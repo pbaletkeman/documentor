@@ -123,7 +123,41 @@ jar {
 bootJar {
     archiveFileName = 'documentor.jar'
     mainClass = 'com.documentor.DocumentorApplication'
+    archiveClassifier = '' // This makes it the main artifact
 }
+
+// Create a fat jar task for distribution
+task fatJar(type: Jar) {
+    group = 'distribution'
+    description = 'Create a fat JAR containing all dependencies'
+    archiveClassifier = 'fat'
+    archiveFileName = 'documentor-fat.jar'
+    
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    with jar
+    
+    manifest {
+        attributes(
+            'Main-Class': 'com.documentor.DocumentorApplication',
+            'Implementation-Title': project.name,
+            'Implementation-Version': project.version
+        )
+    }
+    
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+// Alternative shadow jar plugin configuration (commented out)
+// To use shadow plugin instead, uncomment this and add plugin: id 'com.github.johnrengelman.shadow' version '8.1.1'
+/*
+shadowJar {
+    archiveFileName = 'documentor-shadow.jar'
+    mainClassName = 'com.documentor.DocumentorApplication'
+    mergeServiceFiles()
+}
+*/
 
 task runApp(type: JavaExec) {
     group = 'application'
@@ -133,5 +167,84 @@ task runApp(type: JavaExec) {
     
     if (project.hasProperty('args')) {
         args project.args.split(',')
+    }
+    
+    // Support for help command
+    doFirst {
+        if (project.hasProperty('help') || project.hasProperty('h')) {
+            println """
+            📚 Documentor - AI-Powered Code Documentation Generator
+            ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            
+            Usage: gradlew runApp [-Pargs="command options"]
+            
+            🔍 Available Commands:
+              analyze --project-path <path> [options]  : Analyze and generate documentation
+              scan --project-path <path>              : Analyze project without generating docs
+              validate-config [--config <path>]      : Validate configuration file
+              status                                  : Show current application status
+              info                                   : Show supported features and file types
+              quick-start                           : Display quick start guide
+              help                                  : Show command help (interactive mode)
+            
+            📊 Analyze Command Options:
+              --project-path <path>      : Path to project directory (required)
+              --config <path>           : Configuration file path (default: config.json)
+              --generate-mermaid        : Generate Mermaid class diagrams (default: false)
+              --mermaid-output <path>   : Output directory for diagrams (default: source dir)
+            
+            🚀 Examples:
+              gradlew runApp -Pargs="analyze,--project-path,./my-project"
+              gradlew runApp -Pargs="analyze,--project-path,./src,--generate-mermaid,true"
+              gradlew runApp -Pargs="scan,--project-path,./my-project"
+              gradlew runApp -Pargs="status"
+            
+            📦 Building:
+              gradlew build              : Build the project
+              gradlew fatJar            : Create fat JAR with all dependencies
+              gradlew bootJar           : Create Spring Boot executable JAR
+              gradlew test              : Run tests with coverage
+            
+            💡 Tip: Run without arguments to start interactive shell mode
+            """
+            throw new StopExecutionException("Help displayed")
+        }
+    }
+}
+
+// Task to display help without running the application
+task helpInfo {
+    group = 'help'
+    description = 'Display help information'
+    doLast {
+        println """
+        📚 Documentor - AI-Powered Code Documentation Generator
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        
+        🛠️ Build Tasks:
+          gradlew build              : Build the project
+          gradlew test               : Run tests with coverage
+          gradlew fatJar            : Create fat JAR with all dependencies
+          gradlew bootJar           : Create Spring Boot executable JAR
+          gradlew checkstyleMain    : Check code style for main sources
+          gradlew checkstyleTest    : Check code style for test sources
+          gradlew jacocoTestReport  : Generate test coverage report
+        
+        🚀 Run Tasks:
+          gradlew runApp            : Start interactive shell mode
+          gradlew runApp -Phelp     : Show detailed command help
+          gradlew runApp -Pargs="analyze,--project-path,./src" : Run specific command
+        
+        📦 Distribution:
+          gradlew bootJar           : Create executable JAR (recommended)
+          gradlew fatJar            : Create fat JAR with all dependencies
+        
+        🧪 Testing:
+          gradlew test              : Run all tests
+          gradlew test --info       : Run tests with detailed output
+          gradlew jacocoTestCoverageVerification : Verify coverage meets requirements
+        
+        For command-specific help, run: gradlew runApp -Phelp
+        """
     }
 }

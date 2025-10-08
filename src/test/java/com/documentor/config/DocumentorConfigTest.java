@@ -96,7 +96,7 @@ class DocumentorConfigTest {
 
         // When
         DocumentorConfig.OutputSettings settings = new DocumentorConfig.OutputSettings(
-            outputPath, format, includeIcons, generateUnitTests, targetCoverage
+            outputPath, format, includeIcons, generateUnitTests, targetCoverage, false, outputPath
         );
 
         // Then
@@ -114,7 +114,7 @@ class DocumentorConfigTest {
 
         // When
         DocumentorConfig.OutputSettings settings = new DocumentorConfig.OutputSettings(
-            outputPath, null, null, null, null
+            outputPath, null, null, null, null, null, null
         );
 
         // Then
@@ -134,7 +134,7 @@ class DocumentorConfigTest {
 
         // When
         DocumentorConfig.OutputSettings settings = new DocumentorConfig.OutputSettings(
-            outputPath, format, includeIcons, null, null
+            outputPath, format, includeIcons, null, null, null, null
         );
 
         // Then
@@ -205,7 +205,7 @@ class DocumentorConfigTest {
             new DocumentorConfig.LlmModelConfig("claude-3", "key2", null, null, null, null, null)
         );
         DocumentorConfig.OutputSettings outputSettings = new DocumentorConfig.OutputSettings(
-            "/docs", null, null, null, null
+            "/docs", null, null, null, null, null, null
         );
         DocumentorConfig.AnalysisSettings analysisSettings = new DocumentorConfig.AnalysisSettings(
             null, null, null, null
@@ -227,7 +227,7 @@ class DocumentorConfigTest {
             new DocumentorConfig.LlmModelConfig("gpt-4", "key1", null, null, null, null, null)
         );
         DocumentorConfig.OutputSettings outputSettings = new DocumentorConfig.OutputSettings(
-            "/docs", null, null, null, null
+            "/docs", null, null, null, null, null, null
         );
 
         // When
@@ -283,13 +283,13 @@ class DocumentorConfigTest {
     void testOutputSettings_Equality() {
         // Given
         DocumentorConfig.OutputSettings settings1 = new DocumentorConfig.OutputSettings(
-            "/docs", "markdown", true, true, 0.90
+            "/docs", "markdown", true, true, 0.90, false, "/docs"
         );
         DocumentorConfig.OutputSettings settings2 = new DocumentorConfig.OutputSettings(
-            "/docs", "markdown", true, true, 0.90
+            "/docs", "markdown", true, true, 0.90, false, "/docs"
         );
         DocumentorConfig.OutputSettings settings3 = new DocumentorConfig.OutputSettings(
-            "/other", "html", false, false, 0.95
+            "/other", "html", false, false, 0.95, true, "/other"
         );
 
         // Then
@@ -326,7 +326,7 @@ class DocumentorConfigTest {
             new DocumentorConfig.LlmModelConfig("gpt-4", "key1", null, null, null, null, null)
         );
         DocumentorConfig.OutputSettings outputSettings = new DocumentorConfig.OutputSettings(
-            "/docs", null, null, null, null
+            "/docs", null, null, null, null, null, null
         );
         DocumentorConfig.AnalysisSettings analysisSettings = new DocumentorConfig.AnalysisSettings(
             null, null, null, null

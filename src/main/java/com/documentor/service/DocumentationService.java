@@ -31,10 +31,12 @@ public class DocumentationService {
     private static final Logger logger = LoggerFactory.getLogger(DocumentationService.class);
 
     private final LlmService llmService;
+    private final MermaidDiagramService mermaidDiagramService;
     private final DocumentorConfig config;
 
-    public DocumentationService(LlmService llmService, DocumentorConfig config) {
+    public DocumentationService(LlmService llmService, MermaidDiagramService mermaidDiagramService, DocumentorConfig config) {
         this.llmService = llmService;
+        this.mermaidDiagramService = mermaidDiagramService;
         this.config = config;
     }
 
@@ -64,6 +66,13 @@ public class DocumentationService {
                 // Generate unit tests if enabled
                 if (config.outputSettings().generateUnitTests()) {
                     generateUnitTestDocumentation(analysis, outputPath).join();
+                }
+
+                // Generate Mermaid diagrams if enabled
+                if (config.outputSettings().generateMermaidDiagrams()) {
+                    List<String> diagramPaths = mermaidDiagramService.generateClassDiagrams(
+                        analysis, config.outputSettings().mermaidOutputPath()).join();
+                    logger.info("✅ Generated {} Mermaid diagrams", diagramPaths.size());
                 }
 
                 logger.info("✅ Documentation generated successfully at: {}", outputPath);

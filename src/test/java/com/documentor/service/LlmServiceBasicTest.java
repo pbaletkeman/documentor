@@ -36,7 +36,7 @@ class LlmServiceSimpleTest {
         );
 
         DocumentorConfig.OutputSettings outputSettings = new DocumentorConfig.OutputSettings(
-                "output", "md", true, true, 0.9
+                "output", "md", true, true, 0.9, false, "output"
         );
 
         DocumentorConfig.AnalysisSettings analysisSettings = new DocumentorConfig.AnalysisSettings(

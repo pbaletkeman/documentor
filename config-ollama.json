@@ -13,22 +13,6 @@
       "max_tokens": 4096,
       "temperature": 0.3,
       "timeout_seconds": 60
-    },
-    {
-      "name": "gpt-3.5-turbo",
-      "api_key": "your-openai-api-key-here",
-      "endpoint": "https://api.openai.com/v1/chat/completions",
-      "max_tokens": 4096,
-      "temperature": 0.7,
-      "timeout_seconds": 30
-    },
-    {
-      "name": "gpt-4",
-      "api_key": "your-openai-api-key-here",
-      "endpoint": "https://api.openai.com/v1/chat/completions",
-      "max_tokens": 8192,
-      "temperature": 0.5,
-      "timeout_seconds": 60
     }
   ],
   "output_settings": {
@@ -36,12 +20,17 @@
     "format": "markdown",
     "include_icons": true,
     "generate_unit_tests": true,
-    "target_coverage": 0.9
+    "target_coverage": 0.8,
+    "generate_mermaid_diagrams": true,
+    "mermaid_output_path": "./diagrams"
   },
   "analysis_settings": {
     "include_private_members": false,
     "max_threads": 4,
-    "supported_languages": ["java", "python"],
+    "supported_languages": [
+      "java",
+      "python"
+    ],
     "exclude_patterns": [
       "**/test/**",
       "**/target/**",
@@ -49,6 +38,7 @@
       "**/node_modules/**",
       "**/.git/**",
       "**/build/**",
+      "**/gradle/**",
       "**/.idea/**",
       "**/.vscode/**"
     ]

@@ -28,6 +28,9 @@ class DocumentationServiceTest {
 
     @Mock
     private LlmService llmService;
+    
+    @Mock
+    private MermaidDiagramService mermaidDiagramService;
 
     private DocumentationService documentationService;
     private DocumentorConfig config;
@@ -38,7 +41,7 @@ class DocumentationServiceTest {
     @BeforeEach
     void setUp() {
         DocumentorConfig.OutputSettings outputSettings = new DocumentorConfig.OutputSettings(
-            tempDir.toString(), "markdown", true, true, 0.9
+            tempDir.toString(), "markdown", true, true, 0.9, false, tempDir.toString()
         );
         
         // Create a real config with valid settings for tests
@@ -51,7 +54,7 @@ class DocumentationServiceTest {
         );
         
         config = new DocumentorConfig(List.of(mockModel), outputSettings, analysisSettings);
-        documentationService = new DocumentationService(llmService, config);
+        documentationService = new DocumentationService(llmService, mermaidDiagramService, config);
     }
 
     @Test

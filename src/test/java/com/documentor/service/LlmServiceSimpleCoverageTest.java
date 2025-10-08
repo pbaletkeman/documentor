@@ -39,7 +39,7 @@ class LlmServiceSimpleCoverageTest {
         );
 
         DocumentorConfig.OutputSettings outputSettings = new DocumentorConfig.OutputSettings(
-                "docs", "markdown", false, false, 0.9
+                "docs", "markdown", false, false, 0.9, false, "docs"
         );
 
         DocumentorConfig.AnalysisSettings analysisSettings = new DocumentorConfig.AnalysisSettings(

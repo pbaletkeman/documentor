@@ -3,6 +3,7 @@ package com.documentor.cli;
 import com.documentor.config.DocumentorConfig;
 import com.documentor.service.CodeAnalysisService;
 import com.documentor.service.DocumentationService;
+import com.documentor.service.MermaidDiagramService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +25,9 @@ class DocumentorCommandsStatusTest {
     private DocumentationService documentationService;
 
     @Mock
+    private MermaidDiagramService mermaidDiagramService;
+
+    @Mock
     private DocumentorConfig documentorConfig;
 
     @BeforeEach
@@ -34,7 +38,7 @@ class DocumentorCommandsStatusTest {
     @Test
     void testShowStatusWithMockedConfig() {
         // Simple test without complex mocking
-        DocumentorCommands simpleCommands = new DocumentorCommands(codeAnalysisService, documentationService, documentorConfig);
+        DocumentorCommands simpleCommands = new DocumentorCommands(codeAnalysisService, documentationService, mermaidDiagramService, documentorConfig);
         
         // When
         String result = simpleCommands.showStatus();
@@ -47,7 +51,7 @@ class DocumentorCommandsStatusTest {
     @Test
     void testShowStatusWithNullConfigStillWorks() {
         // Setup - Create DocumentorCommands with null config (no complex mocking needed)
-        DocumentorCommands commandsWithNullConfig = new DocumentorCommands(codeAnalysisService, documentationService, null);
+        DocumentorCommands commandsWithNullConfig = new DocumentorCommands(codeAnalysisService, documentationService, mermaidDiagramService, null);
         
         // When - This should not throw an exception
         String result = commandsWithNullConfig.showStatus();
@@ -61,7 +65,7 @@ class DocumentorCommandsStatusTest {
     @Test
     void testShowInfoContainsExpectedContent() {
         // Create a simple commands instance without complex mocking
-        DocumentorCommands simpleCommands = new DocumentorCommands(codeAnalysisService, documentationService, null);
+        DocumentorCommands simpleCommands = new DocumentorCommands(codeAnalysisService, documentationService, mermaidDiagramService, null);
         
         // When
         String result = simpleCommands.showInfo();
@@ -78,7 +82,7 @@ class DocumentorCommandsStatusTest {
     @Test
     void testQuickStartContainsExpectedContent() {
         // Create a simple commands instance without complex mocking
-        DocumentorCommands simpleCommands = new DocumentorCommands(codeAnalysisService, documentationService, null);
+        DocumentorCommands simpleCommands = new DocumentorCommands(codeAnalysisService, documentationService, mermaidDiagramService, null);
         
         // When
         String result = simpleCommands.quickStart();

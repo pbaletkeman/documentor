@@ -4,6 +4,7 @@ import com.documentor.config.DocumentorConfig;
 import com.documentor.model.ProjectAnalysis;
 import com.documentor.service.CodeAnalysisService;
 import com.documentor.service.DocumentationService;
+import com.documentor.service.MermaidDiagramService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.shell.standard.ShellComponent;
@@ -13,6 +14,7 @@ import org.springframework.shell.standard.ShellOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -28,6 +30,7 @@ public class DocumentorCommands {
 
     private final CodeAnalysisService codeAnalysisService;
     private final DocumentationService documentationService;
+    private final MermaidDiagramService mermaidDiagramService;
     private final DocumentorConfig documentorConfig;
     
     // Track current state
@@ -37,9 +40,11 @@ public class DocumentorCommands {
     public DocumentorCommands(
             final CodeAnalysisService codeAnalysisServiceParam,
             final DocumentationService documentationServiceParam,
+            final MermaidDiagramService mermaidDiagramServiceParam,
             final DocumentorConfig documentorConfigParam) {
         this.codeAnalysisService = codeAnalysisServiceParam;
         this.documentationService = documentationServiceParam;
+        this.mermaidDiagramService = mermaidDiagramServiceParam;
         this.documentorConfig = documentorConfigParam;
     }
 
@@ -55,7 +60,15 @@ public class DocumentorCommands {
             @ShellOption(value = "--config",
                     help = "Path to configuration JSON file",
                     defaultValue = "config.json")
-            final String configPath) {
+            final String configPath,
+            @ShellOption(value = "--generate-mermaid",
+                    help = "Generate Mermaid class diagrams",
+                    defaultValue = "false")
+            final boolean generateMermaid,
+            @ShellOption(value = "--mermaid-output",
+                    help = "Output directory for Mermaid diagrams (defaults to same directory as source files)",
+                    defaultValue = "")
+            final String mermaidOutput) {
 
         try {
             LOGGER.info("🚀 Starting analysis of project: {}", projectPath);
@@ -78,8 +91,24 @@ public class DocumentorCommands {
             CompletableFuture<String> docFuture = documentationService.generateDocumentation(analysis);
             String outputPath = docFuture.join();
 
-            return String.format("✅ Analysis complete! Documentation generated at: %s\n%s",
-                outputPath, analysis.getStats().getFormattedSummary());
+            StringBuilder result = new StringBuilder();
+            result.append(String.format("✅ Analysis complete! Documentation generated at: %s\n", outputPath));
+            
+            // Generate Mermaid diagrams if requested
+            if (generateMermaid) {
+                LOGGER.info("🧩 Generating Mermaid diagrams...");
+                String mermaidOutputPath = mermaidOutput.trim().isEmpty() ? null : mermaidOutput;
+                CompletableFuture<List<String>> mermaidFuture = mermaidDiagramService.generateClassDiagrams(analysis, mermaidOutputPath);
+                List<String> diagramPaths = mermaidFuture.join();
+                result.append(String.format("📊 Generated %d Mermaid diagrams\n", diagramPaths.size()));
+                if (!diagramPaths.isEmpty()) {
+                    result.append("Diagram files:\n");
+                    diagramPaths.forEach(path -> result.append("  - ").append(path).append("\n"));
+                }
+            }
+            
+            result.append(analysis.getStats().getFormattedSummary());
+            return result.toString();
 
         } catch (Exception e) {
             LOGGER.error("❌ Error during analysis: {}", e.getMessage(), e);

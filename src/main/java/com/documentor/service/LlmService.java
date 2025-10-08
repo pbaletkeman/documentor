@@ -121,10 +121,17 @@ public class LlmService {
             Map<String, Object> requestBody = createRequestBody(model, prompt);
             String endpoint = getModelEndpoint(model);
 
-            String response = webClient.post()
+            // Build the request
+            WebClient.RequestBodySpec request = webClient.post()
                     .uri(endpoint)
-                    .header("Authorization", "Bearer " + model.apiKey())
-                    .header("Content-Type", "application/json")
+                    .header("Content-Type", "application/json");
+            
+            // Add authentication header only if not Ollama (Ollama typically doesn't require auth)
+            if (!isOllamaModel(model) && model.apiKey() != null && !model.apiKey().isEmpty()) {
+                request = request.header("Authorization", "Bearer " + model.apiKey());
+            }
+
+            String response = request
                     .bodyValue(requestBody)
                     .retrieve()
                     .bodyToMono(String.class)
@@ -143,6 +150,20 @@ public class LlmService {
      * 🏗️ Creates request body for LLM API call
      */
     private Map<String, Object> createRequestBody(DocumentorConfig.LlmModelConfig model, String prompt) {
+        // Ollama API format
+        if (isOllamaModel(model)) {
+            return Map.of(
+                "model", model.name(),
+                "prompt", prompt,
+                "stream", false,
+                "options", Map.of(
+                    "temperature", model.temperature(),
+                    "num_predict", model.maxTokens()
+                )
+            );
+        }
+        
+        // OpenAI/Anthropic API format (chat completions)
         return Map.of(
             "model", model.name(),
             "messages", List.of(
@@ -162,6 +183,11 @@ public class LlmService {
             return model.endpoint();
         }
         
+        // Ollama default endpoint
+        if (isOllamaModel(model)) {
+            return "http://localhost:11434/api/generate";
+        }
+        
         // Default endpoints based on model names
         if (model.name().startsWith("gpt-")) {
             return "https://api.openai.com/v1/chat/completions";
@@ -173,11 +199,37 @@ public class LlmService {
     }
 
     /**
+     * 🔍 Checks if the model is an Ollama model
+     */
+    private boolean isOllamaModel(DocumentorConfig.LlmModelConfig model) {
+        // Check if endpoint points to Ollama
+        if (model.endpoint() != null && model.endpoint().contains("11434")) {
+            return true;
+        }
+        
+        // Check if model name suggests Ollama (common Ollama model names)
+        String modelName = model.name().toLowerCase();
+        return modelName.contains("llama") || 
+               modelName.contains("mistral") || 
+               modelName.contains("codellama") ||
+               modelName.contains("phi") ||
+               modelName.contains("gemma") ||
+               modelName.equals("qwen") ||
+               modelName.equals("yi") ||
+               (model.endpoint() == null && !modelName.startsWith("gpt-") && !modelName.startsWith("claude-"));
+    }
+
+    /**
      * 📤 Extracts content from LLM response
      */
     private String extractResponseContent(String response, DocumentorConfig.LlmModelConfig model) {
         try {
             JsonNode jsonNode = objectMapper.readTree(response);
+            
+            // Ollama format
+            if (isOllamaModel(model) && jsonNode.has("response")) {
+                return jsonNode.get("response").asText();
+            }
             
             // OpenAI format
             if (jsonNode.has("choices")) {

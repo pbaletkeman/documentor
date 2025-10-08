@@ -6,6 +6,7 @@ import com.documentor.model.CodeElementType;
 import com.documentor.model.ProjectAnalysis;
 import com.documentor.service.CodeAnalysisService;
 import com.documentor.service.DocumentationService;
+import com.documentor.service.MermaidDiagramService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,6 +36,9 @@ class DocumentorCommandsTest {
     private DocumentationService documentationService;
 
     @Mock
+    private MermaidDiagramService mermaidDiagramService;
+
+    @Mock
     private DocumentorConfig documentorConfig;
 
     private DocumentorCommands documentorCommands;
@@ -44,7 +48,7 @@ class DocumentorCommandsTest {
 
     @BeforeEach
     void setUp() {
-        documentorCommands = new DocumentorCommands(codeAnalysisService, documentationService, documentorConfig);
+        documentorCommands = new DocumentorCommands(codeAnalysisService, documentationService, mermaidDiagramService, documentorConfig);
     }
 
     @Test
@@ -61,7 +65,7 @@ class DocumentorCommandsTest {
         when(documentationService.generateDocumentation(any(ProjectAnalysis.class)))
             .thenReturn(CompletableFuture.completedFuture("docs/output"));
 
-        String result = documentorCommands.analyzeProject(tempDir.toString(), null);
+        String result = documentorCommands.analyzeProject(tempDir.toString(), "config.json", false, "");
         
         assertNotNull(result);
         assertTrue(result.contains("✅"));
@@ -97,7 +101,7 @@ class DocumentorCommandsTest {
 
     @Test
     void testAnalyzeProjectNonExistentPath() {
-        String result = documentorCommands.analyzeProject("non-existent-path", null);
+        String result = documentorCommands.analyzeProject("non-existent-path", "config.json", false, "");
         
         assertTrue(result.contains("❌"));
         assertTrue(result.contains("Project path does not exist"));
@@ -151,7 +155,7 @@ class DocumentorCommandsTest {
         when(codeAnalysisService.analyzeProject(any(Path.class)))
             .thenReturn(CompletableFuture.failedFuture(new RuntimeException("Analysis failed")));
 
-        String result = documentorCommands.analyzeProject(tempDir.toString(), null);
+        String result = documentorCommands.analyzeProject(tempDir.toString(), "config.json", false, "");
         
         assertTrue(result.contains("❌"));
         assertTrue(result.contains("Error"));
@@ -222,7 +226,7 @@ class DocumentorCommandsTest {
     @Test
     void testConstructor() {
         // When
-        DocumentorCommands commands = new DocumentorCommands(codeAnalysisService, documentationService, documentorConfig);
+        DocumentorCommands commands = new DocumentorCommands(codeAnalysisService, documentationService, mermaidDiagramService, documentorConfig);
         
         // Then
         assertNotNull(commands);
@@ -251,7 +255,7 @@ class DocumentorCommandsTest {
     @Test
     void testShowStatusWithNullConfig() {
         // Setup - Create DocumentorCommands with null config
-        DocumentorCommands commandsWithNullConfig = new DocumentorCommands(codeAnalysisService, documentationService, null);
+        DocumentorCommands commandsWithNullConfig = new DocumentorCommands(codeAnalysisService, documentationService, mermaidDiagramService, null);
         
         // When
         String result = commandsWithNullConfig.showStatus();
@@ -292,7 +296,7 @@ class DocumentorCommandsTest {
             .thenReturn(CompletableFuture.completedFuture("docs/output"));
 
         String outputPath = tempDir.resolve("output").toString();
-        String result = documentorCommands.analyzeProject(tempDir.toString(), outputPath);
+        String result = documentorCommands.analyzeProject(tempDir.toString(), outputPath, false, "");
         
         assertNotNull(result);
         assertTrue(result.contains("✅") || result.contains("Analysis complete"));

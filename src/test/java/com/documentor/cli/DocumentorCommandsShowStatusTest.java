@@ -3,6 +3,7 @@ package com.documentor.cli;
 import com.documentor.config.DocumentorConfig;
 import com.documentor.service.CodeAnalysisService;
 import com.documentor.service.DocumentationService;
+import com.documentor.service.MermaidDiagramService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +27,9 @@ class DocumentorCommandsShowStatusTest {
     @Mock
     private DocumentationService documentationService;
 
+    @Mock
+    private MermaidDiagramService mermaidDiagramService;
+
     private DocumentorCommands documentorCommands;
 
     @BeforeEach
@@ -42,7 +46,7 @@ class DocumentorCommandsShowStatusTest {
         );
 
         DocumentorConfig.OutputSettings outputSettings = new DocumentorConfig.OutputSettings(
-                "docs", "markdown", true, false, 0.8
+                "docs", "markdown", true, false, 0.8, false, null
         );
 
         DocumentorConfig.AnalysisSettings analysisSettings = new DocumentorConfig.AnalysisSettings(
@@ -53,7 +57,7 @@ class DocumentorCommandsShowStatusTest {
                 Arrays.asList(model1, model2), outputSettings, analysisSettings
         );
 
-        documentorCommands = new DocumentorCommands(codeAnalysisService, documentationService, config);
+        documentorCommands = new DocumentorCommands(codeAnalysisService, documentationService, mermaidDiagramService, config);
     }
 
     @Test

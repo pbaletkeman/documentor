@@ -39,7 +39,7 @@ class LlmServiceIntegrationTest {
         );
         
         DocumentorConfig.OutputSettings outputSettings = new DocumentorConfig.OutputSettings(
-            "output", "markdown", true, true, 0.9
+            "output", "markdown", true, true, 0.9, false, "output"
         );
         
         DocumentorConfig.AnalysisSettings analysisSettings = new DocumentorConfig.AnalysisSettings(
@@ -249,6 +249,47 @@ class LlmServiceIntegrationTest {
             docFuture.get();
             exampleFuture.get();
             testFuture.get();
+        });
+    }
+
+    @Test
+    void testOllamaModelDetection() {
+        // Given - Various Ollama model configurations
+        DocumentorConfig.LlmModelConfig ollamaModel1 = new DocumentorConfig.LlmModelConfig(
+            "llama3.2", null, "http://localhost:11434/api/generate", 4096, 0.7, 60, Map.of()
+        );
+        
+        DocumentorConfig.LlmModelConfig ollamaModel2 = new DocumentorConfig.LlmModelConfig(
+            "codellama", null, null, 4096, 0.3, 60, Map.of()
+        );
+        
+        DocumentorConfig.LlmModelConfig openaiModel = new DocumentorConfig.LlmModelConfig(
+            "gpt-4", "test-key", "https://api.openai.com/v1/chat/completions", 4096, 0.7, 30, Map.of()
+        );
+        
+        DocumentorConfig.OutputSettings outputSettings = new DocumentorConfig.OutputSettings(
+            "output", "markdown", true, true, 0.9, false, "output"
+        );
+        
+        DocumentorConfig.AnalysisSettings analysisSettings = new DocumentorConfig.AnalysisSettings(
+            true, 50, List.of("public"), List.of(".git")
+        );
+        
+        // Test each model type
+        DocumentorConfig ollamaConfig1 = new DocumentorConfig(List.of(ollamaModel1), outputSettings, analysisSettings);
+        DocumentorConfig ollamaConfig2 = new DocumentorConfig(List.of(ollamaModel2), outputSettings, analysisSettings);
+        DocumentorConfig openaiConfig = new DocumentorConfig(List.of(openaiModel), outputSettings, analysisSettings);
+        
+        // When & Then - Should handle different model types without errors
+        assertDoesNotThrow(() -> {
+            LlmService ollamaService1 = new LlmService(ollamaConfig1, mockWebClient);
+            LlmService ollamaService2 = new LlmService(ollamaConfig2, mockWebClient);
+            LlmService openaiService = new LlmService(openaiConfig, mockWebClient);
+            
+            // Verify services are created successfully
+            assertNotNull(ollamaService1);
+            assertNotNull(ollamaService2);
+            assertNotNull(openaiService);
         });
     }
 }

@@ -50,8 +50,7 @@ public record DocumentorConfig(
         String name,
         
         @JsonProperty("api_key")
-        @NotEmpty(message = "API key is required")
-        String apiKey,
+        String apiKey, // Made optional for local models like Ollama
         
         @JsonProperty("endpoint")
         String endpoint,
@@ -100,7 +99,13 @@ public record DocumentorConfig(
         Boolean generateUnitTests,
         
         @JsonProperty("target_coverage")
-        Double targetCoverage
+        Double targetCoverage,
+        
+        @JsonProperty("generate_mermaid_diagrams")
+        Boolean generateMermaidDiagrams,
+        
+        @JsonProperty("mermaid_output_path")
+        String mermaidOutputPath
     ) {
         public OutputSettings {
             if (format == null) format = "markdown";
@@ -109,6 +114,8 @@ public record DocumentorConfig(
             if (targetCoverage == null) {
                 targetCoverage = DEFAULT_TOP_P;
             }
+            if (generateMermaidDiagrams == null) generateMermaidDiagrams = false;
+            // mermaidOutputPath can be null - will default to same directory as source file
         }
     }
     

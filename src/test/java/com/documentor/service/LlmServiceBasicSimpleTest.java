@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * 🧪 Simple focused tests for LlmService coverage improvement
  */
 @ExtendWith(MockitoExtension.class)
-class LlmServiceSimpleTest {
+class LlmServiceBasicSimpleTest {
 
     @Mock
     private WebClient mockWebClient;

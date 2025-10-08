@@ -150,7 +150,7 @@ class AppConfigTest {
             new DocumentorConfig.LlmModelConfig("gpt-4", "key1", null, null, null, null, null)
         );
         DocumentorConfig.OutputSettings outputSettings = new DocumentorConfig.OutputSettings(
-            "/docs", null, null, null, null
+            "/docs", null, null, null, null, null, null
         );
         DocumentorConfig.AnalysisSettings analysisSettings = new DocumentorConfig.AnalysisSettings(
             null, 6, null, null

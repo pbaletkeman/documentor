@@ -23,6 +23,9 @@ class DocumentationServiceCoverageTest {
 
     @Mock
     private LlmService mockLlmService;
+    
+    @Mock
+    private MermaidDiagramService mockMermaidDiagramService;
 
     @Mock
     private DocumentorConfig mockConfig;
@@ -31,7 +34,7 @@ class DocumentationServiceCoverageTest {
 
     @BeforeEach
     void setUp() {
-        documentationService = new DocumentationService(mockLlmService, mockConfig);
+        documentationService = new DocumentationService(mockLlmService, mockMermaidDiagramService, mockConfig);
     }
 
     @Test
