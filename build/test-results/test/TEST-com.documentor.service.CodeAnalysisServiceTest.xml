@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.documentor.service.CodeAnalysisServiceTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2025-10-08T01:25:23" hostname="LAPPY" time="0.14">
+  <properties/>
+  <testcase name="testAnalyzeProject_IgnoresNonCodeFiles()" classname="com.documentor.service.CodeAnalysisServiceTest" time="0.08"/>
+  <testcase name="testAnalyzeProject_HandlesNestedDirectories()" classname="com.documentor.service.CodeAnalysisServiceTest" time="0.014"/>
+  <testcase name="testAnalyzeProject_WithPythonFiles()" classname="com.documentor.service.CodeAnalysisServiceTest" time="0.007"/>
+  <testcase name="testAnalyzeProject_NonExistentDirectory()" classname="com.documentor.service.CodeAnalysisServiceTest" time="0.008"/>
+  <testcase name="testAnalyzeProject_WithJavaFiles()" classname="com.documentor.service.CodeAnalysisServiceTest" time="0.006"/>
+  <testcase name="testAnalyzeProject_HandlesAnalysisErrors()" classname="com.documentor.service.CodeAnalysisServiceTest" time="0.01"/>
+  <testcase name="testAnalyzeProject_EmptyDirectory()" classname="com.documentor.service.CodeAnalysisServiceTest" time="0.003"/>
+  <testcase name="testAnalyzeProject_MixedFiles()" classname="com.documentor.service.CodeAnalysisServiceTest" time="0.007"/>
+  <system-out><![CDATA[21:25:23.392 [Test worker] INFO  c.d.service.CodeAnalysisService - ]]>&#x1f680;<![CDATA[ Starting analysis of project: C:\Users\Pete\AppData\Local\Temp\junit3481064232376729988
+21:25:23.400 [ForkJoinPool.commonPool-worker-1] INFO  c.d.service.CodeAnalysisService - ✅ Analysis completed. Found 0 code elements
+21:25:23.411 [Test worker] INFO  c.d.service.CodeAnalysisService - ]]>&#x1f680;<![CDATA[ Starting analysis of project: C:\Users\Pete\AppData\Local\Temp\junit11703452116437228319
+21:25:23.415 [ForkJoinPool.commonPool-worker-1] INFO  c.d.service.CodeAnalysisService - ✅ Analysis completed. Found 1 code elements
+21:25:23.422 [Test worker] INFO  c.d.service.CodeAnalysisService - ]]>&#x1f680;<![CDATA[ Starting analysis of project: C:\Users\Pete\AppData\Local\Temp\junit16022042596192004577
+21:25:23.423 [ForkJoinPool.commonPool-worker-1] INFO  c.d.service.CodeAnalysisService - ✅ Analysis completed. Found 1 code elements
+21:25:23.429 [Test worker] INFO  c.d.service.CodeAnalysisService - ]]>&#x1f680;<![CDATA[ Starting analysis of project: C:\Users\Pete\AppData\Local\Temp\junit14579374373902588461\does-not-exist
+21:25:23.429 [ForkJoinPool.commonPool-worker-1] ERROR c.d.service.CodeAnalysisService - ❌ Error analyzing project: C:\Users\Pete\AppData\Local\Temp\junit14579374373902588461\does-not-exist
+java.nio.file.NoSuchFileException: C:\Users\Pete\AppData\Local\Temp\junit14579374373902588461\does-not-exist
+	at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:85)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:108)
+	at java.base/sun.nio.fs.WindowsFileAttributeViews$Basic.readAttributes(WindowsFileAttributeViews.java:53)
+	at java.base/sun.nio.fs.WindowsFileAttributeViews$Basic.readAttributes(WindowsFileAttributeViews.java:38)
+	at java.base/sun.nio.fs.WindowsFileSystemProvider.readAttributes(WindowsFileSystemProvider.java:197)
+	at java.base/java.nio.file.Files.readAttributes(Files.java:1854)
+	at java.base/java.nio.file.FileTreeWalker.getAttributes(FileTreeWalker.java:220)
+	at java.base/java.nio.file.FileTreeWalker.visit(FileTreeWalker.java:277)
+	at java.base/java.nio.file.FileTreeWalker.walk(FileTreeWalker.java:323)
+	at java.base/java.nio.file.FileTreeIterator.<init>(FileTreeIterator.java:71)
+	at java.base/java.nio.file.Files.walk(Files.java:3911)
+	at java.base/java.nio.file.Files.walk(Files.java:3966)
+	at com.documentor.service.CodeAnalysisService.discoverAndAnalyzeFiles(CodeAnalysisService.java:76)
+	at com.documentor.service.CodeAnalysisService.lambda$analyzeProject$0(CodeAnalysisService.java:54)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1760)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188)
+21:25:23.435 [Test worker] INFO  c.d.service.CodeAnalysisService - ]]>&#x1f680;<![CDATA[ Starting analysis of project: C:\Users\Pete\AppData\Local\Temp\junit9323294951733515955
+21:25:23.437 [ForkJoinPool.commonPool-worker-1] INFO  c.d.service.CodeAnalysisService - ✅ Analysis completed. Found 2 code elements
+21:25:23.446 [Test worker] INFO  c.d.service.CodeAnalysisService - ]]>&#x1f680;<![CDATA[ Starting analysis of project: C:\Users\Pete\AppData\Local\Temp\junit17699482713948908127
+21:25:23.448 [ForkJoinPool.commonPool-worker-1] WARN  c.d.service.CodeAnalysisService - ⚠️ Failed to analyze file C:\Users\Pete\AppData\Local\Temp\junit17699482713948908127\Test.java: Analysis failed
+21:25:23.449 [ForkJoinPool.commonPool-worker-1] INFO  c.d.service.CodeAnalysisService - ✅ Analysis completed. Found 0 code elements
+21:25:23.453 [Test worker] INFO  c.d.service.CodeAnalysisService - ]]>&#x1f680;<![CDATA[ Starting analysis of project: C:\Users\Pete\AppData\Local\Temp\junit5212608758163086053
+21:25:23.453 [ForkJoinPool.commonPool-worker-1] INFO  c.d.service.CodeAnalysisService - ✅ Analysis completed. Found 0 code elements
+21:25:23.458 [Test worker] INFO  c.d.service.CodeAnalysisService - ]]>&#x1f680;<![CDATA[ Starting analysis of project: C:\Users\Pete\AppData\Local\Temp\junit11948678128057330183
+21:25:23.459 [ForkJoinPool.commonPool-worker-1] INFO  c.d.service.CodeAnalysisService - ✅ Analysis completed. Found 2 code elements
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,69 @@
+package com.documentor.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.AsyncConfigurer;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import java.util.concurrent.Executor;
+
+/**
+ * 🔧 Application Configuration
+ *
+ * Configures beans for the Documentor application including:
+ * - Thread pool for parallel LLM processing
+ * - WebClient for HTTP API calls
+ * - Async execution configuration
+ */
+@Configuration
+public class AppConfig implements AsyncConfigurer {
+
+    private static final int DEFAULT_MAX_MEMORY_SIZE_MB = 10;
+    private static final int BYTES_PER_MB = 1024 * 1024;
+    private static final int DEFAULT_QUEUE_CAPACITY = 100;
+    private static final int DEFAULT_THREAD_MULTIPLIER = 2;
+    private static final int DEFAULT_TERMINATION_TIMEOUT_SECONDS = 60;
+
+    private final DocumentorConfig documentorConfig;
+
+    public AppConfig(final DocumentorConfig documentorConfigParam) {
+        this.documentorConfig = documentorConfigParam;
+    }
+
+    /**
+     * 🌐 WebClient for making HTTP requests to LLM APIs
+     */
+    @Bean
+    public WebClient webClient() {
+        return WebClient.builder()
+                .codecs(configurer -> configurer.defaultCodecs()
+                        .maxInMemorySize(DEFAULT_MAX_MEMORY_SIZE_MB * BYTES_PER_MB))
+                .build();
+    }
+
+    /**
+     * ⚡ Thread pool executor for parallel LLM processing
+     */
+    @Bean("llmExecutor")
+    public ThreadPoolTaskExecutor llmExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(documentorConfig.analysisSettings().maxThreads());
+        executor.setMaxPoolSize(documentorConfig.analysisSettings().maxThreads() 
+                * DEFAULT_THREAD_MULTIPLIER);
+        executor.setQueueCapacity(DEFAULT_QUEUE_CAPACITY);
+        executor.setThreadNamePrefix("LLM-");
+        executor.setWaitForTasksToCompleteOnShutdown(true);
+        executor.setAwaitTerminationSeconds(DEFAULT_TERMINATION_TIMEOUT_SECONDS);
+        executor.initialize();
+        return executor;
+    }
+
+    /**
+     * 🔄 Default async executor configuration
+     */
+    @Override
+    public Executor getAsyncExecutor() {
+        return llmExecutor();
+    }
+}

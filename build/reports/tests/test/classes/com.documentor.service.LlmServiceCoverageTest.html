@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - LlmServiceCoverageTest</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>LlmServiceCoverageTest</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/com.documentor.service.html">com.documentor.service</a> &gt; LlmServiceCoverageTest</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">8</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">0.157s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div id="tabs">
+<ul class="tabLinks">
+<li>
+<a href="#tab0">Tests</a>
+</li>
+<li>
+<a href="#tab1">Standard output</a>
+</li>
+</ul>
+<div id="tab0" class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">testConsolidateResponsesWithMultipleElements()</td>
+<td class="success">0.003s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testCreateDocumentationPrompt()</td>
+<td class="success">0.001s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testCreateRequestBodyWithDifferentModels()</td>
+<td class="success">0.005s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testCreateUnitTestPrompt()</td>
+<td class="success">0.140s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testCreateUsageExamplePrompt()</td>
+<td class="success">0.001s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGenerateUnitTestsWithNonEmptyConfig()</td>
+<td class="success">0.002s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGenerateUsageExamplesWithNonEmptyConfig()</td>
+<td class="success">0.001s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetModelEndpointWithDifferentApiTypes()</td>
+<td class="success">0.004s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div id="tab1" class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>21:25:24.452 [Test worker] DEBUG com.documentor.service.LlmService - &#x1f9ea; Generating unit tests for: &#x1f4ca; com.example.Test.testField (Test.java:5)
+21:25:24.454 [Test worker] ERROR com.documentor.service.LlmService - ❌ LLM API call failed for model test-model: Cannot invoke &quot;org.springframework.web.reactive.function.client.WebClient$RequestBodyUriSpec.uri(String, Object[])&quot; because the return value of &quot;org.springframework.web.reactive.function.client.WebClient.post()&quot; is null
+21:25:24.455 [Test worker] DEBUG com.documentor.service.LlmService - &#x1f916; Generating documentation for: &#x1f527; com.example.Test.testMethod (Test.java:10)
+21:25:24.458 [Test worker] ERROR com.documentor.service.LlmService - ❌ LLM API call failed for model custom-model: Cannot invoke &quot;org.springframework.web.reactive.function.client.WebClient$RequestBodyUriSpec.uri(String, Object[])&quot; because the return value of &quot;org.springframework.web.reactive.function.client.WebClient.post()&quot; is null
+21:25:24.462 [Test worker] DEBUG com.documentor.service.LlmService - &#x1f9ea; Generating unit tests for: &#x1f527; com.example.Test.testMethod (Test.java:10)
+21:25:24.462 [Test worker] ERROR com.documentor.service.LlmService - ❌ LLM API call failed for model test-model: Cannot invoke &quot;org.springframework.web.reactive.function.client.WebClient$RequestBodyUriSpec.uri(String, Object[])&quot; because the return value of &quot;org.springframework.web.reactive.function.client.WebClient.post()&quot; is null
+21:25:24.463 [Test worker] DEBUG com.documentor.service.LlmService - &#x1f4a1; Generating usage examples for: &#x1f4e6; com.example.TestClass (TestClass.java:1)
+21:25:24.464 [Test worker] ERROR com.documentor.service.LlmService - ❌ LLM API call failed for model test-model: Cannot invoke &quot;org.springframework.web.reactive.function.client.WebClient$RequestBodyUriSpec.uri(String, Object[])&quot; because the return value of &quot;org.springframework.web.reactive.function.client.WebClient.post()&quot; is null
+21:25:24.465 [Test worker] DEBUG com.documentor.service.LlmService - &#x1f916; Generating documentation for: &#x1f527; com.example.Test.testMethod (Test.java:10)
+21:25:24.467 [Test worker] ERROR com.documentor.service.LlmService - ❌ LLM API call failed for model gpt-4: Cannot invoke &quot;org.springframework.web.reactive.function.client.WebClient$RequestBodyUriSpec.uri(String, Object[])&quot; because the return value of &quot;org.springframework.web.reactive.function.client.WebClient.post()&quot; is null
+21:25:24.468 [Test worker] DEBUG com.documentor.service.LlmService - &#x1f4a1; Generating usage examples for: &#x1f527; com.example.Test.testMethod (Test.java:10)
+21:25:24.469 [Test worker] ERROR com.documentor.service.LlmService - ❌ LLM API call failed for model test-model: Cannot invoke &quot;org.springframework.web.reactive.function.client.WebClient$RequestBodyUriSpec.uri(String, Object[])&quot; because the return value of &quot;org.springframework.web.reactive.function.client.WebClient.post()&quot; is null
+21:25:24.470 [Test worker] DEBUG com.documentor.service.LlmService - &#x1f916; Generating documentation for: &#x1f527; com.example.Test.testMethod (Test.java:10)
+21:25:24.472 [Test worker] DEBUG com.documentor.service.LlmService - &#x1f916; Generating documentation for: &#x1f527; com.example.Test.testMethod (Test.java:10)
+21:25:24.472 [Test worker] ERROR com.documentor.service.LlmService - ❌ LLM API call failed for model model1: Cannot invoke &quot;org.springframework.web.reactive.function.client.WebClient$RequestBodyUriSpec.uri(String, Object[])&quot; because the return value of &quot;org.springframework.web.reactive.function.client.WebClient.post()&quot; is null
+21:25:24.472 [Test worker] ERROR com.documentor.service.LlmService - ❌ LLM API call failed for model model2: Cannot invoke &quot;org.springframework.web.reactive.function.client.WebClient$RequestBodyUriSpec.uri(String, Object[])&quot; because the return value of &quot;org.springframework.web.reactive.function.client.WebClient.post()&quot; is null
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="http://www.gradle.org">Gradle 8.5</a> at Oct 7, 2025, 9:25:25 PM</p>
+</div>
+</div>
+</body>
+</html>

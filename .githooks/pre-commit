@@ -1,0 +1,36 @@
+#!/bin/sh
+# 🔧 Pre-commit hook for Documentor project
+# Runs unit tests and linting before allowing commits
+
+echo "🚀 Running pre-commit checks..."
+
+# Check if we're in a git repository
+if ! git rev-parse --git-dir > /dev/null 2>&1; then
+    echo "❌ Not in a git repository"
+    exit 1
+fi
+
+# Run Checkstyle linting
+echo "🔍 Running Checkstyle..."
+if ! ./gradlew checkstyleMain checkstyleTest; then
+    echo "❌ Checkstyle failed. Please fix the issues and try again."
+    exit 1
+fi
+
+# Run unit tests
+echo "🧪 Running unit tests..."
+if ! ./gradlew test; then
+    echo "❌ Unit tests failed. Please fix the issues and try again."
+    exit 1
+fi
+
+# Check test coverage
+echo "📊 Checking test coverage..."
+if ! ./gradlew jacocoTestCoverageVerification; then
+    echo "⚠️ Test coverage below threshold. Consider adding more tests."
+    echo "📈 View coverage report: build/reports/jacoco/test/html/index.html"
+    # Don't fail the commit for coverage, just warn
+fi
+
+echo "✅ All pre-commit checks passed!"
+exit 0

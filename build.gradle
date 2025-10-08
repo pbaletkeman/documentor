@@ -1,0 +1,137 @@
+plugins {
+    id 'org.springframework.boot' version '3.2.0'
+    id 'io.spring.dependency-management' version '1.1.4'
+    id 'java'
+    id 'checkstyle'
+    id 'jacoco'
+}
+
+group = 'com.documentor'
+version = '1.0.0'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-json'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    
+    // JSON processing
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    
+    // HTTP client for LLM API calls
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    
+    // Code analysis libraries
+    implementation 'com.github.javaparser:javaparser-core:3.25.8'
+    implementation 'com.github.javaparser:javaparser-symbol-solver-core:3.25.8'
+    
+    // Python AST parsing (using Jython or Python process)
+    implementation 'org.python:jython-standalone:2.7.3'
+    
+    // CLI support
+    implementation 'org.springframework.shell:spring-shell-starter:3.2.0'
+    implementation 'info.picocli:picocli:4.7.5'
+    implementation 'info.picocli:picocli-spring-boot-starter:4.7.5'
+    
+    // Markdown generation
+    implementation 'com.vladsch.flexmark:flexmark-all:0.64.8'
+    
+    // Utilities
+    implementation 'org.apache.commons:commons-lang3'
+    implementation 'commons-io:commons-io:2.15.1'
+    
+    // Logging
+    implementation 'org.springframework.boot:spring-boot-starter-logging'
+    
+    // Configuration
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    
+    // Testing
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.mockito:mockito-core'
+    testImplementation 'org.mockito:mockito-junit-jupiter'
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.assertj:assertj-core'
+    
+    // Test containers for integration tests
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.testcontainers:testcontainers'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = true
+    }
+    finalizedBy jacocoTestCoverageVerification
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.90 // 90% coverage requirement
+            }
+        }
+    }
+}
+
+checkstyle {
+    toolVersion = '10.12.5'
+    configFile = file("config/checkstyle/checkstyle.xml")
+}
+
+checkstyleMain {
+    source = 'src/main/java'
+}
+
+checkstyleTest {
+    source = 'src/test/java'
+}
+
+springBoot {
+    mainClass = 'com.documentor.DocumentorApplication'
+}
+
+jar {
+    enabled = false
+}
+
+bootJar {
+    archiveFileName = 'documentor.jar'
+    mainClass = 'com.documentor.DocumentorApplication'
+}
+
+task runApp(type: JavaExec) {
+    group = 'application'
+    description = 'Run the Documentor application'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.documentor.DocumentorApplication'
+    
+    if (project.hasProperty('args')) {
+        args project.args.split(',')
+    }
+}

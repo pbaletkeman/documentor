@@ -1,0 +1,74 @@
+{
+  "groups": [
+    {
+      "name": "documentor",
+      "type": "com.documentor.config.DocumentorConfig",
+      "sourceType": "com.documentor.config.DocumentorConfig"
+    },
+    {
+      "name": "documentor.analysis-settings",
+      "type": "com.documentor.config.DocumentorConfig$AnalysisSettings",
+      "sourceType": "com.documentor.config.DocumentorConfig",
+      "sourceMethod": "analysisSettings()"
+    },
+    {
+      "name": "documentor.output-settings",
+      "type": "com.documentor.config.DocumentorConfig$OutputSettings",
+      "sourceType": "com.documentor.config.DocumentorConfig",
+      "sourceMethod": "outputSettings()"
+    }
+  ],
+  "properties": [
+    {
+      "name": "documentor.analysis-settings.exclude-patterns",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "com.documentor.config.DocumentorConfig$AnalysisSettings"
+    },
+    {
+      "name": "documentor.analysis-settings.include-private-members",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.documentor.config.DocumentorConfig$AnalysisSettings"
+    },
+    {
+      "name": "documentor.analysis-settings.max-threads",
+      "type": "java.lang.Integer",
+      "sourceType": "com.documentor.config.DocumentorConfig$AnalysisSettings"
+    },
+    {
+      "name": "documentor.analysis-settings.supported-languages",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "com.documentor.config.DocumentorConfig$AnalysisSettings"
+    },
+    {
+      "name": "documentor.llm-models",
+      "type": "java.util.List<com.documentor.config.DocumentorConfig$LlmModelConfig>",
+      "sourceType": "com.documentor.config.DocumentorConfig"
+    },
+    {
+      "name": "documentor.output-settings.format",
+      "type": "java.lang.String",
+      "sourceType": "com.documentor.config.DocumentorConfig$OutputSettings"
+    },
+    {
+      "name": "documentor.output-settings.generate-unit-tests",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.documentor.config.DocumentorConfig$OutputSettings"
+    },
+    {
+      "name": "documentor.output-settings.include-icons",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.documentor.config.DocumentorConfig$OutputSettings"
+    },
+    {
+      "name": "documentor.output-settings.output-path",
+      "type": "java.lang.String",
+      "sourceType": "com.documentor.config.DocumentorConfig$OutputSettings"
+    },
+    {
+      "name": "documentor.output-settings.target-coverage",
+      "type": "java.lang.Double",
+      "sourceType": "com.documentor.config.DocumentorConfig$OutputSettings"
+    }
+  ],
+  "hints": []
+}

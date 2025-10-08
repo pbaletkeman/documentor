@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.documentor.DocumentorApplicationIntegrationTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2025-10-08T01:25:22" hostname="LAPPY" time="0.028">
+  <properties/>
+  <testcase name="testAsyncConfiguration()" classname="com.documentor.DocumentorApplicationIntegrationTest" time="0.009"/>
+  <testcase name="testConfigurationPropertiesScan()" classname="com.documentor.DocumentorApplicationIntegrationTest" time="0.003"/>
+  <testcase name="testComponentIntegration()" classname="com.documentor.DocumentorApplicationIntegrationTest" time="0.001"/>
+  <testcase name="testSpringBootApplicationConfiguration()" classname="com.documentor.DocumentorApplicationIntegrationTest" time="0.002"/>
+  <testcase name="testApplicationContextLoads()" classname="com.documentor.DocumentorApplicationIntegrationTest" time="0.002"/>
+  <testcase name="testMainApplicationClass()" classname="com.documentor.DocumentorApplicationIntegrationTest" time="0.002"/>
+  <testcase name="testQuickStartCommand()" classname="com.documentor.DocumentorApplicationIntegrationTest" time="0.002"/>
+  <system-out><![CDATA[21:25:18.618 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.documentor.DocumentorApplicationIntegrationTest]: DocumentorApplicationIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+21:25:18.896 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.documentor.DocumentorApplication for test class com.documentor.DocumentorApplicationIntegrationTest
+21:25:19.949 [Test worker] INFO  c.d.DocumentorApplicationIntegrationTest - Starting DocumentorApplicationIntegrationTest using Java 21.0.8 with PID 49872 (started by Pete in C:\Users\Pete\Desktop\documentor)
+21:25:19.951 [Test worker] DEBUG c.d.DocumentorApplicationIntegrationTest - Running with Spring Boot v3.2.0, Spring v6.1.1
+21:25:19.952 [Test worker] INFO  c.d.DocumentorApplicationIntegrationTest - The following 1 profile is active: "test"
+21:25:22.398 [Test worker] WARN  org.jline - Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+21:25:22.683 [Test worker] INFO  c.d.DocumentorApplicationIntegrationTest - Started DocumentorApplicationIntegrationTest in 3.465 seconds (process running for 7.367)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

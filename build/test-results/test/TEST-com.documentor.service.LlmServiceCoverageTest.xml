@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.documentor.service.LlmServiceCoverageTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2025-10-08T01:25:24" hostname="LAPPY" time="0.159">
+  <properties/>
+  <testcase name="testCreateUnitTestPrompt()" classname="com.documentor.service.LlmServiceCoverageTest" time="0.14"/>
+  <testcase name="testCreateRequestBodyWithDifferentModels()" classname="com.documentor.service.LlmServiceCoverageTest" time="0.005"/>
+  <testcase name="testGenerateUnitTestsWithNonEmptyConfig()" classname="com.documentor.service.LlmServiceCoverageTest" time="0.002"/>
+  <testcase name="testCreateUsageExamplePrompt()" classname="com.documentor.service.LlmServiceCoverageTest" time="0.001"/>
+  <testcase name="testGetModelEndpointWithDifferentApiTypes()" classname="com.documentor.service.LlmServiceCoverageTest" time="0.004"/>
+  <testcase name="testGenerateUsageExamplesWithNonEmptyConfig()" classname="com.documentor.service.LlmServiceCoverageTest" time="0.001"/>
+  <testcase name="testCreateDocumentationPrompt()" classname="com.documentor.service.LlmServiceCoverageTest" time="0.001"/>
+  <testcase name="testConsolidateResponsesWithMultipleElements()" classname="com.documentor.service.LlmServiceCoverageTest" time="0.003"/>
+  <system-out><![CDATA[21:25:24.452 [Test worker] DEBUG com.documentor.service.LlmService - ]]>&#x1f9ea;<![CDATA[ Generating unit tests for: ]]>&#x1f4ca;<![CDATA[ com.example.Test.testField (Test.java:5)
+21:25:24.454 [Test worker] ERROR com.documentor.service.LlmService - ❌ LLM API call failed for model test-model: Cannot invoke "org.springframework.web.reactive.function.client.WebClient$RequestBodyUriSpec.uri(String, Object[])" because the return value of "org.springframework.web.reactive.function.client.WebClient.post()" is null
+21:25:24.455 [Test worker] DEBUG com.documentor.service.LlmService - ]]>&#x1f916;<![CDATA[ Generating documentation for: ]]>&#x1f527;<![CDATA[ com.example.Test.testMethod (Test.java:10)
+21:25:24.458 [Test worker] ERROR com.documentor.service.LlmService - ❌ LLM API call failed for model custom-model: Cannot invoke "org.springframework.web.reactive.function.client.WebClient$RequestBodyUriSpec.uri(String, Object[])" because the return value of "org.springframework.web.reactive.function.client.WebClient.post()" is null
+21:25:24.462 [Test worker] DEBUG com.documentor.service.LlmService - ]]>&#x1f9ea;<![CDATA[ Generating unit tests for: ]]>&#x1f527;<![CDATA[ com.example.Test.testMethod (Test.java:10)
+21:25:24.462 [Test worker] ERROR com.documentor.service.LlmService - ❌ LLM API call failed for model test-model: Cannot invoke "org.springframework.web.reactive.function.client.WebClient$RequestBodyUriSpec.uri(String, Object[])" because the return value of "org.springframework.web.reactive.function.client.WebClient.post()" is null
+21:25:24.463 [Test worker] DEBUG com.documentor.service.LlmService - ]]>&#x1f4a1;<![CDATA[ Generating usage examples for: ]]>&#x1f4e6;<![CDATA[ com.example.TestClass (TestClass.java:1)
+21:25:24.464 [Test worker] ERROR com.documentor.service.LlmService - ❌ LLM API call failed for model test-model: Cannot invoke "org.springframework.web.reactive.function.client.WebClient$RequestBodyUriSpec.uri(String, Object[])" because the return value of "org.springframework.web.reactive.function.client.WebClient.post()" is null
+21:25:24.465 [Test worker] DEBUG com.documentor.service.LlmService - ]]>&#x1f916;<![CDATA[ Generating documentation for: ]]>&#x1f527;<![CDATA[ com.example.Test.testMethod (Test.java:10)
+21:25:24.467 [Test worker] ERROR com.documentor.service.LlmService - ❌ LLM API call failed for model gpt-4: Cannot invoke "org.springframework.web.reactive.function.client.WebClient$RequestBodyUriSpec.uri(String, Object[])" because the return value of "org.springframework.web.reactive.function.client.WebClient.post()" is null
+21:25:24.468 [Test worker] DEBUG com.documentor.service.LlmService - ]]>&#x1f4a1;<![CDATA[ Generating usage examples for: ]]>&#x1f527;<![CDATA[ com.example.Test.testMethod (Test.java:10)
+21:25:24.469 [Test worker] ERROR com.documentor.service.LlmService - ❌ LLM API call failed for model test-model: Cannot invoke "org.springframework.web.reactive.function.client.WebClient$RequestBodyUriSpec.uri(String, Object[])" because the return value of "org.springframework.web.reactive.function.client.WebClient.post()" is null
+21:25:24.470 [Test worker] DEBUG com.documentor.service.LlmService - ]]>&#x1f916;<![CDATA[ Generating documentation for: ]]>&#x1f527;<![CDATA[ com.example.Test.testMethod (Test.java:10)
+21:25:24.472 [Test worker] DEBUG com.documentor.service.LlmService - ]]>&#x1f916;<![CDATA[ Generating documentation for: ]]>&#x1f527;<![CDATA[ com.example.Test.testMethod (Test.java:10)
+21:25:24.472 [Test worker] ERROR com.documentor.service.LlmService - ❌ LLM API call failed for model model1: Cannot invoke "org.springframework.web.reactive.function.client.WebClient$RequestBodyUriSpec.uri(String, Object[])" because the return value of "org.springframework.web.reactive.function.client.WebClient.post()" is null
+21:25:24.472 [Test worker] ERROR com.documentor.service.LlmService - ❌ LLM API call failed for model model2: Cannot invoke "org.springframework.web.reactive.function.client.WebClient$RequestBodyUriSpec.uri(String, Object[])" because the return value of "org.springframework.web.reactive.function.client.WebClient.post()" is null
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

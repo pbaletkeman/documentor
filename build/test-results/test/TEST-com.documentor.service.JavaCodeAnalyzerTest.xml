@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.documentor.service.JavaCodeAnalyzerTest" tests="17" skipped="0" failures="0" errors="0" timestamp="2025-10-08T01:25:23" hostname="LAPPY" time="0.756">
+  <properties/>
+  <testcase name="testAnalyzeFile_RecordClass()" classname="com.documentor.service.JavaCodeAnalyzerTest" time="0.489"/>
+  <testcase name="testAnalyzeFile_EmptyFile()" classname="com.documentor.service.JavaCodeAnalyzerTest" time="0.006"/>
+  <testcase name="testAnalyzeFile_NonExistentFile()" classname="com.documentor.service.JavaCodeAnalyzerTest" time="0.006"/>
+  <testcase name="testAnalyzeFile_AnnotationClass()" classname="com.documentor.service.JavaCodeAnalyzerTest" time="0.026"/>
+  <testcase name="testAnalyzeFile_NestedClasses()" classname="com.documentor.service.JavaCodeAnalyzerTest" time="0.034"/>
+  <testcase name="testAnalyzeFile_WithPrivateMembersExcluded()" classname="com.documentor.service.JavaCodeAnalyzerTest" time="0.033"/>
+  <testcase name="testAnalyzeFile_Constructor()" classname="com.documentor.service.JavaCodeAnalyzerTest" time="0.004"/>
+  <testcase name="testAnalyzeFile_SimpleClass()" classname="com.documentor.service.JavaCodeAnalyzerTest" time="0.017"/>
+  <testcase name="testAnalyzeFile_InvalidJava()" classname="com.documentor.service.JavaCodeAnalyzerTest" time="0.008"/>
+  <testcase name="testAnalyzeFile_ComplexInterface()" classname="com.documentor.service.JavaCodeAnalyzerTest" time="0.028"/>
+  <testcase name="testAnalyzeFile_Interface()" classname="com.documentor.service.JavaCodeAnalyzerTest" time="0.01"/>
+  <testcase name="testAnalyzeFile_OnlyComments()" classname="com.documentor.service.JavaCodeAnalyzerTest" time="0.007"/>
+  <testcase name="testAnalyzeFile_Enum()" classname="com.documentor.service.JavaCodeAnalyzerTest" time="0.019"/>
+  <testcase name="testAnalyzeFile_WithPrivateElements()" classname="com.documentor.service.JavaCodeAnalyzerTest" time="0.013"/>
+  <testcase name="testAnalyzeFile_StaticInitializerAndInstanceInitializer()" classname="com.documentor.service.JavaCodeAnalyzerTest" time="0.017"/>
+  <testcase name="testAnalyzeFile_WithPrivateMembersIncluded()" classname="com.documentor.service.JavaCodeAnalyzerTest" time="0.012"/>
+  <testcase name="testAnalyzeFile_MethodsWithComplexSignatures()" classname="com.documentor.service.JavaCodeAnalyzerTest" time="0.017"/>
+  <system-out><![CDATA[21:25:23.559 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f50d;<![CDATA[ Analyzing Java file: C:\Users\Pete\AppData\Local\Temp\junit4953498708506299232\Person.java
+21:25:24.041 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f527;<![CDATA[ Found method: String getDisplayName()
+21:25:24.042 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ✅ Found 1 elements in Person.java
+21:25:24.050 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f50d;<![CDATA[ Analyzing Java file: C:\Users\Pete\AppData\Local\Temp\junit14435357049173104160\Empty.java
+21:25:24.050 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ✅ Found 0 elements in Empty.java
+21:25:24.057 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f50d;<![CDATA[ Analyzing Java file: C:\Users\Pete\AppData\Local\Temp\junit262222033208127603\DoesNotExist.java
+21:25:24.063 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f50d;<![CDATA[ Analyzing Java file: C:\Users\Pete\AppData\Local\Temp\junit12587054395840338213\CustomAnnotation.java
+21:25:24.084 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ✅ Found 0 elements in CustomAnnotation.java
+21:25:24.090 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f50d;<![CDATA[ Analyzing Java file: C:\Users\Pete\AppData\Local\Temp\junit4749604222608977499\OuterClass.java
+21:25:24.111 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f4e6;<![CDATA[ Found class: com.example.OuterClass
+21:25:24.114 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f4e6;<![CDATA[ Found class: com.example.OuterClass.StaticNestedClass
+21:25:24.114 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f527;<![CDATA[ Found method: void nestedMethod()
+21:25:24.115 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f4e6;<![CDATA[ Found class: com.example.OuterClass.InnerClass
+21:25:24.115 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f527;<![CDATA[ Found method: void innerMethod()
+21:25:24.115 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f527;<![CDATA[ Found method: void outerMethod()
+21:25:24.115 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f4e6;<![CDATA[ Found class: LocalClass
+21:25:24.117 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f527;<![CDATA[ Found method: void localMethod()
+21:25:24.117 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ✅ Found 8 elements in OuterClass.java
+21:25:24.125 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f50d;<![CDATA[ Analyzing Java file: C:\Users\Pete\AppData\Local\Temp\junit8593555714050368848\PrivateTest.java
+21:25:24.144 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f4e6;<![CDATA[ Found class: com.example.PrivateTest
+21:25:24.148 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f4ca;<![CDATA[ Found field: String protectedField
+21:25:24.149 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f4ca;<![CDATA[ Found field: String publicField
+21:25:24.150 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f527;<![CDATA[ Found method: void protectedMethod()
+21:25:24.150 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f527;<![CDATA[ Found method: void publicMethod()
+21:25:24.150 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ✅ Found 5 elements in PrivateTest.java
+21:25:24.162 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f50d;<![CDATA[ Analyzing Java file: C:\Users\Pete\AppData\Local\Temp\junit25953214702276918\TestClass.java
+21:25:24.170 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f4e6;<![CDATA[ Found class: com.example.TestClass
+21:25:24.171 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f527;<![CDATA[ Found method: void publicMethod()
+21:25:24.172 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ✅ Found 2 elements in TestClass.java
+21:25:24.181 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f50d;<![CDATA[ Analyzing Java file: C:\Users\Pete\AppData\Local\Temp\junit457678647610164997\Invalid.java
+21:25:24.183 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ✅ Found 0 elements in Invalid.java
+21:25:24.189 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f50d;<![CDATA[ Analyzing Java file: C:\Users\Pete\AppData\Local\Temp\junit12888635644200967135\ComplexInterface.java
+21:25:24.208 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f4e6;<![CDATA[ Found class: com.example.ComplexInterface
+21:25:24.209 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f4ca;<![CDATA[ Found field: String CONSTANT
+21:25:24.209 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f527;<![CDATA[ Found method: void abstractMethod()
+21:25:24.210 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f527;<![CDATA[ Found method: void defaultMethod()
+21:25:24.210 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f527;<![CDATA[ Found method: void staticMethod()
+21:25:24.210 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ✅ Found 5 elements in ComplexInterface.java
+21:25:24.217 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f50d;<![CDATA[ Analyzing Java file: C:\Users\Pete\AppData\Local\Temp\junit12383332134472180712\TestInterface.java
+21:25:24.220 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f4e6;<![CDATA[ Found class: com.example.TestInterface
+21:25:24.220 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f527;<![CDATA[ Found method: void method1()
+21:25:24.221 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f527;<![CDATA[ Found method: String method2(int)
+21:25:24.221 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ✅ Found 3 elements in TestInterface.java
+21:25:24.228 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f50d;<![CDATA[ Analyzing Java file: C:\Users\Pete\AppData\Local\Temp\junit8571797993720435768\CommentsOnly.java
+21:25:24.230 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ✅ Found 0 elements in CommentsOnly.java
+21:25:24.234 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f50d;<![CDATA[ Analyzing Java file: C:\Users\Pete\AppData\Local\Temp\junit1004704930810306826\TestEnum.java
+21:25:24.247 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f4e6;<![CDATA[ Found enum: TestEnum
+21:25:24.248 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f527;<![CDATA[ Found method: void enumMethod()
+21:25:24.248 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ✅ Found 2 elements in TestEnum.java
+21:25:24.254 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f50d;<![CDATA[ Analyzing Java file: C:\Users\Pete\AppData\Local\Temp\junit2239106841428873223\TestClass.java
+21:25:24.260 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f4e6;<![CDATA[ Found class: TestClass
+21:25:24.260 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f4ca;<![CDATA[ Found field: String privateField
+21:25:24.261 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f4ca;<![CDATA[ Found field: String publicField
+21:25:24.261 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f527;<![CDATA[ Found method: void privateMethod()
+21:25:24.262 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f527;<![CDATA[ Found method: void publicMethod()
+21:25:24.262 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ✅ Found 5 elements in TestClass.java
+21:25:24.268 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f50d;<![CDATA[ Analyzing Java file: C:\Users\Pete\AppData\Local\Temp\junit16482263361745732033\InitializerTest.java
+21:25:24.281 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f4e6;<![CDATA[ Found class: com.example.InitializerTest
+21:25:24.281 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ✅ Found 1 elements in InitializerTest.java
+21:25:24.285 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f50d;<![CDATA[ Analyzing Java file: C:\Users\Pete\AppData\Local\Temp\junit15600644660404191247\PrivateTest.java
+21:25:24.290 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f4e6;<![CDATA[ Found class: com.example.PrivateTest
+21:25:24.291 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f4ca;<![CDATA[ Found field: String privateField
+21:25:24.291 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f4ca;<![CDATA[ Found field: String protectedField
+21:25:24.291 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f4ca;<![CDATA[ Found field: String publicField
+21:25:24.291 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f527;<![CDATA[ Found method: void privateMethod()
+21:25:24.292 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f527;<![CDATA[ Found method: void protectedMethod()
+21:25:24.292 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f527;<![CDATA[ Found method: void publicMethod()
+21:25:24.292 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f4e6;<![CDATA[ Found class: com.example.PrivateTest.InnerClass
+21:25:24.292 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ✅ Found 8 elements in PrivateTest.java
+21:25:24.298 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f50d;<![CDATA[ Analyzing Java file: C:\Users\Pete\AppData\Local\Temp\junit2928153968816505956\ComplexMethods.java
+21:25:24.308 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f4e6;<![CDATA[ Found class: com.example.ComplexMethods
+21:25:24.309 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f527;<![CDATA[ Found method: List<T> genericMethod(T)
+21:25:24.309 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f527;<![CDATA[ Found method: void methodWithVarargs(String...)
+21:25:24.310 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f527;<![CDATA[ Found method: Map<K, V> complexGenericMethod(List<? extends K>, V)
+21:25:24.310 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ]]>&#x1f527;<![CDATA[ Found method: void modifiedMethod()
+21:25:24.310 [Test worker] DEBUG c.d.service.JavaCodeAnalyzer - ✅ Found 5 elements in ComplexMethods.java
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

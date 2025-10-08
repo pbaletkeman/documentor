@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DocumentorConfig.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">documentor</a> &gt; <a href="index.source.html" class="el_package">com.documentor.config</a> &gt; <span class="el_source">DocumentorConfig.java</span></div><h1>DocumentorConfig.java</h1><pre class="source lang-java linenums">package com.documentor.config;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.validation.annotation.Validated;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 🔧 Configuration properties for the Documentor application
+ *
+ * This class maps the external JSON configuration file to Java objects,
+ * providing type-safe access to LLM configurations and application settings.
+ */
+@ConfigurationProperties(prefix = &quot;documentor&quot;)
+@Validated
+public record DocumentorConfig(
+
+        @JsonProperty(&quot;llm_models&quot;)
+        @NotEmpty(message = &quot;At least one LLM model must be configured&quot;)
+        @Valid
+        List&lt;LlmModelConfig&gt; llmModels,
+
+        @JsonProperty(&quot;output_settings&quot;)
+        @NotNull(message = &quot;Output settings must be configured&quot;)
+        @Valid
+        OutputSettings outputSettings,
+
+        @JsonProperty(&quot;analysis_settings&quot;)
+        @Valid
+        AnalysisSettings analysisSettings
+) {
+
+    // Default values constants
+    private static final int DEFAULT_MAX_TOKENS = 4096;
+    private static final double DEFAULT_TEMPERATURE = 0.7;
+    private static final int DEFAULT_TIMEOUT_SECONDS = 30;
+    private static final double DEFAULT_TOP_P = 0.90;
+    
+    /**
+     * 🤖 LLM Model Configuration
+     */
+    public record LlmModelConfig(
+        @JsonProperty(&quot;name&quot;)
+        @NotEmpty(message = &quot;Model name is required&quot;)
+        String name,
+        
+        @JsonProperty(&quot;api_key&quot;)
+        @NotEmpty(message = &quot;API key is required&quot;)
+        String apiKey,
+        
+        @JsonProperty(&quot;endpoint&quot;)
+        String endpoint,
+        
+        @JsonProperty(&quot;max_tokens&quot;)
+        Integer maxTokens,
+        
+        @JsonProperty(&quot;temperature&quot;)
+        Double temperature,
+        
+        @JsonProperty(&quot;timeout_seconds&quot;)
+        Integer timeoutSeconds,
+        
+        @JsonProperty(&quot;additional_config&quot;)
+        Map&lt;String, Object&gt; additionalConfig
+    ) {
+<span class="fc" id="L71">        public LlmModelConfig {</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">            if (maxTokens == null) {</span>
+<span class="fc" id="L73">                maxTokens = DEFAULT_MAX_TOKENS;</span>
+            }
+<span class="fc bfc" id="L75" title="All 2 branches covered.">            if (temperature == null) {</span>
+<span class="fc" id="L76">                temperature = DEFAULT_TEMPERATURE;</span>
+            }
+<span class="fc bfc" id="L78" title="All 2 branches covered.">            if (timeoutSeconds == null) {</span>
+<span class="fc" id="L79">                timeoutSeconds = DEFAULT_TIMEOUT_SECONDS;</span>
+            }
+<span class="fc bfc" id="L81" title="All 2 branches covered.">            if (additionalConfig == null) additionalConfig = Map.of();</span>
+<span class="fc" id="L82">        }</span>
+    }
+    
+    /**
+     * 📄 Output Settings Configuration
+     */
+    public record OutputSettings(
+        @JsonProperty(&quot;output_path&quot;)
+        @NotEmpty(message = &quot;Output path is required&quot;)
+        String outputPath,
+        
+        @JsonProperty(&quot;format&quot;)
+        String format,
+        
+        @JsonProperty(&quot;include_icons&quot;)
+        Boolean includeIcons,
+        
+        @JsonProperty(&quot;generate_unit_tests&quot;)
+        Boolean generateUnitTests,
+        
+        @JsonProperty(&quot;target_coverage&quot;)
+        Double targetCoverage
+    ) {
+<span class="fc" id="L105">        public OutputSettings {</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">            if (format == null) format = &quot;markdown&quot;;</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">            if (includeIcons == null) includeIcons = true;</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">            if (generateUnitTests == null) generateUnitTests = true;</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">            if (targetCoverage == null) {</span>
+<span class="fc" id="L110">                targetCoverage = DEFAULT_TOP_P;</span>
+            }
+<span class="fc" id="L112">        }</span>
+    }
+    
+    /**
+     * 🔍 Analysis Settings Configuration
+     */
+    public record AnalysisSettings(
+        @JsonProperty(&quot;include_private_members&quot;)
+        Boolean includePrivateMembers,
+        
+        @JsonProperty(&quot;max_threads&quot;)
+        Integer maxThreads,
+        
+        @JsonProperty(&quot;supported_languages&quot;)
+        List&lt;String&gt; supportedLanguages,
+        
+        @JsonProperty(&quot;exclude_patterns&quot;)
+        List&lt;String&gt; excludePatterns
+    ) {
+<span class="fc" id="L131">        public AnalysisSettings {</span>
+<span class="fc bfc" id="L132" title="All 2 branches covered.">            if (includePrivateMembers == null) includePrivateMembers = false;</span>
+<span class="fc bfc" id="L133" title="All 2 branches covered.">            if (maxThreads == null) maxThreads = Runtime.getRuntime().availableProcessors();</span>
+<span class="fc bfc" id="L134" title="All 2 branches covered.">            if (supportedLanguages == null) supportedLanguages = List.of(&quot;java&quot;, &quot;python&quot;);</span>
+<span class="fc bfc" id="L135" title="All 2 branches covered.">            if (excludePatterns == null) excludePatterns = List.of(&quot;**/test/**&quot;, &quot;**/target/**&quot;, &quot;**/__pycache__/**&quot;);</span>
+<span class="fc" id="L136">        }</span>
+    }
+    
+<span class="fc" id="L139">    public DocumentorConfig {</span>
+<span class="fc bfc" id="L140" title="All 2 branches covered.">        if (analysisSettings == null) {</span>
+<span class="fc" id="L141">            analysisSettings = new AnalysisSettings(null, null, null, null);</span>
+        }
+<span class="fc" id="L143">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.documentor.DocumentorApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-10-08T01:25:22" hostname="LAPPY" time="0.003">
+  <properties/>
+  <testcase name="contextLoads()" classname="com.documentor.DocumentorApplicationTests" time="0.003"/>
+  <system-out><![CDATA[21:25:22.732 [Test worker] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.documentor.DocumentorApplicationTests]: DocumentorApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+21:25:22.733 [Test worker] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.documentor.DocumentorApplication for test class com.documentor.DocumentorApplicationTests
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

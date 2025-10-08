@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProjectAnalysis.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">documentor</a> &gt; <a href="index.source.html" class="el_package">com.documentor.model</a> &gt; <span class="el_source">ProjectAnalysis.java</span></div><h1>ProjectAnalysis.java</h1><pre class="source lang-java linenums">package com.documentor.model;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+/**
+ * 📊 Project Analysis Result
+ * 
+ * Contains the complete analysis results for a project, including all discovered
+ * code elements organized by type and file.
+ */
+<span class="fc" id="L13">public record ProjectAnalysis(</span>
+    String projectPath,
+    List&lt;CodeElement&gt; codeElements,
+    long timestamp
+) {
+    
+    /**
+     * 📦 Gets all classes found in the project
+     */
+    public List&lt;CodeElement&gt; getClasses() {
+<span class="fc" id="L23">        return codeElements.stream()</span>
+<span class="fc bfc" id="L24" title="All 2 branches covered.">                .filter(element -&gt; element.type() == CodeElementType.CLASS)</span>
+<span class="fc" id="L25">                .toList();</span>
+    }
+    
+    /**
+     * 🔧 Gets all methods found in the project
+     */
+    public List&lt;CodeElement&gt; getMethods() {
+<span class="fc" id="L32">        return codeElements.stream()</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">                .filter(element -&gt; element.type() == CodeElementType.METHOD)</span>
+<span class="fc" id="L34">                .toList();</span>
+    }
+    
+    /**
+     * 📊 Gets all fields found in the project
+     */
+    public List&lt;CodeElement&gt; getFields() {
+<span class="fc" id="L41">        return codeElements.stream()</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">                .filter(element -&gt; element.type() == CodeElementType.FIELD)</span>
+<span class="fc" id="L43">                .toList();</span>
+    }
+    
+    /**
+     * 📁 Groups code elements by file path
+     */
+    public Map&lt;String, List&lt;CodeElement&gt;&gt; getElementsByFile() {
+<span class="fc" id="L50">        return codeElements.stream()</span>
+<span class="fc" id="L51">                .collect(Collectors.groupingBy(CodeElement::filePath));</span>
+    }
+    
+    /**
+     * 🏷️ Groups code elements by type
+     */
+    public Map&lt;CodeElementType, List&lt;CodeElement&gt;&gt; getElementsByType() {
+<span class="fc" id="L58">        return codeElements.stream()</span>
+<span class="fc" id="L59">                .collect(Collectors.groupingBy(CodeElement::type));</span>
+    }
+    
+    /**
+     * 📈 Gets analysis statistics
+     */
+    public AnalysisStats getStats() {
+<span class="fc" id="L66">        Map&lt;CodeElementType, Long&gt; counts = codeElements.stream()</span>
+<span class="fc" id="L67">                .collect(Collectors.groupingBy(</span>
+                    CodeElement::type,
+<span class="fc" id="L69">                    Collectors.counting()</span>
+                ));
+        
+<span class="fc" id="L72">        long fileCount = codeElements.stream()</span>
+<span class="fc" id="L73">                .map(CodeElement::filePath)</span>
+<span class="fc" id="L74">                .distinct()</span>
+<span class="fc" id="L75">                .count();</span>
+        
+<span class="fc" id="L77">        return new AnalysisStats(</span>
+<span class="fc" id="L78">            codeElements.size(),</span>
+<span class="fc" id="L79">            counts.getOrDefault(CodeElementType.CLASS, 0L).intValue(),</span>
+<span class="fc" id="L80">            counts.getOrDefault(CodeElementType.METHOD, 0L).intValue(),</span>
+<span class="fc" id="L81">            counts.getOrDefault(CodeElementType.FIELD, 0L).intValue(),</span>
+            (int) fileCount
+        );
+    }
+    
+    /**
+     * 📊 Analysis Statistics Record
+     */
+<span class="fc" id="L89">    public record AnalysisStats(</span>
+        int totalElements,
+        int classCount,
+        int methodCount,
+        int fieldCount,
+        int fileCount
+    ) {
+        public String getFormattedSummary() {
+<span class="fc" id="L97">            return String.format(</span>
+                &quot;📊 Analysis Summary: %d total elements (%d classes, %d methods, %d fields) across %d files&quot;,
+<span class="fc" id="L99">                totalElements, classCount, methodCount, fieldCount, fileCount</span>
+            );
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

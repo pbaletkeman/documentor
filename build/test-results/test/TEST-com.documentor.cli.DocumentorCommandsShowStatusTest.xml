@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.documentor.cli.DocumentorCommandsShowStatusTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2025-10-08T01:25:22" hostname="LAPPY" time="0.13">
+  <properties/>
+  <testcase name="testShowStatusOutputSettings()" classname="com.documentor.cli.DocumentorCommandsShowStatusTest" time="0.112"/>
+  <testcase name="testShowStatusModelDetails()" classname="com.documentor.cli.DocumentorCommandsShowStatusTest" time="0.003"/>
+  <testcase name="testShowStatusAnalysisSettings()" classname="com.documentor.cli.DocumentorCommandsShowStatusTest" time="0.002"/>
+  <testcase name="testShowStatusSystemProperties()" classname="com.documentor.cli.DocumentorCommandsShowStatusTest" time="0.001"/>
+  <testcase name="testShowStatusBasic()" classname="com.documentor.cli.DocumentorCommandsShowStatusTest" time="0.001"/>
+  <testcase name="testShowStatusMemoryInformation()" classname="com.documentor.cli.DocumentorCommandsShowStatusTest" time="0.002"/>
+  <testcase name="testShowStatusWithMultipleModels()" classname="com.documentor.cli.DocumentorCommandsShowStatusTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

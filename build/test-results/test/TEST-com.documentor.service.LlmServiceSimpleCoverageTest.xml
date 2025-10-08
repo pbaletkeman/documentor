@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.documentor.service.LlmServiceSimpleCoverageTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2025-10-08T01:25:24" hostname="LAPPY" time="0.009">
+  <properties/>
+  <testcase name="testCodeElementIsPublic()" classname="com.documentor.service.LlmServiceSimpleCoverageTest" time="0.001"/>
+  <testcase name="testCodeElementWithParameters()" classname="com.documentor.service.LlmServiceSimpleCoverageTest" time="0.002"/>
+  <testcase name="testGenerateDocumentationWithEmptyModels()" classname="com.documentor.service.LlmServiceSimpleCoverageTest" time="0.001"/>
+  <testcase name="testCodeElementAnalysisContext()" classname="com.documentor.service.LlmServiceSimpleCoverageTest" time="0.001"/>
+  <testcase name="testGenerateUnitTestsWithClassElement()" classname="com.documentor.service.LlmServiceSimpleCoverageTest" time="0.001"/>
+  <testcase name="testCodeElementDisplayName()" classname="com.documentor.service.LlmServiceSimpleCoverageTest" time="0.001"/>
+  <testcase name="testGenerateUsageExamplesWithFieldElement()" classname="com.documentor.service.LlmServiceSimpleCoverageTest" time="0.001"/>
+  <testcase name="testConfigurationValidation()" classname="com.documentor.service.LlmServiceSimpleCoverageTest" time="0.0"/>
+  <system-out><![CDATA[21:25:24.494 [Test worker] DEBUG com.documentor.service.LlmService - ]]>&#x1f916;<![CDATA[ Generating documentation for: ]]>&#x1f527;<![CDATA[ TestClass (test.java:15)
+21:25:24.494 [Test worker] ERROR com.documentor.service.LlmService - ❌ LLM API call failed for model test-model: Cannot invoke "org.springframework.web.reactive.function.client.WebClient$RequestBodyUriSpec.uri(String, Object[])" because the return value of "org.springframework.web.reactive.function.client.WebClient.post()" is null
+21:25:24.494 [Test worker] DEBUG com.documentor.service.LlmService - ]]>&#x1f4a1;<![CDATA[ Generating usage examples for: ]]>&#x1f527;<![CDATA[ TestClass (test.java:15)
+21:25:24.495 [Test worker] ERROR com.documentor.service.LlmService - ❌ LLM API call failed for model test-model: Cannot invoke "org.springframework.web.reactive.function.client.WebClient$RequestBodyUriSpec.uri(String, Object[])" because the return value of "org.springframework.web.reactive.function.client.WebClient.post()" is null
+21:25:24.495 [Test worker] DEBUG com.documentor.service.LlmService - ]]>&#x1f9ea;<![CDATA[ Generating unit tests for: ]]>&#x1f527;<![CDATA[ TestClass (test.java:15)
+21:25:24.495 [Test worker] ERROR com.documentor.service.LlmService - ❌ LLM API call failed for model test-model: Cannot invoke "org.springframework.web.reactive.function.client.WebClient$RequestBodyUriSpec.uri(String, Object[])" because the return value of "org.springframework.web.reactive.function.client.WebClient.post()" is null
+21:25:24.495 [Test worker] DEBUG com.documentor.service.LlmService - ]]>&#x1f916;<![CDATA[ Generating documentation for: ]]>&#x1f527;<![CDATA[ TestClass (test.java:10)
+21:25:24.498 [Test worker] DEBUG com.documentor.service.LlmService - ]]>&#x1f9ea;<![CDATA[ Generating unit tests for: ]]>&#x1f4e6;<![CDATA[ TestClass (test.java:1)
+21:25:24.498 [Test worker] ERROR com.documentor.service.LlmService - ❌ LLM API call failed for model test-model: Cannot invoke "org.springframework.web.reactive.function.client.WebClient$RequestBodyUriSpec.uri(String, Object[])" because the return value of "org.springframework.web.reactive.function.client.WebClient.post()" is null
+21:25:24.500 [Test worker] DEBUG com.documentor.service.LlmService - ]]>&#x1f4a1;<![CDATA[ Generating usage examples for: ]]>&#x1f4ca;<![CDATA[ TestClass (test.java:5)
+21:25:24.500 [Test worker] ERROR com.documentor.service.LlmService - ❌ LLM API call failed for model test-model: Cannot invoke "org.springframework.web.reactive.function.client.WebClient$RequestBodyUriSpec.uri(String, Object[])" because the return value of "org.springframework.web.reactive.function.client.WebClient.post()" is null
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

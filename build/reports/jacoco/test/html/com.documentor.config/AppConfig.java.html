@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AppConfig.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">documentor</a> &gt; <a href="index.source.html" class="el_package">com.documentor.config</a> &gt; <span class="el_source">AppConfig.java</span></div><h1>AppConfig.java</h1><pre class="source lang-java linenums">package com.documentor.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.AsyncConfigurer;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import java.util.concurrent.Executor;
+
+/**
+ * 🔧 Application Configuration
+ *
+ * Configures beans for the Documentor application including:
+ * - Thread pool for parallel LLM processing
+ * - WebClient for HTTP API calls
+ * - Async execution configuration
+ */
+@Configuration
+public class AppConfig implements AsyncConfigurer {
+
+    private static final int DEFAULT_MAX_MEMORY_SIZE_MB = 10;
+    private static final int BYTES_PER_MB = 1024 * 1024;
+    private static final int DEFAULT_QUEUE_CAPACITY = 100;
+    private static final int DEFAULT_THREAD_MULTIPLIER = 2;
+    private static final int DEFAULT_TERMINATION_TIMEOUT_SECONDS = 60;
+
+    private final DocumentorConfig documentorConfig;
+
+<span class="fc" id="L30">    public AppConfig(final DocumentorConfig documentorConfigParam) {</span>
+<span class="fc" id="L31">        this.documentorConfig = documentorConfigParam;</span>
+<span class="fc" id="L32">    }</span>
+
+    /**
+     * 🌐 WebClient for making HTTP requests to LLM APIs
+     */
+    @Bean
+    public WebClient webClient() {
+<span class="fc" id="L39">        return WebClient.builder()</span>
+<span class="fc" id="L40">                .codecs(configurer -&gt; configurer.defaultCodecs()</span>
+<span class="fc" id="L41">                        .maxInMemorySize(DEFAULT_MAX_MEMORY_SIZE_MB * BYTES_PER_MB))</span>
+<span class="fc" id="L42">                .build();</span>
+    }
+
+    /**
+     * ⚡ Thread pool executor for parallel LLM processing
+     */
+    @Bean(&quot;llmExecutor&quot;)
+    public ThreadPoolTaskExecutor llmExecutor() {
+<span class="fc" id="L50">        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();</span>
+<span class="fc" id="L51">        executor.setCorePoolSize(documentorConfig.analysisSettings().maxThreads());</span>
+<span class="fc" id="L52">        executor.setMaxPoolSize(documentorConfig.analysisSettings().maxThreads() </span>
+                * DEFAULT_THREAD_MULTIPLIER);
+<span class="fc" id="L54">        executor.setQueueCapacity(DEFAULT_QUEUE_CAPACITY);</span>
+<span class="fc" id="L55">        executor.setThreadNamePrefix(&quot;LLM-&quot;);</span>
+<span class="fc" id="L56">        executor.setWaitForTasksToCompleteOnShutdown(true);</span>
+<span class="fc" id="L57">        executor.setAwaitTerminationSeconds(DEFAULT_TERMINATION_TIMEOUT_SECONDS);</span>
+<span class="fc" id="L58">        executor.initialize();</span>
+<span class="fc" id="L59">        return executor;</span>
+    }
+
+    /**
+     * 🔄 Default async executor configuration
+     */
+    @Override
+    public Executor getAsyncExecutor() {
+<span class="fc" id="L67">        return llmExecutor();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

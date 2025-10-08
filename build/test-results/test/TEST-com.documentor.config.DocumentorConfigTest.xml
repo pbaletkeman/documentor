@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.documentor.config.DocumentorConfigTest" tests="17" skipped="0" failures="0" errors="0" timestamp="2025-10-08T01:25:23" hostname="LAPPY" time="0.049">
+  <properties/>
+  <testcase name="testAnalysisSettings_WithAllValues()" classname="com.documentor.config.DocumentorConfigTest" time="0.0"/>
+  <testcase name="testLlmModelConfig_Equality()" classname="com.documentor.config.DocumentorConfigTest" time="0.005"/>
+  <testcase name="testAnalysisSettings_WithDefaultValues()" classname="com.documentor.config.DocumentorConfigTest" time="0.0"/>
+  <testcase name="testDocumentorConfig_Complete()" classname="com.documentor.config.DocumentorConfigTest" time="0.01"/>
+  <testcase name="testOutputSettings_WithPartialDefaults()" classname="com.documentor.config.DocumentorConfigTest" time="0.001"/>
+  <testcase name="testAnalysisSettings_WithPartialDefaults()" classname="com.documentor.config.DocumentorConfigTest" time="0.0"/>
+  <testcase name="testAnalysisSettings_Equality()" classname="com.documentor.config.DocumentorConfigTest" time="0.001"/>
+  <testcase name="testOutputSettings_Equality()" classname="com.documentor.config.DocumentorConfigTest" time="0.001"/>
+  <testcase name="testLlmModelConfig_WithAllValues()" classname="com.documentor.config.DocumentorConfigTest" time="0.0"/>
+  <testcase name="testLlmModelConfig_WithPartialDefaults()" classname="com.documentor.config.DocumentorConfigTest" time="0.0"/>
+  <testcase name="testAnalysisSettings_IncludePrivateMembersMethod()" classname="com.documentor.config.DocumentorConfigTest" time="0.0"/>
+  <testcase name="testDocumentorConfig_WithNullAnalysisSettings()" classname="com.documentor.config.DocumentorConfigTest" time="0.0"/>
+  <testcase name="testMaxThreadsDefaultValue()" classname="com.documentor.config.DocumentorConfigTest" time="0.001"/>
+  <testcase name="testOutputSettings_WithAllValues()" classname="com.documentor.config.DocumentorConfigTest" time="0.0"/>
+  <testcase name="testOutputSettings_WithDefaultValues()" classname="com.documentor.config.DocumentorConfigTest" time="0.001"/>
+  <testcase name="testDocumentorConfig_ToString()" classname="com.documentor.config.DocumentorConfigTest" time="0.022"/>
+  <testcase name="testLlmModelConfig_WithDefaultValues()" classname="com.documentor.config.DocumentorConfigTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

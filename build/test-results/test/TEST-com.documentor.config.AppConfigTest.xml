@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.documentor.config.AppConfigTest" tests="15" skipped="0" failures="0" errors="0" timestamp="2025-10-08T01:25:23" hostname="LAPPY" time="0.096">
+  <properties/>
+  <testcase name="testExecutorShutdownConfiguration()" classname="com.documentor.config.AppConfigTest" time="0.052"/>
+  <testcase name="testLlmExecutorBean()" classname="com.documentor.config.AppConfigTest" time="0.003"/>
+  <testcase name="testLlmExecutorWithSingleThread()" classname="com.documentor.config.AppConfigTest" time="0.002"/>
+  <testcase name="testWebClientConfiguration()" classname="com.documentor.config.AppConfigTest" time="0.003"/>
+  <testcase name="testMultipleWebClientCalls()" classname="com.documentor.config.AppConfigTest" time="0.004"/>
+  <testcase name="testLlmExecutorWithDifferentMaxThreads()" classname="com.documentor.config.AppConfigTest" time="0.003"/>
+  <testcase name="testAppConfigWithCompleteDocumentorConfig()" classname="com.documentor.config.AppConfigTest" time="0.003"/>
+  <testcase name="testWithHighThreadCount()" classname="com.documentor.config.AppConfigTest" time="0.003"/>
+  <testcase name="testLlmExecutorInitialization()" classname="com.documentor.config.AppConfigTest" time="0.002"/>
+  <testcase name="testMultipleLlmExecutorCalls()" classname="com.documentor.config.AppConfigTest" time="0.002"/>
+  <testcase name="testWebClientBean()" classname="com.documentor.config.AppConfigTest" time="0.003"/>
+  <testcase name="testDefaultConstants()" classname="com.documentor.config.AppConfigTest" time="0.002"/>
+  <testcase name="testConfigurationAsAsyncConfigurer()" classname="com.documentor.config.AppConfigTest" time="0.002"/>
+  <testcase name="testConstructor()" classname="com.documentor.config.AppConfigTest" time="0.002"/>
+  <testcase name="testGetAsyncExecutor()" classname="com.documentor.config.AppConfigTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

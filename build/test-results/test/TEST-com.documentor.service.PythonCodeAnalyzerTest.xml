@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.documentor.service.PythonCodeAnalyzerTest" tests="18" skipped="0" failures="0" errors="0" timestamp="2025-10-08T01:25:24" hostname="LAPPY" time="0.977">
+  <properties/>
+  <testcase name="testDocstringExtraction()" classname="com.documentor.service.PythonCodeAnalyzerTest" time="0.008"/>
+  <testcase name="testAnalyzeFileWithIOException()" classname="com.documentor.service.PythonCodeAnalyzerTest" time="0.004"/>
+  <testcase name="testAnalyzeWithPrivateMembersIncluded()" classname="com.documentor.service.PythonCodeAnalyzerTest" time="0.106"/>
+  <testcase name="testExtractParameters()" classname="com.documentor.service.PythonCodeAnalyzerTest" time="0.102"/>
+  <testcase name="testRegexPatterns()" classname="com.documentor.service.PythonCodeAnalyzerTest" time="0.118"/>
+  <testcase name="testRegexParsingFallback()" classname="com.documentor.service.PythonCodeAnalyzerTest" time="0.008"/>
+  <testcase name="testAnalyzeComplexPythonCode()" classname="com.documentor.service.PythonCodeAnalyzerTest" time="0.117"/>
+  <testcase name="testParameterExtraction()" classname="com.documentor.service.PythonCodeAnalyzerTest" time="0.007"/>
+  <testcase name="testAnalyzeFileWithOnlyComments()" classname="com.documentor.service.PythonCodeAnalyzerTest" time="0.096"/>
+  <testcase name="testShouldIncludePrivateMembers()" classname="com.documentor.service.PythonCodeAnalyzerTest" time="0.004"/>
+  <testcase name="testAnalyzeSimplePythonClass()" classname="com.documentor.service.PythonCodeAnalyzerTest" time="0.098"/>
+  <testcase name="testAnalyzeEmptyFile()" classname="com.documentor.service.PythonCodeAnalyzerTest" time="0.089"/>
+  <testcase name="testAnalyzeWithPrivateMembersExcluded()" classname="com.documentor.service.PythonCodeAnalyzerTest" time="0.1"/>
+  <testcase name="testExtractDocstring()" classname="com.documentor.service.PythonCodeAnalyzerTest" time="0.1"/>
+  <testcase name="testAnalyzeNonExistentFile()" classname="com.documentor.service.PythonCodeAnalyzerTest" time="0.004"/>
+  <testcase name="testRegexParsingWithPrivateMembersIncluded()" classname="com.documentor.service.PythonCodeAnalyzerTest" time="0.006"/>
+  <testcase name="testConstructor()" classname="com.documentor.service.PythonCodeAnalyzerTest" time="0.002"/>
+  <testcase name="testParsePythonASTOutput()" classname="com.documentor.service.PythonCodeAnalyzerTest" time="0.002"/>
+  <system-out><![CDATA[21:25:24.517 [Test worker] DEBUG c.d.service.PythonCodeAnalyzer - ]]>&#x1f50d;<![CDATA[ Analyzing Python file: C:\Users\Pete\AppData\Local\Temp\junit7970190532582444825\test.py
+21:25:24.520 [Test worker] DEBUG c.d.service.PythonCodeAnalyzer - ]]>&#x1f50d;<![CDATA[ Analyzing Python file: C:\Users\Pete\AppData\Local\Temp\junit16258421582666208709\private_test.py
+21:25:24.629 [Test worker] DEBUG c.d.service.PythonCodeAnalyzer - ]]>&#x1f50d;<![CDATA[ Analyzing Python file: C:\Users\Pete\AppData\Local\Temp\junit4477670570497084952\params_test.py
+21:25:24.730 [Test worker] DEBUG c.d.service.PythonCodeAnalyzer - ]]>&#x1f50d;<![CDATA[ Analyzing Python file: C:\Users\Pete\AppData\Local\Temp\junit7547474101760638812\patterns_test.py
+21:25:24.859 [Test worker] DEBUG c.d.service.PythonCodeAnalyzer - ]]>&#x1f50d;<![CDATA[ Analyzing Python file: C:\Users\Pete\AppData\Local\Temp\junit2650109090609267830\calculator.py
+21:25:24.982 [Test worker] DEBUG c.d.service.PythonCodeAnalyzer - ]]>&#x1f50d;<![CDATA[ Analyzing Python file: C:\Users\Pete\AppData\Local\Temp\junit18164104897615797766\comments_only.py
+21:25:25.082 [Test worker] DEBUG c.d.service.PythonCodeAnalyzer - ]]>&#x1f50d;<![CDATA[ Analyzing Python file: C:\Users\Pete\AppData\Local\Temp\junit17402676388057609396\test_class.py
+21:25:25.177 [Test worker] DEBUG c.d.service.PythonCodeAnalyzer - ]]>&#x1f50d;<![CDATA[ Analyzing Python file: C:\Users\Pete\AppData\Local\Temp\junit8774789393605965904\empty.py
+21:25:25.271 [Test worker] DEBUG c.d.service.PythonCodeAnalyzer - ]]>&#x1f50d;<![CDATA[ Analyzing Python file: C:\Users\Pete\AppData\Local\Temp\junit15521274669279760395\private_test2.py
+21:25:25.371 [Test worker] DEBUG c.d.service.PythonCodeAnalyzer - ]]>&#x1f50d;<![CDATA[ Analyzing Python file: C:\Users\Pete\AppData\Local\Temp\junit5894544302131095029\docstring_test.py
+21:25:25.471 [Test worker] DEBUG c.d.service.PythonCodeAnalyzer - ]]>&#x1f50d;<![CDATA[ Analyzing Python file: C:\Users\Pete\AppData\Local\Temp\junit5773460208216316565\non-existent.py
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.documentor.model.ProjectAnalysisTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2025-10-08T01:25:23" hostname="LAPPY" time="0.02">
+  <properties/>
+  <testcase name="testAnalysisStatsFormattedSummary()" classname="com.documentor.model.ProjectAnalysisTest" time="0.001"/>
+  <testcase name="testGetStats()" classname="com.documentor.model.ProjectAnalysisTest" time="0.0"/>
+  <testcase name="testToString()" classname="com.documentor.model.ProjectAnalysisTest" time="0.007"/>
+  <testcase name="testConstructorAndGetters()" classname="com.documentor.model.ProjectAnalysisTest" time="0.0"/>
+  <testcase name="testGetElementsByFile()" classname="com.documentor.model.ProjectAnalysisTest" time="0.0"/>
+  <testcase name="testGetElementsByType()" classname="com.documentor.model.ProjectAnalysisTest" time="0.0"/>
+  <testcase name="testGetFields()" classname="com.documentor.model.ProjectAnalysisTest" time="0.0"/>
+  <testcase name="testGetClasses()" classname="com.documentor.model.ProjectAnalysisTest" time="0.0"/>
+  <testcase name="testGetMethods()" classname="com.documentor.model.ProjectAnalysisTest" time="0.0"/>
+  <testcase name="testEquality()" classname="com.documentor.model.ProjectAnalysisTest" time="0.003"/>
+  <testcase name="testWithEmptyList()" classname="com.documentor.model.ProjectAnalysisTest" time="0.0"/>
+  <testcase name="testWithEmptyElements()" classname="com.documentor.model.ProjectAnalysisTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
