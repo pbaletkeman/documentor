@@ -2,338 +2,91 @@ package com.documentor.service;
 
 import com.documentor.config.DocumentorConfig;
 import com.documentor.model.CodeElement;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.documentor.service.llm.LlmApiClient;
+import com.documentor.service.llm.LlmRequestBuilder;
+import com.documentor.service.llm.LlmResponseHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 
-import java.time.Duration;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * 🤖 LLM Integration Service
- * 
- * Handles communication with Large Language Models to generate:
- * - Code summaries and documentation
- * - Usage examples with sample data
- * - Unit test suggestions
+ * LLM Integration Service - Refactored for Low Complexity
  */
-@Service
 public class LlmService {
 
     private static final Logger logger = LoggerFactory.getLogger(LlmService.class);
 
     private final DocumentorConfig config;
-    private final WebClient webClient;
-    private final ObjectMapper objectMapper;
+    private final LlmRequestBuilder requestBuilder;
+    private final LlmResponseHandler responseHandler;
+    private final LlmApiClient apiClient;
 
-    public LlmService(DocumentorConfig config, WebClient webClient) {
+    public LlmService(DocumentorConfig config, LlmRequestBuilder requestBuilder, 
+                     LlmResponseHandler responseHandler, LlmApiClient apiClient) {
         this.config = config;
-        this.webClient = webClient;
-        this.objectMapper = new ObjectMapper();
+        this.requestBuilder = requestBuilder;
+        this.responseHandler = responseHandler;
+        this.apiClient = apiClient;
     }
 
-    /**
-     * 📝 Generates documentation for a code element using multiple LLM models
-     * 
-     * @param codeElement The code element to document
-     * @return CompletableFuture containing the generated documentation
-     */
     @Async("llmExecutor")
     public CompletableFuture<String> generateDocumentation(CodeElement codeElement) {
-        logger.debug("🤖 Generating documentation for: {}", codeElement.getDisplayName());
+        logger.debug("Generating documentation for: {}", codeElement.getDisplayName());
 
-        List<CompletableFuture<String>> futures = config.llmModels().stream()
-                .map(model -> generateWithModel(codeElement, model))
-                .map(CompletableFuture::completedFuture)
-                .toList();
+        if (config.llmModels().isEmpty()) {
+            return CompletableFuture.completedFuture("No LLM models configured for documentation generation.");
+        }
 
-        return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))
-                .thenApply(v -> {
-                    List<String> responses = futures.stream()
-                            .map(CompletableFuture::join)
-                            .filter(response -> !response.isEmpty())
-                            .toList();
-                    
-                    return consolidateResponses(responses, codeElement);
-                });
+        DocumentorConfig.LlmModelConfig model = config.llmModels().get(0);
+        return CompletableFuture.supplyAsync(() -> generateWithModel(codeElement, model, "documentation"));
     }
 
-    /**
-     * 💡 Generates usage examples for a code element
-     */
     @Async("llmExecutor")
     public CompletableFuture<String> generateUsageExamples(CodeElement codeElement) {
-        logger.debug("💡 Generating usage examples for: {}", codeElement.getDisplayName());
+        logger.debug("Generating usage examples for: {}", codeElement.getDisplayName());
 
-        String prompt = createUsageExamplePrompt(codeElement);
-        
-        // Use the first available model for examples
-        if (!config.llmModels().isEmpty()) {
-            DocumentorConfig.LlmModelConfig model = config.llmModels().get(0);
-            return CompletableFuture.completedFuture(callLlmModel(model, prompt));
+        if (config.llmModels().isEmpty()) {
+            return CompletableFuture.completedFuture("No LLM models configured for usage example generation.");
         }
-        
-        return CompletableFuture.completedFuture("No LLM models configured for usage examples.");
+
+        DocumentorConfig.LlmModelConfig model = config.llmModels().get(0);
+        return CompletableFuture.supplyAsync(() -> generateWithModel(codeElement, model, "usage"));
     }
 
-    /**
-     * 🧪 Generates unit test suggestions for a code element
-     */
     @Async("llmExecutor")
     public CompletableFuture<String> generateUnitTests(CodeElement codeElement) {
-        logger.debug("🧪 Generating unit tests for: {}", codeElement.getDisplayName());
+        logger.debug("Generating unit tests for: {}", codeElement.getDisplayName());
 
-        String prompt = createUnitTestPrompt(codeElement);
-        
-        // Use the first available model for unit tests
-        if (!config.llmModels().isEmpty()) {
-            DocumentorConfig.LlmModelConfig model = config.llmModels().get(0);
-            return CompletableFuture.completedFuture(callLlmModel(model, prompt));
+        if (config.llmModels().isEmpty()) {
+            return CompletableFuture.completedFuture("No LLM models configured for unit test generation.");
         }
-        
-        return CompletableFuture.completedFuture("No LLM models configured for unit test generation.");
+
+        DocumentorConfig.LlmModelConfig model = config.llmModels().get(0);
+        return CompletableFuture.supplyAsync(() -> generateWithModel(codeElement, model, "tests"));
     }
 
-    /**
-     * 🔄 Generates documentation using a specific LLM model
-     */
-    private String generateWithModel(CodeElement codeElement, DocumentorConfig.LlmModelConfig model) {
+    private String generateWithModel(CodeElement codeElement, DocumentorConfig.LlmModelConfig model, String type) {
         try {
-            String prompt = createDocumentationPrompt(codeElement);
-            return callLlmModel(model, prompt);
+            String prompt = createPrompt(codeElement, type);
+            Map<String, Object> requestBody = requestBuilder.buildRequestBody(model, prompt);
+            String endpoint = responseHandler.getModelEndpoint(model);
+            String response = apiClient.callLlmModel(model, endpoint, requestBody);
+            return responseHandler.extractResponseContent(response, model);
         } catch (Exception e) {
-            logger.error("❌ Error generating documentation with model {}: {}", model.name(), e.getMessage());
-            return "";
+            logger.error("Error generating {} with model {}: {}", type, model.name(), e.getMessage());
+            return "Error generating " + type + " with " + model.name();
         }
     }
 
-    /**
-     * 📞 Makes API call to LLM model
-     */
-    private String callLlmModel(DocumentorConfig.LlmModelConfig model, String prompt) {
-        try {
-            Map<String, Object> requestBody = createRequestBody(model, prompt);
-            String endpoint = getModelEndpoint(model);
-
-            // Build the request
-            WebClient.RequestBodySpec request = webClient.post()
-                    .uri(endpoint)
-                    .header("Content-Type", "application/json");
-            
-            // Add authentication header only if not Ollama (Ollama typically doesn't require auth)
-            if (!isOllamaModel(model) && model.apiKey() != null && !model.apiKey().isEmpty()) {
-                request = request.header("Authorization", "Bearer " + model.apiKey());
-            }
-
-            String response = request
-                    .bodyValue(requestBody)
-                    .retrieve()
-                    .bodyToMono(String.class)
-                    .timeout(Duration.ofSeconds(model.timeoutSeconds()))
-                    .block();
-
-            return extractResponseContent(response, model);
-
-        } catch (Exception e) {
-            logger.error("❌ LLM API call failed for model {}: {}", model.name(), e.getMessage());
-            return "Error generating content with " + model.name();
-        }
-    }
-
-    /**
-     * 🏗️ Creates request body for LLM API call
-     */
-    private Map<String, Object> createRequestBody(DocumentorConfig.LlmModelConfig model, String prompt) {
-        // Ollama API format
-        if (isOllamaModel(model)) {
-            return Map.of(
-                "model", model.name(),
-                "prompt", prompt,
-                "stream", false,
-                "options", Map.of(
-                    "temperature", model.temperature(),
-                    "num_predict", model.maxTokens()
-                )
-            );
-        }
-        
-        // OpenAI/Anthropic API format (chat completions)
-        return Map.of(
-            "model", model.name(),
-            "messages", List.of(
-                Map.of("role", "system", "content", "You are a helpful code documentation assistant."),
-                Map.of("role", "user", "content", prompt)
-            ),
-            "max_tokens", model.maxTokens(),
-            "temperature", model.temperature()
-        );
-    }
-
-    /**
-     * 🌐 Gets the appropriate endpoint for the model
-     */
-    private String getModelEndpoint(DocumentorConfig.LlmModelConfig model) {
-        if (model.endpoint() != null && !model.endpoint().isEmpty()) {
-            return model.endpoint();
-        }
-        
-        // Ollama default endpoint
-        if (isOllamaModel(model)) {
-            return "http://localhost:11434/api/generate";
-        }
-        
-        // Default endpoints based on model names
-        if (model.name().startsWith("gpt-")) {
-            return "https://api.openai.com/v1/chat/completions";
-        } else if (model.name().startsWith("claude-")) {
-            return "https://api.anthropic.com/v1/messages";
-        }
-        
-        throw new IllegalArgumentException("No endpoint configured for model: " + model.name());
-    }
-
-    /**
-     * 🔍 Checks if the model is an Ollama model
-     */
-    private boolean isOllamaModel(DocumentorConfig.LlmModelConfig model) {
-        // Check if endpoint points to Ollama
-        if (model.endpoint() != null && model.endpoint().contains("11434")) {
-            return true;
-        }
-        
-        // Check if model name suggests Ollama (common Ollama model names)
-        String modelName = model.name().toLowerCase();
-        return modelName.contains("llama") || 
-               modelName.contains("mistral") || 
-               modelName.contains("codellama") ||
-               modelName.contains("phi") ||
-               modelName.contains("gemma") ||
-               modelName.equals("qwen") ||
-               modelName.equals("yi") ||
-               (model.endpoint() == null && !modelName.startsWith("gpt-") && !modelName.startsWith("claude-"));
-    }
-
-    /**
-     * 📤 Extracts content from LLM response
-     */
-    private String extractResponseContent(String response, DocumentorConfig.LlmModelConfig model) {
-        try {
-            JsonNode jsonNode = objectMapper.readTree(response);
-            
-            // Ollama format
-            if (isOllamaModel(model) && jsonNode.has("response")) {
-                return jsonNode.get("response").asText();
-            }
-            
-            // OpenAI format
-            if (jsonNode.has("choices")) {
-                return jsonNode.get("choices").get(0).get("message").get("content").asText();
-            }
-            
-            // Anthropic format
-            if (jsonNode.has("content")) {
-                return jsonNode.get("content").get(0).get("text").asText();
-            }
-            
-            return "Unable to parse response from " + model.name();
-            
-        } catch (Exception e) {
-            logger.error("❌ Error parsing LLM response: {}", e.getMessage());
-            return "Error parsing response from " + model.name();
-        }
-    }
-
-    /**
-     * 🔗 Consolidates multiple LLM responses into a single documentation
-     */
-    private String consolidateResponses(List<String> responses, CodeElement codeElement) {
-        if (responses.isEmpty()) {
-            return "No documentation generated.";
-        }
-        
-        if (responses.size() == 1) {
-            return responses.get(0);
-        }
-        
-        // Simple consolidation - take the longest response as primary
-        // In a real implementation, you might use another LLM call to merge responses
-        return responses.stream()
-                .max((a, b) -> Integer.compare(a.length(), b.length()))
-                .orElse("No documentation generated.");
-    }
-
-    /**
-     * 📝 Creates documentation generation prompt
-     */
-    private String createDocumentationPrompt(CodeElement codeElement) {
-        return String.format("""
-            Please generate comprehensive documentation for the following %s:
-            
-            %s
-            
-            Please provide:
-            1. A clear description of what this %s does
-            2. Parameters explanation (if applicable)
-            3. Return value description (if applicable)
-            4. Any important notes or considerations
-            5. Brief usage context
-            
-            Format the response in markdown.
-            """, 
-            codeElement.type().getDescription().toLowerCase(),
-            codeElement.getAnalysisContext(),
-            codeElement.type().getDescription().toLowerCase()
-        );
-    }
-
-    /**
-     * 💡 Creates usage example generation prompt
-     */
-    private String createUsageExamplePrompt(CodeElement codeElement) {
-        return String.format("""
-            Please generate practical usage examples for the following %s:
-            
-            %s
-            
-            Please provide:
-            1. 2-3 realistic usage examples with sample data
-            2. Expected outputs or results
-            3. Common use cases
-            4. Best practices for usage
-            
-            Use realistic sample data and format the response in markdown with code blocks.
-            """, 
-            codeElement.type().getDescription().toLowerCase(),
-            codeElement.getAnalysisContext()
-        );
-    }
-
-    /**
-     * 🧪 Creates unit test generation prompt
-     */
-    private String createUnitTestPrompt(CodeElement codeElement) {
-        return String.format("""
-            Please generate comprehensive unit tests for the following %s:
-            
-            %s
-            
-            Please provide:
-            1. Test cases for normal operation
-            2. Edge cases and boundary conditions
-            3. Error handling tests
-            4. Mock objects if needed
-            5. Aim for high code coverage
-            
-            Use appropriate testing framework (JUnit for Java, pytest for Python) and format as code blocks.
-            """, 
-            codeElement.type().getDescription().toLowerCase(),
-            codeElement.getAnalysisContext()
-        );
+    private String createPrompt(CodeElement codeElement, String type) {
+        return switch (type) {
+            case "documentation" -> requestBuilder.createDocumentationPrompt(codeElement);
+            case "usage" -> requestBuilder.createUsageExamplePrompt(codeElement);
+            case "tests" -> requestBuilder.createUnitTestPrompt(codeElement);
+            default -> requestBuilder.createDocumentationPrompt(codeElement);
+        };
     }
 }

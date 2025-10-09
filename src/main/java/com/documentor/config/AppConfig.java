@@ -60,7 +60,34 @@ public class AppConfig implements AsyncConfigurer {
     }
 
     /**
-     * 🔄 Default async executor configuration
+     * 🤖 LLM Service with proper dependency injection
+     */
+    @Bean
+    public com.documentor.service.LlmService llmService(
+            DocumentorConfig documentorConfig,
+            com.documentor.service.llm.LlmRequestBuilder requestBuilder,
+            com.documentor.service.llm.LlmResponseHandler responseHandler,
+            com.documentor.service.llm.LlmApiClient apiClient) {
+        return new com.documentor.service.LlmService(documentorConfig, requestBuilder, responseHandler, apiClient);
+    }
+
+    /**
+     * � Documentation Service with proper dependency injection
+     */
+    @Bean
+    public com.documentor.service.DocumentationService documentationService(
+            com.documentor.service.documentation.MainDocumentationGenerator mainDocGenerator,
+            com.documentor.service.documentation.ElementDocumentationGenerator elementDocGenerator,
+            com.documentor.service.documentation.UnitTestDocumentationGenerator testDocGenerator,
+            com.documentor.service.MermaidDiagramService mermaidDiagramService,
+            DocumentorConfig documentorConfig) {
+        return new com.documentor.service.DocumentationService(
+                mainDocGenerator, elementDocGenerator, testDocGenerator, 
+                mermaidDiagramService, documentorConfig);
+    }
+
+    /**
+     * �🔄 Default async executor configuration
      */
     @Override
     public Executor getAsyncExecutor() {

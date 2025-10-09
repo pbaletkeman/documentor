@@ -3,6 +3,7 @@ package com.documentor.service;
 import com.documentor.config.DocumentorConfig;
 import com.documentor.model.CodeElement;
 import com.documentor.model.CodeElementType;
+import com.documentor.service.llm.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -56,10 +57,25 @@ class LlmServiceIntegrationTest {
         );
     }
 
+    /**
+     * Helper method to create LlmService with new constructor
+     */
+    private LlmService createLlmService(DocumentorConfig config) {
+        LlmModelTypeDetector modelTypeDetector = new LlmModelTypeDetector();
+        LlmPromptTemplates promptTemplates = new LlmPromptTemplates();
+        LlmRequestFormatter requestFormatter = new LlmRequestFormatter(modelTypeDetector);
+        LlmRequestBuilder requestBuilder = new LlmRequestBuilder(promptTemplates, requestFormatter);
+        LlmResponseParser responseParser = new LlmResponseParser(modelTypeDetector);
+        LlmResponseHandler responseHandler = new LlmResponseHandler(responseParser, modelTypeDetector);
+        LlmApiClient apiClient = new LlmApiClient(mockWebClient, modelTypeDetector);
+        
+        return new LlmService(config, requestBuilder, responseHandler, apiClient);
+    }
+
     @Test
     void testConstructorInitialization() {
         // When
-        LlmService service = new LlmService(config, mockWebClient);
+        LlmService service = createLlmService(config);
         
         // Then
         assertNotNull(service);
@@ -71,7 +87,7 @@ class LlmServiceIntegrationTest {
         DocumentorConfig emptyConfig = new DocumentorConfig(
             List.of(), config.outputSettings(), config.analysisSettings()
         );
-        LlmService serviceWithEmptyConfig = new LlmService(emptyConfig, mockWebClient);
+        LlmService serviceWithEmptyConfig = createLlmService(emptyConfig);
         
         // When
         CompletableFuture<String> result = serviceWithEmptyConfig.generateDocumentation(testElement);
@@ -91,7 +107,7 @@ class LlmServiceIntegrationTest {
         DocumentorConfig emptyConfig = new DocumentorConfig(
             List.of(), config.outputSettings(), config.analysisSettings()
         );
-        LlmService serviceWithEmptyConfig = new LlmService(emptyConfig, mockWebClient);
+        LlmService serviceWithEmptyConfig = createLlmService(emptyConfig);
         
         // When
         CompletableFuture<String> result = serviceWithEmptyConfig.generateUsageExamples(testElement);
@@ -100,7 +116,7 @@ class LlmServiceIntegrationTest {
         assertNotNull(result);
         assertDoesNotThrow(() -> {
             String response = result.get();
-            assertTrue(response.contains("No LLM models configured for usage examples"));
+            assertTrue(response.contains("No LLM models configured for usage example generation"));
         });
     }
 
@@ -110,7 +126,7 @@ class LlmServiceIntegrationTest {
         DocumentorConfig emptyConfig = new DocumentorConfig(
             List.of(), config.outputSettings(), config.analysisSettings()
         );
-        LlmService serviceWithEmptyConfig = new LlmService(emptyConfig, mockWebClient);
+        LlmService serviceWithEmptyConfig = createLlmService(emptyConfig);
         
         // When
         CompletableFuture<String> result = serviceWithEmptyConfig.generateUnitTests(testElement);
@@ -129,7 +145,7 @@ class LlmServiceIntegrationTest {
         DocumentorConfig emptyConfig = new DocumentorConfig(
             List.of(), config.outputSettings(), config.analysisSettings()
         );
-        LlmService serviceWithEmptyConfig = new LlmService(emptyConfig, mockWebClient);
+        LlmService serviceWithEmptyConfig = createLlmService(emptyConfig);
         
         CodeElement classElement = new CodeElement(
             CodeElementType.CLASS, "TestClass", "com.test.TestClass",
@@ -166,7 +182,7 @@ class LlmServiceIntegrationTest {
         DocumentorConfig multiModelConfig = new DocumentorConfig(
             List.of(model1, model2), config.outputSettings(), config.analysisSettings()
         );
-        LlmService multiModelService = new LlmService(multiModelConfig, mockWebClient);
+        LlmService multiModelService = createLlmService(multiModelConfig);
         
         // When & Then - should not throw exceptions
         assertDoesNotThrow(() -> {
@@ -181,7 +197,7 @@ class LlmServiceIntegrationTest {
         DocumentorConfig emptyConfig = new DocumentorConfig(
             List.of(), config.outputSettings(), config.analysisSettings()
         );
-        LlmService serviceWithEmptyConfig = new LlmService(emptyConfig, mockWebClient);
+        LlmService serviceWithEmptyConfig = createLlmService(emptyConfig);
         
         // Create elements of different types
         CodeElement[] elements = {
@@ -232,7 +248,7 @@ class LlmServiceIntegrationTest {
         DocumentorConfig emptyConfig = new DocumentorConfig(
             List.of(), config.outputSettings(), config.analysisSettings()
         );
-        LlmService serviceWithEmptyConfig = new LlmService(emptyConfig, mockWebClient);
+        LlmService serviceWithEmptyConfig = createLlmService(emptyConfig);
         
         // When - all methods should return CompletableFuture
         CompletableFuture<String> docFuture = serviceWithEmptyConfig.generateDocumentation(testElement);
@@ -282,9 +298,9 @@ class LlmServiceIntegrationTest {
         
         // When & Then - Should handle different model types without errors
         assertDoesNotThrow(() -> {
-            LlmService ollamaService1 = new LlmService(ollamaConfig1, mockWebClient);
-            LlmService ollamaService2 = new LlmService(ollamaConfig2, mockWebClient);
-            LlmService openaiService = new LlmService(openaiConfig, mockWebClient);
+            LlmService ollamaService1 = createLlmService(ollamaConfig1);
+            LlmService ollamaService2 = createLlmService(ollamaConfig2);
+            LlmService openaiService = createLlmService(openaiConfig);
             
             // Verify services are created successfully
             assertNotNull(ollamaService1);
