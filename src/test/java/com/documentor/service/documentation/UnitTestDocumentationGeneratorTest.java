@@ -82,4 +82,61 @@ class UnitTestDocumentationGeneratorTest {
         assertFalse(content.contains("ðŸ§ª"));
         assertTrue(content.contains("Target Coverage: 50%"));
     }
+
+    @Test
+    void generateUnitTestDocumentation_filtersOutFieldElements(@TempDir Path tempDir) throws Exception {
+        LlmService llm = mock(LlmService.class);
+
+        DocumentorConfig config = mock(DocumentorConfig.class);
+        OutputSettings outputSettings = mock(OutputSettings.class);
+        when(config.outputSettings()).thenReturn(outputSettings);
+        when(outputSettings.includeIcons()).thenReturn(false);
+        when(outputSettings.targetCoverage()).thenReturn(0.80);
+
+        List<String> empty = List.of();
+        
+        // Create both FIELD and non-FIELD elements to test filter logic
+        CodeElement fieldElement = new CodeElement(
+            CodeElementType.FIELD,
+            "testField",
+            "com.example.TestClass.testField",
+            "src/TestClass.java",
+            5,
+            "private String testField;",
+            "A test field",
+            empty,
+            empty
+        );
+
+        CodeElement methodElement = new CodeElement(
+            CodeElementType.METHOD,
+            "testMethod",
+            "com.example.TestClass.testMethod",
+            "src/TestClass.java",
+            15,
+            "public void testMethod() {}",
+            "A test method",
+            empty,
+            empty
+        );
+
+        // Only non-FIELD elements should get test generation calls
+        when(llm.generateUnitTests(methodElement)).thenReturn(CompletableFuture.completedFuture("// test for testMethod"));
+        // The field element should never be passed to generateUnitTests due to filtering
+
+        UnitTestDocumentationGenerator generator = new UnitTestDocumentationGenerator(llm, config);
+
+        ProjectAnalysis analysis = new ProjectAnalysis("/tmp/project", List.of(fieldElement, methodElement), System.currentTimeMillis());
+
+        generator.generateUnitTestDocumentation(analysis, tempDir).join();
+
+        // Verify the LLM service was only called for the method, not the field
+        verify(llm, times(1)).generateUnitTests(methodElement);
+        verify(llm, never()).generateUnitTests(fieldElement);
+
+        Path testsFile = tempDir.resolve("tests").resolve("unit-tests.md");
+        String content = Files.readString(testsFile);
+        assertTrue(content.contains("test for testMethod"));
+        assertTrue(content.contains("Target Coverage: 80%"));
+    }
 }

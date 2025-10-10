@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.util.Map;
 
@@ -155,14 +156,6 @@ class LlmApiClientTest {
     }
 
     @Test
-    @DisplayName("Should not add authorization header for Ollama models")
-    void testNoAuthHeaderForOllamaModels() {
-        // This test is simplified - we can verify that Ollama models typically don't use auth
-        // by checking the ollamaModel API key setup
-        assertTrue(ollamaModel.apiKey().isEmpty());
-    }
-
-    @Test
     @DisplayName("Should apply timeout from model configuration")
     void testApplyTimeoutFromModelConfig() {
         // Test that custom timeouts are properly configured on the model
@@ -171,5 +164,136 @@ class LlmApiClientTest {
         );
 
         assertEquals(45, modelWithCustomTimeout.timeoutSeconds());
+    }
+
+    @Test
+    @DisplayName("Should add authorization header for non-Ollama models with valid API key")
+    void testAuthHeaderForNonOllamaWithApiKey() {
+        // Given
+        Map<String, Object> requestBody = Map.of("prompt", "test");
+        
+        // Mock the WebClient chain - using raw types to avoid generic issues
+        WebClient.RequestBodyUriSpec requestBodyUriSpec = mock(WebClient.RequestBodyUriSpec.class);
+        WebClient.RequestBodySpec requestBodySpec = mock(WebClient.RequestBodySpec.class);
+        @SuppressWarnings("rawtypes")
+        WebClient.RequestHeadersSpec requestHeadersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+        
+        when(mockWebClient.post()).thenReturn(requestBodyUriSpec);
+        when(requestBodyUriSpec.uri(anyString())).thenReturn(requestBodySpec);
+        when(requestBodySpec.header(eq("Content-Type"), eq("application/json"))).thenReturn(requestBodySpec);
+        when(requestBodySpec.header(eq("Authorization"), eq("Bearer sk-test-key"))).thenReturn(requestBodySpec);
+        when(requestBodySpec.bodyValue(requestBody)).thenReturn(requestHeadersSpec);
+        when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(String.class)).thenReturn(Mono.just("response"));
+        
+        // Configure model detector to return false (not Ollama)
+        when(modelTypeDetector.isOllamaModel(openAiModel)).thenReturn(false);
+        
+        // When
+        String result = apiClient.callLlmModel(openAiModel, "http://test.api", requestBody);
+        
+        // Then
+        assertEquals("response", result);
+        verify(requestBodySpec).header("Authorization", "Bearer sk-test-key");
+    }
+
+    @Test
+    @DisplayName("Should not add authorization header for Ollama models with proper mock chain")
+    void testNoAuthHeaderForOllamaModelsMocked() {
+        // Given
+        Map<String, Object> requestBody = Map.of("prompt", "test");
+        
+        // Mock the WebClient chain - using raw types to avoid generic issues
+        WebClient.RequestBodyUriSpec requestBodyUriSpec = mock(WebClient.RequestBodyUriSpec.class);
+        WebClient.RequestBodySpec requestBodySpec = mock(WebClient.RequestBodySpec.class);
+        @SuppressWarnings("rawtypes")
+        WebClient.RequestHeadersSpec requestHeadersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+        
+        when(mockWebClient.post()).thenReturn(requestBodyUriSpec);
+        when(requestBodyUriSpec.uri(anyString())).thenReturn(requestBodySpec);
+        when(requestBodySpec.header(eq("Content-Type"), eq("application/json"))).thenReturn(requestBodySpec);
+        when(requestBodySpec.bodyValue(requestBody)).thenReturn(requestHeadersSpec);
+        when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(String.class)).thenReturn(Mono.just("ollama response"));
+        
+        // Configure model detector to return true (is Ollama)
+        when(modelTypeDetector.isOllamaModel(ollamaModel)).thenReturn(true);
+        
+        // When
+        String result = apiClient.callLlmModel(ollamaModel, "http://localhost:11434/api/generate", requestBody);
+        
+        // Then
+        assertEquals("ollama response", result);
+        verify(requestBodySpec, never()).header(eq("Authorization"), anyString());
+    }
+
+    @Test
+    @DisplayName("Should not add authorization header for non-Ollama models with null API key")
+    void testNoAuthHeaderForNullApiKey() {
+        // Given
+        LlmModelConfig modelWithNullKey = new LlmModelConfig(
+            "test-model", "openai", "http://test.api", null, 1000, 30
+        );
+        Map<String, Object> requestBody = Map.of("prompt", "test");
+        
+        // Mock the WebClient chain - using raw types to avoid generic issues
+        WebClient.RequestBodyUriSpec requestBodyUriSpec = mock(WebClient.RequestBodyUriSpec.class);
+        WebClient.RequestBodySpec requestBodySpec = mock(WebClient.RequestBodySpec.class);
+        @SuppressWarnings("rawtypes")
+        WebClient.RequestHeadersSpec requestHeadersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+        
+        when(mockWebClient.post()).thenReturn(requestBodyUriSpec);
+        when(requestBodyUriSpec.uri(anyString())).thenReturn(requestBodySpec);
+        when(requestBodySpec.header(eq("Content-Type"), eq("application/json"))).thenReturn(requestBodySpec);
+        when(requestBodySpec.bodyValue(requestBody)).thenReturn(requestHeadersSpec);
+        when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(String.class)).thenReturn(Mono.just("no auth response"));
+        
+        // Configure model detector to return false (not Ollama)
+        when(modelTypeDetector.isOllamaModel(modelWithNullKey)).thenReturn(false);
+        
+        // When
+        String result = apiClient.callLlmModel(modelWithNullKey, "http://test.api", requestBody);
+        
+        // Then
+        assertEquals("no auth response", result);
+        verify(requestBodySpec, never()).header(eq("Authorization"), anyString());
+    }
+
+    @Test
+    @DisplayName("Should not add authorization header for non-Ollama models with empty API key")
+    void testNoAuthHeaderForEmptyApiKey() {
+        // Given
+        LlmModelConfig modelWithEmptyKey = new LlmModelConfig(
+            "test-model", "openai", "http://test.api", "", 1000, 30
+        );
+        Map<String, Object> requestBody = Map.of("prompt", "test");
+        
+        // Mock the WebClient chain - using raw types to avoid generic issues
+        WebClient.RequestBodyUriSpec requestBodyUriSpec = mock(WebClient.RequestBodyUriSpec.class);
+        WebClient.RequestBodySpec requestBodySpec = mock(WebClient.RequestBodySpec.class);
+        @SuppressWarnings("rawtypes")
+        WebClient.RequestHeadersSpec requestHeadersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+        
+        when(mockWebClient.post()).thenReturn(requestBodyUriSpec);
+        when(requestBodyUriSpec.uri(anyString())).thenReturn(requestBodySpec);
+        when(requestBodySpec.header(eq("Content-Type"), eq("application/json"))).thenReturn(requestBodySpec);
+        when(requestBodySpec.bodyValue(requestBody)).thenReturn(requestHeadersSpec);
+        when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(String.class)).thenReturn(Mono.just("empty key response"));
+        
+        // Configure model detector to return false (not Ollama)
+        when(modelTypeDetector.isOllamaModel(modelWithEmptyKey)).thenReturn(false);
+        
+        // When
+        String result = apiClient.callLlmModel(modelWithEmptyKey, "http://test.api", requestBody);
+        
+        // Then
+        assertEquals("empty key response", result);
+        verify(requestBodySpec, never()).header(eq("Authorization"), anyString());
     }
 }
