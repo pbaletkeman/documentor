@@ -145,4 +145,39 @@ class DocumentationServiceUnitTest {
         // Unit test generator should still be called since generateUnitTests() always returns true
         verify(testGenerator, atLeastOnce()).generateUnitTestDocumentation(any(), any());
     }
+
+    @Test
+    void testGenerateDocumentationWithUnitTestsDisabled() throws Exception {
+        // Create a mock OutputSettings that returns false for generateUnitTests()
+        OutputSettings mockOutputSettings = mock(OutputSettings.class);
+        when(mockOutputSettings.outputPath()).thenReturn(tempDir.toString());
+        when(mockOutputSettings.generateUnitTests()).thenReturn(false);
+        when(mockOutputSettings.generateMermaidDiagrams()).thenReturn(true);
+        when(mockOutputSettings.mermaidOutputPath()).thenReturn(tempDir.toString());
+        
+        AnalysisSettings analysisSettings = new AnalysisSettings(true, 5, List.of("**/*.java"), List.of("**/test/**"));
+        DocumentorConfig testConfig = new DocumentorConfig(List.of(), mockOutputSettings, analysisSettings);
+        DocumentationService testService = new DocumentationService(mainGenerator, elementGenerator, testGenerator, mermaidService, testConfig);
+
+        CodeElement element = new CodeElement(CodeElementType.CLASS, "TestClass", "com.test.TestClass",
+            "/src/TestClass.java", 1, "public class TestClass {}", "", List.of(), List.of());
+        ProjectAnalysis analysis = new ProjectAnalysis("/project", List.of(element), System.currentTimeMillis());
+
+        when(mainGenerator.generateMainDocumentation(any())).thenReturn(CompletableFuture.completedFuture("# README"));
+        when(elementGenerator.generateElementDocumentation(any(), any())).thenReturn(CompletableFuture.completedFuture(null));
+        when(mermaidService.generateClassDiagrams(any(), anyString())).thenReturn(CompletableFuture.completedFuture(List.of("diagram1")));
+
+        // Act
+        CompletableFuture<String> result = testService.generateDocumentation(analysis);
+
+        // Assert
+        assertNotNull(result);
+        String outputPath = result.get();
+        assertEquals(tempDir.toString(), outputPath);
+
+        // Verify unit test generator was NOT called since generateUnitTests = false
+        verify(testGenerator, never()).generateUnitTestDocumentation(any(), any());
+        // Mermaid service should still be called since generateMermaidDiagrams = true
+        verify(mermaidService, atLeastOnce()).generateClassDiagrams(any(), anyString());
+    }
 }

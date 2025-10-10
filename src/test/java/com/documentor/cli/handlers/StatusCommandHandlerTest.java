@@ -232,4 +232,17 @@ class StatusCommandHandlerTest {
         assertTrue(status.contains("Supported Languages: java, python"));
         assertTrue(status.contains("Exclude Patterns: *.class, *.pyc"));
     }
+
+    @Test
+    void showStatus_withLlmModelWithNullApiKey() {
+        // Test branch where model.apiKey() is null - should show "Not set"
+        LlmModelConfig model = new LlmModelConfig("model", "openai", "http://api", null, 100, 10);
+        DocumentorConfig cfg = new DocumentorConfig(List.of(model), null, null);
+        StatusCommandHandler handler = new StatusCommandHandler(cfg);
+        String status = handler.handleShowStatus(null, null);
+        
+        assertTrue(status.contains("🤖 LLM Models:"));
+        assertTrue(status.contains("1. model"));
+        assertTrue(status.contains("API Key: Not set")); // Should hit the null apiKey branch
+    }
 }

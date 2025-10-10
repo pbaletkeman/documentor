@@ -106,4 +106,78 @@ class ConfigurationCommandHandlerTest {
 
         assertTrue(res.contains("Configuration validation failed"));
     }
+
+    @Test
+    void handleValidateConfigWithNullOutputSettings(@TempDir Path tmp) throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        ConfigurationCommandHandler handler = new ConfigurationCommandHandler(mapper);
+
+        // Create JSON manually to bypass validation during object creation
+        String jsonWithNullOutput = """
+            {
+                "llm_models": [
+                    {
+                        "name": "test-model",
+                        "provider": "openai",
+                        "baseUrl": "http://test.com",
+                        "apiKey": "test-key",
+                        "maxTokens": 100,
+                        "requestTimeout": 10
+                    }
+                ],
+                "output_settings": null,
+                "analysis_settings": {
+                    "includePrivateElements": false,
+                    "maxThreads": 2,
+                    "includePatterns": ["**/*.java"],
+                    "excludePatterns": ["**/test/**"]
+                }
+            }
+            """;
+
+        Path cfg = tmp.resolve("null-output.json");
+        java.nio.file.Files.writeString(cfg, jsonWithNullOutput);
+
+        String res = handler.handleValidateConfig(cfg.toString());
+
+        // Should either fail validation or show warning about null output settings
+        assertTrue(res.contains("Configuration validation failed") || res.contains("Warning: No output settings configured"));
+    }
+
+    @Test
+    void handleValidateConfigWithNullAnalysisSettings(@TempDir Path tmp) throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        ConfigurationCommandHandler handler = new ConfigurationCommandHandler(mapper);
+
+        // Create JSON manually to bypass validation during object creation
+        String jsonWithNullAnalysis = """
+            {
+                "llm_models": [
+                    {
+                        "name": "test-model",
+                        "provider": "openai",
+                        "baseUrl": "http://test.com",
+                        "apiKey": "test-key",
+                        "maxTokens": 100,
+                        "requestTimeout": 10
+                    }
+                ],
+                "output_settings": {
+                    "outputPath": "%s",
+                    "format": "md",
+                    "includeUnitTests": true,
+                    "includeSourceCode": false
+                },
+                "analysis_settings": null
+            }
+            """.formatted(tmp.toString());
+
+        Path cfg = tmp.resolve("null-analysis.json");
+        java.nio.file.Files.writeString(cfg, jsonWithNullAnalysis);
+
+        String res = handler.handleValidateConfig(cfg.toString());
+
+        // Should either fail validation or show warning about null analysis settings
+        assertTrue(res.contains("Configuration validation failed") || res.contains("Warning: No analysis settings configured"));
+    }
 }
