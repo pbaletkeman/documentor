@@ -89,4 +89,68 @@ class DocumentationFormatterTest {
 
         assertTrue(sb.length() >= 0);
     }
+
+    @Test
+    void testAppendApiReference() {
+        StringBuilder sb = new StringBuilder();
+
+        formatter.appendApiReference(sb, testProject);
+
+        String result = sb.toString();
+        assertNotNull(result);
+        assertTrue(result.length() > 0);
+        assertTrue(result.contains("API Reference"));
+        assertTrue(result.contains("Detailed API documentation"));
+    }
+
+    @Test
+    void testAppendApiReferenceWithEmptyProject() {
+        ProjectAnalysis emptyProject = new ProjectAnalysis("/empty", List.of(), System.currentTimeMillis());
+        StringBuilder sb = new StringBuilder();
+
+        formatter.appendApiReference(sb, emptyProject);
+
+        String result = sb.toString();
+        assertNotNull(result);
+        assertTrue(result.length() > 0);
+        assertTrue(result.contains("API Reference"));
+        assertTrue(result.contains("No API elements found"));
+    }
+
+    @Test
+    void testAppendTestDocumentationHeader() {
+        StringBuilder sb = new StringBuilder();
+
+        formatter.appendTestDocumentationHeader(sb);
+
+        String result = sb.toString();
+        assertNotNull(result);
+        assertTrue(result.length() > 0);
+        assertTrue(result.contains("Unit Test Documentation"));
+        assertTrue(result.contains("Generated test documentation"));
+    }
+
+    @Test
+    void testGetProjectNameWithNullPath() {
+        ProjectAnalysis nullPathProject = new ProjectAnalysis(null, List.of(), System.currentTimeMillis());
+        StringBuilder sb = new StringBuilder();
+
+        formatter.appendHeader(sb, nullPathProject);
+
+        String result = sb.toString();
+        assertNotNull(result);
+        assertTrue(result.contains("Project Documentation"));
+    }
+
+    @Test
+    void testGetProjectNameWithEmptyPath() {
+        ProjectAnalysis emptyPathProject = new ProjectAnalysis("", List.of(), System.currentTimeMillis());
+        StringBuilder sb = new StringBuilder();
+
+        formatter.appendHeader(sb, emptyPathProject);
+
+        String result = sb.toString();
+        assertNotNull(result);
+        assertTrue(result.contains("Project Documentation"));
+    }
 }
