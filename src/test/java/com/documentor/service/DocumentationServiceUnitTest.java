@@ -113,4 +113,36 @@ class DocumentationServiceUnitTest {
         // Should not call element generator for empty analysis
         verify(elementGenerator, never()).generateElementDocumentation(any(), any());
     }
+
+    @Test
+    void testGenerateDocumentationWithMermaidDiagramsDisabled() throws Exception {
+        // Create config with generateMermaidDiagrams = false (third parameter)
+        OutputSettings outputSettings = new OutputSettings(
+            tempDir.toString(), "markdown", false, true
+        );
+        AnalysisSettings analysisSettings = new AnalysisSettings(true, 5, List.of("**/*.java"), List.of("**/test/**"));
+        DocumentorConfig testConfig = new DocumentorConfig(List.of(), outputSettings, analysisSettings);
+        DocumentationService testService = new DocumentationService(mainGenerator, elementGenerator, testGenerator, mermaidService, testConfig);
+
+        CodeElement element = new CodeElement(CodeElementType.CLASS, "TestClass", "com.test.TestClass",
+            "/src/TestClass.java", 1, "public class TestClass {}", "", List.of(), List.of());
+        ProjectAnalysis analysis = new ProjectAnalysis("/project", List.of(element), System.currentTimeMillis());
+
+        when(mainGenerator.generateMainDocumentation(any())).thenReturn(CompletableFuture.completedFuture("# README"));
+        when(elementGenerator.generateElementDocumentation(any(), any())).thenReturn(CompletableFuture.completedFuture(null));
+        when(testGenerator.generateUnitTestDocumentation(any(), any())).thenReturn(CompletableFuture.completedFuture(null));
+
+        // Act
+        CompletableFuture<String> result = testService.generateDocumentation(analysis);
+
+        // Assert
+        assertNotNull(result);
+        String outputPath = result.get();
+        assertEquals(tempDir.toString(), outputPath);
+
+        // Verify mermaid service was NOT called since generateMermaid = false
+        verify(mermaidService, never()).generateClassDiagrams(any(), anyString());
+        // Unit test generator should still be called since generateUnitTests() always returns true
+        verify(testGenerator, atLeastOnce()).generateUnitTestDocumentation(any(), any());
+    }
 }
