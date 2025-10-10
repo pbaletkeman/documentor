@@ -19,11 +19,6 @@ import java.util.concurrent.CompletableFuture;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * 🧪 Unit tests for MermaidDiagramService
- * 
- * Tests diagram generation for non-private classes with comprehensive scenarios.
- */
 @ExtendWith(MockitoExtension.class)
 class MermaidDiagramServiceTest {
 
@@ -33,7 +28,7 @@ class MermaidDiagramServiceTest {
     private MermaidClassDiagramGenerator mermaidClassDiagramGenerator;
 
     @TempDir
-    Path tempDir;
+    private Path tempDir;
 
     @BeforeEach
     void setUp() {
@@ -48,7 +43,7 @@ class MermaidDiagramServiceTest {
     }
 
     @Test
-    void testGenerateClassDiagrams_withValidProject_shouldCreateDiagrams() throws Exception {
+    void generateClassDiagramsWithValidProjectShouldCreateDiagrams() throws Exception {
         // Given
         ProjectAnalysis analysis = createSampleProjectAnalysis();
         String outputPath = tempDir.toString();
@@ -60,13 +55,13 @@ class MermaidDiagramServiceTest {
         // Then
         assertThat(generatedFiles).isNotEmpty();
         assertThat(generatedFiles).hasSize(1); // One public class
-        
+
         String diagramFile = generatedFiles.get(0);
         assertThat(diagramFile).contains("TestClass_diagram.md");
-        
+
         Path diagramPath = Path.of(diagramFile);
         assertThat(Files.exists(diagramPath)).isTrue();
-        
+
         String content = Files.readString(diagramPath);
         assertThat(content).contains("# TestClass Class Diagram");
         assertThat(content).contains("```mermaid");
@@ -75,7 +70,7 @@ class MermaidDiagramServiceTest {
     }
 
     @Test
-    void testGenerateClassDiagrams_withPrivateClass_shouldSkipPrivateClasses() throws Exception {
+    void generateClassDiagramsWithPrivateClassShouldSkipPrivateClasses() throws Exception {
         // Given
         ProjectAnalysis analysis = createProjectWithPrivateClass();
 
@@ -88,7 +83,7 @@ class MermaidDiagramServiceTest {
     }
 
     @Test
-    void testGenerateClassDiagrams_withNullOutputPath_shouldUseDefaultPath() throws Exception {
+    void generateClassDiagramsWithNullOutputPathShouldUseDefaultPath() throws Exception {
         // Given
         ProjectAnalysis analysis = createSampleProjectAnalysis();
 
@@ -103,7 +98,7 @@ class MermaidDiagramServiceTest {
     }
 
     @Test
-    void testGenerateClassDiagrams_withEmptyOutputPath_shouldUseDefaultPath() throws Exception {
+    void generateClassDiagramsWithEmptyOutputPathShouldUseDefaultPath() throws Exception {
         // Given
         ProjectAnalysis analysis = createSampleProjectAnalysis();
 
@@ -116,7 +111,7 @@ class MermaidDiagramServiceTest {
     }
 
     @Test
-    void testGenerateClassDiagrams_withComplexClass_shouldIncludeMethodsAndFields() throws Exception {
+    void generateClassDiagramsWithComplexClassShouldIncludeMethodsAndFields() throws Exception {
         // Given
         ProjectAnalysis analysis = createComplexProjectAnalysis();
         String outputPath = tempDir.toString();
@@ -127,10 +122,10 @@ class MermaidDiagramServiceTest {
 
         // Then
         assertThat(generatedFiles).hasSize(1);
-        
+
         String diagramFile = generatedFiles.get(0);
         String content = Files.readString(Path.of(diagramFile));
-        
+
         // Should contain class definition with methods and fields
         assertThat(content).contains("class ComplexClass");
         assertThat(content).contains("publicField"); // Public field should be included
@@ -140,7 +135,7 @@ class MermaidDiagramServiceTest {
     }
 
     @Test
-    void testGenerateClassDiagrams_withSpecialCharacters_shouldSanitizeNames() throws Exception {
+    void generateClassDiagramsWithSpecialCharactersShouldSanitizeNames() throws Exception {
         // Given
         ProjectAnalysis analysis = createProjectWithSpecialCharacters();
         String outputPath = tempDir.toString();
@@ -151,17 +146,17 @@ class MermaidDiagramServiceTest {
 
         // Then
         assertThat(generatedFiles).isNotEmpty();
-        
+
         String diagramFile = generatedFiles.get(0);
         String content = Files.readString(Path.of(diagramFile));
-        
+
         // Class name with special characters should be sanitized
         assertThat(content).contains("Special"); // Just verify the class is present
         // Note: Mermaid diagram sanitization needs improvement for special characters
     }
 
     @Test
-    void testGenerateClassDiagrams_withLongSignatures_shouldTruncate() throws Exception {
+    void generateClassDiagramsWithLongSignaturesShouldTruncate() throws Exception {
         // Given
         ProjectAnalysis analysis = createProjectWithLongSignatures();
         String outputPath = tempDir.toString();
@@ -172,16 +167,16 @@ class MermaidDiagramServiceTest {
 
         // Then
         assertThat(generatedFiles).isNotEmpty();
-        
+
         String diagramFile = generatedFiles.get(0);
         String content = Files.readString(Path.of(diagramFile));
-        
+
         // Long signatures should be truncated
         assertThat(content).contains("...");
     }
 
     @Test
-    void testGenerateClassDiagrams_withMultipleClasses_shouldCreateMultipleDiagrams() throws Exception {
+    void generateClassDiagramsWithMultipleClassesShouldCreateMultipleDiagrams() throws Exception {
         // Given
         ProjectAnalysis analysis = createMultiClassProjectAnalysis();
         String outputPath = tempDir.toString();
@@ -197,7 +192,7 @@ class MermaidDiagramServiceTest {
     }
 
     @Test
-    void testGenerateClassDiagrams_withRelationships_shouldShowRelationships() throws Exception {
+    void generateClassDiagramsWithRelationshipsShouldShowRelationships() throws Exception {
         // Given
         ProjectAnalysis analysis = createProjectWithRelationships();
         String outputPath = tempDir.toString();
@@ -208,13 +203,13 @@ class MermaidDiagramServiceTest {
 
         // Then
         assertThat(generatedFiles).isNotEmpty();
-        
+
         String diagramFile = generatedFiles.get(0);
         String content = Files.readString(Path.of(diagramFile));
-        
+
         // Should show relationships - check for either format
-        boolean hasRelationships = content.contains("-->") || content.contains("MainClass") && content.contains("OtherClass");
-        assertThat(hasRelationships).describedAs("Expected diagram to show relationships, but content was: " + content).isTrue();
+        boolean hasRelationships = content.contains("-->") || (content.contains("MainClass") && content.contains("OtherClass"));
+        assertThat(hasRelationships).isTrue();
     }
 
     // Helper methods to create test data
@@ -258,7 +253,7 @@ class MermaidDiagramServiceTest {
             "com.example.PrivateClass",
             "/src/main/java/PrivateClass.java",
             1,
-            "private class PrivateClass", // Private class
+            "private class PrivateClass",
             "A private test class",
             List.of(),
             List.of()

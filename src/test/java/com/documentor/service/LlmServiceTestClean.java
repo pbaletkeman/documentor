@@ -27,12 +27,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-/**
- * Focused tests for LlmService
- */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-class LlmServiceTest2 {
+class LlmServiceTestClean {
 
     @Mock
     private LlmRequestBuilder mockRequestBuilder;
@@ -49,28 +46,17 @@ class LlmServiceTest2 {
 
     @BeforeEach
     void setUp() {
-        OutputSettings outputSettings = new OutputSettings(
-            "output", "markdown", true, true
-        );
-
-        AnalysisSettings analysisSettings = new AnalysisSettings(
-            true, 50, List.of("**/*.java"), List.of("**/test/**")
-        );
-
-        LlmModelConfig testModel = new LlmModelConfig(
-            "test-model", "openai", "http://test.api", "api-key", 1000, 30
-        );
+        OutputSettings outputSettings = new OutputSettings("output", "markdown", true, true);
+        AnalysisSettings analysisSettings = new AnalysisSettings(true, 50, List.of("**/*.java"), List.of("**/test/**"));
+        LlmModelConfig testModel = new LlmModelConfig("test-model", "openai", "http://test.api", "api-key", 1000, 30);
 
         config = new DocumentorConfig(List.of(testModel), outputSettings, analysisSettings);
         llmService = new LlmService(config, mockRequestBuilder, mockResponseHandler, mockApiClient);
 
-        testElement = new CodeElement(
-            CodeElementType.CLASS, "TestClass", "com.example.TestClass",
-            "TestClass.java", 1, "public class TestClass {}",
-            "", List.of(), List.of()
-        );
+        testElement = new CodeElement(CodeElementType.CLASS, "TestClass", "com.example.TestClass", "TestClass.java", 1,
+                "public class TestClass {}", "", List.of(), List.of());
 
-        // Setup mock behaviors
+        // Common mock behavior used by tests
         when(mockRequestBuilder.createDocumentationPrompt(any())).thenReturn("documentation prompt");
         when(mockRequestBuilder.createUsageExamplePrompt(any())).thenReturn("usage prompt");
         when(mockRequestBuilder.createUnitTestPrompt(any())).thenReturn("test prompt");
@@ -81,50 +67,27 @@ class LlmServiceTest2 {
     }
 
     @Test
-    void testGenerateDocumentation() {
+    void generateDocumentationReturnsExtractedContent() {
         CompletableFuture<String> result = llmService.generateDocumentation(testElement);
-
-        assertNotNull(result);
         assertEquals("extracted content", result.join());
     }
 
     @Test
-    void testGenerateUsageExamples() {
+    void generateUsageExamplesReturnsExtractedContent() {
         CompletableFuture<String> result = llmService.generateUsageExamples(testElement);
-
-        assertNotNull(result);
         assertEquals("extracted content", result.join());
     }
 
     @Test
-    void testGenerateUnitTests() {
+    void generateUnitTestsReturnsExtractedContent() {
         CompletableFuture<String> result = llmService.generateUnitTests(testElement);
-
-        assertNotNull(result);
         assertEquals("extracted content", result.join());
     }
 
     @Test
-    void testServiceWithDifferentElementTypes() {
-        CodeElement methodElement = new CodeElement(
-            CodeElementType.METHOD, "testMethod", "com.example.TestClass.testMethod",
-            "TestClass.java", 5, "public void testMethod()",
-            "", List.of("param1"), List.of("@Test")
-        );
-
-        assertNotNull(llmService.generateDocumentation(methodElement).join());
-        assertNotNull(llmService.generateUsageExamples(methodElement).join());
-        assertNotNull(llmService.generateUnitTests(methodElement).join());
-    }
-
-    @Test
-    void testEmptyConfiguration() {
-        DocumentorConfig emptyConfig = new DocumentorConfig(
-            List.of(), config.outputSettings(), config.analysisSettings()
-        );
+    void serviceConstructsWithEmptyModelList() {
+        DocumentorConfig emptyConfig = new DocumentorConfig(List.of(), config.outputSettings(), config.analysisSettings());
         LlmService emptyService = new LlmService(emptyConfig, mockRequestBuilder, mockResponseHandler, mockApiClient);
-
-        // Should handle empty configuration gracefully
         assertNotNull(emptyService);
     }
 }

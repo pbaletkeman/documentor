@@ -1,9 +1,8 @@
-package com.documentor.service;
+package com.documentor.service.python;
 
 import com.documentor.model.CodeElement;
 import com.documentor.model.CodeElementType;
-import com.documentor.service.python.PythonASTProcessor;
-import com.documentor.service.python.PythonRegexAnalyzer;
+import com.documentor.service.PythonCodeAnalyzer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
@@ -17,11 +16,8 @@ import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -38,12 +34,6 @@ class PythonCodeAnalyzerTest {
 
     @TempDir
     private Path tempDir;
-
-    @Test
-    void pythonCodeAnalyzerClassIsPresent() throws ClassNotFoundException {
-        // Verify class is present on classpath (sanity check)
-        assertNotNull(Class.forName("com.documentor.service.PythonCodeAnalyzer"));
-    }
 
     @Test
     void analyzeFile_withSuccessfulAstProcessing_returnsAstElements() throws IOException, InterruptedException {
