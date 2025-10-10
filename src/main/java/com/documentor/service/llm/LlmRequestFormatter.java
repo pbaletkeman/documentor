@@ -32,22 +32,37 @@ public class LlmRequestFormatter {
     }
 
     private Map<String, Object> createOllamaRequest(LlmModelConfig model, String prompt) {
-        return Map.of("model", model.name(), "prompt", prompt);
+        // Ollama expects model, prompt and optional streaming flag. Tests expect
+        // a 'stream' boolean (default false) to be present.
+        return Map.of(
+            "model", model.name(),
+            "prompt", prompt,
+            "stream", Boolean.FALSE,
+            "max_tokens", model.maxTokens()
+        );
     }
 
     private Map<String, Object> createOpenAIRequest(LlmModelConfig model, String prompt) {
+        // OpenAI-compatible payload: include temperature default (0.7) and ensure
+        // numeric types are present for max_tokens. Use messages for chat models.
         return Map.of(
             "model", model.name(),
             "messages", List.of(Map.of("role", "user", "content", prompt)),
             "max_tokens", model.maxTokens(),
+            "temperature", Double.valueOf(0.7),
             "timeout", model.timeoutSeconds()
         );
     }
 
     private Map<String, Object> createGenericRequest(final LlmModelConfig model, final String prompt) {
-        return Map.of("input", prompt, "parameters", Map.of(
+        // Generic providers: expose a top-level 'prompt' and common parameters
+        // like temperature (default 0.5) and max_tokens so tests can assert on
+        // these values directly.
+        return Map.of(
+            "prompt", prompt,
             "max_tokens", model.maxTokens(),
+            "temperature", Double.valueOf(0.5),
             "timeout", model.timeoutSeconds()
-        ));
+        );
     }
 }

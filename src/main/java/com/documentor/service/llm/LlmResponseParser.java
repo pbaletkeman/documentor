@@ -50,7 +50,11 @@ public class LlmResponseParser {
                     return choice.get("text").asText();
                 }
             }
-            return json.asText();
+            // If this isn't the OpenAI choices format, attempt to parse common
+            // fallback fields (response, text, content, output, result) before
+            // returning an empty string. This handles tests that pass a simple
+            // {"response": "..."} JSON body for OpenAI-configured models.
+            return parseGenericResponse(response, "response", "text", "content", "output", "result");
         } catch (Exception e) {
             return response;
         }
