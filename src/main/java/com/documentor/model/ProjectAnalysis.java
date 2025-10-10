@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * 📊 Project Analysis Result
+ * ðŸ“Š Project Analysis Result
  *
  * Contains the complete analysis results for a project, including all discovered
  * code elements organized by type and file.
@@ -17,7 +17,7 @@ public record ProjectAnalysis(
 ) {
 
     /**
-     * 📦 Gets all classes found in the project
+     * ðŸ“¦ Gets all classes found in the project
      */
     public List<CodeElement> getClasses() {
         return codeElements.stream()
@@ -26,7 +26,7 @@ public record ProjectAnalysis(
     }
 
     /**
-     * 🔧 Gets all methods found in the project
+     * ðŸ”§ Gets all methods found in the project
      */
     public List<CodeElement> getMethods() {
         return codeElements.stream()
@@ -35,7 +35,7 @@ public record ProjectAnalysis(
     }
 
     /**
-     * 📊 Gets all fields found in the project
+     * ðŸ“Š Gets all fields found in the project
      */
     public List<CodeElement> getFields() {
         return codeElements.stream()
@@ -44,7 +44,7 @@ public record ProjectAnalysis(
     }
 
     /**
-     * 📁 Groups code elements by file path
+     * ðŸ“ Groups code elements by file path
      */
     public Map<String, List<CodeElement>> getElementsByFile() {
         return codeElements.stream()
@@ -52,7 +52,7 @@ public record ProjectAnalysis(
     }
 
     /**
-     * 🏷️ Groups code elements by type
+     * ðŸ·ï¸ Groups code elements by type
      */
     public Map<CodeElementType, List<CodeElement>> getElementsByType() {
         return codeElements.stream()
@@ -60,7 +60,7 @@ public record ProjectAnalysis(
     }
 
     /**
-     * 📈 Gets analysis statistics
+     * ðŸ“ˆ Gets analysis statistics
      */
     public AnalysisStats getStats() {
         Map<CodeElementType, Long> counts = codeElements.stream()
@@ -84,7 +84,7 @@ public record ProjectAnalysis(
     }
 
     /**
-     * 📊 Analysis Statistics Record
+     * ðŸ“Š Analysis Statistics Record
      */
     public record AnalysisStats(
         int totalElements,
@@ -95,7 +95,7 @@ public record ProjectAnalysis(
     ) {
         public String getFormattedSummary() {
             return String.format(
-                "📊 Analysis Summary: %d total elements (%d classes, %d methods, %d fields) across %d files",
+                "ðŸ“Š Analysis Summary: %d total elements (%d classes, %d methods, %d fields) across %d files",
                 totalElements, classCount, methodCount, fieldCount, fileCount
             );
         }

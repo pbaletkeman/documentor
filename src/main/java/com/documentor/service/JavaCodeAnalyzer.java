@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * ☕ Java Code Analyzer - Refactored for Low Complexity
+ * â˜• Java Code Analyzer - Refactored for Low Complexity
  *
  * Parses Java source files using JavaParser to extract:
  * - Public/protected classes and interfaces
@@ -31,19 +31,19 @@ public class JavaCodeAnalyzer {
     private final JavaParser javaParser;
     private final JavaElementVisitor elementVisitor;
 
-    public JavaCodeAnalyzer(DocumentorConfig config, JavaElementVisitor elementVisitor) {
+    public JavaCodeAnalyzer(final DocumentorConfig config, final JavaElementVisitor elementVisitor) {
         this.javaParser = new JavaParser();
         this.elementVisitor = elementVisitor;
     }
 
     /**
-     * 📄 Analyzes a Java file and extracts all non-private code elements
+     * ðŸ“„ Analyzes a Java file and extracts all non-private code elements
      *
      * @param filePath Path to the Java source file
      * @return List of discovered code elements
      */
-    public List<CodeElement> analyzeFile(Path filePath) throws IOException {
-        LOGGER.debug("🔍 Analyzing Java file: {}", filePath);
+    public List<CodeElement> analyzeFile(final Path filePath) throws IOException {
+        LOGGER.debug("ðŸ” Analyzing Java file: {}", filePath);
 
         String sourceCode = Files.readString(filePath);
         List<CodeElement> elements = new ArrayList<>();
@@ -55,11 +55,11 @@ public class JavaCodeAnalyzer {
             elementVisitor.initialize(filePath, elements);
             elementVisitor.visit(cu, null);
 
-            LOGGER.debug("✅ Found {} elements in {}", elements.size(), filePath.getFileName());
+            LOGGER.debug("âœ… Found {} elements in {}", elements.size(), filePath.getFileName());
             return elements;
 
         } catch (Exception e) {
-            LOGGER.error("❌ Error parsing Java file {}: {}", filePath, e.getMessage());
+            LOGGER.error("âŒ Error parsing Java file {}: {}", filePath, e.getMessage());
             throw new IOException("Failed to analyze Java file", e);
         }
     }

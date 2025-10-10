@@ -14,8 +14,8 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.List;
 
 /**
- * 🧪 Main Application Tests
- * 
+ * ðŸ§ª Main Application Tests
+ *
  * Integration tests for the Documentor Spring Boot application.
  */
 @SpringBootTest
@@ -24,33 +24,33 @@ class DocumentorApplicationTests {
 
     @TestConfiguration
     static class TestConfig {
-        
+
         @Bean
         @Primary
         public DocumentorConfig documentorConfig() {
             LlmModelConfig llmModel = new LlmModelConfig(
-                "test-model", 
-                "test-provider", 
-                "http://localhost:11434", 
-                "test-key", 
-                1000, 
+                "test-model",
+                "test-provider",
+                "http://localhost:11434",
+                "test-key",
+                1000,
                 10
             );
-            
+
             OutputSettings outputSettings = new OutputSettings(
                 "./test-docs",
                 "markdown",
                 false,
                 false
             );
-            
+
             AnalysisSettings analysisSettings = new AnalysisSettings(
                 true,
                 5,
                 List.of("**/*.java"),
                 List.of("**/target/**")
             );
-            
+
             return new DocumentorConfig(
                 List.of(llmModel),
                 outputSettings,

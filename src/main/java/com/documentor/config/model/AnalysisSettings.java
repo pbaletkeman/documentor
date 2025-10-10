@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /**
- * 🔍 Analysis Settings Configuration - Simplified
+ * ðŸ” Analysis Settings Configuration - Simplified
  */
 public record AnalysisSettings(
     @JsonProperty("include_private_members")

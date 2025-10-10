@@ -16,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
 /**
- * 🔍 Code Analysis Service
+ * ðŸ” Code Analysis Service
  *
  * Orchestrates the analysis of Java and Python projects by:
  * - Discovering source files
@@ -42,13 +42,13 @@ public class CodeAnalysisService {
     }
 
     /**
-     * 📊 Analyzes a project directory and returns comprehensive analysis results
+     * ðŸ“Š Analyzes a project directory and returns comprehensive analysis results
      *
      * @param projectPath Path to the project directory
      * @return ProjectAnalysis containing all discovered code elements
      */
-    public CompletableFuture<ProjectAnalysis> analyzeProject(Path projectPath) {
-        LOGGER.info("🚀 Starting analysis of project: {}", projectPath);
+    public CompletableFuture<ProjectAnalysis> analyzeProject(final Path projectPath) {
+        LOGGER.info("ðŸš€ Starting analysis of project: {}", projectPath);
 
         return CompletableFuture.supplyAsync(() -> {
             try {
@@ -60,20 +60,20 @@ public class CodeAnalysisService {
                     System.currentTimeMillis()
                 );
 
-                LOGGER.info("✅ Analysis completed. Found {} code elements", allElements.size());
+                LOGGER.info("âœ… Analysis completed. Found {} code elements", allElements.size());
                 return analysis;
 
             } catch (Exception e) {
-                LOGGER.error("❌ Error analyzing project: {}", e.getMessage(), e);
+                LOGGER.error("âŒ Error analyzing project: {}", e.getMessage(), e);
                 throw new RuntimeException("Failed to analyze project", e);
             }
         });
     }
 
     /**
-     * 🔎 Discovers and analyzes all supported source files in the project
+     * ðŸ”Ž Discovers and analyzes all supported source files in the project
      */
-    private List<CodeElement> discoverAndAnalyzeFiles(Path projectPath) throws IOException {
+    private List<CodeElement> discoverAndAnalyzeFiles(final Path projectPath) throws IOException {
         try (Stream<Path> fileStream = Files.walk(projectPath)) {
             return fileStream
                     .filter(Files::isRegularFile)
@@ -85,18 +85,18 @@ public class CodeAnalysisService {
     }
 
     /**
-     * 📁 Checks if a file is a supported source file
+     * ðŸ“ Checks if a file is a supported source file
      */
-    private boolean isSupportedFile(Path file) {
+    private boolean isSupportedFile(final Path file) {
         String fileName = file.getFileName().toString().toLowerCase();
         return fileName.endsWith(ApplicationConstants.JAVA_EXTENSION) ||
                fileName.endsWith(ApplicationConstants.PYTHON_EXTENSION);
     }
 
     /**
-     * 🚫 Applies exclude patterns to determine if file should be analyzed
+     * ðŸš« Applies exclude patterns to determine if file should be analyzed
      */
-    private boolean shouldAnalyzeFile(Path file) {
+    private boolean shouldAnalyzeFile(final Path file) {
         String filePath = file.toString();
         return config.analysisSettings().excludePatterns().stream()
                 .noneMatch(pattern -> filePath.matches(
@@ -104,21 +104,21 @@ public class CodeAnalysisService {
     }
 
     /**
-     * 🔍 Safely analyzes a single file, returning empty stream on error
+     * ðŸ” Safely analyzes a single file, returning empty stream on error
      */
-    private Stream<CodeElement> analyzeFileSafely(Path file) {
+    private Stream<CodeElement> analyzeFileSafely(final Path file) {
         try {
             return analyzeFileByType(file);
         } catch (Exception e) {
-            LOGGER.warn("⚠️ Failed to analyze file {}: {}", file, e.getMessage());
+            LOGGER.warn("âš ï¸ Failed to analyze file {}: {}", file, e.getMessage());
             return Stream.empty();
         }
     }
 
     /**
-     * 🔍 Analyzes a single file by determining its type
+     * ðŸ” Analyzes a single file by determining its type
      */
-    private Stream<CodeElement> analyzeFileByType(Path file) throws IOException {
+    private Stream<CodeElement> analyzeFileByType(final Path file) throws IOException {
         String fileName = file.getFileName().toString().toLowerCase();
 
         if (fileName.endsWith(ApplicationConstants.JAVA_EXTENSION)) {

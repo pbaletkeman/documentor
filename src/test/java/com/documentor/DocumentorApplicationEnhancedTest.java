@@ -13,8 +13,8 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mockStatic;
 
 /**
- * 🧪 Enhanced tests for DocumentorApplication
- * 
+ * ðŸ§ª Enhanced tests for DocumentorApplication
+ *
  * Tests focused on improving coverage of the main application class.
  */
 @ExtendWith(MockitoExtension.class)
@@ -26,7 +26,7 @@ class DocumentorApplicationEnhancedTest {
         try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
             // When
             DocumentorApplication.main(new String[]{"--help"});
-            
+
             // Then
             mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorApplication.class), any(String[].class)));
         }
@@ -38,7 +38,7 @@ class DocumentorApplicationEnhancedTest {
         try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
             // When
             DocumentorApplication.main(new String[]{});
-            
+
             // Then
             mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorApplication.class), any(String[].class)));
         }
@@ -50,7 +50,7 @@ class DocumentorApplicationEnhancedTest {
         try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
             // When
             DocumentorApplication.main(null);
-            
+
             // Then
             mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorApplication.class), any()));
         }
@@ -61,10 +61,10 @@ class DocumentorApplicationEnhancedTest {
         // Test main method with multiple arguments
         try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
             String[] args = {"--spring.profiles.active=test", "--debug", "--project-path=/test"};
-            
+
             // When
             DocumentorApplication.main(args);
-            
+
             // Then
             mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorApplication.class), eq(args)));
         }
@@ -90,7 +90,7 @@ class DocumentorApplicationEnhancedTest {
         // Verify main method exists with correct signature
         Class<DocumentorApplication> clazz = DocumentorApplication.class;
         java.lang.reflect.Method mainMethod = clazz.getDeclaredMethod("main", String[].class);
-        
+
         assertNotNull(mainMethod);
         assertTrue(java.lang.reflect.Modifier.isStatic(mainMethod.getModifiers()));
         assertTrue(java.lang.reflect.Modifier.isPublic(mainMethod.getModifiers()));

@@ -14,8 +14,8 @@ import org.springframework.test.context.ActiveProfiles;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * 🧪 Integration tests for DocumentorApplication
- * 
+ * ðŸ§ª Integration tests for DocumentorApplication
+ *
  * Tests the complete Spring Boot application context and component integration.
  * This ensures all beans are properly configured and wired together.
  */
@@ -59,7 +59,7 @@ class DocumentorApplicationIntegrationTest {
         // This validates the application.yml configuration
         assertNotNull(documentorConfig.llmModels(), "LLM models should be configured");
         assertFalse(documentorConfig.llmModels().isEmpty(), "At least one LLM model should be configured");
-        
+
         assertNotNull(documentorConfig.outputSettings(), "Output settings should be configured");
         assertNotNull(documentorConfig.analysisSettings(), "Analysis settings should be configured");
     }
@@ -68,10 +68,10 @@ class DocumentorApplicationIntegrationTest {
     void testComponentIntegration() {
         // Test that components are properly integrated and can work together
         // This validates @ComponentScan and @EnableAutoConfiguration
-        
+
         // DocumentorCommands should have its dependencies injected
         assertNotNull(documentorCommands, "DocumentorCommands should be properly instantiated");
-        
+
         // Test basic command functionality to ensure components are wired correctly
         String infoResult = documentorCommands.showInfo();
         assertNotNull(infoResult, "showInfo() should return a result");
@@ -84,7 +84,7 @@ class DocumentorApplicationIntegrationTest {
         // Test that @EnableAsync is working correctly
         // LlmService should be available and configured for async operations
         assertNotNull(llmService, "LlmService should be available for async operations");
-        
+
         // DocumentationService should be able to handle async calls
         assertNotNull(documentationService, "DocumentationService should be available");
     }
@@ -95,11 +95,11 @@ class DocumentorApplicationIntegrationTest {
         // DocumentorConfig should be properly bound from properties
         assertNotNull(documentorConfig, "DocumentorConfig should be bound from properties");
         assertNotNull(documentorConfig.llmModels(), "LLM models should be bound from configuration");
-        
+
         // Verify test-specific configuration is loaded
-        assertEquals("test-model", documentorConfig.llmModels().get(0).name(), 
+        assertEquals("test-model", documentorConfig.llmModels().get(0).name(),
                      "Test configuration should override default model name");
-        assertEquals("test-key", documentorConfig.llmModels().get(0).apiKey(), 
+        assertEquals("test-key", documentorConfig.llmModels().get(0).apiKey(),
                      "Test configuration should override default API key");
     }
 
@@ -107,7 +107,7 @@ class DocumentorApplicationIntegrationTest {
     void testMainApplicationClass() {
         // Test the main application class annotations and configuration
         Class<?> appClass = DocumentorApplication.class;
-        
+
         // Verify Spring Boot annotations are present
         assertTrue(appClass.isAnnotationPresent(org.springframework.boot.autoconfigure.SpringBootApplication.class),
                    "Application should be annotated with @SpringBootApplication");

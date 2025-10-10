@@ -1,4 +1,4 @@
-import com.documentor.model.CodeElement;
+﻿import com.documentor.model.CodeElement;
 import com.documentor.model.CodeElementType;
 import com.documentor.service.diagram.MermaidClassDiagramGenerator;
 import java.nio.file.Path;
@@ -7,7 +7,7 @@ import java.util.List;
 public class DebugRelationshipTest {
     public static void main(String[] args) throws Exception {
         MermaidClassDiagramGenerator generator = new MermaidClassDiagramGenerator();
-        
+
         CodeElement mainClass = new CodeElement(
             CodeElementType.CLASS,
             "MainClass",
@@ -45,7 +45,7 @@ public class DebugRelationshipTest {
         );
 
         List<CodeElement> elements = List.of(mainClass, otherClass, methodWithDependency);
-        
+
         String output = generator.generateClassDiagram(mainClass, elements, Path.of("temp"));
         System.out.println("Generated diagram content:");
         System.out.println(output);

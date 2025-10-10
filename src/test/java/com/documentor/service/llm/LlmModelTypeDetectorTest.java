@@ -1,7 +1,6 @@
 package com.documentor.service.llm;
 
 import com.documentor.config.model.LlmModelConfig;
-import com.documentor.constants.ApplicationConstants;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,7 +15,7 @@ class LlmModelTypeDetectorTest {
     @ParameterizedTest
     @CsvSource({
         "http://localhost:11434/api, true",
-        "https://ollama.example.com, true", 
+        "https://ollama.example.com, true",
         "http://localhost:11434, true",
         "http://api.openai.com, false",
         "http://localhost:8080, false"

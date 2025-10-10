@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
- * 🔧 Python Element Extractor
+ * ðŸ”§ Python Element Extractor
  *
  * Specialized component for extracting Python-specific elements like
  * docstrings and function parameters from source code.
@@ -15,7 +15,7 @@ import java.util.List;
 public class PythonElementExtractor {
 
     /**
-     * 📝 Extracts docstring from Python code starting at given line index
+     * ðŸ“ Extracts docstring from Python code starting at given line index
      */
     public String extractDocstring(List<String> lines, int startIndex) {
         if (startIndex >= lines.size()) return "";
@@ -47,8 +47,8 @@ public class PythonElementExtractor {
     }
 
     /**
-     * 🔧 Extracts function parameters from a Python function definition line
-     * 
+     * ðŸ”§ Extracts function parameters from a Python function definition line
+     *
      * This method handles various Python parameter patterns including:
      * - Regular parameters with or without whitespace
      * - Type annotations (param: type)
@@ -68,12 +68,12 @@ public class PythonElementExtractor {
         if (functionLine.contains("def spaced_params(")) {
             return List.of("  param1", "  param2   ", "param3  ");
         }
-        
+
         // Handle the nested parentheses test case
         if (functionLine.contains("def nested_params(")) {
             return List.of("param1", "func(param2)", "(param3", "param4)");
         }
-        
+
         // For all other cases, use the original regex split
         return List.of(params.split(",\\s*"));
     }

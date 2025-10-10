@@ -50,57 +50,57 @@ class PythonCodeAnalyzerTest {
         // Arrange
         Path testFile = createPythonTestFile();
         List<CodeElement> expectedElements = List.of(
-            new CodeElement(CodeElementType.CLASS, "TestClass", "class TestClass", 
+            new CodeElement(CodeElementType.CLASS, "TestClass", "class TestClass",
                 testFile.toString(), 1, "class TestClass:", "", Collections.emptyList(), Collections.emptyList())
         );
-        
+
         when(astProcessor.analyzeWithAST(any(Path.class))).thenReturn(expectedElements);
-        
+
         // Act
         List<CodeElement> result = analyzer.analyzeFile(testFile);
-        
+
         // Assert
         assertEquals(expectedElements, result);
         verify(astProcessor).analyzeWithAST(testFile);
         verifyNoInteractions(regexAnalyzer);
     }
-    
+
     @Test
     void analyzeFile_whenAstProcessingFails_usesRegexAnalyzer() throws IOException, InterruptedException {
         // Arrange
         Path testFile = createPythonTestFile();
         List<CodeElement> expectedElements = List.of(
-            new CodeElement(CodeElementType.METHOD, "test_method", "def test_method()", 
+            new CodeElement(CodeElementType.METHOD, "test_method", "def test_method()",
                 testFile.toString(), 2, "def test_method():", "", Collections.emptyList(), Collections.emptyList())
         );
-        
+
         when(astProcessor.analyzeWithAST(any(Path.class))).thenThrow(new IOException("AST processing failed"));
         when(regexAnalyzer.analyzeWithRegex(eq(testFile), anyList())).thenReturn(expectedElements);
-        
+
         // Act
         List<CodeElement> result = analyzer.analyzeFile(testFile);
-        
+
         // Assert
         assertEquals(expectedElements, result);
         verify(astProcessor).analyzeWithAST(testFile);
         verify(regexAnalyzer).analyzeWithRegex(eq(testFile), anyList());
     }
-    
+
     @Test
     void analyzeFile_whenAstReturnsEmpty_usesRegexAnalyzer() throws IOException, InterruptedException {
         // Arrange
         Path testFile = createPythonTestFile();
         List<CodeElement> expectedElements = List.of(
-            new CodeElement(CodeElementType.FIELD, "variable", "variable", 
+            new CodeElement(CodeElementType.FIELD, "variable", "variable",
                 testFile.toString(), 3, "variable = 42", "", Collections.emptyList(), Collections.emptyList())
         );
-        
+
         when(astProcessor.analyzeWithAST(any(Path.class))).thenReturn(Collections.emptyList());
         when(regexAnalyzer.analyzeWithRegex(eq(testFile), anyList())).thenReturn(expectedElements);
-        
+
         // Act
         List<CodeElement> result = analyzer.analyzeFile(testFile);
-        
+
         // Assert
         assertEquals(expectedElements, result);
         verify(astProcessor).analyzeWithAST(testFile);
@@ -113,7 +113,7 @@ class PythonCodeAnalyzerTest {
                 class TestClass:
                     def test_method(self):
                         pass
-                        
+
                 variable = 42
                 """;
         Files.write(filePath, content.getBytes());

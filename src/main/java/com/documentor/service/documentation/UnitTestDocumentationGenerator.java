@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * 🧪 Unit Test Documentation Generator
+ * ðŸ§ª Unit Test Documentation Generator
  *
  * Specialized component for generating unit test documentation and suggestions.
  * Handles AI-generated test cases and coverage recommendations.
@@ -35,9 +35,9 @@ public class UnitTestDocumentationGenerator {
     }
 
     /**
-     * 🧪 Generates unit test documentation
+     * ðŸ§ª Generates unit test documentation
      */
-    public CompletableFuture<Void> generateUnitTestDocumentation(ProjectAnalysis analysis, Path outputPath) {
+    public CompletableFuture<Void> generateUnitTestDocumentation(final ProjectAnalysis analysis, final Path outputPath) {
         return CompletableFuture.supplyAsync(() -> {
             try {
                 Path testsDir = outputPath.resolve("tests");
@@ -61,24 +61,24 @@ public class UnitTestDocumentationGenerator {
                             try {
                                 Files.write(testsDir.resolve("unit-tests.md"), testDoc.toString().getBytes());
                             } catch (IOException e) {
-                                LOGGER.error("❌ Error writing test documentation: {}", e.getMessage());
+                                LOGGER.error("âŒ Error writing test documentation: {}", e.getMessage());
                             }
                         })
                         .join();
 
                 return null;
             } catch (Exception e) {
-                LOGGER.error("❌ Error generating test documentation: {}", e.getMessage());
+                LOGGER.error("âŒ Error generating test documentation: {}", e.getMessage());
                 throw new RuntimeException("Failed to generate test documentation", e);
             }
         });
     }
 
     /**
-     * 🧪 Appends test documentation header
+     * ðŸ§ª Appends test documentation header
      */
-    private void appendTestDocumentationHeader(StringBuilder doc) {
-        String icon = config.outputSettings().includeIcons() ? "🧪 " : "";
+    private void appendTestDocumentationHeader(final StringBuilder doc) {
+        String icon = config.outputSettings().includeIcons() ? "ðŸ§ª " : "";
         doc.append(String.format("# %sGenerated Unit Tests\n\n", icon));
         doc.append("This file contains AI-generated unit test suggestions for the analyzed code.\n\n");
         doc.append(String.format("Target Coverage: %.0f%%\n\n",

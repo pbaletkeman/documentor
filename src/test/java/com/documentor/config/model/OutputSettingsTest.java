@@ -63,7 +63,7 @@ class OutputSettingsTest {
     @DisplayName("Should apply defaults for partial null values")
     void shouldApplyDefaultsForPartialNullValues(String outputDirectory, String format,
                                               Boolean generateMermaid, Boolean verboseOutput,
-                                              String expectedFormat, Boolean expectedGenerateMermaid, 
+                                              String expectedFormat, Boolean expectedGenerateMermaid,
                                               Boolean expectedVerboseOutput) {
         // When
         OutputSettings settings = new OutputSettings(

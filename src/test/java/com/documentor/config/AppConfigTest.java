@@ -18,8 +18,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.reactive.function.client.WebClient;
 
 /**
- * 🧪 Comprehensive tests for AppConfig
- * 
+ * ðŸ§ª Comprehensive tests for AppConfig
+ *
  * Tests Spring configuration bean creation and async executor setup
  */
 @ExtendWith(MockitoExtension.class)
@@ -37,7 +37,7 @@ class AppConfigTest {
     void setUp() {
         lenient().when(documentorConfig.analysisSettings()).thenReturn(analysisSettings);
         lenient().when(analysisSettings.maxThreads()).thenReturn(4);
-        
+
         appConfig = new AppConfig(documentorConfig);
     }
 
@@ -114,7 +114,7 @@ class AppConfigTest {
         // Then
         assertNotNull(asyncExecutor);
         assertTrue(asyncExecutor instanceof ThreadPoolTaskExecutor);
-        
+
         ThreadPoolTaskExecutor threadPoolExecutor = (ThreadPoolTaskExecutor) asyncExecutor;
         assertEquals(4, threadPoolExecutor.getCorePoolSize());
         assertEquals("LLM-", threadPoolExecutor.getThreadNamePrefix());

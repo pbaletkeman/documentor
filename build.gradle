@@ -31,18 +31,18 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springframework.shell:spring-shell-starter:3.2.0'
-    
+
     // Core analysis libraries only
     implementation 'com.github.javaparser:javaparser-core:3.25.8'
     implementation 'org.python:jython-standalone:2.7.3'
-    
+
     // Essential utilities
     implementation 'com.vladsch.flexmark:flexmark-all:0.64.8'
     implementation 'commons-io:commons-io:2.15.1'
-    
+
     // Configuration processing
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-    
+
     // Minimal testing
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
@@ -111,7 +111,7 @@ task runApp(type: JavaExec) {
     description = 'Run the Documentor application'
     classpath = sourceSets.main.runtimeClasspath
     mainClass = 'com.documentor.DocumentorApplication'
-    
+
     if (project.hasProperty('args')) {
         args project.args.split(',')
     }

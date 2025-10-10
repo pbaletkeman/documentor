@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 📋 LLM Request Formatter - Formats requests for different LLM providers
+ * ðŸ“‹ LLM Request Formatter - Formats requests for different LLM providers
  */
 @Component
 public class LlmRequestFormatter {
@@ -19,7 +19,7 @@ public class LlmRequestFormatter {
     }
 
         /**
-     * 🎯 Creates request body based on model type
+     * ðŸŽ¯ Creates request body based on model type
      */
     public Map<String, Object> createRequest(LlmModelConfig model, String prompt) {
         if (modelTypeDetector.isOllamaModel(model)) {

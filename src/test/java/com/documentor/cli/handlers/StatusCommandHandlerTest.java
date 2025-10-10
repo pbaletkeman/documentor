@@ -4,7 +4,6 @@ import com.documentor.config.DocumentorConfig;
 import com.documentor.config.model.AnalysisSettings;
 import com.documentor.config.model.LlmModelConfig;
 import com.documentor.config.model.OutputSettings;
-import com.documentor.constants.ApplicationConstants;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

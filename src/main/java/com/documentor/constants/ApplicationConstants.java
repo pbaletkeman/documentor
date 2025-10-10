@@ -1,7 +1,7 @@
 package com.documentor.constants;
 
 /**
- * 🎯 Application Constants - Centralized constants to reduce complexity
+ * ðŸŽ¯ Application Constants - Centralized constants to reduce complexity
  *
  * Contains commonly used string literals, magic numbers, and configuration defaults
  * to improve maintainability and reduce duplication.
@@ -27,10 +27,10 @@ public final class ApplicationConstants {
     public static final String REGEX_REPLACEMENT = ".*";
 
     // Status Messages
-    public static final String SUCCESS_PREFIX = "✅";
-    public static final String ERROR_PREFIX = "❌";
-    public static final String WARNING_PREFIX = "⚠️";
-    public static final String INFO_PREFIX = "ℹ️";
+    public static final String SUCCESS_PREFIX = "âœ…";
+    public static final String ERROR_PREFIX = "âŒ";
+    public static final String WARNING_PREFIX = "âš ï¸";
+    public static final String INFO_PREFIX = "â„¹ï¸";
 
     // Limit Values
     public static final int MAX_SIGNATURE_LENGTH = 50;

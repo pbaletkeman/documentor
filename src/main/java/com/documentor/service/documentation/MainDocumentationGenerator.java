@@ -14,7 +14,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
- * 📖 Main Documentation Generator
+ * ðŸ“– Main Documentation Generator
  *
  * Specialized component for generating the main README.md documentation.
  * Handles project overview, statistics, and API reference sections.
@@ -29,9 +29,9 @@ public class MainDocumentationGenerator {
     }
 
     /**
-     * 📖 Generates the main README.md documentation
+     * ðŸ“– Generates the main README.md documentation
      */
-    public CompletableFuture<String> generateMainDocumentation(ProjectAnalysis analysis) {
+    public CompletableFuture<String> generateMainDocumentation(final ProjectAnalysis analysis) {
         return CompletableFuture.supplyAsync(() -> {
             StringBuilder doc = new StringBuilder();
 
@@ -52,11 +52,11 @@ public class MainDocumentationGenerator {
     }
 
     /**
-     * 📊 Appends header section to documentation
+     * ðŸ“Š Appends header section to documentation
      */
-    private void appendHeader(StringBuilder doc, ProjectAnalysis analysis) {
+    private void appendHeader(final StringBuilder doc, final ProjectAnalysis analysis) {
         String projectName = Paths.get(analysis.projectPath()).getFileName().toString();
-        String icon = config.outputSettings().includeIcons() ? "📚 " : "";
+        String icon = config.outputSettings().includeIcons() ? "ðŸ“š " : "";
 
         doc.append(String.format("# %s%s - Code Documentation\n\n", icon, projectName));
         doc.append(String.format("Generated on: %s\n\n",
@@ -65,11 +65,11 @@ public class MainDocumentationGenerator {
     }
 
     /**
-     * 📈 Appends statistics section
+     * ðŸ“ˆ Appends statistics section
      */
-    private void appendStatistics(StringBuilder doc, ProjectAnalysis analysis) {
+    private void appendStatistics(final StringBuilder doc, final ProjectAnalysis analysis) {
         ProjectAnalysis.AnalysisStats stats = analysis.getStats();
-        String icon = config.outputSettings().includeIcons() ? "📊 " : "";
+        String icon = config.outputSettings().includeIcons() ? "ðŸ“Š " : "";
 
         doc.append(String.format("## %sProject Statistics\n\n", icon));
         doc.append(stats.getFormattedSummary()).append("\n\n");
@@ -77,19 +77,19 @@ public class MainDocumentationGenerator {
         doc.append("| Element Type | Count |\n");
         doc.append("|--------------|-------|\n");
         doc.append(String.format("| %s Classes | %d |\n",
-            config.outputSettings().includeIcons() ? "📦" : "", stats.classCount()));
+            config.outputSettings().includeIcons() ? "ðŸ“¦" : "", stats.classCount()));
         doc.append(String.format("| %s Methods | %d |\n",
-            config.outputSettings().includeIcons() ? "🔧" : "", stats.methodCount()));
+            config.outputSettings().includeIcons() ? "ðŸ”§" : "", stats.methodCount()));
         doc.append(String.format("| %s Fields | %d |\n",
-            config.outputSettings().includeIcons() ? "📊" : "", stats.fieldCount()));
+            config.outputSettings().includeIcons() ? "ðŸ“Š" : "", stats.fieldCount()));
         doc.append("\n");
     }
 
     /**
-     * 📋 Appends API reference section
+     * ðŸ“‹ Appends API reference section
      */
-    private void appendApiReference(StringBuilder doc, ProjectAnalysis analysis) {
-        String icon = config.outputSettings().includeIcons() ? "📋 " : "";
+    private void appendApiReference(final StringBuilder doc, final ProjectAnalysis analysis) {
+        String icon = config.outputSettings().includeIcons() ? "ðŸ“‹ " : "";
         doc.append(String.format("## %sAPI Reference\n\n", icon));
 
         Map<String, List<CodeElement>> elementsByFile = analysis.getElementsByFile();
@@ -111,10 +111,10 @@ public class MainDocumentationGenerator {
     }
 
     /**
-     * 💡 Appends usage examples section
+     * ðŸ’¡ Appends usage examples section
      */
-    private void appendUsageExamples(StringBuilder doc, ProjectAnalysis analysis) {
-        String icon = config.outputSettings().includeIcons() ? "💡 " : "";
+    private void appendUsageExamples(final StringBuilder doc, final ProjectAnalysis analysis) {
+        String icon = config.outputSettings().includeIcons() ? "ðŸ’¡ " : "";
         doc.append(String.format("## %sUsage Examples\n\n", icon));
         doc.append("Detailed usage examples can be found in the individual element documentation files.\n\n");
 

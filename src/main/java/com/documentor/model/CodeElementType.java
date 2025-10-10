@@ -1,7 +1,7 @@
 package com.documentor.model;
 
 /**
- * 🏷️ Code Element Type Enumeration
+ * ðŸ·ï¸ Code Element Type Enumeration
  *
  * Represents the different types of code elements that can be analyzed:
  * - CLASS: Classes, interfaces, enums
@@ -9,9 +9,9 @@ package com.documentor.model;
  * - FIELD: Variables, attributes, constants
  */
 public enum CodeElementType {
-    CLASS("📦", "Class/Interface"),
-    METHOD("🔧", "Method/Function"),
-    FIELD("📊", "Field/Variable");
+    CLASS("ðŸ“¦", "Class/Interface"),
+    METHOD("ðŸ”§", "Method/Function"),
+    FIELD("ðŸ“Š", "Field/Variable");
 
     private final String icon;
     private final String description;

@@ -23,7 +23,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /**
- * 🧪 Unit tests for CodeAnalysisService
+ * ðŸ§ª Unit tests for CodeAnalysisService
  */
 @ExtendWith(MockitoExtension.class)
 class CodeAnalysisServiceTest {
@@ -128,7 +128,7 @@ class CodeAnalysisServiceTest {
         // Create both Java and Python files
         Path javaFile = tempDir.resolve("Test.java");
         Files.writeString(javaFile, "public class Test {}");
-        
+
         Path pythonFile = tempDir.resolve("test.py");
         Files.writeString(pythonFile, "class TestClass: pass");
 
@@ -141,7 +141,7 @@ class CodeAnalysisServiceTest {
             CodeElementType.CLASS, "TestClass", "TestClass", pythonFile.toString(), 1,
             "class TestClass:", "", List.of(), List.of()
         );
-        
+
         when(javaCodeAnalyzer.analyzeFile(javaFile)).thenReturn(List.of(javaElement));
         when(pythonCodeAnalyzer.analyzeFile(pythonFile)).thenReturn(List.of(pythonElement));
 
@@ -176,7 +176,7 @@ class CodeAnalysisServiceTest {
         // Create nested directory structure
         Path subDir = tempDir.resolve("src").resolve("main").resolve("java");
         Files.createDirectories(subDir);
-        
+
         Path javaFile = subDir.resolve("Test.java");
         Files.writeString(javaFile, "public class Test {}");
 
@@ -214,7 +214,7 @@ class CodeAnalysisServiceTest {
     @Test
     void testAnalyzeProject_NonExistentDirectory() {
         Path nonExistent = tempDir.resolve("does-not-exist");
-        
+
         assertThrows(Exception.class, () -> {
             CompletableFuture<ProjectAnalysis> future = codeAnalysisService.analyzeProject(nonExistent);
             future.get();

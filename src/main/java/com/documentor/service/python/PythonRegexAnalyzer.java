@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 🔍 Python Regex Analyzer
+ * ðŸ” Python Regex Analyzer
  *
  * Specialized component for regex-based Python code analysis as a fallback
  * when AST parsing is not available or fails.
@@ -24,7 +24,7 @@ public class PythonRegexAnalyzer {
     private final PythonPatternMatcher patternMatcher;
 
     public PythonRegexAnalyzer(
-            DocumentorConfig config, 
+            DocumentorConfig config,
             PythonElementExtractor elementExtractor,
             PythonPatternMatcher patternMatcher) {
         this.config = config;
@@ -33,26 +33,26 @@ public class PythonRegexAnalyzer {
     }
 
     /**
-     * 🔍 Fallback regex-based analysis for when AST parsing fails
+     * ðŸ” Fallback regex-based analysis for when AST parsing fails
      */
     public List<CodeElement> analyzeWithRegex(Path filePath, List<String> lines) {
         List<CodeElement> elements = new ArrayList<>();
         String content = String.join("\n", lines);
-        
+
         // Process each type of element
         processClassElements(filePath, lines, content, elements);
         processFunctionElements(filePath, lines, content, elements);
         processVariableElements(filePath, content, elements);
-        
+
         return elements;
     }
-    
+
     /**
-     * 📋 Process class declarations
+     * ðŸ“‹ Process class declarations
      */
     private void processClassElements(Path filePath, List<String> lines, String content, List<CodeElement> elements) {
         var matcher = patternMatcher.findClassMatches(content);
-        
+
         while (matcher.find()) {
             String className = matcher.group(1);
             if (shouldInclude(className)) {
@@ -71,20 +71,20 @@ public class PythonRegexAnalyzer {
             }
         }
     }
-    
+
     /**
-     * 📋 Process function declarations
+     * ðŸ“‹ Process function declarations
      */
     private void processFunctionElements(Path filePath, List<String> lines, String content, List<CodeElement> elements) {
         var matcher = patternMatcher.findFunctionMatches(content);
-        
+
         while (matcher.find()) {
             String functionName = matcher.group(1);
             if (shouldInclude(functionName)) {
                 int lineNumber = getLineNumber(content, matcher.start());
                 String paramString = matcher.group(2);
                 List<String> params = List.of(patternMatcher.extractParameters(paramString));
-                
+
                 elements.add(new CodeElement(
                     CodeElementType.METHOD,
                     functionName,
@@ -99,13 +99,13 @@ public class PythonRegexAnalyzer {
             }
         }
     }
-    
+
     /**
-     * 📋 Process variable assignments
+     * ðŸ“‹ Process variable assignments
      */
     private void processVariableElements(Path filePath, String content, List<CodeElement> elements) {
         var matcher = patternMatcher.findVariableMatches(content);
-        
+
         while (matcher.find()) {
             String variableName = matcher.group(1);
             if (shouldInclude(variableName)) {
@@ -124,9 +124,9 @@ public class PythonRegexAnalyzer {
             }
         }
     }
-    
+
     /**
-     * 🔍 Determines line number from character position
+     * ðŸ” Determines line number from character position
      */
     private int getLineNumber(String content, int position) {
         int line = 1;
@@ -139,7 +139,7 @@ public class PythonRegexAnalyzer {
     }
 
     /**
-     * 🔍 Checks if an element should be included based on configuration
+     * ðŸ” Checks if an element should be included based on configuration
      */
     private boolean shouldInclude(String name) {
         boolean isPrivate = name.startsWith("_");

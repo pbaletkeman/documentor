@@ -75,7 +75,7 @@ class AnalysisSettingsTest {
         // When
         int threadsWithZero = settingsWithZero.maxThreads();
         int threadsWithNegative = settingsWithNegative.maxThreads();
-        
+
         // Then
         assertTrue(threadsWithZero > 0, "Should return a positive number of threads with zero maxDepth");
         assertTrue(threadsWithNegative > 0, "Should return a positive number of threads with negative maxDepth");
@@ -91,18 +91,18 @@ class AnalysisSettingsTest {
 
         // When - Force a specific implementation test - maxThreads should just return processors
         int maxThreads = settings.maxThreads();
-        
+
         // Then
         // We only check that maxThreads is positive as the available processors can vary
         // between environments - don't make assumptions about the exact number
         assertTrue(maxThreads > 0, "Max threads should be a positive number");
-        
-        // Instead of comparing with Runtime.getRuntime().availableProcessors(), we'll just verify 
+
+        // Instead of comparing with Runtime.getRuntime().availableProcessors(), we'll just verify
         // that the actual implementation is being used by mocking the AnalysisSettings class
         // and verifying our test logic
         AnalysisSettings mockSettings = mock(AnalysisSettings.class);
         when(mockSettings.maxThreads()).thenReturn(42); // arbitrary value
-        assertEquals(42, mockSettings.maxThreads(), 
+        assertEquals(42, mockSettings.maxThreads(),
             "Mock verification: maxThreads() should return the configured value");
     }
 

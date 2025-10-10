@@ -11,7 +11,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * 🧪 Simple tests for DocumentationFormatter component
+ * ðŸ§ª Simple tests for DocumentationFormatter component
  */
 class DocumentationFormatterTest {
 
@@ -21,13 +21,13 @@ class DocumentationFormatterTest {
     @BeforeEach
     void setUp() {
         formatter = new DocumentationFormatter();
-        
+
         CodeElement testElement = new CodeElement(
-            CodeElementType.CLASS, "TestClass", "com.example.TestClass", 
-            "TestClass.java", 1, "public class TestClass {}", 
+            CodeElementType.CLASS, "TestClass", "com.example.TestClass",
+            "TestClass.java", 1, "public class TestClass {}",
             "", List.of(), List.of()
         );
-        
+
         testProject = new ProjectAnalysis("/test/path", List.of(testElement), System.currentTimeMillis());
     }
 
@@ -40,9 +40,9 @@ class DocumentationFormatterTest {
     @Test
     void testAppendHeader() {
         StringBuilder sb = new StringBuilder();
-        
+
         formatter.appendHeader(sb, testProject);
-        
+
         String result = sb.toString();
         assertNotNull(result);
         assertTrue(result.length() > 0);
@@ -53,9 +53,9 @@ class DocumentationFormatterTest {
     @Test
     void testAppendStatistics() {
         StringBuilder sb = new StringBuilder();
-        
+
         formatter.appendStatistics(sb, testProject);
-        
+
         String result = sb.toString();
         assertNotNull(result);
         assertTrue(result.length() > 0);
@@ -66,9 +66,9 @@ class DocumentationFormatterTest {
     @Test
     void testAppendUsageExamples() {
         StringBuilder sb = new StringBuilder();
-        
+
         formatter.appendUsageExamples(sb, testProject);
-        
+
         String result = sb.toString();
         assertNotNull(result);
         // Should handle empty or basic usage examples gracefully
@@ -79,14 +79,14 @@ class DocumentationFormatterTest {
     void testFormatterWithEmptyProject() {
         ProjectAnalysis emptyProject = new ProjectAnalysis("/empty", List.of(), System.currentTimeMillis());
         StringBuilder sb = new StringBuilder();
-        
+
         // Should handle empty project without errors
         assertDoesNotThrow(() -> {
             formatter.appendHeader(sb, emptyProject);
             formatter.appendStatistics(sb, emptyProject);
             formatter.appendUsageExamples(sb, emptyProject);
         });
-        
+
         assertTrue(sb.length() >= 0);
     }
 }

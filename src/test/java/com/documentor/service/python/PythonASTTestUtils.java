@@ -11,7 +11,7 @@ import java.nio.file.Path;
  * Utility class for testing refactored Python code analysis components
  */
 public class PythonASTTestUtils {
-    
+
     /**
      * Helper method to invoke the parseASTOutputLine method on PythonASTCommandBuilder
      */

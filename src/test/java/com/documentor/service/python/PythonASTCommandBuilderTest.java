@@ -25,11 +25,11 @@ class PythonASTCommandBuilderTest {
     void shouldReturnValidPythonAstScript() {
         // When
         String script = commandBuilder.getPythonAstScript();
-        
+
         // Then
         assertNotNull(script);
         assertFalse(script.isEmpty());
-        
+
         // Check for expected content
         assertTrue(script.contains("import ast"));
         assertTrue(script.contains("import sys"));
@@ -44,16 +44,16 @@ class PythonASTCommandBuilderTest {
     void shouldWriteTempScript(@TempDir Path tempDir) throws IOException {
         // Set the temp directory (optional)
         System.setProperty("java.io.tmpdir", tempDir.toString());
-        
+
         // When
         Path scriptPath = commandBuilder.writeTempScript();
-        
+
         // Then
         assertNotNull(scriptPath);
         assertTrue(Files.exists(scriptPath));
         assertTrue(scriptPath.getFileName().toString().startsWith("python_analyzer"));
         assertTrue(scriptPath.getFileName().toString().endsWith(".py"));
-        
+
         // Content check
         String content = Files.readString(scriptPath);
         assertTrue(content.contains("import ast"));
@@ -67,10 +67,10 @@ class PythonASTCommandBuilderTest {
         Path filePath = tempDir.resolve("test_file.py");
         Files.writeString(scriptPath, "print('test')");
         Files.writeString(filePath, "class Test: pass");
-        
+
         // When
         ProcessBuilder processBuilder = commandBuilder.createProcessBuilder(scriptPath, filePath);
-        
+
         // Then
         assertNotNull(processBuilder);
         List<String> command = processBuilder.command();
@@ -86,10 +86,10 @@ class PythonASTCommandBuilderTest {
         // Given
         String classLine = "CLASS|TestClass|10|This is a test class docstring";
         Path filePath = Path.of("test.py");
-        
+
         // When
         CodeElement element = commandBuilder.parseASTOutputLine(classLine, filePath);
-        
+
         // Then
         assertNotNull(element);
         assertEquals(CodeElementType.CLASS, element.type());
@@ -109,10 +109,10 @@ class PythonASTCommandBuilderTest {
         // Given
         String functionLine = "FUNCTION|test_function|15|This is a function docstring|param1,param2,param3";
         Path filePath = Path.of("test.py");
-        
+
         // When
         CodeElement element = commandBuilder.parseASTOutputLine(functionLine, filePath);
-        
+
         // Then
         assertNotNull(element);
         assertEquals(CodeElementType.METHOD, element.type());
@@ -122,13 +122,13 @@ class PythonASTCommandBuilderTest {
         assertEquals(15, element.lineNumber());
         assertEquals("def test_function(param1, param2, param3):", element.signature());
         assertEquals("This is a function docstring", element.documentation());
-        
+
         // Parameters check
         assertEquals(3, element.parameters().size());
         assertEquals("param1", element.parameters().get(0));
         assertEquals("param2", element.parameters().get(1));
         assertEquals("param3", element.parameters().get(2));
-        
+
         assertTrue(element.annotations().isEmpty());
     }
 
@@ -138,10 +138,10 @@ class PythonASTCommandBuilderTest {
         // Given
         String variableLine = "VARIABLE|test_variable|5||";
         Path filePath = Path.of("test.py");
-        
+
         // When
         CodeElement element = commandBuilder.parseASTOutputLine(variableLine, filePath);
-        
+
         // Then
         assertNotNull(element);
         assertEquals(CodeElementType.FIELD, element.type());
@@ -152,7 +152,7 @@ class PythonASTCommandBuilderTest {
         assertEquals("test_variable = ...", element.signature());
         assertEquals("", element.documentation());
         assertTrue(element.parameters().isEmpty());
-        
+
         assertTrue(element.annotations().isEmpty());
     }
 
@@ -162,10 +162,10 @@ class PythonASTCommandBuilderTest {
         // Given
         String invalidLine = "INVALID|only_one_part";
         Path filePath = Path.of("test.py");
-        
+
         // When
         CodeElement element = commandBuilder.parseASTOutputLine(invalidLine, filePath);
-        
+
         // Then
         assertNull(element);
     }
@@ -176,10 +176,10 @@ class PythonASTCommandBuilderTest {
         // Given
         String lineWithEmptyParts = "FUNCTION|empty_function|20||";
         Path filePath = Path.of("test.py");
-        
+
         // When
         CodeElement element = commandBuilder.parseASTOutputLine(lineWithEmptyParts, filePath);
-        
+
         // Then
         assertNotNull(element);
         assertEquals(CodeElementType.METHOD, element.type());

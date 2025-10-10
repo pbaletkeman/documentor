@@ -37,7 +37,7 @@ class ApplicationConstantsTest {
         // Verify constructor is private
         Constructor<ApplicationConstants> constructor = ApplicationConstants.class.getDeclaredConstructor();
         assertTrue(Modifier.isPrivate(constructor.getModifiers()));
-        
+
         // Verify constructor throws exception when invoked
         constructor.setAccessible(true);
         try {

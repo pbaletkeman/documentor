@@ -16,53 +16,53 @@ public class CommonCommandHandler {
     /**
      * 🔍 Validates a file path exists
      */
-    public boolean fileExists(String path) {
+    public boolean fileExists(final String path) {
         if (path == null || path.trim().isEmpty()) {
             return false;
         }
-        
+
         java.nio.file.Path filePath = java.nio.file.Paths.get(path);
         return java.nio.file.Files.exists(filePath);
     }
-    
+
     /**
      * 🔍 Validates a directory path exists
      */
-    public boolean directoryExists(String path) {
+    public boolean directoryExists(final String path) {
         if (path == null || path.trim().isEmpty()) {
             return false;
         }
-        
+
         java.nio.file.Path dirPath = java.nio.file.Paths.get(path);
         return java.nio.file.Files.exists(dirPath) && java.nio.file.Files.isDirectory(dirPath);
     }
-    
+
     /**
      * 📊 Creates standardized statistics section
      */
-    public String formatStatistics(String title, Map<String, Object> stats) {
+    public String formatStatistics(final String title, final Map<String, Object> stats) {
         StringBuilder result = new StringBuilder();
         result.append("📊 ").append(title).append("\n");
         result.append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n");
-        
+
         stats.forEach((key, value) -> {
             result.append(key).append(": ").append(value).append("\n");
         });
-        
+
         return result.toString();
     }
-    
+
     /**
      * 📝 Creates standardized result builder
      */
     public StringBuilder createResultBuilder() {
         return new StringBuilder();
     }
-    
+
     /**
      * ⚠️ Creates error message with consistent format
      */
-    public String formatErrorMessage(String message, Exception e) {
+    public String formatErrorMessage(final String message, final Exception e) {
         return "❌ " + message + ": " + e.getMessage();
     }
 }

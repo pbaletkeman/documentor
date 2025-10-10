@@ -3,6 +3,27 @@
 # Runs unit tests and linting before allowing commits
 
 echo "🚀 Running pre-commit checks..."
+# Clean up staged files: remove BOM, trim whitespace, remove empty lines, ensure trailing newline
+FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(java|txt|md|json|yaml|yml)$')
+
+for FILE in $FILES; do
+    if [ -f "$FILE" ]; then
+        # Remove UTF-8 BOM if present
+        head -c 3 "$FILE" | od -An -tx1 | grep -q 'ef bb bf' && \
+        tail -c +4 "$FILE" > "$FILE.nobom" && mv "$FILE.nobom" "$FILE"
+
+        # Remove empty lines and trim whitespace
+        sed -i.bak '/^[[:space:]]*$/d' "$FILE"
+        sed -i.bak 's/^[[:space:]]*//;s/[[:space:]]*$//' "$FILE"
+        rm "$FILE.bak"
+
+        # Ensure trailing newline
+        tail -c1 "$FILE" | od -An -t x1 | grep -q '0a' || echo >> "$FILE"
+
+        # Re-add cleaned file to staging
+        git add "$FILE"
+    fi
+done
 
 # Check if we're in a git repository
 if ! git rev-parse --git-dir > /dev/null 2>&1; then

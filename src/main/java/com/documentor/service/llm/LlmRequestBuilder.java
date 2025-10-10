@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 /**
- * 🔧 LLM Request Builder - Refactored for Low Complexity
+ * ðŸ”§ LLM Request Builder - Refactored for Low Complexity
  */
 @Component
 public class LlmRequestBuilder {
@@ -20,22 +20,22 @@ public class LlmRequestBuilder {
         this.requestFormatter = requestFormatter;
     }
 
-    /** 🏗️ Builds complete request body for LLM API */
+    /** ðŸ—ï¸ Builds complete request body for LLM API */
     public Map<String, Object> buildRequestBody(LlmModelConfig model, String prompt) {
         return requestFormatter.createRequest(model, prompt);
     }
 
-    /** 📝 Creates documentation generation prompt */
+    /** ðŸ“ Creates documentation generation prompt */
     public String createDocumentationPrompt(CodeElement codeElement) {
         return promptTemplates.createDocumentationPrompt(codeElement);
     }
 
-    /** 💡 Creates usage example generation prompt */
+    /** ðŸ’¡ Creates usage example generation prompt */
     public String createUsageExamplePrompt(CodeElement codeElement) {
         return promptTemplates.createUsageExamplePrompt(codeElement);
     }
 
-    /** 🧪 Creates unit test generation prompt */
+    /** ðŸ§ª Creates unit test generation prompt */
     public String createUnitTestPrompt(CodeElement codeElement) {
         return promptTemplates.createUnitTestPrompt(codeElement);
     }

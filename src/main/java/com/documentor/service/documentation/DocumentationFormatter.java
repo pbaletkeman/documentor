@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
- * 📋 Documentation Formatter
+ * ðŸ“‹ Documentation Formatter
  *
  * Handles formatting of documentation sections.
  * Reduces DocumentationService complexity by extracting formatting logic.
@@ -18,9 +18,9 @@ import java.util.List;
 public class DocumentationFormatter {
 
     /**
-     * 📝 Creates header section for documentation
+     * ðŸ“ Creates header section for documentation
      */
-    public void appendHeader(StringBuilder doc, ProjectAnalysis analysis) {
+    public void appendHeader(final StringBuilder doc, final ProjectAnalysis analysis) {
         doc.append("# ").append(getProjectName(analysis.projectPath())).append("\n\n");
         doc.append("*Generated on: ").append(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)).append("*\n\n");
 
@@ -30,10 +30,10 @@ public class DocumentationFormatter {
     }
 
     /**
-     * 📊 Creates statistics section
+     * ðŸ“Š Creates statistics section
      */
-    public void appendStatistics(StringBuilder doc, ProjectAnalysis analysis) {
-        doc.append("## 📊 Project Statistics\n\n");
+    public void appendStatistics(final StringBuilder doc, final ProjectAnalysis analysis) {
+        doc.append("## ðŸ“Š Project Statistics\n\n");
 
         List<CodeElement> elements = analysis.codeElements();
         long classCount = elements.stream().filter(e -> e.type().name().equals("CLASS")).count();
@@ -47,10 +47,10 @@ public class DocumentationFormatter {
     }
 
     /**
-     * 💡 Creates usage examples section
+     * ðŸ’¡ Creates usage examples section
      */
-    public void appendUsageExamples(StringBuilder doc, ProjectAnalysis analysis) {
-        doc.append("## 💡 Usage Examples\n\n");
+    public void appendUsageExamples(final StringBuilder doc, final ProjectAnalysis analysis) {
+        doc.append("## ðŸ’¡ Usage Examples\n\n");
 
         if (analysis.codeElements().isEmpty()) {
             doc.append("*No code elements found for examples.*\n\n");
@@ -61,10 +61,10 @@ public class DocumentationFormatter {
     }
 
     /**
-     * 📚 Creates API reference section
+     * ðŸ“š Creates API reference section
      */
-    public void appendApiReference(StringBuilder doc, ProjectAnalysis analysis) {
-        doc.append("## 📚 API Reference\n\n");
+    public void appendApiReference(final StringBuilder doc, final ProjectAnalysis analysis) {
+        doc.append("## ðŸ“š API Reference\n\n");
 
         if (analysis.codeElements().isEmpty()) {
             doc.append("*No API elements found.*\n\n");
@@ -75,17 +75,17 @@ public class DocumentationFormatter {
     }
 
     /**
-     * 🧪 Creates test documentation header
+     * ðŸ§ª Creates test documentation header
      */
-    public void appendTestDocumentationHeader(StringBuilder doc) {
-        doc.append("# 🧪 Unit Test Documentation\n\n");
+    public void appendTestDocumentationHeader(final StringBuilder doc) {
+        doc.append("# ðŸ§ª Unit Test Documentation\n\n");
         doc.append("*Generated test documentation and examples*\n\n");
     }
 
     /**
-     * 🏗️ Extracts project name from path
+     * ðŸ—ï¸ Extracts project name from path
      */
-    private String getProjectName(String projectPath) {
+    private String getProjectName(final String projectPath) {
         if (projectPath == null || projectPath.isEmpty()) {
             return "Project Documentation";
         }

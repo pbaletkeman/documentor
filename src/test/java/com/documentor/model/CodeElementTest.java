@@ -7,7 +7,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * 🧪 Unit tests for CodeElement
+ * ðŸ§ª Unit tests for CodeElement
  */
 class CodeElementTest {
 
@@ -79,7 +79,7 @@ class CodeElementTest {
             List.of(),
             List.of("@Autowired")
         );
-        
+
         CodeElement element2 = new CodeElement(
             CodeElementType.FIELD,
             "testField",
@@ -219,7 +219,7 @@ class CodeElementTest {
         String displayName = element.getDisplayName();
 
         // Then
-        assertTrue(displayName.contains("🔧")); // METHOD icon
+        assertTrue(displayName.contains("ðŸ”§")); // METHOD icon
         assertTrue(displayName.contains("com.test.TestClass.testMethod"));
         assertTrue(displayName.contains("TestClass.java"));
         assertTrue(displayName.contains("25"));

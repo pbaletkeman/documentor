@@ -27,18 +27,18 @@ public class PythonElementExtractorMockTest {
 
     @Mock
     private PythonASTProcessor astProcessor;
-    
+
     @Mock
     private PythonRegexAnalyzer regexAnalyzer;
-    
+
     @InjectMocks
     private PythonElementExtractor elementExtractor;
-    
+
     @TempDir
     private Path tempDir;
-    
+
     /**
-     * This is a helper method to simulate a combined approach using both 
+     * This is a helper method to simulate a combined approach using both
      * AST and regex analysis
      */
     private List<CodeElement> extractElementsUsingBothApproaches(Path filePath) throws IOException, InterruptedException {
@@ -48,7 +48,7 @@ public class PythonElementExtractorMockTest {
             if (!elements.isEmpty()) {
                 return elements;
             }
-            
+
             // If AST returns empty, fall back to regex
             List<String> lines = Files.readAllLines(filePath);
             return regexAnalyzer.analyzeWithRegex(filePath, lines);
@@ -63,7 +63,7 @@ public class PythonElementExtractorMockTest {
     void shouldExtractElementsUsingAstAndFallbackToRegex() throws Exception {
         // Given
         Path pythonFile = createSamplePythonFile();
-        
+
         // Create mock AST elements
         CodeElement astClass = new CodeElement(
             CodeElementType.CLASS,
@@ -76,7 +76,7 @@ public class PythonElementExtractorMockTest {
             List.of(),
             List.of()
         );
-        
+
         CodeElement astMethod = new CodeElement(
             CodeElementType.METHOD,
             "test_method",
@@ -88,34 +88,34 @@ public class PythonElementExtractorMockTest {
             List.of("param1", "param2"),
             List.of()
         );
-        
+
         // Mock AST processor behavior
         when(astProcessor.analyzeWithAST(eq(pythonFile)))
             .thenReturn(List.of(astClass, astMethod));
-        
+
         // When - Test the method that we're creating to combine both approaches
         List<CodeElement> elements = extractElementsUsingBothApproaches(pythonFile);
-        
+
         // Then
         verify(astProcessor).analyzeWithAST(pythonFile);
-        
+
         // We shouldn't call the regex analyzer when AST succeeds
         verify(regexAnalyzer, never()).analyzeWithRegex(eq(pythonFile), any());
-        
+
         assertEquals(2, elements.size());
         assertTrue(elements.contains(astClass));
         assertTrue(elements.contains(astMethod));
     }
-    
+
     @Test
     void shouldFallbackToRegexWhenAstFails() throws Exception {
         // Given
         Path pythonFile = createSamplePythonFile();
-        
+
         // Mock AST processor to throw exception (simulating failure)
         when(astProcessor.analyzeWithAST(eq(pythonFile)))
             .thenThrow(new IOException("AST analysis failed"));
-        
+
         // Create mock regex elements for fallback
         CodeElement regexClass = new CodeElement(
             CodeElementType.CLASS,
@@ -128,34 +128,34 @@ public class PythonElementExtractorMockTest {
             List.of(),
             List.of()
         );
-        
+
         // Mock regex analyzer behavior for fallback
         List<String> lines = Files.readAllLines(pythonFile);
         when(regexAnalyzer.analyzeWithRegex(eq(pythonFile), eq(lines)))
             .thenReturn(List.of(regexClass));
-        
+
         // When
         List<CodeElement> elements = extractElementsUsingBothApproaches(pythonFile);
-        
+
         // Then
         verify(astProcessor).analyzeWithAST(pythonFile);
         verify(regexAnalyzer).analyzeWithRegex(eq(pythonFile), any());
-        
+
         assertEquals(1, elements.size());
         assertEquals("FallbackClass", elements.get(0).name());
         assertEquals(CodeElementType.CLASS, elements.get(0).type());
     }
-    
+
     private Path createSamplePythonFile() throws IOException {
         Path pythonFile = tempDir.resolve("test_file.py");
         String content = """
             class TestClass:
                 \"\"\"Test class docstring\"\"\"
-                
+
                 def test_method(param1, param2):
                     \"\"\"Test method docstring\"\"\"
                     return param1 + param2
-                    
+
                 CONFIG_VALUE = 'test'
             """;
         Files.writeString(pythonFile, content);

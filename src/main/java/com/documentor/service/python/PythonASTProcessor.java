@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 🐍 Python AST Processor
+ * ðŸ Python AST Processor
  *
  * Specialized component for analyzing Python files using Python's AST module
  * via subprocess execution. Refactored for reduced complexity.
@@ -25,29 +25,29 @@ public class PythonASTProcessor {
     private static final Logger LOGGER = LoggerFactory.getLogger(PythonASTProcessor.class);
     // Logger used in future error handling methods - required by design
     private final PythonASTCommandBuilder commandBuilder;
-    
+
     public PythonASTProcessor(PythonASTCommandBuilder commandBuilder) {
         this.commandBuilder = commandBuilder;
     }
 
     /**
-     * 🔬 Analyzes Python file using Python's AST module via subprocess
+     * ðŸ”¬ Analyzes Python file using Python's AST module via subprocess
      */
     public List<CodeElement> analyzeWithAST(Path filePath) throws IOException, InterruptedException {
         List<CodeElement> elements = new ArrayList<>();
         Path tempScript = null;
-        
+
         try {
             // Get temporary script from command builder
             tempScript = commandBuilder.writeTempScript();
-            
+
             // Create and execute process
             ProcessBuilder pb = commandBuilder.createProcessBuilder(tempScript, filePath);
             Process process = pb.start();
-            
+
             // Process the output
             elements = processOutput(process, filePath);
-            
+
             // Check exit code
             int exitCode = process.waitFor();
             if (exitCode != 0) {
@@ -62,13 +62,13 @@ public class PythonASTProcessor {
 
         return elements;
     }
-    
+
     /**
-     * 📋 Processes the output of the Python process
+     * ðŸ“‹ Processes the output of the Python process
      */
     private List<CodeElement> processOutput(Process process, Path filePath) throws IOException {
         List<CodeElement> elements = new ArrayList<>();
-        
+
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(process.getInputStream()))) {
             String line;
@@ -83,7 +83,7 @@ public class PythonASTProcessor {
                 }
             }
         }
-        
+
         return elements;
     }
 }

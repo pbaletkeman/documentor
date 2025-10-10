@@ -40,13 +40,13 @@ class DocumentorCommandsEnhancedTest {
         String configPath = "custom-config.json";
         boolean generateMermaid = true;
         String mermaidOutput = "/test/diagrams";
-        
+
         when(projectAnalysisHandler.handleAnalyzeProject(projectPath, configPath, generateMermaid, mermaidOutput))
             .thenReturn("Analysis complete");
-        
+
         // When
         String result = commands.analyzeProject(projectPath, configPath, generateMermaid, mermaidOutput);
-        
+
         // Then
         assertEquals("Analysis complete", result);
         verify(projectAnalysisHandler).handleAnalyzeProject(projectPath, configPath, generateMermaid, mermaidOutput);
@@ -57,13 +57,13 @@ class DocumentorCommandsEnhancedTest {
     void shouldHandleScanProject() {
         // Given
         String projectPath = "/test/project";
-        
+
         when(projectAnalysisHandler.handleScanProject(projectPath))
             .thenReturn("Scan complete");
-        
+
         // When
         String result = commands.scanProject(projectPath);
-        
+
         // Then
         assertEquals("Scan complete", result);
         verify(projectAnalysisHandler).handleScanProject(projectPath);
@@ -74,13 +74,13 @@ class DocumentorCommandsEnhancedTest {
     void shouldHandleValidateConfig() {
         // Given
         String configPath = "config.json";
-        
+
         when(configurationHandler.handleValidateConfig(configPath))
             .thenReturn("Config valid");
-        
+
         // When
         String result = commands.validateConfig(configPath);
-        
+
         // Then
         assertEquals("Config valid", result);
         verify(configurationHandler).handleValidateConfig(configPath);
@@ -92,10 +92,10 @@ class DocumentorCommandsEnhancedTest {
         // Given
         when(statusHandler.handleShowInfo())
             .thenReturn("Info displayed");
-        
+
         // When
         String result = commands.showInfo();
-        
+
         // Then
         assertEquals("Info displayed", result);
         verify(statusHandler).handleShowInfo();
@@ -107,10 +107,10 @@ class DocumentorCommandsEnhancedTest {
         // Given
         when(statusHandler.handleQuickStart())
             .thenReturn("Quick start guide");
-        
+
         // When
         String result = commands.quickStart();
-        
+
         // Then
         assertEquals("Quick start guide", result);
         verify(statusHandler).handleQuickStart();
@@ -122,13 +122,13 @@ class DocumentorCommandsEnhancedTest {
         // Given
         // First set the current project and config path
         commands.analyzeProject("/test/project", "custom-config.json", false, "");
-        
+
         when(statusHandler.handleShowStatus("/test/project", "custom-config.json"))
             .thenReturn("Status displayed");
-        
+
         // When
         String result = commands.showStatus();
-        
+
         // Then
         assertEquals("Status displayed", result);
         verify(statusHandler).handleShowStatus("/test/project", "custom-config.json");

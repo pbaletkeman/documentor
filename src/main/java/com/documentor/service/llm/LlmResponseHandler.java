@@ -4,7 +4,7 @@ import com.documentor.config.model.LlmModelConfig;
 import org.springframework.stereotype.Component;
 
 /**
- * 🔍 LLM Response Handler - Refactored for Low Complexity
+ * ðŸ” LLM Response Handler - Refactored for Low Complexity
  *
  * Simplified response handling by delegating to specialized components.
  * Reduces complexity by removing duplicate logic and centralizing response parsing.
@@ -21,14 +21,14 @@ public class LlmResponseHandler {
     }
 
     /**
-     * 📤 Extracts content from LLM response based on model type
+     * ðŸ“¤ Extracts content from LLM response based on model type
      */
     public String extractResponseContent(String response, LlmModelConfig model) {
         return responseParser.parseResponse(response, model);
     }
 
     /**
-     * 🎯 Gets the appropriate endpoint for the model
+     * ðŸŽ¯ Gets the appropriate endpoint for the model
      */
     public String getModelEndpoint(LlmModelConfig model) {
         return modelTypeDetector.getModelEndpoint(model);

@@ -15,7 +15,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.List;
 
 /**
- * 📐 Mermaid Class Diagram Generator
+ * ðŸ“ Mermaid Class Diagram Generator
  *
  * Specialized component for generating individual class diagrams in Mermaid format.
  * Handles the creation of class structure diagrams with fields and methods.
@@ -26,7 +26,7 @@ public class MermaidClassDiagramGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(MermaidClassDiagramGenerator.class);
 
     /**
-     * 📊 Generates a Mermaid class diagram for a single class
+     * ðŸ“Š Generates a Mermaid class diagram for a single class
      */
     public String generateClassDiagram(CodeElement classElement, List<CodeElement> allElements, Path outputPath) throws IOException {
         String className = classElement.name();
@@ -52,12 +52,12 @@ public class MermaidClassDiagramGenerator {
         Files.writeString(diagramPath, diagram.toString(),
             StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
-        LOGGER.debug("✅ Generated diagram: {}", diagramPath);
+        LOGGER.debug("âœ… Generated diagram: {}", diagramPath);
         return diagramPath.toString();
     }
 
     /**
-     * 📐 Adds a class definition to the Mermaid diagram
+     * ðŸ“ Adds a class definition to the Mermaid diagram
      */
     private void addClassToMermaid(StringBuilder diagram, CodeElement classElement, List<CodeElement> allElements) {
         String className = sanitizeClassName(classElement.name());
@@ -90,7 +90,7 @@ public class MermaidClassDiagramGenerator {
     }
 
     /**
-     * 🔗 Adds relationships between classes to the Mermaid diagram
+     * ðŸ”— Adds relationships between classes to the Mermaid diagram
      */
     private void addRelationshipsToMermaid(StringBuilder diagram, CodeElement classElement, List<CodeElement> allElements) {
         // This is a simplified relationship detection
@@ -122,14 +122,14 @@ public class MermaidClassDiagramGenerator {
     }
 
     /**
-     * 🧹 Sanitizes class name for Mermaid compatibility
+     * ðŸ§¹ Sanitizes class name for Mermaid compatibility
      */
     private String sanitizeClassName(String className) {
         return className.replaceAll("[^a-zA-Z0-9_]", "_");
     }
 
     /**
-     * 🧹 Sanitizes method/field signature for Mermaid compatibility
+     * ðŸ§¹ Sanitizes method/field signature for Mermaid compatibility
      */
     private String sanitizeSignature(String signature) {
         // Remove complex generics and packages for readability
@@ -145,7 +145,7 @@ public class MermaidClassDiagramGenerator {
     }
 
     /**
-     * 🔍 Simplified visibility check using enum
+     * ðŸ” Simplified visibility check using enum
      */
     private boolean isNonPrivate(CodeElement element) {
         CodeVisibility visibility = CodeVisibility.fromSignatureAndName(element.signature(), element.name());

@@ -7,7 +7,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * 🧪 Unit tests for ProjectAnalysis
+ * ðŸ§ª Unit tests for ProjectAnalysis
  */
 class ProjectAnalysisTest {
 
@@ -15,11 +15,11 @@ class ProjectAnalysisTest {
     void testConstructorAndGetters() {
         // Given
         CodeElement element1 = new CodeElement(
-            CodeElementType.CLASS, "TestClass", "com.test.TestClass", "/test/TestClass.java", 
+            CodeElementType.CLASS, "TestClass", "com.test.TestClass", "/test/TestClass.java",
             1, "public class TestClass", "", List.of(), List.of()
         );
         CodeElement element2 = new CodeElement(
-            CodeElementType.METHOD, "testMethod", "com.test.TestClass.testMethod", "/test/TestClass.java", 
+            CodeElementType.METHOD, "testMethod", "com.test.TestClass.testMethod", "/test/TestClass.java",
             5, "public void testMethod()", "", List.of(), List.of()
         );
         List<CodeElement> elements = List.of(element1, element2);
@@ -57,12 +57,12 @@ class ProjectAnalysisTest {
     void testEquality() {
         // Given
         CodeElement element = new CodeElement(
-            CodeElementType.CLASS, "TestClass", "com.test.TestClass", "/test/TestClass.java", 
+            CodeElementType.CLASS, "TestClass", "com.test.TestClass", "/test/TestClass.java",
             1, "public class TestClass", "", List.of(), List.of()
         );
         List<CodeElement> elements = List.of(element);
         long timestamp = 12345L;
-        
+
         ProjectAnalysis analysis1 = new ProjectAnalysis("/test/project", elements, timestamp);
         ProjectAnalysis analysis2 = new ProjectAnalysis("/test/project", elements, timestamp);
 
@@ -75,7 +75,7 @@ class ProjectAnalysisTest {
     void testToString() {
         // Given
         CodeElement element = new CodeElement(
-            CodeElementType.CLASS, "TestClass", "com.test.TestClass", "/test/TestClass.java", 
+            CodeElementType.CLASS, "TestClass", "com.test.TestClass", "/test/TestClass.java",
             1, "public class TestClass", "", List.of(), List.of()
         );
         List<CodeElement> elements = List.of(element);
@@ -93,15 +93,15 @@ class ProjectAnalysisTest {
     void testGetClasses() {
         // Given
         CodeElement classElement = new CodeElement(
-            CodeElementType.CLASS, "TestClass", "com.test.TestClass", "/test/TestClass.java", 
+            CodeElementType.CLASS, "TestClass", "com.test.TestClass", "/test/TestClass.java",
             1, "public class TestClass", "", List.of(), List.of()
         );
         CodeElement methodElement = new CodeElement(
-            CodeElementType.METHOD, "testMethod", "com.test.TestClass.testMethod", "/test/TestClass.java", 
+            CodeElementType.METHOD, "testMethod", "com.test.TestClass.testMethod", "/test/TestClass.java",
             5, "public void testMethod()", "", List.of(), List.of()
         );
         CodeElement fieldElement = new CodeElement(
-            CodeElementType.FIELD, "testField", "com.test.TestClass.testField", "/test/TestClass.java", 
+            CodeElementType.FIELD, "testField", "com.test.TestClass.testField", "/test/TestClass.java",
             3, "private String testField", "", List.of(), List.of()
         );
         List<CodeElement> elements = List.of(classElement, methodElement, fieldElement);
@@ -119,15 +119,15 @@ class ProjectAnalysisTest {
     void testGetMethods() {
         // Given - same setup as above
         CodeElement classElement = new CodeElement(
-            CodeElementType.CLASS, "TestClass", "com.test.TestClass", "/test/TestClass.java", 
+            CodeElementType.CLASS, "TestClass", "com.test.TestClass", "/test/TestClass.java",
             1, "public class TestClass", "", List.of(), List.of()
         );
         CodeElement method1 = new CodeElement(
-            CodeElementType.METHOD, "method1", "com.test.TestClass.method1", "/test/TestClass.java", 
+            CodeElementType.METHOD, "method1", "com.test.TestClass.method1", "/test/TestClass.java",
             5, "public void method1()", "", List.of(), List.of()
         );
         CodeElement method2 = new CodeElement(
-            CodeElementType.METHOD, "method2", "com.test.TestClass.method2", "/test/TestClass.java", 
+            CodeElementType.METHOD, "method2", "com.test.TestClass.method2", "/test/TestClass.java",
             10, "public void method2()", "", List.of(), List.of()
         );
         List<CodeElement> elements = List.of(classElement, method1, method2);
@@ -146,15 +146,15 @@ class ProjectAnalysisTest {
     void testGetFields() {
         // Given
         CodeElement field1 = new CodeElement(
-            CodeElementType.FIELD, "field1", "com.test.TestClass.field1", "/test/TestClass.java", 
+            CodeElementType.FIELD, "field1", "com.test.TestClass.field1", "/test/TestClass.java",
             3, "private String field1", "", List.of(), List.of()
         );
         CodeElement field2 = new CodeElement(
-            CodeElementType.FIELD, "field2", "com.test.TestClass.field2", "/test/TestClass.java", 
+            CodeElementType.FIELD, "field2", "com.test.TestClass.field2", "/test/TestClass.java",
             4, "private int field2", "", List.of(), List.of()
         );
         CodeElement methodElement = new CodeElement(
-            CodeElementType.METHOD, "testMethod", "com.test.TestClass.testMethod", "/test/TestClass.java", 
+            CodeElementType.METHOD, "testMethod", "com.test.TestClass.testMethod", "/test/TestClass.java",
             5, "public void testMethod()", "", List.of(), List.of()
         );
         List<CodeElement> elements = List.of(field1, field2, methodElement);
@@ -173,15 +173,15 @@ class ProjectAnalysisTest {
     void testGetElementsByFile() {
         // Given
         CodeElement element1 = new CodeElement(
-            CodeElementType.CLASS, "TestClass1", "com.test.TestClass1", "/test/TestClass1.java", 
+            CodeElementType.CLASS, "TestClass1", "com.test.TestClass1", "/test/TestClass1.java",
             1, "public class TestClass1", "", List.of(), List.of()
         );
         CodeElement element2 = new CodeElement(
-            CodeElementType.CLASS, "TestClass2", "com.test.TestClass2", "/test/TestClass2.java", 
+            CodeElementType.CLASS, "TestClass2", "com.test.TestClass2", "/test/TestClass2.java",
             1, "public class TestClass2", "", List.of(), List.of()
         );
         CodeElement element3 = new CodeElement(
-            CodeElementType.METHOD, "method1", "com.test.TestClass1.method1", "/test/TestClass1.java", 
+            CodeElementType.METHOD, "method1", "com.test.TestClass1.method1", "/test/TestClass1.java",
             5, "public void method1()", "", List.of(), List.of()
         );
         List<CodeElement> elements = List.of(element1, element2, element3);
@@ -202,15 +202,15 @@ class ProjectAnalysisTest {
     void testGetElementsByType() {
         // Given
         CodeElement classElement = new CodeElement(
-            CodeElementType.CLASS, "TestClass", "com.test.TestClass", "/test/TestClass.java", 
+            CodeElementType.CLASS, "TestClass", "com.test.TestClass", "/test/TestClass.java",
             1, "public class TestClass", "", List.of(), List.of()
         );
         CodeElement methodElement = new CodeElement(
-            CodeElementType.METHOD, "testMethod", "com.test.TestClass.testMethod", "/test/TestClass.java", 
+            CodeElementType.METHOD, "testMethod", "com.test.TestClass.testMethod", "/test/TestClass.java",
             5, "public void testMethod()", "", List.of(), List.of()
         );
         CodeElement fieldElement = new CodeElement(
-            CodeElementType.FIELD, "testField", "com.test.TestClass.testField", "/test/TestClass.java", 
+            CodeElementType.FIELD, "testField", "com.test.TestClass.testField", "/test/TestClass.java",
             3, "private String testField", "", List.of(), List.of()
         );
         List<CodeElement> elements = List.of(classElement, methodElement, fieldElement);
@@ -233,19 +233,19 @@ class ProjectAnalysisTest {
     void testGetStats() {
         // Given
         CodeElement classElement = new CodeElement(
-            CodeElementType.CLASS, "TestClass", "com.test.TestClass", "/test/TestClass.java", 
+            CodeElementType.CLASS, "TestClass", "com.test.TestClass", "/test/TestClass.java",
             1, "public class TestClass", "", List.of(), List.of()
         );
         CodeElement method1 = new CodeElement(
-            CodeElementType.METHOD, "method1", "com.test.TestClass.method1", "/test/TestClass.java", 
+            CodeElementType.METHOD, "method1", "com.test.TestClass.method1", "/test/TestClass.java",
             5, "public void method1()", "", List.of(), List.of()
         );
         CodeElement method2 = new CodeElement(
-            CodeElementType.METHOD, "method2", "com.test.TestClass.method2", "/test/TestClass.java", 
+            CodeElementType.METHOD, "method2", "com.test.TestClass.method2", "/test/TestClass.java",
             10, "public void method2()", "", List.of(), List.of()
         );
         CodeElement fieldElement = new CodeElement(
-            CodeElementType.FIELD, "testField", "com.test.TestClass.testField", "/test/TestClass.java", 
+            CodeElementType.FIELD, "testField", "com.test.TestClass.testField", "/test/TestClass.java",
             3, "private String testField", "", List.of(), List.of()
         );
         List<CodeElement> elements = List.of(classElement, method1, method2, fieldElement);
@@ -292,7 +292,7 @@ class ProjectAnalysisTest {
         assertTrue(analysis.getFields().isEmpty());
         assertTrue(analysis.getElementsByFile().isEmpty());
         assertTrue(analysis.getElementsByType().isEmpty());
-        
+
         ProjectAnalysis.AnalysisStats stats = analysis.getStats();
         assertEquals(0, stats.totalElements());
         assertEquals(0, stats.classCount());

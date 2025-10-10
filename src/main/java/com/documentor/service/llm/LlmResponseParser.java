@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
 
-/** 📤 LLM Response Parser - Centralized response parsing for different LLM providers */
+/** ðŸ“¤ LLM Response Parser - Centralized response parsing for different LLM providers */
 @Component
 public class LlmResponseParser {
 
@@ -17,7 +17,7 @@ public class LlmResponseParser {
         this.modelTypeDetector = modelTypeDetector;
     }
 
-    /** 📤 Main response parsing method that delegates to specific parsers */
+    /** ðŸ“¤ Main response parsing method that delegates to specific parsers */
     public String parseResponse(final String response, final LlmModelConfig model) {
         try {
             if (modelTypeDetector.isOllamaModel(model)) {
@@ -32,12 +32,12 @@ public class LlmResponseParser {
         }
     }
 
-    /** 🦙 Extracts response from Ollama format */
+    /** ðŸ¦™ Extracts response from Ollama format */
     public String parseOllamaResponse(String response) {
         return parseGenericResponse(response, "response");
     }
 
-    /** 🤖 Extracts response from OpenAI format */
+    /** ðŸ¤– Extracts response from OpenAI format */
     public String parseOpenAIResponse(final String response) {
         try {
             JsonNode json = objectMapper.readTree(response);
@@ -60,7 +60,7 @@ public class LlmResponseParser {
         }
     }
 
-    /** 🔧 Extracts response from generic format */
+    /** ðŸ”§ Extracts response from generic format */
     public String parseGenericResponse(final String response) {
         return parseGenericResponse(response, "text", "content", "response", "output", "result");
     }

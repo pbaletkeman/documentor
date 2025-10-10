@@ -9,7 +9,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.util.concurrent.Executor;
 
 /**
- * 🔧 Application Configuration
+ * ðŸ”§ Application Configuration
  *
  * Configures beans for the Documentor application including:
  * - Thread pool for parallel LLM processing
@@ -32,7 +32,7 @@ public class AppConfig implements AsyncConfigurer {
     }
 
     /**
-     * 🌐 WebClient for making HTTP requests to LLM APIs
+     * ðŸŒ WebClient for making HTTP requests to LLM APIs
      */
     @Bean
     public WebClient webClient() {
@@ -43,7 +43,7 @@ public class AppConfig implements AsyncConfigurer {
     }
 
     /**
-     * ⚡ Thread pool executor for parallel LLM processing
+     * âš¡ Thread pool executor for parallel LLM processing
      */
     @Bean("llmExecutor")
     public ThreadPoolTaskExecutor llmExecutor() {
@@ -60,7 +60,7 @@ public class AppConfig implements AsyncConfigurer {
     }
 
     /**
-     * 🤖 LLM Service with proper dependency injection
+     * ðŸ¤– LLM Service with proper dependency injection
      */
     @Bean
     public com.documentor.service.LlmService llmService(
@@ -72,7 +72,7 @@ public class AppConfig implements AsyncConfigurer {
     }
 
     /**
-     * � Documentation Service with proper dependency injection
+     * ï¿½ Documentation Service with proper dependency injection
      */
     @Bean
     public com.documentor.service.DocumentationService documentationService(
@@ -87,7 +87,7 @@ public class AppConfig implements AsyncConfigurer {
     }
 
     /**
-     * �🔄 Default async executor configuration
+     * ï¿½ðŸ”„ Default async executor configuration
      */
     @Override
     public Executor getAsyncExecutor() {

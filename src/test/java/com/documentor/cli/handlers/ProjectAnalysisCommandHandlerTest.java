@@ -40,27 +40,27 @@ class ProjectAnalysisCommandHandlerTest {
         commonHandler = mock(CommonCommandHandler.class);
 
         handler = new ProjectAnalysisCommandHandler(analysisService, documentationService, mermaidService, commonHandler);
-        
+
         // Setup default behavior for commonHandler
         when(commonHandler.createResultBuilder()).thenReturn(new StringBuilder());
         when(commonHandler.formatStatistics(anyString(), anyMap())).thenAnswer(invocation -> {
             String title = invocation.getArgument(0);
-            return "📊 " + title + "\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n";
+            return "ðŸ“Š " + title + "\nâ”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”\n\n";
         });
     }
 
     @Test
     void handleScanProjectReturnsFormattedStats(@TempDir Path tmp) {
         // Arrange
-        ProjectAnalysis pa = new ProjectAnalysis(tmp.toString(), 
-            List.of(new CodeElement(CodeElementType.CLASS, "A", "A", "A.java", 1, "sig", "", List.of(), List.of())), 
+        ProjectAnalysis pa = new ProjectAnalysis(tmp.toString(),
+            List.of(new CodeElement(CodeElementType.CLASS, "A", "A", "A.java", 1, "sig", "", List.of(), List.of())),
             System.currentTimeMillis());
         when(analysisService.analyzeProject(tmp)).thenReturn(CompletableFuture.completedFuture(pa));
         when(commonHandler.directoryExists(tmp.toString())).thenReturn(true);
-        
+
         // Act
         String out = handler.handleScanProject(tmp.toString());
-        
+
         // Assert
         verify(commonHandler).directoryExists(tmp.toString());
         verify(commonHandler).formatStatistics(eq("Project Analysis Statistics"), anyMap());
@@ -75,32 +75,32 @@ class ProjectAnalysisCommandHandlerTest {
         when(documentationService.generateDocumentation(pa)).thenReturn(CompletableFuture.completedFuture(tmp.toString()));
         when(mermaidService.generateClassDiagrams(pa, "out")).thenReturn(CompletableFuture.completedFuture(List.of("d1", "d2")));
         when(commonHandler.directoryExists(tmp.toString())).thenReturn(true);
-        
+
         // Act
         String res = handler.handleAnalyzeProject(tmp.toString(), "", true, "out");
-        
+
         // Assert
         verify(commonHandler).directoryExists(tmp.toString());
         verify(commonHandler).createResultBuilder();
         assertTrue(res.contains("Documentation generated at"));
         assertTrue(res.contains("Mermaid diagrams"));
     }
-    
+
     @Test
     void handleScanProjectHandlesNonExistentDirectory(@TempDir Path tmp) {
         // Arrange
         String nonExistentPath = tmp.toString() + "/nonexistent";
         when(commonHandler.directoryExists(nonExistentPath)).thenReturn(false);
-        
+
         // Act
         String result = handler.handleScanProject(nonExistentPath);
-        
+
         // Assert
         verify(commonHandler).directoryExists(nonExistentPath);
         verify(analysisService, never()).analyzeProject(any(Path.class));
-        assertTrue(result.contains("❌ Error"), "Should return error for non-existent directory");
+        assertTrue(result.contains("âŒ Error"), "Should return error for non-existent directory");
     }
-    
+
     @Test
     void handleAnalyzeProjectHandlesException(@TempDir Path tmp) {
         // Arrange
@@ -108,13 +108,13 @@ class ProjectAnalysisCommandHandlerTest {
         when(commonHandler.directoryExists(tmp.toString())).thenReturn(true);
         when(analysisService.analyzeProject(tmp)).thenThrow(exception);
         when(commonHandler.formatErrorMessage(anyString(), eq(exception)))
-            .thenReturn("❌ Error during analysis: Test exception");
-        
+            .thenReturn("âŒ Error during analysis: Test exception");
+
         // Act
         String result = handler.handleAnalyzeProject(tmp.toString(), "", false, "");
-        
+
         // Assert
         verify(commonHandler).formatErrorMessage(anyString(), eq(exception));
-        assertTrue(result.contains("❌ Error during analysis"), "Should format exception message");
+        assertTrue(result.contains("âŒ Error during analysis"), "Should format exception message");
     }
 }

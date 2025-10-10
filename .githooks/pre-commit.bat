@@ -10,6 +10,22 @@ if not exist "gradlew.bat" (
     exit /b 1
 )
 
+REM Process staged files
+for /f "delims=" %%f in ('git diff --cached --name-only --diff-filter=ACM') do (
+    REM Only process text-based files
+    echo Processing %%f...
+
+    REM Remove UTF-8 BOM if present
+    powershell -Command ^
+    "$content = Get-Content -Raw '%%f'; ^
+     if ($content.StartsWith([char]0xFEFF)) { $content = $content.Substring(1) }; ^
+     $lines = $content -split \"`n\" | ForEach-Object { $_.Trim() } | Where-Object { $_ -ne \"\" }; ^
+     $newContent = ($lines -join \"`n\") + \"`n\"; ^
+     Set-Content -NoNewline -Encoding UTF8 '%%f' $newContent"
+
+    git add "%%f"
+)
+
 REM Run Checkstyle linting
 echo 🔍 Running Checkstyle...
 call gradlew.bat checkstyleMain checkstyleTest
@@ -19,7 +35,7 @@ if %ERRORLEVEL% neq 0 (
 )
 
 REM Run unit tests
-echo 🧪 Running unit tests...
+echo 🪪 Running unit tests...
 call gradlew.bat test
 if %ERRORLEVEL% neq 0 (
     echo ❌ Unit tests failed. Please fix the issues and try again.

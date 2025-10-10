@@ -14,7 +14,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 /**
- * 🚶 Java AST Visitor for extracting code elements
+ * ðŸš¶ Java AST Visitor for extracting code elements
  *
  * Specialized visitor that traverses the Java AST and extracts
  * classes, methods, and fields based on visibility rules.

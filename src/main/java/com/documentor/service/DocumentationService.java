@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * 📝 Documentation Generation Service - Refactored for Low Complexity
+ * ðŸ“ Documentation Generation Service - Refactored for Low Complexity
  *
  * Orchestrates the generation of markdown documentation from code analysis results.
  * Delegates to specialized generators for different types of documentation.
@@ -33,11 +33,11 @@ public class DocumentationService {
     private final DocumentorConfig config;
 
     public DocumentationService(
-            MainDocumentationGenerator mainDocGenerator,
-            ElementDocumentationGenerator elementDocGenerator,
-            UnitTestDocumentationGenerator testDocGenerator,
-            MermaidDiagramService mermaidDiagramService,
-            DocumentorConfig config) {
+            final MainDocumentationGenerator mainDocGenerator,
+            final ElementDocumentationGenerator elementDocGenerator,
+            final UnitTestDocumentationGenerator testDocGenerator,
+            final MermaidDiagramService mermaidDiagramService,
+            final DocumentorConfig config) {
         this.mainDocGenerator = mainDocGenerator;
         this.elementDocGenerator = elementDocGenerator;
         this.testDocGenerator = testDocGenerator;
@@ -46,13 +46,13 @@ public class DocumentationService {
     }
 
     /**
-     * 📚 Generates complete project documentation
+     * ðŸ“š Generates complete project documentation
      *
      * @param analysis The project analysis results
      * @return CompletableFuture containing the path to generated documentation
      */
-    public CompletableFuture<String> generateDocumentation(ProjectAnalysis analysis) {
-        LOGGER.info("📝 Starting documentation generation for project: {}", analysis.projectPath());
+    public CompletableFuture<String> generateDocumentation(final ProjectAnalysis analysis) {
+        LOGGER.info("ðŸ“ Starting documentation generation for project: {}", analysis.projectPath());
 
         return CompletableFuture.supplyAsync(() -> {
             try {
@@ -77,23 +77,23 @@ public class DocumentationService {
                 if (config.outputSettings().generateMermaidDiagrams()) {
                     List<String> diagramPaths = mermaidDiagramService.generateClassDiagrams(
                         analysis, config.outputSettings().mermaidOutputPath()).join();
-                    LOGGER.info("✅ Generated {} Mermaid diagrams", diagramPaths.size());
+                    LOGGER.info("âœ… Generated {} Mermaid diagrams", diagramPaths.size());
                 }
 
-                LOGGER.info("✅ Documentation generated successfully at: {}", outputPath);
+                LOGGER.info("âœ… Documentation generated successfully at: {}", outputPath);
                 return outputPath.toString();
 
             } catch (Exception e) {
-                LOGGER.error("❌ Error generating documentation: {}", e.getMessage(), e);
+                LOGGER.error("âŒ Error generating documentation: {}", e.getMessage(), e);
                 throw new RuntimeException("Failed to generate documentation", e);
             }
         });
     }
 
     /**
-     * 📑 Generates detailed documentation for each code element
+     * ðŸ“‘ Generates detailed documentation for each code element
      */
-    private CompletableFuture<Void> generateDetailedDocumentation(ProjectAnalysis analysis, Path outputPath) {
+    private CompletableFuture<Void> generateDetailedDocumentation(final ProjectAnalysis analysis, final Path outputPath) {
         List<CompletableFuture<Void>> futures = analysis.codeElements().stream()
                 .map(element -> elementDocGenerator.generateElementDocumentation(element, outputPath))
                 .toList();

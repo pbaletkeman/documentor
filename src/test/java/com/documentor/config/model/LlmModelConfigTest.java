@@ -67,7 +67,7 @@ class LlmModelConfigTest {
         String apiKey = "custom-key";
         Integer maxTokens = 2000;
         Integer timeoutSeconds = 45;
-        
+
         LlmModelConfig config = new LlmModelConfig(name, provider, baseUrl, apiKey, maxTokens, timeoutSeconds);
 
         // When
@@ -116,13 +116,13 @@ class LlmModelConfigTest {
     void shouldThrowExceptionForInvalidConfig(LlmModelConfig config, String expectedMessage) {
         // When & Then
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, config::validate);
-        assertTrue(exception.getMessage().contains(expectedMessage), 
+        assertTrue(exception.getMessage().contains(expectedMessage),
             "Expected message to contain '" + expectedMessage + "' but was '" + exception.getMessage() + "'");
     }
 
     private static Stream<Arguments> provideInvalidConfigs() {
         return Stream.of(
-            Arguments.of(new LlmModelConfig(null, "provider", "url", "key", 1000, 60), 
+            Arguments.of(new LlmModelConfig(null, "provider", "url", "key", 1000, 60),
                 "name cannot be null or empty"),
             Arguments.of(new LlmModelConfig("", "provider", "url", "key", 1000, 60),
                 "name cannot be null or empty"),

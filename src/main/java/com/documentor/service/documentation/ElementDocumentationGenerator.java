@@ -12,7 +12,7 @@ import java.nio.file.Path;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * 🔧 Element Documentation Generator
+ * ðŸ”§ Element Documentation Generator
  *
  * Specialized component for generating detailed documentation for individual code elements.
  * Handles element-specific documentation files with LLM-generated content.
@@ -29,9 +29,9 @@ public class ElementDocumentationGenerator {
     }
 
     /**
-     * 🔧 Generates documentation for a single code element
+     * ðŸ”§ Generates documentation for a single code element
      */
-    public CompletableFuture<Void> generateElementDocumentation(CodeElement element, Path outputPath) {
+    public CompletableFuture<Void> generateElementDocumentation(final CodeElement element, final Path outputPath) {
         return llmService.generateDocumentation(element)
                 .thenCombine(llmService.generateUsageExamples(element), (doc, examples) -> {
                     try {
@@ -56,14 +56,14 @@ public class ElementDocumentationGenerator {
 
                         return null;
                     } catch (IOException e) {
-                        LOGGER.error("❌ Error writing element documentation: {}", e.getMessage());
+                        LOGGER.error("âŒ Error writing element documentation: {}", e.getMessage());
                         throw new RuntimeException("Failed to write element documentation", e);
                     }
                 });
     }
 
     /**
-     * 🔍 Determines programming language from file extension
+     * ðŸ” Determines programming language from file extension
      */
     private String getLanguageFromFile(final String filePath) {
         if (filePath.endsWith(".java")) {

@@ -15,14 +15,14 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
- * 🧪 Tests for LlmApiClient component
+ * ðŸ§ª Tests for LlmApiClient component
  */
 @ExtendWith(MockitoExtension.class)
 class LlmApiClientTest {
 
     @Mock
     private WebClient mockWebClient;
-    
+
     @Mock
     private LlmModelTypeDetector modelTypeDetector;
 
@@ -35,19 +35,19 @@ class LlmApiClientTest {
     @BeforeEach
     void setUp() {
         apiClient = new LlmApiClient(mockWebClient, modelTypeDetector);
-        
+
         openAiModel = new LlmModelConfig(
             "gpt-4", "openai", "https://api.openai.com/v1/completions", "sk-test-key", 1000, 30
         );
-        
+
         ollamaModel = new LlmModelConfig(
             "llama2", "ollama", "http://localhost:11434/api/generate", "", 1000, 30
         );
-        
+
         codelamaModel = new LlmModelConfig(
             "codellama:7b", "ollama", "http://localhost:11434/api/generate", "", 1000, 30
         );
-        
+
         mistralModel = new LlmModelConfig(
             "mistral:latest", "ollama", "http://localhost:11434/api/generate", "", 1000, 30
         );
@@ -64,13 +64,13 @@ class LlmApiClientTest {
     void testCallLlmModelHandlesException() {
         // Given
         Map<String, Object> requestBody = Map.of("prompt", "test prompt");
-        
+
         // Mock WebClient to throw exception during the call
         when(mockWebClient.post()).thenThrow(new RuntimeException("Network error"));
-        
+
         // When
         String result = apiClient.callLlmModel(openAiModel, "http://test.api", requestBody);
-        
+
         // Then
         assertTrue(result.contains("Error generating content with gpt-4"));
         assertTrue(result.contains("gpt-4"));
@@ -80,13 +80,13 @@ class LlmApiClientTest {
     @DisplayName("Should successfully detect model types")
     void testIsOllamaModelDetection() {
         // Test via actual model configurations that would trigger different behaviors
-        
+
         // Test with different model types
         assertNotNull(ollamaModel); // ollama endpoint
-        assertNotNull(codelamaModel); // codellama model name  
+        assertNotNull(codelamaModel); // codellama model name
         assertNotNull(mistralModel); // mistral model name
         assertNotNull(openAiModel); // OpenAI model (not Ollama)
-        
+
         // Verify models are properly configured
         assertTrue(ollamaModel.baseUrl().contains("11434"));
         assertTrue(codelamaModel.name().startsWith("codellama"));
@@ -94,19 +94,19 @@ class LlmApiClientTest {
         assertFalse(openAiModel.baseUrl().contains("ollama"));
     }
 
-    @Test 
+    @Test
     @DisplayName("Should handle different model configurations properly")
     void testModelConfigurationHandling() {
         // Test with model without API key
         LlmModelConfig modelWithoutKey = new LlmModelConfig(
             "test-model", "ollama", "http://test.api", "", 1000, 30
         );
-        
+
         // Test with model with null API key
         LlmModelConfig modelWithNullKey = new LlmModelConfig(
             "test-model", "ollama", "http://test.api", null, 1000, 30
         );
-        
+
         assertNotNull(modelWithoutKey);
         assertNotNull(modelWithNullKey);
         assertEquals("", modelWithoutKey.apiKey());
@@ -118,13 +118,13 @@ class LlmApiClientTest {
     void testCallLlmModelWithDifferentEndpoints() {
         // Test behavior with different model types
         Map<String, Object> requestBody = Map.of("prompt", "test");
-        
+
         // Mock exception for simplicity - we just want to check the error formatting
         when(mockWebClient.post()).thenThrow(new RuntimeException("Connection failed"));
-        
+
         // Test with one model type
         String openaiResult = apiClient.callLlmModel(openAiModel, "https://api.example.com", requestBody);
-        
+
         // Check error messages contain the model name
         assertTrue(openaiResult.contains("Error generating content with gpt-4"));
     }
@@ -136,15 +136,15 @@ class LlmApiClientTest {
         LlmModelConfig fastModel = new LlmModelConfig(
             "fast-model", "ollama", "http://fast.api", "key", 100, 5
         );
-        
+
         LlmModelConfig slowModel = new LlmModelConfig(
             "slow-model", "ollama", "http://slow.api", "key", 1000, 120
         );
-        
+
         assertEquals(5, fastModel.timeoutSeconds());
         assertEquals(120, slowModel.timeoutSeconds());
     }
-    
+
     @Test
     @DisplayName("Should add authorization header for non-Ollama models with API key")
     void testAuthHeaderAddedForNonOllamaModels() {
@@ -153,7 +153,7 @@ class LlmApiClientTest {
         assertFalse(openAiModel.apiKey().isEmpty());
         assertEquals("sk-test-key", openAiModel.apiKey());
     }
-    
+
     @Test
     @DisplayName("Should not add authorization header for Ollama models")
     void testNoAuthHeaderForOllamaModels() {
@@ -161,7 +161,7 @@ class LlmApiClientTest {
         // by checking the ollamaModel API key setup
         assertTrue(ollamaModel.apiKey().isEmpty());
     }
-    
+
     @Test
     @DisplayName("Should apply timeout from model configuration")
     void testApplyTimeoutFromModelConfig() {
@@ -169,7 +169,7 @@ class LlmApiClientTest {
         LlmModelConfig modelWithCustomTimeout = new LlmModelConfig(
             "test-model", "provider", "http://test.api", "key", 1000, 45
         );
-        
+
         assertEquals(45, modelWithCustomTimeout.timeoutSeconds());
     }
 }

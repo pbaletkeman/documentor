@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * 🧪 Unit tests for CodeElementType
+ * ðŸ§ª Unit tests for CodeElementType
  */
 class CodeElementTypeTest {
 
@@ -15,7 +15,7 @@ class CodeElementTypeTest {
         assertNotNull(CodeElementType.CLASS);
         assertNotNull(CodeElementType.METHOD);
         assertNotNull(CodeElementType.FIELD);
-        
+
         // Test enum contains expected number of values
         CodeElementType[] values = CodeElementType.values();
         assertEquals(3, values.length);
@@ -43,7 +43,7 @@ class CodeElementTypeTest {
         assertTrue(CodeElementType.CLASS.ordinal() >= 0);
         assertTrue(CodeElementType.METHOD.ordinal() >= 0);
         assertTrue(CodeElementType.FIELD.ordinal() >= 0);
-        
+
         // Test that ordinals are different
         assertNotEquals(CodeElementType.CLASS.ordinal(), CodeElementType.METHOD.ordinal());
         assertNotEquals(CodeElementType.METHOD.ordinal(), CodeElementType.FIELD.ordinal());
@@ -52,9 +52,9 @@ class CodeElementTypeTest {
     @Test
     void testGetIcon() {
         // Test icon values
-        assertEquals("📦", CodeElementType.CLASS.getIcon());
-        assertEquals("🔧", CodeElementType.METHOD.getIcon());
-        assertEquals("📊", CodeElementType.FIELD.getIcon());
+        assertEquals("ðŸ“¦", CodeElementType.CLASS.getIcon());
+        assertEquals("ðŸ”§", CodeElementType.METHOD.getIcon());
+        assertEquals("ðŸ“Š", CodeElementType.FIELD.getIcon());
     }
 
     @Test

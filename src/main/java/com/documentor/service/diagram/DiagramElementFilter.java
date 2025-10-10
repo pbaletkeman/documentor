@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * 🔍 Diagram Element Filter
+ * ðŸ” Diagram Element Filter
  *
  * Specialized component for filtering and organizing code elements for diagram generation.
  * Handles visibility rules and element grouping logic.
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class DiagramElementFilter {
 
     /**
-     * 📦 Groups elements by class for diagram generation
+     * ðŸ“¦ Groups elements by class for diagram generation
      */
     public Map<CodeElement, List<CodeElement>> groupElementsByClass(ProjectAnalysis analysis) {
         // Get all non-private classes
@@ -38,7 +38,7 @@ public class DiagramElementFilter {
     }
 
     /**
-     * 🔍 Gets all eligible classes from the analysis
+     * ðŸ” Gets all eligible classes from the analysis
      */
     public List<CodeElement> getEligibleClasses(ProjectAnalysis analysis) {
         return analysis.codeElements().stream()
@@ -48,7 +48,7 @@ public class DiagramElementFilter {
     }
 
     /**
-     * 📋 Gets all elements belonging to a specific class
+     * ðŸ“‹ Gets all elements belonging to a specific class
      */
     public List<CodeElement> getElementsForClass(List<CodeElement> allElements, CodeElement classElement) {
         Set<String> classFiles = Set.of(classElement.filePath());
@@ -60,7 +60,7 @@ public class DiagramElementFilter {
     }
 
     /**
-     * 🔍 Checks if a code element is non-private and should be included in diagrams
+     * ðŸ” Checks if a code element is non-private and should be included in diagrams
      */
     public boolean isNonPrivate(CodeElement element) {
         String signature = element.signature().toLowerCase();
@@ -82,7 +82,7 @@ public class DiagramElementFilter {
     }
 
     /**
-     * 🏗️ Groups elements by file for file-based diagram generation
+     * ðŸ—ï¸ Groups elements by file for file-based diagram generation
      */
     public Map<String, List<CodeElement>> groupElementsByFile(ProjectAnalysis analysis) {
         return analysis.codeElements().stream()

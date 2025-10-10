@@ -12,23 +12,23 @@ logging:
 
 # Test Documentor Configuration
 documentor:
-  llm_models:
+  llm-models:
     - name: "test-model"
       provider: "test-provider"
-      baseUrl: "http://localhost:11434"
-      apiKey: "test-key"
-      maxTokens: 1000
-      timeoutSeconds: 10
-  output_settings:
-    output_directory: "./test-docs"
+      base-url: "http://localhost:11434"
+      api-key: "test-key"
+      max-tokens: 1000
+      timeout-seconds: 10
+  output-settings:
+    output-directory: "./test-docs"
     format: "markdown"
-    generate_mermaid: false
-    verbose_output: false
-  analysis_settings:
-    include_private_members: true
-    max_depth: 5
-    included_patterns:
+    generate-mermaid: false
+    verbose-output: false
+  analysis-settings:
+    include-private-members: true
+    max-depth: 5
+    included-patterns:
       - "**/*.java"
       - "**/*.py"
-    excluded_patterns:
+    excluded-patterns:
       - "**/target/**"

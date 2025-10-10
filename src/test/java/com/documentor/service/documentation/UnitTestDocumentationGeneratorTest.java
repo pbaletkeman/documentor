@@ -54,7 +54,7 @@ class UnitTestDocumentationGeneratorTest {
         assertTrue(Files.exists(testsFile), "unit-tests.md should be created");
 
         String content = Files.readString(testsFile);
-        assertTrue(content.contains("🧪"), "header should include icon when enabled");
+        assertTrue(content.contains("ðŸ§ª"), "header should include icon when enabled");
         assertTrue(content.contains("test for TestClass"));
     }
 
@@ -79,7 +79,7 @@ class UnitTestDocumentationGeneratorTest {
         assertTrue(Files.exists(testsFile));
 
         String content = Files.readString(testsFile);
-        assertFalse(content.contains("🧪"));
+        assertFalse(content.contains("ðŸ§ª"));
         assertTrue(content.contains("Target Coverage: 50%"));
     }
 }
