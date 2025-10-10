@@ -15,9 +15,9 @@ public class LlmRequestBuilder {
     private final LlmPromptTemplates promptTemplates;
     private final LlmRequestFormatter requestFormatter;
 
-    public LlmRequestBuilder(LlmPromptTemplates promptTemplates, LlmRequestFormatter requestFormatter) {
-        this.promptTemplates = promptTemplates;
-        this.requestFormatter = requestFormatter;
+    public LlmRequestBuilder(LlmPromptTemplates promptTemplatesParam, LlmRequestFormatter requestFormatterParam) {
+        this.promptTemplates = promptTemplatesParam;
+        this.requestFormatter = requestFormatterParam;
     }
 
     /** ðŸ—ï¸ Builds complete request body for LLM API */

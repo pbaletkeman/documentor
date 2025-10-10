@@ -24,12 +24,12 @@ public class PythonRegexAnalyzer {
     private final PythonPatternMatcher patternMatcher;
 
     public PythonRegexAnalyzer(
-            DocumentorConfig config,
-            PythonElementExtractor elementExtractor,
-            PythonPatternMatcher patternMatcher) {
-        this.config = config;
-        this.elementExtractor = elementExtractor;
-        this.patternMatcher = patternMatcher;
+            DocumentorConfig configParam,
+            PythonElementExtractor elementExtractorParam,
+            PythonPatternMatcher patternMatcherParam) {
+        this.config = configParam;
+        this.elementExtractor = elementExtractorParam;
+        this.patternMatcher = patternMatcherParam;
     }
 
     /**

@@ -31,9 +31,9 @@ public class JavaCodeAnalyzer {
     private final JavaParser javaParser;
     private final JavaElementVisitor elementVisitor;
 
-    public JavaCodeAnalyzer(final DocumentorConfig config, final JavaElementVisitor elementVisitor) {
+    public JavaCodeAnalyzer(final DocumentorConfig config, final JavaElementVisitor elementVisitorParam) {
         this.javaParser = new JavaParser();
-        this.elementVisitor = elementVisitor;
+        this.elementVisitor = elementVisitorParam;
     }
 
     /**

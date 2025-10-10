@@ -17,9 +17,9 @@ public class LlmApiClient {
     private final WebClient webClient;
     private final LlmModelTypeDetector modelTypeDetector;
 
-    public LlmApiClient(WebClient webClient, LlmModelTypeDetector modelTypeDetector) {
-        this.webClient = webClient;
-        this.modelTypeDetector = modelTypeDetector;
+    public LlmApiClient(WebClient webClientParam, LlmModelTypeDetector modelTypeDetectorParam) {
+        this.webClient = webClientParam;
+        this.modelTypeDetector = modelTypeDetectorParam;
     }
 
     /** ðŸ“ž Makes API call to LLM model */

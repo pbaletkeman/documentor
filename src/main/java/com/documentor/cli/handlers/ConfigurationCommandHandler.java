@@ -20,8 +20,8 @@ public class ConfigurationCommandHandler {
 
     private final ObjectMapper objectMapper;
 
-    public ConfigurationCommandHandler(final ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
+    public ConfigurationCommandHandler(final ObjectMapper objectMapperParam) {
+        this.objectMapper = objectMapperParam;
     }
 
     public String handleValidateConfig(final String configPath) {

@@ -26,8 +26,8 @@ public class PythonASTProcessor {
     // Logger used in future error handling methods - required by design
     private final PythonASTCommandBuilder commandBuilder;
 
-    public PythonASTProcessor(PythonASTCommandBuilder commandBuilder) {
-        this.commandBuilder = commandBuilder;
+    public PythonASTProcessor(PythonASTCommandBuilder commandBuilderParam) {
+        this.commandBuilder = commandBuilderParam;
     }
 
     /**

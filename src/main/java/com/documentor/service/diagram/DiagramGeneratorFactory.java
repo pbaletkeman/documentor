@@ -13,8 +13,8 @@ public class DiagramGeneratorFactory {
 
     private final MermaidClassDiagramGenerator classDiagramGenerator;
 
-    public DiagramGeneratorFactory(MermaidClassDiagramGenerator classDiagramGenerator) {
-        this.classDiagramGenerator = classDiagramGenerator;
+    public DiagramGeneratorFactory(MermaidClassDiagramGenerator classDiagramGeneratorParam) {
+        this.classDiagramGenerator = classDiagramGeneratorParam;
     }
 
     /**

@@ -12,9 +12,9 @@ public class LlmResponseParser {
     private final ObjectMapper objectMapper;
     private final LlmModelTypeDetector modelTypeDetector;
 
-    public LlmResponseParser(LlmModelTypeDetector modelTypeDetector) {
+    public LlmResponseParser(LlmModelTypeDetector modelTypeDetectorParam) {
         this.objectMapper = new ObjectMapper();
-        this.modelTypeDetector = modelTypeDetector;
+        this.modelTypeDetector = modelTypeDetectorParam;
     }
 
     /** ðŸ“¤ Main response parsing method that delegates to specific parsers */

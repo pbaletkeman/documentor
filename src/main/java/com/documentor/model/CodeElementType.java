@@ -16,9 +16,9 @@ public enum CodeElementType {
     private final String icon;
     private final String description;
 
-    CodeElementType(final String icon, final String description) {
-        this.icon = icon;
-        this.description = description;
+    CodeElementType(final String iconParam, final String descriptionParam) {
+        this.icon = iconParam;
+        this.description = descriptionParam;
     }
 
     public String getIcon() {

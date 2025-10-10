@@ -14,8 +14,8 @@ public class LlmRequestFormatter {
 
     private final LlmModelTypeDetector modelTypeDetector;
 
-    public LlmRequestFormatter(LlmModelTypeDetector modelTypeDetector) {
-        this.modelTypeDetector = modelTypeDetector;
+    public LlmRequestFormatter(LlmModelTypeDetector modelTypeDetectorParam) {
+        this.modelTypeDetector = modelTypeDetectorParam;
     }
 
         /**

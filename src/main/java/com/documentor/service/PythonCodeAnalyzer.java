@@ -27,10 +27,10 @@ public class PythonCodeAnalyzer {
     private final PythonASTProcessor astProcessor;
     private final PythonRegexAnalyzer regexAnalyzer;
 
-    public PythonCodeAnalyzer(final PythonASTProcessor astProcessor,
-                             final PythonRegexAnalyzer regexAnalyzer) {
-        this.astProcessor = astProcessor;
-        this.regexAnalyzer = regexAnalyzer;
+    public PythonCodeAnalyzer(final PythonASTProcessor astProcessorParam,
+                             final PythonRegexAnalyzer regexAnalyzerParam) {
+        this.astProcessor = astProcessorParam;
+        this.regexAnalyzer = regexAnalyzerParam;
     }
 
     /**

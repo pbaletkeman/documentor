@@ -25,12 +25,12 @@ public class DocumentorCommands {
     private String currentConfigPath;
 
     public DocumentorCommands(
-            final ProjectAnalysisCommandHandler projectAnalysisHandler,
-            final StatusCommandHandler statusHandler,
-            final ConfigurationCommandHandler configurationHandler) {
-        this.projectAnalysisHandler = projectAnalysisHandler;
-        this.statusHandler = statusHandler;
-        this.configurationHandler = configurationHandler;
+            final ProjectAnalysisCommandHandler projectAnalysisHandlerParam,
+            final StatusCommandHandler statusHandlerParam,
+            final ConfigurationCommandHandler configurationHandlerParam) {
+        this.projectAnalysisHandler = projectAnalysisHandlerParam;
+        this.statusHandler = statusHandlerParam;
+        this.configurationHandler = configurationHandlerParam;
     }
 
     /**

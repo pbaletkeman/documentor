@@ -16,8 +16,8 @@ public class StatusCommandHandler {
 
     private final DocumentorConfig documentorConfig;
 
-    public StatusCommandHandler(final DocumentorConfig documentorConfig) {
-        this.documentorConfig = documentorConfig;
+    public StatusCommandHandler(final DocumentorConfig documentorConfigParam) {
+        this.documentorConfig = documentorConfigParam;
     }
 
     public String handleShowStatus(final String currentProjectPath, final String currentConfigPath) {

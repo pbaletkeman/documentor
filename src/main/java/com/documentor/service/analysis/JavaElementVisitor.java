@@ -26,16 +26,16 @@ public class JavaElementVisitor extends VoidVisitorAdapter<Void> {
     private Path filePath;
     private List<CodeElement> elements;
 
-    public JavaElementVisitor(final DocumentorConfig config) {
-        this.config = config;
+    public JavaElementVisitor(final DocumentorConfig configParam) {
+        this.config = configParam;
     }
 
     /**
      * Initialize visitor with file context
      */
-    public void initialize(final Path filePath, final List<CodeElement> elements) {
-        this.filePath = filePath;
-        this.elements = elements;
+    public void initialize(final Path filePathParam, final List<CodeElement> elementsParam) {
+        this.filePath = filePathParam;
+        this.elements = elementsParam;
     }
 
     @Override

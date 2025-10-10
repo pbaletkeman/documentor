@@ -64,11 +64,11 @@ public class AppConfig implements AsyncConfigurer {
      */
     @Bean
     public com.documentor.service.LlmService llmService(
-            final DocumentorConfig documentorConfig,
+            final DocumentorConfig documentorConfigParam,
             final com.documentor.service.llm.LlmRequestBuilder requestBuilder,
             final com.documentor.service.llm.LlmResponseHandler responseHandler,
             final com.documentor.service.llm.LlmApiClient apiClient) {
-        return new com.documentor.service.LlmService(documentorConfig, requestBuilder, responseHandler, apiClient);
+        return new com.documentor.service.LlmService(documentorConfigParam, requestBuilder, responseHandler, apiClient);
     }
 
     /**
@@ -80,10 +80,10 @@ public class AppConfig implements AsyncConfigurer {
             final com.documentor.service.documentation.ElementDocumentationGenerator elementDocGenerator,
             final com.documentor.service.documentation.UnitTestDocumentationGenerator testDocGenerator,
             final com.documentor.service.MermaidDiagramService mermaidDiagramService,
-            final DocumentorConfig documentorConfig) {
+            final DocumentorConfig documentorConfigParam) {
         return new com.documentor.service.DocumentationService(
                 mainDocGenerator, elementDocGenerator, testDocGenerator,
-                mermaidDiagramService, documentorConfig);
+                mermaidDiagramService, documentorConfigParam);
     }
 
     /**

@@ -24,8 +24,8 @@ public class MainDocumentationGenerator {
 
     private final DocumentorConfig config;
 
-    public MainDocumentationGenerator(DocumentorConfig config) {
-        this.config = config;
+    public MainDocumentationGenerator(DocumentorConfig configParam) {
+        this.config = configParam;
     }
 
     /**

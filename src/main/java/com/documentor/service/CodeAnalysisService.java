@@ -33,12 +33,12 @@ public class CodeAnalysisService {
     private final DocumentorConfig config;
 
     public CodeAnalysisService(
-            JavaCodeAnalyzer javaCodeAnalyzer,
-            PythonCodeAnalyzer pythonCodeAnalyzer,
-            DocumentorConfig config) {
-        this.javaCodeAnalyzer = javaCodeAnalyzer;
-        this.pythonCodeAnalyzer = pythonCodeAnalyzer;
-        this.config = config;
+            JavaCodeAnalyzer javaCodeAnalyzerParam,
+            PythonCodeAnalyzer pythonCodeAnalyzerParam,
+            DocumentorConfig configParam) {
+        this.javaCodeAnalyzer = javaCodeAnalyzerParam;
+        this.pythonCodeAnalyzer = pythonCodeAnalyzerParam;
+        this.config = configParam;
     }
 
     /**

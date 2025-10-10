@@ -25,14 +25,14 @@ public class LlmService {
     private final LlmResponseHandler responseHandler;
     private final LlmApiClient apiClient;
 
-    public LlmService(final DocumentorConfig config,
-                     final LlmRequestBuilder requestBuilder,
-                     final LlmResponseHandler responseHandler,
-                     final LlmApiClient apiClient) {
-        this.config = config;
-        this.requestBuilder = requestBuilder;
-        this.responseHandler = responseHandler;
-        this.apiClient = apiClient;
+    public LlmService(final DocumentorConfig configParam,
+                     final LlmRequestBuilder requestBuilderParam,
+                     final LlmResponseHandler responseHandlerParam,
+                     final LlmApiClient apiClientParam) {
+        this.config = configParam;
+        this.requestBuilder = requestBuilderParam;
+        this.responseHandler = responseHandlerParam;
+        this.apiClient = apiClientParam;
     }
 
     @Async("llmExecutor")

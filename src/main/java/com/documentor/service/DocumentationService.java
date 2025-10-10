@@ -33,16 +33,16 @@ public class DocumentationService {
     private final DocumentorConfig config;
 
     public DocumentationService(
-            final MainDocumentationGenerator mainDocGenerator,
-            final ElementDocumentationGenerator elementDocGenerator,
-            final UnitTestDocumentationGenerator testDocGenerator,
-            final MermaidDiagramService mermaidDiagramService,
-            final DocumentorConfig config) {
-        this.mainDocGenerator = mainDocGenerator;
-        this.elementDocGenerator = elementDocGenerator;
-        this.testDocGenerator = testDocGenerator;
-        this.mermaidDiagramService = mermaidDiagramService;
-        this.config = config;
+            final MainDocumentationGenerator mainDocGeneratorParam,
+            final ElementDocumentationGenerator elementDocGeneratorParam,
+            final UnitTestDocumentationGenerator testDocGeneratorParam,
+            final MermaidDiagramService mermaidDiagramServiceParam,
+            final DocumentorConfig configParam) {
+        this.mainDocGenerator = mainDocGeneratorParam;
+        this.elementDocGenerator = elementDocGeneratorParam;
+        this.testDocGenerator = testDocGeneratorParam;
+        this.mermaidDiagramService = mermaidDiagramServiceParam;
+        this.config = configParam;
     }
 
     /**

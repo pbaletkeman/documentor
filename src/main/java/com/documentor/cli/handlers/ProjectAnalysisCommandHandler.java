@@ -30,14 +30,14 @@ public class ProjectAnalysisCommandHandler {
     private final CommonCommandHandler commonHandler;
 
     public ProjectAnalysisCommandHandler(
-            final CodeAnalysisService codeAnalysisService,
-            final DocumentationService documentationService,
-            final MermaidDiagramService mermaidDiagramService,
-            final CommonCommandHandler commonHandler) {
-        this.codeAnalysisService = codeAnalysisService;
-        this.documentationService = documentationService;
-        this.mermaidDiagramService = mermaidDiagramService;
-        this.commonHandler = commonHandler;
+            final CodeAnalysisService codeAnalysisServiceParam,
+            final DocumentationService documentationServiceParam,
+            final MermaidDiagramService mermaidDiagramServiceParam,
+            final CommonCommandHandler commonHandlerParam) {
+        this.codeAnalysisService = codeAnalysisServiceParam;
+        this.documentationService = documentationServiceParam;
+        this.mermaidDiagramService = mermaidDiagramServiceParam;
+        this.commonHandler = commonHandlerParam;
     }
 
     /**

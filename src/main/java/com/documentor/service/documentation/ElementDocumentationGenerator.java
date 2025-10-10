@@ -24,8 +24,8 @@ public class ElementDocumentationGenerator {
 
     private final LlmService llmService;
 
-    public ElementDocumentationGenerator(LlmService llmService) {
-        this.llmService = llmService;
+    public ElementDocumentationGenerator(LlmService llmServiceParam) {
+        this.llmService = llmServiceParam;
     }
 
     /**
