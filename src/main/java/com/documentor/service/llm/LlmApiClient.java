@@ -1,6 +1,6 @@
 package com.documentor.service.llm;
 
-import com.documentor.config.DocumentorConfig;
+import com.documentor.config.model.LlmModelConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -13,7 +13,7 @@ import java.util.Map;
 @Component
 public class LlmApiClient {
 
-    private static final Logger logger = LoggerFactory.getLogger(LlmApiClient.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LlmApiClient.class);
     private final WebClient webClient;
     private final LlmModelTypeDetector modelTypeDetector;
 
@@ -23,12 +23,12 @@ public class LlmApiClient {
     }
 
     /** 📞 Makes API call to LLM model */
-    public String callLlmModel(DocumentorConfig.LlmModelConfig model, String endpoint, Map<String, Object> requestBody) {
+    public String callLlmModel(LlmModelConfig model, String endpoint, Map<String, Object> requestBody) {
         try {
             WebClient.RequestBodySpec request = webClient.post()
                     .uri(endpoint)
                     .header("Content-Type", "application/json");
-            
+
             // Add authentication header only if not Ollama (Ollama typically doesn't require auth)
             if (!modelTypeDetector.isOllamaModel(model) && model.apiKey() != null && !model.apiKey().isEmpty()) {
                 request = request.header("Authorization", "Bearer " + model.apiKey());
@@ -44,7 +44,7 @@ public class LlmApiClient {
             return response;
 
         } catch (Exception e) {
-            logger.error("❌ LLM API call failed for model {}: {}", model.name(), e.getMessage());
+            LOGGER.error("❌ LLM API call failed for model {}: {}", model.name(), e.getMessage());
             return "Error generating content with " + model.name();
         }
     }

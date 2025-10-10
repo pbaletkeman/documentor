@@ -7,10 +7,10 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
  * 📚 Documentor Application - AI-Powered Code Documentation Generator
- * 
+ *
  * This Spring Boot Command Line application analyzes Java and Python projects
  * to generate comprehensive documentation using Large Language Models (LLMs).
- * 
+ *
  * Features:
  * - 🔍 Analyzes Java and Python codebases
  * - 🤖 Integrates with multiple LLM models (GPT-3.5, GPT-4, etc.)
@@ -24,7 +24,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableAsync
 public class DocumentorApplication {
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         SpringApplication.run(DocumentorApplication.class, args);
     }
 }

@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 /**
  * 📊 Project Analysis Result
- * 
+ *
  * Contains the complete analysis results for a project, including all discovered
  * code elements organized by type and file.
  */
@@ -15,7 +15,7 @@ public record ProjectAnalysis(
     List<CodeElement> codeElements,
     long timestamp
 ) {
-    
+
     /**
      * 📦 Gets all classes found in the project
      */
@@ -24,7 +24,7 @@ public record ProjectAnalysis(
                 .filter(element -> element.type() == CodeElementType.CLASS)
                 .toList();
     }
-    
+
     /**
      * 🔧 Gets all methods found in the project
      */
@@ -33,7 +33,7 @@ public record ProjectAnalysis(
                 .filter(element -> element.type() == CodeElementType.METHOD)
                 .toList();
     }
-    
+
     /**
      * 📊 Gets all fields found in the project
      */
@@ -42,7 +42,7 @@ public record ProjectAnalysis(
                 .filter(element -> element.type() == CodeElementType.FIELD)
                 .toList();
     }
-    
+
     /**
      * 📁 Groups code elements by file path
      */
@@ -50,7 +50,7 @@ public record ProjectAnalysis(
         return codeElements.stream()
                 .collect(Collectors.groupingBy(CodeElement::filePath));
     }
-    
+
     /**
      * 🏷️ Groups code elements by type
      */
@@ -58,7 +58,7 @@ public record ProjectAnalysis(
         return codeElements.stream()
                 .collect(Collectors.groupingBy(CodeElement::type));
     }
-    
+
     /**
      * 📈 Gets analysis statistics
      */
@@ -68,12 +68,12 @@ public record ProjectAnalysis(
                     CodeElement::type,
                     Collectors.counting()
                 ));
-        
+
         long fileCount = codeElements.stream()
                 .map(CodeElement::filePath)
                 .distinct()
                 .count();
-        
+
         return new AnalysisStats(
             codeElements.size(),
             counts.getOrDefault(CodeElementType.CLASS, 0L).intValue(),
@@ -82,7 +82,7 @@ public record ProjectAnalysis(
             (int) fileCount
         );
     }
-    
+
     /**
      * 📊 Analysis Statistics Record
      */

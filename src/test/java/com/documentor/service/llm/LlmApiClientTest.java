@@ -1,6 +1,6 @@
 package com.documentor.service.llm;
 
-import com.documentor.config.DocumentorConfig;
+import com.documentor.config.model.LlmModelConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,30 +23,30 @@ class LlmApiClientTest {
     private WebClient mockWebClient;
 
     private LlmApiClient apiClient;
-    private DocumentorConfig.LlmModelConfig openAiModel;
-    private DocumentorConfig.LlmModelConfig ollamaModel;
-    private DocumentorConfig.LlmModelConfig codelamaModel;
-    private DocumentorConfig.LlmModelConfig mistralModel;
+    private LlmModelConfig openAiModel;
+    private LlmModelConfig ollamaModel;
+    private LlmModelConfig codelamaModel;
+    private LlmModelConfig mistralModel;
 
     @BeforeEach
     void setUp() {
         LlmModelTypeDetector modelTypeDetector = new LlmModelTypeDetector();
         apiClient = new LlmApiClient(mockWebClient, modelTypeDetector);
         
-        openAiModel = new DocumentorConfig.LlmModelConfig(
-            "gpt-4", "sk-test-key", "https://api.openai.com/v1/completions", 1000, 0.7, 30, Map.of()
+        openAiModel = new LlmModelConfig(
+            "gpt-4", "openai", "https://api.openai.com/v1/completions", "sk-test-key", 1000, 30
         );
         
-        ollamaModel = new DocumentorConfig.LlmModelConfig(
-            "llama2", "", "http://localhost:11434/api/generate", 1000, 0.7, 30, Map.of()
+        ollamaModel = new LlmModelConfig(
+            "llama2", "ollama", "http://localhost:11434/api/generate", "", 1000, 30
         );
         
-        codelamaModel = new DocumentorConfig.LlmModelConfig(
-            "codellama:7b", "", "http://localhost:11434/api/generate", 1000, 0.7, 30, Map.of()
+        codelamaModel = new LlmModelConfig(
+            "codellama:7b", "ollama", "http://localhost:11434/api/generate", "", 1000, 30
         );
         
-        mistralModel = new DocumentorConfig.LlmModelConfig(
-            "mistral:latest", "", "http://localhost:11434/api/generate", 1000, 0.7, 30, Map.of()
+        mistralModel = new LlmModelConfig(
+            "mistral:latest", "ollama", "http://localhost:11434/api/generate", "", 1000, 30
         );
     }
 
@@ -83,22 +83,22 @@ class LlmApiClientTest {
         assertNotNull(openAiModel); // OpenAI model (not Ollama)
         
         // Verify models are properly configured
-        assertTrue(ollamaModel.endpoint().contains("11434"));
+        assertTrue(ollamaModel.baseUrl().contains("11434"));
         assertTrue(codelamaModel.name().startsWith("codellama"));
         assertTrue(mistralModel.name().startsWith("mistral"));
-        assertFalse(openAiModel.endpoint().contains("ollama"));
+        assertFalse(openAiModel.baseUrl().contains("ollama"));
     }
 
     @Test 
     void testModelConfigurationHandling() {
         // Test with model without API key
-        DocumentorConfig.LlmModelConfig modelWithoutKey = new DocumentorConfig.LlmModelConfig(
-            "test-model", "", "http://test.api", 1000, 0.7, 30, Map.of()
+        LlmModelConfig modelWithoutKey = new LlmModelConfig(
+            "test-model", "ollama", "http://test.api", "", 1000, 30
         );
         
         // Test with model with null API key
-        DocumentorConfig.LlmModelConfig modelWithNullKey = new DocumentorConfig.LlmModelConfig(
-            "test-model", null, "http://test.api", 1000, 0.7, 30, Map.of()
+        LlmModelConfig modelWithNullKey = new LlmModelConfig(
+            "test-model", "ollama", "http://test.api", null, 1000, 30
         );
         
         assertNotNull(modelWithoutKey);
@@ -116,31 +116,31 @@ class LlmApiClientTest {
         when(mockWebClient.post()).thenThrow(new RuntimeException("Connection failed"));
         
         // Test Ollama endpoint
-        String ollamaResult = apiClient.callLlmModel(ollamaModel, ollamaModel.endpoint(), requestBody);
+        String ollamaResult = apiClient.callLlmModel(ollamaModel, ollamaModel.baseUrl(), requestBody);
         assertTrue(ollamaResult.contains("Error generating content with llama2"));
         
         // Test CodeLlama model  
-        String codelamaResult = apiClient.callLlmModel(codelamaModel, codelamaModel.endpoint(), requestBody);
+        String codelamaResult = apiClient.callLlmModel(codelamaModel, codelamaModel.baseUrl(), requestBody);
         assertTrue(codelamaResult.contains("Error generating content with codellama:7b"));
         
         // Test Mistral model
-        String mistralResult = apiClient.callLlmModel(mistralModel, mistralModel.endpoint(), requestBody);
+        String mistralResult = apiClient.callLlmModel(mistralModel, mistralModel.baseUrl(), requestBody);
         assertTrue(mistralResult.contains("Error generating content with mistral:latest"));
         
         // Test OpenAI model
-        String openaiResult = apiClient.callLlmModel(openAiModel, openAiModel.endpoint(), requestBody);
+        String openaiResult = apiClient.callLlmModel(openAiModel, openAiModel.baseUrl(), requestBody);
         assertTrue(openaiResult.contains("Error generating content with gpt-4"));
     }
 
     @Test
     void testTimeoutConfiguration() {
         // Test that models can be configured with different timeouts
-        DocumentorConfig.LlmModelConfig fastModel = new DocumentorConfig.LlmModelConfig(
-            "fast-model", "key", "http://fast.api", 100, 0.7, 5, Map.of()
+        LlmModelConfig fastModel = new LlmModelConfig(
+            "fast-model", "ollama", "http://fast.api", "key", 100, 5
         );
         
-        DocumentorConfig.LlmModelConfig slowModel = new DocumentorConfig.LlmModelConfig(
-            "slow-model", "key", "http://slow.api", 1000, 0.7, 120, Map.of()
+        LlmModelConfig slowModel = new LlmModelConfig(
+            "slow-model", "ollama", "http://slow.api", "key", 1000, 120
         );
         
         assertEquals(5, fastModel.timeoutSeconds());

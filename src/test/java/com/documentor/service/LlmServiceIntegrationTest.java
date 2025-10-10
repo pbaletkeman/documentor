@@ -1,6 +1,9 @@
 package com.documentor.service;
 
 import com.documentor.config.DocumentorConfig;
+import com.documentor.config.model.LlmModelConfig;
+import com.documentor.config.model.AnalysisSettings;
+import com.documentor.config.model.OutputSettings;
 import com.documentor.model.CodeElement;
 import com.documentor.model.CodeElementType;
 import com.documentor.service.llm.*;
@@ -12,7 +15,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,16 +37,16 @@ class LlmServiceIntegrationTest {
     @BeforeEach
     void setUp() {
         // Create test configuration with LLM models
-        DocumentorConfig.LlmModelConfig testModel = new DocumentorConfig.LlmModelConfig(
-            "test-model", "test-key", "https://api.test.com", 1000, 0.7, 30, Map.of()
+        LlmModelConfig testModel = new LlmModelConfig(
+            "test-model", "openai", "https://api.test.com", "test-key", 1000, 30
         );
         
-        DocumentorConfig.OutputSettings outputSettings = new DocumentorConfig.OutputSettings(
-            "output", "markdown", true, true, 0.9, false, "output"
+        OutputSettings outputSettings = new OutputSettings(
+            "output", "markdown", true, true
         );
         
-        DocumentorConfig.AnalysisSettings analysisSettings = new DocumentorConfig.AnalysisSettings(
-            true, 50, List.of("public"), List.of(".git")
+        AnalysisSettings analysisSettings = new AnalysisSettings(
+            true, 50, List.of("**/*.java"), List.of("**/test/**")
         );
         
         config = new DocumentorConfig(List.of(testModel), outputSettings, analysisSettings);
@@ -172,11 +174,11 @@ class LlmServiceIntegrationTest {
     @Test
     void testServiceWithMultipleModels() {
         // Given - configuration with multiple models
-        DocumentorConfig.LlmModelConfig model1 = new DocumentorConfig.LlmModelConfig(
-            "model-1", "key-1", "https://api1.test.com", 1000, 0.7, 30, Map.of()
+        LlmModelConfig model1 = new LlmModelConfig(
+            "model-1", "openai", "https://api1.test.com", "key-1", 1000, 30
         );
-        DocumentorConfig.LlmModelConfig model2 = new DocumentorConfig.LlmModelConfig(
-            "model-2", "key-2", "https://api2.test.com", 2000, 0.8, 60, Map.of()
+        LlmModelConfig model2 = new LlmModelConfig(
+            "model-2", "openai", "https://api2.test.com", "key-2", 2000, 60
         );
         
         DocumentorConfig multiModelConfig = new DocumentorConfig(
@@ -271,24 +273,24 @@ class LlmServiceIntegrationTest {
     @Test
     void testOllamaModelDetection() {
         // Given - Various Ollama model configurations
-        DocumentorConfig.LlmModelConfig ollamaModel1 = new DocumentorConfig.LlmModelConfig(
-            "llama3.2", null, "http://localhost:11434/api/generate", 4096, 0.7, 60, Map.of()
+        LlmModelConfig ollamaModel1 = new LlmModelConfig(
+            "llama3.2", "ollama", "http://localhost:11434/api/generate", "", 4096, 60
         );
         
-        DocumentorConfig.LlmModelConfig ollamaModel2 = new DocumentorConfig.LlmModelConfig(
-            "codellama", null, null, 4096, 0.3, 60, Map.of()
+        LlmModelConfig ollamaModel2 = new LlmModelConfig(
+            "codellama", "ollama", "http://localhost:11434/api/generate", "", 4096, 60
         );
         
-        DocumentorConfig.LlmModelConfig openaiModel = new DocumentorConfig.LlmModelConfig(
-            "gpt-4", "test-key", "https://api.openai.com/v1/chat/completions", 4096, 0.7, 30, Map.of()
+        LlmModelConfig openaiModel = new LlmModelConfig(
+            "gpt-4", "openai", "https://api.openai.com/v1/chat/completions", "test-key", 4096, 30
         );
         
-        DocumentorConfig.OutputSettings outputSettings = new DocumentorConfig.OutputSettings(
-            "output", "markdown", true, true, 0.9, false, "output"
+        OutputSettings outputSettings = new OutputSettings(
+            "output", "markdown", true, true
         );
         
-        DocumentorConfig.AnalysisSettings analysisSettings = new DocumentorConfig.AnalysisSettings(
-            true, 50, List.of("public"), List.of(".git")
+        AnalysisSettings analysisSettings = new AnalysisSettings(
+            true, 50, List.of("**/*.java"), List.of("**/test/**")
         );
         
         // Test each model type

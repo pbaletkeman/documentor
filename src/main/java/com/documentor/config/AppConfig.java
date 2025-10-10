@@ -49,7 +49,7 @@ public class AppConfig implements AsyncConfigurer {
     public ThreadPoolTaskExecutor llmExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(documentorConfig.analysisSettings().maxThreads());
-        executor.setMaxPoolSize(documentorConfig.analysisSettings().maxThreads() 
+        executor.setMaxPoolSize(documentorConfig.analysisSettings().maxThreads()
                 * DEFAULT_THREAD_MULTIPLIER);
         executor.setQueueCapacity(DEFAULT_QUEUE_CAPACITY);
         executor.setThreadNamePrefix("LLM-");
@@ -64,10 +64,10 @@ public class AppConfig implements AsyncConfigurer {
      */
     @Bean
     public com.documentor.service.LlmService llmService(
-            DocumentorConfig documentorConfig,
-            com.documentor.service.llm.LlmRequestBuilder requestBuilder,
-            com.documentor.service.llm.LlmResponseHandler responseHandler,
-            com.documentor.service.llm.LlmApiClient apiClient) {
+            final DocumentorConfig documentorConfig,
+            final com.documentor.service.llm.LlmRequestBuilder requestBuilder,
+            final com.documentor.service.llm.LlmResponseHandler responseHandler,
+            final com.documentor.service.llm.LlmApiClient apiClient) {
         return new com.documentor.service.LlmService(documentorConfig, requestBuilder, responseHandler, apiClient);
     }
 
@@ -76,13 +76,13 @@ public class AppConfig implements AsyncConfigurer {
      */
     @Bean
     public com.documentor.service.DocumentationService documentationService(
-            com.documentor.service.documentation.MainDocumentationGenerator mainDocGenerator,
-            com.documentor.service.documentation.ElementDocumentationGenerator elementDocGenerator,
-            com.documentor.service.documentation.UnitTestDocumentationGenerator testDocGenerator,
-            com.documentor.service.MermaidDiagramService mermaidDiagramService,
-            DocumentorConfig documentorConfig) {
+            final com.documentor.service.documentation.MainDocumentationGenerator mainDocGenerator,
+            final com.documentor.service.documentation.ElementDocumentationGenerator elementDocGenerator,
+            final com.documentor.service.documentation.UnitTestDocumentationGenerator testDocGenerator,
+            final com.documentor.service.MermaidDiagramService mermaidDiagramService,
+            final DocumentorConfig documentorConfig) {
         return new com.documentor.service.DocumentationService(
-                mainDocGenerator, elementDocGenerator, testDocGenerator, 
+                mainDocGenerator, elementDocGenerator, testDocGenerator,
                 mermaidDiagramService, documentorConfig);
     }
 

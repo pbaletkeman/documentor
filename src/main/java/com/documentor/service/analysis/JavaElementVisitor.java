@@ -15,35 +15,35 @@ import java.util.List;
 
 /**
  * 🚶 Java AST Visitor for extracting code elements
- * 
+ *
  * Specialized visitor that traverses the Java AST and extracts
  * classes, methods, and fields based on visibility rules.
  */
 @Component
 public class JavaElementVisitor extends VoidVisitorAdapter<Void> {
-    
+
     private final DocumentorConfig config;
     private Path filePath;
     private List<CodeElement> elements;
 
-    public JavaElementVisitor(DocumentorConfig config) {
+    public JavaElementVisitor(final DocumentorConfig config) {
         this.config = config;
     }
 
     /**
      * Initialize visitor with file context
      */
-    public void initialize(Path filePath, List<CodeElement> elements) {
+    public void initialize(final Path filePath, final List<CodeElement> elements) {
         this.filePath = filePath;
         this.elements = elements;
     }
 
     @Override
-    public void visit(ClassOrInterfaceDeclaration declaration, Void arg) {
+    public void visit(final ClassOrInterfaceDeclaration declaration, final Void arg) {
         if (shouldInclude(declaration.getModifiers())) {
             String name = declaration.getNameAsString();
             String qualifiedName = declaration.getFullyQualifiedName().orElse(name);
-            
+
             CodeElement classElement = new CodeElement(
                 CodeElementType.CLASS,
                 name,
@@ -55,19 +55,19 @@ public class JavaElementVisitor extends VoidVisitorAdapter<Void> {
                 List.of(), // Parameters for classes are empty
                 extractAnnotations(declaration)
             );
-            
+
             elements.add(classElement);
         }
-        
+
         super.visit(declaration, arg);
     }
 
     @Override
-    public void visit(EnumDeclaration declaration, Void arg) {
+    public void visit(final EnumDeclaration declaration, final Void arg) {
         if (shouldInclude(declaration.getModifiers())) {
             String name = declaration.getNameAsString();
             String qualifiedName = declaration.getFullyQualifiedName().orElse(name);
-            
+
             CodeElement enumElement = new CodeElement(
                 CodeElementType.CLASS, // Treat enums as classes
                 name,
@@ -79,19 +79,19 @@ public class JavaElementVisitor extends VoidVisitorAdapter<Void> {
                 List.of(),
                 extractAnnotations(declaration)
             );
-            
+
             elements.add(enumElement);
         }
-        
+
         super.visit(declaration, arg);
     }
 
     @Override
-    public void visit(MethodDeclaration declaration, Void arg) {
+    public void visit(final MethodDeclaration declaration, final Void arg) {
         if (shouldInclude(declaration.getModifiers())) {
             String name = declaration.getNameAsString();
             String signature = declaration.getDeclarationAsString();
-            
+
             CodeElement methodElement = new CodeElement(
                 CodeElementType.METHOD,
                 name,
@@ -103,20 +103,20 @@ public class JavaElementVisitor extends VoidVisitorAdapter<Void> {
                 extractParameters(declaration),
                 extractAnnotations(declaration)
             );
-            
+
             elements.add(methodElement);
         }
-        
+
         super.visit(declaration, arg);
     }
 
     @Override
-    public void visit(FieldDeclaration declaration, Void arg) {
+    public void visit(final FieldDeclaration declaration, final Void arg) {
         if (shouldInclude(declaration.getModifiers())) {
             declaration.getVariables().forEach(variable -> {
                 String name = variable.getNameAsString();
                 String qualifiedName = name; // Simplified for now
-                
+
                 CodeElement fieldElement = new CodeElement(
                     CodeElementType.FIELD,
                     name,
@@ -128,46 +128,46 @@ public class JavaElementVisitor extends VoidVisitorAdapter<Void> {
                     List.of(),
                     extractAnnotations(declaration)
                 );
-                
+
                 elements.add(fieldElement);
             });
         }
-        
+
         super.visit(declaration, arg);
     }
 
-    private boolean shouldInclude(com.github.javaparser.ast.NodeList<com.github.javaparser.ast.Modifier> modifiers) {
+    private boolean shouldInclude(final com.github.javaparser.ast.NodeList<com.github.javaparser.ast.Modifier> modifiers) {
         if (config.analysisSettings().includePrivateMembers()) {
             return true;
         }
-        
+
         boolean isPrivate = modifiers.stream()
             .anyMatch(mod -> mod.getKeyword() == com.github.javaparser.ast.Modifier.Keyword.PRIVATE);
-        
+
         return !isPrivate;
     }
 
-    private String extractSignature(ClassOrInterfaceDeclaration declaration) {
+    private String extractSignature(final ClassOrInterfaceDeclaration declaration) {
         return declaration.toString().replace("\n", " ").replaceAll("\\s+", " ").trim();
     }
 
-    private String extractSignature(EnumDeclaration declaration) {
+    private String extractSignature(final EnumDeclaration declaration) {
         return declaration.toString().replace("\n", " ").replaceAll("\\s+", " ").trim();
     }
 
-    private String extractJavadoc(com.github.javaparser.ast.nodeTypes.NodeWithJavadoc<?> node) {
+    private String extractJavadoc(final com.github.javaparser.ast.nodeTypes.NodeWithJavadoc<?> node) {
         return node.getJavadoc()
             .map(javadoc -> javadoc.getDescription().toText())
             .orElse("");
     }
 
-    private List<String> extractParameters(MethodDeclaration declaration) {
+    private List<String> extractParameters(final MethodDeclaration declaration) {
         return declaration.getParameters().stream()
             .map(param -> param.getType().asString() + " " + param.getNameAsString())
             .toList();
     }
 
-    private List<String> extractAnnotations(com.github.javaparser.ast.nodeTypes.NodeWithAnnotations<?> node) {
+    private List<String> extractAnnotations(final com.github.javaparser.ast.nodeTypes.NodeWithAnnotations<?> node) {
         return node.getAnnotations().stream()
             .map(annotation -> "@" + annotation.getNameAsString())
             .toList();

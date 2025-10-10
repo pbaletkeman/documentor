@@ -1,6 +1,7 @@
 package com.documentor.service;
 
 import com.documentor.config.DocumentorConfig;
+import com.documentor.constants.ApplicationConstants;
 import com.documentor.model.CodeElement;
 import com.documentor.model.ProjectAnalysis;
 import org.slf4j.Logger;
@@ -16,7 +17,7 @@ import java.util.stream.Stream;
 
 /**
  * 🔍 Code Analysis Service
- * 
+ *
  * Orchestrates the analysis of Java and Python projects by:
  * - Discovering source files
  * - Parsing code to extract classes, methods, and variables
@@ -25,7 +26,7 @@ import java.util.stream.Stream;
 @Service
 public class CodeAnalysisService {
 
-    private static final Logger logger = LoggerFactory.getLogger(CodeAnalysisService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CodeAnalysisService.class);
 
     private final JavaCodeAnalyzer javaCodeAnalyzer;
     private final PythonCodeAnalyzer pythonCodeAnalyzer;
@@ -42,28 +43,28 @@ public class CodeAnalysisService {
 
     /**
      * 📊 Analyzes a project directory and returns comprehensive analysis results
-     * 
+     *
      * @param projectPath Path to the project directory
      * @return ProjectAnalysis containing all discovered code elements
      */
     public CompletableFuture<ProjectAnalysis> analyzeProject(Path projectPath) {
-        logger.info("🚀 Starting analysis of project: {}", projectPath);
+        LOGGER.info("🚀 Starting analysis of project: {}", projectPath);
 
         return CompletableFuture.supplyAsync(() -> {
             try {
                 List<CodeElement> allElements = discoverAndAnalyzeFiles(projectPath);
-                
+
                 ProjectAnalysis analysis = new ProjectAnalysis(
                     projectPath.toString(),
                     allElements,
                     System.currentTimeMillis()
                 );
-                
-                logger.info("✅ Analysis completed. Found {} code elements", allElements.size());
+
+                LOGGER.info("✅ Analysis completed. Found {} code elements", allElements.size());
                 return analysis;
-                
+
             } catch (Exception e) {
-                logger.error("❌ Error analyzing project: {}", e.getMessage(), e);
+                LOGGER.error("❌ Error analyzing project: {}", e.getMessage(), e);
                 throw new RuntimeException("Failed to analyze project", e);
             }
         });
@@ -73,12 +74,14 @@ public class CodeAnalysisService {
      * 🔎 Discovers and analyzes all supported source files in the project
      */
     private List<CodeElement> discoverAndAnalyzeFiles(Path projectPath) throws IOException {
-        return Files.walk(projectPath)
-                .filter(Files::isRegularFile)
-                .filter(this::isSupportedFile)
-                .filter(this::shouldAnalyzeFile)
-                .flatMap(this::analyzeFile)
-                .toList();
+        try (Stream<Path> fileStream = Files.walk(projectPath)) {
+            return fileStream
+                    .filter(Files::isRegularFile)
+                    .filter(this::isSupportedFile)
+                    .filter(this::shouldAnalyzeFile)
+                    .flatMap(this::analyzeFileSafely)
+                    .toList();
+        }
     }
 
     /**
@@ -86,7 +89,8 @@ public class CodeAnalysisService {
      */
     private boolean isSupportedFile(Path file) {
         String fileName = file.getFileName().toString().toLowerCase();
-        return fileName.endsWith(".java") || fileName.endsWith(".py");
+        return fileName.endsWith(ApplicationConstants.JAVA_EXTENSION) ||
+               fileName.endsWith(ApplicationConstants.PYTHON_EXTENSION);
     }
 
     /**
@@ -95,27 +99,34 @@ public class CodeAnalysisService {
     private boolean shouldAnalyzeFile(Path file) {
         String filePath = file.toString();
         return config.analysisSettings().excludePatterns().stream()
-                .noneMatch(pattern -> filePath.matches(pattern.replace("*", ".*")));
+                .noneMatch(pattern -> filePath.matches(
+                    pattern.replace(ApplicationConstants.WILDCARD_PATTERN, ApplicationConstants.REGEX_REPLACEMENT)));
     }
 
     /**
-     * 🔍 Analyzes a single file and returns a stream of code elements
+     * 🔍 Safely analyzes a single file, returning empty stream on error
      */
-    private Stream<CodeElement> analyzeFile(Path file) {
+    private Stream<CodeElement> analyzeFileSafely(Path file) {
         try {
-            String fileName = file.getFileName().toString().toLowerCase();
-            
-            if (fileName.endsWith(".java")) {
-                return javaCodeAnalyzer.analyzeFile(file).stream();
-            } else if (fileName.endsWith(".py")) {
-                return pythonCodeAnalyzer.analyzeFile(file).stream();
-            }
-            
-            return Stream.empty();
-            
+            return analyzeFileByType(file);
         } catch (Exception e) {
-            logger.warn("⚠️ Failed to analyze file {}: {}", file, e.getMessage());
+            LOGGER.warn("⚠️ Failed to analyze file {}: {}", file, e.getMessage());
             return Stream.empty();
         }
+    }
+
+    /**
+     * 🔍 Analyzes a single file by determining its type
+     */
+    private Stream<CodeElement> analyzeFileByType(Path file) throws IOException {
+        String fileName = file.getFileName().toString().toLowerCase();
+
+        if (fileName.endsWith(ApplicationConstants.JAVA_EXTENSION)) {
+            return javaCodeAnalyzer.analyzeFile(file).stream();
+        } else if (fileName.endsWith(ApplicationConstants.PYTHON_EXTENSION)) {
+            return pythonCodeAnalyzer.analyzeFile(file).stream();
+        }
+
+        return Stream.empty();
     }
 }

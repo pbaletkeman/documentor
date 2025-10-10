@@ -1,123 +1,244 @@
-package com.documentor.config;
+package com.documentor.config;package com.documentor.config;
 
-import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.List;
-import java.util.Map;
 
-import org.junit.jupiter.api.Test;
+import com.documentor.config.model.LlmModelConfig;import static org.junit.jupiter.api.Assertions.*;
+
+import com.documentor.config.model.AnalysisSettings;
+
+import com.documentor.config.model.OutputSettings;import java.util.List;
+
+import org.junit.jupiter.api.Test;import java.util.Map;
+
+
+
+import java.util.List;import org.junit.jupiter.api.Test;
+
+import com.documentor.config.model.LlmModelConfig;
+
+import static org.junit.jupiter.api.Assertions.*;import com.documentor.config.model.OutputSettings;
+
+import com.documentor.config.model.AnalysisSettings;
 
 /**
- * 🧪 Comprehensive tests for DocumentorConfig and nested record classes
- * 
+
+ * Tests for DocumentorConfig and related configuration classes/**
+
+ */ * 🧪 Comprehensive tests for DocumentorConfig and nested record classes
+
+class DocumentorConfigTest { * 
+
  * Tests configuration property handling, default values, and validation
- * for all configuration records: LlmModelConfig, OutputSettings, AnalysisSettings
- */
-class DocumentorConfigTest {
 
-    @Test
-    void testLlmModelConfig_WithAllValues() {
-        // Given
+    @Test * for all configuration records: LlmModelConfig, OutputSettings, AnalysisSettings
+
+    void testLlmModelConfigCreation() { */
+
+        // Givenclass DocumentorConfigTest {
+
         String name = "gpt-4";
-        String apiKey = "test-api-key";
-        String endpoint = "https://api.openai.com/v1";
-        Integer maxTokens = 2000;
-        Double temperature = 0.5;
-        Integer timeoutSeconds = 60;
-        Map<String, Object> additionalConfig = Map.of("top_p", 0.95);
 
-        // When
-        DocumentorConfig.LlmModelConfig config = new DocumentorConfig.LlmModelConfig(
-            name, apiKey, endpoint, maxTokens, temperature, timeoutSeconds, additionalConfig
+        String provider = "openai";    @Test
+
+        String baseUrl = "https://api.openai.com/v1";    void testLlmModelConfig_WithAllValues() {
+
+        String apiKey = "test-api-key";        // Given
+
+        Integer maxTokens = 2000;        String name = "gpt-4";
+
+        Integer timeoutSeconds = 60;        String provider = "openai";
+
+        String baseUrl = "https://api.openai.com/v1";
+
+        // When        String apiKey = "test-api-key";
+
+        LlmModelConfig config = new LlmModelConfig(        Integer maxTokens = 2000;
+
+            name, provider, baseUrl, apiKey, maxTokens, timeoutSeconds        Integer timeoutSeconds = 60;
+
         );
 
-        // Then
-        assertEquals(name, config.name());
-        assertEquals(apiKey, config.apiKey());
-        assertEquals(endpoint, config.endpoint());
-        assertEquals(maxTokens, config.maxTokens());
-        assertEquals(temperature, config.temperature());
-        assertEquals(timeoutSeconds, config.timeoutSeconds());
-        assertEquals(additionalConfig, config.additionalConfig());
-    }
+        // When
 
-    @Test
-    void testLlmModelConfig_WithDefaultValues() {
-        // Given
+        // Then        LlmModelConfig config = new LlmModelConfig(
+
+        assertEquals(name, config.name());            name, provider, baseUrl, apiKey, maxTokens, timeoutSeconds
+
+        assertEquals(provider, config.provider());        );
+
+        assertEquals(baseUrl, config.baseUrl());
+
+        assertEquals(apiKey, config.apiKey());        // Then
+
+        assertEquals(maxTokens, config.maxTokens());        assertEquals(name, config.name());
+
+        assertEquals(timeoutSeconds, config.timeoutSeconds());        assertEquals(provider, config.provider());
+
+    }        assertEquals(baseUrl, config.baseUrl());
+
+        assertEquals(apiKey, config.apiKey());
+
+    @Test        assertEquals(maxTokens, config.maxTokens());
+
+    void testOutputSettingsCreation() {        assertEquals(timeoutSeconds, config.timeoutSeconds());
+
+        // Given    }
+
+        String outputDirectory = "docs/output";
+
+        String format = "markdown";    @Test
+
+        Boolean generateMermaid = true;    void testLlmModelConfig_WithDefaultValues() {
+
+        Boolean verboseOutput = false;        // Given
+
         String name = "claude-3";
-        String apiKey = "claude-api-key";
 
-        // When
-        DocumentorConfig.LlmModelConfig config = new DocumentorConfig.LlmModelConfig(
+        // When        String apiKey = "claude-api-key";
+
+        OutputSettings settings = new OutputSettings(
+
+            outputDirectory, format, generateMermaid, verboseOutput        // When
+
+        );        LlmModelConfig config = new LlmModelConfig(
+
             name, apiKey, null, null, null, null, null
-        );
 
-        // Then
-        assertEquals(name, config.name());
-        assertEquals(apiKey, config.apiKey());
-        assertNull(config.endpoint());
+        // Then        );
+
+        assertEquals(outputDirectory, settings.outputDirectory());
+
+        assertEquals(format, settings.format());        // Then
+
+        assertEquals(generateMermaid, settings.generateMermaid());        assertEquals(name, config.name());
+
+        assertEquals(verboseOutput, settings.verboseOutput());        assertEquals(apiKey, config.apiKey());
+
+    }        assertNull(config.endpoint());
+
         assertEquals(4096, config.maxTokens()); // Default value
-        assertEquals(0.7, config.temperature()); // Default value
-        assertEquals(30, config.timeoutSeconds()); // Default value
-        assertEquals(Map.of(), config.additionalConfig()); // Default empty map
-    }
 
-    @Test
-    void testLlmModelConfig_WithPartialDefaults() {
+    @Test        assertEquals(0.7, config.temperature()); // Default value
+
+    void testAnalysisSettingsCreation() {        assertEquals(30, config.timeoutSeconds()); // Default value
+
+        // Given        assertEquals(Map.of(), config.additionalConfig()); // Default empty map
+
+        Boolean includePrivateMembers = true;    }
+
+        Integer maxDepth = 10;
+
+        List<String> includedPatterns = List.of("**/*.java");    @Test
+
+        List<String> excludePatterns = List.of("**/test/**");    void testLlmModelConfig_WithPartialDefaults() {
+
         // Given
-        String name = "gpt-3.5-turbo";
-        String apiKey = "openai-key";
-        String endpoint = "https://api.openai.com/v1";
-        Integer maxTokens = 1500;
 
-        // When
-        DocumentorConfig.LlmModelConfig config = new DocumentorConfig.LlmModelConfig(
-            name, apiKey, endpoint, maxTokens, null, null, null
-        );
+        // When        String name = "gpt-3.5-turbo";
 
-        // Then
+        AnalysisSettings settings = new AnalysisSettings(        String apiKey = "openai-key";
+
+            includePrivateMembers, maxDepth, includedPatterns, excludePatterns        String endpoint = "https://api.openai.com/v1";
+
+        );        Integer maxTokens = 1500;
+
+
+
+        // Then        // When
+
+        assertEquals(includePrivateMembers, settings.includePrivateMembers());        LlmModelConfig config = new LlmModelConfig(
+
+        assertEquals(maxDepth, settings.maxDepth());            name, apiKey, endpoint, maxTokens, null, null, null
+
+        assertEquals(includedPatterns, settings.includedPatterns());        );
+
+        assertEquals(excludePatterns, settings.excludePatterns());
+
+    }        // Then
+
         assertEquals(name, config.name());
-        assertEquals(apiKey, config.apiKey());
-        assertEquals(endpoint, config.endpoint());
-        assertEquals(maxTokens, config.maxTokens());
-        assertEquals(0.7, config.temperature()); // Default
-        assertEquals(30, config.timeoutSeconds()); // Default
-        assertEquals(Map.of(), config.additionalConfig()); // Default
-    }
 
-    @Test
-    void testOutputSettings_WithAllValues() {
-        // Given
-        String outputPath = "/docs/output";
+    @Test        assertEquals(apiKey, config.apiKey());
+
+    void testDocumentorConfigCreation() {        assertEquals(endpoint, config.endpoint());
+
+        // Given        assertEquals(maxTokens, config.maxTokens());
+
+        LlmModelConfig llmModel = new LlmModelConfig(        assertEquals(0.7, config.temperature()); // Default
+
+            "gpt-4", "openai", "https://api.openai.com/v1", "test-key", 1000, 30        assertEquals(30, config.timeoutSeconds()); // Default
+
+        );        assertEquals(Map.of(), config.additionalConfig()); // Default
+
+        OutputSettings outputSettings = new OutputSettings(    }
+
+            "docs", "markdown", true, false
+
+        );    @Test
+
+        AnalysisSettings analysisSettings = new AnalysisSettings(    void testOutputSettings_WithAllValues() {
+
+            false, 5, List.of("**/*.java"), List.of("**/test/**")        // Given
+
+        );        String outputPath = "/docs/output";
+
         String format = "html";
-        Boolean includeIcons = false;
-        Boolean generateUnitTests = false;
-        Double targetCoverage = 0.95;
 
-        // When
-        DocumentorConfig.OutputSettings settings = new DocumentorConfig.OutputSettings(
-            outputPath, format, includeIcons, generateUnitTests, targetCoverage, false, outputPath
+        // When        Boolean includeIcons = false;
+
+        DocumentorConfig config = new DocumentorConfig(        Boolean generateUnitTests = false;
+
+            List.of(llmModel), outputSettings, analysisSettings        Double targetCoverage = 0.95;
+
         );
 
-        // Then
-        assertEquals(outputPath, settings.outputPath());
-        assertEquals(format, settings.format());
+        // When
+
+        // Then        OutputSettings settings = new OutputSettings(
+
+        assertNotNull(config);            outputPath, format, includeIcons, generateUnitTests, targetCoverage, false, outputPath
+
+        assertEquals(1, config.llmModels().size());        );
+
+        assertEquals(llmModel, config.llmModels().get(0));
+
+        assertEquals(outputSettings, config.outputSettings());        // Then
+
+        assertEquals(analysisSettings, config.analysisSettings());        assertEquals(outputPath, settings.outputPath());
+
+    }        assertEquals(format, settings.format());
+
         assertEquals(includeIcons, settings.includeIcons());
-        assertEquals(generateUnitTests, settings.generateUnitTests());
-        assertEquals(targetCoverage, settings.targetCoverage());
+
+    @Test        assertEquals(generateUnitTests, settings.generateUnitTests());
+
+    void testConfigurationEquality() {        assertEquals(targetCoverage, settings.targetCoverage());
+
+        // Given    }
+
+        LlmModelConfig config1 = new LlmModelConfig(
+
+            "gpt-4", "openai", "https://api.openai.com/v1", "key", 1000, 30    @Test
+
+        );    void testOutputSettings_WithDefaultValues() {
+
+        LlmModelConfig config2 = new LlmModelConfig(        // Given
+
+            "gpt-4", "openai", "https://api.openai.com/v1", "key", 1000, 30        String outputPath = "/docs/default";
+
+        );
+
+        // When
+
+        // Then        OutputSettings settings = new OutputSettings(
+
+        assertEquals(config1, config2);            outputPath, null, null, null, null, null, null
+
+        assertEquals(config1.hashCode(), config2.hashCode());        );
+
     }
 
-    @Test
-    void testOutputSettings_WithDefaultValues() {
-        // Given
-        String outputPath = "/docs/default";
-
-        // When
-        DocumentorConfig.OutputSettings settings = new DocumentorConfig.OutputSettings(
-            outputPath, null, null, null, null, null, null
-        );
-
-        // Then
+}        // Then
         assertEquals(outputPath, settings.outputPath());
         assertEquals("markdown", settings.format()); // Default
         assertEquals(true, settings.includeIcons()); // Default
@@ -133,7 +254,7 @@ class DocumentorConfigTest {
         Boolean includeIcons = false;
 
         // When
-        DocumentorConfig.OutputSettings settings = new DocumentorConfig.OutputSettings(
+        OutputSettings settings = new OutputSettings(
             outputPath, format, includeIcons, null, null, null, null
         );
 
@@ -154,7 +275,7 @@ class DocumentorConfigTest {
         List<String> excludePatterns = List.of("**/build/**", "**/dist/**");
 
         // When
-        DocumentorConfig.AnalysisSettings settings = new DocumentorConfig.AnalysisSettings(
+        AnalysisSettings settings = new AnalysisSettings(
             includePrivateMembers, maxThreads, supportedLanguages, excludePatterns
         );
 
@@ -168,7 +289,7 @@ class DocumentorConfigTest {
     @Test
     void testAnalysisSettings_WithDefaultValues() {
         // When
-        DocumentorConfig.AnalysisSettings settings = new DocumentorConfig.AnalysisSettings(
+        AnalysisSettings settings = new AnalysisSettings(
             null, null, null, null
         );
 
@@ -186,7 +307,7 @@ class DocumentorConfigTest {
         Integer maxThreads = 4;
 
         // When
-        DocumentorConfig.AnalysisSettings settings = new DocumentorConfig.AnalysisSettings(
+        AnalysisSettings settings = new AnalysisSettings(
             includePrivateMembers, maxThreads, null, null
         );
 
@@ -200,14 +321,14 @@ class DocumentorConfigTest {
     @Test
     void testDocumentorConfig_Complete() {
         // Given
-        List<DocumentorConfig.LlmModelConfig> llmModels = List.of(
-            new DocumentorConfig.LlmModelConfig("gpt-4", "key1", null, null, null, null, null),
-            new DocumentorConfig.LlmModelConfig("claude-3", "key2", null, null, null, null, null)
+        List<LlmModelConfig> llmModels = List.of(
+            new LlmModelConfig("gpt-4", "key1", null, null, null, null, null),
+            new LlmModelConfig("claude-3", "key2", null, null, null, null, null)
         );
-        DocumentorConfig.OutputSettings outputSettings = new DocumentorConfig.OutputSettings(
+        OutputSettings outputSettings = new OutputSettings(
             "/docs", null, null, null, null, null, null
         );
-        DocumentorConfig.AnalysisSettings analysisSettings = new DocumentorConfig.AnalysisSettings(
+        AnalysisSettings analysisSettings = new AnalysisSettings(
             null, null, null, null
         );
 
@@ -223,10 +344,10 @@ class DocumentorConfigTest {
     @Test
     void testDocumentorConfig_WithNullAnalysisSettings() {
         // Given
-        List<DocumentorConfig.LlmModelConfig> llmModels = List.of(
-            new DocumentorConfig.LlmModelConfig("gpt-4", "key1", null, null, null, null, null)
+        List<LlmModelConfig> llmModels = List.of(
+            new LlmModelConfig("gpt-4", "key1", null, null, null, null, null)
         );
-        DocumentorConfig.OutputSettings outputSettings = new DocumentorConfig.OutputSettings(
+        OutputSettings outputSettings = new OutputSettings(
             "/docs", null, null, null, null, null, null
         );
 
@@ -243,13 +364,13 @@ class DocumentorConfigTest {
     @Test
     void testAnalysisSettings_IncludePrivateMembersMethod() {
         // Given
-        DocumentorConfig.AnalysisSettings settingsTrue = new DocumentorConfig.AnalysisSettings(
+        AnalysisSettings settingsTrue = new AnalysisSettings(
             true, null, null, null
         );
-        DocumentorConfig.AnalysisSettings settingsFalse = new DocumentorConfig.AnalysisSettings(
+        AnalysisSettings settingsFalse = new AnalysisSettings(
             false, null, null, null
         );
-        DocumentorConfig.AnalysisSettings settingsDefault = new DocumentorConfig.AnalysisSettings(
+        AnalysisSettings settingsDefault = new AnalysisSettings(
             null, null, null, null
         );
 
@@ -262,13 +383,13 @@ class DocumentorConfigTest {
     @Test
     void testLlmModelConfig_Equality() {
         // Given
-        DocumentorConfig.LlmModelConfig config1 = new DocumentorConfig.LlmModelConfig(
+        LlmModelConfig config1 = new LlmModelConfig(
             "gpt-4", "key1", "endpoint1", 1000, 0.5, 30, Map.of()
         );
-        DocumentorConfig.LlmModelConfig config2 = new DocumentorConfig.LlmModelConfig(
+        LlmModelConfig config2 = new LlmModelConfig(
             "gpt-4", "key1", "endpoint1", 1000, 0.5, 30, Map.of()
         );
-        DocumentorConfig.LlmModelConfig config3 = new DocumentorConfig.LlmModelConfig(
+        LlmModelConfig config3 = new LlmModelConfig(
             "claude-3", "key2", "endpoint2", 2000, 0.7, 60, Map.of()
         );
 
@@ -282,13 +403,13 @@ class DocumentorConfigTest {
     @Test
     void testOutputSettings_Equality() {
         // Given
-        DocumentorConfig.OutputSettings settings1 = new DocumentorConfig.OutputSettings(
+        OutputSettings settings1 = new OutputSettings(
             "/docs", "markdown", true, true, 0.90, false, "/docs"
         );
-        DocumentorConfig.OutputSettings settings2 = new DocumentorConfig.OutputSettings(
+        OutputSettings settings2 = new OutputSettings(
             "/docs", "markdown", true, true, 0.90, false, "/docs"
         );
-        DocumentorConfig.OutputSettings settings3 = new DocumentorConfig.OutputSettings(
+        OutputSettings settings3 = new OutputSettings(
             "/other", "html", false, false, 0.95, true, "/other"
         );
 
@@ -302,13 +423,13 @@ class DocumentorConfigTest {
     @Test
     void testAnalysisSettings_Equality() {
         // Given
-        DocumentorConfig.AnalysisSettings settings1 = new DocumentorConfig.AnalysisSettings(
+        AnalysisSettings settings1 = new AnalysisSettings(
             true, 4, List.of("java"), List.of("**/test/**")
         );
-        DocumentorConfig.AnalysisSettings settings2 = new DocumentorConfig.AnalysisSettings(
+        AnalysisSettings settings2 = new AnalysisSettings(
             true, 4, List.of("java"), List.of("**/test/**")
         );
-        DocumentorConfig.AnalysisSettings settings3 = new DocumentorConfig.AnalysisSettings(
+        AnalysisSettings settings3 = new AnalysisSettings(
             false, 8, List.of("python"), List.of("**/build/**")
         );
 
@@ -322,13 +443,13 @@ class DocumentorConfigTest {
     @Test
     void testDocumentorConfig_ToString() {
         // Given
-        List<DocumentorConfig.LlmModelConfig> llmModels = List.of(
-            new DocumentorConfig.LlmModelConfig("gpt-4", "key1", null, null, null, null, null)
+        List<LlmModelConfig> llmModels = List.of(
+            new LlmModelConfig("gpt-4", "key1", null, null, null, null, null)
         );
-        DocumentorConfig.OutputSettings outputSettings = new DocumentorConfig.OutputSettings(
+        OutputSettings outputSettings = new OutputSettings(
             "/docs", null, null, null, null, null, null
         );
-        DocumentorConfig.AnalysisSettings analysisSettings = new DocumentorConfig.AnalysisSettings(
+        AnalysisSettings analysisSettings = new AnalysisSettings(
             null, null, null, null
         );
         DocumentorConfig config = new DocumentorConfig(llmModels, outputSettings, analysisSettings);
@@ -349,7 +470,7 @@ class DocumentorConfigTest {
         int expectedProcessors = Runtime.getRuntime().availableProcessors();
 
         // When
-        DocumentorConfig.AnalysisSettings settings = new DocumentorConfig.AnalysisSettings(
+        AnalysisSettings settings = new AnalysisSettings(
             null, null, null, null
         );
 

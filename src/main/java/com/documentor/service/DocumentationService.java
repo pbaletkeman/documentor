@@ -7,7 +7,6 @@ import com.documentor.service.documentation.MainDocumentationGenerator;
 import com.documentor.service.documentation.UnitTestDocumentationGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Files;
@@ -18,14 +17,14 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * 📝 Documentation Generation Service - Refactored for Low Complexity
- * 
+ *
  * Orchestrates the generation of markdown documentation from code analysis results.
  * Delegates to specialized generators for different types of documentation.
  */
 @Service
 public class DocumentationService {
 
-    private static final Logger logger = LoggerFactory.getLogger(DocumentationService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DocumentationService.class);
 
     private final MainDocumentationGenerator mainDocGenerator;
     private final ElementDocumentationGenerator elementDocGenerator;
@@ -33,7 +32,6 @@ public class DocumentationService {
     private final MermaidDiagramService mermaidDiagramService;
     private final DocumentorConfig config;
 
-    @Autowired
     public DocumentationService(
             MainDocumentationGenerator mainDocGenerator,
             ElementDocumentationGenerator elementDocGenerator,
@@ -48,25 +46,13 @@ public class DocumentationService {
     }
 
     /**
-     * @deprecated Use new constructor with injected generators for better modularity
-     */
-    @Deprecated
-    public DocumentationService(LlmService llmService, MermaidDiagramService mermaidDiagramService, DocumentorConfig config) {
-        this.mainDocGenerator = new MainDocumentationGenerator(config);
-        this.elementDocGenerator = new ElementDocumentationGenerator(llmService);
-        this.testDocGenerator = new UnitTestDocumentationGenerator(llmService, config);
-        this.mermaidDiagramService = mermaidDiagramService;
-        this.config = config;
-    }
-
-    /**
      * 📚 Generates complete project documentation
-     * 
+     *
      * @param analysis The project analysis results
      * @return CompletableFuture containing the path to generated documentation
      */
     public CompletableFuture<String> generateDocumentation(ProjectAnalysis analysis) {
-        logger.info("📝 Starting documentation generation for project: {}", analysis.projectPath());
+        LOGGER.info("📝 Starting documentation generation for project: {}", analysis.projectPath());
 
         return CompletableFuture.supplyAsync(() -> {
             try {
@@ -91,14 +77,14 @@ public class DocumentationService {
                 if (config.outputSettings().generateMermaidDiagrams()) {
                     List<String> diagramPaths = mermaidDiagramService.generateClassDiagrams(
                         analysis, config.outputSettings().mermaidOutputPath()).join();
-                    logger.info("✅ Generated {} Mermaid diagrams", diagramPaths.size());
+                    LOGGER.info("✅ Generated {} Mermaid diagrams", diagramPaths.size());
                 }
 
-                logger.info("✅ Documentation generated successfully at: {}", outputPath);
+                LOGGER.info("✅ Documentation generated successfully at: {}", outputPath);
                 return outputPath.toString();
 
             } catch (Exception e) {
-                logger.error("❌ Error generating documentation: {}", e.getMessage(), e);
+                LOGGER.error("❌ Error generating documentation: {}", e.getMessage(), e);
                 throw new RuntimeException("Failed to generate documentation", e);
             }
         });

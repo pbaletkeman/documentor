@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 
 /**
  * 🔍 Python Regex Analyzer
- * 
+ *
  * Specialized component for regex-based Python code analysis as a fallback
  * when AST parsing is not available or fails.
  */

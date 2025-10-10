@@ -1,6 +1,6 @@
 package com.documentor.service.llm;
 
-import com.documentor.config.DocumentorConfig;
+import com.documentor.config.model.LlmModelConfig;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,8 +18,10 @@ public class LlmRequestFormatter {
         this.modelTypeDetector = modelTypeDetector;
     }
 
-    /** 🎯 Creates formatted request based on model type */
-    public Map<String, Object> createRequest(DocumentorConfig.LlmModelConfig model, String prompt) {
+        /**
+     * 🎯 Creates request body based on model type
+     */
+    public Map<String, Object> createRequest(LlmModelConfig model, String prompt) {
         if (modelTypeDetector.isOllamaModel(model)) {
             return createOllamaRequest(model, prompt);
         } else if (modelTypeDetector.isOpenAICompatible(model)) {
@@ -29,17 +31,23 @@ public class LlmRequestFormatter {
         }
     }
 
-    private Map<String, Object> createOllamaRequest(DocumentorConfig.LlmModelConfig model, String prompt) {
-        return Map.of("model", model.name(), "prompt", prompt, "stream", false);
+    private Map<String, Object> createOllamaRequest(LlmModelConfig model, String prompt) {
+        return Map.of("model", model.name(), "prompt", prompt);
     }
 
-    private Map<String, Object> createOpenAIRequest(DocumentorConfig.LlmModelConfig model, String prompt) {
-        return Map.of("model", model.name(), 
-                     "messages", List.of(Map.of("role", "user", "content", prompt)),
-                     "max_tokens", model.maxTokens(), "temperature", model.temperature());
+    private Map<String, Object> createOpenAIRequest(LlmModelConfig model, String prompt) {
+        return Map.of(
+            "model", model.name(),
+            "messages", List.of(Map.of("role", "user", "content", prompt)),
+            "max_tokens", model.maxTokens(),
+            "timeout", model.timeoutSeconds()
+        );
     }
 
-    private Map<String, Object> createGenericRequest(DocumentorConfig.LlmModelConfig model, String prompt) {
-        return Map.of("prompt", prompt, "max_tokens", model.maxTokens(), "temperature", model.temperature());
+    private Map<String, Object> createGenericRequest(final LlmModelConfig model, final String prompt) {
+        return Map.of("input", prompt, "parameters", Map.of(
+            "max_tokens", model.maxTokens(),
+            "timeout", model.timeoutSeconds()
+        ));
     }
 }

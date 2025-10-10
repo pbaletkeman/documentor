@@ -2,7 +2,7 @@ package com.documentor.model;
 
 /**
  * 🏷️ Code Element Type Enumeration
- * 
+ *
  * Represents the different types of code elements that can be analyzed:
  * - CLASS: Classes, interfaces, enums
  * - METHOD: Methods, functions, procedures
@@ -16,7 +16,7 @@ public enum CodeElementType {
     private final String icon;
     private final String description;
 
-    CodeElementType(String icon, String description) {
+    CodeElementType(final String icon, final String description) {
         this.icon = icon;
         this.description = description;
     }

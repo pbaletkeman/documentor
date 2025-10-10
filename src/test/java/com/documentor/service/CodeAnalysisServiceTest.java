@@ -1,6 +1,7 @@
 package com.documentor.service;
 
 import com.documentor.config.DocumentorConfig;
+import com.documentor.config.model.AnalysisSettings;
 import com.documentor.model.CodeElement;
 import com.documentor.model.CodeElementType;
 import com.documentor.model.ProjectAnalysis;
@@ -37,7 +38,7 @@ class CodeAnalysisServiceTest {
     private DocumentorConfig config;
 
     @Mock
-    private DocumentorConfig.AnalysisSettings analysisSettings;
+    private AnalysisSettings analysisSettings;
 
     private CodeAnalysisService codeAnalysisService;
 

@@ -1,6 +1,6 @@
 package com.documentor.service.llm;
 
-import com.documentor.config.DocumentorConfig;
+import com.documentor.config.model.LlmModelConfig;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
@@ -18,10 +18,14 @@ public class LlmResponseParser {
     }
 
     /** 📤 Main response parsing method that delegates to specific parsers */
-    public String parseResponse(String response, DocumentorConfig.LlmModelConfig model) {
+    public String parseResponse(final String response, final LlmModelConfig model) {
         try {
-            if (modelTypeDetector.isOllamaModel(model)) return parseOllamaResponse(response);
-            if (modelTypeDetector.isOpenAICompatible(model)) return parseOpenAIResponse(response);
+            if (modelTypeDetector.isOllamaModel(model)) {
+                return parseOllamaResponse(response);
+            }
+            if (modelTypeDetector.isOpenAICompatible(model)) {
+                return parseOpenAIResponse(response);
+            }
             return parseGenericResponse(response);
         } catch (Exception e) {
             return response;
@@ -34,7 +38,7 @@ public class LlmResponseParser {
     }
 
     /** 🤖 Extracts response from OpenAI format */
-    public String parseOpenAIResponse(String response) {
+    public String parseOpenAIResponse(final String response) {
         try {
             JsonNode json = objectMapper.readTree(response);
             if (json.has("choices") && json.get("choices").isArray()) {
@@ -42,7 +46,9 @@ public class LlmResponseParser {
                 if (choice.has("message") && choice.get("message").has("content")) {
                     return choice.get("message").get("content").asText();
                 }
-                if (choice.has("text")) return choice.get("text").asText();
+                if (choice.has("text")) {
+                    return choice.get("text").asText();
+                }
             }
             return json.asText();
         } catch (Exception e) {
@@ -51,15 +57,17 @@ public class LlmResponseParser {
     }
 
     /** 🔧 Extracts response from generic format */
-    public String parseGenericResponse(String response) {
+    public String parseGenericResponse(final String response) {
         return parseGenericResponse(response, "text", "content", "response", "output", "result");
     }
 
-    private String parseGenericResponse(String response, String... fields) {
+    private String parseGenericResponse(final String response, final String... fields) {
         try {
             JsonNode json = objectMapper.readTree(response);
             for (String field : fields) {
-                if (json.has(field)) return json.get(field).asText();
+                if (json.has(field)) {
+                    return json.get(field).asText();
+                }
             }
             return json.asText();
         } catch (Exception e) {

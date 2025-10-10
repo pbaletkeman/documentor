@@ -6,6 +6,9 @@ import static org.mockito.Mockito.*;
 import java.util.List;
 import java.util.concurrent.Executor;
 
+import com.documentor.config.model.AnalysisSettings;
+import com.documentor.config.model.LlmModelConfig;
+import com.documentor.config.model.OutputSettings;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,7 +29,7 @@ class AppConfigTest {
     private DocumentorConfig documentorConfig;
 
     @Mock
-    private DocumentorConfig.AnalysisSettings analysisSettings;
+    private AnalysisSettings analysisSettings;
 
     private AppConfig appConfig;
 
@@ -146,14 +149,14 @@ class AppConfigTest {
     @Test
     void testAppConfigWithCompleteDocumentorConfig() {
         // Given
-        List<DocumentorConfig.LlmModelConfig> llmModels = List.of(
-            new DocumentorConfig.LlmModelConfig("gpt-4", "key1", null, null, null, null, null)
+        List<LlmModelConfig> llmModels = List.of(
+            new LlmModelConfig("gpt-4", "openai", null, "key1", null, null)
         );
-        DocumentorConfig.OutputSettings outputSettings = new DocumentorConfig.OutputSettings(
-            "/docs", null, null, null, null, null, null
+        OutputSettings outputSettings = new OutputSettings(
+            "docs", "markdown", false, false
         );
-        DocumentorConfig.AnalysisSettings analysisSettings = new DocumentorConfig.AnalysisSettings(
-            null, 6, null, null
+        AnalysisSettings analysisSettings = new AnalysisSettings(
+            false, 3, List.of("**/*.java"), List.of()
         );
         DocumentorConfig realConfig = new DocumentorConfig(llmModels, outputSettings, analysisSettings);
 

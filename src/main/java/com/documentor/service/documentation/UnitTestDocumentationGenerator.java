@@ -1,5 +1,6 @@
 package com.documentor.service.documentation;
 
+import com.documentor.constants.ApplicationConstants;
 import com.documentor.config.DocumentorConfig;
 import com.documentor.model.CodeElementType;
 import com.documentor.model.ProjectAnalysis;
@@ -16,14 +17,14 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * 🧪 Unit Test Documentation Generator
- * 
+ *
  * Specialized component for generating unit test documentation and suggestions.
  * Handles AI-generated test cases and coverage recommendations.
  */
 @Component
 public class UnitTestDocumentationGenerator {
 
-    private static final Logger logger = LoggerFactory.getLogger(UnitTestDocumentationGenerator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UnitTestDocumentationGenerator.class);
 
     private final LlmService llmService;
     private final DocumentorConfig config;
@@ -60,14 +61,14 @@ public class UnitTestDocumentationGenerator {
                             try {
                                 Files.write(testsDir.resolve("unit-tests.md"), testDoc.toString().getBytes());
                             } catch (IOException e) {
-                                logger.error("❌ Error writing test documentation: {}", e.getMessage());
+                                LOGGER.error("❌ Error writing test documentation: {}", e.getMessage());
                             }
                         })
                         .join();
 
                 return null;
             } catch (Exception e) {
-                logger.error("❌ Error generating test documentation: {}", e.getMessage());
+                LOGGER.error("❌ Error generating test documentation: {}", e.getMessage());
                 throw new RuntimeException("Failed to generate test documentation", e);
             }
         });
@@ -80,6 +81,7 @@ public class UnitTestDocumentationGenerator {
         String icon = config.outputSettings().includeIcons() ? "🧪 " : "";
         doc.append(String.format("# %sGenerated Unit Tests\n\n", icon));
         doc.append("This file contains AI-generated unit test suggestions for the analyzed code.\n\n");
-        doc.append(String.format("Target Coverage: %.0f%%\n\n", config.outputSettings().targetCoverage() * 100));
+        doc.append(String.format("Target Coverage: %.0f%%\n\n",
+            config.outputSettings().targetCoverage() * ApplicationConstants.PERCENTAGE_MULTIPLIER));
     }
 }

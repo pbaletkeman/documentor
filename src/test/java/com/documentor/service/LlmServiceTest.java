@@ -1,6 +1,9 @@
 package com.documentor.service;
 
 import com.documentor.config.DocumentorConfig;
+import com.documentor.config.model.LlmModelConfig;
+import com.documentor.config.model.AnalysisSettings;
+import com.documentor.config.model.OutputSettings;
 import com.documentor.model.CodeElement;
 import com.documentor.model.CodeElementType;
 import com.documentor.service.llm.LlmApiClient;
@@ -45,16 +48,16 @@ class LlmServiceTest {
 
     @BeforeEach
     void setUp() {
-        DocumentorConfig.OutputSettings outputSettings = new DocumentorConfig.OutputSettings(
-            "output", "markdown", true, true, 0.9, false, "output"
+        OutputSettings outputSettings = new OutputSettings(
+            "output", "markdown", true, true
         );
         
-        DocumentorConfig.AnalysisSettings analysisSettings = new DocumentorConfig.AnalysisSettings(
-            true, 50, List.of("public"), List.of(".git")
+        AnalysisSettings analysisSettings = new AnalysisSettings(
+            true, 50, List.of("**/*.java"), List.of("**/test/**")
         );
         
-        DocumentorConfig.LlmModelConfig testModel = new DocumentorConfig.LlmModelConfig(
-            "test-model", "api-key", "http://test.api", 1000, 0.7, 30, Map.of()
+        LlmModelConfig testModel = new LlmModelConfig(
+            "test-model", "openai", "http://test.api", "api-key", 1000, 30
         );
         
         config = new DocumentorConfig(List.of(testModel), outputSettings, analysisSettings);

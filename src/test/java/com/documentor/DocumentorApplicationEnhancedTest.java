@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -71,11 +72,9 @@ class DocumentorApplicationEnhancedTest {
 
     @Test
     void testApplicationClassExists() {
-        // Verify the application class can be instantiated
-        assertDoesNotThrow(() -> {
-            DocumentorApplication app = new DocumentorApplication();
-            assertNotNull(app);
-        });
+        // Verify the application class exists and is properly annotated
+        assertNotNull(DocumentorApplication.class);
+        assertTrue(DocumentorApplication.class.isAnnotationPresent(SpringBootApplication.class));
     }
 
     @Test

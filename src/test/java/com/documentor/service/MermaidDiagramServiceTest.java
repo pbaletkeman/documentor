@@ -157,8 +157,7 @@ class MermaidDiagramServiceTest {
         
         // Class name with special characters should be sanitized
         assertThat(content).contains("Special"); // Just verify the class is present
-        // TODO: Fix sanitization - assertThat(content).contains("class Special_Class");
-        // TODO: Fix sanitization - assertThat(content).doesNotContain("Special$Class");
+        // Note: Mermaid diagram sanitization needs improvement for special characters
     }
 
     @Test

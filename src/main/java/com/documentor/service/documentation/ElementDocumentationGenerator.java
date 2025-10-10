@@ -13,14 +13,14 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * 🔧 Element Documentation Generator
- * 
+ *
  * Specialized component for generating detailed documentation for individual code elements.
  * Handles element-specific documentation files with LLM-generated content.
  */
 @Component
 public class ElementDocumentationGenerator {
 
-    private static final Logger logger = LoggerFactory.getLogger(ElementDocumentationGenerator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ElementDocumentationGenerator.class);
 
     private final LlmService llmService;
 
@@ -46,17 +46,17 @@ public class ElementDocumentationGenerator {
                         content.append(element.signature()).append("\n");
                         content.append("```\n\n");
 
-                        String fileName = String.format("%s-%s.md", 
-                            element.type().name().toLowerCase(), 
+                        String fileName = String.format("%s-%s.md",
+                            element.type().name().toLowerCase(),
                             element.name().replaceAll("[^a-zA-Z0-9]", "_"));
-                        
+
                         Path elementPath = outputPath.resolve("elements").resolve(fileName);
                         Files.createDirectories(elementPath.getParent());
                         Files.write(elementPath, content.toString().getBytes());
 
                         return null;
                     } catch (IOException e) {
-                        logger.error("❌ Error writing element documentation: {}", e.getMessage());
+                        LOGGER.error("❌ Error writing element documentation: {}", e.getMessage());
                         throw new RuntimeException("Failed to write element documentation", e);
                     }
                 });
@@ -65,9 +65,13 @@ public class ElementDocumentationGenerator {
     /**
      * 🔍 Determines programming language from file extension
      */
-    private String getLanguageFromFile(String filePath) {
-        if (filePath.endsWith(".java")) return "java";
-        if (filePath.endsWith(".py")) return "python";
+    private String getLanguageFromFile(final String filePath) {
+        if (filePath.endsWith(".java")) {
+            return "java";
+        }
+        if (filePath.endsWith(".py")) {
+            return "python";
+        }
         return "text";
     }
 }

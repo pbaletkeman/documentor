@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 /**
  * 🔍 Diagram Element Filter
- * 
+ *
  * Specialized component for filtering and organizing code elements for diagram generation.
  * Handles visibility rules and element grouping logic.
  */
@@ -52,7 +52,7 @@ public class DiagramElementFilter {
      */
     public List<CodeElement> getElementsForClass(List<CodeElement> allElements, CodeElement classElement) {
         Set<String> classFiles = Set.of(classElement.filePath());
-        
+
         return allElements.stream()
             .filter(e -> classFiles.contains(e.filePath()))
             .filter(this::isNonPrivate)
@@ -65,17 +65,17 @@ public class DiagramElementFilter {
     public boolean isNonPrivate(CodeElement element) {
         String signature = element.signature().toLowerCase();
         String name = element.name();
-        
+
         // Check for explicit private modifier
         if (signature.contains("private")) {
             return false;
         }
-        
+
         // Check for Python private convention (starting with underscore)
         if (name.startsWith("_")) {
             return false;
         }
-        
+
         // Check for Java package-private (no explicit modifier)
         // This is a simplified check - a more sophisticated approach would parse the full AST
         return true;

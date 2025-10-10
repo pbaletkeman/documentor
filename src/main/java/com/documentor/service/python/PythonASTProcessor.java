@@ -1,5 +1,6 @@
 package com.documentor.service.python;
 
+import com.documentor.constants.ApplicationConstants;
 import com.documentor.model.CodeElement;
 import com.documentor.model.CodeElementType;
 import org.slf4j.Logger;
@@ -16,14 +17,14 @@ import java.util.List;
 
 /**
  * 🐍 Python AST Processor
- * 
+ *
  * Specialized component for analyzing Python files using Python's AST module
  * via subprocess execution.
  */
 @Component
 public class PythonASTProcessor {
 
-    private static final Logger logger = LoggerFactory.getLogger(PythonASTProcessor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PythonASTProcessor.class);
 
     /**
      * 🔬 Analyzes Python file using Python's AST module via subprocess
@@ -35,11 +36,11 @@ public class PythonASTProcessor {
         String pythonScript = """
             import ast
             import sys
-            
+
             def analyze_file(filename):
                 with open(filename, 'r', encoding='utf-8') as f:
                     source = f.read()
-                
+
                 try:
                     tree = ast.parse(source, filename)
                     for node in ast.walk(tree):
@@ -56,7 +57,7 @@ public class PythonASTProcessor {
                                     print(f"VARIABLE|{target.id}|{node.lineno}||")
                 except Exception as e:
                     print(f"ERROR|{str(e)}", file=sys.stderr)
-            
+
             if __name__ == '__main__':
                 analyze_file(sys.argv[1])
             """;
@@ -96,12 +97,14 @@ public class PythonASTProcessor {
      */
     private CodeElement parseASTOutput(String line, Path filePath) {
         String[] parts = line.split("\\|", -1);
-        if (parts.length < 4) return null;
+        if (parts.length < ApplicationConstants.MINIMUM_PARTS_FOR_PARSING) {
+            return null;
+        }
 
         String type = parts[0];
         String name = parts[1];
         int lineNumber = Integer.parseInt(parts[2]);
-        String docstring = parts[3];
+        String docstring = parts[ApplicationConstants.FUNCTION_DEF_PREFIX_LENGTH];
 
         return switch (type) {
             case "CLASS" -> new CodeElement(
@@ -116,8 +119,9 @@ public class PythonASTProcessor {
                 List.of()
             );
             case "FUNCTION" -> {
-                List<String> parameters = parts.length > 4 && !parts[4].isEmpty() 
-                    ? List.of(parts[4].split(",")) 
+                List<String> parameters = parts.length > ApplicationConstants.PARAMETERS_ARRAY_INDEX &&
+                    !parts[ApplicationConstants.PARAMETERS_ARRAY_INDEX].isEmpty()
+                    ? List.of(parts[ApplicationConstants.PARAMETERS_ARRAY_INDEX].split(","))
                     : List.of();
                 yield new CodeElement(
                     CodeElementType.METHOD,

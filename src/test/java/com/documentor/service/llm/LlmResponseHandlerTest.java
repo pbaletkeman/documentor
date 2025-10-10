@@ -1,10 +1,8 @@
 package com.documentor.service.llm;
 
-import com.documentor.config.DocumentorConfig;
+import com.documentor.config.model.LlmModelConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class LlmResponseHandlerTest {
 
     private LlmResponseHandler responseHandler;
-    private DocumentorConfig.LlmModelConfig testModel;
+    private LlmModelConfig testModel;
 
     @BeforeEach
     void setUp() {
@@ -22,8 +20,8 @@ class LlmResponseHandlerTest {
         LlmResponseParser responseParser = new LlmResponseParser(modelTypeDetector);
         responseHandler = new LlmResponseHandler(responseParser, modelTypeDetector);
         
-        testModel = new DocumentorConfig.LlmModelConfig(
-            "test-model", "api-key", "http://test.api", 1000, 0.7, 30, Map.of()
+        testModel = new LlmModelConfig(
+            "test-model", "openai", "http://test.api", "api-key", 1000, 30
         );
     }
 
@@ -67,12 +65,12 @@ class LlmResponseHandlerTest {
 
     @Test
     void testResponseHandlerWithDifferentModels() {
-        DocumentorConfig.LlmModelConfig ollamaModel = new DocumentorConfig.LlmModelConfig(
-            "llama2", "", "http://localhost:11434/api/generate", 1000, 0.7, 30, Map.of()
+        LlmModelConfig ollamaModel = new LlmModelConfig(
+            "llama2", "ollama", "http://localhost:11434/api/generate", "", 1000, 30
         );
         
-        DocumentorConfig.LlmModelConfig openaiModel = new DocumentorConfig.LlmModelConfig(
-            "gpt-4", "sk-test", "https://api.openai.com/v1/completions", 1000, 0.7, 30, Map.of()
+        LlmModelConfig openaiModel = new LlmModelConfig(
+            "gpt-4", "openai", "https://api.openai.com/v1/completions", "sk-test", 1000, 30
         );
         
         // Test that component can handle different model configurations

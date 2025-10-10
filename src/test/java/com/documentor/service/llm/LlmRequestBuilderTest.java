@@ -1,6 +1,6 @@
 package com.documentor.service.llm;
 
-import com.documentor.config.DocumentorConfig;
+import com.documentor.config.model.LlmModelConfig;
 import com.documentor.model.CodeElement;
 import com.documentor.model.CodeElementType;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,8 +17,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class LlmRequestBuilderTest {
 
     private LlmRequestBuilder requestBuilder;
-    private DocumentorConfig.LlmModelConfig ollamaModel;
-    private DocumentorConfig.LlmModelConfig openaiModel;
+    private LlmModelConfig ollamaModel;
+    private LlmModelConfig openaiModel;
 
     @BeforeEach
     void setUp() {
@@ -27,12 +27,12 @@ class LlmRequestBuilderTest {
         LlmRequestFormatter requestFormatter = new LlmRequestFormatter(modelTypeDetector);
         requestBuilder = new LlmRequestBuilder(promptTemplates, requestFormatter);
         
-        ollamaModel = new DocumentorConfig.LlmModelConfig(
-            "llama2", "", "http://localhost:11434/api/generate", 1000, 0.7, 30, Map.of()
+        ollamaModel = new LlmModelConfig(
+            "llama2", "ollama", "http://localhost:11434/api/generate", "", 1000, 30
         );
         
-        openaiModel = new DocumentorConfig.LlmModelConfig(
-            "gpt-4", "sk-test", "https://api.openai.com/v1/completions", 1000, 0.7, 30, Map.of()
+        openaiModel = new LlmModelConfig(
+            "gpt-4", "openai", "https://api.openai.com/v1/completions", "sk-test", 1000, 30
         );
     }
 
@@ -81,8 +81,8 @@ class LlmRequestBuilderTest {
         String prompt = "Test prompt";
         
         // Test generic model (not Ollama or OpenAI)
-        DocumentorConfig.LlmModelConfig genericModel = new DocumentorConfig.LlmModelConfig(
-            "claude-3", "api-key", "https://api.anthropic.com", 2000, 0.5, 60, Map.of()
+        LlmModelConfig genericModel = new LlmModelConfig(
+            "claude-3", "anthropic", "https://api.anthropic.com", "api-key", 2000, 60
         );
         
         Map<String, Object> requestBody = requestBuilder.buildRequestBody(genericModel, prompt);

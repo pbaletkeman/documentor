@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 
 /**
  * 📁 Diagram Path Manager
- * 
+ *
  * Specialized component for managing output paths and file naming for diagrams.
  * Handles path resolution and file naming conventions.
  */
@@ -21,7 +21,7 @@ public class DiagramPathManager {
         if (customOutputPath != null && !customOutputPath.trim().isEmpty()) {
             return customOutputPath;
         }
-        
+
         // Default to same directory as source file
         Path sourcePath = Paths.get(sourceFilePath);
         return sourcePath.getParent() != null ? sourcePath.getParent().toString() : ".";

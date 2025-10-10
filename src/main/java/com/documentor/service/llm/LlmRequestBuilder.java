@@ -1,6 +1,6 @@
 package com.documentor.service.llm;
 
-import com.documentor.config.DocumentorConfig;
+import com.documentor.config.model.LlmModelConfig;
 import com.documentor.model.CodeElement;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +21,7 @@ public class LlmRequestBuilder {
     }
 
     /** 🏗️ Builds complete request body for LLM API */
-    public Map<String, Object> buildRequestBody(DocumentorConfig.LlmModelConfig model, String prompt) {
+    public Map<String, Object> buildRequestBody(LlmModelConfig model, String prompt) {
         return requestFormatter.createRequest(model, prompt);
     }
 

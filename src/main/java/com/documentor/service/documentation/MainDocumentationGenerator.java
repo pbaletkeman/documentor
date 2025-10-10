@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 /**
  * 📖 Main Documentation Generator
- * 
+ *
  * Specialized component for generating the main README.md documentation.
  * Handles project overview, statistics, and API reference sections.
  */
@@ -57,9 +57,9 @@ public class MainDocumentationGenerator {
     private void appendHeader(StringBuilder doc, ProjectAnalysis analysis) {
         String projectName = Paths.get(analysis.projectPath()).getFileName().toString();
         String icon = config.outputSettings().includeIcons() ? "📚 " : "";
-        
+
         doc.append(String.format("# %s%s - Code Documentation\n\n", icon, projectName));
-        doc.append(String.format("Generated on: %s\n\n", 
+        doc.append(String.format("Generated on: %s\n\n",
             LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))));
         doc.append("This documentation was automatically generated using AI-powered code analysis.\n\n");
     }
@@ -70,17 +70,17 @@ public class MainDocumentationGenerator {
     private void appendStatistics(StringBuilder doc, ProjectAnalysis analysis) {
         ProjectAnalysis.AnalysisStats stats = analysis.getStats();
         String icon = config.outputSettings().includeIcons() ? "📊 " : "";
-        
+
         doc.append(String.format("## %sProject Statistics\n\n", icon));
         doc.append(stats.getFormattedSummary()).append("\n\n");
-        
+
         doc.append("| Element Type | Count |\n");
         doc.append("|--------------|-------|\n");
-        doc.append(String.format("| %s Classes | %d |\n", 
+        doc.append(String.format("| %s Classes | %d |\n",
             config.outputSettings().includeIcons() ? "📦" : "", stats.classCount()));
-        doc.append(String.format("| %s Methods | %d |\n", 
+        doc.append(String.format("| %s Methods | %d |\n",
             config.outputSettings().includeIcons() ? "🔧" : "", stats.methodCount()));
-        doc.append(String.format("| %s Fields | %d |\n", 
+        doc.append(String.format("| %s Fields | %d |\n",
             config.outputSettings().includeIcons() ? "📊" : "", stats.fieldCount()));
         doc.append("\n");
     }
@@ -93,11 +93,11 @@ public class MainDocumentationGenerator {
         doc.append(String.format("## %sAPI Reference\n\n", icon));
 
         Map<String, List<CodeElement>> elementsByFile = analysis.getElementsByFile();
-        
+
         elementsByFile.forEach((filePath, elements) -> {
             String fileName = Paths.get(filePath).getFileName().toString();
             doc.append(String.format("### %s\n\n", fileName));
-            
+
             elements.stream()
                     .collect(Collectors.groupingBy(CodeElement::type))
                     .forEach((type, typeElements) -> {
@@ -117,13 +117,13 @@ public class MainDocumentationGenerator {
         String icon = config.outputSettings().includeIcons() ? "💡 " : "";
         doc.append(String.format("## %sUsage Examples\n\n", icon));
         doc.append("Detailed usage examples can be found in the individual element documentation files.\n\n");
-        
+
         // Add links to detailed documentation
         doc.append("### Quick Links\n\n");
         analysis.getClasses().stream()
                 .limit(5) // Show first 5 classes as examples
                 .forEach(cls -> {
-                    String fileName = String.format("elements/class-%s.md", 
+                    String fileName = String.format("elements/class-%s.md",
                         cls.name().replaceAll("[^a-zA-Z0-9]", "_"));
                     doc.append(String.format("- [%s](%s)\n", cls.name(), fileName));
                 });
