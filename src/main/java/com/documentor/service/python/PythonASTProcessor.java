@@ -1,8 +1,6 @@
 package com.documentor.service.python;
 
-import com.documentor.constants.ApplicationConstants;
 import com.documentor.model.CodeElement;
-import com.documentor.model.CodeElementType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -19,134 +17,73 @@ import java.util.List;
  * 🐍 Python AST Processor
  *
  * Specialized component for analyzing Python files using Python's AST module
- * via subprocess execution.
+ * via subprocess execution. Refactored for reduced complexity.
  */
 @Component
 public class PythonASTProcessor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PythonASTProcessor.class);
+    // Logger used in future error handling methods - required by design
+    private final PythonASTCommandBuilder commandBuilder;
+    
+    public PythonASTProcessor(PythonASTCommandBuilder commandBuilder) {
+        this.commandBuilder = commandBuilder;
+    }
 
     /**
      * 🔬 Analyzes Python file using Python's AST module via subprocess
      */
     public List<CodeElement> analyzeWithAST(Path filePath) throws IOException, InterruptedException {
         List<CodeElement> elements = new ArrayList<>();
-
-        // Python script to analyze AST
-        String pythonScript = """
-            import ast
-            import sys
-
-            def analyze_file(filename):
-                with open(filename, 'r', encoding='utf-8') as f:
-                    source = f.read()
-
-                try:
-                    tree = ast.parse(source, filename)
-                    for node in ast.walk(tree):
-                        if isinstance(node, ast.ClassDef):
-                            if not node.name.startswith('_'):
-                                print(f"CLASS|{node.name}|{node.lineno}|{ast.get_docstring(node) or ''}")
-                        elif isinstance(node, ast.FunctionDef):
-                            if not node.name.startswith('_'):
-                                args = [arg.arg for arg in node.args.args]
-                                print(f"FUNCTION|{node.name}|{node.lineno}|{ast.get_docstring(node) or ''}|{','.join(args)}")
-                        elif isinstance(node, ast.Assign):
-                            for target in node.targets:
-                                if isinstance(target, ast.Name) and not target.id.startswith('_'):
-                                    print(f"VARIABLE|{target.id}|{node.lineno}||")
-                except Exception as e:
-                    print(f"ERROR|{str(e)}", file=sys.stderr)
-
-            if __name__ == '__main__':
-                analyze_file(sys.argv[1])
-            """;
-
-        // Write temporary Python script
-        Path tempScript = Files.createTempFile("python_analyzer", ".py");
-        Files.write(tempScript, pythonScript.getBytes());
-
+        Path tempScript = null;
+        
         try {
-            ProcessBuilder pb = new ProcessBuilder("python", tempScript.toString(), filePath.toString());
+            // Get temporary script from command builder
+            tempScript = commandBuilder.writeTempScript();
+            
+            // Create and execute process
+            ProcessBuilder pb = commandBuilder.createProcessBuilder(tempScript, filePath);
             Process process = pb.start();
-
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    CodeElement element = parseASTOutput(line, filePath);
-                    if (element != null) {
-                        elements.add(element);
-                    }
-                }
-            }
-
+            
+            // Process the output
+            elements = processOutput(process, filePath);
+            
+            // Check exit code
             int exitCode = process.waitFor();
             if (exitCode != 0) {
                 throw new IOException("Python AST analysis failed with exit code: " + exitCode);
             }
-
         } finally {
-            Files.deleteIfExists(tempScript);
+            // Clean up
+            if (tempScript != null) {
+                Files.deleteIfExists(tempScript);
+            }
         }
 
         return elements;
     }
-
+    
     /**
-     * 📝 Parses output from Python AST analysis
+     * 📋 Processes the output of the Python process
      */
-    private CodeElement parseASTOutput(String line, Path filePath) {
-        String[] parts = line.split("\\|", -1);
-        if (parts.length < ApplicationConstants.MINIMUM_PARTS_FOR_PARSING) {
-            return null;
-        }
-
-        String type = parts[0];
-        String name = parts[1];
-        int lineNumber = Integer.parseInt(parts[2]);
-        String docstring = parts[ApplicationConstants.FUNCTION_DEF_PREFIX_LENGTH];
-
-        return switch (type) {
-            case "CLASS" -> new CodeElement(
-                CodeElementType.CLASS,
-                name,
-                "class " + name,
-                filePath.toString(),
-                lineNumber,
-                "class " + name + ":",
-                docstring,
-                List.of(),
-                List.of()
-            );
-            case "FUNCTION" -> {
-                List<String> parameters = parts.length > ApplicationConstants.PARAMETERS_ARRAY_INDEX &&
-                    !parts[ApplicationConstants.PARAMETERS_ARRAY_INDEX].isEmpty()
-                    ? List.of(parts[ApplicationConstants.PARAMETERS_ARRAY_INDEX].split(","))
-                    : List.of();
-                yield new CodeElement(
-                    CodeElementType.METHOD,
-                    name,
-                    "def " + name + "(" + String.join(", ", parameters) + ")",
-                    filePath.toString(),
-                    lineNumber,
-                    "def " + name + "(" + String.join(", ", parameters) + "):",
-                    docstring,
-                    parameters,
-                    List.of()
-                );
+    private List<CodeElement> processOutput(Process process, Path filePath) throws IOException {
+        List<CodeElement> elements = new ArrayList<>();
+        
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(process.getInputStream()))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                try {
+                    CodeElement element = commandBuilder.parseASTOutputLine(line, filePath);
+                    if (element != null) {
+                        elements.add(element);
+                    }
+                } catch (Exception e) {
+                    LOGGER.warn("Failed to parse Python AST output line: {}", line, e);
+                }
             }
-            case "VARIABLE" -> new CodeElement(
-                CodeElementType.FIELD,
-                name,
-                name,
-                filePath.toString(),
-                lineNumber,
-                name + " = ...",
-                "",
-                List.of(),
-                List.of()
-            );
-            default -> null;
-        };
+        }
+        
+        return elements;
     }
 }

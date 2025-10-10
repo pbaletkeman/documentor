@@ -1,0 +1,85 @@
+package com.documentor.service.llm;
+
+import com.documentor.config.model.LlmModelConfig;
+import org.junit.jupiter.api.Test;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+/**
+ * Enhanced test for LlmApiClient focused only on core functionality
+ * without complex mocking of WebClient, which has generic type issues
+ */
+class LlmApiClientSimplifiedTest {
+
+    @Test
+    void testErrorHandlingWithNullApi() {
+        // Setup
+        WebClient mockWebClient = mock(WebClient.class);
+        LlmModelTypeDetector modelTypeDetector = mock(LlmModelTypeDetector.class);
+        
+        // Make WebClient.post() throw NullPointerException
+        when(mockWebClient.post()).thenThrow(new NullPointerException("API endpoint not available"));
+        
+        // Create client and model
+        LlmApiClient apiClient = new LlmApiClient(mockWebClient, modelTypeDetector);
+        LlmModelConfig model = new LlmModelConfig(
+            "test-model", "test-provider", "http://test.api", "key", 1000, 30
+        );
+        
+        // Execute
+        String result = apiClient.callLlmModel(model, "http://test.api", null);
+        
+        // Verify proper error handling
+        assertTrue(result.contains("Error generating content with test-model"));
+        verify(mockWebClient).post();
+    }
+    
+    @Test
+    void testErrorHandlingWithTimeoutException() {
+        // Setup - direct testing of error case without complex mocking
+        WebClient mockWebClient = mock(WebClient.class);
+        LlmModelTypeDetector modelTypeDetector = mock(LlmModelTypeDetector.class);
+        
+        // Make WebClient.post() throw timeout exception
+        when(mockWebClient.post()).thenThrow(new RuntimeException("Request timeout after 30 seconds"));
+        
+        // Create client and model with different names to check they appear in error
+        LlmApiClient apiClient = new LlmApiClient(mockWebClient, modelTypeDetector);
+        LlmModelConfig model = new LlmModelConfig(
+            "gpt-4", "openai", "https://api.openai.com", "key", 1000, 30
+        );
+        
+        // Execute
+        String result = apiClient.callLlmModel(model, "https://api.openai.com", null);
+        
+        // Verify proper error handling with correct model name
+        assertTrue(result.contains("Error generating content with gpt-4"));
+        assertFalse(result.contains("test-model")); // Should not contain wrong model name
+        verify(mockWebClient).post();
+    }
+    
+    @Test
+    void testErrorHandlingWithIllegalArgumentException() {
+        // Setup
+        WebClient mockWebClient = mock(WebClient.class);
+        LlmModelTypeDetector modelTypeDetector = mock(LlmModelTypeDetector.class);
+        
+        // Make WebClient.post() throw IllegalArgumentException
+        when(mockWebClient.post()).thenThrow(new IllegalArgumentException("Invalid request format"));
+        
+        // Create client and model
+        LlmApiClient apiClient = new LlmApiClient(mockWebClient, modelTypeDetector);
+        LlmModelConfig model = new LlmModelConfig(
+            "claude-3", "anthropic", "https://api.anthropic.com", "key", 2000, 60
+        );
+        
+        // Execute
+        String result = apiClient.callLlmModel(model, "https://api.anthropic.com", null);
+        
+        // Verify proper error handling
+        assertTrue(result.contains("Error generating content with claude-3"));
+        verify(mockWebClient).post();
+    }
+}

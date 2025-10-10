@@ -6,6 +6,7 @@ import com.documentor.model.ProjectAnalysis;
 import com.documentor.service.diagram.DiagramElementFilter;
 import com.documentor.service.diagram.DiagramPathManager;
 import com.documentor.service.diagram.MermaidClassDiagramGenerator;
+import com.documentor.service.diagram.TestDiagramGeneratorFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,10 +36,11 @@ class MermaidDiagramServiceTest {
         diagramElementFilter = new DiagramElementFilter();
         diagramPathManager = new DiagramPathManager();
         mermaidClassDiagramGenerator = new MermaidClassDiagramGenerator();
+        TestDiagramGeneratorFactory generatorFactory = new TestDiagramGeneratorFactory(mermaidClassDiagramGenerator);
         mermaidDiagramService = new MermaidDiagramService(
             diagramElementFilter,
             diagramPathManager,
-            mermaidClassDiagramGenerator
+            generatorFactory
         );
     }
 

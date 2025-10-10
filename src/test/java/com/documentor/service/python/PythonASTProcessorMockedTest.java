@@ -9,18 +9,27 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 /**
- * Advanced test class for PythonASTProcessor using MockedStatic
+ * Advanced test class for PythonASTProcessor using mocked dependencies
  */
 @ExtendWith(MockitoExtension.class)
 public class PythonASTProcessorMockedTest {
 
     @InjectMocks
     private PythonASTProcessor astProcessor;
+    
+    @Mock
+    private PythonASTCommandBuilder commandBuilder;
 
     @TempDir
     private Path tempDir;
@@ -30,74 +39,142 @@ public class PythonASTProcessorMockedTest {
 
     @Test
     void testParseLargerDataSet() throws Exception {
-        // Create a set of test data to parse
+        // Mock the necessary components
         Path filePath = tempDir.resolve("test.py");
+        Path tempScript = tempDir.resolve("analyzer.py");
         
-        // Test multiple types of Python code elements
-        String[] testLines = {
-            "CLASS|ComplexClass|10|Complex class with multiple methods",
-            "FUNCTION|complex_method|15|Method that does complex things|param1,param2,param3",
-            "VARIABLE|CONSTANT_VALUE|20||",
-            "CLASS|EmptyClass|30|",
-            "FUNCTION|no_doc_method|35||param1",
-            "VARIABLE|empty_var|40||",
-            "INVALID|Format" // Should be ignored
-        };
+        // Setup the process mock
+        when(commandBuilder.writeTempScript()).thenReturn(tempScript);
         
-        // Parse each line
-        for (String line : testLines) {
-            var method = PythonASTProcessor.class.getDeclaredMethod(
-                "parseASTOutput", String.class, Path.class);
-            method.setAccessible(true);
+        // Mock process input stream with test data
+        String testOutput = 
+            "CLASS|ComplexClass|10|Complex class with multiple methods\n" +
+            "FUNCTION|complex_method|15|Method that does complex things|param1,param2,param3\n";
+        
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(testOutput.getBytes());
+        when(process.getInputStream()).thenReturn(inputStream);
+        when(process.waitFor()).thenReturn(0);
+        
+        // Mock the command builder to return valid CodeElements
+        when(commandBuilder.parseASTOutputLine(contains("CLASS|ComplexClass"), eq(filePath)))
+            .thenReturn(new CodeElement(
+                CodeElementType.CLASS,
+                "ComplexClass",
+                "class ComplexClass",
+                filePath.toString(),
+                10,
+                "class ComplexClass:",
+                "Complex class with multiple methods",
+                List.of(),
+                List.of()
+            ));
             
-            CodeElement element = (CodeElement) method.invoke(astProcessor, line, filePath);
-            
-            // Skip invalid lines
-            if (line.startsWith("INVALID")) {
-                assertNull(element);
-                continue;
-            }
-            
-            // Validate common fields
-            assertNotNull(element);
-            assertEquals(filePath.toString(), element.filePath());
-            
-            // Validate type-specific fields
-            String[] parts = line.split("\\|", -1);
-            switch (parts[0]) {
-                case "CLASS":
-                    assertEquals(CodeElementType.CLASS, element.type());
-                    assertEquals(parts[1], element.name());
-                    assertEquals(Integer.parseInt(parts[2]), element.lineNumber());
-                    assertEquals(parts[3], element.documentation());
-                    assertEquals("class " + parts[1] + ":", element.signature());
-                    break;
-                    
-                case "FUNCTION":
-                    assertEquals(CodeElementType.METHOD, element.type());
-                    assertEquals(parts[1], element.name());
-                    assertEquals(Integer.parseInt(parts[2]), element.lineNumber());
-                    assertEquals(parts[3], element.documentation());
-                    assertTrue(element.signature().startsWith("def " + parts[1]));
-                    if (parts.length > 4 && !parts[4].isEmpty()) {
-                        String[] params = parts[4].split(",");
-                        assertEquals(params.length, element.parameters().size());
-                        for (int i = 0; i < params.length; i++) {
-                            assertEquals(params[i], element.parameters().get(i));
-                        }
-                    }
-                    break;
-                    
-                case "VARIABLE":
-                    assertEquals(CodeElementType.FIELD, element.type());
-                    assertEquals(parts[1], element.name());
-                    assertEquals(Integer.parseInt(parts[2]), element.lineNumber());
-                    assertTrue(element.documentation().isEmpty());
-                    assertEquals(parts[1] + " = ...", element.signature());
-                    break;
-            }
-        }
+        when(commandBuilder.parseASTOutputLine(contains("FUNCTION|complex_method"), eq(filePath)))
+            .thenReturn(new CodeElement(
+                CodeElementType.METHOD,
+                "complex_method",
+                "def complex_method(param1, param2, param3)",
+                filePath.toString(),
+                15,
+                "def complex_method(param1, param2, param3):",
+                "Method that does complex things",
+                List.of("param1", "param2", "param3"),
+                List.of()
+            ));
+        
+        // Create a ProcessBuilder mock that returns our mocked Process
+        ProcessBuilder mockProcessBuilder = mock(ProcessBuilder.class);
+        when(mockProcessBuilder.start()).thenReturn(process);
+        when(commandBuilder.createProcessBuilder(any(), any())).thenReturn(mockProcessBuilder);
+        
+        // Execute the test method
+        List<CodeElement> elements = astProcessor.analyzeWithAST(filePath);
+        
+        // Verify the interactions
+        verify(commandBuilder).writeTempScript();
+        verify(commandBuilder).createProcessBuilder(any(), eq(filePath));
+        
+        // Should have called parseASTOutputLine for each line
+        verify(commandBuilder, atLeast(1)).parseASTOutputLine(anyString(), eq(filePath));
+        
+        // Assertions
+        assertNotNull(elements);
+        assertFalse(elements.isEmpty());
+        assertEquals(2, elements.size());
+        
+        // Verify the content of the elements
+        CodeElement classElement = elements.stream()
+            .filter(e -> e.type() == CodeElementType.CLASS)
+            .findFirst()
+            .orElse(null);
+        assertNotNull(classElement);
+        assertEquals("ComplexClass", classElement.name());
+        assertEquals(10, classElement.lineNumber());
+        
+        CodeElement methodElement = elements.stream()
+            .filter(e -> e.type() == CodeElementType.METHOD)
+            .findFirst()
+            .orElse(null);
+        assertNotNull(methodElement);
+        assertEquals("complex_method", methodElement.name());
+        assertEquals(15, methodElement.lineNumber());
+        assertEquals(3, methodElement.parameters().size());
     }
-
-    /* Let's skip the mocked process tests due to mocking complexity */
+    
+    @Test
+    void testErrorHandling() throws Exception {
+        // Mock for error case
+        Path filePath = tempDir.resolve("error_test.py");
+        Path tempScript = tempDir.resolve("analyzer.py");
+        
+        // Setup mock to simulate error conditions
+        when(commandBuilder.writeTempScript()).thenReturn(tempScript);
+        
+        // Mock the process builder
+        ProcessBuilder mockProcessBuilder = mock(ProcessBuilder.class);
+        
+        // Create a process with a non-zero exit code
+        Process mockProcess = mock(Process.class);
+        ByteArrayInputStream inputStream = new ByteArrayInputStream("".getBytes());
+        when(mockProcess.getInputStream()).thenReturn(inputStream);
+        when(mockProcess.waitFor()).thenReturn(1); // Non-zero exit code indicating error
+        
+        when(mockProcessBuilder.start()).thenReturn(mockProcess);
+        when(commandBuilder.createProcessBuilder(any(), eq(filePath))).thenReturn(mockProcessBuilder);
+        
+        // Execute the method and expect an exception
+        assertThrows(IOException.class, () -> {
+            astProcessor.analyzeWithAST(filePath);
+        });
+        
+        // Verify all mocks were used correctly
+        verify(commandBuilder).writeTempScript();
+        verify(commandBuilder).createProcessBuilder(any(), eq(filePath));
+        verify(mockProcessBuilder).start();
+        verify(mockProcess).getInputStream();
+        verify(mockProcess).waitFor();
+    }
+    
+    @Test
+    void testTempScriptCleanup() throws Exception {
+        // Mock the necessary components
+        Path filePath = tempDir.resolve("test.py");
+        Path tempScript = Files.createTempFile(tempDir, "analyzer", ".py");
+        
+        // Setup the process mock
+        when(commandBuilder.writeTempScript()).thenReturn(tempScript);
+        
+        // Create a ProcessBuilder mock that throws an exception
+        ProcessBuilder mockProcessBuilder = mock(ProcessBuilder.class);
+        when(mockProcessBuilder.start()).thenThrow(new IOException("Process failed to start"));
+        when(commandBuilder.createProcessBuilder(any(), any())).thenReturn(mockProcessBuilder);
+        
+        // Execute the method and expect an exception
+        assertThrows(IOException.class, () -> {
+            astProcessor.analyzeWithAST(filePath);
+        });
+        
+        // Verify the temp file was cleaned up
+        assertFalse(Files.exists(tempScript), "Temp script should be cleaned up even when exception occurs");
+    }
 }

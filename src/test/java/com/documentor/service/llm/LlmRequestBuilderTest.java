@@ -116,4 +116,35 @@ class LlmRequestBuilderTest {
         assertTrue(methodPrompt.contains("testMethod"));
         assertTrue(fieldPrompt.contains("testField"));
     }
+    
+    @Test
+    void testCreateUsageExamplePrompt() {
+        CodeElement codeElement = new CodeElement(
+            CodeElementType.METHOD, "exampleMethod", "com.example.TestClass.exampleMethod", 
+            "TestClass.java", 10, "public String exampleMethod(int param) { return \"test\"; }", 
+            "", List.of(), List.of()
+        );
+        
+        String prompt = requestBuilder.createUsageExamplePrompt(codeElement);
+        
+        assertNotNull(prompt);
+        assertTrue(prompt.contains("exampleMethod"));
+        assertTrue(prompt.contains("public String exampleMethod(int param)"));
+    }
+    
+    @Test
+    void testCreateUnitTestPrompt() {
+        CodeElement codeElement = new CodeElement(
+            CodeElementType.METHOD, "methodToTest", "com.example.TestClass.methodToTest", 
+            "TestClass.java", 15, "public int methodToTest(String input) { return input.length(); }", 
+            "", List.of(), List.of()
+        );
+        
+        String prompt = requestBuilder.createUnitTestPrompt(codeElement);
+        
+        assertNotNull(prompt);
+        assertTrue(prompt.contains("methodToTest"));
+        assertTrue(prompt.contains("public int methodToTest(String input)"));
+        assertTrue(prompt.contains("unit test"));
+    }
 }
