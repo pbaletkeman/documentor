@@ -56,7 +56,7 @@ class DocumentationServiceCoverageEnabledTest {
     }
 
     @Test
-    void testGenerateDocumentation_writesReadmeAndInvokesGenerators() throws Exception {
+    void testGenerateDocumentationWritesReadmeAndInvokesGenerators() throws Exception {
         when(mainDocGenerator.generateMainDocumentation(any()))
             .thenReturn(CompletableFuture.completedFuture("# Project Title\nContent"));
 
@@ -95,7 +95,7 @@ class DocumentationServiceCoverageEnabledTest {
     }
 
     @Test
-    void testGenerateDocumentation_withElements_callsElementGenerator() throws Exception {
+    void testGenerateDocumentationWithElementsCallsElementGenerator() throws Exception {
         when(mainDocGenerator.generateMainDocumentation(any()))
             .thenReturn(CompletableFuture.completedFuture("Main content"));
 

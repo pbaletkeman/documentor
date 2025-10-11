@@ -43,7 +43,7 @@ class PythonCodeAnalyzerTest {
     private Path tempDir;
 
     @Test
-    void analyzeFile_withSuccessfulAstProcessing_returnsAstElements() throws IOException, InterruptedException {
+    void analyzeFileWithSuccessfulAstProcessingReturnsAstElements() throws IOException, InterruptedException {
         // Arrange
         Path testFile = createPythonTestFile();
         List<CodeElement> expectedElements = List.of(
@@ -63,7 +63,7 @@ class PythonCodeAnalyzerTest {
     }
 
     @Test
-    void analyzeFile_whenAstProcessingFails_usesRegexAnalyzer() throws IOException, InterruptedException {
+    void analyzeFileWhenAstProcessingFailsUsesRegexAnalyzer() throws IOException, InterruptedException {
         // Arrange
         Path testFile = createPythonTestFile();
         List<CodeElement> expectedElements = List.of(
@@ -84,7 +84,7 @@ class PythonCodeAnalyzerTest {
     }
 
     @Test
-    void analyzeFile_whenAstReturnsEmpty_usesRegexAnalyzer() throws IOException, InterruptedException {
+    void analyzeFileWhenAstReturnsEmptyUsesRegexAnalyzer() throws IOException, InterruptedException {
         // Arrange
         Path testFile = createPythonTestFile();
         List<CodeElement> expectedElements = List.of(

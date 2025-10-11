@@ -28,7 +28,7 @@ class UnitTestDocumentationGeneratorTest {
     private static final int LINE_NUMBER_FIFTEEN = 15;
 
     @Test
-    void generateUnitTestDocumentation_writesFileAndIncludesHeader(@TempDir Path tempDir) throws Exception {
+    void generateUnitTestDocumentationWritesFileAndIncludesHeader(@TempDir Path tempDir) throws Exception {
         LlmService llm = mock(LlmService.class);
 
         DocumentorConfig config = mock(DocumentorConfig.class);
@@ -67,7 +67,7 @@ class UnitTestDocumentationGeneratorTest {
     }
 
     @Test
-    void appendHeader_handlesIconsDisabled(@TempDir Path tempDir) throws Exception {
+    void appendHeaderHandlesIconsDisabled(@TempDir Path tempDir) throws Exception {
         LlmService llm = mock(LlmService.class);
 
         DocumentorConfig config = mock(DocumentorConfig.class);
@@ -92,7 +92,7 @@ class UnitTestDocumentationGeneratorTest {
     }
 
     @Test
-    void generateUnitTestDocumentation_filtersOutFieldElements(@TempDir Path tempDir) throws Exception {
+    void generateUnitTestDocumentationFiltersOutFieldElements(@TempDir Path tempDir) throws Exception {
         LlmService llm = mock(LlmService.class);
 
         DocumentorConfig config = mock(DocumentorConfig.class);

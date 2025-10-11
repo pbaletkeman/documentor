@@ -26,7 +26,7 @@ class LlmRequestFormatterTest {
     }
 
     @Test
-    void createOllamaRequest_containsStreamAndModel() {
+    void createOllamaRequestContainsStreamAndModel() {
         LlmModelConfig model = new LlmModelConfig("llama2", "ollama", "http://localhost:11434/api/generate", "", 1000, 30);
         Map<String, Object> body = formatter.createRequest(model, "hello");
 
@@ -38,7 +38,7 @@ class LlmRequestFormatterTest {
     }
 
     @Test
-    void createOpenAIRequest_includesTemperatureAndMessages() {
+    void createOpenAIRequestIncludesTemperatureAndMessages() {
         LlmModelConfig model = new LlmModelConfig("gpt-4", "openai", "https://api.openai.com/v1/completions", "sk", 500, 10);
         Map<String, Object> body = formatter.createRequest(model, "what's up");
 
@@ -50,7 +50,7 @@ class LlmRequestFormatterTest {
     }
 
     @Test
-    void createGenericRequest_exposesPromptAndTemperature() {
+    void createGenericRequestExposesPromptAndTemperature() {
         LlmModelConfig model = new LlmModelConfig("claude-3", "anthropic", "https://api.anthropic.com", "key", MAX_TOKENS_LARGE, TIMEOUT_SECONDS);
         Map<String, Object> body = formatter.createRequest(model, "generate something");
 

@@ -72,25 +72,25 @@ class LlmServiceTestTmp {
     }
 
     @Test
-    void generateDocumentation_returnsExtractedContent() {
+    void generateDocumentationReturnsExtractedContent() {
         CompletableFuture<String> result = llmService.generateDocumentation(testElement);
         assertEquals("extracted content", result.join());
     }
 
     @Test
-    void generateUsageExamples_returnsExtractedContent() {
+    void generateUsageExamplesReturnsExtractedContent() {
         CompletableFuture<String> result = llmService.generateUsageExamples(testElement);
         assertEquals("extracted content", result.join());
     }
 
     @Test
-    void generateUnitTests_returnsExtractedContent() {
+    void generateUnitTestsReturnsExtractedContent() {
         CompletableFuture<String> result = llmService.generateUnitTests(testElement);
         assertEquals("extracted content", result.join());
     }
 
     @Test
-    void service_handlesDifferentElementTypes() {
+    void serviceHandlesDifferentElementTypes() {
         CodeElement methodElement = new CodeElement(CodeElementType.METHOD, "testMethod", "com.example.TestClass.testMethod",
                 "TestClass.java", ELEMENT_COUNT_TEST, "public void testMethod()", "", List.of("param1"), List.of("@Test"));
 
@@ -100,7 +100,7 @@ class LlmServiceTestTmp {
     }
 
     @Test
-    void service_constructsWithEmptyModelList() {
+    void serviceConstructsWithEmptyModelList() {
         DocumentorConfig emptyConfig = new DocumentorConfig(List.of(), config.outputSettings(), config.analysisSettings());
         LlmService emptyService = new LlmService(emptyConfig, mockRequestBuilder, mockResponseHandler, mockApiClient);
         assertNotNull(emptyService);
