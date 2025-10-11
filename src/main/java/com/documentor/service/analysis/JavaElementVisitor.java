@@ -39,7 +39,7 @@ public class JavaElementVisitor extends VoidVisitorAdapter<Void> {
     }
 
     @Override
-    public void visit(final ClassOrInterfaceDeclaration declaration, final Void arg) {
+    public final void visit(final ClassOrInterfaceDeclaration declaration, final Void arg) {
         if (shouldInclude(declaration.getModifiers())) {
             String name = declaration.getNameAsString();
             String qualifiedName = declaration.getFullyQualifiedName().orElse(name);
@@ -63,7 +63,7 @@ public class JavaElementVisitor extends VoidVisitorAdapter<Void> {
     }
 
     @Override
-    public void visit(final EnumDeclaration declaration, final Void arg) {
+    public final void visit(final EnumDeclaration declaration, final Void arg) {
         if (shouldInclude(declaration.getModifiers())) {
             String name = declaration.getNameAsString();
             String qualifiedName = declaration.getFullyQualifiedName().orElse(name);
@@ -87,7 +87,7 @@ public class JavaElementVisitor extends VoidVisitorAdapter<Void> {
     }
 
     @Override
-    public void visit(final MethodDeclaration declaration, final Void arg) {
+    public final void visit(final MethodDeclaration declaration, final Void arg) {
         if (shouldInclude(declaration.getModifiers())) {
             String name = declaration.getNameAsString();
             String signature = declaration.getDeclarationAsString();
@@ -111,7 +111,7 @@ public class JavaElementVisitor extends VoidVisitorAdapter<Void> {
     }
 
     @Override
-    public void visit(final FieldDeclaration declaration, final Void arg) {
+    public final void visit(final FieldDeclaration declaration, final Void arg) {
         if (shouldInclude(declaration.getModifiers())) {
             declaration.getVariables().forEach(variable -> {
                 String name = variable.getNameAsString();

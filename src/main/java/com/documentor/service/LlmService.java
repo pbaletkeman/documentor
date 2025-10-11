@@ -36,7 +36,7 @@ public class LlmService {
     }
 
     @Async("llmExecutor")
-    public CompletableFuture<String> generateDocumentation(final CodeElement codeElement) {
+    public final CompletableFuture<String> generateDocumentation(final CodeElement codeElement) {
         LOGGER.debug("Generating documentation for: {}", codeElement.getDisplayName());
 
         if (config.llmModels().isEmpty()) {
@@ -48,7 +48,7 @@ public class LlmService {
     }
 
     @Async("llmExecutor")
-    public CompletableFuture<String> generateUsageExamples(final CodeElement codeElement) {
+    public final CompletableFuture<String> generateUsageExamples(final CodeElement codeElement) {
         LOGGER.debug("Generating usage examples for: {}", codeElement.getDisplayName());
 
         if (config.llmModels().isEmpty()) {
@@ -60,7 +60,7 @@ public class LlmService {
     }
 
     @Async("llmExecutor")
-    public CompletableFuture<String> generateUnitTests(final CodeElement codeElement) {
+    public final CompletableFuture<String> generateUnitTests(final CodeElement codeElement) {
         LOGGER.debug("Generating unit tests for: {}", codeElement.getDisplayName());
 
         if (config.llmModels().isEmpty()) {

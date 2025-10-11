@@ -12,7 +12,7 @@ import java.nio.file.Paths;
  * 📋 Handler for application status and information commands
  */
 @Component
-public class StatusCommandHandler {
+public final class StatusCommandHandler {
 
     private final DocumentorConfig documentorConfig;
 

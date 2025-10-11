@@ -14,7 +14,7 @@ import java.nio.file.Paths;
  * ⚙️ Handler for configuration validation commands
  */
 @Component
-public class ConfigurationCommandHandler {
+public final class ConfigurationCommandHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationCommandHandler.class);
 
