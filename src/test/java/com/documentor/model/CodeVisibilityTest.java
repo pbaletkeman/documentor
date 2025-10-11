@@ -12,7 +12,7 @@ class CodeVisibilityTest {
 
     @Test
     @DisplayName("Should detect private visibility from signature")
-    void testFromSignatureAndName_Private() {
+    void testFromSignatureAndNamePrivate() {
         CodeVisibility result = CodeVisibility.fromSignatureAndName("private void method()", "method");
         assertEquals(CodeVisibility.PRIVATE, result);
         
@@ -23,7 +23,7 @@ class CodeVisibilityTest {
 
     @Test
     @DisplayName("Should detect protected visibility from signature")
-    void testFromSignatureAndName_Protected() {
+    void testFromSignatureAndNameProtected() {
         CodeVisibility result = CodeVisibility.fromSignatureAndName("protected void method()", "method");
         assertEquals(CodeVisibility.PROTECTED, result);
         
@@ -34,7 +34,7 @@ class CodeVisibilityTest {
 
     @Test
     @DisplayName("Should detect public visibility from signature")
-    void testFromSignatureAndName_Public() {
+    void testFromSignatureAndNamePublic() {
         CodeVisibility result = CodeVisibility.fromSignatureAndName("public void method()", "method");
         assertEquals(CodeVisibility.PUBLIC, result);
         
@@ -45,7 +45,7 @@ class CodeVisibilityTest {
 
     @Test
     @DisplayName("Should detect private visibility from Python naming convention")
-    void testFromSignatureAndName_PythonPrivate() {
+    void testFromSignatureAndNamePythonPrivate() {
         // Python private convention with underscore
         CodeVisibility result = CodeVisibility.fromSignatureAndName("def method(self):", "_private_method");
         assertEquals(CodeVisibility.PRIVATE, result);
@@ -57,7 +57,7 @@ class CodeVisibilityTest {
 
     @Test
     @DisplayName("Should default to package private when no modifiers found")
-    void testFromSignatureAndName_PackagePrivate() {
+    void testFromSignatureAndNamePackagePrivate() {
         // No explicit modifiers, no underscore prefix
         CodeVisibility result = CodeVisibility.fromSignatureAndName("void method()", "method");
         assertEquals(CodeVisibility.PACKAGE_PRIVATE, result);
@@ -69,7 +69,7 @@ class CodeVisibilityTest {
 
     @Test
     @DisplayName("Should prioritize explicit modifiers over naming conventions")
-    void testFromSignatureAndName_ModifierPrecedence() {
+    void testFromSignatureAndNameModifierPrecedence() {
         // Explicit public should override underscore naming
         CodeVisibility result = CodeVisibility.fromSignatureAndName("public void method()", "_method");
         assertEquals(CodeVisibility.PUBLIC, result);
@@ -81,7 +81,7 @@ class CodeVisibilityTest {
 
     @Test
     @DisplayName("Should include non-private elements when includePrivate is false")
-    void testShouldInclude_ExcludePrivate() {
+    void testShouldIncludeExcludePrivate() {
         assertFalse(CodeVisibility.PRIVATE.shouldInclude(false), "Private should be excluded when includePrivate is false");
         assertTrue(CodeVisibility.PUBLIC.shouldInclude(false), "Public should be included when includePrivate is false");
         assertTrue(CodeVisibility.PROTECTED.shouldInclude(false), "Protected should be included when includePrivate is false");
@@ -90,7 +90,7 @@ class CodeVisibilityTest {
 
     @Test
     @DisplayName("Should include all elements when includePrivate is true")
-    void testShouldInclude_IncludePrivate() {
+    void testShouldIncludeIncludePrivate() {
         assertTrue(CodeVisibility.PRIVATE.shouldInclude(true), "Private should be included when includePrivate is true");
         assertTrue(CodeVisibility.PUBLIC.shouldInclude(true), "Public should be included when includePrivate is true");
         assertTrue(CodeVisibility.PROTECTED.shouldInclude(true), "Protected should be included when includePrivate is true");
@@ -99,7 +99,7 @@ class CodeVisibilityTest {
 
     @Test
     @DisplayName("Should handle complex signatures and edge cases")
-    void testFromSignatureAndName_ComplexSignatures() {
+    void testFromSignatureAndNameComplexSignatures() {
         // Test that private is detected when present with other modifiers
         CodeVisibility result = CodeVisibility.fromSignatureAndName("static private final void method()", "method");
         assertEquals(CodeVisibility.PRIVATE, result, "Should detect private modifier");
@@ -119,7 +119,7 @@ class CodeVisibilityTest {
 
     @Test
     @DisplayName("Should handle edge cases with null and empty inputs")
-    void testFromSignatureAndName_EdgeCases() {
+    void testFromSignatureAndNameEdgeCases() {
         // Null signature should not throw exception
         CodeVisibility result = CodeVisibility.fromSignatureAndName("", "method");
         assertEquals(CodeVisibility.PACKAGE_PRIVATE, result);

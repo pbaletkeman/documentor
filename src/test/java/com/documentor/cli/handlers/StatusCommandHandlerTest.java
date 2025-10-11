@@ -50,7 +50,7 @@ class StatusCommandHandlerTest {
     }
 
     @Test
-    void showStatus_withExistingProjectDirectory(@TempDir final Path tempDir) throws IOException {
+    void showStatusWithExistingProjectDirectory(@TempDir final Path tempDir) throws IOException {
         // Create a test directory
         Path projectDir = Files.createDirectory(tempDir.resolve("test-project"));
 
@@ -64,7 +64,7 @@ class StatusCommandHandlerTest {
     }
 
     @Test
-    void showStatus_withExistingProjectFile(@TempDir final Path tempDir) throws IOException {
+    void showStatusWithExistingProjectFile(@TempDir final Path tempDir) throws IOException {
         // Create a test file
         Path projectFile = Files.createFile(tempDir.resolve("test-file.txt"));
 
@@ -78,7 +78,7 @@ class StatusCommandHandlerTest {
     }
 
     @Test
-    void showStatus_withNonExistentProjectPath() {
+    void showStatusWithNonExistentProjectPath() {
         StatusCommandHandler handler = new StatusCommandHandler(null);
         String status = handler.handleShowStatus("/non/existent/path", null);
 
@@ -88,7 +88,7 @@ class StatusCommandHandlerTest {
     }
 
     @Test
-    void showStatus_withNullProjectPath() {
+    void showStatusWithNullProjectPath() {
         StatusCommandHandler handler = new StatusCommandHandler(null);
         String status = handler.handleShowStatus(null, null);
 
@@ -97,7 +97,7 @@ class StatusCommandHandlerTest {
     }
 
     @Test
-    void showStatus_withExistingConfigFile(@TempDir final Path tempDir) throws IOException {
+    void showStatusWithExistingConfigFile(@TempDir final Path tempDir) throws IOException {
         // Create a test config file
         Path configFile = Files.createFile(tempDir.resolve("config.json"));
 
@@ -110,7 +110,7 @@ class StatusCommandHandlerTest {
     }
 
     @Test
-    void showStatus_withNonExistentConfigFile() {
+    void showStatusWithNonExistentConfigFile() {
         StatusCommandHandler handler = new StatusCommandHandler(null);
         String status = handler.handleShowStatus(null, "/non/existent/config.json");
 
@@ -120,7 +120,7 @@ class StatusCommandHandlerTest {
     }
 
     @Test
-    void showStatus_withNullConfigPath() {
+    void showStatusWithNullConfigPath() {
         StatusCommandHandler handler = new StatusCommandHandler(null);
         String status = handler.handleShowStatus(null, null);
 
@@ -129,7 +129,7 @@ class StatusCommandHandlerTest {
     }
 
     @Test
-    void showStatus_withNullDocumentorConfig() {
+    void showStatusWithNullDocumentorConfig() {
         StatusCommandHandler handler = new StatusCommandHandler(null);
         String status = handler.handleShowStatus(null, null);
 
@@ -138,7 +138,7 @@ class StatusCommandHandlerTest {
     }
 
     @Test
-    void showStatus_withEmptyLlmModelsList() {
+    void showStatusWithEmptyLlmModelsList() {
         DocumentorConfig cfg = new DocumentorConfig(Collections.emptyList(), null, null);
         StatusCommandHandler handler = new StatusCommandHandler(cfg);
         String status = handler.handleShowStatus(null, null);
@@ -148,7 +148,7 @@ class StatusCommandHandlerTest {
     }
 
     @Test
-    void showStatus_withMultipleLlmModels() {
+    void showStatusWithMultipleLlmModels() {
         LlmModelConfig model1 = new LlmModelConfig("model1", "openai", "http://api1", "key1", MAX_TOKENS_LOWER, TIMEOUT_SECONDS_SHORTER);
         LlmModelConfig model2 = new LlmModelConfig("model2", "ollama", "http://api2", "key2", MAX_TOKENS, TIMEOUT_SECONDS);
 
@@ -164,7 +164,7 @@ class StatusCommandHandlerTest {
     }
 
     @Test
-    void showStatus_withLlmModelWithLongApiKey() {
+    void showStatusWithLlmModelWithLongApiKey() {
         // Create a model with long API key to test truncation
         LlmModelConfig model = new LlmModelConfig("model", "openai", "http://api", "verylongapikeystring123456", MAX_TOKENS_LOWER, TIMEOUT_SECONDS_SHORTER);
 
@@ -177,7 +177,7 @@ class StatusCommandHandlerTest {
     }
 
     @Test
-    void showStatus_withLlmModelWithEmptyApiKey() {
+    void showStatusWithLlmModelWithEmptyApiKey() {
         LlmModelConfig model = new LlmModelConfig("model", "openai", "http://api", "", MAX_TOKENS_LOWER, TIMEOUT_SECONDS_SHORTER);
 
         DocumentorConfig cfg = new DocumentorConfig(List.of(model), null, null);
@@ -189,7 +189,7 @@ class StatusCommandHandlerTest {
     }
 
     @Test
-    void showStatus_withNullOutputSettings() {
+    void showStatusWithNullOutputSettings() {
         DocumentorConfig cfg = new DocumentorConfig(Collections.emptyList(), null, null);
         StatusCommandHandler handler = new StatusCommandHandler(cfg);
         String status = handler.handleShowStatus(null, null);
@@ -199,7 +199,7 @@ class StatusCommandHandlerTest {
     }
 
     @Test
-    void showStatus_withCompleteOutputSettings() {
+    void showStatusWithCompleteOutputSettings() {
         OutputSettings output = new OutputSettings("./docs", "markdown", true, false);
         DocumentorConfig cfg = new DocumentorConfig(Collections.emptyList(), output, null);
         StatusCommandHandler handler = new StatusCommandHandler(cfg);
@@ -214,7 +214,7 @@ class StatusCommandHandlerTest {
     }
 
     @Test
-    void showStatus_withNullAnalysisSettings() {
+    void showStatusWithNullAnalysisSettings() {
         // DocumentorConfig constructor creates default AnalysisSettings even if null is passed
         DocumentorConfig cfg = new DocumentorConfig(Collections.emptyList(), null, null);
         StatusCommandHandler handler = new StatusCommandHandler(cfg);
@@ -227,7 +227,7 @@ class StatusCommandHandlerTest {
     }
 
     @Test
-    void showStatus_withCompleteAnalysisSettings() {
+    void showStatusWithCompleteAnalysisSettings() {
         AnalysisSettings analysis = new AnalysisSettings(false, THREAD_COUNT,
                 List.of("java", "python"), List.of("*.class", "*.pyc"));
         DocumentorConfig cfg = new DocumentorConfig(Collections.emptyList(), null, analysis);
@@ -242,7 +242,7 @@ class StatusCommandHandlerTest {
     }
 
     @Test
-    void showStatus_withLlmModelWithNullApiKey() {
+    void showStatusWithLlmModelWithNullApiKey() {
         // Test branch where model.apiKey() is null - should show "Not set"
         LlmModelConfig model = new LlmModelConfig("model", "openai", "http://api", null, MAX_TOKENS_LOWER, TIMEOUT_SECONDS_SHORTER);
         DocumentorConfig cfg = new DocumentorConfig(List.of(model), null, null);

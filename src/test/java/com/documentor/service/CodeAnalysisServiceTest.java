@@ -57,7 +57,7 @@ class CodeAnalysisServiceTest {
     }
 
     @Test
-    void testAnalyzeProject_EmptyDirectory() throws Exception {
+    void testAnalyzeProjectEmptyDirectory() throws Exception {
         CompletableFuture<ProjectAnalysis> future = codeAnalysisService.analyzeProject(tempDir);
         ProjectAnalysis analysis = future.get();
 
@@ -68,7 +68,7 @@ class CodeAnalysisServiceTest {
     }
 
     @Test
-    void testAnalyzeProject_WithJavaFiles() throws Exception {
+    void testAnalyzeProjectWithJavaFiles() throws Exception {
         // Create Java file
         Path javaFile = tempDir.resolve("Test.java");
         Files.writeString(javaFile, """
@@ -100,7 +100,7 @@ class CodeAnalysisServiceTest {
     }
 
     @Test
-    void testAnalyzeProject_WithPythonFiles() throws Exception {
+    void testAnalyzeProjectWithPythonFiles() throws Exception {
         // Create Python file
         Path pythonFile = tempDir.resolve("test.py");
         Files.writeString(pythonFile, """
@@ -127,7 +127,7 @@ class CodeAnalysisServiceTest {
     }
 
     @Test
-    void testAnalyzeProject_MixedFiles() throws Exception {
+    void testAnalyzeProjectMixedFiles() throws Exception {
         // Create both Java and Python files
         Path javaFile = tempDir.resolve("Test.java");
         Files.writeString(javaFile, "public class Test {}");
@@ -159,7 +159,7 @@ class CodeAnalysisServiceTest {
     }
 
     @Test
-    void testAnalyzeProject_IgnoresNonCodeFiles() throws Exception {
+    void testAnalyzeProjectIgnoresNonCodeFiles() throws Exception {
         // Create various file types
         Files.writeString(tempDir.resolve("README.md"), "# Test");
         Files.writeString(tempDir.resolve("config.json"), "{}");
@@ -175,7 +175,7 @@ class CodeAnalysisServiceTest {
     }
 
     @Test
-    void testAnalyzeProject_HandlesNestedDirectories() throws Exception {
+    void testAnalyzeProjectHandlesNestedDirectories() throws Exception {
         // Create nested directory structure
         Path subDir = tempDir.resolve("src").resolve("main").resolve("java");
         Files.createDirectories(subDir);
@@ -198,7 +198,7 @@ class CodeAnalysisServiceTest {
     }
 
     @Test
-    void testAnalyzeProject_HandlesAnalysisErrors() throws Exception {
+    void testAnalyzeProjectHandlesAnalysisErrors() throws Exception {
         Path javaFile = tempDir.resolve("Test.java");
         Files.writeString(javaFile, "public class Test {}");
 
@@ -215,7 +215,7 @@ class CodeAnalysisServiceTest {
     }
 
     @Test
-    void testAnalyzeProject_NonExistentDirectory() {
+    void testAnalyzeProjectNonExistentDirectory() {
         Path nonExistent = tempDir.resolve("does-not-exist");
 
         assertThrows(Exception.class, () -> {

@@ -42,7 +42,7 @@ class JavaCodeAnalyzerTest {
     }
 
     @Test
-    void analyzeFile_shouldParseAndVisitCompilationUnit() throws IOException {
+    void analyzeFileShouldParseAndVisitCompilationUnit() throws IOException {
         // Arrange
         Path tempFile = Files.createTempFile("test", ".java");
         String validJavaCode = "public class TestClass { public void testMethod() {} }";
@@ -71,7 +71,7 @@ class JavaCodeAnalyzerTest {
     }
 
     @Test
-    void analyzeFile_shouldThrowIOException_whenFileNotFound() {
+    void analyzeFileShouldThrowIOExceptionWhenFileNotFound() {
         // Arrange
         Path nonExistentPath = Path.of("non-existent-file.java");
 
@@ -82,7 +82,7 @@ class JavaCodeAnalyzerTest {
     }
 
     @Test
-    void analyzeFile_shouldCallVisitorProperly() throws IOException {
+    void analyzeFileShouldCallVisitorProperly() throws IOException {
         // Arrange  
         Path tempFile = Files.createTempFile("test", ".java");
         String validJavaCode = "public class TestClass {}";
