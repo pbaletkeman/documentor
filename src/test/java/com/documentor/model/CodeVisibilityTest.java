@@ -15,7 +15,7 @@ class CodeVisibilityTest {
     void testFromSignatureAndNamePrivate() {
         CodeVisibility result = CodeVisibility.fromSignatureAndName("private void method()", "method");
         assertEquals(CodeVisibility.PRIVATE, result);
-        
+
         // Test case insensitive
         result = CodeVisibility.fromSignatureAndName("PRIVATE void method()", "method");
         assertEquals(CodeVisibility.PRIVATE, result);
@@ -26,7 +26,7 @@ class CodeVisibilityTest {
     void testFromSignatureAndNameProtected() {
         CodeVisibility result = CodeVisibility.fromSignatureAndName("protected void method()", "method");
         assertEquals(CodeVisibility.PROTECTED, result);
-        
+
         // Test case insensitive
         result = CodeVisibility.fromSignatureAndName("PROTECTED void method()", "method");
         assertEquals(CodeVisibility.PROTECTED, result);
@@ -37,7 +37,7 @@ class CodeVisibilityTest {
     void testFromSignatureAndNamePublic() {
         CodeVisibility result = CodeVisibility.fromSignatureAndName("public void method()", "method");
         assertEquals(CodeVisibility.PUBLIC, result);
-        
+
         // Test case insensitive
         result = CodeVisibility.fromSignatureAndName("PUBLIC void method()", "method");
         assertEquals(CodeVisibility.PUBLIC, result);
@@ -49,7 +49,7 @@ class CodeVisibilityTest {
         // Python private convention with underscore
         CodeVisibility result = CodeVisibility.fromSignatureAndName("def method(self):", "_private_method");
         assertEquals(CodeVisibility.PRIVATE, result);
-        
+
         // Double underscore should also be private
         result = CodeVisibility.fromSignatureAndName("def method(self):", "__private_method");
         assertEquals(CodeVisibility.PRIVATE, result);
@@ -61,7 +61,7 @@ class CodeVisibilityTest {
         // No explicit modifiers, no underscore prefix
         CodeVisibility result = CodeVisibility.fromSignatureAndName("void method()", "method");
         assertEquals(CodeVisibility.PACKAGE_PRIVATE, result);
-        
+
         // Empty signature
         result = CodeVisibility.fromSignatureAndName("", "method");
         assertEquals(CodeVisibility.PACKAGE_PRIVATE, result);
@@ -73,7 +73,7 @@ class CodeVisibilityTest {
         // Explicit public should override underscore naming
         CodeVisibility result = CodeVisibility.fromSignatureAndName("public void method()", "_method");
         assertEquals(CodeVisibility.PUBLIC, result);
-        
+
         // Explicit private should be detected even with public in name
         result = CodeVisibility.fromSignatureAndName("private void publicMethod()", "publicMethod");
         assertEquals(CodeVisibility.PRIVATE, result);
@@ -103,15 +103,15 @@ class CodeVisibilityTest {
         // Test that private is detected when present with other modifiers
         CodeVisibility result = CodeVisibility.fromSignatureAndName("static private final void method()", "method");
         assertEquals(CodeVisibility.PRIVATE, result, "Should detect private modifier");
-        
+
         // Complex Java signature with only public
         result = CodeVisibility.fromSignatureAndName("public static synchronized void method() throws Exception", "method");
         assertEquals(CodeVisibility.PUBLIC, result);
-        
+
         // Complex Python signature without explicit visibility
         result = CodeVisibility.fromSignatureAndName("def calculate_value(self, param):", "calculate_value");
         assertEquals(CodeVisibility.PACKAGE_PRIVATE, result, "Should default to package private for regular method names");
-        
+
         // Test with mixed case
         result = CodeVisibility.fromSignatureAndName("PROTECTED void method()", "method");
         assertEquals(CodeVisibility.PROTECTED, result, "Should handle uppercase modifiers");
@@ -123,11 +123,11 @@ class CodeVisibilityTest {
         // Null signature should not throw exception
         CodeVisibility result = CodeVisibility.fromSignatureAndName("", "method");
         assertEquals(CodeVisibility.PACKAGE_PRIVATE, result);
-        
+
         // Method name without underscore prefix
         result = CodeVisibility.fromSignatureAndName("def method(self):", "method");
         assertEquals(CodeVisibility.PACKAGE_PRIVATE, result);
-        
+
         // Empty method name (edge case)
         result = CodeVisibility.fromSignatureAndName("void method()", "");
         assertEquals(CodeVisibility.PACKAGE_PRIVATE, result);

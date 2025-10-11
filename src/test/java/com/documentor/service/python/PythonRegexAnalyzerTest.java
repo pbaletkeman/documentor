@@ -25,7 +25,7 @@ import static org.mockito.Mockito.mock;
 
 @DisplayName("Python Regex Analyzer Tests")
 class PythonRegexAnalyzerTest {
-    
+
     // Test constants for magic number violations
     private static final int FUNCTION_LINE_START = 20;
     private static final int VARIABLE_LINE_START = 40;

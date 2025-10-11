@@ -72,11 +72,11 @@ class LlmApiClientEnhancedTest_fixed {
         LlmModelConfig modelWithKey = new LlmModelConfig(
             "gpt-4", "openai", "https://api.openai.com/v1/chat/completions", "sk-test-key", 30, 60
         );
-        
+
         LlmModelConfig modelWithoutKey = new LlmModelConfig(
             "gpt-4", "openai", "https://api.openai.com/v1/chat/completions", null, 30, 60
         );
-        
+
         LlmModelConfig modelWithEmptyKey = new LlmModelConfig(
             "gpt-4", "openai", "https://api.openai.com/v1/chat/completions", "", 30, 60
         );
@@ -84,9 +84,9 @@ class LlmApiClientEnhancedTest_fixed {
         // Test API key validation
         assertNotNull(modelWithKey.apiKey());
         assertFalse(modelWithKey.apiKey().trim().isEmpty());
-        
+
         assertNull(modelWithoutKey.apiKey());
-        
+
         assertNotNull(modelWithEmptyKey.apiKey());
         assertTrue(modelWithEmptyKey.apiKey().trim().isEmpty());
     }

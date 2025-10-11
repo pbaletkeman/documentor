@@ -24,7 +24,7 @@ import org.springframework.web.reactive.function.client.WebClient;
  */
 @ExtendWith(MockitoExtension.class)
 class AppConfigTest {
-    
+
     // Test constants for magic number violations
     private static final int TEST_THREAD_COUNT = 4;
     private static final int TEST_THREAD_COUNT_DOUBLE = 8;

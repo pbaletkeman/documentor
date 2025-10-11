@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 @DisplayName("Analysis Settings Tests")
 class AnalysisSettingsTest {
 
-    // Test constants for magic number violations  
+    // Test constants for magic number violations
     private static final int MAX_DEPTH_FIVE = 5;
     private static final int MAX_DEPTH_EIGHT = 8;
     private static final int MAX_DEPTH_NEGATIVE = -5;

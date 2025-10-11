@@ -10,12 +10,12 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class DocumentorConfigTest {
-    
+
     // Test constants for magic number violations
     private static final int MAX_TOKENS = 2000;
     private static final int TIMEOUT_SECONDS = 60;
     private static final int MAX_DEPTH = 3;
-    
+
     @Test
     void testLlmModelConfigCreation() {
         String name = "gpt-4";

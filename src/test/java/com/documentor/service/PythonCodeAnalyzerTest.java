@@ -28,7 +28,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 
 @ExtendWith(MockitoExtension.class)
 class PythonCodeAnalyzerTest {
-    
+
     // Test constants for magic number violations
     private static final int ELEMENT_LINE_NUMBER = 3;
     private static final int LINE_NUMBER_ONE = 1;

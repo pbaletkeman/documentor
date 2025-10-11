@@ -27,7 +27,7 @@ import static org.mockito.Mockito.never;
  */
 @ExtendWith(MockitoExtension.class)
 public class PythonElementExtractorMockTest {
-    
+
     // Test constants for magic number violations
     private static final int TEST_METHOD_LINE_NUMBER = 5;
 

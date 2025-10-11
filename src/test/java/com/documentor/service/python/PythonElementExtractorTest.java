@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PythonElementExtractorTest {
-    
+
     // Test constants for magic number violations
     private static final int OUT_OF_BOUNDS_INDEX = 10;
 

@@ -102,7 +102,7 @@ class UnitTestDocumentationGeneratorTest {
         when(outputSettings.targetCoverage()).thenReturn(TARGET_COVERAGE_GOOD);
 
         List<String> empty = List.of();
-        
+
         // Create both FIELD and non-FIELD elements to test filter logic
         CodeElement fieldElement = new CodeElement(
             CodeElementType.FIELD,

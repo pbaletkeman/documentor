@@ -56,20 +56,20 @@ class MainDocumentationGeneratorTest {
     @Test
     void testGenerateMainDocumentationWithoutIcons() {
         MockitoAnnotations.openMocks(this);
-        
+
         // Create mocked output settings that return false for includeIcons
         OutputSettings mockOutputSettings = org.mockito.Mockito.mock(OutputSettings.class);
         when(mockOutputSettings.includeIcons()).thenReturn(false);
         when(mockOutputSettings.outputPath()).thenReturn("test-output");
         when(mockOutputSettings.format()).thenReturn("markdown");
-        
+
         // Create config with mocked output settings
         AnalysisSettings analysisSettings = new AnalysisSettings(true, 3, List.of("**/*.java"), List.of());
         LlmModelConfig model = new LlmModelConfig("m", "ollama", "http://x", null, 500, 10);
         DocumentorConfig mockConfig = new DocumentorConfig(List.of(model), mockOutputSettings, analysisSettings);
-        
+
         MainDocumentationGenerator generatorWithMock = new MainDocumentationGenerator(mockConfig);
-        
+
         CodeElement e1 = new CodeElement(CodeElementType.CLASS, "TestClass", "com.example.TestClass", "/src/TestClass.java", 1, "public class TestClass{}", "", List.of(), List.of());
         ProjectAnalysis analysis = new ProjectAnalysis("/project/path", List.of(e1), System.currentTimeMillis());
 
@@ -84,7 +84,7 @@ class MainDocumentationGeneratorTest {
         assertFalse(doc.contains("🔧"), "Should not contain tool icon when icons disabled");
         assertFalse(doc.contains("📋"), "Should not contain clipboard icon when icons disabled");
         assertFalse(doc.contains("💡"), "Should not contain lightbulb icon when icons disabled");
-        
+
         // But the content should still be there
         assertTrue(doc.contains("Project Statistics"));
         assertTrue(doc.contains("API Reference"));

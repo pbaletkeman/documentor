@@ -57,7 +57,7 @@ class JavaElementVisitorTest {
         visitor.visit(cu, null);
 
         // Package-private class should be included (not private, so shouldInclude returns true)
-        assertTrue(elements.stream().anyMatch(e -> 
+        assertTrue(elements.stream().anyMatch(e ->
             e.type() == CodeElementType.CLASS && e.name().equals("PackagePrivateClass")));
     }
 
@@ -75,7 +75,7 @@ class JavaElementVisitorTest {
         visitor.visit(cu, null);
 
         // Package-private enum should be included (not private, so shouldInclude returns true)
-        assertTrue(elements.stream().anyMatch(e -> 
+        assertTrue(elements.stream().anyMatch(e ->
             e.type() == CodeElementType.CLASS && e.name().equals("PackagePrivateEnum")));
     }
 
@@ -84,7 +84,7 @@ class JavaElementVisitorTest {
         // Create visitor with includePrivateMembers = true
         DocumentorConfig cfg = new DocumentorConfig(List.of(), null, new AnalysisSettings(true, 1, List.of("**/*.java"), List.of()));
         JavaElementVisitor inclusiveVisitor = new JavaElementVisitor(cfg);
-        
+
         // Use nested class to test private class behavior
         String source = "package com.test; public class OuterClass { private static class PrivateClass { public void method() {} } }";
 
@@ -96,9 +96,9 @@ class JavaElementVisitorTest {
         inclusiveVisitor.visit(cu, null);
 
         // Both outer class and private nested class should be included when includePrivateMembers is true
-        assertTrue(elements.stream().anyMatch(e -> 
+        assertTrue(elements.stream().anyMatch(e ->
             e.type() == CodeElementType.CLASS && e.name().equals("OuterClass")));
-        assertTrue(elements.stream().anyMatch(e -> 
+        assertTrue(elements.stream().anyMatch(e ->
             e.type() == CodeElementType.CLASS && e.name().equals("PrivateClass")));
     }
 
@@ -107,7 +107,7 @@ class JavaElementVisitorTest {
         // Create visitor with includePrivateMembers = true
         DocumentorConfig cfg = new DocumentorConfig(List.of(), null, new AnalysisSettings(true, 1, List.of("**/*.java"), List.of()));
         JavaElementVisitor inclusiveVisitor = new JavaElementVisitor(cfg);
-        
+
         // Use nested enum to test private enum behavior
         String source = "package com.test; public class OuterClass { private enum PrivateEnum { VALUE1, VALUE2; } }";
 
@@ -119,9 +119,9 @@ class JavaElementVisitorTest {
         inclusiveVisitor.visit(cu, null);
 
         // Both outer class and private nested enum should be included when includePrivateMembers is true
-        assertTrue(elements.stream().anyMatch(e -> 
+        assertTrue(elements.stream().anyMatch(e ->
             e.type() == CodeElementType.CLASS && e.name().equals("OuterClass")));
-        assertTrue(elements.stream().anyMatch(e -> 
+        assertTrue(elements.stream().anyMatch(e ->
             e.type() == CodeElementType.CLASS && e.name().equals("PrivateEnum")));
     }
 
@@ -138,9 +138,9 @@ class JavaElementVisitorTest {
         visitor.visit(cu, null);
 
         // Outer class should be included, but private nested class should be excluded
-        assertTrue(elements.stream().anyMatch(e -> 
+        assertTrue(elements.stream().anyMatch(e ->
             e.type() == CodeElementType.CLASS && e.name().equals("OuterClass")));
-        assertFalse(elements.stream().anyMatch(e -> 
+        assertFalse(elements.stream().anyMatch(e ->
             e.type() == CodeElementType.CLASS && e.name().equals("PrivateNestedClass")));
     }
 
@@ -157,9 +157,9 @@ class JavaElementVisitorTest {
         visitor.visit(cu, null);
 
         // Outer class should be included, but private nested enum should be excluded
-        assertTrue(elements.stream().anyMatch(e -> 
+        assertTrue(elements.stream().anyMatch(e ->
             e.type() == CodeElementType.CLASS && e.name().equals("OuterClass")));
-        assertFalse(elements.stream().anyMatch(e -> 
+        assertFalse(elements.stream().anyMatch(e ->
             e.type() == CodeElementType.CLASS && e.name().equals("PrivateNestedEnum")));
     }
 }

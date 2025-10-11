@@ -57,7 +57,7 @@ class ElementDocumentationGeneratorTest {
     @ParameterizedTest
     @CsvSource({
         "/src/TestClass.java, java",
-        "/src/test_script.py, python", 
+        "/src/test_script.py, python",
         "/src/config.xml, text",
         "/readme.txt, text",
         "noextension, text"
@@ -76,9 +76,9 @@ class ElementDocumentationGeneratorTest {
         Path elementsDir = tempDir.resolve("elements");
         Path createdFile = Files.list(elementsDir).findFirst().orElseThrow();
         String content = Files.readString(createdFile);
-        
+
         // Check that the code block uses the expected language
-        assertTrue(content.contains("```" + expectedLanguage), 
+        assertTrue(content.contains("```" + expectedLanguage),
             "Expected language '" + expectedLanguage + "' not found in: " + content);
     }
 
@@ -87,11 +87,11 @@ class ElementDocumentationGeneratorTest {
         // Create a read-only directory to simulate IOException
         Path readOnlyDir = tempDir.resolve("readonly");
         Files.createDirectories(readOnlyDir);
-        
+
         // On Windows, we'll use a different approach - create a file where we want a directory
         Path elementsPath = readOnlyDir.resolve("elements");
         Files.createFile(elementsPath); // Create file instead of directory to cause IOException
-        
+
         CodeElement element = new CodeElement(CodeElementType.CLASS, "TestClass", "com.example.TestClass",
             "/src/TestClass.java", 1, "public class TestClass{}", "", List.of(), List.of());
 
@@ -102,7 +102,7 @@ class ElementDocumentationGeneratorTest {
         CompletionException exception = assertThrows(CompletionException.class, () -> {
             generator.generateElementDocumentation(element, readOnlyDir).join();
         });
-        
+
         // Verify it's wrapped in RuntimeException with correct message
         assertTrue(exception.getCause() instanceof RuntimeException);
         assertEquals("Failed to write element documentation", exception.getCause().getMessage());

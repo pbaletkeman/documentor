@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Tests for PythonPatternMatcher class
  */
 class PythonPatternMatcherTest {
-    
+
     // Test constants for magic number violations
     private static final int EXPECTED_CLASS_COUNT = 3;
     private static final int EXPECTED_FUNCTION_COUNT = 3;

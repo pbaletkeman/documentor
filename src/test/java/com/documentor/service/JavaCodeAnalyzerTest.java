@@ -49,7 +49,7 @@ class JavaCodeAnalyzerTest {
         Files.writeString(tempFile, validJavaCode);
 
         List<CodeElement> expectedElements = new ArrayList<>();
-        
+
         // Mock visitor behavior - capture the elements list
         doAnswer(invocation -> {
             List<CodeElement> elements = invocation.getArgument(1);
@@ -83,7 +83,7 @@ class JavaCodeAnalyzerTest {
 
     @Test
     void analyzeFileShouldCallVisitorProperly() throws IOException {
-        // Arrange  
+        // Arrange
         Path tempFile = Files.createTempFile("test", ".java");
         String validJavaCode = "public class TestClass {}";
         Files.writeString(tempFile, validJavaCode);

@@ -154,7 +154,7 @@ class DocumentationServiceUnitTest {
         when(mockOutputSettings.generateUnitTests()).thenReturn(false);
         when(mockOutputSettings.generateMermaidDiagrams()).thenReturn(true);
         when(mockOutputSettings.mermaidOutputPath()).thenReturn(tempDir.toString());
-        
+
         AnalysisSettings analysisSettings = new AnalysisSettings(true, 5, List.of("**/*.java"), List.of("**/test/**"));
         DocumentorConfig testConfig = new DocumentorConfig(List.of(), mockOutputSettings, analysisSettings);
         DocumentationService testService = new DocumentationService(mainGenerator, elementGenerator, testGenerator, mermaidService, testConfig);
