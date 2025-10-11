@@ -12,7 +12,7 @@ public class PythonASTTestUtils {
     /**
      * Helper method to invoke the parseASTOutputLine method on PythonASTCommandBuilder
      */
-    public static CodeElement parseASTOutputLine(PythonASTCommandBuilder commandBuilder, String line, Path filePath) {
+    public static CodeElement parseASTOutputLine(final PythonASTCommandBuilder commandBuilder, final String line, final Path filePath) {
         try {
             return commandBuilder.parseASTOutputLine(line, filePath);
         } catch (Exception e) {

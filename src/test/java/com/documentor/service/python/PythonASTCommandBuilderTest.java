@@ -50,7 +50,7 @@ class PythonASTCommandBuilderTest {
 
     @Test
     @DisplayName("Should write temporary Python script to filesystem")
-    void shouldWriteTempScript(@TempDir Path tempDir) throws IOException {
+    void shouldWriteTempScript(@TempDir final Path tempDir) throws IOException {
         // Set the temp directory (optional)
         System.setProperty("java.io.tmpdir", tempDir.toString());
 
@@ -70,7 +70,7 @@ class PythonASTCommandBuilderTest {
 
     @Test
     @DisplayName("Should create a valid process builder")
-    void shouldCreateProcessBuilder(@TempDir Path tempDir) throws IOException {
+    void shouldCreateProcessBuilder(@TempDir final Path tempDir) throws IOException {
         // Given
         Path scriptPath = tempDir.resolve("test_script.py");
         Path filePath = tempDir.resolve("test_file.py");

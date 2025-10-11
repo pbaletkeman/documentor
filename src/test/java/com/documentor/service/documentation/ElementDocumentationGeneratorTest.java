@@ -62,7 +62,7 @@ class ElementDocumentationGeneratorTest {
         "/readme.txt, text",
         "noextension, text"
     })
-    void testGetLanguageFromFilePath(String filePath, String expectedLanguage) throws Exception {
+    void testGetLanguageFromFilePath(final String filePath, final String expectedLanguage) throws Exception {
         // Create element with specific file path to test getLanguageFromFile method
         CodeElement element = new CodeElement(CodeElementType.METHOD, "testMethod", "com.example.TestClass.testMethod",
             filePath, 10, "public void testMethod() {}", "", List.of(), List.of());

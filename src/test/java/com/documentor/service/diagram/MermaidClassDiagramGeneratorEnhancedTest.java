@@ -25,7 +25,7 @@ class MermaidClassDiagramGeneratorEnhancedTest {
 
     @Test
     @DisplayName("Should generate class diagram with relationships")
-    void generateClassDiagramWithRelationships(@TempDir Path tempDir) throws IOException {
+    void generateClassDiagramWithRelationships(@TempDir final Path tempDir) throws IOException {
         // Given
         CodeElement mainClass = new CodeElement(
             CodeElementType.CLASS,
@@ -86,7 +86,7 @@ class MermaidClassDiagramGeneratorEnhancedTest {
 
     @Test
     @DisplayName("Should handle long signatures by truncating them")
-    void generateClassDiagramWithLongSignatures(@TempDir Path tempDir) throws IOException {
+    void generateClassDiagramWithLongSignatures(@TempDir final Path tempDir) throws IOException {
         // Given
         CodeElement classElement = new CodeElement(
             CodeElementType.CLASS,

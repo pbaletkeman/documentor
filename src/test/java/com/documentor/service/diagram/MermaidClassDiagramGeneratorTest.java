@@ -23,7 +23,7 @@ class MermaidClassDiagramGeneratorTest {
 
     @Test
     @DisplayName("Should generate class diagram with fields and methods")
-    void generateClassDiagram(@TempDir Path tempDir) throws IOException {
+    void generateClassDiagram(@TempDir final Path tempDir) throws IOException {
         // Given
         CodeElement classElement = new CodeElement(
             CodeElementType.CLASS,

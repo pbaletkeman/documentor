@@ -34,7 +34,7 @@ class DiagramPathManagerEnhancedTest {
     @ParameterizedTest
     @ValueSource(strings = {"Class$Name", "Class@Name", "Class#Name", "Class&Name", "Class%Name"})
     @DisplayName("Should sanitize various special characters in file names")
-    void generateDiagramFileNameWithVariousSpecialChars(String className) {
+    void generateDiagramFileNameWithVariousSpecialChars(final String className) {
         // When
         String fileName = pathManager.generateDiagramFileName(className);
 
@@ -49,7 +49,7 @@ class DiagramPathManagerEnhancedTest {
 
     @Test
     @DisplayName("Should create output directory that exists on filesystem")
-    void createOutputDirectoryThatExists(@TempDir Path tempDir) throws IOException {
+    void createOutputDirectoryThatExists(@TempDir final Path tempDir) throws IOException {
         // Given
         String dirPath = tempDir.toString();
 

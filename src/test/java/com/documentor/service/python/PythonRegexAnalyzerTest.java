@@ -204,7 +204,7 @@ class PythonRegexAnalyzerTest {
 
     // Helper methods to set up the test
 
-    private void setupMockMatchersWithCustomMatches(List<String> lines) {
+    private void setupMockMatchersWithCustomMatches(final List<String> lines) {
         // We'll use the real pattern matcher for this test to avoid complex mocking
         PythonPatternMatcher realMatcher = new PythonPatternMatcher();
         String content = String.join("\n", lines);

@@ -21,7 +21,7 @@ class LlmModelTypeDetectorTest {
         "http://localhost:8080, false"
     })
     @DisplayName("Should correctly detect Ollama models")
-    void isOllamaModel(String baseUrl, boolean expected) {
+    void isOllamaModel(final String baseUrl, final boolean expected) {
         LlmModelConfig config = new LlmModelConfig("test", "provider", baseUrl, "apiKey", 2000, 30);
         assertEquals(expected, detector.isOllamaModel(config));
     }
@@ -34,7 +34,7 @@ class LlmModelTypeDetectorTest {
         "http://localhost:11434, ollama, false"
     })
     @DisplayName("Should correctly detect OpenAI compatible models")
-    void isOpenAICompatible(String baseUrl, String provider, boolean expected) {
+    void isOpenAICompatible(final String baseUrl, final String provider, final boolean expected) {
         LlmModelConfig config = new LlmModelConfig("test", provider, baseUrl, "apiKey", 2000, 30);
         assertEquals(expected, detector.isOpenAICompatible(config));
     }

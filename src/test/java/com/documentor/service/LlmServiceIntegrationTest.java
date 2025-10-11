@@ -81,7 +81,7 @@ class LlmServiceIntegrationTest {
     /**
      * Helper method to create LlmService with new constructor
      */
-    private LlmService createLlmService(DocumentorConfig config) {
+    private LlmService createLlmService(final DocumentorConfig config) {
         LlmModelTypeDetector modelTypeDetector = new LlmModelTypeDetector();
         LlmPromptTemplates promptTemplates = new LlmPromptTemplates();
         LlmRequestFormatter requestFormatter = new LlmRequestFormatter(modelTypeDetector);

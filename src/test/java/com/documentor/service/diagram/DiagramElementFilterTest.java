@@ -148,7 +148,7 @@ class DiagramElementFilterTest {
         assertEquals("PublicClass", eligibleClasses.get(0).name());
     }
 
-    private CodeElement createClass(String name, String path) {
+    private CodeElement createClass(final String name, final String path) {
         return new CodeElement(
             CodeElementType.CLASS,
             name,
@@ -162,7 +162,7 @@ class DiagramElementFilterTest {
         );
     }
 
-    private CodeElement createMethod(String name, String path) {
+    private CodeElement createMethod(final String name, final String path) {
         return new CodeElement(
             CodeElementType.METHOD,
             name,
@@ -176,7 +176,7 @@ class DiagramElementFilterTest {
         );
     }
 
-    private CodeElement createField(String name, String path) {
+    private CodeElement createField(final String name, final String path) {
         return new CodeElement(
             CodeElementType.FIELD,
             name,
