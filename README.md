@@ -432,7 +432,9 @@ Update your config to use `phi3:mini` for faster processing:
 - Use `llama3.2` for balanced documentation
 - Use `phi3:mini` for quick prototyping
 - Increase `timeout_seconds` for large files
-- Lower `temperature` (0.1-0.3) for more consistent outputs## 🖥️ Usage
+- Lower `temperature` (0.1-0.3) for more consistent outputs
+
+## 🖥️ Usage
 
 ### Running the Application
 
@@ -630,12 +632,9 @@ Diagram files:
 
 **Generated Mermaid Diagram Example:**
 
-````markdown
 # UserService Class Diagram
 
-## ​```mermaid
-
-## title: UserService
+```
 
 classDiagram
 class UserService {
@@ -651,10 +650,10 @@ passwordEncoder : PasswordEncoder
     UserService --> UserRepository : uses
     UserService --> PasswordEncoder : uses
 
-​```
+​
 
 Generated on: 2025-10-08T10:30:15
-````
+```
 
 ### Example 4: Generated Documentation Structure
 
