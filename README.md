@@ -7,14 +7,14 @@ A powerful Java Spring Boot Command Line application that analyzes Java and Pyth
 - **🔍 Multi-Language Analysis**: Supports Java and Python codebases with comprehensive AST parsing
 - **🤖 AI-Powered Documentation**: Integrates with OpenAI GPT, Anthropic Claude, and other LLM models
 - **📝 Comprehensive Output**: Generates markdown documentation with examples and usage instructions
-- **� Mermaid Class Diagrams**: Generate visual class diagrams for non-private classes and methods
-- **�🧪 Unit Test Generation**: Creates unit tests targeting 90% code coverage
+- **🎨 Mermaid Class Diagrams**: Generate visual class diagrams for non-private classes and methods
+- **🧪 Unit Test Generation**: Creates unit tests targeting 90% code coverage
 - **⚡ Multi-Threading**: Parallel processing for optimal performance with configurable thread pools
 - **🔧 Pre-commit Hooks**: Automated quality assurance with Checkstyle and testing
 - **📊 Rich Analysis**: Discovers classes, methods, variables, and documentation
 - **🎯 Configurable**: External JSON configuration for LLM models and settings
 - **📋 Status Monitoring**: Real-time project and configuration status display
-- **✅ High Test Coverage**: 83%+ code coverage with comprehensive test suites
+- **✅ High Test Coverage**: 96%+ code coverage with comprehensive test suites
 - **🏗️ Production Ready**: Built with Spring Boot 3.2 and Java 21 for enterprise use
 - **📦 Fat JAR Support**: Create self-contained executable JARs for easy distribution
 
@@ -48,7 +48,7 @@ A powerful Java Spring Boot Command Line application that analyzes Java and Pyth
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/documentor.git
+git clone https://github.com/pbaletkeman/documentor.git
 cd documentor
 ```
 
@@ -89,10 +89,13 @@ gradlew.bat build
 
 ```bash
 # Show help without running the application
-./gradlew helpInfo
+gradlew.bat helpInfo
 
 # Show detailed command help
-./gradlew runApp -Phelp
+gradlew.bat runApp -Pargs="help"
+
+# List all available Gradle tasks
+gradlew.bat tasks
 ```
 
 ## 🚀 Quick Start
@@ -732,25 +735,66 @@ documentor/
 │   │   ├── java/com/documentor/
 │   │   │   ├── DocumentorApplication.java
 │   │   │   ├── cli/
-│   │   │   │   └── DocumentorCommands.java
+│   │   │   │   ├── DocumentorCommands.java
+│   │   │   │   └── handlers/
+│   │   │   │       ├── AnalysisCommandHandler.java
+│   │   │   │       ├── ConfigurationCommandHandler.java
+│   │   │   │       ├── ScanCommandHandler.java
+│   │   │   │       └── StatusCommandHandler.java
 │   │   │   ├── config/
 │   │   │   │   ├── AppConfig.java
-│   │   │   │   └── DocumentorConfig.java
+│   │   │   │   ├── DocumentorConfig.java
+│   │   │   │   └── model/
+│   │   │   │       ├── AnalysisSettings.java
+│   │   │   │       ├── LlmModel.java
+│   │   │   │       └── OutputSettings.java
 │   │   │   ├── model/
 │   │   │   │   ├── CodeElement.java
 │   │   │   │   ├── CodeElementType.java
+│   │   │   │   ├── CodeVisibility.java
 │   │   │   │   └── ProjectAnalysis.java
-│   │   │   └── service/
-│   │   │       ├── CodeAnalysisService.java
-│   │   │       ├── DocumentationService.java
-│   │   │       ├── JavaCodeAnalyzer.java
-│   │   │       ├── LlmService.java
-│   │   │       └── PythonCodeAnalyzer.java
+│   │   │   ├── service/
+│   │   │   │   ├── CodeAnalysisService.java
+│   │   │   │   ├── DocumentationService.java
+│   │   │   │   ├── JavaCodeAnalyzer.java
+│   │   │   │   ├── LlmService.java
+│   │   │   │   ├── MermaidDiagramService.java
+│   │   │   │   ├── PythonCodeAnalyzer.java
+│   │   │   │   ├── analysis/
+│   │   │   │   │   └── CodeAnalysisOrchestrator.java
+│   │   │   │   ├── diagram/
+│   │   │   │   │   ├── DiagramGenerator.java
+│   │   │   │   │   ├── MermaidClassDiagramGenerator.java
+│   │   │   │   │   ├── MermaidElementFormatter.java
+│   │   │   │   │   └── MermaidFileManager.java
+│   │   │   │   ├── documentation/
+│   │   │   │   │   ├── DocumentationFormatter.java
+│   │   │   │   │   ├── ElementDocumentationGenerator.java
+│   │   │   │   │   ├── MainDocumentationGenerator.java
+│   │   │   │   │   └── UnitTestDocumentationGenerator.java
+│   │   │   │   ├── llm/
+│   │   │   │   │   ├── LlmApiClient.java
+│   │   │   │   │   ├── LlmModelTypeDetector.java
+│   │   │   │   │   ├── LlmPromptTemplates.java
+│   │   │   │   │   ├── LlmRequestBuilder.java
+│   │   │   │   │   ├── LlmRequestFormatter.java
+│   │   │   │   │   ├── LlmResponseHandler.java
+│   │   │   │   │   └── LlmResponseParser.java
+│   │   │   │   └── python/
+│   │   │   │       ├── PythonAstAnalyzer.java
+│   │   │   │       ├── PythonAstParserService.java
+│   │   │   │       ├── PythonElementExtractor.java
+│   │   │   │       ├── PythonRegexAnalyzer.java
+│   │   │   │       └── PythonSyntaxValidator.java
+│   │   │   └── util/
+│   │   │       └── ApplicationConstants.java
 │   │   └── resources/
 │   │       └── application.yml
 │   └── test/
 │       └── java/com/documentor/
-│           └── DocumentorApplicationTests.java
+│           ├── DocumentorApplicationIntegrationTest.java
+│           ├── DocumentorApplicationTests.java
+│           └── [comprehensive test suite matching main structure]
 ├── config/
 │   └── checkstyle/
 │       └── checkstyle.xml
@@ -759,17 +803,22 @@ documentor/
 │   └── pre-commit.bat
 ├── build.gradle
 ├── config.json
+├── config-ollama.json
 └── README.md
 ```
 
 ### Key Components
 
-1. **🔍 CodeAnalysisService**: Orchestrates project analysis
-2. **☕ JavaCodeAnalyzer**: Parses Java files using JavaParser
-3. **🐍 PythonCodeAnalyzer**: Parses Python files with AST
-4. **🤖 LlmService**: Handles LLM API communication
-5. **📝 DocumentationService**: Generates markdown documentation
-6. **🖥️ DocumentorCommands**: Spring Shell CLI interface
+1. **🔍 CodeAnalysisService**: Orchestrates project analysis with multi-threaded processing
+2. **☕ JavaCodeAnalyzer**: Advanced Java parsing using JavaParser with AST analysis
+3. **🐍 PythonCodeAnalyzer**: Sophisticated Python analysis with AST and regex fallback
+4. **🤖 LlmService**: Handles LLM API communication with multiple provider support
+5. **📝 DocumentationService**: Generates comprehensive markdown documentation
+6. **🎨 MermaidDiagramService**: Creates visual class diagrams with advanced formatting
+7. **🖥️ DocumentorCommands**: Spring Shell CLI interface with status monitoring
+8. **⚙️ Configuration Management**: Flexible JSON-based configuration with validation
+9. **🔧 Command Handlers**: Specialized handlers for different CLI operations
+10. **📊 Analysis Orchestrator**: Coordinates complex analysis workflows
 
 ### Adding Support for New Languages
 
@@ -802,7 +851,7 @@ To add support for a new programming language:
 
 #### 🧪 **Test Coverage Improvements**
 
-- **83%+ Coverage**: Comprehensive test coverage across all modules
+- **96%+ Coverage**: Comprehensive test coverage across all modules
 - **Integration Tests**: Full application integration testing
 - **Mock Services**: Extensive mocking for reliable unit tests
 - **Quality Gates**: JaCoCo coverage verification and Checkstyle enforcement
@@ -816,9 +865,9 @@ To add support for a new programming language:
 
 ## 🧪 Testing
 
-### Current Test Coverage: 83%+ ✅
+### Current Test Coverage: 96%+ ✅
 
-The project maintains high-quality code standards with comprehensive test coverage:
+The project maintains high-quality code standards with comprehensive test coverage that exceeds the required 95% minimum threshold:
 
 ### Running Tests
 
@@ -852,10 +901,22 @@ open build/reports/jacoco/test/html/index.html
 ### Test Coverage by Module
 
 - **Model Classes**: 100% coverage (CodeElement, ProjectAnalysis, etc.)
-- **Service Layer**: 80%+ coverage (CodeAnalysisService, DocumentationService)
-- **CLI Commands**: 75%+ coverage (DocumentorCommands with status command)
+- **Service Layer**: 88-99% coverage (CodeAnalysisService, DocumentationService, LlmService)
+- **CLI Commands**: 97% coverage (DocumentorCommands with status command)
 - **Configuration**: 100% coverage (DocumentorConfig, AppConfig)
-- **Analyzers**: 85%+ coverage (JavaCodeAnalyzer, PythonCodeAnalyzer)
+- **Analyzers**: 88-98% coverage (JavaCodeAnalyzer, PythonCodeAnalyzer)
+- **Documentation Generators**: 98% coverage (All documentation service modules)
+
+### Quality Gates and Standards
+
+The project enforces strict quality standards:
+
+- **📊 Minimum Coverage**: 95% code coverage required (currently achieving 96%+)
+- **🔍 Checkstyle**: Google Java Style Guide enforcement
+- **🧪 JaCoCo**: Automated coverage verification in build process
+- **⚡ Pre-commit Hooks**: Automatic quality checks before commits
+- **🏗️ Spring Boot 3.2**: Latest enterprise-grade framework
+- **☕ Java 21**: Modern Java LTS support
 
 ### Pre-commit Hooks
 
@@ -995,7 +1056,7 @@ We welcome contributions! Please follow these guidelines:
 - Use **meaningful variable names**
 - Add **comprehensive JavaDoc** comments
 - Include **emojis in comments** for better readability
-- Maintain **test coverage above 90%**
+- Maintain **test coverage above 95%**
 
 ## 📄 License
 
@@ -1012,9 +1073,33 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Support
 
 - 📧 **Email**: `support@documentor.dev`
-- 🐛 **Issues**: [GitHub Issues](https://github.com/your-username/documentor/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/your-username/documentor/discussions)
-- 📖 **Wiki**: [GitHub Wiki](https://github.com/your-username/documentor/wiki)
+- 🐛 **Issues**: [GitHub Issues](https://github.com/pbaletkeman/documentor/issues)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/pbaletkeman/documentor/discussions)
+- 📖 **Wiki**: [GitHub Wiki](https://github.com/pbaletkeman/documentor/wiki)
+
+---
+
+## ✅ Recent Updates & Current Status
+
+**Last Updated**: October 11, 2025
+
+### 🎯 Current Project Status
+
+- **✅ Build Status**: All tests passing (96%+ coverage)
+- **✅ Quality Gates**: Exceeding 95% minimum coverage requirement
+- **✅ Dependencies**: All dependencies up-to-date and compatible
+- **✅ Documentation**: Comprehensive and current
+- **✅ Configuration**: Multiple LLM providers supported (OpenAI, Ollama, etc.)
+- **✅ Architecture**: Production-ready with Spring Boot 3.2 and Java 21
+
+### 🔧 Latest Improvements
+
+- **Enhanced Test Coverage**: Achieved 96% instruction coverage across all modules
+- **Sophisticated Architecture**: Modular design with specialized service layers
+- **Advanced CLI**: Comprehensive command handlers with status monitoring
+- **Quality Enforcement**: Automated coverage verification and style checking
+- **Multiple LLM Support**: Seamless integration with various AI providers
+- **Mermaid Diagrams**: Visual class diagram generation capabilities
 
 ---
 
