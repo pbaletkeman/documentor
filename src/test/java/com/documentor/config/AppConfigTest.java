@@ -22,7 +22,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.reactive.function.client.WebClient;
 
 /**
- * ðŸ§ª Comprehensive tests for AppConfig
+ * 🧪 Comprehensive tests for AppConfig
  *
  * Tests Spring configuration bean creation and async executor setup
  */
@@ -265,3 +265,4 @@ class AppConfigTest {
         assertNotNull(executor.getThreadPoolExecutor());
     }
 }
+

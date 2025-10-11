@@ -457,3 +457,4 @@ class MermaidDiagramServiceTest {
         return new ProjectAnalysis("/src/main/java", elements, System.currentTimeMillis());
     }
 }
+

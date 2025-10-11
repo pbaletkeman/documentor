@@ -156,3 +156,4 @@ class DocumentationFormatterTest {
         assertTrue(result.contains("Project Documentation"));
     }
 }
+

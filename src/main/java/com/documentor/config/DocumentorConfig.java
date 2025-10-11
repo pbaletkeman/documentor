@@ -13,7 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import java.util.List;
 
 /**
- * ðŸ”§ Simplified Configuration Properties for Documentor
+ * 🔍 Simplified Configuration Properties for Documentor
  *
  * Main configuration class that delegates to specialized configuration records
  * for better maintainability and reduced complexity.
@@ -43,3 +43,4 @@ public record DocumentorConfig(
         }
     }
 }
+

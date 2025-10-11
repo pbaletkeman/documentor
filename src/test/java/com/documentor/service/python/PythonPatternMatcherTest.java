@@ -221,3 +221,4 @@ class PythonPatternMatcherTest {
         assertEquals(0, result5.length);
     }
 }
+

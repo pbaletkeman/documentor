@@ -633,7 +633,10 @@ Diagram files:
 ````markdown
 # UserService Class Diagram
 
-​```mermaid
+## ​```mermaid
+
+## title: UserService
+
 classDiagram
 class UserService {
 userRepository : UserRepository

@@ -75,3 +75,4 @@ class DiagramPathManagerTest {
         assertEquals(Paths.get("/output/dir"), dirPath);
     }
 }
+

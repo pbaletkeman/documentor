@@ -66,3 +66,4 @@ class DocumentorConfigTest {
         assertEquals(excludePatterns, settings.excludePatterns());
     }
 }
+

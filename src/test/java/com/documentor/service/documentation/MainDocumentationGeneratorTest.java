@@ -96,3 +96,4 @@ class MainDocumentationGeneratorTest {
         assertTrue(doc.contains("TestClass"));
     }
 }
+

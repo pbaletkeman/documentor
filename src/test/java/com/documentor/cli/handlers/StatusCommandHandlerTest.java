@@ -254,3 +254,4 @@ class StatusCommandHandlerTest {
         assertTrue(status.contains("API Key: Not set")); // Should hit the null apiKey branch
     }
 }
+

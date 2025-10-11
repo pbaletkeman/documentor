@@ -9,3 +9,4 @@ package com.documentor.service.python;
 public class PythonRegexAnalyzerTestsDisabled {
     // Empty class to mark that tests are temporarily disabled
 }
+

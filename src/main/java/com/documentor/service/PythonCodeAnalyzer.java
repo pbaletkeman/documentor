@@ -46,7 +46,7 @@ public class PythonCodeAnalyzer {
             // Try using Python's AST module for more accurate parsing
             List<CodeElement> astElements = astProcessor.analyzeWithAST(filePath);
             if (!astElements.isEmpty()) {
-                LOGGER.debug("âœ… Successfully analyzed {} with AST", filePath);
+                LOGGER.debug("✅ Successfully analyzed {} with AST", filePath);
                 return astElements;
             }
         } catch (Exception e) {
@@ -56,9 +56,10 @@ public class PythonCodeAnalyzer {
         // Fallback to regex-based parsing
         List<String> lines = Files.readAllLines(filePath);
         List<CodeElement> regexElements = regexAnalyzer.analyzeWithRegex(filePath, lines);
-        LOGGER.debug("âœ… Successfully analyzed {} with regex (found {} elements)",
+        LOGGER.debug("✅ Successfully analyzed {} with regex (found {} elements)",
                     filePath, regexElements.size());
 
         return regexElements;
     }
 }
+

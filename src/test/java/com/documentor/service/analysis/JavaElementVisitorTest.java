@@ -169,3 +169,4 @@ class JavaElementVisitorTest {
             e.type() == CodeElementType.CLASS && e.name().equals("PrivateNestedEnum")));
     }
 }
+

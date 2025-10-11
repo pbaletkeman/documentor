@@ -113,3 +113,4 @@ class ElementDocumentationGeneratorTest {
         assertEquals("Failed to write element documentation", exception.getCause().getMessage());
     }
 }
+

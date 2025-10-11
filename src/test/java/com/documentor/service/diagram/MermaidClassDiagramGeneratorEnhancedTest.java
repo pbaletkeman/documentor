@@ -139,3 +139,4 @@ class MermaidClassDiagramGeneratorEnhancedTest {
         assertTrue(fileContent.contains("class TestClass"));
     }
 }
+

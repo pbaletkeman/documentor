@@ -155,3 +155,4 @@ class UnitTestDocumentationGeneratorTest {
         assertTrue(content.contains("Target Coverage: 80%"));
     }
 }
+

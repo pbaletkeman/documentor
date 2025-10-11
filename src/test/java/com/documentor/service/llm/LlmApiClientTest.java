@@ -316,3 +316,4 @@ class LlmApiClientTest {
         verify(requestBodySpec, never()).header(eq("Authorization"), anyString());
     }
 }
+

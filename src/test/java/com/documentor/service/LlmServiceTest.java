@@ -9,3 +9,4 @@ class LlmServiceTest {
         // minimal compilation-only test to unblock suite; detailed tests exist elsewhere
     }
 }
+

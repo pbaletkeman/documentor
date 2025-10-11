@@ -1,7 +1,7 @@
 package com.documentor.model;
 
 /**
- * ðŸ” Code Visibility Levels - Simplified visibility detection
+ * 🔍 Code Visibility Levels - Simplified visibility detection
  *
  * Enum to reduce complexity in visibility checking across different languages.
  */
@@ -12,7 +12,7 @@ public enum CodeVisibility {
     PRIVATE;
 
     /**
-     * ðŸ” Determines visibility from signature and element name
+     * 🔍 Determines visibility from signature and element name
      */
     public static CodeVisibility fromSignatureAndName(final String signature, final String name) {
         String lowerSignature = signature.toLowerCase();
@@ -38,9 +38,10 @@ public enum CodeVisibility {
     }
 
     /**
-     * ðŸš« Check if visibility should be included in documentation
+     * 🔍 Check if visibility should be included in documentation
      */
     public boolean shouldInclude(final boolean includePrivate) {
         return includePrivate || this != PRIVATE;
     }
 }
+

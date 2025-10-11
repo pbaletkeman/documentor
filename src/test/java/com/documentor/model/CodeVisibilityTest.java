@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * ðŸ§ª Tests for CodeVisibility enum
+ * 🧪 Tests for CodeVisibility enum
  */
 class CodeVisibilityTest {
 
@@ -146,3 +146,4 @@ class CodeVisibilityTest {
         assertEquals(CodeVisibility.PACKAGE_PRIVATE, result);
     }
 }
+

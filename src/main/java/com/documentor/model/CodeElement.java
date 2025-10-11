@@ -3,7 +3,7 @@ package com.documentor.model;
 import java.util.List;
 
 /**
- * ðŸ§© Code Element Model
+ * 🔧 Code Element Model
  *
  * Represents a single code element (class, method, or field) discovered during analysis.
  * Contains all metadata needed for documentation generation and LLM processing.
@@ -21,14 +21,14 @@ public record CodeElement(
 ) {
 
     /**
-     * ðŸ†” Generates a unique identifier for this code element
+     * 🔍 Generates a unique identifier for this code element
      */
     public String getId() {
         return String.format("%s:%s:%d", filePath, qualifiedName, lineNumber);
     }
 
     /**
-     * ðŸŽ¯ Checks if this element is a public/non-private element
+     * 🔍 Checks if this element is a public/non-private element
      */
     public boolean isPublic() {
         return !name.startsWith("_") // Python private convention
@@ -36,7 +36,7 @@ public record CodeElement(
     }
 
     /**
-     * ðŸ“ Returns a formatted string representation for logging
+     * 🔍 Returns a formatted string representation for logging
      */
     public String getDisplayName() {
         return String.format("%s %s (%s:%d)",
@@ -47,7 +47,7 @@ public record CodeElement(
     }
 
     /**
-     * ðŸ” Creates a context string for LLM analysis
+     * 🔍 Creates a context string for LLM analysis
      */
     public String getAnalysisContext() {
         StringBuilder context = new StringBuilder();
@@ -70,3 +70,4 @@ public record CodeElement(
         return context.toString();
     }
 }
+

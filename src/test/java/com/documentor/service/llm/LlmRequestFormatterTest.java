@@ -65,3 +65,4 @@ class LlmRequestFormatterTest {
         assertEquals(TEMPERATURE_HALF, body.get("temperature"));
     }
 }
+

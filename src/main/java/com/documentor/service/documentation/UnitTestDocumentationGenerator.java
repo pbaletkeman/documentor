@@ -62,14 +62,14 @@ public class UnitTestDocumentationGenerator {
                             try {
                                 Files.write(testsDir.resolve("unit-tests.md"), testDoc.toString().getBytes());
                             } catch (IOException e) {
-                                LOGGER.error("âŒ Error writing test documentation: {}", e.getMessage());
+                                LOGGER.error("❌ Error writing test documentation: {}", e.getMessage());
                             }
                         })
                         .join();
 
                 return null;
             } catch (Exception e) {
-                LOGGER.error("âŒ Error generating test documentation: {}", e.getMessage());
+                LOGGER.error("❌ Error generating test documentation: {}", e.getMessage());
                 throw new RuntimeException("Failed to generate test documentation", e);
             }
         });
@@ -86,3 +86,4 @@ public class UnitTestDocumentationGenerator {
             config.outputSettings().targetCoverage() * ApplicationConstants.PERCENTAGE_MULTIPLIER));
     }
 }
+

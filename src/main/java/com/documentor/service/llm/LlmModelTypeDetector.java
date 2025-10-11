@@ -5,7 +5,7 @@ import com.documentor.config.model.LlmModelConfig;
 import org.springframework.stereotype.Component;
 
 /**
- * ðŸ” LLM Model Type Detector
+ * 🔍 LLM Model Type Detector
  *
  * Centralized logic for detecting LLM model types and providers.
  * Eliminates duplicate detection logic across LLM components.
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 public class LlmModelTypeDetector {
 
     /**
-     * ðŸ" Checks if the model is Ollama-based
+     * 🔍 Checks if the model is Ollama-based
      */
     public boolean isOllamaModel(final LlmModelConfig model) {
         return model.baseUrl().contains("ollama")
@@ -22,7 +22,7 @@ public class LlmModelTypeDetector {
     }
 
     /**
-     * ðŸ" Checks if the model is OpenAI-compatible
+     * 🔍 Checks if the model is OpenAI-compatible
      */
     public boolean isOpenAICompatible(final LlmModelConfig model) {
         return model.baseUrl().contains("openai")
@@ -30,9 +30,10 @@ public class LlmModelTypeDetector {
     }
 
     /**
-     * ðŸŒ Gets the appropriate endpoint for the model
+     * 🔍 Gets the appropriate endpoint for the model
      */
     public String getModelEndpoint(final LlmModelConfig model) {
         return model.baseUrl() + (model.baseUrl().endsWith("/") ? "" : "/") + "api/generate";
     }
 }
+

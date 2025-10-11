@@ -9,3 +9,4 @@ class DocumentorCommandsTest {
         assertTrue(true, "Basic test to verify class compiles.");
     }
 }
+

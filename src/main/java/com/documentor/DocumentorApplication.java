@@ -16,7 +16,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
  * - 🤖 Integrates with multiple LLM models (GPT-3.5, GPT-4, etc.)
  * - 📝 Generates markdown documentation with examples
  * - 🧪 Creates unit tests for analyzed code
- * - âš¡ Multi-threaded processing for performance
+ * - ⚡ Multi-threaded processing for performance
  * - 🔧 Pre-commit hooks for quality assurance
  */
 @SpringBootApplication
@@ -28,3 +28,4 @@ public class DocumentorApplication {
         SpringApplication.run(DocumentorApplication.class, args);
     }
 }
+

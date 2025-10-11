@@ -14,7 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.List;
 
 /**
- * ðŸ§ª Main Application Tests
+ * 🧪 Main Application Tests
  *
  * Integration tests for the Documentor Spring Boot application.
  */
@@ -70,3 +70,4 @@ class DocumentorApplicationTests {
         // This validates the basic application configuration
     }
 }
+

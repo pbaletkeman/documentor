@@ -215,3 +215,4 @@ class DocumentationServiceUnitTest {
         verify(mermaidService, atLeastOnce()).generateClassDiagrams(any(), anyString());
     }
 }
+

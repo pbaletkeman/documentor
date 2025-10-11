@@ -1,7 +1,7 @@
 package com.documentor.model;
 
 /**
- * ðŸ·ï¸ Code Element Type Enumeration
+ * 🔍 Code Element Type Enumeration
  *
  * Represents the different types of code elements that can be analyzed:
  * - CLASS: Classes, interfaces, enums
@@ -29,3 +29,4 @@ public enum CodeElementType {
         return description;
     }
 }
+

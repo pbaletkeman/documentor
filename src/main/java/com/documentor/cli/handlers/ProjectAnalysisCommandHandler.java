@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * ðŸš€ Handler for project analysis and documentation generation
+ * 🔍 Handler for project analysis and documentation generation
  * Refactored to reduce complexity using CommonCommandHandler
  */
 @Component
@@ -46,16 +46,16 @@ public class ProjectAnalysisCommandHandler {
     public String handleAnalyzeProject(final String projectPath, final String configPath,
                                      final boolean generateMermaid, final String mermaidOutput) {
         try {
-            LOGGER.info("ðŸš€ Starting analysis of project: {}", projectPath);
+            LOGGER.info("🔍 Starting analysis of project: {}", projectPath);
 
             if (!commonHandler.directoryExists(projectPath)) {
-                return "âŒ Error: Project path does not exist or is not a directory: " + projectPath;
+                return "❌ Error: Project path does not exist or is not a directory: " + projectPath;
             }
 
             ProjectAnalysis analysis = performAnalysis(projectPath);
             String outputPath = generateDocumentation(analysis);
             StringBuilder result = commonHandler.createResultBuilder();
-            result.append(String.format("âœ… Analysis complete! Documentation generated at: %s\n", outputPath));
+            result.append(String.format("✅ Analysis complete! Documentation generated at: %s\n", outputPath));
 
             if (generateMermaid) {
                 handleMermaidGeneration(analysis, mermaidOutput, result);
@@ -74,7 +74,7 @@ public class ProjectAnalysisCommandHandler {
     public String handleScanProject(final String projectPath) {
         try {
             if (!commonHandler.directoryExists(projectPath)) {
-                return "âŒ Error: Project path does not exist or is not a directory: " + projectPath;
+                return "❌ Error: Project path does not exist or is not a directory: " + projectPath;
             }
 
             ProjectAnalysis analysis = performAnalysis(projectPath);
@@ -128,3 +128,4 @@ public class ProjectAnalysisCommandHandler {
         return commonHandler.formatStatistics("Project Analysis Statistics", stats);
     }
 }
+

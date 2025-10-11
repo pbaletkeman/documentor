@@ -56,3 +56,4 @@ class LlmModelTypeDetectorTest {
         assertEquals("http://localhost:11434/api/generate", detector.getModelEndpoint(config));
     }
 }
+

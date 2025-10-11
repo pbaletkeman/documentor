@@ -16,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
 /**
- * ðŸ” Code Analysis Service
+ * 🔍 Code Analysis Service
  *
  * Orchestrates the analysis of Java and Python projects by:
  * - Discovering source files
@@ -42,13 +42,13 @@ public class CodeAnalysisService {
     }
 
     /**
-     * ðŸ“Š Analyzes a project directory and returns comprehensive analysis results
+     * 🔍 Analyzes a project directory and returns comprehensive analysis results
      *
      * @param projectPath Path to the project directory
      * @return ProjectAnalysis containing all discovered code elements
      */
     public CompletableFuture<ProjectAnalysis> analyzeProject(final Path projectPath) {
-        LOGGER.info("ðŸš€ Starting analysis of project: {}", projectPath);
+        LOGGER.info("🔍 Starting analysis of project: {}", projectPath);
 
         return CompletableFuture.supplyAsync(() -> {
             try {
@@ -60,18 +60,18 @@ public class CodeAnalysisService {
                     System.currentTimeMillis()
                 );
 
-                LOGGER.info("âœ… Analysis completed. Found {} code elements", allElements.size());
+                LOGGER.info("✅ Analysis completed. Found {} code elements", allElements.size());
                 return analysis;
 
             } catch (Exception e) {
-                LOGGER.error("âŒ Error analyzing project: {}", e.getMessage(), e);
+                LOGGER.error("❌ Error analyzing project: {}", e.getMessage(), e);
                 throw new RuntimeException("Failed to analyze project", e);
             }
         });
     }
 
     /**
-     * ðŸ”Ž Discovers and analyzes all supported source files in the project
+     * 🔍 Discovers and analyzes all supported source files in the project
      */
     private List<CodeElement> discoverAndAnalyzeFiles(final Path projectPath) throws IOException {
         try (Stream<Path> fileStream = Files.walk(projectPath)) {
@@ -85,7 +85,7 @@ public class CodeAnalysisService {
     }
 
     /**
-     * ðŸ“ Checks if a file is a supported source file
+     * 🔍 Checks if a file is a supported source file
      */
     private boolean isSupportedFile(final Path file) {
         String fileName = file.getFileName().toString().toLowerCase();
@@ -94,7 +94,7 @@ public class CodeAnalysisService {
     }
 
     /**
-     * ðŸš« Applies exclude patterns to determine if file should be analyzed
+     * 🔍 Applies exclude patterns to determine if file should be analyzed
      */
     private boolean shouldAnalyzeFile(final Path file) {
         String filePath = file.toString();
@@ -104,19 +104,19 @@ public class CodeAnalysisService {
     }
 
     /**
-     * ðŸ” Safely analyzes a single file, returning empty stream on error
+     * 🔍 Safely analyzes a single file, returning empty stream on error
      */
     private Stream<CodeElement> analyzeFileSafely(final Path file) {
         try {
             return analyzeFileByType(file);
         } catch (Exception e) {
-            LOGGER.warn("âš ï¸ Failed to analyze file {}: {}", file, e.getMessage());
+            LOGGER.warn("⚠️ Failed to analyze file {}: {}", file, e.getMessage());
             return Stream.empty();
         }
     }
 
     /**
-     * ðŸ” Analyzes a single file by determining its type
+     * 🔍 Analyzes a single file by determining its type
      */
     private Stream<CodeElement> analyzeFileByType(final Path file) throws IOException {
         String fileName = file.getFileName().toString().toLowerCase();
@@ -130,3 +130,4 @@ public class CodeAnalysisService {
         return Stream.empty();
     }
 }
+

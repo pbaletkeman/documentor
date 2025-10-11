@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * ðŸ§ª Integration tests for DocumentorApplication
+ * 🧪 Integration tests for DocumentorApplication
  *
  * Tests the complete Spring Boot application context and component integration.
  * This ensures all beans are properly configured and wired together.
@@ -131,3 +131,4 @@ class DocumentorApplicationIntegrationTest {
         assertTrue(quickStartResult.contains("config.json"), "Quick start should mention configuration");
     }
 }
+

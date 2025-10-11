@@ -25,3 +25,4 @@ public final class ApplicationConstants {
     /** Maximum number of lines to process in a single batch */
     public static final int MAX_LINES_PER_BATCH = 1000;
 }
+

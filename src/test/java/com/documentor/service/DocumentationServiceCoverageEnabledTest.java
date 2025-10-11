@@ -139,3 +139,4 @@ class DocumentationServiceCoverageEnabledTest {
         verify(elementDocGenerator, times(1)).generateElementDocumentation(any(), any());
     }
 }
+

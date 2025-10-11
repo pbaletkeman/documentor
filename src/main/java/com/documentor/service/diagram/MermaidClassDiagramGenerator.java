@@ -15,7 +15,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.List;
 
 /**
- * ðŸ“ Mermaid Class Diagram Generator
+ * 📊 Mermaid Class Diagram Generator
  *
  * Specialized component for generating individual class diagrams in Mermaid format.
  * Handles the creation of class structure diagrams with fields and methods.
@@ -38,6 +38,12 @@ public class MermaidClassDiagramGenerator {
         StringBuilder diagram = new StringBuilder();
         diagram.append("# ").append(className).append(" Class Diagram\n\n");
         diagram.append("```mermaid\n");
+        diagram.append("---\n");
+        diagram.append("title: sample title\n");
+        diagram.append("config: \n");
+        diagram.append("  layout: elk\n");
+        diagram.append("  theme: forest %% neutral, for black-and-white documents commented out\n");
+        diagram.append("---\n");
         diagram.append("classDiagram\n");
 
         // Add the main class
@@ -53,7 +59,7 @@ public class MermaidClassDiagramGenerator {
         Files.writeString(diagramPath, diagram.toString(),
             StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
-        LOGGER.debug("âœ… Generated diagram: {}", diagramPath);
+        LOGGER.debug("✅ Generated diagram: {}", diagramPath);
         return diagramPath.toString();
     }
 
@@ -125,14 +131,14 @@ public class MermaidClassDiagramGenerator {
     }
 
     /**
-     * ðŸ§¹ Sanitizes class name for Mermaid compatibility
+     * 🧹 Sanitizes class name for Mermaid compatibility
      */
     private String sanitizeClassName(final String className) {
         return className.replaceAll("[^a-zA-Z0-9_]", "_");
     }
 
     /**
-     * ðŸ§¹ Sanitizes method/field signature for Mermaid compatibility
+     * 🧹 Sanitizes method/field signature for Mermaid compatibility
      */
     private String sanitizeSignature(final String signature) {
         // Remove complex generics and packages for readability
@@ -149,10 +155,11 @@ public class MermaidClassDiagramGenerator {
     }
 
     /**
-     * ðŸ" Simplified visibility check using enum
+     * 🔍 Simplified visibility check using enum
      */
     private boolean isNonPrivate(final CodeElement element) {
         CodeVisibility visibility = CodeVisibility.fromSignatureAndName(element.signature(), element.name());
         return visibility.shouldInclude(false); // Don't include private elements in diagrams
     }
 }
+

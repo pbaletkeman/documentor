@@ -3,7 +3,7 @@ package com.documentor.service.llm;
 import com.documentor.model.CodeElement;
 import org.springframework.stereotype.Component;
 
-/** ðŸ“ LLM Prompt Templates - Centralized prompt generation */
+/** 🔍 LLM Prompt Templates - Centralized prompt generation */
 @Component
 public class LlmPromptTemplates {
 
@@ -31,3 +31,4 @@ public class LlmPromptTemplates {
                            type, codeElement.getAnalysisContext());
     }
 }
+

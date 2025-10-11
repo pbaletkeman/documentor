@@ -54,7 +54,7 @@ public class MermaidDiagramService {
             try {
                 return generateDiagrams(analysis, outputPath);
             } catch (Exception e) {
-                LOGGER.error("âŒ Error generating Mermaid diagrams: {}", e.getMessage(), e);
+                LOGGER.error("❌ Error generating Mermaid diagrams: {}", e.getMessage(), e);
                 throw new RuntimeException("Failed to generate Mermaid diagrams", e);
             }
         });
@@ -79,12 +79,12 @@ public class MermaidDiagramService {
                 String diagram = processSingleClassDiagram(classElement, elementsByClass, outputPath);
                 generatedFiles.add(diagram);
             } catch (Exception e) {
-                LOGGER.warn("âš ï¸ Failed to generate diagram for {}: {}",
+                LOGGER.warn("⚠️ Failed to generate diagram for {}: {}",
                      classElement.name(), e.getMessage());
             }
         });
 
-        LOGGER.info("âœ… Generated {} Mermaid diagrams", generatedFiles.size());
+        LOGGER.info("✅ Generated {} Mermaid diagrams", generatedFiles.size());
         return generatedFiles;
     }
 
@@ -111,3 +111,4 @@ public class MermaidDiagramService {
             .generateClassDiagram(classElement, classElements, outputDir);
     }
 }
+

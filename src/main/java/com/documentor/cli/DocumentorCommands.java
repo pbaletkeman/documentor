@@ -8,7 +8,7 @@ import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 
 /**
- * ðŸ–¥ï¸ Command Line Interface for Documentor
+ * 🔍 Command Line Interface for Documentor
  *
  * Provides interactive commands for analyzing projects and generating documentation.
  * Uses Spring Shell for a rich CLI experience with delegated command handlers.
@@ -34,7 +34,7 @@ public class DocumentorCommands {
     }
 
     /**
-     * ðŸš€ Main command to analyze a project and generate documentation
+     * 🔍 Main command to analyze a project and generate documentation
      */
     @ShellMethod(value = "Analyze a project and generate documentation",
             key = {"analyze", "generate"})
@@ -63,7 +63,7 @@ public class DocumentorCommands {
     }
 
     /**
-     * ðŸ“Š Scan project without generating documentation
+     * 🔍 Scan project without generating documentation
      */
     @ShellMethod(value = "Analyze a project and show statistics",
             key = {"scan", "analyze-only"})
@@ -79,7 +79,7 @@ public class DocumentorCommands {
     }
 
     /**
-     * âš™ï¸ Validate configuration file
+     * ⚙️ Validate configuration file
      */
     @ShellMethod(value = "Validate configuration file",
             key = {"validate-config", "check-config"})
@@ -93,7 +93,7 @@ public class DocumentorCommands {
     }
 
     /**
-     * ðŸ“š Show supported file types and features
+     * 🔍 Show supported file types and features
      */
     @ShellMethod(value = "Show supported file types and features", key = {"info", "help-extended"})
     public String showInfo() {
@@ -101,7 +101,7 @@ public class DocumentorCommands {
     }
 
     /**
-     * ðŸš€ Show quick start guide
+     * 🔍 Show quick start guide
      */
     @ShellMethod(value = "Show quick start guide", key = {"quick-start", "getting-started"})
     public String quickStart() {
@@ -109,10 +109,11 @@ public class DocumentorCommands {
     }
 
     /**
-     * ðŸ“‹ Show current application status
+     * 🔍 Show current application status
      */
     @ShellMethod(value = "Show current application status", key = {"status", "current"})
     public String showStatus() {
         return statusHandler.handleShowStatus(currentProjectPath, currentConfigPath);
     }
 }
+

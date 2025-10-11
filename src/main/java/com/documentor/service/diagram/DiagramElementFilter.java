@@ -90,3 +90,4 @@ public class DiagramElementFilter {
             .collect(Collectors.groupingBy(CodeElement::filePath));
     }
 }
+

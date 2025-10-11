@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /**
- * ðŸ” Analysis Settings Configuration - Simplified
+ * 🔍 Analysis Settings Configuration - Simplified
  */
 public record AnalysisSettings(
     @JsonProperty("include_private_members")
@@ -53,3 +53,4 @@ public record AnalysisSettings(
         return List.of("java", "python");
     }
 }
+

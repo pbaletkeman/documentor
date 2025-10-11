@@ -86,3 +86,4 @@ class MermaidClassDiagramGeneratorTest {
         assertEquals(diagramPath.toString(), result);
     }
 }
+

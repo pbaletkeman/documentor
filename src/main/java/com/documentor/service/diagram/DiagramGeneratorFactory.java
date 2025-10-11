@@ -3,7 +3,7 @@ package com.documentor.service.diagram;
 import org.springframework.stereotype.Component;
 
 /**
- * ðŸ­ Diagram Generator Factory
+ * 🔍 Diagram Generator Factory
  *
  * Factory for creating appropriate diagram generators based on code elements.
  * Reduces complexity by extracting the diagram generation logic from MermaidDiagramService.
@@ -18,9 +18,10 @@ public class DiagramGeneratorFactory {
     }
 
     /**
-     * ðŸ”„ Returns the appropriate diagram generator
+     * 🔍 Returns the appropriate diagram generator
      */
     public MermaidClassDiagramGenerator getClassDiagramGenerator() {
         return classDiagramGenerator;
     }
 }
+

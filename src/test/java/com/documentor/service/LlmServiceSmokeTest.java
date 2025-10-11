@@ -9,3 +9,4 @@ class LlmServiceSmokeTest {
         // minimal compilation-only test to keep the suite stable
     }
 }
+

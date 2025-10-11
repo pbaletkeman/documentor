@@ -4,7 +4,7 @@ import com.documentor.constants.ApplicationConstants;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * ðŸ”§ LLM Model Configuration Record
+ * 🔍 LLM Model Configuration Record
  *
  * Extracted from nested DocumentorConfig to reduce complexity.
  * Contains all LLM-specific configuration settings.
@@ -58,3 +58,4 @@ public record LlmModelConfig(
         }
     }
 }
+

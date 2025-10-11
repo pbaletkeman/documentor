@@ -148,3 +148,4 @@ public class PythonRegexAnalyzer {
         return config.analysisSettings().includePrivateMembers() || !isPrivate;
     }
 }
+

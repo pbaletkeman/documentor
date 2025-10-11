@@ -9,3 +9,4 @@ public class TestDiagramGeneratorFactory extends DiagramGeneratorFactory {
         super(classDiagramGenerator);
     }
 }
+

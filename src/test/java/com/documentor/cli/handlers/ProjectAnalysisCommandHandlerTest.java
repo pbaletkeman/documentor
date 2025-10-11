@@ -105,7 +105,7 @@ class ProjectAnalysisCommandHandlerTest {
         // Assert
         verify(commonHandler).directoryExists(nonExistentPath);
         verify(analysisService, never()).analyzeProject(any(Path.class));
-        assertTrue(result.contains("âŒ Error"), "Should return error for non-existent directory");
+        assertTrue(result.contains("❌ Error"), "Should return error for non-existent directory");
     }
 
     @Test
@@ -115,13 +115,14 @@ class ProjectAnalysisCommandHandlerTest {
         when(commonHandler.directoryExists(tmp.toString())).thenReturn(true);
         when(analysisService.analyzeProject(tmp)).thenThrow(exception);
         when(commonHandler.formatErrorMessage(anyString(), eq(exception)))
-            .thenReturn("âŒ Error during analysis: Test exception");
+            .thenReturn("❌ Error during analysis: Test exception");
 
         // Act
         String result = handler.handleAnalyzeProject(tmp.toString(), "", false, "");
 
         // Assert
         verify(commonHandler).formatErrorMessage(anyString(), eq(exception));
-        assertTrue(result.contains("âŒ Error during analysis"), "Should format exception message");
+        assertTrue(result.contains("❌ Error during analysis"), "Should format exception message");
     }
 }
+

@@ -83,3 +83,4 @@ class DiagramPathManagerEnhancedTest {
         assertEquals(Paths.get("/tmp/diagrams/class/samples"), outputPath);
     }
 }
+

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotEmpty;
 
 /**
- * ðŸ“¤ Output Settings Configuration - Simplified
+ * 🔍 Output Settings Configuration - Simplified
  */
 public record OutputSettings(
     @JsonProperty("output_directory")
@@ -59,3 +59,4 @@ public record OutputSettings(
         return outputDirectory;
     }
 }
+

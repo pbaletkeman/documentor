@@ -9,7 +9,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.time.Duration;
 import java.util.Map;
 
-/** ðŸŒ LLM API Client - Refactored for Low Complexity */
+/** 🔍 LLM API Client - Refactored for Low Complexity */
 @Component
 public class LlmApiClient {
 
@@ -45,8 +45,9 @@ public class LlmApiClient {
             return response;
 
         } catch (Exception e) {
-            LOGGER.error("âŒ LLM API call failed for model {}: {}", model.name(), e.getMessage());
+            LOGGER.error("❌ LLM API call failed for model {}: {}", model.name(), e.getMessage());
             return "Error generating content with " + model.name();
         }
     }
 }
+

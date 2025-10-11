@@ -252,3 +252,4 @@ class PythonRegexAnalyzerTest {
         when(mockPatternMatcher.extractParameters(anyString())).thenReturn(new String[0]);
     }
 }
+

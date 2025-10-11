@@ -189,3 +189,4 @@ class ConfigurationCommandHandlerTest {
                 || res.contains("Warning: No analysis settings configured"));
     }
 }
+

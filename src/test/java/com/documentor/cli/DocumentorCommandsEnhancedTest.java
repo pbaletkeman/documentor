@@ -135,3 +135,4 @@ class DocumentorCommandsEnhancedTest {
         verify(statusHandler).handleShowStatus("/test/project", "custom-config.json");
     }
 }
+
