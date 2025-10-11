@@ -22,8 +22,9 @@ public class LlmApiClient {
         this.modelTypeDetector = modelTypeDetectorParam;
     }
 
-    /** ðŸ"ž Makes API call to LLM model */
-    public String callLlmModel(final LlmModelConfig model, final String endpoint, final Map<String, Object> requestBody) {
+    /** 📞 Makes API call to LLM model */
+    public String callLlmModel(final LlmModelConfig model, final String endpoint,
+            final Map<String, Object> requestBody) {
         try {
             WebClient.RequestBodySpec request = webClient.post()
                     .uri(endpoint)

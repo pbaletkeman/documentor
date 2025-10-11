@@ -40,7 +40,8 @@ public class PythonASTCommandBuilder {
                         elif isinstance(node, ast.FunctionDef):
                             if not node.name.startswith('_'):
                                 args = [arg.arg for arg in node.args.args]
-                                print(f"FUNCTION|{node.name}|{node.lineno}|{ast.get_docstring(node) or ''}|{','.join(args)}")
+                                docstring = ast.get_docstring(node) or ''
+                                print(f"FUNCTION|{node.name}|{node.lineno}|{docstring}|{','.join(args)}")
                         elif isinstance(node, ast.Assign):
                             for target in node.targets:
                                 if isinstance(target, ast.Name) and not target.id.startswith('_'):

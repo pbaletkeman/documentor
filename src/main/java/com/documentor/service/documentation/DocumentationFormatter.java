@@ -22,7 +22,9 @@ public class DocumentationFormatter {
      */
     public void appendHeader(final StringBuilder doc, final ProjectAnalysis analysis) {
         doc.append("# ").append(getProjectName(analysis.projectPath())).append("\n\n");
-        doc.append("*Generated on: ").append(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)).append("*\n\n");
+        doc.append("*Generated on: ")
+                .append(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                .append("*\n\n");
 
         if (analysis.projectPath() != null && !analysis.projectPath().isEmpty()) {
             doc.append("**Project Path:** `").append(analysis.projectPath()).append("`\n\n");

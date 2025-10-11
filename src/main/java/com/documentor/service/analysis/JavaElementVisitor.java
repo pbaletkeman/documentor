@@ -136,7 +136,8 @@ public class JavaElementVisitor extends VoidVisitorAdapter<Void> {
         super.visit(declaration, arg);
     }
 
-    private boolean shouldInclude(final com.github.javaparser.ast.NodeList<com.github.javaparser.ast.Modifier> modifiers) {
+    private boolean shouldInclude(
+            final com.github.javaparser.ast.NodeList<com.github.javaparser.ast.Modifier> modifiers) {
         if (config.analysisSettings().includePrivateMembers()) {
             return true;
         }

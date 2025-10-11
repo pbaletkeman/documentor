@@ -15,7 +15,8 @@ public class LlmResponseHandler {
     private final LlmResponseParser responseParser;
     private final LlmModelTypeDetector modelTypeDetector;
 
-    public LlmResponseHandler(final LlmResponseParser responseParserParam, final LlmModelTypeDetector modelTypeDetectorParam) {
+    public LlmResponseHandler(final LlmResponseParser responseParserParam,
+            final LlmModelTypeDetector modelTypeDetectorParam) {
         this.responseParser = responseParserParam;
         this.modelTypeDetector = modelTypeDetectorParam;
     }

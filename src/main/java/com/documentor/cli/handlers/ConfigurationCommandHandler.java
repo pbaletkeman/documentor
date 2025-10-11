@@ -62,7 +62,9 @@ public final class ConfigurationCommandHandler {
 
         if (config.analysisSettings() != null) {
             result.append("🔍 Max Threads: ").append(config.analysisSettings().maxThreads()).append("\n");
-            result.append("🗂️ Supported Languages: ").append(String.join(", ", config.analysisSettings().supportedLanguages())).append("\n");
+            result.append("🗂️ Supported Languages: ")
+                    .append(String.join(", ", config.analysisSettings().supportedLanguages()))
+                    .append("\n");
         }
         result.append("\n");
     }

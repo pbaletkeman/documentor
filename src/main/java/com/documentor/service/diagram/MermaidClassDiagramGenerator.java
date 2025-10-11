@@ -26,9 +26,10 @@ public class MermaidClassDiagramGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(MermaidClassDiagramGenerator.class);
 
     /**
-     * ðŸ"Š Generates a Mermaid class diagram for a single class
+     * 📊 Generates a Mermaid class diagram for a single class
      */
-    public String generateClassDiagram(final CodeElement classElement, final List<CodeElement> allElements, final Path outputPath) throws IOException {
+    public String generateClassDiagram(final CodeElement classElement, final List<CodeElement> allElements,
+            final Path outputPath) throws IOException {
         String className = classElement.name();
         String diagramFileName = className + "_diagram.md";
         Path diagramPath = outputPath.resolve(diagramFileName);
@@ -57,9 +58,10 @@ public class MermaidClassDiagramGenerator {
     }
 
     /**
-     * ðŸ" Adds a class definition to the Mermaid diagram
+     * 🔍 Adds a class definition to the Mermaid diagram
      */
-    private void addClassToMermaid(final StringBuilder diagram, final CodeElement classElement, final List<CodeElement> allElements) {
+    private void addClassToMermaid(final StringBuilder diagram, final CodeElement classElement,
+            final List<CodeElement> allElements) {
         String className = sanitizeClassName(classElement.name());
 
         // Get all methods and fields for this class
@@ -90,9 +92,10 @@ public class MermaidClassDiagramGenerator {
     }
 
     /**
-     * ðŸ"— Adds relationships between classes to the Mermaid diagram
+     * 🔗 Adds relationships between classes to the Mermaid diagram
      */
-    private void addRelationshipsToMermaid(final StringBuilder diagram, final CodeElement classElement, final List<CodeElement> allElements) {
+    private void addRelationshipsToMermaid(final StringBuilder diagram, final CodeElement classElement,
+            final List<CodeElement> allElements) {
         // This is a simplified relationship detection
         // In a full implementation, we would analyze method parameters, return types, and field types
         // to detect associations, dependencies, and inheritance relationships
@@ -138,7 +141,8 @@ public class MermaidClassDiagramGenerator {
 
         // Limit length for diagram readability using constants
         if (cleaned.length() > ApplicationConstants.MAX_SIGNATURE_LENGTH) {
-            cleaned = cleaned.substring(0, ApplicationConstants.MAX_SIGNATURE_LENGTH - ApplicationConstants.TRUNCATE_SUFFIX_LENGTH) + "...";
+            cleaned = cleaned.substring(0, ApplicationConstants.MAX_SIGNATURE_LENGTH
+                    - ApplicationConstants.TRUNCATE_SUFFIX_LENGTH) + "...";
         }
 
         return cleaned;

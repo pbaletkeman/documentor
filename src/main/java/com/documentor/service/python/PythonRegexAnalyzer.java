@@ -48,9 +48,10 @@ public class PythonRegexAnalyzer {
     }
 
     /**
-     * ðŸ"‹ Process class declarations
+     * 📋 Process class declarations
      */
-    private void processClassElements(final Path filePath, final List<String> lines, final String content, final List<CodeElement> elements) {
+    private void processClassElements(final Path filePath, final List<String> lines, final String content,
+            final List<CodeElement> elements) {
         var matcher = patternMatcher.findClassMatches(content);
 
         while (matcher.find()) {
@@ -73,9 +74,10 @@ public class PythonRegexAnalyzer {
     }
 
     /**
-     * ðŸ"‹ Process function declarations
+     * 📋 Process function declarations
      */
-    private void processFunctionElements(final Path filePath, final List<String> lines, final String content, final List<CodeElement> elements) {
+    private void processFunctionElements(final Path filePath, final List<String> lines, final String content,
+            final List<CodeElement> elements) {
         var matcher = patternMatcher.findFunctionMatches(content);
 
         while (matcher.find()) {

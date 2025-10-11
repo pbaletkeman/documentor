@@ -67,7 +67,9 @@ public final class StatusCommandHandler {
     public String handleQuickStart() {
         StringBuilder guide = new StringBuilder();
         guide.append("🚀 Quick Start Guide\n");
-        guide.append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n");
+        guide.append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+                .append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+                .append("\n\n");
 
         guide.append("1️⃣ Configure LLM Models (config.json):\n");
         guide.append("   Create a config.json file with your preferred LLM settings\n\n");
@@ -127,7 +129,9 @@ public final class StatusCommandHandler {
                 status.append("   ").append(i + 1).append(". ").append(model.name()).append("\n");
                 status.append("      API Key: ").append(model.apiKey() != null && !model.apiKey().isEmpty()
                     ? (model.apiKey().length() > ApplicationConstants.API_KEY_PREVIEW_LENGTH
-                        ? model.apiKey().substring(0, ApplicationConstants.API_KEY_PREVIEW_LENGTH) + "..." : "***") : "Not set").append("\n");
+                        ? model.apiKey().substring(0, ApplicationConstants.API_KEY_PREVIEW_LENGTH) + "..."
+                        : "***")
+                    : "Not set").append("\n");
                 if (model.baseUrl() != null && !model.baseUrl().isEmpty()) {
                     status.append("      Base URL: ").append(model.baseUrl()).append("\n");
                 }
@@ -149,8 +153,10 @@ public final class StatusCommandHandler {
             var outputSettings = documentorConfig.outputSettings();
             status.append("   Output Path: ").append(outputSettings.outputPath()).append("\n");
             status.append("   Format: ").append(outputSettings.format()).append("\n");
-            status.append("   Include Icons: ").append(outputSettings.includeIcons() ? "✅ Yes" : "❌ No").append("\n");
-            status.append("   Generate Unit Tests: ").append(outputSettings.generateUnitTests() ? "✅ Yes" : "❌ No").append("\n");
+            status.append("   Include Icons: ").append(outputSettings.includeIcons() ? "✅ Yes" : "❌ No")
+                    .append("\n");
+            status.append("   Generate Unit Tests: ")
+                    .append(outputSettings.generateUnitTests() ? "✅ Yes" : "❌ No").append("\n");
             status.append("   Target Coverage: ").append(String.format("%.1f%%",
                 outputSettings.targetCoverage() * ApplicationConstants.PERCENTAGE_MULTIPLIER)).append("\n");
         } else {
@@ -163,10 +169,13 @@ public final class StatusCommandHandler {
         status.append("🔍 Analysis Settings:\n");
         if (documentorConfig != null && documentorConfig.analysisSettings() != null) {
             var analysisSettings = documentorConfig.analysisSettings();
-            status.append("   Include Private Members: ").append(analysisSettings.includePrivateMembers() ? "✅ Yes" : "❌ No").append("\n");
+            status.append("   Include Private Members: ")
+                    .append(analysisSettings.includePrivateMembers() ? "✅ Yes" : "❌ No").append("\n");
             status.append("   Max Threads: ").append(analysisSettings.maxThreads()).append("\n");
-            status.append("   Supported Languages: ").append(String.join(", ", analysisSettings.supportedLanguages())).append("\n");
-            status.append("   Exclude Patterns: ").append(String.join(", ", analysisSettings.excludePatterns())).append("\n");
+            status.append("   Supported Languages: ")
+                    .append(String.join(", ", analysisSettings.supportedLanguages())).append("\n");
+            status.append("   Exclude Patterns: ")
+                    .append(String.join(", ", analysisSettings.excludePatterns())).append("\n");
         } else {
             status.append("   Using default analysis settings\n");
         }

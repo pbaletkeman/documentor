@@ -91,9 +91,10 @@ public class DocumentationService {
     }
 
     /**
-     * ðŸ“‘ Generates detailed documentation for each code element
+     * 📝 Generates detailed documentation for each code element
      */
-    private CompletableFuture<Void> generateDetailedDocumentation(final ProjectAnalysis analysis, final Path outputPath) {
+    private CompletableFuture<Void> generateDetailedDocumentation(final ProjectAnalysis analysis,
+            final Path outputPath) {
         List<CompletableFuture<Void>> futures = analysis.codeElements().stream()
                 .map(element -> elementDocGenerator.generateElementDocumentation(element, outputPath))
                 .toList();

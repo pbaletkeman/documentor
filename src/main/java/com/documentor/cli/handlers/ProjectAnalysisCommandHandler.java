@@ -107,11 +107,13 @@ public class ProjectAnalysisCommandHandler {
      */
     private void handleMermaidGeneration(final ProjectAnalysis analysis, final String mermaidOutput,
                                        final StringBuilder result) {
-        LOGGER.info("ðŸ§© Generating Mermaid diagrams...");
+        LOGGER.info("🧩 Generating Mermaid diagrams...");
         String mermaidOutputPath = mermaidOutput.trim().isEmpty() ? null : mermaidOutput;
-        CompletableFuture<List<String>> mermaidFuture = mermaidDiagramService.generateClassDiagrams(analysis, mermaidOutputPath);
+        CompletableFuture<List<String>> mermaidFuture = mermaidDiagramService
+                .generateClassDiagrams(analysis, mermaidOutputPath);
         List<String> mermaidResult = mermaidFuture.join();
-        result.append("ðŸ§© Mermaid diagrams: ").append(mermaidResult.size()).append(" diagrams generated").append("\n");
+        result.append("🧩 Mermaid diagrams: ").append(mermaidResult.size())
+                .append(" diagrams generated").append("\n");
     }
 
     /**

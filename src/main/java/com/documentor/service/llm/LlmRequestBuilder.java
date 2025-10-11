@@ -15,7 +15,8 @@ public class LlmRequestBuilder {
     private final LlmPromptTemplates promptTemplates;
     private final LlmRequestFormatter requestFormatter;
 
-    public LlmRequestBuilder(final LlmPromptTemplates promptTemplatesParam, final LlmRequestFormatter requestFormatterParam) {
+    public LlmRequestBuilder(final LlmPromptTemplates promptTemplatesParam,
+            final LlmRequestFormatter requestFormatterParam) {
         this.promptTemplates = promptTemplatesParam;
         this.requestFormatter = requestFormatterParam;
     }

@@ -35,9 +35,10 @@ public class UnitTestDocumentationGenerator {
     }
 
     /**
-     * ðŸ§ª Generates unit test documentation
+     * 🧪 Generates unit test documentation
      */
-    public CompletableFuture<Void> generateUnitTestDocumentation(final ProjectAnalysis analysis, final Path outputPath) {
+    public CompletableFuture<Void> generateUnitTestDocumentation(final ProjectAnalysis analysis,
+            final Path outputPath) {
         return CompletableFuture.supplyAsync(() -> {
             try {
                 Path testsDir = outputPath.resolve("tests");
