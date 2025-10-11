@@ -18,6 +18,10 @@ public class LlmRequestFormatter {
         this.modelTypeDetector = modelTypeDetectorParam;
     }
 
+    // Temperature constants for different LLM providers
+    private static final double DEFAULT_OPENAI_TEMPERATURE = 0.7;
+    private static final double DEFAULT_GENERIC_TEMPERATURE = 0.5;
+
         /**
      * ðŸŽ¯ Creates request body based on model type
      */
@@ -49,7 +53,7 @@ public class LlmRequestFormatter {
             "model", model.name(),
             "messages", List.of(Map.of("role", "user", "content", prompt)),
             "max_tokens", model.maxTokens(),
-            "temperature", Double.valueOf(0.7),
+            "temperature", Double.valueOf(DEFAULT_OPENAI_TEMPERATURE),
             "timeout", model.timeoutSeconds()
         );
     }
@@ -61,7 +65,7 @@ public class LlmRequestFormatter {
         return Map.of(
             "prompt", prompt,
             "max_tokens", model.maxTokens(),
-            "temperature", Double.valueOf(0.5),
+            "temperature", Double.valueOf(DEFAULT_GENERIC_TEMPERATURE),
             "timeout", model.timeoutSeconds()
         );
     }

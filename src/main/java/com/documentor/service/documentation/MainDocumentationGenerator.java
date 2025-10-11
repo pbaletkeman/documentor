@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 @Component
 public class MainDocumentationGenerator {
 
+    private static final int MAX_QUICK_LINKS = 5;
     private final DocumentorConfig config;
 
     public MainDocumentationGenerator(final DocumentorConfig configParam) {
@@ -121,7 +122,7 @@ public class MainDocumentationGenerator {
         // Add links to detailed documentation
         doc.append("### Quick Links\n\n");
         analysis.getClasses().stream()
-                .limit(5) // Show first 5 classes as examples
+                .limit(MAX_QUICK_LINKS) // Show first 5 classes as examples
                 .forEach(cls -> {
                     String fileName = String.format("elements/class-%s.md",
                         cls.name().replaceAll("[^a-zA-Z0-9]", "_"));
