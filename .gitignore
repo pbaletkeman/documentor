@@ -68,6 +68,18 @@ documentor.log
 temp/
 tmp/
 
+# Temporary development files
+*_summary.md
+checkstyle_*.txt
+fix*.ps1
+fix*.sh
+fix*.py
+remove*.ps1
+remove*.py
+java_files.txt
+hs_err_*.log
+replay_*.log
+
 # Runtime configuration that might contain sensitive data
 config/local.json
 *.local.json
