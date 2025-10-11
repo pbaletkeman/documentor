@@ -34,6 +34,11 @@ import static org.mockito.Mockito.when;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class LlmServiceTest2 {
 
+    private static final int MAX_DEPTH = 50;
+    private static final int DEFAULT_MAX_TOKENS = 1000;
+    private static final int DEFAULT_TIMEOUT_SECONDS = 30;
+    private static final int ELEMENT_COUNT_TEST = 5;
+
     @Mock
     private LlmRequestBuilder mockRequestBuilder;
 
@@ -54,11 +59,11 @@ class LlmServiceTest2 {
         );
 
         AnalysisSettings analysisSettings = new AnalysisSettings(
-            true, 50, List.of("**/*.java"), List.of("**/test/**")
+            true, MAX_DEPTH, List.of("**/*.java"), List.of("**/test/**")
         );
 
         LlmModelConfig testModel = new LlmModelConfig(
-            "test-model", "openai", "http://test.api", "api-key", 1000, 30
+            "test-model", "openai", "http://test.api", "api-key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
         );
 
         config = new DocumentorConfig(List.of(testModel), outputSettings, analysisSettings);
@@ -108,7 +113,7 @@ class LlmServiceTest2 {
     void testServiceWithDifferentElementTypes() {
         CodeElement methodElement = new CodeElement(
             CodeElementType.METHOD, "testMethod", "com.example.TestClass.testMethod",
-            "TestClass.java", 5, "public void testMethod()",
+            "TestClass.java", ELEMENT_COUNT_TEST, "public void testMethod()",
             "", List.of("param1"), List.of("@Test")
         );
 

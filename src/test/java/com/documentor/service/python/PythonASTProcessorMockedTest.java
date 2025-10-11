@@ -34,6 +34,10 @@ import static org.mockito.Mockito.atLeast;
 @ExtendWith(MockitoExtension.class)
 public class PythonASTProcessorMockedTest {
 
+    private static final int CLASS_LINE_NUMBER = 10;
+    private static final int METHOD_LINE_NUMBER = 15;
+    private static final int EXPECTED_PARAM_COUNT = 3;
+
     @InjectMocks
     private PythonASTProcessor astProcessor;
 
@@ -71,7 +75,7 @@ public class PythonASTProcessorMockedTest {
                 "ComplexClass",
                 "class ComplexClass",
                 filePath.toString(),
-                10,
+                CLASS_LINE_NUMBER,
                 "class ComplexClass:",
                 "Complex class with multiple methods",
                 List.of(),

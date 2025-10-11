@@ -31,6 +31,10 @@ import static org.mockito.Mockito.when;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class LlmServiceTestClean {
 
+    private static final int MAX_DEPTH = 50;
+    private static final int DEFAULT_MAX_TOKENS = 1000;
+    private static final int DEFAULT_TIMEOUT_SECONDS = 30;
+
     @Mock
     private LlmRequestBuilder mockRequestBuilder;
 
@@ -47,8 +51,8 @@ class LlmServiceTestClean {
     @BeforeEach
     void setUp() {
         OutputSettings outputSettings = new OutputSettings("output", "markdown", true, true);
-        AnalysisSettings analysisSettings = new AnalysisSettings(true, 50, List.of("**/*.java"), List.of("**/test/**"));
-        LlmModelConfig testModel = new LlmModelConfig("test-model", "openai", "http://test.api", "api-key", 1000, 30);
+        AnalysisSettings analysisSettings = new AnalysisSettings(true, MAX_DEPTH, List.of("**/*.java"), List.of("**/test/**"));
+        LlmModelConfig testModel = new LlmModelConfig("test-model", "openai", "http://test.api", "api-key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS);
 
         config = new DocumentorConfig(List.of(testModel), outputSettings, analysisSettings);
         llmService = new LlmService(config, mockRequestBuilder, mockResponseHandler, mockApiClient);
