@@ -19,6 +19,7 @@ class LlmModelConfigTest {
     private static final int DEFAULT_MAX_TOKENS = 1000;
     private static final int DEFAULT_TIMEOUT_SECONDS = 60;
     private static final int ALTERNATIVE_MAX_TOKENS = 2000;
+    private static final int ALTERNATIVE_TIMEOUT_SECONDS = 45;
 
     @Test
     @DisplayName("Should create a valid LLM model config")
@@ -70,7 +71,7 @@ class LlmModelConfigTest {
         String baseUrl = "http://custom-url";
         String apiKey = "custom-key";
         Integer maxTokens = ALTERNATIVE_MAX_TOKENS;
-        Integer timeoutSeconds = 45;
+        Integer timeoutSeconds = ALTERNATIVE_TIMEOUT_SECONDS;
 
         LlmModelConfig config = new LlmModelConfig(name, provider, baseUrl, apiKey, maxTokens, timeoutSeconds);
 

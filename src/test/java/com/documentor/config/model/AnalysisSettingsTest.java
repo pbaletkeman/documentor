@@ -17,12 +17,20 @@ import static org.mockito.Mockito.when;
 @DisplayName("Analysis Settings Tests")
 class AnalysisSettingsTest {
 
+    // Test constants for magic number violations  
+    private static final int MAX_DEPTH_FIVE = 5;
+    private static final int MAX_DEPTH_EIGHT = 8;
+    private static final int MAX_DEPTH_NEGATIVE = -5;
+    private static final int TEST_VALUE_FORTY_TWO = 42;
+    private static final int MAX_DEPTH_FIFTEEN = 15;
+    private static final int MAX_DEPTH_FORTY_FIVE = 45;
+
     @Test
     @DisplayName("Should create AnalysisSettings with provided values")
     void shouldCreateWithProvidedValues() {
         // Given
         Boolean includePrivateMembers = true;
-        Integer maxDepth = 5;
+        Integer maxDepth = MAX_DEPTH_FIVE;
         List<String> includedPatterns = List.of("**/*.java");
         List<String> excludedPatterns = List.of("**/generated/**");
 
@@ -58,7 +66,7 @@ class AnalysisSettingsTest {
     @DisplayName("Should return correct maxThreads when maxDepth is provided")
     void shouldReturnCorrectMaxThreadsWhenMaxDepthIsProvided() {
         // Given
-        Integer customMaxDepth = 8;
+        Integer customMaxDepth = MAX_DEPTH_EIGHT;
         AnalysisSettings settings = new AnalysisSettings(false, customMaxDepth, null, null);
 
         // When & Then
@@ -70,7 +78,7 @@ class AnalysisSettingsTest {
     void shouldReturnAtLeastOneThreadWhenMaxDepthIsZeroOrNegative() {
         // Given
         AnalysisSettings settingsWithZero = new AnalysisSettings(false, 0, null, null);
-        AnalysisSettings settingsWithNegative = new AnalysisSettings(false, -5, null, null);
+        AnalysisSettings settingsWithNegative = new AnalysisSettings(false, MAX_DEPTH_NEGATIVE, null, null);
 
         // When
         int threadsWithZero = settingsWithZero.maxThreads();
@@ -101,8 +109,8 @@ class AnalysisSettingsTest {
         // that the actual implementation is being used by mocking the AnalysisSettings class
         // and verifying our test logic
         AnalysisSettings mockSettings = mock(AnalysisSettings.class);
-        when(mockSettings.maxThreads()).thenReturn(42); // arbitrary value
-        assertEquals(42, mockSettings.maxThreads(),
+        when(mockSettings.maxThreads()).thenReturn(TEST_VALUE_FORTY_TWO); // arbitrary value
+        assertEquals(TEST_VALUE_FORTY_TWO, mockSettings.maxThreads(),
             "Mock verification: maxThreads() should return the configured value");
     }
 
@@ -154,8 +162,8 @@ class AnalysisSettingsTest {
                 ),
                 // Test with only maxDepth set
                 Arguments.of(
-                        null, 15, null, null,
-                        false, 15, List.of("**/*.java", "**/*.py"), List.of("**/test/**", "**/target/**")
+                        null, MAX_DEPTH_FIFTEEN, null, null,
+                        false, MAX_DEPTH_FIFTEEN, List.of("**/*.java", "**/*.py"), List.of("**/test/**", "**/target/**")
                 ),
                 // Test with only includedPatterns set
                 Arguments.of(

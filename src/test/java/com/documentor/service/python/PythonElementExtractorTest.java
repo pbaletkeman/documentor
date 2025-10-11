@@ -11,6 +11,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PythonElementExtractorTest {
+    
+    // Test constants for magic number violations
+    private static final int OUT_OF_BOUNDS_INDEX = 10;
 
     private PythonElementExtractor extractor;
 
@@ -94,7 +97,7 @@ class PythonElementExtractorTest {
         );
 
         // Act
-        String result = extractor.extractDocstring(lines, 10);
+        String result = extractor.extractDocstring(lines, OUT_OF_BOUNDS_INDEX);
 
         // Assert
         assertEquals("", result);

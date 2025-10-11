@@ -30,6 +30,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 class PythonASTProcessorTest {
+    
+    // Test constants for magic number violations
+    private static final int LINE_NUMBER_TEN = 10;
+    private static final int LINE_NUMBER_FIFTEEN = 15;
+    private static final int LINE_NUMBER_TWENTY = 20;
+    private static final int LINE_NUMBER_THREE = 3;
+    private static final int LINE_NUMBER_FIVE = 5;
 
     @InjectMocks
     private PythonASTProcessor astProcessor;
@@ -60,7 +67,7 @@ class PythonASTProcessorTest {
         assertEquals("TestClass", element.name());
         assertEquals("class TestClass:", element.signature());
         assertEquals(filePath.toString(), element.filePath());
-        assertEquals(10, element.lineNumber());
+        assertEquals(LINE_NUMBER_TEN, element.lineNumber());
         assertEquals("This is a test class", element.documentation());
     }
 
@@ -79,7 +86,7 @@ class PythonASTProcessorTest {
         assertEquals("test_function", element.name());
         assertEquals("def test_function(param1, param2):", element.signature());
         assertEquals(filePath.toString(), element.filePath());
-        assertEquals(15, element.lineNumber());
+        assertEquals(LINE_NUMBER_FIFTEEN, element.lineNumber());
         assertEquals("This is a test function", element.documentation());
         assertEquals(List.of("param1", "param2"), element.parameters());
     }
@@ -99,7 +106,7 @@ class PythonASTProcessorTest {
         assertEquals("test_var", element.name());
         assertEquals("test_var = ...", element.signature());
         assertEquals(filePath.toString(), element.filePath());
-        assertEquals(20, element.lineNumber());
+        assertEquals(LINE_NUMBER_TWENTY, element.lineNumber());
         assertEquals("", element.documentation());
     }
 
@@ -173,13 +180,13 @@ class PythonASTProcessorTest {
 
         CodeElement methodElement = new CodeElement(
             CodeElementType.METHOD, "test_method", "def test_method(self, param1, param2)",
-            filePath.toString(), 3, "def test_method(self, param1, param2):", "This is a test method",
+            filePath.toString(), LINE_NUMBER_THREE, "def test_method(self, param1, param2):", "This is a test method",
             List.of("self", "param1", "param2"), List.of()
         );
 
         CodeElement fieldElement = new CodeElement(
             CodeElementType.FIELD, "test_var", "test_var = ...",
-            filePath.toString(), 5, "test_var = ...", "",
+            filePath.toString(), LINE_NUMBER_FIVE, "test_var = ...", "",
             List.of(), List.of()
         );
 
@@ -195,7 +202,7 @@ class PythonASTProcessorTest {
         List<CodeElement> elements = mockedProcessor.analyzeWithAST(filePath);
 
         assertNotNull(elements);
-        assertEquals(3, elements.size());
+        assertEquals(LINE_NUMBER_THREE, elements.size());
 
         // Verify we have the expected elements
         assertTrue(elements.stream().anyMatch(e -> e.type() == CodeElementType.CLASS && "TestClass".equals(e.name())));

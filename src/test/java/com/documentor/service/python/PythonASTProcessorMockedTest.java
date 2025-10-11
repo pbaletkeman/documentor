@@ -88,7 +88,7 @@ public class PythonASTProcessorMockedTest {
                 "complex_method",
                 "def complex_method(param1, param2, param3)",
                 filePath.toString(),
-                15,
+                METHOD_LINE_NUMBER,
                 "def complex_method(param1, param2, param3):",
                 "Method that does complex things",
                 List.of("param1", "param2", "param3"),
@@ -122,7 +122,7 @@ public class PythonASTProcessorMockedTest {
             .orElse(null);
         assertNotNull(classElement);
         assertEquals("ComplexClass", classElement.name());
-        assertEquals(10, classElement.lineNumber());
+        assertEquals(CLASS_LINE_NUMBER, classElement.lineNumber());
 
         CodeElement methodElement = elements.stream()
             .filter(e -> e.type() == CodeElementType.METHOD)
@@ -130,8 +130,8 @@ public class PythonASTProcessorMockedTest {
             .orElse(null);
         assertNotNull(methodElement);
         assertEquals("complex_method", methodElement.name());
-        assertEquals(15, methodElement.lineNumber());
-        assertEquals(3, methodElement.parameters().size());
+        assertEquals(METHOD_LINE_NUMBER, methodElement.lineNumber());
+        assertEquals(EXPECTED_PARAM_COUNT, methodElement.parameters().size());
     }
 
     @Test

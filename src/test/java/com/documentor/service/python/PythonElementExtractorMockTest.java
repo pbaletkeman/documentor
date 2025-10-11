@@ -31,6 +31,9 @@ import static org.mockito.Mockito.never;
  */
 @ExtendWith(MockitoExtension.class)
 public class PythonElementExtractorMockTest {
+    
+    // Test constants for magic number violations
+    private static final int TEST_METHOD_LINE_NUMBER = 5;
 
     @Mock
     private PythonASTProcessor astProcessor;
@@ -89,7 +92,7 @@ public class PythonElementExtractorMockTest {
             "test_method",
             "def test_method(param1, param2):",
             pythonFile.toString(),
-            5,
+            TEST_METHOD_LINE_NUMBER,
             "Test method docstring",
             "",
             List.of("param1", "param2"),

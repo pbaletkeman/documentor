@@ -26,6 +26,10 @@ import static org.mockito.Mockito.mock;
 
 @DisplayName("Python Regex Analyzer Tests")
 class PythonRegexAnalyzerTest {
+    
+    // Test constants for magic number violations
+    private static final int FUNCTION_LINE_START = 20;
+    private static final int VARIABLE_LINE_START = 40;
 
     private DocumentorConfig mockConfig;
     private AnalysisSettings mockAnalysisSettings;
@@ -226,14 +230,14 @@ class PythonRegexAnalyzerTest {
         when(functionMatcher.group()).thenReturn("def test_function():");
         when(functionMatcher.group(1)).thenReturn("test_function");
         when(functionMatcher.group(2)).thenReturn("");
-        when(functionMatcher.start()).thenReturn(20);
+        when(functionMatcher.start()).thenReturn(FUNCTION_LINE_START);
 
         // Variable matcher
         Matcher variableMatcher = Mockito.mock(Matcher.class);
         when(variableMatcher.find()).thenReturn(true, false);
         when(variableMatcher.group()).thenReturn("test_var = 100");
         when(variableMatcher.group(1)).thenReturn("test_var");
-        when(variableMatcher.start()).thenReturn(40);
+        when(variableMatcher.start()).thenReturn(VARIABLE_LINE_START);
 
         when(mockPatternMatcher.findClassMatches(anyString())).thenReturn(classMatcher);
         when(mockPatternMatcher.findFunctionMatches(anyString())).thenReturn(functionMatcher);

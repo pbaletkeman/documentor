@@ -17,9 +17,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class StatusCommandHandlerTest {
 
+    // Test constants for magic number violations
+    private static final int MAX_TOKENS = 200;
+    private static final int TIMEOUT_SECONDS = 20;
+    private static final int TIMEOUT_SECONDS_SHORTER = 10;
+    private static final int MAX_TOKENS_LOWER = 100;
+    private static final int THREAD_COUNT = 4;
+
     @Test
     void showStatusIncludesProjectAndConfigInfo() {
-        LlmModelConfig model = new LlmModelConfig("m", "openai", "http://x", "apikey123456", 200, 20);
+        LlmModelConfig model = new LlmModelConfig("m", "openai", "http://x", "apikey123456", MAX_TOKENS, TIMEOUT_SECONDS);
         OutputSettings output = new OutputSettings("out", "md", true, true);
         AnalysisSettings analysis = new AnalysisSettings(true, 2, List.of("**/*.java"), List.of("**/test/**"));
 
@@ -142,8 +149,8 @@ class StatusCommandHandlerTest {
 
     @Test
     void showStatus_withMultipleLlmModels() {
-        LlmModelConfig model1 = new LlmModelConfig("model1", "openai", "http://api1", "key1", 100, 10);
-        LlmModelConfig model2 = new LlmModelConfig("model2", "ollama", "http://api2", "key2", 200, 20);
+        LlmModelConfig model1 = new LlmModelConfig("model1", "openai", "http://api1", "key1", MAX_TOKENS_LOWER, TIMEOUT_SECONDS_SHORTER);
+        LlmModelConfig model2 = new LlmModelConfig("model2", "ollama", "http://api2", "key2", MAX_TOKENS, TIMEOUT_SECONDS);
         
         DocumentorConfig cfg = new DocumentorConfig(List.of(model1, model2), null, null);
         StatusCommandHandler handler = new StatusCommandHandler(cfg);
@@ -159,7 +166,7 @@ class StatusCommandHandlerTest {
     @Test
     void showStatus_withLlmModelWithLongApiKey() {
         // Create a model with long API key to test truncation
-        LlmModelConfig model = new LlmModelConfig("model", "openai", "http://api", "verylongapikeystring123456", 100, 10);
+        LlmModelConfig model = new LlmModelConfig("model", "openai", "http://api", "verylongapikeystring123456", MAX_TOKENS_LOWER, TIMEOUT_SECONDS_SHORTER);
         
         DocumentorConfig cfg = new DocumentorConfig(List.of(model), null, null);
         StatusCommandHandler handler = new StatusCommandHandler(cfg);
@@ -171,7 +178,7 @@ class StatusCommandHandlerTest {
 
     @Test
     void showStatus_withLlmModelWithEmptyApiKey() {
-        LlmModelConfig model = new LlmModelConfig("model", "openai", "http://api", "", 100, 10);
+        LlmModelConfig model = new LlmModelConfig("model", "openai", "http://api", "", MAX_TOKENS_LOWER, TIMEOUT_SECONDS_SHORTER);
         
         DocumentorConfig cfg = new DocumentorConfig(List.of(model), null, null);
         StatusCommandHandler handler = new StatusCommandHandler(cfg);
@@ -221,14 +228,14 @@ class StatusCommandHandlerTest {
 
     @Test
     void showStatus_withCompleteAnalysisSettings() {
-        AnalysisSettings analysis = new AnalysisSettings(false, 4, List.of("java", "python"), List.of("*.class", "*.pyc"));
+        AnalysisSettings analysis = new AnalysisSettings(false, THREAD_COUNT, List.of("java", "python"), List.of("*.class", "*.pyc"));
         DocumentorConfig cfg = new DocumentorConfig(Collections.emptyList(), null, analysis);
         StatusCommandHandler handler = new StatusCommandHandler(cfg);
         String status = handler.handleShowStatus(null, null);
         
         assertTrue(status.contains("🔍 Analysis Settings:"));
         assertTrue(status.contains("Include Private Members: ❌ No"));
-        assertTrue(status.contains("Max Threads: 4"));
+        assertTrue(status.contains("Max Threads: " + THREAD_COUNT));
         assertTrue(status.contains("Supported Languages: java, python"));
         assertTrue(status.contains("Exclude Patterns: *.class, *.pyc"));
     }
@@ -236,7 +243,7 @@ class StatusCommandHandlerTest {
     @Test
     void showStatus_withLlmModelWithNullApiKey() {
         // Test branch where model.apiKey() is null - should show "Not set"
-        LlmModelConfig model = new LlmModelConfig("model", "openai", "http://api", null, 100, 10);
+        LlmModelConfig model = new LlmModelConfig("model", "openai", "http://api", null, MAX_TOKENS_LOWER, TIMEOUT_SECONDS_SHORTER);
         DocumentorConfig cfg = new DocumentorConfig(List.of(model), null, null);
         StatusCommandHandler handler = new StatusCommandHandler(cfg);
         String status = handler.handleShowStatus(null, null);

@@ -31,6 +31,9 @@ import static org.mockito.Mockito.verifyNoInteractions;
 
 @ExtendWith(MockitoExtension.class)
 class PythonCodeAnalyzerTest {
+    
+    // Test constants for magic number violations
+    private static final int ELEMENT_LINE_NUMBER = 3;
 
     @Mock
     private PythonASTProcessor astProcessor;
@@ -91,7 +94,7 @@ class PythonCodeAnalyzerTest {
         Path testFile = createPythonTestFile();
         List<CodeElement> expectedElements = List.of(
             new CodeElement(CodeElementType.FIELD, "variable", "variable",
-                testFile.toString(), 3, "variable = 42", "", Collections.emptyList(), Collections.emptyList())
+                testFile.toString(), ELEMENT_LINE_NUMBER, "variable = 42", "", Collections.emptyList(), Collections.emptyList())
         );
 
         when(astProcessor.analyzeWithAST(any(Path.class))).thenReturn(Collections.emptyList());

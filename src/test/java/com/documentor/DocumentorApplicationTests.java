@@ -22,6 +22,11 @@ import java.util.List;
 @ActiveProfiles("test")
 class DocumentorApplicationTests {
 
+    // Test constants for magic number violations
+    private static final int TEST_MAX_TOKENS = 1000;
+    private static final int TEST_TIMEOUT_SECONDS = 10;
+    private static final int TEST_MAX_DEPTH = 5;
+
     @TestConfiguration
     static class TestConfig {
 
@@ -33,8 +38,8 @@ class DocumentorApplicationTests {
                 "test-provider",
                 "http://localhost:11434",
                 "test-key",
-                1000,
-                10
+                TEST_MAX_TOKENS,
+                TEST_TIMEOUT_SECONDS
             );
 
             OutputSettings outputSettings = new OutputSettings(
@@ -46,7 +51,7 @@ class DocumentorApplicationTests {
 
             AnalysisSettings analysisSettings = new AnalysisSettings(
                 true,
-                5,
+                TEST_MAX_DEPTH,
                 List.of("**/*.java"),
                 List.of("**/target/**")
             );

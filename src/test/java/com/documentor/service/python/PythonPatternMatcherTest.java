@@ -11,6 +11,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Tests for PythonPatternMatcher class
  */
 class PythonPatternMatcherTest {
+    
+    // Test constants for magic number violations
+    private static final int EXPECTED_CLASS_COUNT = 3;
+    private static final int EXPECTED_FUNCTION_COUNT = 3;
+    private static final int EXPECTED_VARIABLE_COUNT = 4;
+    private static final int EXPECTED_COMPLEX_PARAM_COUNT = 5;
+    private static final int EXPECTED_PARAM_COUNT = 3;
+    private static final int FIRST_ITEM = 1;
+    private static final int SECOND_ITEM = 2;
+    private static final int THIRD_ITEM = 3;
+    private static final int FOURTH_ITEM = 4;
+    private static final int FIFTH_ITEM = 5;
 
     private final PythonPatternMatcher matcher = new PythonPatternMatcher();
 
@@ -40,15 +52,15 @@ class PythonPatternMatcherTest {
         while (classMatcher.find()) {
             count++;
             String className = classMatcher.group(1);
-            if (count == 1) {
+            if (count == FIRST_ITEM) {
                 assertEquals("SimpleClass", className);
-            } else if (count == 2) {
+            } else if (count == SECOND_ITEM) {
                 assertEquals("ComplexClass", className);
-            } else if (count == 3) {
+            } else if (count == THIRD_ITEM) {
                 assertEquals("IndentedClass", className);
             }
         }
-        assertEquals(3, count, "Should find exactly 3 class declarations");
+        assertEquals(EXPECTED_CLASS_COUNT, count, "Should find exactly 3 class declarations");
     }
 
     @Test
@@ -79,18 +91,18 @@ class PythonPatternMatcherTest {
             String functionName = functionMatcher.group(1);
             String params = functionMatcher.group(2);
 
-            if (count == 1) {
+            if (count == FIRST_ITEM) {
                 assertEquals("simple_function", functionName);
                 assertEquals("", params);
-            } else if (count == 2) {
+            } else if (count == SECOND_ITEM) {
                 assertEquals("function_with_params", functionName);
                 assertEquals("a, b=10, *args, **kwargs", params);
-            } else if (count == 3) {
+            } else if (count == THIRD_ITEM) {
                 assertEquals("indented_function", functionName);
                 assertEquals("x", params);
             }
         }
-        assertEquals(3, count, "Should find exactly 3 function declarations");
+        assertEquals(EXPECTED_FUNCTION_COUNT, count, "Should find exactly 3 function declarations");
     }
 
     @Test
@@ -115,21 +127,21 @@ class PythonPatternMatcherTest {
             String variableName = variableMatcher.group(1);
             String value = variableMatcher.group(2);
 
-            if (count == 1) {
+            if (count == FIRST_ITEM) {
                 assertEquals("x", variableName);
                 assertEquals("10", value);
-            } else if (count == 2) {
+            } else if (count == SECOND_ITEM) {
                 assertEquals("name", variableName);
                 assertEquals("\"John\"", value);
-            } else if (count == 3) {
+            } else if (count == THIRD_ITEM) {
                 assertEquals("PI", variableName);
                 assertEquals("3.14159", value);
-            } else if (count == 4) {
+            } else if (count == FOURTH_ITEM) {
                 assertEquals("complex_var", variableName);
                 assertEquals("{\"key\": \"value\"}", value);
             }
         }
-        assertEquals(4, count, "Should find exactly 4 variable assignments");
+        assertEquals(EXPECTED_VARIABLE_COUNT, count, "Should find exactly 4 variable assignments");
     }
 
     @Test
@@ -192,17 +204,17 @@ class PythonPatternMatcherTest {
         assertEquals(1, result2.length);
         assertEquals("x", result2[0]);
 
-        assertEquals(3, result3.length);
+        assertEquals(EXPECTED_PARAM_COUNT, result3.length);
         assertEquals("a", result3[0]);
         assertEquals("b", result3[1]);
         assertEquals("c", result3[2]);
 
-        assertEquals(5, result4.length);
+        assertEquals(EXPECTED_COMPLEX_PARAM_COUNT, result4.length);
         assertEquals("self", result4[0]);
         assertEquals("name", result4[1]);
         assertEquals("age=30", result4[2]);
-        assertEquals("*args", result4[3]);
-        assertEquals("**kwargs", result4[4]);
+        assertEquals("*args", result4[EXPECTED_CLASS_COUNT]);
+        assertEquals("**kwargs", result4[FOURTH_ITEM]);
 
         assertEquals(0, result5.length);
     }

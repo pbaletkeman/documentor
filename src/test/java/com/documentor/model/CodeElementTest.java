@@ -14,6 +14,12 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
  */
 class CodeElementTest {
 
+    // Test constants for magic number violations
+    private static final int LINE_NUMBER_TEN = 10;
+    private static final int LINE_NUMBER_FIVE = 5;
+    private static final int LINE_NUMBER_FIFTEEN = 15;
+    private static final int LINE_NUMBER_TWENTY_FIVE = 25;
+
     @Test
     void testConstructorAndGetters() {
         // Given
@@ -26,7 +32,7 @@ class CodeElementTest {
             "testMethod",
             "com.test.TestClass.testMethod",
             "/test/TestClass.java",
-            10,
+            LINE_NUMBER_TEN,
             "public void testMethod(String arg1, int arg2)",
             "This is a test method",
             parameters,

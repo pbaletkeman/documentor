@@ -10,14 +10,20 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class DocumentorConfigTest {
+    
+    // Test constants for magic number violations
+    private static final int MAX_TOKENS = 2000;
+    private static final int TIMEOUT_SECONDS = 60;
+    private static final int MAX_DEPTH = 3;
+    
     @Test
     void testLlmModelConfigCreation() {
         String name = "gpt-4";
         String provider = "openai";
         String baseUrl = "https://api.openai.com/v1";
         String apiKey = "test-api-key";
-        Integer maxTokens = 2000;
-        Integer timeoutSeconds = 60;
+        Integer maxTokens = MAX_TOKENS;
+        Integer timeoutSeconds = TIMEOUT_SECONDS;
 
         LlmModelConfig config = new LlmModelConfig(name, provider, baseUrl, apiKey, maxTokens, timeoutSeconds);
 
@@ -47,7 +53,7 @@ class DocumentorConfigTest {
     @Test
     void testAnalysisSettingsCreation() {
         boolean includePrivateMembers = false;
-        int maxDepth = 3;
+        int maxDepth = MAX_DEPTH;
         List<String> includedPatterns = List.of("**/*.java");
         List<String> excludePatterns = List.of("**/test/**");
 
