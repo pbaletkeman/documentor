@@ -22,7 +22,8 @@ class JavaElementVisitorTest {
 
     @BeforeEach
     void setUp() {
-        DocumentorConfig cfg = new DocumentorConfig(List.of(), null, new AnalysisSettings(false, 1, List.of("**/*.java"), List.of()));
+        DocumentorConfig cfg = new DocumentorConfig(List.of(), null,
+                new AnalysisSettings(false, 1, List.of("**/*.java"), List.of()));
         visitor = new JavaElementVisitor(cfg);
     }
 
@@ -82,11 +83,13 @@ class JavaElementVisitorTest {
     @Test
     void visitPrivateClassIncludedWhenPrivateMembersEnabled() {
         // Create visitor with includePrivateMembers = true
-        DocumentorConfig cfg = new DocumentorConfig(List.of(), null, new AnalysisSettings(true, 1, List.of("**/*.java"), List.of()));
+        DocumentorConfig cfg = new DocumentorConfig(List.of(), null,
+                new AnalysisSettings(true, 1, List.of("**/*.java"), List.of()));
         JavaElementVisitor inclusiveVisitor = new JavaElementVisitor(cfg);
 
         // Use nested class to test private class behavior
-        String source = "package com.test; public class OuterClass { private static class PrivateClass { public void method() {} } }";
+        String source = "package com.test; public class OuterClass { " +
+                "private static class PrivateClass { public void method() {} } }";
 
         var parseResult = new JavaParser().parse(source);
         CompilationUnit cu = parseResult.getResult().orElseThrow(() -> new IllegalStateException("parse failed"));
@@ -105,11 +108,13 @@ class JavaElementVisitorTest {
     @Test
     void visitPrivateEnumIncludedWhenPrivateMembersEnabled() {
         // Create visitor with includePrivateMembers = true
-        DocumentorConfig cfg = new DocumentorConfig(List.of(), null, new AnalysisSettings(true, 1, List.of("**/*.java"), List.of()));
+        DocumentorConfig cfg = new DocumentorConfig(List.of(), null,
+                new AnalysisSettings(true, 1, List.of("**/*.java"), List.of()));
         JavaElementVisitor inclusiveVisitor = new JavaElementVisitor(cfg);
 
         // Use nested enum to test private enum behavior
-        String source = "package com.test; public class OuterClass { private enum PrivateEnum { VALUE1, VALUE2; } }";
+        String source = "package com.test; public class OuterClass { " +
+                "private enum PrivateEnum { VALUE1, VALUE2; } }";
 
         var parseResult = new JavaParser().parse(source);
         CompilationUnit cu = parseResult.getResult().orElseThrow(() -> new IllegalStateException("parse failed"));
@@ -147,7 +152,8 @@ class JavaElementVisitorTest {
     @Test
     void visitPrivateNestedEnumExcludedWhenPrivateMembersDisabled() {
         // Test the false branch of shouldInclude for private nested EnumDeclaration
-        String source = "package com.test; public class OuterClass { private enum PrivateNestedEnum { VALUE1, VALUE2; } }";
+        String source = "package com.test; public class OuterClass { " +
+                "private enum PrivateNestedEnum { VALUE1, VALUE2; } }";
 
         var parseResult = new JavaParser().parse(source);
         CompilationUnit cu = parseResult.getResult().orElseThrow(() -> new IllegalStateException("parse failed"));

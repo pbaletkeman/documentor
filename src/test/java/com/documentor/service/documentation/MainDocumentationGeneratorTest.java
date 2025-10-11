@@ -40,7 +40,9 @@ class MainDocumentationGeneratorTest {
 
     @Test
     void testGenerateMainDocumentationContainsSections() {
-        CodeElement e1 = new CodeElement(CodeElementType.CLASS, "TestClass", "com.example.TestClass", "/src/TestClass.java", LINE_NUMBER_ONE, "public class TestClass{}", "", List.of(), List.of());
+        CodeElement e1 = new CodeElement(CodeElementType.CLASS, "TestClass", "com.example.TestClass",
+                "/src/TestClass.java", LINE_NUMBER_ONE, "public class TestClass{}", "",
+                List.of(), List.of());
         ProjectAnalysis analysis = new ProjectAnalysis("/project/path", List.of(e1), System.currentTimeMillis());
 
         CompletableFuture<String> fut = generator.generateMainDocumentation(analysis);
@@ -70,7 +72,8 @@ class MainDocumentationGeneratorTest {
 
         MainDocumentationGenerator generatorWithMock = new MainDocumentationGenerator(mockConfig);
 
-        CodeElement e1 = new CodeElement(CodeElementType.CLASS, "TestClass", "com.example.TestClass", "/src/TestClass.java", 1, "public class TestClass{}", "", List.of(), List.of());
+        CodeElement e1 = new CodeElement(CodeElementType.CLASS, "TestClass", "com.example.TestClass",
+                "/src/TestClass.java", 1, "public class TestClass{}", "", List.of(), List.of());
         ProjectAnalysis analysis = new ProjectAnalysis("/project/path", List.of(e1), System.currentTimeMillis());
 
         CompletableFuture<String> fut = generatorWithMock.generateMainDocumentation(analysis);

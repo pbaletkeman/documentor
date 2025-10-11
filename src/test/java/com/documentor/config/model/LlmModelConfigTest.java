@@ -109,7 +109,8 @@ class LlmModelConfigTest {
     @DisplayName("Should validate successfully with valid config")
     void shouldValidateSuccessfullyWithValidConfig() {
         // Given
-        LlmModelConfig config = new LlmModelConfig("model", "provider", "url", "key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS);
+        LlmModelConfig config = new LlmModelConfig("model", "provider", "url", "key",
+                DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS);
 
         // When & Then
         assertDoesNotThrow(config::validate);
@@ -127,15 +128,20 @@ class LlmModelConfigTest {
 
     private static Stream<Arguments> provideInvalidConfigs() {
         return Stream.of(
-            Arguments.of(new LlmModelConfig(null, "provider", "url", "key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS),
+            Arguments.of(new LlmModelConfig(null, "provider", "url", "key",
+                    DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS),
                 "name cannot be null or empty"),
-            Arguments.of(new LlmModelConfig("", "provider", "url", "key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS),
+            Arguments.of(new LlmModelConfig("", "provider", "url", "key",
+                    DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS),
                 "name cannot be null or empty"),
-            Arguments.of(new LlmModelConfig("  ", "provider", "url", "key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS),
+            Arguments.of(new LlmModelConfig("  ", "provider", "url", "key",
+                    DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS),
                 "name cannot be null or empty"),
-            Arguments.of(new LlmModelConfig("model", null, "url", "key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS),
+            Arguments.of(new LlmModelConfig("model", null, "url", "key",
+                    DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS),
                 "provider cannot be null or empty"),
-            Arguments.of(new LlmModelConfig("model", "", "url", "key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS),
+            Arguments.of(new LlmModelConfig("model", "", "url", "key",
+                    DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS),
                 "provider cannot be null or empty"),
             Arguments.of(new LlmModelConfig("model", "  ", "url", "key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS),
                 "provider cannot be null or empty")

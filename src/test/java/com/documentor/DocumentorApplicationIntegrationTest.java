@@ -111,7 +111,8 @@ class DocumentorApplicationIntegrationTest {
         // Verify Spring Boot annotations are present
         assertTrue(appClass.isAnnotationPresent(org.springframework.boot.autoconfigure.SpringBootApplication.class),
                    "Application should be annotated with @SpringBootApplication");
-        assertTrue(appClass.isAnnotationPresent(org.springframework.boot.context.properties.ConfigurationPropertiesScan.class),
+        assertTrue(appClass.isAnnotationPresent(
+                   org.springframework.boot.context.properties.ConfigurationPropertiesScan.class),
                    "Application should be annotated with @ConfigurationPropertiesScan");
         assertTrue(appClass.isAnnotationPresent(org.springframework.scheduling.annotation.EnableAsync.class),
                    "Application should be annotated with @EnableAsync");

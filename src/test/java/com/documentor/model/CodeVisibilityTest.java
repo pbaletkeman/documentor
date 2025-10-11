@@ -82,35 +82,46 @@ class CodeVisibilityTest {
     @Test
     @DisplayName("Should include non-private elements when includePrivate is false")
     void testShouldIncludeExcludePrivate() {
-        assertFalse(CodeVisibility.PRIVATE.shouldInclude(false), "Private should be excluded when includePrivate is false");
-        assertTrue(CodeVisibility.PUBLIC.shouldInclude(false), "Public should be included when includePrivate is false");
-        assertTrue(CodeVisibility.PROTECTED.shouldInclude(false), "Protected should be included when includePrivate is false");
-        assertTrue(CodeVisibility.PACKAGE_PRIVATE.shouldInclude(false), "Package private should be included when includePrivate is false");
+        assertFalse(CodeVisibility.PRIVATE.shouldInclude(false),
+                "Private should be excluded when includePrivate is false");
+        assertTrue(CodeVisibility.PUBLIC.shouldInclude(false),
+                "Public should be included when includePrivate is false");
+        assertTrue(CodeVisibility.PROTECTED.shouldInclude(false),
+                "Protected should be included when includePrivate is false");
+        assertTrue(CodeVisibility.PACKAGE_PRIVATE.shouldInclude(false),
+                "Package private should be included when includePrivate is false");
     }
 
     @Test
     @DisplayName("Should include all elements when includePrivate is true")
     void testShouldIncludeIncludePrivate() {
-        assertTrue(CodeVisibility.PRIVATE.shouldInclude(true), "Private should be included when includePrivate is true");
-        assertTrue(CodeVisibility.PUBLIC.shouldInclude(true), "Public should be included when includePrivate is true");
-        assertTrue(CodeVisibility.PROTECTED.shouldInclude(true), "Protected should be included when includePrivate is true");
-        assertTrue(CodeVisibility.PACKAGE_PRIVATE.shouldInclude(true), "Package private should be included when includePrivate is true");
+        assertTrue(CodeVisibility.PRIVATE.shouldInclude(true),
+                "Private should be included when includePrivate is true");
+        assertTrue(CodeVisibility.PUBLIC.shouldInclude(true),
+                "Public should be included when includePrivate is true");
+        assertTrue(CodeVisibility.PROTECTED.shouldInclude(true),
+                "Protected should be included when includePrivate is true");
+        assertTrue(CodeVisibility.PACKAGE_PRIVATE.shouldInclude(true),
+                "Package private should be included when includePrivate is true");
     }
 
     @Test
     @DisplayName("Should handle complex signatures and edge cases")
     void testFromSignatureAndNameComplexSignatures() {
         // Test that private is detected when present with other modifiers
-        CodeVisibility result = CodeVisibility.fromSignatureAndName("static private final void method()", "method");
+        CodeVisibility result = CodeVisibility.fromSignatureAndName(
+                "static private final void method()", "method");
         assertEquals(CodeVisibility.PRIVATE, result, "Should detect private modifier");
 
         // Complex Java signature with only public
-        result = CodeVisibility.fromSignatureAndName("public static synchronized void method() throws Exception", "method");
+        result = CodeVisibility.fromSignatureAndName(
+                "public static synchronized void method() throws Exception", "method");
         assertEquals(CodeVisibility.PUBLIC, result);
 
         // Complex Python signature without explicit visibility
         result = CodeVisibility.fromSignatureAndName("def calculate_value(self, param):", "calculate_value");
-        assertEquals(CodeVisibility.PACKAGE_PRIVATE, result, "Should default to package private for regular method names");
+        assertEquals(CodeVisibility.PACKAGE_PRIVATE, result,
+                "Should default to package private for regular method names");
 
         // Test with mixed case
         result = CodeVisibility.fromSignatureAndName("PROTECTED void method()", "method");

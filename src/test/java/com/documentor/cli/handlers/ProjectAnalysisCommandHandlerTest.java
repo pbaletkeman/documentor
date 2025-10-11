@@ -77,8 +77,10 @@ class ProjectAnalysisCommandHandlerTest {
         // Arrange
         ProjectAnalysis pa = new ProjectAnalysis(tmp.toString(), List.of(), System.currentTimeMillis());
         when(analysisService.analyzeProject(tmp)).thenReturn(CompletableFuture.completedFuture(pa));
-        when(documentationService.generateDocumentation(pa)).thenReturn(CompletableFuture.completedFuture(tmp.toString()));
-        when(mermaidService.generateClassDiagrams(pa, "out")).thenReturn(CompletableFuture.completedFuture(List.of("d1", "d2")));
+        when(documentationService.generateDocumentation(pa))
+                .thenReturn(CompletableFuture.completedFuture(tmp.toString()));
+        when(mermaidService.generateClassDiagrams(pa, "out"))
+                .thenReturn(CompletableFuture.completedFuture(List.of("d1", "d2")));
         when(commonHandler.directoryExists(tmp.toString())).thenReturn(true);
 
         // Act

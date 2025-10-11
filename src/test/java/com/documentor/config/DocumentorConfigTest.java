@@ -57,7 +57,8 @@ class DocumentorConfigTest {
         List<String> includedPatterns = List.of("**/*.java");
         List<String> excludePatterns = List.of("**/test/**");
 
-        AnalysisSettings settings = new AnalysisSettings(includePrivateMembers, maxDepth, includedPatterns, excludePatterns);
+        AnalysisSettings settings = new AnalysisSettings(includePrivateMembers, maxDepth,
+                includedPatterns, excludePatterns);
 
         assertEquals(includePrivateMembers, settings.includePrivateMembers());
         assertEquals(maxDepth, settings.maxDepth());

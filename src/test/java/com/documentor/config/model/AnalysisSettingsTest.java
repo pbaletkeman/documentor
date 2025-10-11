@@ -137,7 +137,8 @@ class AnalysisSettingsTest {
     void shouldApplyDefaultsForPartialNullValues(Boolean includePrivateMembers, Integer maxDepth,
                                                List<String> includedPatterns, List<String> excludedPatterns,
                                                Boolean expectedIncludePrivateMembers, Integer expectedMaxDepth,
-                                               List<String> expectedIncludedPatterns, List<String> expectedExcludedPatterns) {
+                                               List<String> expectedIncludedPatterns,
+                                               List<String> expectedExcludedPatterns) {
         // When
         AnalysisSettings settings = new AnalysisSettings(
                 includePrivateMembers,
@@ -158,22 +159,30 @@ class AnalysisSettingsTest {
                 // Test with only includePrivateMembers set
                 Arguments.of(
                         true, null, null, null,
-                        true, ApplicationConstants.DEFAULT_MAX_DEPTH, List.of("**/*.java", "**/*.py"), List.of("**/test/**", "**/target/**")
+                        true, ApplicationConstants.DEFAULT_MAX_DEPTH,
+                        List.of("**/*.java", "**/*.py"),
+                        List.of("**/test/**", "**/target/**")
                 ),
                 // Test with only maxDepth set
                 Arguments.of(
                         null, MAX_DEPTH_FIFTEEN, null, null,
-                        false, MAX_DEPTH_FIFTEEN, List.of("**/*.java", "**/*.py"), List.of("**/test/**", "**/target/**")
+                        false, MAX_DEPTH_FIFTEEN,
+                        List.of("**/*.java", "**/*.py"),
+                        List.of("**/test/**", "**/target/**")
                 ),
                 // Test with only includedPatterns set
                 Arguments.of(
                         null, null, List.of("**/*.txt"), null,
-                        false, ApplicationConstants.DEFAULT_MAX_DEPTH, List.of("**/*.txt"), List.of("**/test/**", "**/target/**")
+                        false, ApplicationConstants.DEFAULT_MAX_DEPTH,
+                        List.of("**/*.txt"),
+                        List.of("**/test/**", "**/target/**")
                 ),
                 // Test with only excludePatterns set
                 Arguments.of(
                         null, null, null, List.of("**/logs/**"),
-                        false, ApplicationConstants.DEFAULT_MAX_DEPTH, List.of("**/*.java", "**/*.py"), List.of("**/logs/**")
+                        false, ApplicationConstants.DEFAULT_MAX_DEPTH,
+                        List.of("**/*.java", "**/*.py"),
+                        List.of("**/logs/**")
                 )
         );
     }
