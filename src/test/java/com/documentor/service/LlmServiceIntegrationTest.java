@@ -6,7 +6,13 @@ import com.documentor.config.model.AnalysisSettings;
 import com.documentor.config.model.OutputSettings;
 import com.documentor.model.CodeElement;
 import com.documentor.model.CodeElementType;
-import com.documentor.service.llm.*;
+import com.documentor.service.llm.LlmModelTypeDetector;
+import com.documentor.service.llm.LlmPromptTemplates;
+import com.documentor.service.llm.LlmRequestFormatter;
+import com.documentor.service.llm.LlmRequestBuilder;
+import com.documentor.service.llm.LlmResponseParser;
+import com.documentor.service.llm.LlmResponseHandler;
+import com.documentor.service.llm.LlmApiClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,7 +23,10 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * 🧪 Integration tests for LlmService
