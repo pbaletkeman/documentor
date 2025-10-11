@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class CommonCommandHandlerTest {
 
     @TempDir
-    Path tempDir;
+    private Path tempDir;
 
     @Test
     void testDirectoryExists() throws Exception {

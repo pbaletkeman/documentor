@@ -29,7 +29,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-class LlmServiceTest_clean {
+class LlmServiceTestClean {
 
     private static final int MAX_DEPTH = 50;
     private static final int DEFAULT_MAX_TOKENS = 1000;

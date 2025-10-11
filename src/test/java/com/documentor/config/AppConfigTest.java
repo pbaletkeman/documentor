@@ -169,10 +169,10 @@ class AppConfigTest {
             "docs", "markdown", false, false
         );
         // Set maxThreads to 6 to match expected values
-        AnalysisSettings analysisSettings = new AnalysisSettings(
+        AnalysisSettings configAnalysisSettings = new AnalysisSettings(
             false, TEST_THREAD_COUNT_SIX, List.of("**/*.java"), List.of()
         );
-        DocumentorConfig realConfig = new DocumentorConfig(llmModels, outputSettings, analysisSettings);
+        DocumentorConfig realConfig = new DocumentorConfig(llmModels, outputSettings, configAnalysisSettings);
 
         // When
         AppConfig config = new AppConfig(realConfig);

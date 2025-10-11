@@ -47,7 +47,7 @@ class DocumentationServiceCoverageEnabledTest {
     private MermaidDiagramService mermaidDiagramService;
 
     @TempDir
-    Path tempDir;
+    private Path tempDir;
 
     private DocumentorConfig config;
 

@@ -50,7 +50,7 @@ class CodeAnalysisServiceTest {
     private CodeAnalysisService codeAnalysisService;
 
     @TempDir
-    Path tempDir;
+    private Path tempDir;
 
     @BeforeEach
     void setUp() {

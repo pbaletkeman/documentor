@@ -275,7 +275,9 @@ class ProjectAnalysisTest {
     @Test
     void testAnalysisStatsFormattedSummary() {
         // Given
-        ProjectAnalysis.AnalysisStats stats = new ProjectAnalysis.AnalysisStats(LINE_NUMBER_TEN, 2, LINE_NUMBER_FIVE, LINE_NUMBER_THREE, 2);
+        ProjectAnalysis.AnalysisStats stats = new ProjectAnalysis.AnalysisStats(
+            LINE_NUMBER_TEN, 2, LINE_NUMBER_FIVE, LINE_NUMBER_THREE, 2
+        );
 
         // When
         String summary = stats.getFormattedSummary();

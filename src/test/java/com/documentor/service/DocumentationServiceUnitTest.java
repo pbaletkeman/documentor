@@ -55,7 +55,7 @@ class DocumentationServiceUnitTest {
     private DocumentorConfig config;
 
     @TempDir
-    Path tempDir;
+    private Path tempDir;
 
     @BeforeEach
     void setUp() {
@@ -65,7 +65,9 @@ class DocumentationServiceUnitTest {
             tempDir.toString(), "markdown", true, true
         );
 
-        AnalysisSettings analysisSettings = new AnalysisSettings(true, MAX_DEPTH_FIVE, List.of("**/*.java"), List.of("**/test/**"));
+        AnalysisSettings analysisSettings = new AnalysisSettings(
+            true, MAX_DEPTH_FIVE, List.of("**/*.java"), List.of("**/test/**")
+        );
 
         LlmModelConfig model = new LlmModelConfig("m", "ollama", "http://x", null, MAX_TOKENS_500, TIMEOUT_SECONDS_TEN);
         config = new DocumentorConfig(List.of(model), outputSettings, analysisSettings);
@@ -140,7 +142,9 @@ class DocumentationServiceUnitTest {
         OutputSettings outputSettings = new OutputSettings(
             tempDir.toString(), "markdown", false, true
         );
-        AnalysisSettings analysisSettings = new AnalysisSettings(true, MAX_DEPTH_FIVE, List.of("**/*.java"), List.of("**/test/**"));
+        AnalysisSettings analysisSettings = new AnalysisSettings(
+            true, MAX_DEPTH_FIVE, List.of("**/*.java"), List.of("**/test/**")
+        );
         DocumentorConfig testConfig = new DocumentorConfig(List.of(), outputSettings, analysisSettings);
         DocumentationService testService = new DocumentationService(mainGenerator, elementGenerator,
                 testGenerator, mermaidService, testConfig);
@@ -179,7 +183,9 @@ class DocumentationServiceUnitTest {
         when(mockOutputSettings.generateMermaidDiagrams()).thenReturn(true);
         when(mockOutputSettings.mermaidOutputPath()).thenReturn(tempDir.toString());
 
-        AnalysisSettings analysisSettings = new AnalysisSettings(true, MAX_DEPTH_FIVE, List.of("**/*.java"), List.of("**/test/**"));
+        AnalysisSettings analysisSettings = new AnalysisSettings(
+            true, MAX_DEPTH_FIVE, List.of("**/*.java"), List.of("**/test/**")
+        );
         DocumentorConfig testConfig = new DocumentorConfig(List.of(), mockOutputSettings, analysisSettings);
         DocumentationService testService = new DocumentationService(mainGenerator, elementGenerator,
                 testGenerator, mermaidService, testConfig);

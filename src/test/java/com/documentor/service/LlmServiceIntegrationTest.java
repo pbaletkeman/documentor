@@ -81,7 +81,7 @@ class LlmServiceIntegrationTest {
     /**
      * Helper method to create LlmService with new constructor
      */
-    private LlmService createLlmService(final DocumentorConfig config) {
+    private LlmService createLlmService(final DocumentorConfig serviceConfig) {
         LlmModelTypeDetector modelTypeDetector = new LlmModelTypeDetector();
         LlmPromptTemplates promptTemplates = new LlmPromptTemplates();
         LlmRequestFormatter requestFormatter = new LlmRequestFormatter(modelTypeDetector);
@@ -90,7 +90,7 @@ class LlmServiceIntegrationTest {
         LlmResponseHandler responseHandler = new LlmResponseHandler(responseParser, modelTypeDetector);
         LlmApiClient apiClient = new LlmApiClient(mockWebClient, modelTypeDetector);
 
-        return new LlmService(config, requestBuilder, responseHandler, apiClient);
+        return new LlmService(serviceConfig, requestBuilder, responseHandler, apiClient);
     }
 
     @Test

@@ -34,7 +34,7 @@ class ElementDocumentationGeneratorTest {
     private ElementDocumentationGenerator generator;
 
     @TempDir
-    Path tempDir;
+    private Path tempDir;
 
     @BeforeEach
     void setUp() {

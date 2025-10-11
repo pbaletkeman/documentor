@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
  * Enhanced test focusing on auth header logic without complex WebClient mocking
  */
 @ExtendWith(MockitoExtension.class)
-class LlmApiClientEnhancedTest_fixed {
+class LlmApiClientEnhancedTestFixed {
 
     private static final int TIMEOUT_30 = 30;
     private static final int TIMEOUT_60 = 60;
