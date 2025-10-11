@@ -37,8 +37,6 @@ class LlmApiClientTest {
     private static final int SHORT_TIMEOUT = 5;
     private static final int LONG_TIMEOUT = 120;
     private static final int MEDIUM_TIMEOUT = 45;
-    private static final int LARGE_MAX_TOKENS = 2000;
-    private static final int MEDIUM_TIMEOUT_60 = 60;
 
     @Mock
     private WebClient mockWebClient;
@@ -187,6 +185,7 @@ class LlmApiClientTest {
 
     @Test
     @DisplayName("Should add authorization header for non-Ollama models with valid API key")
+    @SuppressWarnings("unchecked")
     void testAuthHeaderForNonOllamaWithApiKey() {
         // Given
         Map<String, Object> requestBody = Map.of("prompt", "test");
@@ -219,6 +218,7 @@ class LlmApiClientTest {
 
     @Test
     @DisplayName("Should not add authorization header for Ollama models with proper mock chain")
+    @SuppressWarnings("unchecked")
     void testNoAuthHeaderForOllamaModelsMocked() {
         // Given
         Map<String, Object> requestBody = Map.of("prompt", "test");
@@ -250,6 +250,7 @@ class LlmApiClientTest {
 
     @Test
     @DisplayName("Should not add authorization header for non-Ollama models with null API key")
+    @SuppressWarnings("unchecked")
     void testNoAuthHeaderForNullApiKey() {
         // Given
         LlmModelConfig modelWithNullKey = new LlmModelConfig(
@@ -284,6 +285,7 @@ class LlmApiClientTest {
 
     @Test
     @DisplayName("Should not add authorization header for non-Ollama models with empty API key")
+    @SuppressWarnings("unchecked")
     void testNoAuthHeaderForEmptyApiKey() {
         // Given
         LlmModelConfig modelWithEmptyKey = new LlmModelConfig(

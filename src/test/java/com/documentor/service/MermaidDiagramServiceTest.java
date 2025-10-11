@@ -26,7 +26,6 @@ class MermaidDiagramServiceTest {
     private static final int ELEMENT_COUNT_SMALL = 3;
     private static final int ELEMENT_COUNT_MEDIUM = 4;
     private static final int ELEMENT_COUNT_LARGE = 5;
-    private static final int ELEMENT_COUNT_EXTRA_LARGE = 6;
     private static final int ELEMENT_COUNT_MAX = 9;
     private static final int LINE_NUMBER_SIX = 6;
 

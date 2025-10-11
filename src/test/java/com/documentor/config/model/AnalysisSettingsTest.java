@@ -25,7 +25,6 @@ class AnalysisSettingsTest {
     private static final int MAX_DEPTH_NEGATIVE = -5;
     private static final int TEST_VALUE_FORTY_TWO = 42;
     private static final int MAX_DEPTH_FIFTEEN = 15;
-    private static final int MAX_DEPTH_FORTY_FIVE = 45;
 
     @Test
     @DisplayName("Should create AnalysisSettings with provided values")

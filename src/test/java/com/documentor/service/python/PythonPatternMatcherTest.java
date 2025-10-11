@@ -21,10 +21,6 @@ class PythonPatternMatcherTest {
     private static final int SECOND_ITEM = 2;
     private static final int THIRD_ITEM = 3;
     private static final int FOURTH_ITEM = 4;
-    private static final int FIFTH_ITEM = 5;
-    private static final int DEFAULT_PARAM_VALUE = 10;
-    private static final int DEFAULT_AGE_VALUE = 30;
-    private static final double PI_VALUE = 3.14159;
 
     private final PythonPatternMatcher matcher = new PythonPatternMatcher();
 
