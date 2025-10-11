@@ -28,7 +28,7 @@ class ConfigurationCommandHandlerTest {
     }
 
     @Test
-    void handleValidateConfigValidConfigProducesSummary(@TempDir Path tmp) throws Exception {
+    void handleValidateConfigValidConfigProducesSummary(@TempDir final Path tmp) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         ConfigurationCommandHandler handler = new ConfigurationCommandHandler(mapper);
 
@@ -45,11 +45,11 @@ class ConfigurationCommandHandlerTest {
         assertTrue(res.contains("Configuration file is valid"));
         assertTrue(res.contains("LLM Models"));
         assertTrue(res.contains("Output Format"));
-        assertTrue(res.contains("Analysis settings" ) || res.contains("Max Threads"));
+        assertTrue(res.contains("Analysis settings") || res.contains("Max Threads"));
     }
 
     @Test
-    void handleValidateConfigWithEmptyLlmModels(@TempDir Path tmp) throws Exception {
+    void handleValidateConfigWithEmptyLlmModels(@TempDir final Path tmp) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         ConfigurationCommandHandler handler = new ConfigurationCommandHandler(mapper);
 
@@ -68,7 +68,7 @@ class ConfigurationCommandHandlerTest {
     }
 
     @Test
-    void handleValidateConfigWithMissingApiKeys(@TempDir Path tmp) throws Exception {
+    void handleValidateConfigWithMissingApiKeys(@TempDir final Path tmp) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         ConfigurationCommandHandler handler = new ConfigurationCommandHandler(mapper);
 
@@ -77,10 +77,13 @@ class ConfigurationCommandHandlerTest {
         LlmModelConfig modelWithEmptyKey = new LlmModelConfig("modelEmpty", "openai", "http://test", "", TEST_MAX_TOKENS, TEST_TIMEOUT_SECONDS);
         LlmModelConfig modelWithWhitespaceKey = new LlmModelConfig("modelWhitespace", "openai", "http://test", "   ", TEST_MAX_TOKENS, TEST_TIMEOUT_SECONDS);
         LlmModelConfig modelWithValidKey = new LlmModelConfig("modelValid", "openai", "http://test", "valid-key", TEST_MAX_TOKENS, TEST_TIMEOUT_SECONDS);
-        
+
         OutputSettings output = new OutputSettings(tmp.toString(), "md", true, false);
-        AnalysisSettings analysis = new AnalysisSettings(false, 2, List.of("**/*.java"), List.of("**/test/**"));
-        DocumentorConfig config = new DocumentorConfig(List.of(modelWithNullKey, modelWithEmptyKey, modelWithWhitespaceKey, modelWithValidKey), output, analysis);
+        AnalysisSettings analysis = new AnalysisSettings(false, 2, List.of("**/*.java"),
+                List.of("**/test/**"));
+        DocumentorConfig config = new DocumentorConfig(
+                List.of(modelWithNullKey, modelWithEmptyKey, modelWithWhitespaceKey, modelWithValidKey),
+                output, analysis);
 
         Path cfg = tmp.resolve("missing-keys.json");
         mapper.writeValue(cfg.toFile(), config);
@@ -97,7 +100,7 @@ class ConfigurationCommandHandlerTest {
     }
 
     @Test
-    void handleValidateConfigWithInvalidJson(@TempDir Path tmp) throws Exception {
+    void handleValidateConfigWithInvalidJson(@TempDir final Path tmp) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         ConfigurationCommandHandler handler = new ConfigurationCommandHandler(mapper);
 
@@ -111,7 +114,7 @@ class ConfigurationCommandHandlerTest {
     }
 
     @Test
-    void handleValidateConfigWithNullOutputSettings(@TempDir Path tmp) throws Exception {
+    void handleValidateConfigWithNullOutputSettings(@TempDir final Path tmp) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         ConfigurationCommandHandler handler = new ConfigurationCommandHandler(mapper);
 
@@ -144,11 +147,12 @@ class ConfigurationCommandHandlerTest {
         String res = handler.handleValidateConfig(cfg.toString());
 
         // Should either fail validation or show warning about null output settings
-        assertTrue(res.contains("Configuration validation failed") || res.contains("Warning: No output settings configured"));
+        assertTrue(res.contains("Configuration validation failed")
+                || res.contains("Warning: No output settings configured"));
     }
 
     @Test
-    void handleValidateConfigWithNullAnalysisSettings(@TempDir Path tmp) throws Exception {
+    void handleValidateConfigWithNullAnalysisSettings(@TempDir final Path tmp) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         ConfigurationCommandHandler handler = new ConfigurationCommandHandler(mapper);
 
@@ -181,6 +185,7 @@ class ConfigurationCommandHandlerTest {
         String res = handler.handleValidateConfig(cfg.toString());
 
         // Should either fail validation or show warning about null analysis settings
-        assertTrue(res.contains("Configuration validation failed") || res.contains("Warning: No analysis settings configured"));
+        assertTrue(res.contains("Configuration validation failed")
+                || res.contains("Warning: No analysis settings configured"));
     }
 }

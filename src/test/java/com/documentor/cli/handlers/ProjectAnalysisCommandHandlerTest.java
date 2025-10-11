@@ -42,18 +42,20 @@ class ProjectAnalysisCommandHandlerTest {
         mermaidService = mock(MermaidDiagramService.class);
         commonHandler = mock(CommonCommandHandler.class);
 
-        handler = new ProjectAnalysisCommandHandler(analysisService, documentationService, mermaidService, commonHandler);
+        handler = new ProjectAnalysisCommandHandler(analysisService, documentationService,
+                mermaidService, commonHandler);
 
         // Setup default behavior for commonHandler
         when(commonHandler.createResultBuilder()).thenReturn(new StringBuilder());
         when(commonHandler.formatStatistics(anyString(), anyMap())).thenAnswer(invocation -> {
             String title = invocation.getArgument(0);
-            return "ðŸ“Š " + title + "\nâ”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”\n\n";
+            return "📊 " + title
+                    + "\n─────────────────────────────────────\n\n";
         });
     }
 
     @Test
-    void handleScanProjectReturnsFormattedStats(@TempDir Path tmp) {
+    void handleScanProjectReturnsFormattedStats(@TempDir final Path tmp) {
         // Arrange
         ProjectAnalysis pa = new ProjectAnalysis(tmp.toString(),
             List.of(new CodeElement(CodeElementType.CLASS, "A", "A", "A.java", 1, "sig", "", List.of(), List.of())),
@@ -71,7 +73,7 @@ class ProjectAnalysisCommandHandlerTest {
     }
 
     @Test
-    void handleAnalyzeProjectGeneratesDocsAndMermaid(@TempDir Path tmp) {
+    void handleAnalyzeProjectGeneratesDocsAndMermaid(@TempDir final Path tmp) {
         // Arrange
         ProjectAnalysis pa = new ProjectAnalysis(tmp.toString(), List.of(), System.currentTimeMillis());
         when(analysisService.analyzeProject(tmp)).thenReturn(CompletableFuture.completedFuture(pa));
@@ -90,7 +92,7 @@ class ProjectAnalysisCommandHandlerTest {
     }
 
     @Test
-    void handleScanProjectHandlesNonExistentDirectory(@TempDir Path tmp) {
+    void handleScanProjectHandlesNonExistentDirectory(@TempDir final Path tmp) {
         // Arrange
         String nonExistentPath = tmp.toString() + "/nonexistent";
         when(commonHandler.directoryExists(nonExistentPath)).thenReturn(false);
@@ -105,7 +107,7 @@ class ProjectAnalysisCommandHandlerTest {
     }
 
     @Test
-    void handleAnalyzeProjectHandlesException(@TempDir Path tmp) {
+    void handleAnalyzeProjectHandlesException(@TempDir final Path tmp) {
         // Arrange
         Exception exception = new RuntimeException("Test exception");
         when(commonHandler.directoryExists(tmp.toString())).thenReturn(true);

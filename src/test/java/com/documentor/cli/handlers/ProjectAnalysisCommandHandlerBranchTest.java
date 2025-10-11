@@ -37,8 +37,9 @@ class ProjectAnalysisCommandHandlerBranchTest {
         documentationService = mock(DocumentationService.class);
         mermaidService = mock(MermaidDiagramService.class);
         commonHandler = mock(CommonCommandHandler.class);
-        handler = new ProjectAnalysisCommandHandler(analysisService, documentationService, mermaidService, commonHandler);
-        
+        handler = new ProjectAnalysisCommandHandler(analysisService, documentationService,
+                mermaidService, commonHandler);
+
         // Setup default behavior for commonHandler
         when(commonHandler.createResultBuilder()).thenReturn(new StringBuilder());
         when(commonHandler.formatStatistics(any(), any())).thenAnswer(invocation -> {
@@ -48,11 +49,13 @@ class ProjectAnalysisCommandHandlerBranchTest {
     }
 
     @Test
-    void handleAnalyzeProjectWithoutMermaidGeneration(@TempDir Path tmp) {
+    void handleAnalyzeProjectWithoutMermaidGeneration(@TempDir final Path tmp) {
         // Test the false branch of generateMermaid condition
-        ProjectAnalysis pa = new ProjectAnalysis(tmp.toString(), List.of(), System.currentTimeMillis());
+        ProjectAnalysis pa = new ProjectAnalysis(tmp.toString(), List.of(),
+                System.currentTimeMillis());
         when(analysisService.analyzeProject(tmp)).thenReturn(CompletableFuture.completedFuture(pa));
-        when(documentationService.generateDocumentation(pa)).thenReturn(CompletableFuture.completedFuture(tmp.toString()));
+        when(documentationService.generateDocumentation(pa))
+                .thenReturn(CompletableFuture.completedFuture(tmp.toString()));
         when(commonHandler.directoryExists(tmp.toString())).thenReturn(true);
 
         // Act with generateMermaid = false
@@ -65,12 +68,15 @@ class ProjectAnalysisCommandHandlerBranchTest {
     }
 
     @Test
-    void handleMermaidGenerationWithEmptyOutput(@TempDir Path tmp) {
+    void handleMermaidGenerationWithEmptyOutput(@TempDir final Path tmp) {
         // Test the ternary operator branch in handleMermaidGeneration with empty mermaidOutput
-        ProjectAnalysis pa = new ProjectAnalysis(tmp.toString(), List.of(), System.currentTimeMillis());
+        ProjectAnalysis pa = new ProjectAnalysis(tmp.toString(), List.of(),
+                System.currentTimeMillis());
         when(analysisService.analyzeProject(tmp)).thenReturn(CompletableFuture.completedFuture(pa));
-        when(documentationService.generateDocumentation(pa)).thenReturn(CompletableFuture.completedFuture(tmp.toString()));
-        when(mermaidService.generateClassDiagrams(pa, null)).thenReturn(CompletableFuture.completedFuture(List.of("d1")));
+        when(documentationService.generateDocumentation(pa))
+                .thenReturn(CompletableFuture.completedFuture(tmp.toString()));
+        when(mermaidService.generateClassDiagrams(pa, null))
+                .thenReturn(CompletableFuture.completedFuture(List.of("d1")));
         when(commonHandler.directoryExists(tmp.toString())).thenReturn(true);
 
         // Act with generateMermaid = true but empty mermaidOutput (should pass null to service)
@@ -82,12 +88,15 @@ class ProjectAnalysisCommandHandlerBranchTest {
     }
 
     @Test
-    void handleMermaidGenerationWithSpecificOutput(@TempDir Path tmp) {
+    void handleMermaidGenerationWithSpecificOutput(@TempDir final Path tmp) {
         // Test the ternary operator branch in handleMermaidGeneration with specific mermaidOutput
-        ProjectAnalysis pa = new ProjectAnalysis(tmp.toString(), List.of(), System.currentTimeMillis());
+        ProjectAnalysis pa = new ProjectAnalysis(tmp.toString(), List.of(),
+                System.currentTimeMillis());
         when(analysisService.analyzeProject(tmp)).thenReturn(CompletableFuture.completedFuture(pa));
-        when(documentationService.generateDocumentation(pa)).thenReturn(CompletableFuture.completedFuture(tmp.toString()));
-        when(mermaidService.generateClassDiagrams(pa, "custom-output")).thenReturn(CompletableFuture.completedFuture(List.of("d1", "d2")));
+        when(documentationService.generateDocumentation(pa))
+                .thenReturn(CompletableFuture.completedFuture(tmp.toString()));
+        when(mermaidService.generateClassDiagrams(pa, "custom-output"))
+                .thenReturn(CompletableFuture.completedFuture(List.of("d1", "d2")));
         when(commonHandler.directoryExists(tmp.toString())).thenReturn(true);
 
         // Act with generateMermaid = true and specific mermaidOutput
