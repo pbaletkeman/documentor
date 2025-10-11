@@ -89,7 +89,7 @@ class PythonCodeAnalyzerTest {
         Path testFile = createPythonTestFile();
         List<CodeElement> expectedElements = List.of(
             new CodeElement(CodeElementType.FIELD, "variable", "variable",
-                testFile.toString(), ELEMENT_LINE_NUMBER, "variable = 42", "", 
+                testFile.toString(), ELEMENT_LINE_NUMBER, "variable = 42", "",
                 Collections.emptyList(), Collections.emptyList())
         );
 

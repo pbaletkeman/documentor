@@ -119,7 +119,7 @@ class LlmModelConfigTest {
     @ParameterizedTest
     @MethodSource("provideInvalidConfigs")
     @DisplayName("Should throw exception for invalid config")
-    void shouldThrowExceptionForInvalidConfig(LlmModelConfig config, String expectedMessage) {
+    void shouldThrowExceptionForInvalidConfig(final LlmModelConfig config, final String expectedMessage) {
         // When & Then
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, config::validate);
         assertTrue(exception.getMessage().contains(expectedMessage),

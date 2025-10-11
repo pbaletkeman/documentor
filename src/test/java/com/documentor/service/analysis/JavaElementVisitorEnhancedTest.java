@@ -211,7 +211,7 @@ class JavaElementVisitorEnhancedTest {
     /**
      * Helper to parse Java source code
      */
-    private CompilationUnit parseSource(String source) {
+    private CompilationUnit parseSource(final String source) {
         var parseResult = new JavaParser().parse(source);
         return parseResult.getResult().orElseThrow(() ->
             new IllegalStateException("Failed to parse Java source code"));
@@ -220,7 +220,7 @@ class JavaElementVisitorEnhancedTest {
     /**
      * Helper to find an element by type
      */
-    private CodeElement findElementByType(CodeElementType type) {
+    private CodeElement findElementByType(final CodeElementType type) {
         return elements.stream()
             .filter(e -> e.type() == type)
             .findFirst()

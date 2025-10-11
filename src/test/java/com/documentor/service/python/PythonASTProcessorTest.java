@@ -207,11 +207,11 @@ class PythonASTProcessorTest {
         assertEquals(LINE_NUMBER_THREE, elements.size());
 
         // Verify we have the expected elements
-        assertTrue(elements.stream().anyMatch(e -> e.type() == CodeElementType.CLASS 
+        assertTrue(elements.stream().anyMatch(e -> e.type() == CodeElementType.CLASS
                 && "TestClass".equals(e.name())));
-        assertTrue(elements.stream().anyMatch(e -> e.type() == CodeElementType.METHOD 
+        assertTrue(elements.stream().anyMatch(e -> e.type() == CodeElementType.METHOD
                 && "test_method".equals(e.name())));
-        assertTrue(elements.stream().anyMatch(e -> e.type() == CodeElementType.FIELD 
+        assertTrue(elements.stream().anyMatch(e -> e.type() == CodeElementType.FIELD
                 && "test_var".equals(e.name())));
     }
 }

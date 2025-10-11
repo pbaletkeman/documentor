@@ -47,7 +47,7 @@ public class PythonElementExtractorMockTest {
      * This is a helper method to simulate a combined approach using both
      * AST and regex analysis
      */
-    private List<CodeElement> extractElementsUsingBothApproaches(Path filePath) 
+    private List<CodeElement> extractElementsUsingBothApproaches(Path filePath)
             throws IOException, InterruptedException {
         try {
             // Try AST first

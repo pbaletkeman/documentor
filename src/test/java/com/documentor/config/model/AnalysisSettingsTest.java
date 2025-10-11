@@ -134,11 +134,11 @@ class AnalysisSettingsTest {
     @ParameterizedTest
     @MethodSource("partialDefaultsProvider")
     @DisplayName("Should apply defaults for partial null values")
-    void shouldApplyDefaultsForPartialNullValues(Boolean includePrivateMembers, Integer maxDepth,
-                                               List<String> includedPatterns, List<String> excludedPatterns,
-                                               Boolean expectedIncludePrivateMembers, Integer expectedMaxDepth,
-                                               List<String> expectedIncludedPatterns,
-                                               List<String> expectedExcludedPatterns) {
+    void shouldApplyDefaultsForPartialNullValues(final Boolean includePrivateMembers, final Integer maxDepth,
+                                               final List<String> includedPatterns, final List<String> excludedPatterns,
+                                               final Boolean expectedIncludePrivateMembers, final Integer expectedMaxDepth,
+                                               final List<String> expectedIncludedPatterns,
+                                               final List<String> expectedExcludedPatterns) {
         // When
         AnalysisSettings settings = new AnalysisSettings(
                 includePrivateMembers,

@@ -217,7 +217,7 @@ class MermaidDiagramServiceTest {
         String content = Files.readString(Path.of(diagramFile));
 
         // Should show relationships - check for either format
-        boolean hasRelationships = content.contains("-->") || 
+        boolean hasRelationships = content.contains("-->") ||
                 (content.contains("MainClass") && content.contains("OtherClass"));
         assertThat(hasRelationships).isTrue();
     }

@@ -93,8 +93,8 @@ class LlmServiceTestTmp {
 
     @Test
     void serviceHandlesDifferentElementTypes() {
-        CodeElement methodElement = new CodeElement(CodeElementType.METHOD, "testMethod", 
-                "com.example.TestClass.testMethod", "TestClass.java", ELEMENT_COUNT_TEST, 
+        CodeElement methodElement = new CodeElement(CodeElementType.METHOD, "testMethod",
+                "com.example.TestClass.testMethod", "TestClass.java", ELEMENT_COUNT_TEST,
                 "public void testMethod()", "", List.of("param1"), List.of("@Test"));
 
         assertNotNull(llmService.generateDocumentation(methodElement).join());
@@ -104,7 +104,7 @@ class LlmServiceTestTmp {
 
     @Test
     void serviceConstructsWithEmptyModelList() {
-        DocumentorConfig emptyConfig = new DocumentorConfig(List.of(), config.outputSettings(), 
+        DocumentorConfig emptyConfig = new DocumentorConfig(List.of(), config.outputSettings(),
                 config.analysisSettings());
         LlmService emptyService = new LlmService(emptyConfig, mockRequestBuilder, mockResponseHandler, mockApiClient);
         assertNotNull(emptyService);

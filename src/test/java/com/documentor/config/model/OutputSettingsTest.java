@@ -61,10 +61,10 @@ class OutputSettingsTest {
     @ParameterizedTest
     @MethodSource("partialDefaultsProvider")
     @DisplayName("Should apply defaults for partial null values")
-    void shouldApplyDefaultsForPartialNullValues(String outputDirectory, String format,
-                                              Boolean generateMermaid, Boolean verboseOutput,
-                                              String expectedFormat, Boolean expectedGenerateMermaid,
-                                              Boolean expectedVerboseOutput) {
+    void shouldApplyDefaultsForPartialNullValues(final String outputDirectory, final String format,
+                                              final Boolean generateMermaid, final Boolean verboseOutput,
+                                              final String expectedFormat, final Boolean expectedGenerateMermaid,
+                                              final Boolean expectedVerboseOutput) {
         // When
         OutputSettings settings = new OutputSettings(
                 outputDirectory,

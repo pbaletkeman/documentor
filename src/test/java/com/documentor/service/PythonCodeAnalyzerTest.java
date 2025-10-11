@@ -58,7 +58,7 @@ class PythonCodeAnalyzerTest {
         Path testFile = createPythonTestFile();
         List<CodeElement> expectedElements = List.of(
             new CodeElement(CodeElementType.CLASS, "TestClass", "class TestClass",
-                testFile.toString(), LINE_NUMBER_ONE, "class TestClass:", "", 
+                testFile.toString(), LINE_NUMBER_ONE, "class TestClass:", "",
                 Collections.emptyList(), Collections.emptyList())
         );
 
@@ -79,7 +79,7 @@ class PythonCodeAnalyzerTest {
         Path testFile = createPythonTestFile();
         List<CodeElement> expectedElements = List.of(
             new CodeElement(CodeElementType.METHOD, "test_method", "def test_method()",
-                testFile.toString(), LINE_NUMBER_TWO, "def test_method():", "", 
+                testFile.toString(), LINE_NUMBER_TWO, "def test_method():", "",
                 Collections.emptyList(), Collections.emptyList())
         );
 
@@ -101,7 +101,7 @@ class PythonCodeAnalyzerTest {
         Path testFile = createPythonTestFile();
         List<CodeElement> expectedElements = List.of(
             new CodeElement(CodeElementType.FIELD, "variable", "variable",
-                testFile.toString(), ELEMENT_LINE_NUMBER, "variable = 42", "", 
+                testFile.toString(), ELEMENT_LINE_NUMBER, "variable = 42", "",
                 Collections.emptyList(), Collections.emptyList())
         );
 
