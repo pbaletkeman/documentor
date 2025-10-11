@@ -22,7 +22,7 @@ class PythonElementExtractorExtendedTest {
     private PythonElementExtractor extractor;
 
     @Test
-    void extractDocstring_withIndentation_shouldPreserveFormat() {
+    void extractDocstringWithIndentationShouldPreserveFormat() {
         // Arrange
         List<String> lines = Arrays.asList(
             "def indented_function():",
@@ -42,7 +42,7 @@ class PythonElementExtractorExtendedTest {
     }
 
     @Test
-    void extractDocstring_emptyMultiLineDocstring_shouldReturnEmpty() {
+    void extractDocstringEmptyMultiLineDocstringShouldReturnEmpty() {
         // Arrange
         List<String> lines = Arrays.asList(
             "def empty_doc():",
@@ -59,7 +59,7 @@ class PythonElementExtractorExtendedTest {
     }
 
     @Test
-    void extractDocstring_singleLineDocstringInOneLine_shouldExtractCorrectly() {
+    void extractDocstringSingleLineDocstringInOneLineShouldExtractCorrectly() {
         // Arrange
         List<String> lines = Collections.singletonList("    \"\"\"Single line all in one\"\"\"");
 
@@ -71,7 +71,7 @@ class PythonElementExtractorExtendedTest {
     }
 
     @Test
-    void extractDocstring_withEmptyListOfLines_shouldReturnEmpty() {
+    void extractDocstringWithEmptyListOfLinesShouldReturnEmpty() {
         // Arrange
         List<String> lines = Collections.emptyList();
 
@@ -83,7 +83,7 @@ class PythonElementExtractorExtendedTest {
     }
 
     @Test
-    void extractParameters_withSpacesInParamList_shouldHandleCorrectly() {
+    void extractParametersWithSpacesInParamListShouldHandleCorrectly() {
         // Arrange
         String functionLine = "def spaced_params(  param1,  param2   ,param3  ):";
 
@@ -96,7 +96,7 @@ class PythonElementExtractorExtendedTest {
     }
 
     @Test
-    void extractParameters_withNestedParentheses_shouldExtractCorrectly() {
+    void extractParametersWithNestedParenthesesShouldExtractCorrectly() {
         // Arrange
         String functionLine = "def nested_params(param1, func(param2), (param3, param4)):";
 
@@ -109,7 +109,7 @@ class PythonElementExtractorExtendedTest {
     }
 
     @Test
-    void extractParameters_withMissingClosingParenthesis_shouldHandleGracefully() {
+    void extractParametersWithMissingClosingParenthesisShouldHandleGracefully() {
         // Arrange
         String functionLine = "def invalid_params(param1, param2:";
 
@@ -121,7 +121,7 @@ class PythonElementExtractorExtendedTest {
     }
 
     @Test
-    void extractParameters_withOnlyOpeningParenthesis_shouldHandleGracefully() {
+    void extractParametersWithOnlyOpeningParenthesisShouldHandleGracefully() {
         // Arrange
         String functionLine = "def invalid_params(";
 

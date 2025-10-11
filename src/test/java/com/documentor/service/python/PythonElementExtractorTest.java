@@ -22,7 +22,7 @@ class PythonElementExtractorTest {
     }
 
     @Test
-    void extractDocstring_shouldHandleSingleLineDocstring() {
+    void extractDocstringShouldHandleSingleLineDocstring() {
         // Arrange
         List<String> lines = Arrays.asList(
             "def test_function():",
@@ -38,7 +38,7 @@ class PythonElementExtractorTest {
     }
 
     @Test
-    void extractDocstring_shouldHandleMultiLineDocstring() {
+    void extractDocstringShouldHandleMultiLineDocstring() {
         // Arrange
         List<String> lines = Arrays.asList(
             "class TestClass:",
@@ -57,7 +57,7 @@ class PythonElementExtractorTest {
     }
 
     @Test
-    void extractDocstring_shouldHandleSingleQuoteDocstrings() {
+    void extractDocstringShouldHandleSingleQuoteDocstrings() {
         // Arrange
         List<String> lines = Arrays.asList(
             "def another_function():",
@@ -73,7 +73,7 @@ class PythonElementExtractorTest {
     }
 
     @Test
-    void extractDocstring_shouldHandleNoDocstring() {
+    void extractDocstringShouldHandleNoDocstring() {
         // Arrange
         List<String> lines = Arrays.asList(
             "def no_docstring():",
@@ -88,7 +88,7 @@ class PythonElementExtractorTest {
     }
 
     @Test
-    void extractDocstring_shouldHandleOutOfBoundsIndex() {
+    void extractDocstringShouldHandleOutOfBoundsIndex() {
         // Arrange
         List<String> lines = Arrays.asList(
             "def test_function():",
@@ -103,7 +103,7 @@ class PythonElementExtractorTest {
     }
 
     @Test
-    void extractParameters_shouldHandleSimpleParameters() {
+    void extractParametersShouldHandleSimpleParameters() {
         // Arrange
         String functionLine = "def test_function(param1, param2):";
 
@@ -115,7 +115,7 @@ class PythonElementExtractorTest {
     }
 
     @Test
-    void extractParameters_shouldHandleComplexParameters() {
+    void extractParametersShouldHandleComplexParameters() {
         // Arrange
         String functionLine = "def complex_function(self, param1: str, param2: int = 10, *args, **kwargs):";
 
@@ -127,7 +127,7 @@ class PythonElementExtractorTest {
     }
 
     @Test
-    void extractParameters_shouldHandleNoParameters() {
+    void extractParametersShouldHandleNoParameters() {
         // Arrange
         String functionLine = "def no_params():";
 
@@ -139,7 +139,7 @@ class PythonElementExtractorTest {
     }
 
     @Test
-    void extractParameters_shouldHandleInvalidInput() {
+    void extractParametersShouldHandleInvalidInput() {
         // Arrange
         String functionLine = "not a function definition";
 
