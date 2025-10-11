@@ -8,6 +8,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class LlmResponseParserTest {
 
+    private static final int TEST_MAX_TOKENS = 100;
+    private static final int TEST_TIMEOUT_SECONDS = 10;
+
     private LlmResponseParser parser;
     private LlmModelTypeDetector detector;
 
@@ -19,7 +22,7 @@ class LlmResponseParserTest {
 
     @Test
     void parseGenericResponse_returnsResponseField() {
-        LlmModelConfig model = new LlmModelConfig("test", "other", "http://api.test", "key", 100, 10);
+        LlmModelConfig model = new LlmModelConfig("test", "other", "http://api.test", "key", TEST_MAX_TOKENS, TEST_TIMEOUT_SECONDS);
         String json = "{\"response\": \"ok\"}";
         String out = parser.parseResponse(json, model);
         assertEquals("ok", out);
@@ -27,7 +30,7 @@ class LlmResponseParserTest {
 
     @Test
     void parseOpenAIResponse_handlesSimpleResponseField() {
-        LlmModelConfig model = new LlmModelConfig("gpt", "openai", "https://api.openai.com/v1", "key", 100, 10);
+        LlmModelConfig model = new LlmModelConfig("gpt", "openai", "https://api.openai.com/v1", "key", TEST_MAX_TOKENS, TEST_TIMEOUT_SECONDS);
         String json = "{\"response\": \"fallback\"}";
         String out = parser.parseResponse(json, model);
         assertEquals("fallback", out);

@@ -14,6 +14,9 @@ import static org.mockito.Mockito.verify;
 
 class LlmResponseParserEnhancedTest {
 
+    private static final int DEFAULT_MAX_TOKENS = 1000;
+    private static final int DEFAULT_TIMEOUT_SECONDS = 30;
+
     private LlmResponseParser parser;
     private LlmModelTypeDetector detector;
     private ObjectMapper objectMapper;
@@ -28,7 +31,7 @@ class LlmResponseParserEnhancedTest {
     @Test
     void testParseResponseDelegatesCorrectlyForOllamaModel() {
         // Given
-        LlmModelConfig model = new LlmModelConfig("llama", "ollama", "http://localhost:11434", "", 1000, 30);
+        LlmModelConfig model = new LlmModelConfig("llama", "ollama", "http://localhost:11434", "", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS);
         String response = "{\"response\": \"Ollama generated content\"}";
         when(detector.isOllamaModel(model)).thenReturn(true);
         when(detector.isOpenAICompatible(model)).thenReturn(false);
@@ -45,7 +48,7 @@ class LlmResponseParserEnhancedTest {
     @Test
     void testParseResponseDelegatesCorrectlyForOpenAIModel() {
         // Given
-        LlmModelConfig model = new LlmModelConfig("gpt-4", "openai", "https://api.openai.com", "key", 1000, 30);
+        LlmModelConfig model = new LlmModelConfig("gpt-4", "openai", "https://api.openai.com", "key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS);
         String response = "{\"choices\":[{\"message\":{\"content\":\"OpenAI generated content\"}}]}";
         when(detector.isOllamaModel(model)).thenReturn(false);
         when(detector.isOpenAICompatible(model)).thenReturn(true);
@@ -62,7 +65,7 @@ class LlmResponseParserEnhancedTest {
     @Test
     void testParseResponseDelegatesCorrectlyForGenericModel() {
         // Given
-        LlmModelConfig model = new LlmModelConfig("other-model", "other", "https://api.other.com", "key", 1000, 30);
+        LlmModelConfig model = new LlmModelConfig("other-model", "other", "https://api.other.com", "key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS);
         String response = "{\"text\": \"Generic model content\"}";
         when(detector.isOllamaModel(model)).thenReturn(false);
         when(detector.isOpenAICompatible(model)).thenReturn(false);
@@ -79,7 +82,7 @@ class LlmResponseParserEnhancedTest {
     @Test
     void testParseResponseHandlesParsingExceptionGracefully() {
         // Given
-        LlmModelConfig model = new LlmModelConfig("model", "provider", "http://api", "key", 1000, 30);
+        LlmModelConfig model = new LlmModelConfig("model", "provider", "http://api", "key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS);
         String response = "Invalid JSON";
         when(detector.isOllamaModel(model)).thenThrow(new RuntimeException("Unexpected error"));
 

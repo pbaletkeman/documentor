@@ -12,6 +12,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class LlmRequestFormatterTest {
 
+    private static final int MAX_TOKENS_LARGE = 2000;
+    private static final int TIMEOUT_SECONDS = 60;
+    private static final double TEMPERATURE_HALF = 0.5;
+
     private LlmRequestFormatter formatter;
     private LlmModelTypeDetector detector;
 
@@ -47,12 +51,12 @@ class LlmRequestFormatterTest {
 
     @Test
     void createGenericRequest_exposesPromptAndTemperature() {
-        LlmModelConfig model = new LlmModelConfig("claude-3", "anthropic", "https://api.anthropic.com", "key", 2000, 60);
+        LlmModelConfig model = new LlmModelConfig("claude-3", "anthropic", "https://api.anthropic.com", "key", MAX_TOKENS_LARGE, TIMEOUT_SECONDS);
         Map<String, Object> body = formatter.createRequest(model, "generate something");
 
         assertNotNull(body);
         assertEquals("generate something", body.get("prompt"));
-        assertEquals(2000, body.get("max_tokens"));
-        assertEquals(0.5, body.get("temperature"));
+        assertEquals(MAX_TOKENS_LARGE, body.get("max_tokens"));
+        assertEquals(TEMPERATURE_HALF, body.get("temperature"));
     }
 }

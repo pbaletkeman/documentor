@@ -23,6 +23,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(MockitoExtension.class)
 class MermaidDiagramServiceTest {
 
+    private static final int ELEMENT_COUNT_SMALL = 3;
+    private static final int ELEMENT_COUNT_MEDIUM = 4;
+    private static final int ELEMENT_COUNT_LARGE = 5;
+    private static final int ELEMENT_COUNT_EXTRA_LARGE = 6;
+    private static final int ELEMENT_COUNT_MAX = 9;
+    private static final int LINE_NUMBER_SIX = 6;
+
     private MermaidDiagramService mermaidDiagramService;
     private DiagramElementFilter diagramElementFilter;
     private DiagramPathManager diagramPathManager;
@@ -234,7 +241,7 @@ class MermaidDiagramServiceTest {
             "testMethod",
             "com.example.TestClass.testMethod",
             "/src/main/java/TestClass.java",
-            5,
+            ELEMENT_COUNT_LARGE,
             "public void testMethod()",
             "A test method",
             List.of(),
@@ -286,7 +293,7 @@ class MermaidDiagramServiceTest {
             "publicField",
             "com.example.ComplexClass.publicField",
             "/src/main/java/ComplexClass.java",
-            3,
+            ELEMENT_COUNT_SMALL,
             "public String publicField",
             "A public field",
             List.of(),
@@ -298,7 +305,7 @@ class MermaidDiagramServiceTest {
             "privateField",
             "com.example.ComplexClass.privateField",
             "/src/main/java/ComplexClass.java",
-            4,
+            ELEMENT_COUNT_MEDIUM,
             "private int privateField",
             "A private field",
             List.of(),
@@ -310,7 +317,7 @@ class MermaidDiagramServiceTest {
             "publicMethod",
             "com.example.ComplexClass.publicMethod",
             "/src/main/java/ComplexClass.java",
-            6,
+            LINE_NUMBER_SIX,
             "public void publicMethod()",
             "A public method",
             List.of(),
@@ -322,7 +329,7 @@ class MermaidDiagramServiceTest {
             "privateMethod",
             "com.example.ComplexClass.privateMethod",
             "/src/main/java/ComplexClass.java",
-            9,
+            ELEMENT_COUNT_MAX,
             "private void privateMethod()",
             "A private method",
             List.of(),
@@ -367,7 +374,7 @@ class MermaidDiagramServiceTest {
             "verylongmethodnamethatexceedsfiftycharacterslimitforreadability",
             "com.example.LongClass.verylongmethodnamethatexceedsfiftycharacterslimitforreadability",
             "/src/main/java/LongClass.java",
-            3,
+            ELEMENT_COUNT_SMALL,
             "public void verylongmethodnamethatexceedsfiftycharacterslimitforreadability(VeryLongParameterTypeName parameter)",
             "A method with very long signature",
             List.of("VeryLongParameterTypeName parameter"),
@@ -437,7 +444,7 @@ class MermaidDiagramServiceTest {
             "useOtherClass",
             "com.example.MainClass.useOtherClass",
             "/src/main/java/MainClass.java",
-            3,
+            ELEMENT_COUNT_SMALL,
             "public void useOtherClass(OtherClass other)",
             "Method that uses another class",
             List.of("OtherClass other"),

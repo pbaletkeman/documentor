@@ -37,6 +37,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ExtendWith(MockitoExtension.class)
 class LlmServiceIntegrationTest {
 
+    private static final int DEFAULT_MAX_TOKENS = 1000;
+    private static final int DEFAULT_TIMEOUT_SECONDS = 30;
+    private static final int ALTERNATIVE_MAX_TOKENS = 2000;
+    private static final int ALTERNATIVE_TIMEOUT_SECONDS = 60;
+    private static final int LARGE_MAX_TOKENS = 4096;
+    private static final int ITERATION_COUNT_SMALL = 3;
+    private static final int ITERATION_COUNT_MEDIUM = 5;
+    private static final int ITERATION_COUNT_LARGE = 50;
+    private static final int TEST_LINE_NUMBER = 10;
+
     @Mock
     private WebClient mockWebClient;
 
@@ -47,7 +57,7 @@ class LlmServiceIntegrationTest {
     void setUp() {
         // Create test configuration with LLM models
         LlmModelConfig testModel = new LlmModelConfig(
-            "test-model", "openai", "https://api.test.com", "test-key", 1000, 30
+            "test-model", "openai", "https://api.test.com", "test-key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
         );
 
         OutputSettings outputSettings = new OutputSettings(
@@ -55,7 +65,7 @@ class LlmServiceIntegrationTest {
         );
 
         AnalysisSettings analysisSettings = new AnalysisSettings(
-            true, 50, List.of("**/*.java"), List.of("**/test/**")
+            true, ITERATION_COUNT_LARGE, List.of("**/*.java"), List.of("**/test/**")
         );
 
         config = new DocumentorConfig(List.of(testModel), outputSettings, analysisSettings);
@@ -63,7 +73,7 @@ class LlmServiceIntegrationTest {
         // Create test code element
         testElement = new CodeElement(
             CodeElementType.METHOD, "testMethod", "com.test.TestClass.testMethod",
-            "/test/TestClass.java", 10, "public void testMethod(String param)",
+            "/test/TestClass.java", TEST_LINE_NUMBER, "public void testMethod(String param)",
             "Test method documentation", List.of("param"), List.of()
         );
     }
@@ -184,10 +194,10 @@ class LlmServiceIntegrationTest {
     void testServiceWithMultipleModels() {
         // Given - configuration with multiple models
         LlmModelConfig model1 = new LlmModelConfig(
-            "model-1", "openai", "https://api1.test.com", "key-1", 1000, 30
+            "model-1", "openai", "https://api1.test.com", "key-1", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
         );
         LlmModelConfig model2 = new LlmModelConfig(
-            "model-2", "openai", "https://api2.test.com", "key-2", 2000, 60
+            "model-2", "openai", "https://api2.test.com", "key-2", ALTERNATIVE_MAX_TOKENS, ALTERNATIVE_TIMEOUT_SECONDS
         );
 
         DocumentorConfig multiModelConfig = new DocumentorConfig(
@@ -215,9 +225,9 @@ class LlmServiceIntegrationTest {
             new CodeElement(CodeElementType.CLASS, "TestClass", "com.test.TestClass",
                 "/test/TestClass.java", 1, "public class TestClass", "", List.of(), List.of()),
             new CodeElement(CodeElementType.METHOD, "testMethod", "com.test.TestClass.testMethod",
-                "/test/TestClass.java", 5, "public void testMethod()", "", List.of(), List.of()),
+                "/test/TestClass.java", ITERATION_COUNT_MEDIUM, "public void testMethod()", "", List.of(), List.of()),
             new CodeElement(CodeElementType.FIELD, "testField", "com.test.TestClass.testField",
-                "/test/TestClass.java", 3, "private String testField", "", List.of(), List.of()),
+                "/test/TestClass.java", ITERATION_COUNT_SMALL, "private String testField", "", List.of(), List.of()),
             new CodeElement(CodeElementType.CLASS, "TestInterface", "com.test.TestInterface",
                 "/test/TestInterface.java", 1, "public interface TestInterface", "", List.of(), List.of())
         };
@@ -283,15 +293,15 @@ class LlmServiceIntegrationTest {
     void testOllamaModelDetection() {
         // Given - Various Ollama model configurations
         LlmModelConfig ollamaModel1 = new LlmModelConfig(
-            "llama3.2", "ollama", "http://localhost:11434/api/generate", "", 4096, 60
+            "llama3.2", "ollama", "http://localhost:11434/api/generate", "", LARGE_MAX_TOKENS, ALTERNATIVE_TIMEOUT_SECONDS
         );
 
         LlmModelConfig ollamaModel2 = new LlmModelConfig(
-            "codellama", "ollama", "http://localhost:11434/api/generate", "", 4096, 60
+            "codellama", "ollama", "http://localhost:11434/api/generate", "", LARGE_MAX_TOKENS, ALTERNATIVE_TIMEOUT_SECONDS
         );
 
         LlmModelConfig openaiModel = new LlmModelConfig(
-            "gpt-4", "openai", "https://api.openai.com/v1/chat/completions", "test-key", 4096, 30
+            "gpt-4", "openai", "https://api.openai.com/v1/chat/completions", "test-key", LARGE_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
         );
 
         OutputSettings outputSettings = new OutputSettings(
@@ -299,7 +309,7 @@ class LlmServiceIntegrationTest {
         );
 
         AnalysisSettings analysisSettings = new AnalysisSettings(
-            true, 50, List.of("**/*.java"), List.of("**/test/**")
+            true, ITERATION_COUNT_LARGE, List.of("**/*.java"), List.of("**/test/**")
         );
 
         // Test each model type

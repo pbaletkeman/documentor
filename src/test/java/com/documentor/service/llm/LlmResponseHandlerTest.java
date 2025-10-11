@@ -13,6 +13,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class LlmResponseHandlerTest {
 
+    private static final int DEFAULT_MAX_TOKENS = 1000;
+    private static final int DEFAULT_TIMEOUT_SECONDS = 30;
+
     private LlmResponseHandler responseHandler;
     private LlmModelConfig testModel;
 
@@ -23,7 +26,7 @@ class LlmResponseHandlerTest {
         responseHandler = new LlmResponseHandler(responseParser, modelTypeDetector);
 
         testModel = new LlmModelConfig(
-            "test-model", "openai", "http://test.api", "api-key", 1000, 30
+            "test-model", "openai", "http://test.api", "api-key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
         );
     }
 
@@ -68,11 +71,11 @@ class LlmResponseHandlerTest {
     @Test
     void testResponseHandlerWithDifferentModels() {
         LlmModelConfig ollamaModel = new LlmModelConfig(
-            "llama2", "ollama", "http://localhost:11434/api/generate", "", 1000, 30
+            "llama2", "ollama", "http://localhost:11434/api/generate", "", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
         );
 
         LlmModelConfig openaiModel = new LlmModelConfig(
-            "gpt-4", "openai", "https://api.openai.com/v1/completions", "sk-test", 1000, 30
+            "gpt-4", "openai", "https://api.openai.com/v1/completions", "sk-test", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
         );
 
         // Test that component can handle different model configurations

@@ -79,7 +79,8 @@ class CommonCommandHandlerTest {
         CommonCommandHandler handler = new CommonCommandHandler();
         Map<String, Object> stats = new HashMap<>();
         stats.put("Key1", "Value1");
-        stats.put("Key2", 123);
+        final int testValue = 123;
+        stats.put("Key2", testValue);
         
         // Act
         String formattedStats = handler.formatStatistics("Test Stats", stats);
@@ -87,6 +88,6 @@ class CommonCommandHandlerTest {
         // Assert
         assertTrue(formattedStats.contains("📊 Test Stats"), "Formatted stats should contain the title");
         assertTrue(formattedStats.contains("Key1: Value1"), "Formatted stats should contain key-value pairs");
-        assertTrue(formattedStats.contains("Key2: 123"), "Formatted stats should contain numeric values");
+        assertTrue(formattedStats.contains("Key2: " + testValue), "Formatted stats should contain numeric values");
     }
 }

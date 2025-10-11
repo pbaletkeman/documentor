@@ -15,6 +15,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ConfigurationCommandHandlerTest {
 
+    private static final int TEST_MAX_TOKENS = 100;
+    private static final int TEST_TIMEOUT_SECONDS = 10;
+
     @Test
     void handleValidateConfigFileNotFound() {
         ObjectMapper mapper = new ObjectMapper();
@@ -29,7 +32,7 @@ class ConfigurationCommandHandlerTest {
         ObjectMapper mapper = new ObjectMapper();
         ConfigurationCommandHandler handler = new ConfigurationCommandHandler(mapper);
 
-        LlmModelConfig model = new LlmModelConfig("m", "openai", "http://x", null, 100, 10);
+        LlmModelConfig model = new LlmModelConfig("m", "openai", "http://x", null, TEST_MAX_TOKENS, TEST_TIMEOUT_SECONDS);
         OutputSettings output = new OutputSettings(tmp.toString(), "md", true, false);
         AnalysisSettings analysis = new AnalysisSettings(false, 2, List.of("**/*.java"), List.of("**/test/**"));
         DocumentorConfig config = new DocumentorConfig(List.of(model), output, analysis);
@@ -70,10 +73,10 @@ class ConfigurationCommandHandlerTest {
         ConfigurationCommandHandler handler = new ConfigurationCommandHandler(mapper);
 
         // Create models with null and empty API keys
-        LlmModelConfig modelWithNullKey = new LlmModelConfig("modelNull", "openai", "http://test", null, 100, 10);
-        LlmModelConfig modelWithEmptyKey = new LlmModelConfig("modelEmpty", "openai", "http://test", "", 100, 10);
-        LlmModelConfig modelWithWhitespaceKey = new LlmModelConfig("modelWhitespace", "openai", "http://test", "   ", 100, 10);
-        LlmModelConfig modelWithValidKey = new LlmModelConfig("modelValid", "openai", "http://test", "valid-key", 100, 10);
+        LlmModelConfig modelWithNullKey = new LlmModelConfig("modelNull", "openai", "http://test", null, TEST_MAX_TOKENS, TEST_TIMEOUT_SECONDS);
+        LlmModelConfig modelWithEmptyKey = new LlmModelConfig("modelEmpty", "openai", "http://test", "", TEST_MAX_TOKENS, TEST_TIMEOUT_SECONDS);
+        LlmModelConfig modelWithWhitespaceKey = new LlmModelConfig("modelWhitespace", "openai", "http://test", "   ", TEST_MAX_TOKENS, TEST_TIMEOUT_SECONDS);
+        LlmModelConfig modelWithValidKey = new LlmModelConfig("modelValid", "openai", "http://test", "valid-key", TEST_MAX_TOKENS, TEST_TIMEOUT_SECONDS);
         
         OutputSettings output = new OutputSettings(tmp.toString(), "md", true, false);
         AnalysisSettings analysis = new AnalysisSettings(false, 2, List.of("**/*.java"), List.of("**/test/**"));

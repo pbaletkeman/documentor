@@ -22,6 +22,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
  */
 class PythonASTCommandBuilderTest {
 
+    private static final int LINE_NUMBER_THREE = 3;
+    private static final int LINE_NUMBER_TEN = 10;
+    private static final int LINE_NUMBER_FIFTEEN = 15;
+    private static final int LINE_NUMBER_FIVE = 5;
+
     private final PythonASTCommandBuilder commandBuilder = new PythonASTCommandBuilder();
 
     @Test
@@ -78,7 +83,7 @@ class PythonASTCommandBuilderTest {
         // Then
         assertNotNull(processBuilder);
         List<String> command = processBuilder.command();
-        assertEquals(3, command.size());
+        assertEquals(LINE_NUMBER_THREE, command.size());
         assertEquals("python", command.get(0));
         assertEquals(scriptPath.toString(), command.get(1));
         assertEquals(filePath.toString(), command.get(2));
@@ -100,7 +105,7 @@ class PythonASTCommandBuilderTest {
         assertEquals("TestClass", element.name());
         assertEquals("class TestClass", element.qualifiedName());
         assertEquals(filePath.toString(), element.filePath());
-        assertEquals(10, element.lineNumber());
+        assertEquals(LINE_NUMBER_TEN, element.lineNumber());
         assertEquals("class TestClass:", element.signature());
         assertEquals("This is a test class docstring", element.documentation());
         assertTrue(element.parameters().isEmpty());
@@ -123,12 +128,12 @@ class PythonASTCommandBuilderTest {
         assertEquals("test_function", element.name());
         assertEquals("def test_function(param1, param2, param3)", element.qualifiedName());
         assertEquals(filePath.toString(), element.filePath());
-        assertEquals(15, element.lineNumber());
+        assertEquals(LINE_NUMBER_FIFTEEN, element.lineNumber());
         assertEquals("def test_function(param1, param2, param3):", element.signature());
         assertEquals("This is a function docstring", element.documentation());
 
         // Parameters check
-        assertEquals(3, element.parameters().size());
+        assertEquals(LINE_NUMBER_THREE, element.parameters().size());
         assertEquals("param1", element.parameters().get(0));
         assertEquals("param2", element.parameters().get(1));
         assertEquals("param3", element.parameters().get(2));
@@ -152,7 +157,7 @@ class PythonASTCommandBuilderTest {
         assertEquals("test_variable", element.name());
         assertEquals("test_variable", element.qualifiedName());
         assertEquals(filePath.toString(), element.filePath());
-        assertEquals(5, element.lineNumber());
+        assertEquals(LINE_NUMBER_FIVE, element.lineNumber());
         assertEquals("test_variable = ...", element.signature());
         assertEquals("", element.documentation());
         assertTrue(element.parameters().isEmpty());

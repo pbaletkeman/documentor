@@ -15,15 +15,21 @@ import static org.junit.jupiter.api.Assertions.fail;
  */
 class ApplicationConstantsTest {
 
+    private static final int EXPECTED_MIN_PARTS = 3;
+    private static final int EXPECTED_FUNCTION_PREFIX_LENGTH = 1;
+    private static final int EXPECTED_PARAMS_ARRAY_INDEX = 2;
+    private static final int EXPECTED_TIMEOUT_SECONDS = 30;
+    private static final int EXPECTED_MAX_LINES_BATCH = 1000;
+
     @Test
     @DisplayName("Should verify constants are defined with correct values")
     void shouldVerifyConstantValues() {
         // Verify constant values
-        assertEquals(3, ApplicationConstants.MINIMUM_PARTS_FOR_PARSING);
-        assertEquals(1, ApplicationConstants.FUNCTION_DEF_PREFIX_LENGTH);
-        assertEquals(2, ApplicationConstants.PARAMETERS_ARRAY_INDEX);
-        assertEquals(30, ApplicationConstants.DEFAULT_PROCESS_TIMEOUT_SECONDS);
-        assertEquals(1000, ApplicationConstants.MAX_LINES_PER_BATCH);
+        assertEquals(EXPECTED_MIN_PARTS, ApplicationConstants.MINIMUM_PARTS_FOR_PARSING);
+        assertEquals(EXPECTED_FUNCTION_PREFIX_LENGTH, ApplicationConstants.FUNCTION_DEF_PREFIX_LENGTH);
+        assertEquals(EXPECTED_PARAMS_ARRAY_INDEX, ApplicationConstants.PARAMETERS_ARRAY_INDEX);
+        assertEquals(EXPECTED_TIMEOUT_SECONDS, ApplicationConstants.DEFAULT_PROCESS_TIMEOUT_SECONDS);
+        assertEquals(EXPECTED_MAX_LINES_BATCH, ApplicationConstants.MAX_LINES_PER_BATCH);
     }
 
     @Test

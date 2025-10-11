@@ -16,6 +16,10 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class LlmModelConfigTest {
 
+    private static final int DEFAULT_MAX_TOKENS = 1000;
+    private static final int DEFAULT_TIMEOUT_SECONDS = 60;
+    private static final int ALTERNATIVE_MAX_TOKENS = 2000;
+
     @Test
     @DisplayName("Should create a valid LLM model config")
     void shouldCreateValidConfig() {
@@ -24,8 +28,8 @@ class LlmModelConfigTest {
         String provider = "test-provider";
         String baseUrl = "http://test-url";
         String apiKey = "test-key";
-        Integer maxTokens = 1000;
-        Integer timeoutSeconds = 60;
+        Integer maxTokens = DEFAULT_MAX_TOKENS;
+        Integer timeoutSeconds = DEFAULT_TIMEOUT_SECONDS;
 
         // When
         LlmModelConfig config = new LlmModelConfig(name, provider, baseUrl, apiKey, maxTokens, timeoutSeconds);
@@ -65,7 +69,7 @@ class LlmModelConfigTest {
         String provider = "custom-provider";
         String baseUrl = "http://custom-url";
         String apiKey = "custom-key";
-        Integer maxTokens = 2000;
+        Integer maxTokens = ALTERNATIVE_MAX_TOKENS;
         Integer timeoutSeconds = 45;
 
         LlmModelConfig config = new LlmModelConfig(name, provider, baseUrl, apiKey, maxTokens, timeoutSeconds);
@@ -104,7 +108,7 @@ class LlmModelConfigTest {
     @DisplayName("Should validate successfully with valid config")
     void shouldValidateSuccessfullyWithValidConfig() {
         // Given
-        LlmModelConfig config = new LlmModelConfig("model", "provider", "url", "key", 1000, 60);
+        LlmModelConfig config = new LlmModelConfig("model", "provider", "url", "key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS);
 
         // When & Then
         assertDoesNotThrow(config::validate);
@@ -122,17 +126,17 @@ class LlmModelConfigTest {
 
     private static Stream<Arguments> provideInvalidConfigs() {
         return Stream.of(
-            Arguments.of(new LlmModelConfig(null, "provider", "url", "key", 1000, 60),
+            Arguments.of(new LlmModelConfig(null, "provider", "url", "key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS),
                 "name cannot be null or empty"),
-            Arguments.of(new LlmModelConfig("", "provider", "url", "key", 1000, 60),
+            Arguments.of(new LlmModelConfig("", "provider", "url", "key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS),
                 "name cannot be null or empty"),
-            Arguments.of(new LlmModelConfig("  ", "provider", "url", "key", 1000, 60),
+            Arguments.of(new LlmModelConfig("  ", "provider", "url", "key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS),
                 "name cannot be null or empty"),
-            Arguments.of(new LlmModelConfig("model", null, "url", "key", 1000, 60),
+            Arguments.of(new LlmModelConfig("model", null, "url", "key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS),
                 "provider cannot be null or empty"),
-            Arguments.of(new LlmModelConfig("model", "", "url", "key", 1000, 60),
+            Arguments.of(new LlmModelConfig("model", "", "url", "key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS),
                 "provider cannot be null or empty"),
-            Arguments.of(new LlmModelConfig("model", "  ", "url", "key", 1000, 60),
+            Arguments.of(new LlmModelConfig("model", "  ", "url", "key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS),
                 "provider cannot be null or empty")
         );
     }
