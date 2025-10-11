@@ -1,10 +1,7 @@
 package com.documentor.service.python;
 
 import com.documentor.model.CodeElement;
-import org.springframework.test.util.ReflectionTestUtils;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.nio.file.Path;
 
 /**
