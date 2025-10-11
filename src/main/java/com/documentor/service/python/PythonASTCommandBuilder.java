@@ -11,7 +11,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 /**
- * ðŸ Python AST Processor Command Builder
+ * 🐍 Python AST Processor Command Builder
  *
  * Handles generating and executing Python commands for AST analysis.
  * Extracted from PythonASTProcessor to reduce complexity.
@@ -20,7 +20,7 @@ import java.util.List;
 public class PythonASTCommandBuilder {
 
     /**
-     * ðŸ“ Gets the AST analysis script
+     * 🔍 Gets the AST analysis script
      */
     public String getPythonAstScript() {
         return """
@@ -55,7 +55,7 @@ public class PythonASTCommandBuilder {
     }
 
     /**
-     * ðŸ“ Writes the temporary Python script
+     * 🔍 Writes the temporary Python script
      */
     public Path writeTempScript() throws IOException {
         Path tempScript = Files.createTempFile("python_analyzer", ".py");
@@ -64,14 +64,14 @@ public class PythonASTCommandBuilder {
     }
 
     /**
-     * ðŸ" Creates a process builder for Python execution
+     * 🔍 Creates a process builder for Python execution
      */
     public ProcessBuilder createProcessBuilder(final Path scriptPath, final Path filePath) {
         return new ProcessBuilder("python", scriptPath.toString(), filePath.toString());
     }
 
     /**
-     * ðŸ" Parses a single line of AST output
+     * 🔍 Parses a single line of AST output
      */
     public CodeElement parseASTOutputLine(final String line, final Path filePath) {
         String[] parts = line.split("\\|", -1);

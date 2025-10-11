@@ -52,9 +52,9 @@ class CodeElementTypeTest {
     @Test
     void testGetIcon() {
         // Test icon values
-        assertEquals("ðŸ“¦", CodeElementType.CLASS.getIcon());
-        assertEquals("ðŸ”§", CodeElementType.METHOD.getIcon());
-        assertEquals("ðŸ“Š", CodeElementType.FIELD.getIcon());
+        assertEquals("📦", CodeElementType.CLASS.getIcon());
+        assertEquals("🔧", CodeElementType.METHOD.getIcon());
+        assertEquals("📊", CodeElementType.FIELD.getIcon());
     }
 
     @Test

@@ -6,7 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- * ðŸ“ Diagram Path Manager
+ * 🔍 Diagram Path Manager
  *
  * Specialized component for managing output paths and file naming for diagrams.
  * Handles path resolution and file naming conventions.
@@ -15,7 +15,7 @@ import java.nio.file.Paths;
 public class DiagramPathManager {
 
     /**
-     * ðŸ" Determines the output path for the diagram
+     * 🔍 Determines the output path for the diagram
      */
     public String determineOutputPath(final String sourceFilePath, final String customOutputPath) {
         if (customOutputPath != null && !customOutputPath.trim().isEmpty()) {
@@ -28,21 +28,21 @@ public class DiagramPathManager {
     }
 
     /**
-     * ðŸ·ï¸ Generates a standardized diagram file name
+     * 🏷️ Generates a standardized diagram file name
      */
     public String generateDiagramFileName(final String className) {
         return sanitizeFileName(className) + "_diagram.md";
     }
 
     /**
-     * ðŸ§¹ Sanitizes file name for cross-platform compatibility
+     * 🧹 Sanitizes file name for cross-platform compatibility
      */
     private String sanitizeFileName(final String fileName) {
         return fileName.replaceAll("[^a-zA-Z0-9_\\-]", "_");
     }
 
     /**
-     * ðŸ"Š Creates the output directory path
+     * 📊 Creates the output directory path
      */
     public Path createOutputDirectory(final String outputPath) {
         return Paths.get(outputPath);

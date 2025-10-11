@@ -23,7 +23,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /**
- * ðŸ§ª Unit tests for CodeAnalysisService
+ * 🧪 Unit tests for CodeAnalysisService
  */
 @ExtendWith(MockitoExtension.class)
 class CodeAnalysisServiceTest {

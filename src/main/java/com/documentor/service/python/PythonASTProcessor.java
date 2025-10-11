@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * ðŸ Python AST Processor
+ * 🐍 Python AST Processor
  *
  * Specialized component for analyzing Python files using Python's AST module
  * via subprocess execution. Refactored for reduced complexity.
@@ -31,7 +31,7 @@ public class PythonASTProcessor {
     }
 
     /**
-     * ðŸ"¬ Analyzes Python file using Python's AST module via subprocess
+     * 🔬 Analyzes Python file using Python's AST module via subprocess
      */
     public List<CodeElement> analyzeWithAST(final Path filePath) throws IOException, InterruptedException {
         List<CodeElement> elements = new ArrayList<>();
@@ -64,7 +64,7 @@ public class PythonASTProcessor {
     }
 
     /**
-     * ðŸ"‹ Processes the output of the Python process
+     * 📋 Processes the output of the Python process
      */
     private List<CodeElement> processOutput(final Process process, final Path filePath) throws IOException {
         List<CodeElement> elements = new ArrayList<>();

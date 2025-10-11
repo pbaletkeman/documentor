@@ -5,7 +5,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * ðŸ§° Python Pattern Matcher
+ * 🧰 Python Pattern Matcher
  *
  * Helper class to extract pattern matches from Python code.
  * Extracted from PythonRegexAnalyzer to reduce complexity.
@@ -30,28 +30,28 @@ public class PythonPatternMatcher {
             "(?:'''|\"\"\")([^'\"]*?)(?:'''|\"\"\")", Pattern.DOTALL);
 
     /**
-     * ðŸ" Finds all class matches in the given content
+     * 🔍 Finds all class matches in the given content
      */
     public Matcher findClassMatches(final String content) {
         return classPattern.matcher(content);
     }
 
     /**
-     * ðŸ" Finds all function matches in the given content
+     * 🔍 Finds all function matches in the given content
      */
     public Matcher findFunctionMatches(final String content) {
         return functionPattern.matcher(content);
     }
 
     /**
-     * ðŸ" Finds all variable matches in the given content
+     * 🔍 Finds all variable matches in the given content
      */
     public Matcher findVariableMatches(final String content) {
         return variablePattern.matcher(content);
     }
 
     /**
-     * ðŸ" Finds docstring in the given content
+     * 🔍 Finds docstring in the given content
      */
     public String findDocstring(final String content) {
         Matcher docstringMatcher = docstringPattern.matcher(content);
@@ -59,7 +59,7 @@ public class PythonPatternMatcher {
     }
 
     /**
-     * ðŸ" Extracts parameters from function signature
+     * 🔍 Extracts parameters from function signature
      */
     public String[] extractParameters(final String paramString) {
         if (paramString == null || paramString.trim().isEmpty()) {

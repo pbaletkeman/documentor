@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * ðŸ§ª Simple tests for LlmResponseHandler component
+ * 🧪 Simple tests for LlmResponseHandler component
  */
 class LlmResponseHandlerTest {
 

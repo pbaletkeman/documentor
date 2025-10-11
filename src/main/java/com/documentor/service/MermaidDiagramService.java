@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * ðŸ“Š Mermaid Diagram Service
+ * 📊 Mermaid Diagram Service
  *
  * Service for generating Mermaid diagrams from code analysis.
  * This is a refactored version with reduced complexity.
@@ -41,14 +41,14 @@ public class MermaidDiagramService {
     }
 
     /**
-     * ðŸ“Š Generates class diagrams for the analyzed project
+     * 📊 Generates class diagrams for the analyzed project
      */
     public CompletableFuture<List<String>> generateClassDiagrams(
             final ProjectAnalysis analysis,
             final String outputPath) {
 
         return CompletableFuture.supplyAsync(() -> {
-            LOGGER.info("ðŸ“Š Starting Mermaid diagram generation for {} elements",
+            LOGGER.info("📊 Starting Mermaid diagram generation for {} elements",
                     analysis.codeElements().size());
 
             try {
@@ -61,7 +61,7 @@ public class MermaidDiagramService {
     }
 
     /**
-     * ðŸ“Š Core diagram generation logic
+     * 📊 Core diagram generation logic
      */
     private List<String> generateDiagrams(final ProjectAnalysis analysis, final String outputPath) {
         List<String> generatedFiles = new ArrayList<>();
@@ -89,7 +89,7 @@ public class MermaidDiagramService {
     }
 
     /**
-     * ðŸ“Š Process a single class diagram
+     * 📊 Process a single class diagram
      */
     private String processSingleClassDiagram(
             final CodeElement classElement,

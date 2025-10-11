@@ -12,7 +12,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * ðŸ§ª Tests for LlmRequestBuilder component
+ * 🧪 Tests for LlmRequestBuilder component
  */
 class LlmRequestBuilderTest {
 

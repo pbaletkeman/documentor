@@ -9,9 +9,9 @@ package com.documentor.model;
  * - FIELD: Variables, attributes, constants
  */
 public enum CodeElementType {
-    CLASS("ðŸ“¦", "Class/Interface"),
-    METHOD("ðŸ”§", "Method/Function"),
-    FIELD("ðŸ“Š", "Field/Variable");
+    CLASS("📦", "Class/Interface"),
+    METHOD("🔧", "Method/Function"),
+    FIELD("📊", "Field/Variable");
 
     private final String icon;
     private final String description;

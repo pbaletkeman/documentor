@@ -11,7 +11,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * ðŸ§ª Simple tests for DocumentationFormatter component
+ * 🧪 Simple tests for DocumentationFormatter component
  */
 class DocumentationFormatterTest {
 

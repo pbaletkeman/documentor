@@ -219,7 +219,7 @@ class CodeElementTest {
         String displayName = element.getDisplayName();
 
         // Then
-        assertTrue(displayName.contains("ðŸ”§")); // METHOD icon
+        assertTrue(displayName.contains("🔧")); // METHOD icon
         assertTrue(displayName.contains("com.test.TestClass.testMethod"));
         assertTrue(displayName.contains("TestClass.java"));
         assertTrue(displayName.contains("25"));

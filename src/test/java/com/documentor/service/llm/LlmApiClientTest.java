@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
- * ðŸ§ª Tests for LlmApiClient component
+ * 🧪 Tests for LlmApiClient component
  */
 @ExtendWith(MockitoExtension.class)
 class LlmApiClientTest {

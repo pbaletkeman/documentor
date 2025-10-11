@@ -13,7 +13,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 /**
- * ðŸ Python Code Analyzer
+  * 🐍 Python Code Analyzer
  *
  * Orchestrates Python source file analysis using specialized components:
  * - AST-based parsing for accuracy (preferred)
@@ -34,13 +34,13 @@ public class PythonCodeAnalyzer {
     }
 
     /**
-     * ðŸ“„ Analyzes a Python file and extracts all non-private code elements
+     * 📄 Analyzes a Python file and extracts all non-private code elements
      *
      * @param filePath Path to the Python source file
      * @return List of discovered code elements
      */
     public List<CodeElement> analyzeFile(final Path filePath) throws IOException {
-        LOGGER.debug("ðŸ” Analyzing Python file: {}", filePath);
+        LOGGER.debug("🔍 Analyzing Python file: {}", filePath);
 
         try {
             // Try using Python's AST module for more accurate parsing

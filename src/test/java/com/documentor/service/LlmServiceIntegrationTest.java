@@ -20,7 +20,7 @@ import java.util.concurrent.CompletableFuture;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * ðŸ§ª Integration tests for LlmService
+ * 🧪 Integration tests for LlmService
  *
  * Tests LLM service methods with mocked WebClient to verify
  * prompt generation, model selection, and response handling.

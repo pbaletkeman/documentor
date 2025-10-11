@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * ðŸ§ª Unit Test Documentation Generator
+ * 🧪 Unit Test Documentation Generator
  *
  * Specialized component for generating unit test documentation and suggestions.
  * Handles AI-generated test cases and coverage recommendations.
@@ -76,10 +76,10 @@ public class UnitTestDocumentationGenerator {
     }
 
     /**
-     * ðŸ§ª Appends test documentation header
+     * 🧪 Appends test documentation header
      */
     private void appendTestDocumentationHeader(final StringBuilder doc) {
-        String icon = config.outputSettings().includeIcons() ? "ðŸ§ª " : "";
+        String icon = config.outputSettings().includeIcons() ? "🧪 " : "";
         doc.append(String.format("# %sGenerated Unit Tests\n\n", icon));
         doc.append("This file contains AI-generated unit test suggestions for the analyzed code.\n\n");
         doc.append(String.format("Target Coverage: %.0f%%\n\n",
