@@ -79,6 +79,11 @@ remove*.py
 java_files.txt
 hs_err_*.log
 replay_*.log
+*.temp
+*.tmp
+*.disabled
+*.bak
+*.old
 
 # Runtime configuration that might contain sensitive data
 config/local.json
