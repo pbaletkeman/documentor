@@ -15,7 +15,7 @@ A powerful Java Spring Boot Command Line application that analyzes Java and Pyth
 - **🎯 Configurable**: External JSON configuration for LLM models and settings
 - **📋 Status Monitoring**: Real-time project and configuration status display
 - **✅ High Test Coverage**: 96%+ code coverage with comprehensive test suites
-- **🏗️ Production Ready**: Built with Spring Boot 3.2 and Java 21 for enterprise use
+- **🏗️ Production Ready**: Built with Spring Boot 3.5.6 and Java 21 for enterprise use
 - **📦 Fat JAR Support**: Create self-contained executable JARs for easy distribution
 
 ## 📋 Table of Contents
@@ -835,7 +835,14 @@ To add support for a new programming language:
 
 ## 🆕 Recent Enhancements
 
-### Version 1.0.0 Latest Features
+### Version 1.0.1 - October 2025 Updates
+
+#### 🚀 **Spring Boot 3.5.6 Upgrade**
+
+- **Latest Spring Boot**: Upgraded from 3.2.12 to 3.5.6 for improved performance and security
+- **Java 21 Optimizations**: Enhanced virtual thread support and performance improvements
+- **Updated Dependencies**: All third-party libraries updated to latest compatible versions
+- **Security Patches**: Latest security updates and vulnerability fixes
 
 #### 📋 **Status Command**
 
@@ -847,7 +854,7 @@ To add support for a new programming language:
 
 #### 🏗️ **Enhanced Architecture**
 
-- **Spring Boot 3.2**: Upgraded to latest Spring Boot with improved performance
+- **Spring Boot 3.5.6**: Upgraded to latest Spring Boot with improved performance and Java 21 optimizations
 - **Java 21 Support**: Full compatibility with latest Java LTS version
 - **Async Processing**: Multi-threaded LLM processing with configurable thread pools
 - **Configuration Injection**: Dependency injection for better testability and maintainability
@@ -918,7 +925,7 @@ The project enforces strict quality standards:
 - **🔍 Checkstyle**: Google Java Style Guide enforcement
 - **🧪 JaCoCo**: Automated coverage verification in build process
 - **⚡ Pre-commit Hooks**: Automatic quality checks before commits
-- **🏗️ Spring Boot 3.2**: Latest enterprise-grade framework
+- **🏗️ Spring Boot 3.5.6**: Latest enterprise-grade framework with security updates
 - **☕ Java 21**: Modern Java LTS support
 
 ### Pre-commit Hooks
@@ -1093,10 +1100,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **✅ Dependencies**: All dependencies up-to-date and compatible
 - **✅ Documentation**: Comprehensive and current
 - **✅ Configuration**: Multiple LLM providers supported (OpenAI, Ollama, etc.)
-- **✅ Architecture**: Production-ready with Spring Boot 3.2 and Java 21
+- **✅ Architecture**: Production-ready with Spring Boot 3.5.6 and Java 21
 
 ### 🔧 Latest Improvements
 
+- **Spring Boot 3.5.6 Upgrade**: Updated to latest Spring Boot version with security patches and performance enhancements
 - **Enhanced Test Coverage**: Achieved 96% instruction coverage across all modules
 - **Sophisticated Architecture**: Modular design with specialized service layers
 - **Advanced CLI**: Comprehensive command handlers with status monitoring
