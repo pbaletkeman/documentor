@@ -18,7 +18,9 @@ public class PythonElementExtractor {
      * ðŸ" Extracts docstring from Python code starting at given line index
      */
     public String extractDocstring(final List<String> lines, final int startIndex) {
-        if (startIndex >= lines.size()) return "";
+        if (startIndex >= lines.size()) {
+            return "";
+        }
 
         String nextLine = lines.get(startIndex).trim();
         if (nextLine.startsWith("\"\"\"") || nextLine.startsWith("'''")) {
@@ -59,10 +61,14 @@ public class PythonElementExtractor {
     public List<String> extractParameters(final String functionLine) {
         int start = functionLine.indexOf('(');
         int end = functionLine.lastIndexOf(')');
-        if (start == -1 || end == -1 || start >= end) return List.of();
+        if (start == -1 || end == -1 || start >= end) {
+            return List.of();
+        }
 
         String params = functionLine.substring(start + 1, end);
-        if (params.trim().isEmpty()) return List.of();
+        if (params.trim().isEmpty()) {
+            return List.of();
+        }
 
         // Handle the space-preserving test case
         if (functionLine.contains("def spaced_params(")) {

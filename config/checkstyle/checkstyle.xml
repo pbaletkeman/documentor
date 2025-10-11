@@ -13,6 +13,12 @@
     <property name="fileNamePattern" value="module\-info\.java$"/>
   </module>
   
+  <!-- Suppression filter for specific files -->
+  <module name="SuppressionSingleFilter">
+    <property name="files" value=".*DocumentorApplication\.java$"/>
+    <property name="checks" value="HideUtilityClassConstructor"/>
+  </module>
+  
   <!-- Size Violations -->
   <module name="FileLength"/>
   <module name="LineLength">
