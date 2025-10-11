@@ -143,12 +143,12 @@ class PythonASTProcessorTest {
 
         // Create test file
         Path filePath = Files.createTempFile(tempDir, "test", ".py");
-        String pythonCode = "class TestClass:\n" +
-                           "    \"\"\"This is a test class\"\"\"\n" +
-                           "    def test_method(self, param1, param2):\n" +
-                           "        \"\"\"This is a test method\"\"\"\n" +
-                           "        test_var = 42\n" +
-                           "        return test_var\n";
+        String pythonCode = "class TestClass:\n"
+                           + "    \"\"\"This is a test class\"\"\"\n"
+                           + "    def test_method(self, param1, param2):\n"
+                           + "        \"\"\"This is a test method\"\"\"\n"
+                           + "        test_var = 42\n"
+                           + "        return test_var\n";
         Files.write(filePath, pythonCode.getBytes());
 
         // Setup mocks
@@ -158,9 +158,9 @@ class PythonASTProcessorTest {
         // Mock process
         Process mockedProcess = mock(Process.class);
         String testOutput =
-            "CLASS|TestClass|1|This is a test class\n" +
-            "FUNCTION|test_method|3|This is a test method|self,param1,param2\n" +
-            "VARIABLE|test_var|5||\n";
+            "CLASS|TestClass|1|This is a test class\n"
+            + "FUNCTION|test_method|3|This is a test method|self,param1,param2\n"
+            + "VARIABLE|test_var|5||\n";
         ByteArrayInputStream inputStream = new ByteArrayInputStream(testOutput.getBytes());
         when(mockedProcess.getInputStream()).thenReturn(inputStream);
         when(mockedProcess.waitFor()).thenReturn(0);

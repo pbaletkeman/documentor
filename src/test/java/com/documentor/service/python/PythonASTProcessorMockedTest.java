@@ -61,8 +61,8 @@ public class PythonASTProcessorMockedTest {
 
         // Mock process input stream with test data
         String testOutput =
-            "CLASS|ComplexClass|10|Complex class with multiple methods\n" +
-            "FUNCTION|complex_method|15|Method that does complex things|param1,param2,param3\n";
+            "CLASS|ComplexClass|10|Complex class with multiple methods\n"
+            + "FUNCTION|complex_method|15|Method that does complex things|param1,param2,param3\n";
 
         ByteArrayInputStream inputStream = new ByteArrayInputStream(testOutput.getBytes());
         when(process.getInputStream()).thenReturn(inputStream);

@@ -130,9 +130,9 @@ class MermaidClassDiagramGeneratorEnhancedTest {
         String fileContent = Files.readString(diagramPath);
 
         // Check for method representation - actual representation may vary
-        assertTrue(fileContent.contains("longMethodWithManyParameters") ||
-                   fileContent.contains("method") ||
-                   fileContent.contains("TestClass"));
+        assertTrue(fileContent.contains("longMethodWithManyParameters")
+                   || fileContent.contains("method")
+                   || fileContent.contains("TestClass"));
 
         // File should still contain the basic class structure
         assertTrue(fileContent.contains("class TestClass"));

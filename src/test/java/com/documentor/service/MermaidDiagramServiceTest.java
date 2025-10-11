@@ -217,8 +217,8 @@ class MermaidDiagramServiceTest {
         String content = Files.readString(Path.of(diagramFile));
 
         // Should show relationships - check for either format
-        boolean hasRelationships = content.contains("-->") ||
-                (content.contains("MainClass") && content.contains("OtherClass"));
+        boolean hasRelationships = content.contains("-->")
+                || (content.contains("MainClass") && content.contains("OtherClass"));
         assertThat(hasRelationships).isTrue();
     }
 
@@ -376,8 +376,8 @@ class MermaidDiagramServiceTest {
             "com.example.LongClass.verylongmethodnamethatexceedsfiftycharacterslimitforreadability",
             "/src/main/java/LongClass.java",
             ELEMENT_COUNT_SMALL,
-            "public void verylongmethodnamethatexceedsfiftycharacterslimitforreadability(" +
-                    "VeryLongParameterTypeName parameter)",
+            "public void verylongmethodnamethatexceedsfiftycharacterslimitforreadability("
+                    + "VeryLongParameterTypeName parameter)",
             "A method with very long signature",
             List.of("VeryLongParameterTypeName parameter"),
             List.of()
