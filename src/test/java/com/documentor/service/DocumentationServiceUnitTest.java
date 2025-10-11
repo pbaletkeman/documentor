@@ -27,6 +27,11 @@ import static org.mockito.Mockito.*;
 
 class DocumentationServiceUnitTest {
 
+    // Test constants for magic number violations
+    private static final int MAX_DEPTH_FIVE = 5;
+    private static final int MAX_TOKENS_500 = 500;
+    private static final int TIMEOUT_SECONDS_TEN = 10;
+
     @Mock
     private MainDocumentationGenerator mainGenerator;
 
@@ -53,9 +58,9 @@ class DocumentationServiceUnitTest {
             tempDir.toString(), "markdown", true, true
         );
 
-        AnalysisSettings analysisSettings = new AnalysisSettings(true, 5, List.of("**/*.java"), List.of("**/test/**"));
+        AnalysisSettings analysisSettings = new AnalysisSettings(true, MAX_DEPTH_FIVE, List.of("**/*.java"), List.of("**/test/**"));
 
-        LlmModelConfig model = new LlmModelConfig("m", "ollama", "http://x", null, 500, 10);
+        LlmModelConfig model = new LlmModelConfig("m", "ollama", "http://x", null, MAX_TOKENS_500, TIMEOUT_SECONDS_TEN);
         config = new DocumentorConfig(List.of(model), outputSettings, analysisSettings);
 
         documentationService = new DocumentationService(mainGenerator, elementGenerator,
@@ -128,7 +133,7 @@ class DocumentationServiceUnitTest {
         OutputSettings outputSettings = new OutputSettings(
             tempDir.toString(), "markdown", false, true
         );
-        AnalysisSettings analysisSettings = new AnalysisSettings(true, 5, List.of("**/*.java"), List.of("**/test/**"));
+        AnalysisSettings analysisSettings = new AnalysisSettings(true, MAX_DEPTH_FIVE, List.of("**/*.java"), List.of("**/test/**"));
         DocumentorConfig testConfig = new DocumentorConfig(List.of(), outputSettings, analysisSettings);
         DocumentationService testService = new DocumentationService(mainGenerator, elementGenerator,
                 testGenerator, mermaidService, testConfig);
@@ -167,7 +172,7 @@ class DocumentationServiceUnitTest {
         when(mockOutputSettings.generateMermaidDiagrams()).thenReturn(true);
         when(mockOutputSettings.mermaidOutputPath()).thenReturn(tempDir.toString());
 
-        AnalysisSettings analysisSettings = new AnalysisSettings(true, 5, List.of("**/*.java"), List.of("**/test/**"));
+        AnalysisSettings analysisSettings = new AnalysisSettings(true, MAX_DEPTH_FIVE, List.of("**/*.java"), List.of("**/test/**"));
         DocumentorConfig testConfig = new DocumentorConfig(List.of(), mockOutputSettings, analysisSettings);
         DocumentationService testService = new DocumentationService(mainGenerator, elementGenerator,
                 testGenerator, mermaidService, testConfig);

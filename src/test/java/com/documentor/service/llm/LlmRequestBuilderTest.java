@@ -28,6 +28,7 @@ class LlmRequestBuilderTest {
     private static final double GENERIC_TEMPERATURE = 0.5;
     private static final int LINE_NUMBER_FIVE = 5;
     private static final int LINE_NUMBER_THREE = 3;
+    private static final int LINE_NUMBER_FIFTEEN = 15;
     private static final int LINE_NUMBER_TEN = 10;
 
     private LlmRequestBuilder requestBuilder;
@@ -150,7 +151,7 @@ class LlmRequestBuilderTest {
     void testCreateUnitTestPrompt() {
         CodeElement codeElement = new CodeElement(
             CodeElementType.METHOD, "methodToTest", "com.example.TestClass.methodToTest",
-            "TestClass.java", 15, "public int methodToTest(String input) { return input.length(); }",
+            "TestClass.java", LINE_NUMBER_FIFTEEN, "public int methodToTest(String input) { return input.length(); }",
             "", List.of(), List.of()
         );
 

@@ -17,6 +17,9 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class LlmApiClientEnhancedTest_fixed {
 
+    private static final int TIMEOUT_30 = 30;
+    private static final int TIMEOUT_60 = 60;
+
     @Mock
     private LlmModelTypeDetector mockModelTypeDetector;
 
@@ -36,7 +39,7 @@ class LlmApiClientEnhancedTest_fixed {
     @Test
     void shouldIdentifyOllamaModel() {
         LlmModelConfig model = new LlmModelConfig(
-            "llama2", "ollama", "http://localhost:11434/api/generate", null, 30, 60
+            "llama2", "ollama", "http://localhost:11434/api/generate", null, TIMEOUT_30, TIMEOUT_60
         );
 
         // Mock detector to identify as Ollama model
@@ -53,7 +56,7 @@ class LlmApiClientEnhancedTest_fixed {
     @Test
     void shouldIdentifyNonOllamaModel() {
         LlmModelConfig model = new LlmModelConfig(
-            "gpt-4", "openai", "https://api.openai.com/v1/chat/completions", "sk-test-key", 30, 60
+            "gpt-4", "openai", "https://api.openai.com/v1/chat/completions", "sk-test-key", TIMEOUT_30, TIMEOUT_60
         );
 
         // Mock detector to identify as non-Ollama model
@@ -70,15 +73,15 @@ class LlmApiClientEnhancedTest_fixed {
     @Test
     void shouldValidateApiKey() {
         LlmModelConfig modelWithKey = new LlmModelConfig(
-            "gpt-4", "openai", "https://api.openai.com/v1/chat/completions", "sk-test-key", 30, 60
+            "gpt-4", "openai", "https://api.openai.com/v1/chat/completions", "sk-test-key", TIMEOUT_30, TIMEOUT_60
         );
 
         LlmModelConfig modelWithoutKey = new LlmModelConfig(
-            "gpt-4", "openai", "https://api.openai.com/v1/chat/completions", null, 30, 60
+            "gpt-4", "openai", "https://api.openai.com/v1/chat/completions", null, TIMEOUT_30, TIMEOUT_60
         );
 
         LlmModelConfig modelWithEmptyKey = new LlmModelConfig(
-            "gpt-4", "openai", "https://api.openai.com/v1/chat/completions", "", 30, 60
+            "gpt-4", "openai", "https://api.openai.com/v1/chat/completions", "", TIMEOUT_30, TIMEOUT_60
         );
 
         // Test API key validation

@@ -23,6 +23,9 @@ import static org.mockito.Mockito.when;
 
 class ElementDocumentationGeneratorTest {
 
+    // Test constants for magic number violations
+    private static final int LINE_NUMBER_TEN = 10;
+
     @Mock
     private LlmService llmService;
 
@@ -65,7 +68,7 @@ class ElementDocumentationGeneratorTest {
     void testGetLanguageFromFilePath(final String filePath, final String expectedLanguage) throws Exception {
         // Create element with specific file path to test getLanguageFromFile method
         CodeElement element = new CodeElement(CodeElementType.METHOD, "testMethod", "com.example.TestClass.testMethod",
-            filePath, 10, "public void testMethod() {}", "", List.of(), List.of());
+            filePath, LINE_NUMBER_TEN, "public void testMethod() {}", "", List.of(), List.of());
 
         when(llmService.generateDocumentation(any())).thenReturn(CompletableFuture.completedFuture("Doc content"));
         when(llmService.generateUsageExamples(any())).thenReturn(CompletableFuture.completedFuture("Usage content"));

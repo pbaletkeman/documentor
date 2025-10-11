@@ -13,6 +13,12 @@ import static org.mockito.Mockito.*;
  */
 class LlmApiClientSimplifiedTest {
 
+    // Test constants for magic number violations
+    private static final int MAX_TOKENS_1000 = 1000;
+    private static final int TIMEOUT_30 = 30;
+    private static final int MAX_TOKENS_2000 = 2000;
+    private static final int TIMEOUT_60 = 60;
+
     @Test
     void testErrorHandlingWithNullApi() {
         // Setup
@@ -25,7 +31,7 @@ class LlmApiClientSimplifiedTest {
         // Create client and model
         LlmApiClient apiClient = new LlmApiClient(mockWebClient, modelTypeDetector);
         LlmModelConfig model = new LlmModelConfig(
-            "test-model", "test-provider", "http://test.api", "key", 1000, 30
+            "test-model", "test-provider", "http://test.api", "key", MAX_TOKENS_1000, TIMEOUT_30
         );
 
         // Execute
@@ -48,7 +54,7 @@ class LlmApiClientSimplifiedTest {
         // Create client and model with different names to check they appear in error
         LlmApiClient apiClient = new LlmApiClient(mockWebClient, modelTypeDetector);
         LlmModelConfig model = new LlmModelConfig(
-            "gpt-4", "openai", "https://api.openai.com", "key", 1000, 30
+            "gpt-4", "openai", "https://api.openai.com", "key", MAX_TOKENS_1000, TIMEOUT_30
         );
 
         // Execute
@@ -72,7 +78,7 @@ class LlmApiClientSimplifiedTest {
         // Create client and model
         LlmApiClient apiClient = new LlmApiClient(mockWebClient, modelTypeDetector);
         LlmModelConfig model = new LlmModelConfig(
-            "claude-3", "anthropic", "https://api.anthropic.com", "key", 2000, 60
+            "claude-3", "anthropic", "https://api.anthropic.com", "key", MAX_TOKENS_2000, TIMEOUT_60
         );
 
         // Execute

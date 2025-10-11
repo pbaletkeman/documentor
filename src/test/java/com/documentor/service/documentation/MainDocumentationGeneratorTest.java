@@ -66,8 +66,8 @@ class MainDocumentationGeneratorTest {
         when(mockOutputSettings.format()).thenReturn("markdown");
 
         // Create config with mocked output settings
-        AnalysisSettings analysisSettings = new AnalysisSettings(true, 3, List.of("**/*.java"), List.of());
-        LlmModelConfig model = new LlmModelConfig("m", "ollama", "http://x", null, 500, 10);
+        AnalysisSettings analysisSettings = new AnalysisSettings(true, MAX_DEPTH, List.of("**/*.java"), List.of());
+        LlmModelConfig model = new LlmModelConfig("m", "ollama", "http://x", null, MAX_TOKENS, TIMEOUT_SECONDS);
         DocumentorConfig mockConfig = new DocumentorConfig(List.of(model), mockOutputSettings, analysisSettings);
 
         MainDocumentationGenerator generatorWithMock = new MainDocumentationGenerator(mockConfig);

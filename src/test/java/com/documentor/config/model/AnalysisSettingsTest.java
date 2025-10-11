@@ -120,7 +120,7 @@ class AnalysisSettingsTest {
     @DisplayName("Should return list of supported languages")
     void shouldReturnListOfSupportedLanguages() {
         // Given
-        AnalysisSettings settings = new AnalysisSettings(false, 5, null, null);
+        AnalysisSettings settings = new AnalysisSettings(false, MAX_DEPTH_FIVE, null, null);
         List<String> expectedLanguages = List.of("java", "python");
 
         // When

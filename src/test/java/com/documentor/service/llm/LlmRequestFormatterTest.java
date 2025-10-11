@@ -15,6 +15,11 @@ class LlmRequestFormatterTest {
     private static final int MAX_TOKENS_LARGE = 2000;
     private static final int TIMEOUT_SECONDS = 60;
     private static final double TEMPERATURE_HALF = 0.5;
+    private static final int MAX_TOKENS_STANDARD = 1000;
+    private static final int TIMEOUT_SECONDS_30 = 30;
+    private static final int MAX_TOKENS_MEDIUM = 500;
+    private static final int TIMEOUT_SECONDS_10 = 10;
+    private static final double TEMPERATURE_POINT_SEVEN = 0.7;
 
     private LlmRequestFormatter formatter;
     private LlmModelTypeDetector detector;
@@ -27,26 +32,26 @@ class LlmRequestFormatterTest {
 
     @Test
     void createOllamaRequestContainsStreamAndModel() {
-        LlmModelConfig model = new LlmModelConfig("llama2", "ollama", "http://localhost:11434/api/generate", "", 1000, 30);
+        LlmModelConfig model = new LlmModelConfig("llama2", "ollama", "http://localhost:11434/api/generate", "", MAX_TOKENS_STANDARD, TIMEOUT_SECONDS_30);
         Map<String, Object> body = formatter.createRequest(model, "hello");
 
         assertNotNull(body);
         assertEquals("llama2", body.get("model"));
         assertEquals("hello", body.get("prompt"));
         assertEquals(Boolean.FALSE, body.get("stream"));
-        assertEquals(1000, body.get("max_tokens"));
+        assertEquals(MAX_TOKENS_STANDARD, body.get("max_tokens"));
     }
 
     @Test
     void createOpenAIRequestIncludesTemperatureAndMessages() {
-        LlmModelConfig model = new LlmModelConfig("gpt-4", "openai", "https://api.openai.com/v1/completions", "sk", 500, 10);
+        LlmModelConfig model = new LlmModelConfig("gpt-4", "openai", "https://api.openai.com/v1/completions", "sk", MAX_TOKENS_MEDIUM, TIMEOUT_SECONDS_10);
         Map<String, Object> body = formatter.createRequest(model, "what's up");
 
         assertNotNull(body);
         assertEquals("gpt-4", body.get("model"));
         assertTrue(body.containsKey("messages"));
-        assertEquals(500, body.get("max_tokens"));
-        assertEquals(0.7, body.get("temperature"));
+        assertEquals(MAX_TOKENS_MEDIUM, body.get("max_tokens"));
+        assertEquals(TEMPERATURE_POINT_SEVEN, body.get("temperature"));
     }
 
     @Test

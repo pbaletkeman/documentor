@@ -10,6 +10,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class LlmModelTypeDetectorTest {
 
+    private static final int MAX_TOKENS_2000 = 2000;
+    private static final int TIMEOUT_30 = 30;
+
     private final LlmModelTypeDetector detector = new LlmModelTypeDetector();
 
     @ParameterizedTest
@@ -22,7 +25,7 @@ class LlmModelTypeDetectorTest {
     })
     @DisplayName("Should correctly detect Ollama models")
     void isOllamaModel(final String baseUrl, final boolean expected) {
-        LlmModelConfig config = new LlmModelConfig("test", "provider", baseUrl, "apiKey", 2000, 30);
+        LlmModelConfig config = new LlmModelConfig("test", "provider", baseUrl, "apiKey", MAX_TOKENS_2000, TIMEOUT_30);
         assertEquals(expected, detector.isOllamaModel(config));
     }
 
@@ -35,21 +38,21 @@ class LlmModelTypeDetectorTest {
     })
     @DisplayName("Should correctly detect OpenAI compatible models")
     void isOpenAICompatible(final String baseUrl, final String provider, final boolean expected) {
-        LlmModelConfig config = new LlmModelConfig("test", provider, baseUrl, "apiKey", 2000, 30);
+        LlmModelConfig config = new LlmModelConfig("test", provider, baseUrl, "apiKey", MAX_TOKENS_2000, TIMEOUT_30);
         assertEquals(expected, detector.isOpenAICompatible(config));
     }
 
     @Test
     @DisplayName("Should format model endpoint correctly with trailing slash")
     void getModelEndpointWithTrailingSlash() {
-        LlmModelConfig config = new LlmModelConfig("test", "provider", "http://localhost:11434/", "apiKey", 2000, 30);
+        LlmModelConfig config = new LlmModelConfig("test", "provider", "http://localhost:11434/", "apiKey", MAX_TOKENS_2000, TIMEOUT_30);
         assertEquals("http://localhost:11434/api/generate", detector.getModelEndpoint(config));
     }
 
     @Test
     @DisplayName("Should format model endpoint correctly without trailing slash")
     void getModelEndpointWithoutTrailingSlash() {
-        LlmModelConfig config = new LlmModelConfig("test", "provider", "http://localhost:11434", "apiKey", 2000, 30);
+        LlmModelConfig config = new LlmModelConfig("test", "provider", "http://localhost:11434", "apiKey", MAX_TOKENS_2000, TIMEOUT_30);
         assertEquals("http://localhost:11434/api/generate", detector.getModelEndpoint(config));
     }
 }
