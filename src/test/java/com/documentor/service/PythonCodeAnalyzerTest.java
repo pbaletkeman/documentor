@@ -31,6 +31,8 @@ class PythonCodeAnalyzerTest {
     
     // Test constants for magic number violations
     private static final int ELEMENT_LINE_NUMBER = 3;
+    private static final int LINE_NUMBER_ONE = 1;
+    private static final int LINE_NUMBER_TWO = 2;
 
     @Mock
     private PythonASTProcessor astProcessor;
@@ -56,7 +58,7 @@ class PythonCodeAnalyzerTest {
         Path testFile = createPythonTestFile();
         List<CodeElement> expectedElements = List.of(
             new CodeElement(CodeElementType.CLASS, "TestClass", "class TestClass",
-                testFile.toString(), 1, "class TestClass:", "", Collections.emptyList(), Collections.emptyList())
+                testFile.toString(), LINE_NUMBER_ONE, "class TestClass:", "", Collections.emptyList(), Collections.emptyList())
         );
 
         when(astProcessor.analyzeWithAST(any(Path.class))).thenReturn(expectedElements);
@@ -76,7 +78,7 @@ class PythonCodeAnalyzerTest {
         Path testFile = createPythonTestFile();
         List<CodeElement> expectedElements = List.of(
             new CodeElement(CodeElementType.METHOD, "test_method", "def test_method()",
-                testFile.toString(), 2, "def test_method():", "", Collections.emptyList(), Collections.emptyList())
+                testFile.toString(), LINE_NUMBER_TWO, "def test_method():", "", Collections.emptyList(), Collections.emptyList())
         );
 
         when(astProcessor.analyzeWithAST(any(Path.class))).thenThrow(new IOException("AST processing failed"));

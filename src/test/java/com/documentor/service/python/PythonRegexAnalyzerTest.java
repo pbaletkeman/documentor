@@ -30,6 +30,14 @@ class PythonRegexAnalyzerTest {
     // Test constants for magic number violations
     private static final int FUNCTION_LINE_START = 20;
     private static final int VARIABLE_LINE_START = 40;
+    private static final int TEST_VALUE_100 = 100;
+    private static final int TEST_VALUE_42 = 42;
+    private static final int EXPECTED_COUNT_ONE = 1;
+    private static final int MATCHER_GROUP_ONE = 1;
+    private static final int MATCHER_GROUP_TWO = 2;
+    private static final String PUBLIC_VAR_ASSIGNMENT = "public_var = " + TEST_VALUE_100;
+    private static final String PRIVATE_VAR_ASSIGNMENT = "_private_var = " + TEST_VALUE_42;
+    private static final String TEST_VAR_ASSIGNMENT = "test_var = " + TEST_VALUE_100;
 
     private DocumentorConfig mockConfig;
     private AnalysisSettings mockAnalysisSettings;
@@ -96,8 +104,8 @@ class PythonRegexAnalyzerTest {
             "    pass",
             "def _private_function():",
             "    pass",
-            "public_var = 100",
-            "_private_var = 42"
+            PUBLIC_VAR_ASSIGNMENT,
+            PRIVATE_VAR_ASSIGNMENT
         );
 
         // Configure to exclude private members
@@ -130,8 +138,8 @@ class PythonRegexAnalyzerTest {
             "    pass",
             "def _private_function():",
             "    pass",
-            "public_var = 100",
-            "_private_var = 42"
+            PUBLIC_VAR_ASSIGNMENT,
+            PRIVATE_VAR_ASSIGNMENT
         );
 
         // Configure to include private members
@@ -162,7 +170,7 @@ class PythonRegexAnalyzerTest {
             "    pass",
             "def test_function():",
             "    pass",
-            "test_var = 100"
+            TEST_VAR_ASSIGNMENT
         );
 
         // Configure to include all members
@@ -190,9 +198,9 @@ class PythonRegexAnalyzerTest {
                 .filter(e -> e.type() == CodeElementType.FIELD)
                 .count();
 
-        assertEquals(1, classCount, "Should have one class");
-        assertEquals(1, methodCount, "Should have one method");
-        assertEquals(1, fieldCount, "Should have one field");
+        assertEquals(EXPECTED_COUNT_ONE, classCount, "Should have one class");
+        assertEquals(EXPECTED_COUNT_ONE, methodCount, "Should have one method");
+        assertEquals(EXPECTED_COUNT_ONE, fieldCount, "Should have one field");
     }
 
     // Helper methods to set up the test
@@ -221,22 +229,22 @@ class PythonRegexAnalyzerTest {
         Matcher classMatcher = Mockito.mock(Matcher.class);
         when(classMatcher.find()).thenReturn(true, false);
         when(classMatcher.group()).thenReturn("class TestClass:");
-        when(classMatcher.group(1)).thenReturn("TestClass");
+        when(classMatcher.group(MATCHER_GROUP_ONE)).thenReturn("TestClass");
         when(classMatcher.start()).thenReturn(0);
 
         // Function matcher
         Matcher functionMatcher = Mockito.mock(Matcher.class);
         when(functionMatcher.find()).thenReturn(true, false);
         when(functionMatcher.group()).thenReturn("def test_function():");
-        when(functionMatcher.group(1)).thenReturn("test_function");
-        when(functionMatcher.group(2)).thenReturn("");
+        when(functionMatcher.group(MATCHER_GROUP_ONE)).thenReturn("test_function");
+        when(functionMatcher.group(MATCHER_GROUP_TWO)).thenReturn("");
         when(functionMatcher.start()).thenReturn(FUNCTION_LINE_START);
 
         // Variable matcher
         Matcher variableMatcher = Mockito.mock(Matcher.class);
         when(variableMatcher.find()).thenReturn(true, false);
-        when(variableMatcher.group()).thenReturn("test_var = 100");
-        when(variableMatcher.group(1)).thenReturn("test_var");
+        when(variableMatcher.group()).thenReturn(TEST_VAR_ASSIGNMENT);
+        when(variableMatcher.group(MATCHER_GROUP_ONE)).thenReturn("test_var");
         when(variableMatcher.start()).thenReturn(VARIABLE_LINE_START);
 
         when(mockPatternMatcher.findClassMatches(anyString())).thenReturn(classMatcher);

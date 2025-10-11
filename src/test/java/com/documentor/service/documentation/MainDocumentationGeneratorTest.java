@@ -20,21 +20,27 @@ import static org.mockito.Mockito.when;
 
 class MainDocumentationGeneratorTest {
 
+    // Test constants for magic number violations
+    private static final int MAX_DEPTH = 3;
+    private static final int MAX_TOKENS = 500;
+    private static final int TIMEOUT_SECONDS = 10;
+    private static final int LINE_NUMBER_ONE = 1;
+
     private MainDocumentationGenerator generator;
     private DocumentorConfig config;
 
     @BeforeEach
     void setUp() {
         OutputSettings outputSettings = new OutputSettings("out", "markdown", true, false);
-        AnalysisSettings analysisSettings = new AnalysisSettings(true, 3, List.of("**/*.java"), List.of());
-        LlmModelConfig model = new LlmModelConfig("m", "ollama", "http://x", null, 500, 10);
+        AnalysisSettings analysisSettings = new AnalysisSettings(true, MAX_DEPTH, List.of("**/*.java"), List.of());
+        LlmModelConfig model = new LlmModelConfig("m", "ollama", "http://x", null, MAX_TOKENS, TIMEOUT_SECONDS);
         config = new DocumentorConfig(List.of(model), outputSettings, analysisSettings);
         generator = new MainDocumentationGenerator(config);
     }
 
     @Test
     void testGenerateMainDocumentationContainsSections() {
-        CodeElement e1 = new CodeElement(CodeElementType.CLASS, "TestClass", "com.example.TestClass", "/src/TestClass.java", 1, "public class TestClass{}", "", List.of(), List.of());
+        CodeElement e1 = new CodeElement(CodeElementType.CLASS, "TestClass", "com.example.TestClass", "/src/TestClass.java", LINE_NUMBER_ONE, "public class TestClass{}", "", List.of(), List.of());
         ProjectAnalysis analysis = new ProjectAnalysis("/project/path", List.of(e1), System.currentTimeMillis());
 
         CompletableFuture<String> fut = generator.generateMainDocumentation(analysis);
