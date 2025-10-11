@@ -7,22 +7,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class LlmPromptTemplates {
 
-    /** ðŸ“ Creates documentation generation prompt */
-    public String createDocumentationPrompt(CodeElement codeElement) {
+    /** ðŸ" Creates documentation generation prompt */
+    public String createDocumentationPrompt(final CodeElement codeElement) {
         String type = codeElement.type().getDescription().toLowerCase();
         return String.format("Analyze and document this %s:\n\n%s\n\nProvide: description, parameters, return value, usage notes.",
                            type, codeElement.getAnalysisContext());
     }
 
-    /** ðŸ’¡ Creates usage example generation prompt */
-    public String createUsageExamplePrompt(CodeElement codeElement) {
+    /** ðŸ'¡ Creates usage example generation prompt */
+    public String createUsageExamplePrompt(final CodeElement codeElement) {
         String type = codeElement.type().getDescription().toLowerCase();
         return String.format("Generate practical usage examples for this %s:\n\n%s\n\nProvide: 2-3 examples with sample data, expected outputs, use cases.",
                            type, codeElement.getAnalysisContext());
     }
 
     /** ðŸ§ª Creates unit test generation prompt */
-    public String createUnitTestPrompt(CodeElement codeElement) {
+    public String createUnitTestPrompt(final CodeElement codeElement) {
         String type = codeElement.type().getDescription().toLowerCase();
         return String.format("Generate comprehensive unit tests for this %s:\n\n%s\n\nProvide: normal cases, edge cases, error handling tests.",
                            type, codeElement.getAnalysisContext());

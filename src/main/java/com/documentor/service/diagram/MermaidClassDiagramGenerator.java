@@ -26,9 +26,9 @@ public class MermaidClassDiagramGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(MermaidClassDiagramGenerator.class);
 
     /**
-     * ðŸ“Š Generates a Mermaid class diagram for a single class
+     * ðŸ"Š Generates a Mermaid class diagram for a single class
      */
-    public String generateClassDiagram(CodeElement classElement, List<CodeElement> allElements, Path outputPath) throws IOException {
+    public String generateClassDiagram(final CodeElement classElement, final List<CodeElement> allElements, final Path outputPath) throws IOException {
         String className = classElement.name();
         String diagramFileName = className + "_diagram.md";
         Path diagramPath = outputPath.resolve(diagramFileName);
@@ -57,9 +57,9 @@ public class MermaidClassDiagramGenerator {
     }
 
     /**
-     * ðŸ“ Adds a class definition to the Mermaid diagram
+     * ðŸ" Adds a class definition to the Mermaid diagram
      */
-    private void addClassToMermaid(StringBuilder diagram, CodeElement classElement, List<CodeElement> allElements) {
+    private void addClassToMermaid(final StringBuilder diagram, final CodeElement classElement, final List<CodeElement> allElements) {
         String className = sanitizeClassName(classElement.name());
 
         // Get all methods and fields for this class
@@ -90,9 +90,9 @@ public class MermaidClassDiagramGenerator {
     }
 
     /**
-     * ðŸ”— Adds relationships between classes to the Mermaid diagram
+     * ðŸ"— Adds relationships between classes to the Mermaid diagram
      */
-    private void addRelationshipsToMermaid(StringBuilder diagram, CodeElement classElement, List<CodeElement> allElements) {
+    private void addRelationshipsToMermaid(final StringBuilder diagram, final CodeElement classElement, final List<CodeElement> allElements) {
         // This is a simplified relationship detection
         // In a full implementation, we would analyze method parameters, return types, and field types
         // to detect associations, dependencies, and inheritance relationships
@@ -124,14 +124,14 @@ public class MermaidClassDiagramGenerator {
     /**
      * ðŸ§¹ Sanitizes class name for Mermaid compatibility
      */
-    private String sanitizeClassName(String className) {
+    private String sanitizeClassName(final String className) {
         return className.replaceAll("[^a-zA-Z0-9_]", "_");
     }
 
     /**
      * ðŸ§¹ Sanitizes method/field signature for Mermaid compatibility
      */
-    private String sanitizeSignature(String signature) {
+    private String sanitizeSignature(final String signature) {
         // Remove complex generics and packages for readability
         String cleaned = signature.replaceAll("<[^>]*>", "");
         cleaned = cleaned.replaceAll("\\b\\w+\\.", "");
@@ -145,9 +145,9 @@ public class MermaidClassDiagramGenerator {
     }
 
     /**
-     * ðŸ” Simplified visibility check using enum
+     * ðŸ" Simplified visibility check using enum
      */
-    private boolean isNonPrivate(CodeElement element) {
+    private boolean isNonPrivate(final CodeElement element) {
         CodeVisibility visibility = CodeVisibility.fromSignatureAndName(element.signature(), element.name());
         return visibility.shouldInclude(false); // Don't include private elements in diagrams
     }

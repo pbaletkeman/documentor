@@ -24,18 +24,18 @@ public class PythonRegexAnalyzer {
     private final PythonPatternMatcher patternMatcher;
 
     public PythonRegexAnalyzer(
-            DocumentorConfig configParam,
-            PythonElementExtractor elementExtractorParam,
-            PythonPatternMatcher patternMatcherParam) {
+            final DocumentorConfig configParam,
+            final PythonElementExtractor elementExtractorParam,
+            final PythonPatternMatcher patternMatcherParam) {
         this.config = configParam;
         this.elementExtractor = elementExtractorParam;
         this.patternMatcher = patternMatcherParam;
     }
 
     /**
-     * ðŸ” Fallback regex-based analysis for when AST parsing fails
+     * ðŸ" Fallback regex-based analysis for when AST parsing fails
      */
-    public List<CodeElement> analyzeWithRegex(Path filePath, List<String> lines) {
+    public List<CodeElement> analyzeWithRegex(final Path filePath, final List<String> lines) {
         List<CodeElement> elements = new ArrayList<>();
         String content = String.join("\n", lines);
 
@@ -48,9 +48,9 @@ public class PythonRegexAnalyzer {
     }
 
     /**
-     * ðŸ“‹ Process class declarations
+     * ðŸ"‹ Process class declarations
      */
-    private void processClassElements(Path filePath, List<String> lines, String content, List<CodeElement> elements) {
+    private void processClassElements(final Path filePath, final List<String> lines, final String content, final List<CodeElement> elements) {
         var matcher = patternMatcher.findClassMatches(content);
 
         while (matcher.find()) {
@@ -73,9 +73,9 @@ public class PythonRegexAnalyzer {
     }
 
     /**
-     * ðŸ“‹ Process function declarations
+     * ðŸ"‹ Process function declarations
      */
-    private void processFunctionElements(Path filePath, List<String> lines, String content, List<CodeElement> elements) {
+    private void processFunctionElements(final Path filePath, final List<String> lines, final String content, final List<CodeElement> elements) {
         var matcher = patternMatcher.findFunctionMatches(content);
 
         while (matcher.find()) {
@@ -103,7 +103,7 @@ public class PythonRegexAnalyzer {
     /**
      * ðŸ“‹ Process variable assignments
      */
-    private void processVariableElements(Path filePath, String content, List<CodeElement> elements) {
+    private void processVariableElements(final Path filePath, final String content, final List<CodeElement> elements) {
         var matcher = patternMatcher.findVariableMatches(content);
 
         while (matcher.find()) {
@@ -128,7 +128,7 @@ public class PythonRegexAnalyzer {
     /**
      * ðŸ” Determines line number from character position
      */
-    private int getLineNumber(String content, int position) {
+    private int getLineNumber(final String content, final int position) {
         int line = 1;
         for (int i = 0; i < position; i++) {
             if (content.charAt(i) == '\n') {
@@ -139,9 +139,9 @@ public class PythonRegexAnalyzer {
     }
 
     /**
-     * ðŸ” Checks if an element should be included based on configuration
+     * ðŸ" Checks if an element should be included based on configuration
      */
-    private boolean shouldInclude(String name) {
+    private boolean shouldInclude(final String name) {
         boolean isPrivate = name.startsWith("_");
         return config.analysisSettings().includePrivateMembers() || !isPrivate;
     }

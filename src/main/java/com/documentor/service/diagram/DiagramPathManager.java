@@ -15,9 +15,9 @@ import java.nio.file.Paths;
 public class DiagramPathManager {
 
     /**
-     * ðŸ“ Determines the output path for the diagram
+     * ðŸ" Determines the output path for the diagram
      */
-    public String determineOutputPath(String sourceFilePath, String customOutputPath) {
+    public String determineOutputPath(final String sourceFilePath, final String customOutputPath) {
         if (customOutputPath != null && !customOutputPath.trim().isEmpty()) {
             return customOutputPath;
         }
@@ -28,23 +28,23 @@ public class DiagramPathManager {
     }
 
     /**
-     * ðŸ·ï¸ Generates a standardized diagram file name
+     * ðŸ·ï¸ Generates a standardized diagram file name
      */
-    public String generateDiagramFileName(String className) {
+    public String generateDiagramFileName(final String className) {
         return sanitizeFileName(className) + "_diagram.md";
     }
 
     /**
      * ðŸ§¹ Sanitizes file name for cross-platform compatibility
      */
-    private String sanitizeFileName(String fileName) {
+    private String sanitizeFileName(final String fileName) {
         return fileName.replaceAll("[^a-zA-Z0-9_\\-]", "_");
     }
 
     /**
-     * ðŸ“Š Creates the output directory path
+     * ðŸ"Š Creates the output directory path
      */
-    public Path createOutputDirectory(String outputPath) {
+    public Path createOutputDirectory(final String outputPath) {
         return Paths.get(outputPath);
     }
 }

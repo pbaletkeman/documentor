@@ -63,16 +63,16 @@ public class PythonASTCommandBuilder {
     }
 
     /**
-     * ðŸ“ Creates a process builder for Python execution
+     * ðŸ" Creates a process builder for Python execution
      */
-    public ProcessBuilder createProcessBuilder(Path scriptPath, Path filePath) {
+    public ProcessBuilder createProcessBuilder(final Path scriptPath, final Path filePath) {
         return new ProcessBuilder("python", scriptPath.toString(), filePath.toString());
     }
 
     /**
-     * ðŸ“ Parses a single line of AST output
+     * ðŸ" Parses a single line of AST output
      */
-    public CodeElement parseASTOutputLine(String line, Path filePath) {
+    public CodeElement parseASTOutputLine(final String line, final Path filePath) {
         String[] parts = line.split("\\|", -1);
         if (parts.length < ApplicationConstants.MINIMUM_PARTS_FOR_PARSING) {
             return null;

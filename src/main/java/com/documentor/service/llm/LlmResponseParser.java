@@ -12,7 +12,7 @@ public class LlmResponseParser {
     private final ObjectMapper objectMapper;
     private final LlmModelTypeDetector modelTypeDetector;
 
-    public LlmResponseParser(LlmModelTypeDetector modelTypeDetectorParam) {
+    public LlmResponseParser(final LlmModelTypeDetector modelTypeDetectorParam) {
         this.objectMapper = new ObjectMapper();
         this.modelTypeDetector = modelTypeDetectorParam;
     }
@@ -33,7 +33,7 @@ public class LlmResponseParser {
     }
 
     /** ðŸ¦™ Extracts response from Ollama format */
-    public String parseOllamaResponse(String response) {
+    public String parseOllamaResponse(final String response) {
         return parseGenericResponse(response, "response");
     }
 

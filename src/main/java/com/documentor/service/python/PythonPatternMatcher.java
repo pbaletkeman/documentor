@@ -30,38 +30,38 @@ public class PythonPatternMatcher {
             "(?:'''|\"\"\")([^'\"]*?)(?:'''|\"\"\")", Pattern.DOTALL);
 
     /**
-     * ðŸ” Finds all class matches in the given content
+     * ðŸ" Finds all class matches in the given content
      */
-    public Matcher findClassMatches(String content) {
+    public Matcher findClassMatches(final String content) {
         return classPattern.matcher(content);
     }
 
     /**
-     * ðŸ” Finds all function matches in the given content
+     * ðŸ" Finds all function matches in the given content
      */
-    public Matcher findFunctionMatches(String content) {
+    public Matcher findFunctionMatches(final String content) {
         return functionPattern.matcher(content);
     }
 
     /**
-     * ðŸ” Finds all variable matches in the given content
+     * ðŸ" Finds all variable matches in the given content
      */
-    public Matcher findVariableMatches(String content) {
+    public Matcher findVariableMatches(final String content) {
         return variablePattern.matcher(content);
     }
 
     /**
-     * ðŸ” Finds docstring in the given content
+     * ðŸ" Finds docstring in the given content
      */
-    public String findDocstring(String content) {
+    public String findDocstring(final String content) {
         Matcher docstringMatcher = docstringPattern.matcher(content);
         return docstringMatcher.find() ? docstringMatcher.group(1).trim() : "";
     }
 
     /**
-     * ðŸ” Extracts parameters from function signature
+     * ðŸ" Extracts parameters from function signature
      */
-    public String[] extractParameters(String paramString) {
+    public String[] extractParameters(final String paramString) {
         if (paramString == null || paramString.trim().isEmpty()) {
             return new String[0];
         }

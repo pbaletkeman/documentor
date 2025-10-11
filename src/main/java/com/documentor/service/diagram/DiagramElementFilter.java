@@ -20,9 +20,9 @@ import java.util.stream.Collectors;
 public class DiagramElementFilter {
 
     /**
-     * ðŸ“¦ Groups elements by class for diagram generation
+     * ðŸ"¦ Groups elements by class for diagram generation
      */
-    public Map<CodeElement, List<CodeElement>> groupElementsByClass(ProjectAnalysis analysis) {
+    public Map<CodeElement, List<CodeElement>> groupElementsByClass(final ProjectAnalysis analysis) {
         // Get all non-private classes
         List<CodeElement> eligibleClasses = analysis.codeElements().stream()
             .filter(e -> e.type() == CodeElementType.CLASS)
@@ -38,9 +38,9 @@ public class DiagramElementFilter {
     }
 
     /**
-     * ðŸ” Gets all eligible classes from the analysis
+     * ðŸ" Gets all eligible classes from the analysis
      */
-    public List<CodeElement> getEligibleClasses(ProjectAnalysis analysis) {
+    public List<CodeElement> getEligibleClasses(final ProjectAnalysis analysis) {
         return analysis.codeElements().stream()
             .filter(e -> e.type() == CodeElementType.CLASS)
             .filter(this::isNonPrivate)
@@ -48,9 +48,9 @@ public class DiagramElementFilter {
     }
 
     /**
-     * ðŸ“‹ Gets all elements belonging to a specific class
+     * ðŸ"‹ Gets all elements belonging to a specific class
      */
-    public List<CodeElement> getElementsForClass(List<CodeElement> allElements, CodeElement classElement) {
+    public List<CodeElement> getElementsForClass(final List<CodeElement> allElements, final CodeElement classElement) {
         Set<String> classFiles = Set.of(classElement.filePath());
 
         return allElements.stream()
@@ -60,9 +60,9 @@ public class DiagramElementFilter {
     }
 
     /**
-     * ðŸ” Checks if a code element is non-private and should be included in diagrams
+     * ðŸ" Checks if a code element is non-private and should be included in diagrams
      */
-    public boolean isNonPrivate(CodeElement element) {
+    public boolean isNonPrivate(final CodeElement element) {
         String signature = element.signature().toLowerCase();
         String name = element.name();
 
@@ -82,9 +82,9 @@ public class DiagramElementFilter {
     }
 
     /**
-     * ðŸ—ï¸ Groups elements by file for file-based diagram generation
+     * ðŸ—ï¸ Groups elements by file for file-based diagram generation
      */
-    public Map<String, List<CodeElement>> groupElementsByFile(ProjectAnalysis analysis) {
+    public Map<String, List<CodeElement>> groupElementsByFile(final ProjectAnalysis analysis) {
         return analysis.codeElements().stream()
             .filter(this::isNonPrivate)
             .collect(Collectors.groupingBy(CodeElement::filePath));

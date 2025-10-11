@@ -26,14 +26,14 @@ public class PythonASTProcessor {
     // Logger used in future error handling methods - required by design
     private final PythonASTCommandBuilder commandBuilder;
 
-    public PythonASTProcessor(PythonASTCommandBuilder commandBuilderParam) {
+    public PythonASTProcessor(final PythonASTCommandBuilder commandBuilderParam) {
         this.commandBuilder = commandBuilderParam;
     }
 
     /**
-     * ðŸ”¬ Analyzes Python file using Python's AST module via subprocess
+     * ðŸ"¬ Analyzes Python file using Python's AST module via subprocess
      */
-    public List<CodeElement> analyzeWithAST(Path filePath) throws IOException, InterruptedException {
+    public List<CodeElement> analyzeWithAST(final Path filePath) throws IOException, InterruptedException {
         List<CodeElement> elements = new ArrayList<>();
         Path tempScript = null;
 
@@ -64,9 +64,9 @@ public class PythonASTProcessor {
     }
 
     /**
-     * ðŸ“‹ Processes the output of the Python process
+     * ðŸ"‹ Processes the output of the Python process
      */
-    private List<CodeElement> processOutput(Process process, Path filePath) throws IOException {
+    private List<CodeElement> processOutput(final Process process, final Path filePath) throws IOException {
         List<CodeElement> elements = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(

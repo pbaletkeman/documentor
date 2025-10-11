@@ -17,13 +17,13 @@ public class LlmApiClient {
     private final WebClient webClient;
     private final LlmModelTypeDetector modelTypeDetector;
 
-    public LlmApiClient(WebClient webClientParam, LlmModelTypeDetector modelTypeDetectorParam) {
+    public LlmApiClient(final WebClient webClientParam, final LlmModelTypeDetector modelTypeDetectorParam) {
         this.webClient = webClientParam;
         this.modelTypeDetector = modelTypeDetectorParam;
     }
 
-    /** ðŸ“ž Makes API call to LLM model */
-    public String callLlmModel(LlmModelConfig model, String endpoint, Map<String, Object> requestBody) {
+    /** ðŸ"ž Makes API call to LLM model */
+    public String callLlmModel(final LlmModelConfig model, final String endpoint, final Map<String, Object> requestBody) {
         try {
             WebClient.RequestBodySpec request = webClient.post()
                     .uri(endpoint)

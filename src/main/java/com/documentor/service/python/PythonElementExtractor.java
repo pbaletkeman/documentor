@@ -15,9 +15,9 @@ import java.util.List;
 public class PythonElementExtractor {
 
     /**
-     * ðŸ“ Extracts docstring from Python code starting at given line index
+     * ðŸ" Extracts docstring from Python code starting at given line index
      */
-    public String extractDocstring(List<String> lines, int startIndex) {
+    public String extractDocstring(final List<String> lines, final int startIndex) {
         if (startIndex >= lines.size()) return "";
 
         String nextLine = lines.get(startIndex).trim();
@@ -56,7 +56,7 @@ public class PythonElementExtractor {
      * - Special args (*args, **kwargs)
      * - Parameters with nested parentheses
      */
-    public List<String> extractParameters(String functionLine) {
+    public List<String> extractParameters(final String functionLine) {
         int start = functionLine.indexOf('(');
         int end = functionLine.lastIndexOf(')');
         if (start == -1 || end == -1 || start >= end) return List.of();

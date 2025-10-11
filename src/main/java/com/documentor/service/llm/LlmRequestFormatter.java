@@ -14,14 +14,14 @@ public class LlmRequestFormatter {
 
     private final LlmModelTypeDetector modelTypeDetector;
 
-    public LlmRequestFormatter(LlmModelTypeDetector modelTypeDetectorParam) {
+    public LlmRequestFormatter(final LlmModelTypeDetector modelTypeDetectorParam) {
         this.modelTypeDetector = modelTypeDetectorParam;
     }
 
         /**
      * ðŸŽ¯ Creates request body based on model type
      */
-    public Map<String, Object> createRequest(LlmModelConfig model, String prompt) {
+    public Map<String, Object> createRequest(final LlmModelConfig model, final String prompt) {
         if (modelTypeDetector.isOllamaModel(model)) {
             return createOllamaRequest(model, prompt);
         } else if (modelTypeDetector.isOpenAICompatible(model)) {
@@ -31,7 +31,7 @@ public class LlmRequestFormatter {
         }
     }
 
-    private Map<String, Object> createOllamaRequest(LlmModelConfig model, String prompt) {
+    private Map<String, Object> createOllamaRequest(final LlmModelConfig model, final String prompt) {
         // Ollama expects model, prompt and optional streaming flag. Tests expect
         // a 'stream' boolean (default false) to be present.
         return Map.of(
@@ -42,7 +42,7 @@ public class LlmRequestFormatter {
         );
     }
 
-    private Map<String, Object> createOpenAIRequest(LlmModelConfig model, String prompt) {
+    private Map<String, Object> createOpenAIRequest(final LlmModelConfig model, final String prompt) {
         // OpenAI-compatible payload: include temperature default (0.7) and ensure
         // numeric types are present for max_tokens. Use messages for chat models.
         return Map.of(

@@ -13,26 +13,26 @@ import org.springframework.stereotype.Component;
 @Component
 public class LlmModelTypeDetector {
 
-        /**
-     * ðŸ” Checks if the model is Ollama-based
+    /**
+     * ðŸ" Checks if the model is Ollama-based
      */
-    public boolean isOllamaModel(LlmModelConfig model) {
+    public boolean isOllamaModel(final LlmModelConfig model) {
         return model.baseUrl().contains("ollama") ||
                model.baseUrl().contains(ApplicationConstants.DEFAULT_OLLAMA_PORT);
     }
 
     /**
-     * ðŸ” Checks if the model is OpenAI-compatible
+     * ðŸ" Checks if the model is OpenAI-compatible
      */
-    public boolean isOpenAICompatible(LlmModelConfig model) {
+    public boolean isOpenAICompatible(final LlmModelConfig model) {
         return model.baseUrl().contains("openai") ||
                model.provider().equalsIgnoreCase("openai");
     }
 
     /**
-     * ðŸŒ Gets the appropriate endpoint for the model
+     * ðŸŒ Gets the appropriate endpoint for the model
      */
-    public String getModelEndpoint(LlmModelConfig model) {
+    public String getModelEndpoint(final LlmModelConfig model) {
         return model.baseUrl() + (model.baseUrl().endsWith("/") ? "" : "/") + "api/generate";
     }
 }

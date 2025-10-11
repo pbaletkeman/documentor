@@ -29,7 +29,7 @@ public class UnitTestDocumentationGenerator {
     private final LlmService llmService;
     private final DocumentorConfig config;
 
-    public UnitTestDocumentationGenerator(LlmService llmServiceParam, DocumentorConfig configParam) {
+    public UnitTestDocumentationGenerator(final LlmService llmServiceParam, final DocumentorConfig configParam) {
         this.llmService = llmServiceParam;
         this.config = configParam;
     }

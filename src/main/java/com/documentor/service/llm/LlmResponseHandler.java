@@ -15,22 +15,22 @@ public class LlmResponseHandler {
     private final LlmResponseParser responseParser;
     private final LlmModelTypeDetector modelTypeDetector;
 
-    public LlmResponseHandler(LlmResponseParser responseParserParam, LlmModelTypeDetector modelTypeDetectorParam) {
+    public LlmResponseHandler(final LlmResponseParser responseParserParam, final LlmModelTypeDetector modelTypeDetectorParam) {
         this.responseParser = responseParserParam;
         this.modelTypeDetector = modelTypeDetectorParam;
     }
 
     /**
-     * ðŸ“¤ Extracts content from LLM response based on model type
+     * ðŸ"¤ Extracts content from LLM response based on model type
      */
-    public String extractResponseContent(String response, LlmModelConfig model) {
+    public String extractResponseContent(final String response, final LlmModelConfig model) {
         return responseParser.parseResponse(response, model);
     }
 
     /**
      * ðŸŽ¯ Gets the appropriate endpoint for the model
      */
-    public String getModelEndpoint(LlmModelConfig model) {
+    public String getModelEndpoint(final LlmModelConfig model) {
         return modelTypeDetector.getModelEndpoint(model);
     }
 }

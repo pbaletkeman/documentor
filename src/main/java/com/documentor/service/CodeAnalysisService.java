@@ -33,9 +33,9 @@ public class CodeAnalysisService {
     private final DocumentorConfig config;
 
     public CodeAnalysisService(
-            JavaCodeAnalyzer javaCodeAnalyzerParam,
-            PythonCodeAnalyzer pythonCodeAnalyzerParam,
-            DocumentorConfig configParam) {
+            final JavaCodeAnalyzer javaCodeAnalyzerParam,
+            final PythonCodeAnalyzer pythonCodeAnalyzerParam,
+            final DocumentorConfig configParam) {
         this.javaCodeAnalyzer = javaCodeAnalyzerParam;
         this.pythonCodeAnalyzer = pythonCodeAnalyzerParam;
         this.config = configParam;

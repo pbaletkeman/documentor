@@ -32,9 +32,9 @@ public class MermaidDiagramService {
     private final DiagramGeneratorFactory generatorFactory;
 
     public MermaidDiagramService(
-            DiagramElementFilter elementFilterParam,
-            DiagramPathManager pathManagerParam,
-            DiagramGeneratorFactory generatorFactoryParam) {
+            final DiagramElementFilter elementFilterParam,
+            final DiagramPathManager pathManagerParam,
+            final DiagramGeneratorFactory generatorFactoryParam) {
         this.elementFilter = elementFilterParam;
         this.pathManager = pathManagerParam;
         this.generatorFactory = generatorFactoryParam;
