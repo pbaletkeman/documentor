@@ -16,6 +16,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MermaidClassDiagramGeneratorTest {
 
+    // Test constants for magic number violations
+    private static final int LINE_NUMBER_THREE = 3;
+
     private final MermaidClassDiagramGenerator generator = new MermaidClassDiagramGenerator();
 
     @Test
@@ -51,7 +54,7 @@ class MermaidClassDiagramGeneratorTest {
             "testMethod",
             "public void testMethod(String param)",
             "/path/TestClass.java",
-            3,
+            LINE_NUMBER_THREE,
             "public void testMethod(String param) {}",
             "Test method",
             List.of("String param"),

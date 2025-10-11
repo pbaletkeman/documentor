@@ -16,6 +16,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class DiagramElementFilterTest {
 
+    // Test constants for magic number violations
+    private static final int LINE_NUMBER_THREE = 3;
+
     private final DiagramElementFilter filter = new DiagramElementFilter();
 
     @Test
@@ -76,7 +79,7 @@ class DiagramElementFilterTest {
             "_privateMethod",
             "def _privateMethod()",
             "/path.py",
-            3,
+            LINE_NUMBER_THREE,
             "def _privateMethod():",
             "",
             List.of(),
@@ -179,7 +182,7 @@ class DiagramElementFilterTest {
             name,
             "private String " + name,
             path,
-            3,
+            LINE_NUMBER_THREE,
             "private String " + name + ";",
             "",
             List.of(),

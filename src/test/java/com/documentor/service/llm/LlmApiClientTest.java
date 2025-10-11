@@ -30,6 +30,16 @@ import static org.mockito.Mockito.anyString;
 @ExtendWith(MockitoExtension.class)
 class LlmApiClientTest {
 
+    // Test constants for magic number violations
+    private static final int DEFAULT_MAX_TOKENS = 1000;
+    private static final int DEFAULT_TIMEOUT_SECONDS = 30;
+    private static final int SMALL_MAX_TOKENS = 100;
+    private static final int SHORT_TIMEOUT = 5;
+    private static final int LONG_TIMEOUT = 120;
+    private static final int MEDIUM_TIMEOUT = 45;
+    private static final int LARGE_MAX_TOKENS = 2000;
+    private static final int MEDIUM_TIMEOUT_60 = 60;
+
     @Mock
     private WebClient mockWebClient;
 
@@ -47,19 +57,19 @@ class LlmApiClientTest {
         apiClient = new LlmApiClient(mockWebClient, modelTypeDetector);
 
         openAiModel = new LlmModelConfig(
-            "gpt-4", "openai", "https://api.openai.com/v1/completions", "sk-test-key", 1000, 30
+            "gpt-4", "openai", "https://api.openai.com/v1/completions", "sk-test-key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
         );
 
         ollamaModel = new LlmModelConfig(
-            "llama2", "ollama", "http://localhost:11434/api/generate", "", 1000, 30
+            "llama2", "ollama", "http://localhost:11434/api/generate", "", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
         );
 
         codelamaModel = new LlmModelConfig(
-            "codellama:7b", "ollama", "http://localhost:11434/api/generate", "", 1000, 30
+            "codellama:7b", "ollama", "http://localhost:11434/api/generate", "", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
         );
 
         mistralModel = new LlmModelConfig(
-            "mistral:latest", "ollama", "http://localhost:11434/api/generate", "", 1000, 30
+            "mistral:latest", "ollama", "http://localhost:11434/api/generate", "", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
         );
     }
 
@@ -109,12 +119,12 @@ class LlmApiClientTest {
     void testModelConfigurationHandling() {
         // Test with model without API key
         LlmModelConfig modelWithoutKey = new LlmModelConfig(
-            "test-model", "ollama", "http://test.api", "", 1000, 30
+            "test-model", "ollama", "http://test.api", "", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
         );
 
         // Test with model with null API key
         LlmModelConfig modelWithNullKey = new LlmModelConfig(
-            "test-model", "ollama", "http://test.api", null, 1000, 30
+            "test-model", "ollama", "http://test.api", null, DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
         );
 
         assertNotNull(modelWithoutKey);
@@ -144,15 +154,15 @@ class LlmApiClientTest {
     void testTimeoutConfiguration() {
         // Test that models can be configured with different timeouts
         LlmModelConfig fastModel = new LlmModelConfig(
-            "fast-model", "ollama", "http://fast.api", "key", 100, 5
+            "fast-model", "ollama", "http://fast.api", "key", SMALL_MAX_TOKENS, SHORT_TIMEOUT
         );
 
         LlmModelConfig slowModel = new LlmModelConfig(
-            "slow-model", "ollama", "http://slow.api", "key", 1000, 120
+            "slow-model", "ollama", "http://slow.api", "key", DEFAULT_MAX_TOKENS, LONG_TIMEOUT
         );
 
-        assertEquals(5, fastModel.timeoutSeconds());
-        assertEquals(120, slowModel.timeoutSeconds());
+        assertEquals(SHORT_TIMEOUT, fastModel.timeoutSeconds());
+        assertEquals(LONG_TIMEOUT, slowModel.timeoutSeconds());
     }
 
     @Test
@@ -169,10 +179,10 @@ class LlmApiClientTest {
     void testApplyTimeoutFromModelConfig() {
         // Test that custom timeouts are properly configured on the model
         LlmModelConfig modelWithCustomTimeout = new LlmModelConfig(
-            "test-model", "provider", "http://test.api", "key", 1000, 45
+            "test-model", "provider", "http://test.api", "key", DEFAULT_MAX_TOKENS, MEDIUM_TIMEOUT
         );
 
-        assertEquals(45, modelWithCustomTimeout.timeoutSeconds());
+        assertEquals(MEDIUM_TIMEOUT, modelWithCustomTimeout.timeoutSeconds());
     }
 
     @Test
@@ -243,7 +253,7 @@ class LlmApiClientTest {
     void testNoAuthHeaderForNullApiKey() {
         // Given
         LlmModelConfig modelWithNullKey = new LlmModelConfig(
-            "test-model", "openai", "http://test.api", null, 1000, 30
+            "test-model", "openai", "http://test.api", null, DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
         );
         Map<String, Object> requestBody = Map.of("prompt", "test");
         
@@ -277,7 +287,7 @@ class LlmApiClientTest {
     void testNoAuthHeaderForEmptyApiKey() {
         // Given
         LlmModelConfig modelWithEmptyKey = new LlmModelConfig(
-            "test-model", "openai", "http://test.api", "", 1000, 30
+            "test-model", "openai", "http://test.api", "", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
         );
         Map<String, Object> requestBody = Map.of("prompt", "test");
         

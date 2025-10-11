@@ -18,6 +18,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 class LlmRequestBuilderTest {
 
+    // Test constants for magic number violations
+    private static final int DEFAULT_MAX_TOKENS = 1000;
+    private static final int DEFAULT_TIMEOUT_SECONDS = 30;
+    private static final int LINE_NUMBER_ONE = 1;
+    private static final double DEFAULT_TEMPERATURE = 0.7;
+    private static final int LARGE_MAX_TOKENS = 2000;
+    private static final int LARGE_TIMEOUT_SECONDS = 60;
+    private static final double GENERIC_TEMPERATURE = 0.5;
+    private static final int LINE_NUMBER_FIVE = 5;
+    private static final int LINE_NUMBER_THREE = 3;
+    private static final int LINE_NUMBER_TEN = 10;
+
     private LlmRequestBuilder requestBuilder;
     private LlmModelConfig ollamaModel;
     private LlmModelConfig openaiModel;
@@ -30,11 +42,11 @@ class LlmRequestBuilderTest {
         requestBuilder = new LlmRequestBuilder(promptTemplates, requestFormatter);
 
         ollamaModel = new LlmModelConfig(
-            "llama2", "ollama", "http://localhost:11434/api/generate", "", 1000, 30
+            "llama2", "ollama", "http://localhost:11434/api/generate", "", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
         );
 
         openaiModel = new LlmModelConfig(
-            "gpt-4", "openai", "https://api.openai.com/v1/completions", "sk-test", 1000, 30
+            "gpt-4", "openai", "https://api.openai.com/v1/completions", "sk-test", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
         );
     }
 
@@ -42,7 +54,7 @@ class LlmRequestBuilderTest {
     void testCreateDocumentationPrompt() {
         CodeElement codeElement = new CodeElement(
             CodeElementType.CLASS, "TestClass", "com.example.TestClass",
-            "TestClass.java", 1, "public class TestClass {}",
+            "TestClass.java", LINE_NUMBER_ONE, "public class TestClass {}",
             "", List.of(), List.of()
         );
 
@@ -74,8 +86,8 @@ class LlmRequestBuilderTest {
         assertNotNull(requestBody);
         assertEquals("gpt-4", requestBody.get("model"));
         assertTrue(requestBody.containsKey("messages"));
-        assertEquals(1000, requestBody.get("max_tokens"));
-        assertEquals(0.7, requestBody.get("temperature"));
+        assertEquals(DEFAULT_MAX_TOKENS, requestBody.get("max_tokens"));
+        assertEquals(DEFAULT_TEMPERATURE, requestBody.get("temperature"));
     }
 
     @Test
@@ -84,7 +96,7 @@ class LlmRequestBuilderTest {
 
         // Test generic model (not Ollama or OpenAI)
         LlmModelConfig genericModel = new LlmModelConfig(
-            "claude-3", "anthropic", "https://api.anthropic.com", "api-key", 2000, 60
+            "claude-3", "anthropic", "https://api.anthropic.com", "api-key", LARGE_MAX_TOKENS, LARGE_TIMEOUT_SECONDS
         );
 
         Map<String, Object> requestBody = requestBuilder.buildRequestBody(genericModel, prompt);
@@ -92,21 +104,21 @@ class LlmRequestBuilderTest {
         assertNotNull(requestBody);
         // Generic models should contain basic fields
         assertTrue(requestBody.containsKey("prompt"));
-        assertEquals(2000, requestBody.get("max_tokens"));
-        assertEquals(0.5, requestBody.get("temperature"));
+        assertEquals(LARGE_MAX_TOKENS, requestBody.get("max_tokens"));
+        assertEquals(GENERIC_TEMPERATURE, requestBody.get("temperature"));
     }
 
     @Test
     void testCreateDocumentationPromptWithDifferentElementTypes() {
         CodeElement methodElement = new CodeElement(
             CodeElementType.METHOD, "testMethod", "com.example.TestClass.testMethod",
-            "TestClass.java", 5, "public void testMethod() {}",
+            "TestClass.java", LINE_NUMBER_FIVE, "public void testMethod() {}",
             "", List.of(), List.of()
         );
 
         CodeElement fieldElement = new CodeElement(
             CodeElementType.FIELD, "testField", "com.example.TestClass.testField",
-            "TestClass.java", 3, "private String testField",
+            "TestClass.java", LINE_NUMBER_THREE, "private String testField",
             "", List.of(), List.of()
         );
 
@@ -123,7 +135,7 @@ class LlmRequestBuilderTest {
     void testCreateUsageExamplePrompt() {
         CodeElement codeElement = new CodeElement(
             CodeElementType.METHOD, "exampleMethod", "com.example.TestClass.exampleMethod",
-            "TestClass.java", 10, "public String exampleMethod(int param) { return \"test\"; }",
+            "TestClass.java", LINE_NUMBER_TEN, "public String exampleMethod(int param) { return \"test\"; }",
             "", List.of(), List.of()
         );
 

@@ -19,6 +19,14 @@ import static org.mockito.Mockito.*;
 
 class UnitTestDocumentationGeneratorTest {
 
+    // Test constants for magic number violations
+    private static final double TARGET_COVERAGE_HIGH = 0.85;
+    private static final double TARGET_COVERAGE_MEDIUM = 0.50;
+    private static final double TARGET_COVERAGE_GOOD = 0.80;
+    private static final int LINE_NUMBER_TEN = 10;
+    private static final int LINE_NUMBER_FIVE = 5;
+    private static final int LINE_NUMBER_FIFTEEN = 15;
+
     @Test
     void generateUnitTestDocumentation_writesFileAndIncludesHeader(@TempDir Path tempDir) throws Exception {
         LlmService llm = mock(LlmService.class);
@@ -27,7 +35,7 @@ class UnitTestDocumentationGeneratorTest {
         OutputSettings outputSettings = mock(OutputSettings.class);
         when(config.outputSettings()).thenReturn(outputSettings);
         when(outputSettings.includeIcons()).thenReturn(true);
-        when(outputSettings.targetCoverage()).thenReturn(0.85);
+        when(outputSettings.targetCoverage()).thenReturn(TARGET_COVERAGE_HIGH);
 
         List<String> empty = List.of();
         CodeElement element = new CodeElement(
@@ -35,7 +43,7 @@ class UnitTestDocumentationGeneratorTest {
             "TestClass",
             "com.example.TestClass",
             "src/TestClass.java",
-            10,
+            LINE_NUMBER_TEN,
             "public class TestClass {}",
             "Some doc",
             empty,
@@ -66,7 +74,7 @@ class UnitTestDocumentationGeneratorTest {
         OutputSettings outputSettings = mock(OutputSettings.class);
         when(config.outputSettings()).thenReturn(outputSettings);
         when(outputSettings.includeIcons()).thenReturn(false);
-        when(outputSettings.targetCoverage()).thenReturn(0.50);
+        when(outputSettings.targetCoverage()).thenReturn(TARGET_COVERAGE_MEDIUM);
 
         UnitTestDocumentationGenerator generator = new UnitTestDocumentationGenerator(llm, config);
 
@@ -91,7 +99,7 @@ class UnitTestDocumentationGeneratorTest {
         OutputSettings outputSettings = mock(OutputSettings.class);
         when(config.outputSettings()).thenReturn(outputSettings);
         when(outputSettings.includeIcons()).thenReturn(false);
-        when(outputSettings.targetCoverage()).thenReturn(0.80);
+        when(outputSettings.targetCoverage()).thenReturn(TARGET_COVERAGE_GOOD);
 
         List<String> empty = List.of();
         
@@ -101,7 +109,7 @@ class UnitTestDocumentationGeneratorTest {
             "testField",
             "com.example.TestClass.testField",
             "src/TestClass.java",
-            5,
+            LINE_NUMBER_FIVE,
             "private String testField;",
             "A test field",
             empty,
@@ -113,7 +121,7 @@ class UnitTestDocumentationGeneratorTest {
             "testMethod",
             "com.example.TestClass.testMethod",
             "src/TestClass.java",
-            15,
+            LINE_NUMBER_FIFTEEN,
             "public void testMethod() {}",
             "A test method",
             empty,

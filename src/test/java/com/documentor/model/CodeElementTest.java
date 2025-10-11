@@ -45,7 +45,7 @@ class CodeElementTest {
         assertEquals("testMethod", element.name());
         assertEquals("com.test.TestClass.testMethod", element.qualifiedName());
         assertEquals("/test/TestClass.java", element.filePath());
-        assertEquals(10, element.lineNumber());
+        assertEquals(LINE_NUMBER_TEN, element.lineNumber());
         assertEquals("public void testMethod(String arg1, int arg2)", element.signature());
         assertEquals("This is a test method", element.documentation());
         assertEquals(parameters, element.parameters());
@@ -82,7 +82,7 @@ class CodeElementTest {
             "testField",
             "com.test.TestClass.testField",
             "/test/TestClass.java",
-            5,
+            LINE_NUMBER_FIVE,
             "private String testField",
             "A test field",
             List.of(),
@@ -94,7 +94,7 @@ class CodeElementTest {
             "testField",
             "com.test.TestClass.testField",
             "/test/TestClass.java",
-            5,
+            LINE_NUMBER_FIVE,
             "private String testField",
             "A test field",
             List.of(),
@@ -114,7 +114,7 @@ class CodeElementTest {
             "toString",
             "com.test.TestClass.toString",
             "/test/TestClass.java",
-            15,
+            LINE_NUMBER_FIFTEEN,
             "public String toString()",
             "Returns string representation",
             List.of(),
@@ -138,7 +138,7 @@ class CodeElementTest {
             "TestClass",
             "com.test.TestClass",
             "/src/test/TestClass.java",
-            10,
+            LINE_NUMBER_TEN,
             "public class TestClass",
             "Test class",
             List.of(),
@@ -149,7 +149,7 @@ class CodeElementTest {
         String id = element.getId();
 
         // Then
-        assertEquals("/src/test/TestClass.java:com.test.TestClass:10", id);
+        assertEquals("/src/test/TestClass.java:com.test.TestClass:" + LINE_NUMBER_TEN, id);
     }
 
     @Test
@@ -160,7 +160,7 @@ class CodeElementTest {
             "publicMethod",
             "com.test.TestClass.publicMethod",
             "/test/TestClass.java",
-            5,
+            LINE_NUMBER_FIVE,
             "public void publicMethod()",
             "Public method",
             List.of(),
@@ -179,7 +179,7 @@ class CodeElementTest {
             "privateMethod",
             "com.test.TestClass.privateMethod",
             "/test/TestClass.java",
-            5,
+            LINE_NUMBER_FIVE,
             "private void privateMethod()",
             "Private method",
             List.of(),
@@ -198,7 +198,7 @@ class CodeElementTest {
             "_private_method",
             "test_module._private_method",
             "/test/test_module.py",
-            5,
+            LINE_NUMBER_FIVE,
             "def _private_method(self):",
             "Private method in Python",
             List.of(),
@@ -217,7 +217,7 @@ class CodeElementTest {
             "testMethod",
             "com.test.TestClass.testMethod",
             "/src/main/java/com/test/TestClass.java",
-            25,
+            LINE_NUMBER_TWENTY_FIVE,
             "public void testMethod()",
             "Test method",
             List.of(),
@@ -231,7 +231,7 @@ class CodeElementTest {
         assertTrue(displayName.contains("🔧")); // METHOD icon
         assertTrue(displayName.contains("com.test.TestClass.testMethod"));
         assertTrue(displayName.contains("TestClass.java"));
-        assertTrue(displayName.contains("25"));
+        assertTrue(displayName.contains(String.valueOf(LINE_NUMBER_TWENTY_FIVE)));
     }
 
     @Test
@@ -242,7 +242,7 @@ class CodeElementTest {
             "processData",
             "com.service.DataProcessor.processData",
             "/src/DataProcessor.java",
-            15,
+            LINE_NUMBER_FIFTEEN,
             "public String processData(String input, int flags)",
             "Processes the input data with given flags",
             List.of("String input", "int flags"),
@@ -269,7 +269,7 @@ class CodeElementTest {
             "simpleField",
             "com.test.TestClass.simpleField",
             "/test/TestClass.java",
-            5,
+            LINE_NUMBER_FIVE,
             "private String simpleField",
             "",
             List.of(),

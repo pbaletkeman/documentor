@@ -11,6 +11,13 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class ProjectAnalysisTest {
 
+    // Test constants for magic number violations
+    private static final int LINE_NUMBER_FIVE = 5;
+    private static final int LINE_NUMBER_THREE = 3;
+    private static final int LINE_NUMBER_TEN = 10;
+    private static final int LINE_NUMBER_FOUR = 4;
+    private static final long TEST_TIMESTAMP = 12345L;
+
     @Test
     void testConstructorAndGetters() {
         // Given
@@ -20,7 +27,7 @@ class ProjectAnalysisTest {
         );
         CodeElement element2 = new CodeElement(
             CodeElementType.METHOD, "testMethod", "com.test.TestClass.testMethod", "/test/TestClass.java",
-            5, "public void testMethod()", "", List.of(), List.of()
+            LINE_NUMBER_FIVE, "public void testMethod()", "", List.of(), List.of()
         );
         List<CodeElement> elements = List.of(element1, element2);
         long timestamp = System.currentTimeMillis();
@@ -61,7 +68,7 @@ class ProjectAnalysisTest {
             1, "public class TestClass", "", List.of(), List.of()
         );
         List<CodeElement> elements = List.of(element);
-        long timestamp = 12345L;
+        long timestamp = TEST_TIMESTAMP;
 
         ProjectAnalysis analysis1 = new ProjectAnalysis("/test/project", elements, timestamp);
         ProjectAnalysis analysis2 = new ProjectAnalysis("/test/project", elements, timestamp);

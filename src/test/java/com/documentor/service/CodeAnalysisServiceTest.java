@@ -28,6 +28,9 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class CodeAnalysisServiceTest {
 
+    // Test constants for magic number violations
+    private static final int DEFAULT_MAX_THREADS = 4;
+
     @Mock
     private JavaCodeAnalyzer javaCodeAnalyzer;
 
@@ -49,7 +52,7 @@ class CodeAnalysisServiceTest {
     void setUp() {
         // Use lenient mode to avoid UnnecessaryStubbingException
         lenient().when(config.analysisSettings()).thenReturn(analysisSettings);
-        lenient().when(analysisSettings.maxThreads()).thenReturn(4);
+        lenient().when(analysisSettings.maxThreads()).thenReturn(DEFAULT_MAX_THREADS);
         codeAnalysisService = new CodeAnalysisService(javaCodeAnalyzer, pythonCodeAnalyzer, config);
     }
 

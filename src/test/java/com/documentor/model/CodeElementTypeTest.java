@@ -13,6 +13,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
  */
 class CodeElementTypeTest {
 
+    // Test constants for magic number violations
+    private static final int EXPECTED_ENUM_COUNT = 3;
+
     @Test
     void testEnumValues() {
         // Test that all expected enum values exist
@@ -22,7 +25,7 @@ class CodeElementTypeTest {
 
         // Test enum contains expected number of values
         CodeElementType[] values = CodeElementType.values();
-        assertEquals(3, values.length);
+        assertEquals(EXPECTED_ENUM_COUNT, values.length);
     }
 
     @Test

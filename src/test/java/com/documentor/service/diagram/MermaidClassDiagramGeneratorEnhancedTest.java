@@ -17,6 +17,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MermaidClassDiagramGeneratorEnhancedTest {
 
+    // Test constants for magic number violations
+    private static final int LINE_NUMBER_THREE = 3;
+    private static final int LOOP_COUNT_TWENTY = 20;
+
     private final MermaidClassDiagramGenerator generator = new MermaidClassDiagramGenerator();
 
     @Test
@@ -52,7 +56,7 @@ class MermaidClassDiagramGeneratorEnhancedTest {
             "methodUsingDependency",
             "public DependencyClass methodUsingDependency()",
             "/path/MainClass.java",
-            3,
+            LINE_NUMBER_THREE,
             "public DependencyClass methodUsingDependency() { return new DependencyClass(); }",
             "Method using dependency",
             List.of(),
@@ -98,7 +102,7 @@ class MermaidClassDiagramGeneratorEnhancedTest {
 
         // Create a method with a very long signature
         StringBuilder longSignature = new StringBuilder("public void methodWithVeryLongSignature(");
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < LOOP_COUNT_TWENTY; i++) {
             longSignature.append("String param").append(i).append(", ");
         }
         longSignature.append("String lastParam) {}");
@@ -108,7 +112,7 @@ class MermaidClassDiagramGeneratorEnhancedTest {
             "methodWithVeryLongSignature",
             longSignature.toString(),
             "/path/TestClass.java",
-            3,
+            LINE_NUMBER_THREE,
             longSignature.toString(),
             "Method with long signature",
             List.of(),
