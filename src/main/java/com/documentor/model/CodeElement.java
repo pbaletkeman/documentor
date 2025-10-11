@@ -31,8 +31,8 @@ public record CodeElement(
      * ðŸŽ¯ Checks if this element is a public/non-private element
      */
     public boolean isPublic() {
-        return !name.startsWith("_") && // Python private convention
-               !signature.contains("private"); // Java private keyword
+        return !name.startsWith("_") // Python private convention
+               && !signature.contains("private"); // Java private keyword
     }
 
     /**

@@ -125,9 +125,9 @@ public final class StatusCommandHandler {
             for (int i = 0; i < documentorConfig.llmModels().size(); i++) {
                 var model = documentorConfig.llmModels().get(i);
                 status.append("   ").append(i + 1).append(". ").append(model.name()).append("\n");
-                status.append("      API Key: ").append(model.apiKey() != null && !model.apiKey().isEmpty() ?
-                    (model.apiKey().length() > ApplicationConstants.API_KEY_PREVIEW_LENGTH ?
-                        model.apiKey().substring(0, ApplicationConstants.API_KEY_PREVIEW_LENGTH) + "..." : "***") : "Not set").append("\n");
+                status.append("      API Key: ").append(model.apiKey() != null && !model.apiKey().isEmpty()
+                    ? (model.apiKey().length() > ApplicationConstants.API_KEY_PREVIEW_LENGTH
+                        ? model.apiKey().substring(0, ApplicationConstants.API_KEY_PREVIEW_LENGTH) + "..." : "***") : "Not set").append("\n");
                 if (model.baseUrl() != null && !model.baseUrl().isEmpty()) {
                     status.append("      Base URL: ").append(model.baseUrl()).append("\n");
                 }

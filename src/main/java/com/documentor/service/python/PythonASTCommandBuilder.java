@@ -96,8 +96,8 @@ public class PythonASTCommandBuilder {
                 List.of()
             );
             case "FUNCTION" -> {
-                List<String> parameters = parts.length > ApplicationConstants.PARAMETERS_ARRAY_INDEX &&
-                    !parts[ApplicationConstants.PARAMETERS_ARRAY_INDEX].isEmpty()
+                List<String> parameters = parts.length > ApplicationConstants.PARAMETERS_ARRAY_INDEX
+                    && !parts[ApplicationConstants.PARAMETERS_ARRAY_INDEX].isEmpty()
                     ? List.of(parts[ApplicationConstants.PARAMETERS_ARRAY_INDEX].split(","))
                     : List.of();
                 yield new CodeElement(

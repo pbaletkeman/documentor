@@ -17,16 +17,16 @@ public class LlmModelTypeDetector {
      * ðŸ" Checks if the model is Ollama-based
      */
     public boolean isOllamaModel(final LlmModelConfig model) {
-        return model.baseUrl().contains("ollama") ||
-               model.baseUrl().contains(ApplicationConstants.DEFAULT_OLLAMA_PORT);
+        return model.baseUrl().contains("ollama")
+               || model.baseUrl().contains(ApplicationConstants.DEFAULT_OLLAMA_PORT);
     }
 
     /**
      * ðŸ" Checks if the model is OpenAI-compatible
      */
     public boolean isOpenAICompatible(final LlmModelConfig model) {
-        return model.baseUrl().contains("openai") ||
-               model.provider().equalsIgnoreCase("openai");
+        return model.baseUrl().contains("openai")
+               || model.provider().equalsIgnoreCase("openai");
     }
 
     /**

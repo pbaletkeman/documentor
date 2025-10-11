@@ -89,8 +89,8 @@ public class CodeAnalysisService {
      */
     private boolean isSupportedFile(final Path file) {
         String fileName = file.getFileName().toString().toLowerCase();
-        return fileName.endsWith(ApplicationConstants.JAVA_EXTENSION) ||
-               fileName.endsWith(ApplicationConstants.PYTHON_EXTENSION);
+        return fileName.endsWith(ApplicationConstants.JAVA_EXTENSION)
+               || fileName.endsWith(ApplicationConstants.PYTHON_EXTENSION);
     }
 
     /**
