@@ -89,7 +89,8 @@ class PythonCodeAnalyzerTest {
         Path testFile = createPythonTestFile();
         List<CodeElement> expectedElements = List.of(
             new CodeElement(CodeElementType.FIELD, "variable", "variable",
-                testFile.toString(), ELEMENT_LINE_NUMBER, "variable = 42", "", Collections.emptyList(), Collections.emptyList())
+                testFile.toString(), ELEMENT_LINE_NUMBER, "variable = 42", "", 
+                Collections.emptyList(), Collections.emptyList())
         );
 
         when(astProcessor.analyzeWithAST(any(Path.class))).thenReturn(Collections.emptyList());

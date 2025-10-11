@@ -52,8 +52,10 @@ class LlmServiceTestTmp {
     @BeforeEach
     void setUp() {
         OutputSettings outputSettings = new OutputSettings("output", "markdown", true, true);
-        AnalysisSettings analysisSettings = new AnalysisSettings(true, MAX_DEPTH, List.of("**/*.java"), List.of("**/test/**"));
-        LlmModelConfig testModel = new LlmModelConfig("test-model", "openai", "http://test.api", "api-key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS);
+        AnalysisSettings analysisSettings = new AnalysisSettings(true, MAX_DEPTH,
+                List.of("**/*.java"), List.of("**/test/**"));
+        LlmModelConfig testModel = new LlmModelConfig("test-model", "openai", "http://test.api",
+                "api-key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS);
 
         config = new DocumentorConfig(List.of(testModel), outputSettings, analysisSettings);
         llmService = new LlmService(config, mockRequestBuilder, mockResponseHandler, mockApiClient);
@@ -91,8 +93,9 @@ class LlmServiceTestTmp {
 
     @Test
     void serviceHandlesDifferentElementTypes() {
-        CodeElement methodElement = new CodeElement(CodeElementType.METHOD, "testMethod", "com.example.TestClass.testMethod",
-                "TestClass.java", ELEMENT_COUNT_TEST, "public void testMethod()", "", List.of("param1"), List.of("@Test"));
+        CodeElement methodElement = new CodeElement(CodeElementType.METHOD, "testMethod", 
+                "com.example.TestClass.testMethod", "TestClass.java", ELEMENT_COUNT_TEST, 
+                "public void testMethod()", "", List.of("param1"), List.of("@Test"));
 
         assertNotNull(llmService.generateDocumentation(methodElement).join());
         assertNotNull(llmService.generateUsageExamples(methodElement).join());
@@ -101,7 +104,8 @@ class LlmServiceTestTmp {
 
     @Test
     void serviceConstructsWithEmptyModelList() {
-        DocumentorConfig emptyConfig = new DocumentorConfig(List.of(), config.outputSettings(), config.analysisSettings());
+        DocumentorConfig emptyConfig = new DocumentorConfig(List.of(), config.outputSettings(), 
+                config.analysisSettings());
         LlmService emptyService = new LlmService(emptyConfig, mockRequestBuilder, mockResponseHandler, mockApiClient);
         assertNotNull(emptyService);
     }

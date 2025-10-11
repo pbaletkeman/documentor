@@ -190,11 +190,14 @@ class PythonASTProcessorTest {
         );
 
         // Mock the command builder to parse the lines - use argThat for better matching
-        when(mockedCommandBuilder.parseASTOutputLine(argThat(arg -> arg != null && arg.contains("CLASS|TestClass")), eq(filePath)))
+        when(mockedCommandBuilder.parseASTOutputLine(
+                argThat(arg -> arg != null && arg.contains("CLASS|TestClass")), eq(filePath)))
             .thenReturn(classElement);
-        when(mockedCommandBuilder.parseASTOutputLine(argThat(arg -> arg != null && arg.contains("FUNCTION|test_method")), eq(filePath)))
+        when(mockedCommandBuilder.parseASTOutputLine(
+                argThat(arg -> arg != null && arg.contains("FUNCTION|test_method")), eq(filePath)))
             .thenReturn(methodElement);
-        when(mockedCommandBuilder.parseASTOutputLine(argThat(arg -> arg != null && arg.contains("VARIABLE|test_var")), eq(filePath)))
+        when(mockedCommandBuilder.parseASTOutputLine(
+                argThat(arg -> arg != null && arg.contains("VARIABLE|test_var")), eq(filePath)))
             .thenReturn(fieldElement);
 
         // Execute and verify
@@ -204,8 +207,11 @@ class PythonASTProcessorTest {
         assertEquals(LINE_NUMBER_THREE, elements.size());
 
         // Verify we have the expected elements
-        assertTrue(elements.stream().anyMatch(e -> e.type() == CodeElementType.CLASS && "TestClass".equals(e.name())));
-        assertTrue(elements.stream().anyMatch(e -> e.type() == CodeElementType.METHOD && "test_method".equals(e.name())));
-        assertTrue(elements.stream().anyMatch(e -> e.type() == CodeElementType.FIELD && "test_var".equals(e.name())));
+        assertTrue(elements.stream().anyMatch(e -> e.type() == CodeElementType.CLASS 
+                && "TestClass".equals(e.name())));
+        assertTrue(elements.stream().anyMatch(e -> e.type() == CodeElementType.METHOD 
+                && "test_method".equals(e.name())));
+        assertTrue(elements.stream().anyMatch(e -> e.type() == CodeElementType.FIELD 
+                && "test_var".equals(e.name())));
     }
 }

@@ -58,7 +58,8 @@ class DocumentationServiceUnitTest {
         LlmModelConfig model = new LlmModelConfig("m", "ollama", "http://x", null, 500, 10);
         config = new DocumentorConfig(List.of(model), outputSettings, analysisSettings);
 
-        documentationService = new DocumentationService(mainGenerator, elementGenerator, testGenerator, mermaidService, config);
+        documentationService = new DocumentationService(mainGenerator, elementGenerator,
+                testGenerator, mermaidService, config);
     }
 
     @Test
@@ -69,10 +70,14 @@ class DocumentationServiceUnitTest {
 
         ProjectAnalysis analysis = new ProjectAnalysis("/project", List.of(element), System.currentTimeMillis());
 
-        when(mainGenerator.generateMainDocumentation(any())).thenReturn(CompletableFuture.completedFuture("# README"));
-        when(elementGenerator.generateElementDocumentation(any(), any())).thenReturn(CompletableFuture.completedFuture(null));
-        when(testGenerator.generateUnitTestDocumentation(any(), any())).thenReturn(CompletableFuture.completedFuture(null));
-        when(mermaidService.generateClassDiagrams(any(), anyString())).thenReturn(CompletableFuture.completedFuture(List.of("diagram1")));
+        when(mainGenerator.generateMainDocumentation(any()))
+                .thenReturn(CompletableFuture.completedFuture("# README"));
+        when(elementGenerator.generateElementDocumentation(any(), any()))
+                .thenReturn(CompletableFuture.completedFuture(null));
+        when(testGenerator.generateUnitTestDocumentation(any(), any()))
+                .thenReturn(CompletableFuture.completedFuture(null));
+        when(mermaidService.generateClassDiagrams(any(), anyString()))
+                .thenReturn(CompletableFuture.completedFuture(List.of("diagram1")));
 
         // Act
         CompletableFuture<String> result = documentationService.generateDocumentation(analysis);
@@ -99,10 +104,13 @@ class DocumentationServiceUnitTest {
     void testGenerateDocumentationHandlesEmptyAnalysis() throws Exception {
         ProjectAnalysis empty = new ProjectAnalysis("/empty", List.of(), System.currentTimeMillis());
 
-        when(mainGenerator.generateMainDocumentation(any())).thenReturn(CompletableFuture.completedFuture("# README"));
+        when(mainGenerator.generateMainDocumentation(any()))
+                .thenReturn(CompletableFuture.completedFuture("# README"));
         // Stub other generators that may be invoked by configuration defaults
-        when(testGenerator.generateUnitTestDocumentation(any(), any())).thenReturn(CompletableFuture.completedFuture(null));
-        when(mermaidService.generateClassDiagrams(any(), anyString())).thenReturn(CompletableFuture.completedFuture(List.of()));
+        when(testGenerator.generateUnitTestDocumentation(any(), any()))
+                .thenReturn(CompletableFuture.completedFuture(null));
+        when(mermaidService.generateClassDiagrams(any(), anyString()))
+                .thenReturn(CompletableFuture.completedFuture(List.of()));
 
         CompletableFuture<String> result = documentationService.generateDocumentation(empty);
 
@@ -122,15 +130,19 @@ class DocumentationServiceUnitTest {
         );
         AnalysisSettings analysisSettings = new AnalysisSettings(true, 5, List.of("**/*.java"), List.of("**/test/**"));
         DocumentorConfig testConfig = new DocumentorConfig(List.of(), outputSettings, analysisSettings);
-        DocumentationService testService = new DocumentationService(mainGenerator, elementGenerator, testGenerator, mermaidService, testConfig);
+        DocumentationService testService = new DocumentationService(mainGenerator, elementGenerator,
+                testGenerator, mermaidService, testConfig);
 
         CodeElement element = new CodeElement(CodeElementType.CLASS, "TestClass", "com.test.TestClass",
             "/src/TestClass.java", 1, "public class TestClass {}", "", List.of(), List.of());
         ProjectAnalysis analysis = new ProjectAnalysis("/project", List.of(element), System.currentTimeMillis());
 
-        when(mainGenerator.generateMainDocumentation(any())).thenReturn(CompletableFuture.completedFuture("# README"));
-        when(elementGenerator.generateElementDocumentation(any(), any())).thenReturn(CompletableFuture.completedFuture(null));
-        when(testGenerator.generateUnitTestDocumentation(any(), any())).thenReturn(CompletableFuture.completedFuture(null));
+        when(mainGenerator.generateMainDocumentation(any()))
+                .thenReturn(CompletableFuture.completedFuture("# README"));
+        when(elementGenerator.generateElementDocumentation(any(), any()))
+                .thenReturn(CompletableFuture.completedFuture(null));
+        when(testGenerator.generateUnitTestDocumentation(any(), any()))
+                .thenReturn(CompletableFuture.completedFuture(null));
 
         // Act
         CompletableFuture<String> result = testService.generateDocumentation(analysis);
@@ -157,15 +169,19 @@ class DocumentationServiceUnitTest {
 
         AnalysisSettings analysisSettings = new AnalysisSettings(true, 5, List.of("**/*.java"), List.of("**/test/**"));
         DocumentorConfig testConfig = new DocumentorConfig(List.of(), mockOutputSettings, analysisSettings);
-        DocumentationService testService = new DocumentationService(mainGenerator, elementGenerator, testGenerator, mermaidService, testConfig);
+        DocumentationService testService = new DocumentationService(mainGenerator, elementGenerator,
+                testGenerator, mermaidService, testConfig);
 
         CodeElement element = new CodeElement(CodeElementType.CLASS, "TestClass", "com.test.TestClass",
             "/src/TestClass.java", 1, "public class TestClass {}", "", List.of(), List.of());
         ProjectAnalysis analysis = new ProjectAnalysis("/project", List.of(element), System.currentTimeMillis());
 
-        when(mainGenerator.generateMainDocumentation(any())).thenReturn(CompletableFuture.completedFuture("# README"));
-        when(elementGenerator.generateElementDocumentation(any(), any())).thenReturn(CompletableFuture.completedFuture(null));
-        when(mermaidService.generateClassDiagrams(any(), anyString())).thenReturn(CompletableFuture.completedFuture(List.of("diagram1")));
+        when(mainGenerator.generateMainDocumentation(any()))
+                .thenReturn(CompletableFuture.completedFuture("# README"));
+        when(elementGenerator.generateElementDocumentation(any(), any()))
+                .thenReturn(CompletableFuture.completedFuture(null));
+        when(mermaidService.generateClassDiagrams(any(), anyString()))
+                .thenReturn(CompletableFuture.completedFuture(List.of("diagram1")));
 
         // Act
         CompletableFuture<String> result = testService.generateDocumentation(analysis);

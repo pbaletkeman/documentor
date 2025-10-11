@@ -38,7 +38,8 @@ class PythonElementExtractorExtendedTest {
         String result = extractor.extractDocstring(lines, 1);
 
         // Assert
-        assertEquals("This is an indented docstring\n        with varying levels of indentation\n            that should be preserved", result);
+        assertEquals("This is an indented docstring\n        with varying levels of indentation\n" +
+                "            that should be preserved", result);
     }
 
     @Test

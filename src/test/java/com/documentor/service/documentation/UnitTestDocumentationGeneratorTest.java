@@ -129,12 +129,14 @@ class UnitTestDocumentationGeneratorTest {
         );
 
         // Only non-FIELD elements should get test generation calls
-        when(llm.generateUnitTests(methodElement)).thenReturn(CompletableFuture.completedFuture("// test for testMethod"));
+        when(llm.generateUnitTests(methodElement))
+                .thenReturn(CompletableFuture.completedFuture("// test for testMethod"));
         // The field element should never be passed to generateUnitTests due to filtering
 
         UnitTestDocumentationGenerator generator = new UnitTestDocumentationGenerator(llm, config);
 
-        ProjectAnalysis analysis = new ProjectAnalysis("/tmp/project", List.of(fieldElement, methodElement), System.currentTimeMillis());
+        ProjectAnalysis analysis = new ProjectAnalysis("/tmp/project",
+                List.of(fieldElement, methodElement), System.currentTimeMillis());
 
         generator.generateUnitTestDocumentation(analysis, tempDir).join();
 

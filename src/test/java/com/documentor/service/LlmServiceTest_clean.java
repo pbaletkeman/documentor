@@ -51,8 +51,10 @@ class LlmServiceTest_clean {
     @BeforeEach
     void setUp() {
         OutputSettings outputSettings = new OutputSettings("output", "markdown", true, true);
-        AnalysisSettings analysisSettings = new AnalysisSettings(true, MAX_DEPTH, List.of("**/*.java"), List.of("**/test/**"));
-        LlmModelConfig testModel = new LlmModelConfig("test-model", "openai", "http://test.api", "api-key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS);
+        AnalysisSettings analysisSettings = new AnalysisSettings(true, MAX_DEPTH, 
+                List.of("**/*.java"), List.of("**/test/**"));
+        LlmModelConfig testModel = new LlmModelConfig("test-model", "openai", "http://test.api", 
+                "api-key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS);
 
         config = new DocumentorConfig(List.of(testModel), outputSettings, analysisSettings);
         llmService = new LlmService(config, mockRequestBuilder, mockResponseHandler, mockApiClient);
@@ -90,8 +92,10 @@ class LlmServiceTest_clean {
 
     @Test
     void serviceConstructsWithEmptyModelList() {
-        DocumentorConfig emptyConfig = new DocumentorConfig(List.of(), config.outputSettings(), config.analysisSettings());
-        LlmService emptyService = new LlmService(emptyConfig, mockRequestBuilder, mockResponseHandler, mockApiClient);
+        DocumentorConfig emptyConfig = new DocumentorConfig(List.of(), config.outputSettings(), 
+                config.analysisSettings());
+        LlmService emptyService = new LlmService(emptyConfig, mockRequestBuilder, mockResponseHandler, 
+                mockApiClient);
         assertNotNull(emptyService);
     }
 }
