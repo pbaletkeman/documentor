@@ -53,13 +53,43 @@ public class DocumentorCommands {
             @ShellOption(value = "--mermaid-output",
                     help = "Output directory for Mermaid diagrams (defaults to same directory as source files)",
                     defaultValue = "")
-            final String mermaidOutput) {
+            final String mermaidOutput,
+            @ShellOption(value = "--generate-plantuml",
+                    help = "Generate PlantUML class diagrams",
+                    defaultValue = "false")
+            final boolean generatePlantUML,
+            @ShellOption(value = "--plantuml-output",
+                    help = "Output directory for PlantUML diagrams (defaults to same directory as source files)",
+                    defaultValue = "")
+            final String plantUMLOutput) {
 
         // Update current state
         this.currentProjectPath = projectPath;
         this.currentConfigPath = configPath;
 
-        return projectAnalysisHandler.handleAnalyzeProject(projectPath, configPath, generateMermaid, mermaidOutput);
+        return projectAnalysisHandler.handleAnalyzeProjectExtended(projectPath, configPath,
+                generateMermaid, mermaidOutput, generatePlantUML, plantUMLOutput);
+    }
+
+    /**
+     * 🌱 Generate PlantUML diagrams only (without full analysis)
+     */
+    @ShellMethod(value = "Generate PlantUML class diagrams for a project",
+            key = {"plantuml", "puml"})
+    public String generatePlantUMLDiagrams(
+            @ShellOption(value = "--project-path",
+                    help = "Path to the project directory to analyze")
+            final String projectPath,
+            @ShellOption(value = "--plantuml-output",
+                    help = "Output directory for PlantUML diagrams (defaults to same directory as source files)",
+                    defaultValue = "")
+            final String plantUMLOutput) {
+
+        // Update current state
+        this.currentProjectPath = projectPath;
+
+        return projectAnalysisHandler.handleAnalyzeProjectExtended(projectPath, "config.json",
+                false, "", true, plantUMLOutput);
     }
 
     /**

@@ -32,11 +32,14 @@
     }
   ],
   "output_settings": {
-    "output_path": "./docs",
+    "output_directory": "./docs",
     "format": "markdown",
     "include_icons": true,
     "generate_unit_tests": true,
-    "target_coverage": 0.9
+    "target_coverage": 0.9,
+    "generate_mermaid": false,
+    "generate_plantuml": false,
+    "verbose_output": false
   },
   "analysis_settings": {
     "include_private_members": false,

@@ -4,107 +4,213 @@ import com.documentor.model.ProjectAnalysis;
 import com.documentor.service.CodeAnalysisService;
 import com.documentor.service.DocumentationService;
 import com.documentor.service.MermaidDiagramService;
+import com.documentor.service.PlantUMLDiagramService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 /**
- * Additional branch coverage tests for ProjectAnalysisCommandHandler.
- * These tests focus on improving branch coverage for the cli.handlers package.
+ * Branch coverage tests for ProjectAnalysisCommandHandler.
  */
+@ExtendWith(MockitoExtension.class)
 class ProjectAnalysisCommandHandlerBranchTest {
 
-    private ProjectAnalysisCommandHandler handler;
-    private CodeAnalysisService analysisService;
+    @Mock
+    private CodeAnalysisService codeAnalysisService;
+
+    @Mock
     private DocumentationService documentationService;
-    private MermaidDiagramService mermaidService;
+
+    @Mock
+    private MermaidDiagramService mermaidDiagramService;
+
+    @Mock
+    private PlantUMLDiagramService plantUMLDiagramService;
+
+    @Mock
     private CommonCommandHandler commonHandler;
+
+    @Mock
+    private ProjectAnalysis projectAnalysis;
+
+    private ProjectAnalysisCommandHandler handler;
+
+    @TempDir
+    private Path tempDir;
 
     @BeforeEach
     void setUp() {
-        analysisService = mock(CodeAnalysisService.class);
-        documentationService = mock(DocumentationService.class);
-        mermaidService = mock(MermaidDiagramService.class);
-        commonHandler = mock(CommonCommandHandler.class);
-        handler = new ProjectAnalysisCommandHandler(analysisService, documentationService,
-                mermaidService, commonHandler);
+        handler = new ProjectAnalysisCommandHandler(
+                codeAnalysisService, documentationService, mermaidDiagramService,
+                plantUMLDiagramService, commonHandler);
+    }
 
-        // Setup default behavior for commonHandler
+    @Test
+    void handleAnalyzeProjectExtendedWithInvalidPath() {
+        // Given: Invalid project path
+        String invalidPath = "/nonexistent/path";
+        when(commonHandler.directoryExists(invalidPath)).thenReturn(false);
+
+        // When
+        String result = handler.handleAnalyzeProjectExtended(
+                invalidPath, "output", false, "", false, "");
+
+        // Then: Returns error message
+        assertThat(result).contains("❌ Error: Project path does not exist");
+    }
+
+    @Test
+    void handleAnalyzeProjectExtendedWithPlantUMLGeneration() throws Exception {
+        // Given: Valid project path with PlantUML generation enabled
+        Path projectPath = Files.createDirectory(tempDir.resolve("test-project"));
+        when(commonHandler.directoryExists(projectPath.toString())).thenReturn(true);
+        when(codeAnalysisService.analyzeProject(any(Path.class)))
+                .thenReturn(CompletableFuture.completedFuture(projectAnalysis));
+        when(documentationService.generateDocumentation(projectAnalysis))
+                .thenReturn(CompletableFuture.completedFuture("docs/output"));
         when(commonHandler.createResultBuilder()).thenReturn(new StringBuilder());
-        when(commonHandler.formatStatistics(any(), any())).thenAnswer(invocation -> {
-            String title = invocation.getArgument(0);
-            return "📊 " + title + "\n════════════════════════════════\n\n";
-        });
+        when(plantUMLDiagramService.generateClassDiagrams(any(), anyString()))
+                .thenReturn(CompletableFuture.completedFuture(List.of("diagram1.puml", "diagram2.puml")));
+
+        // When: Generate with PlantUML enabled
+        String result = handler.handleAnalyzeProjectExtended(
+                projectPath.toString(), "output", false, "", true, "plantuml-output");
+
+        // Then: PlantUML generation is handled
+        assertThat(result).contains("✅ Analysis complete!");
+        assertThat(result).contains("🌱 PlantUML diagrams: 2 diagrams generated");
     }
 
     @Test
-    void handleAnalyzeProjectWithoutMermaidGeneration(@TempDir final Path tmp) {
-        // Test the false branch of generateMermaid condition
-        ProjectAnalysis pa = new ProjectAnalysis(tmp.toString(), List.of(),
-                System.currentTimeMillis());
-        when(analysisService.analyzeProject(tmp)).thenReturn(CompletableFuture.completedFuture(pa));
-        when(documentationService.generateDocumentation(pa))
-                .thenReturn(CompletableFuture.completedFuture(tmp.toString()));
-        when(commonHandler.directoryExists(tmp.toString())).thenReturn(true);
+    void handleAnalyzeProjectExtendedWithMermaidGeneration() throws Exception {
+        // Given: Valid project path with Mermaid generation enabled
+        Path projectPath = Files.createDirectory(tempDir.resolve("test-project"));
+        when(commonHandler.directoryExists(projectPath.toString())).thenReturn(true);
+        when(codeAnalysisService.analyzeProject(any(Path.class)))
+                .thenReturn(CompletableFuture.completedFuture(projectAnalysis));
+        when(documentationService.generateDocumentation(projectAnalysis))
+                .thenReturn(CompletableFuture.completedFuture("docs/output"));
+        when(commonHandler.createResultBuilder()).thenReturn(new StringBuilder());
+        when(mermaidDiagramService.generateClassDiagrams(any(), anyString()))
+                .thenReturn(CompletableFuture.completedFuture(List.of("diagram1.mmd")));
 
-        // Act with generateMermaid = false
-        String result = handler.handleAnalyzeProject(tmp.toString(), "", false, "");
+        // When: Generate with Mermaid enabled
+        String result = handler.handleAnalyzeProjectExtended(
+                projectPath.toString(), "output", true, "mermaid-output", false, "");
 
-        // Assert
-        verify(mermaidService, never()).generateClassDiagrams(any(), any());
-        assertTrue(result.contains("Documentation generated at"));
-        assertTrue(!result.contains("Mermaid diagrams")); // Should not contain mermaid output
+        // Then: Mermaid generation is handled
+        assertThat(result).contains("✅ Analysis complete!");
+        assertThat(result).contains("🧩 Mermaid diagrams: 1 diagrams generated");
     }
 
     @Test
-    void handleMermaidGenerationWithEmptyOutput(@TempDir final Path tmp) {
-        // Test the ternary operator branch in handleMermaidGeneration with empty mermaidOutput
-        ProjectAnalysis pa = new ProjectAnalysis(tmp.toString(), List.of(),
-                System.currentTimeMillis());
-        when(analysisService.analyzeProject(tmp)).thenReturn(CompletableFuture.completedFuture(pa));
-        when(documentationService.generateDocumentation(pa))
-                .thenReturn(CompletableFuture.completedFuture(tmp.toString()));
-        when(mermaidService.generateClassDiagrams(pa, null))
-                .thenReturn(CompletableFuture.completedFuture(List.of("d1")));
-        when(commonHandler.directoryExists(tmp.toString())).thenReturn(true);
+    void handleAnalyzeProjectExtendedWithBothDiagramTypes() throws Exception {
+        // Given: Valid project path with both diagram types enabled
+        Path projectPath = Files.createDirectory(tempDir.resolve("test-project"));
+        when(commonHandler.directoryExists(projectPath.toString())).thenReturn(true);
+        when(codeAnalysisService.analyzeProject(any(Path.class)))
+                .thenReturn(CompletableFuture.completedFuture(projectAnalysis));
+        when(documentationService.generateDocumentation(projectAnalysis))
+                .thenReturn(CompletableFuture.completedFuture("docs/output"));
+        when(commonHandler.createResultBuilder()).thenReturn(new StringBuilder());
+        when(mermaidDiagramService.generateClassDiagrams(any(), anyString()))
+                .thenReturn(CompletableFuture.completedFuture(List.of("mermaid.mmd")));
+        when(plantUMLDiagramService.generateClassDiagrams(any(), anyString()))
+                .thenReturn(CompletableFuture.completedFuture(List.of("plantuml.puml")));
 
-        // Act with generateMermaid = true but empty mermaidOutput (should pass null to service)
-        String result = handler.handleAnalyzeProject(tmp.toString(), "", true, "");
+        // When: Generate with both types enabled
+        String result = handler.handleAnalyzeProjectExtended(
+                projectPath.toString(), "output", true, "mermaid-output", true, "plantuml-output");
 
-        // Assert
-        verify(mermaidService).generateClassDiagrams(pa, null); // Should pass null for empty output
-        assertTrue(result.contains("Mermaid diagrams"));
+        // Then: Both diagram types are generated
+        assertThat(result).contains("✅ Analysis complete!");
+        assertThat(result).contains("🧩 Mermaid diagrams: 1 diagrams generated");
+        assertThat(result).contains("🌱 PlantUML diagrams: 1 diagrams generated");
     }
 
     @Test
-    void handleMermaidGenerationWithSpecificOutput(@TempDir final Path tmp) {
-        // Test the ternary operator branch in handleMermaidGeneration with specific mermaidOutput
-        ProjectAnalysis pa = new ProjectAnalysis(tmp.toString(), List.of(),
-                System.currentTimeMillis());
-        when(analysisService.analyzeProject(tmp)).thenReturn(CompletableFuture.completedFuture(pa));
-        when(documentationService.generateDocumentation(pa))
-                .thenReturn(CompletableFuture.completedFuture(tmp.toString()));
-        when(mermaidService.generateClassDiagrams(pa, "custom-output"))
-                .thenReturn(CompletableFuture.completedFuture(List.of("d1", "d2")));
-        when(commonHandler.directoryExists(tmp.toString())).thenReturn(true);
+    void handleAnalyzeProjectExtendedWithException() throws Exception {
+        // Given: Project path that causes analysis exception
+        Path projectPath = Files.createDirectory(tempDir.resolve("test-project"));
+        when(commonHandler.directoryExists(projectPath.toString())).thenReturn(true);
+        when(codeAnalysisService.analyzeProject(any(Path.class)))
+                .thenThrow(new RuntimeException("Analysis failed"));
+        when(commonHandler.formatErrorMessage(anyString(), any(Exception.class)))
+                .thenReturn("❌ Error: Analysis failed");
 
-        // Act with generateMermaid = true and specific mermaidOutput
-        String result = handler.handleAnalyzeProject(tmp.toString(), "", true, "custom-output");
+        // When: Analysis throws exception
+        String result = handler.handleAnalyzeProjectExtended(
+                projectPath.toString(), "output", false, "", false, "");
 
-        // Assert
-        verify(mermaidService).generateClassDiagrams(pa, "custom-output"); // Should pass specific output path
-        assertTrue(result.contains("Mermaid diagrams"));
-        assertTrue(result.contains("2 diagrams generated"));
+        // Then: Exception is handled gracefully
+        assertThat(result).contains("❌ Error: Analysis failed");
+    }
+
+    @Test
+    void handleScanProjectWithInvalidPath() {
+        // Given: Invalid project path
+        String invalidPath = "/nonexistent/path";
+        when(commonHandler.directoryExists(invalidPath)).thenReturn(false);
+
+        // When
+        String result = handler.handleScanProject(invalidPath);
+
+        // Then: Returns error message
+        assertThat(result).contains("❌ Error: Project path does not exist");
+    }
+
+    @Test
+    void handleScanProjectWithException() throws Exception {
+        // Given: Project path that causes scan exception
+        Path projectPath = Files.createDirectory(tempDir.resolve("test-project"));
+        when(commonHandler.directoryExists(projectPath.toString())).thenReturn(true);
+        when(codeAnalysisService.analyzeProject(any(Path.class)))
+                .thenThrow(new RuntimeException("Scan failed"));
+        when(commonHandler.formatErrorMessage(anyString(), any(Exception.class)))
+                .thenReturn("❌ Error: Scan failed");
+
+        // When: Scan throws exception
+        String result = handler.handleScanProject(projectPath.toString());
+
+        // Then: Exception is handled gracefully
+        assertThat(result).contains("❌ Error: Scan failed");
+    }
+
+    @Test
+    void handleAnalyzeProjectExtendedWithoutDiagrams() throws Exception {
+        // Given: Valid project path with no diagram generation
+        Path projectPath = Files.createDirectory(tempDir.resolve("test-project"));
+        when(commonHandler.directoryExists(projectPath.toString())).thenReturn(true);
+        when(codeAnalysisService.analyzeProject(any(Path.class)))
+                .thenReturn(CompletableFuture.completedFuture(projectAnalysis));
+        when(documentationService.generateDocumentation(projectAnalysis))
+                .thenReturn(CompletableFuture.completedFuture("docs/output"));
+        when(commonHandler.createResultBuilder()).thenReturn(new StringBuilder());
+
+        // When: Generate without any diagrams
+        String result = handler.handleAnalyzeProjectExtended(
+                projectPath.toString(), "output", false, "", false, "");
+
+        // Then: Only documentation is generated
+        assertThat(result).contains("✅ Analysis complete!");
+        assertThat(result).doesNotContain("Mermaid diagrams");
+        assertThat(result).doesNotContain("PlantUML diagrams");
+        verify(mermaidDiagramService, never()).generateClassDiagrams(any(), any());
+        verify(plantUMLDiagramService, never()).generateClassDiagrams(any(), any());
     }
 }

@@ -45,6 +45,9 @@ class DocumentationServiceCoverageEnabledTest {
 
     @Mock
     private MermaidDiagramService mermaidDiagramService;
+    
+    @Mock
+    private PlantUMLDiagramService plantUMLDiagramService;
 
     @TempDir
     private Path tempDir;
@@ -55,7 +58,7 @@ class DocumentationServiceCoverageEnabledTest {
     void setUp() {
         // Build a minimal DocumentorConfig with sensible defaults pointing at the temp directory
         LlmModelConfig model = new LlmModelConfig("test-model", "ollama", "http://localhost", null, null, null);
-        OutputSettings outputSettings = new OutputSettings(tempDir.toString(), "md", true, false);
+        OutputSettings outputSettings = new OutputSettings(tempDir.toString(), "md", true, false, false);
         AnalysisSettings analysisSettings = new AnalysisSettings(null, null, null, null);
         config = new DocumentorConfig(List.of(model), outputSettings, analysisSettings);
     }
@@ -73,13 +76,7 @@ class DocumentationServiceCoverageEnabledTest {
         lenient().when(mermaidDiagramService.generateClassDiagrams(any(), any()))
             .thenReturn(CompletableFuture.completedFuture(List.of()));
 
-        DocumentationService documentationService = new DocumentationService(
-            mainDocGenerator,
-            elementDocGenerator,
-            unitTestDocumentationGenerator,
-            mermaidDiagramService,
-            config
-        );
+        DocumentationService documentationService = new DocumentationService(mainDocGenerator, elementDocGenerator, unitTestDocumentationGenerator, mermaidDiagramService, plantUMLDiagramService, config);
 
         ProjectAnalysis analysis = new ProjectAnalysis(tempDir.toString(), List.of(), System.currentTimeMillis());
 
@@ -113,13 +110,7 @@ class DocumentationServiceCoverageEnabledTest {
         when(unitTestDocumentationGenerator.generateUnitTestDocumentation(any(), any()))
             .thenReturn(CompletableFuture.completedFuture(null));
 
-        DocumentationService documentationService = new DocumentationService(
-            mainDocGenerator,
-            elementDocGenerator,
-            unitTestDocumentationGenerator,
-            mermaidDiagramService,
-            config
-        );
+        DocumentationService documentationService = new DocumentationService(mainDocGenerator, elementDocGenerator, unitTestDocumentationGenerator, mermaidDiagramService, plantUMLDiagramService, config);
 
         CodeElement elem = new CodeElement(
             CodeElementType.CLASS,

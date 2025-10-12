@@ -56,19 +56,19 @@ class LlmServiceIntegrationTest {
     @BeforeEach
     void setUp() {
         // Create test configuration with LLM models
-        LlmModelConfig testModel = new LlmModelConfig(
+        LlmModelConfig model = new LlmModelConfig(
             "test-model", "openai", "https://api.test.com", "test-key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
         );
 
         OutputSettings outputSettings = new OutputSettings(
-            "output", "markdown", true, true
+            "output", "markdown", true, false, true
         );
 
         AnalysisSettings analysisSettings = new AnalysisSettings(
             true, ITERATION_COUNT_LARGE, List.of("**/*.java"), List.of("**/test/**")
         );
 
-        config = new DocumentorConfig(List.of(testModel), outputSettings, analysisSettings);
+        config = new DocumentorConfig(List.of(model), outputSettings, analysisSettings);
 
         // Create test code element
         testElement = new CodeElement(
@@ -305,7 +305,7 @@ class LlmServiceIntegrationTest {
         );
 
         OutputSettings outputSettings = new OutputSettings(
-            "output", "markdown", true, true
+            "output", "markdown", true, true, false
         );
 
         AnalysisSettings analysisSettings = new AnalysisSettings(

@@ -51,6 +51,9 @@ class DocumentationServiceUnitTest {
     @Mock
     private MermaidDiagramService mermaidService;
 
+    @Mock
+    private PlantUMLDiagramService plantUMLService;
+
     private DocumentationService documentationService;
     private DocumentorConfig config;
 
@@ -62,7 +65,7 @@ class DocumentationServiceUnitTest {
         MockitoAnnotations.openMocks(this);
 
         OutputSettings outputSettings = new OutputSettings(
-            tempDir.toString(), "markdown", true, true
+            tempDir.toString(), "markdown", true, false, true
         );
 
         AnalysisSettings analysisSettings = new AnalysisSettings(
@@ -73,7 +76,7 @@ class DocumentationServiceUnitTest {
         config = new DocumentorConfig(List.of(model), outputSettings, analysisSettings);
 
         documentationService = new DocumentationService(mainGenerator, elementGenerator,
-                testGenerator, mermaidService, config);
+                testGenerator, mermaidService, plantUMLService, config);
     }
 
     @Test
@@ -140,14 +143,14 @@ class DocumentationServiceUnitTest {
     void testGenerateDocumentationWithMermaidDiagramsDisabled() throws Exception {
         // Create config with generateMermaidDiagrams = false (third parameter)
         OutputSettings outputSettings = new OutputSettings(
-            tempDir.toString(), "markdown", false, true
+            tempDir.toString(), "markdown", false, false, true
         );
         AnalysisSettings analysisSettings = new AnalysisSettings(
             true, MAX_DEPTH_FIVE, List.of("**/*.java"), List.of("**/test/**")
         );
         DocumentorConfig testConfig = new DocumentorConfig(List.of(), outputSettings, analysisSettings);
-        DocumentationService testService = new DocumentationService(mainGenerator, elementGenerator,
-                testGenerator, mermaidService, testConfig);
+        DocumentationService testService = new DocumentationService(mainGenerator,
+                elementGenerator, testGenerator, mermaidService, plantUMLService, testConfig);
 
         CodeElement element = new CodeElement(CodeElementType.CLASS, "TestClass", "com.test.TestClass",
             "/src/TestClass.java", 1, "public class TestClass {}", "", List.of(), List.of());
@@ -187,8 +190,8 @@ class DocumentationServiceUnitTest {
             true, MAX_DEPTH_FIVE, List.of("**/*.java"), List.of("**/test/**")
         );
         DocumentorConfig testConfig = new DocumentorConfig(List.of(), mockOutputSettings, analysisSettings);
-        DocumentationService testService = new DocumentationService(mainGenerator, elementGenerator,
-                testGenerator, mermaidService, testConfig);
+        DocumentationService testService = new DocumentationService(mainGenerator,
+                elementGenerator, testGenerator, mermaidService, plantUMLService, testConfig);
 
         CodeElement element = new CodeElement(CodeElementType.CLASS, "TestClass", "com.test.TestClass",
             "/src/TestClass.java", 1, "public class TestClass {}", "", List.of(), List.of());

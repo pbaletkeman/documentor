@@ -16,13 +16,14 @@
     }
   ],
   "output_settings": {
-    "output_path": "./docs",
+    "output_directory": "./docs",
     "format": "markdown",
     "include_icons": true,
     "generate_unit_tests": true,
     "target_coverage": 0.8,
-    "generate_mermaid_diagrams": true,
-    "mermaid_output_path": "./diagrams"
+    "generate_mermaid": true,
+    "generate_plantuml": true,
+    "verbose_output": true
   },
   "analysis_settings": {
     "include_private_members": false,

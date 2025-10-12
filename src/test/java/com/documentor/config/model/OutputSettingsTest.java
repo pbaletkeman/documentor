@@ -32,6 +32,7 @@ class OutputSettingsTest {
                 outputDirectory,
                 format,
                 generateMermaid,
+                false,
                 verboseOutput
         );
 
@@ -48,6 +49,7 @@ class OutputSettingsTest {
         // When
         OutputSettings settings = new OutputSettings(
                 VALID_OUTPUT_DIR,
+                null,
                 null,
                 null,
                 null
@@ -72,6 +74,7 @@ class OutputSettingsTest {
                 outputDirectory,
                 format,
                 generateMermaid,
+                false,
                 verboseOutput
         );
 
@@ -87,7 +90,7 @@ class OutputSettingsTest {
     void shouldReturnCorrectOutputPath() {
         // Given
         String outputDirectory = "custom/output/path";
-        OutputSettings settings = new OutputSettings(outputDirectory, null, null, null);
+        OutputSettings settings = new OutputSettings(outputDirectory, null, null, false, null);
 
         // When & Then
         assertEquals(outputDirectory, settings.outputPath());
@@ -97,7 +100,7 @@ class OutputSettingsTest {
     @DisplayName("Should always return true for includeIcons")
     void shouldAlwaysReturnTrueForIncludeIcons() {
         // Given
-        OutputSettings settings = new OutputSettings(VALID_OUTPUT_DIR, null, null, null);
+        OutputSettings settings = new OutputSettings(VALID_OUTPUT_DIR, null, null, false, null);
 
         // When & Then
         assertTrue(settings.includeIcons());
@@ -107,7 +110,7 @@ class OutputSettingsTest {
     @DisplayName("Should always return true for generateUnitTests")
     void shouldAlwaysReturnTrueForGenerateUnitTests() {
         // Given
-        OutputSettings settings = new OutputSettings(VALID_OUTPUT_DIR, null, null, null);
+        OutputSettings settings = new OutputSettings(VALID_OUTPUT_DIR, null, null, false, null);
 
         // When & Then
         assertTrue(settings.generateUnitTests());
@@ -117,7 +120,7 @@ class OutputSettingsTest {
     @DisplayName("Should return default coverage threshold")
     void shouldReturnDefaultCoverageThreshold() {
         // Given
-        OutputSettings settings = new OutputSettings(VALID_OUTPUT_DIR, null, null, null);
+        OutputSettings settings = new OutputSettings(VALID_OUTPUT_DIR, null, null, false, null);
 
         // When & Then
         assertEquals(ApplicationConstants.DEFAULT_COVERAGE_THRESHOLD, settings.targetCoverage());
@@ -127,9 +130,9 @@ class OutputSettingsTest {
     @DisplayName("Should return same value for generateMermaidDiagrams as for generateMermaid")
     void shouldReturnSameValueForGenerateMermaidDiagramsAsForGenerateMermaid() {
         // Given
-        OutputSettings settingsWithTrue = new OutputSettings(VALID_OUTPUT_DIR, null, true, null);
-        OutputSettings settingsWithFalse = new OutputSettings(VALID_OUTPUT_DIR, null, false, null);
-        OutputSettings settingsWithNull = new OutputSettings(VALID_OUTPUT_DIR, null, null, null);
+        OutputSettings settingsWithTrue = new OutputSettings(VALID_OUTPUT_DIR, null, true, false, null);
+        OutputSettings settingsWithFalse = new OutputSettings(VALID_OUTPUT_DIR, null, false, false, null);
+        OutputSettings settingsWithNull = new OutputSettings(VALID_OUTPUT_DIR, null, null, false, null);
 
         // When & Then
         assertTrue(settingsWithTrue.generateMermaidDiagrams());
@@ -142,7 +145,7 @@ class OutputSettingsTest {
     void shouldReturnOutputDirectoryForMermaidOutputPath() {
         // Given
         String outputDirectory = "custom/output/path";
-        OutputSettings settings = new OutputSettings(outputDirectory, null, null, null);
+        OutputSettings settings = new OutputSettings(outputDirectory, null, null, false, null);
 
         // When & Then
         assertEquals(outputDirectory, settings.mermaidOutputPath());

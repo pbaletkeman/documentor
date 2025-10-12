@@ -4,6 +4,7 @@ import com.documentor.model.ProjectAnalysis;
 import com.documentor.service.CodeAnalysisService;
 import com.documentor.service.DocumentationService;
 import com.documentor.service.MermaidDiagramService;
+import com.documentor.service.PlantUMLDiagramService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,7 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * 🔍 Handler for project analysis and documentation generation
- * Refactored to reduce complexity using CommonCommandHandler
+ * Enhanced with PlantUML support alongside existing Mermaid functionality
  */
 @Component
 public class ProjectAnalysisCommandHandler {
@@ -27,24 +28,36 @@ public class ProjectAnalysisCommandHandler {
     private final CodeAnalysisService codeAnalysisService;
     private final DocumentationService documentationService;
     private final MermaidDiagramService mermaidDiagramService;
+    private final PlantUMLDiagramService plantUMLDiagramService;
     private final CommonCommandHandler commonHandler;
 
     public ProjectAnalysisCommandHandler(
             final CodeAnalysisService codeAnalysisServiceParam,
             final DocumentationService documentationServiceParam,
             final MermaidDiagramService mermaidDiagramServiceParam,
+            final PlantUMLDiagramService plantUMLDiagramServiceParam,
             final CommonCommandHandler commonHandlerParam) {
         this.codeAnalysisService = codeAnalysisServiceParam;
         this.documentationService = documentationServiceParam;
         this.mermaidDiagramService = mermaidDiagramServiceParam;
+        this.plantUMLDiagramService = plantUMLDiagramServiceParam;
         this.commonHandler = commonHandlerParam;
     }
 
     /**
-     * Handle project analysis command with optional Mermaid diagram generation
+     * Handle project analysis command with optional diagram generation
      */
     public String handleAnalyzeProject(final String projectPath, final String configPath,
                                      final boolean generateMermaid, final String mermaidOutput) {
+        return handleAnalyzeProjectExtended(projectPath, configPath, generateMermaid, mermaidOutput, false, "");
+    }
+
+    /**
+     * Handle project analysis command with both Mermaid and PlantUML options
+     */
+    public String handleAnalyzeProjectExtended(final String projectPath, final String configPath,
+                                     final boolean generateMermaid, final String mermaidOutput,
+                                     final boolean generatePlantUML, final String plantUMLOutput) {
         try {
             LOGGER.info("🔍 Starting analysis of project: {}", projectPath);
 
@@ -59,6 +72,10 @@ public class ProjectAnalysisCommandHandler {
 
             if (generateMermaid) {
                 handleMermaidGeneration(analysis, mermaidOutput, result);
+            }
+
+            if (generatePlantUML) {
+                handlePlantUMLGeneration(analysis, plantUMLOutput, result);
             }
 
             return result.toString();
@@ -113,6 +130,20 @@ public class ProjectAnalysisCommandHandler {
                 .generateClassDiagrams(analysis, mermaidOutputPath);
         List<String> mermaidResult = mermaidFuture.join();
         result.append("🧩 Mermaid diagrams: ").append(mermaidResult.size())
+                .append(" diagrams generated").append("\n");
+    }
+
+    /**
+     * Generate and handle PlantUML diagrams
+     */
+    private void handlePlantUMLGeneration(final ProjectAnalysis analysis, final String plantUMLOutput,
+                                        final StringBuilder result) {
+        LOGGER.info("🌱 Generating PlantUML diagrams...");
+        String plantUMLOutputPath = plantUMLOutput.trim().isEmpty() ? null : plantUMLOutput;
+        CompletableFuture<List<String>> plantUMLFuture = plantUMLDiagramService
+                .generateClassDiagrams(analysis, plantUMLOutputPath);
+        List<String> plantUMLResult = plantUMLFuture.join();
+        result.append("🌱 PlantUML diagrams: ").append(plantUMLResult.size())
                 .append(" diagrams generated").append("\n");
     }
 

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotEmpty;
 
 /**
- * 🔍 Output Settings Configuration - Simplified
+ * 🔍 Output Settings Configuration - Enhanced with PlantUML Support
  */
 public record OutputSettings(
     @JsonProperty("output_directory")
@@ -18,6 +18,9 @@ public record OutputSettings(
     @JsonProperty("generate_mermaid")
     Boolean generateMermaid,
 
+    @JsonProperty("generate_plantuml")
+    Boolean generatePlantUML,
+
     @JsonProperty("verbose_output")
     Boolean verboseOutput
 ) {
@@ -28,6 +31,9 @@ public record OutputSettings(
         }
         if (generateMermaid == null) {
             generateMermaid = false;
+        }
+        if (generatePlantUML == null) {
+            generatePlantUML = false;
         }
         if (verboseOutput == null) {
             verboseOutput = false;
@@ -55,7 +61,15 @@ public record OutputSettings(
         return generateMermaid;
     }
 
+    public Boolean generatePlantUMLDiagrams() {
+        return generatePlantUML;
+    }
+
     public String mermaidOutputPath() {
+        return outputDirectory;
+    }
+
+    public String plantUMLOutputPath() {
         return outputDirectory;
     }
 }

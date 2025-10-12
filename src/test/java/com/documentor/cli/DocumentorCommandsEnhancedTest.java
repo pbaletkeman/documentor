@@ -42,15 +42,15 @@ class DocumentorCommandsEnhancedTest {
         boolean generateMermaid = true;
         String mermaidOutput = "/test/diagrams";
 
-        when(projectAnalysisHandler.handleAnalyzeProject(projectPath, configPath, generateMermaid, mermaidOutput))
+        when(projectAnalysisHandler.handleAnalyzeProjectExtended(projectPath, configPath, generateMermaid, mermaidOutput, false, ""))
             .thenReturn("Analysis complete");
 
         // When
-        String result = commands.analyzeProject(projectPath, configPath, generateMermaid, mermaidOutput);
+        String result = commands.analyzeProject(projectPath, configPath, generateMermaid, mermaidOutput, false, "");
 
         // Then
         assertEquals("Analysis complete", result);
-        verify(projectAnalysisHandler).handleAnalyzeProject(projectPath, configPath, generateMermaid, mermaidOutput);
+        verify(projectAnalysisHandler).handleAnalyzeProjectExtended(projectPath, configPath, generateMermaid, mermaidOutput, false, "");
     }
 
     @Test
@@ -122,7 +122,7 @@ class DocumentorCommandsEnhancedTest {
     void shouldHandleShowStatus() {
         // Given
         // First set the current project and config path
-        commands.analyzeProject("/test/project", "custom-config.json", false, "");
+        commands.analyzeProject("/test/project", "custom-config.json", false, "", false, "");
 
         when(statusHandler.handleShowStatus("/test/project", "custom-config.json"))
             .thenReturn("Status displayed");

@@ -46,6 +46,7 @@ class DocumentorApplicationTests {
                 "./test-docs",
                 "markdown",
                 false,
+                false,
                 false
             );
 

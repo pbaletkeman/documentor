@@ -16,10 +16,11 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * 📄 Documentation Generation Service - Refactored for Low Complexity
+ * 📄 Documentation Generation Service - Enhanced with PlantUML Support
  *
  * Orchestrates the generation of markdown documentation from code analysis results.
  * Delegates to specialized generators for different types of documentation.
+ * Now supports both Mermaid and PlantUML diagram generation.
  */
 @Service
 public class DocumentationService {
@@ -30,6 +31,7 @@ public class DocumentationService {
     private final ElementDocumentationGenerator elementDocGenerator;
     private final UnitTestDocumentationGenerator testDocGenerator;
     private final MermaidDiagramService mermaidDiagramService;
+    private final PlantUMLDiagramService plantUMLDiagramService;
     private final DocumentorConfig config;
 
     public DocumentationService(
@@ -37,11 +39,13 @@ public class DocumentationService {
             final ElementDocumentationGenerator elementDocGeneratorParam,
             final UnitTestDocumentationGenerator testDocGeneratorParam,
             final MermaidDiagramService mermaidDiagramServiceParam,
+            final PlantUMLDiagramService plantUMLDiagramServiceParam,
             final DocumentorConfig configParam) {
         this.mainDocGenerator = mainDocGeneratorParam;
         this.elementDocGenerator = elementDocGeneratorParam;
         this.testDocGenerator = testDocGeneratorParam;
         this.mermaidDiagramService = mermaidDiagramServiceParam;
+        this.plantUMLDiagramService = plantUMLDiagramServiceParam;
         this.config = configParam;
     }
 
@@ -78,6 +82,13 @@ public class DocumentationService {
                     List<String> diagramPaths = mermaidDiagramService.generateClassDiagrams(
                         analysis, config.outputSettings().mermaidOutputPath()).join();
                     LOGGER.info("✅ Generated {} Mermaid diagrams", diagramPaths.size());
+                }
+
+                // Generate PlantUML diagrams if enabled
+                if (config.outputSettings().generatePlantUMLDiagrams()) {
+                    List<String> plantUMLPaths = plantUMLDiagramService.generateClassDiagrams(
+                        analysis, config.outputSettings().plantUMLOutputPath()).join();
+                    LOGGER.info("✅ Generated {} PlantUML diagrams", plantUMLPaths.size());
                 }
 
                 LOGGER.info("✅ Documentation generated successfully at: {}", outputPath);

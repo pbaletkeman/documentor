@@ -80,10 +80,11 @@ public class AppConfig implements AsyncConfigurer {
             final com.documentor.service.documentation.ElementDocumentationGenerator elementDocGenerator,
             final com.documentor.service.documentation.UnitTestDocumentationGenerator testDocGenerator,
             final com.documentor.service.MermaidDiagramService mermaidDiagramService,
+            final com.documentor.service.PlantUMLDiagramService plantUMLDiagramService,
             final DocumentorConfig documentorConfigParam) {
         return new com.documentor.service.DocumentationService(
                 mainDocGenerator, elementDocGenerator, testDocGenerator,
-                mermaidDiagramService, documentorConfigParam);
+                mermaidDiagramService, plantUMLDiagramService, documentorConfigParam);
     }
 
     /**

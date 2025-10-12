@@ -33,7 +33,7 @@ class ConfigurationCommandHandlerTest {
         ConfigurationCommandHandler handler = new ConfigurationCommandHandler(mapper);
 
         LlmModelConfig model = new LlmModelConfig("m", "openai", "http://x", null, TEST_MAX_TOKENS, TEST_TIMEOUT_SECONDS);
-        OutputSettings output = new OutputSettings(tmp.toString(), "md", true, false);
+        OutputSettings output = new OutputSettings(tmp.toString(), "md", true, false, false);
         AnalysisSettings analysis = new AnalysisSettings(false, 2, List.of("**/*.java"), List.of("**/test/**"));
         DocumentorConfig config = new DocumentorConfig(List.of(model), output, analysis);
 
@@ -54,7 +54,7 @@ class ConfigurationCommandHandlerTest {
         ConfigurationCommandHandler handler = new ConfigurationCommandHandler(mapper);
 
         // Create config with empty LLM models list
-        OutputSettings output = new OutputSettings(tmp.toString(), "md", true, false);
+        OutputSettings output = new OutputSettings(tmp.toString(), "md", true, false, false);
         AnalysisSettings analysis = new AnalysisSettings(false, 2, List.of("**/*.java"), List.of("**/test/**"));
         DocumentorConfig config = new DocumentorConfig(List.of(), output, analysis);
 
@@ -78,7 +78,7 @@ class ConfigurationCommandHandlerTest {
         LlmModelConfig modelWithWhitespaceKey = new LlmModelConfig("modelWhitespace", "openai", "http://test", "   ", TEST_MAX_TOKENS, TEST_TIMEOUT_SECONDS);
         LlmModelConfig modelWithValidKey = new LlmModelConfig("modelValid", "openai", "http://test", "valid-key", TEST_MAX_TOKENS, TEST_TIMEOUT_SECONDS);
 
-        OutputSettings output = new OutputSettings(tmp.toString(), "md", true, false);
+        OutputSettings output = new OutputSettings(tmp.toString(), "md", true, false, false);
         AnalysisSettings analysis = new AnalysisSettings(false, 2, List.of("**/*.java"),
                 List.of("**/test/**"));
         DocumentorConfig config = new DocumentorConfig(

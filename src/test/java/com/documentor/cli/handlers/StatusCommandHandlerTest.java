@@ -27,7 +27,7 @@ class StatusCommandHandlerTest {
     @Test
     void showStatusIncludesProjectAndConfigInfo() {
         LlmModelConfig model = new LlmModelConfig("m", "openai", "http://x", "apikey123456", MAX_TOKENS, TIMEOUT_SECONDS);
-        OutputSettings output = new OutputSettings("out", "md", true, true);
+        OutputSettings output = new OutputSettings("out", "md", true, false, true);
         AnalysisSettings analysis = new AnalysisSettings(true, 2, List.of("**/*.java"), List.of("**/test/**"));
 
         DocumentorConfig cfg = new DocumentorConfig(List.of(model), output, analysis);
@@ -200,7 +200,7 @@ class StatusCommandHandlerTest {
 
     @Test
     void showStatusWithCompleteOutputSettings() {
-        OutputSettings output = new OutputSettings("./docs", "markdown", true, false);
+        OutputSettings output = new OutputSettings("./docs", "markdown", true, false, false);
         DocumentorConfig cfg = new DocumentorConfig(Collections.emptyList(), output, null);
         StatusCommandHandler handler = new StatusCommandHandler(cfg);
         String status = handler.handleShowStatus(null, null);
