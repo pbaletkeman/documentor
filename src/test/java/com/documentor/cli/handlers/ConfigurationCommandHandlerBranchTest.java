@@ -150,8 +150,8 @@ class ConfigurationCommandHandlerBranchTest {
         assertTrue(result.contains("🤖 LLM Models: 1"));
         assertTrue(result.contains("⚠️ Warning: No output settings configured"));
         // Analysis settings should get defaults in constructor, but test both possibilities
-        assertTrue(result.contains("✅ Analysis settings configuration is valid") || 
-                  result.contains("⚠️ Warning: No analysis settings configured"));
+        assertTrue(result.contains("✅ Analysis settings configuration is valid")
+                  || result.contains("⚠️ Warning: No analysis settings configured"));
     }
 
     @Test

@@ -276,7 +276,7 @@ class PlantUMLClassDiagramGeneratorEdgeCasesTest {
 
         assertNotNull(result);
         String content = java.nio.file.Files.readString(Path.of(result));
-        // Should be INCLUDED because even though isPublic() returns false, 
+        // Should be INCLUDED because even though isPublic() returns false,
         // the signature doesn't contain "private", so isNonPrivate() returns true
         assertTrue(content.contains("_hiddenMethod"));
     }

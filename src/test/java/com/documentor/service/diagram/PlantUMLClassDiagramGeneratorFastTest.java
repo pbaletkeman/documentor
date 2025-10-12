@@ -7,7 +7,10 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Fast tests for PlantUMLClassDiagramGenerator focusing on logic validation without I/O operations.
@@ -15,13 +18,18 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class PlantUMLClassDiagramGeneratorFastTest {
 
+    // Constants for test data line numbers
+    private static final int TEST_METHOD_LINE = 10;
+    private static final int TEST_FIELD_LINE = 5;
+    private static final int PRIVATE_FIELD_LINE = 6;
+
     @Test
     @DisplayName("Should generate class header content")
     void shouldGenerateClassHeaderContent() {
         CodeElement classElement = createTestClass();
-        
+
         String content = generateClassHeader(classElement);
-        
+
         assertNotNull(content);
         assertTrue(content.contains("@startuml"));
         assertTrue(content.contains("class TestClass"));
@@ -32,9 +40,9 @@ class PlantUMLClassDiagramGeneratorFastTest {
     @DisplayName("Should format method signatures correctly")
     void shouldFormatMethodSignatures() {
         CodeElement methodElement = createTestMethod();
-        
+
         String formatted = formatMethodSignature(methodElement);
-        
+
         assertNotNull(formatted);
         assertTrue(formatted.contains("testMethod"));
         assertTrue(formatted.contains("()"));
@@ -45,10 +53,10 @@ class PlantUMLClassDiagramGeneratorFastTest {
     void shouldHandleFieldVisibility() {
         CodeElement publicField = createTestField();
         CodeElement privateField = createPrivateField();
-        
+
         String publicVis = getVisibilitySymbol(publicField);
         String privateVis = getVisibilitySymbol(privateField);
-        
+
         assertEquals("+", publicVis);
         assertEquals("-", privateVis);
     }
@@ -75,9 +83,9 @@ class PlantUMLClassDiagramGeneratorFastTest {
     void shouldValidateClassMembership() {
         CodeElement classElement = createTestClass();
         CodeElement fieldElement = createTestField();
-        
+
         assertTrue(belongsToClass(fieldElement, classElement));
-        
+
         CodeElement unrelatedElement = createUnrelatedElement();
         assertFalse(belongsToClass(unrelatedElement, classElement));
     }
@@ -91,9 +99,9 @@ class PlantUMLClassDiagramGeneratorFastTest {
             createTestField(),
             createTestMethod()
         );
-        
+
         String diagram = generateDiagramContent(classElement, elements);
-        
+
         assertNotNull(diagram);
         assertTrue(diagram.contains("@startuml"));
         assertTrue(diagram.contains("@enduml"));
@@ -102,29 +110,29 @@ class PlantUMLClassDiagramGeneratorFastTest {
 
     // Helper methods that simulate the generator logic without file I/O
 
-    private String generateClassHeader(CodeElement classElement) {
-        return String.format("@startuml\n!theme plain\nclass %s {\n", 
+    private String generateClassHeader(final CodeElement classElement) {
+        return String.format("@startuml\n!theme plain\nclass %s {\n",
             sanitizeName(classElement.name()));
     }
 
-    private String formatMethodSignature(CodeElement methodElement) {
-        return String.format("%s %s()", 
-            getVisibilitySymbol(methodElement), 
+    private String formatMethodSignature(final CodeElement methodElement) {
+        return String.format("%s %s()",
+            getVisibilitySymbol(methodElement),
             methodElement.name());
     }
 
-    private String getVisibilitySymbol(CodeElement element) {
+    private String getVisibilitySymbol(final CodeElement element) {
         if (element.signature().contains("private")) {
             return "-";
         }
         return "+";
     }
 
-    private String sanitizeName(String name) {
+    private String sanitizeName(final String name) {
         return name.replace("-", "_");
     }
 
-    private String mapElementType(CodeElementType type) {
+    private String mapElementType(final CodeElementType type) {
         return switch (type) {
             case CLASS -> "class";
             case METHOD -> "method";
@@ -132,14 +140,14 @@ class PlantUMLClassDiagramGeneratorFastTest {
         };
     }
 
-    private boolean belongsToClass(CodeElement element, CodeElement classElement) {
+    private boolean belongsToClass(final CodeElement element, final CodeElement classElement) {
         return element.qualifiedName().startsWith(classElement.qualifiedName());
     }
 
-    private String generateDiagramContent(CodeElement classElement, List<CodeElement> elements) {
+    private String generateDiagramContent(final CodeElement classElement, final List<CodeElement> elements) {
         StringBuilder content = new StringBuilder();
         content.append(generateClassHeader(classElement));
-        
+
         for (CodeElement element : elements) {
             if (element.type() == CodeElementType.FIELD) {
                 content.append("  ").append(formatMethodSignature(element)).append("\n");
@@ -147,7 +155,7 @@ class PlantUMLClassDiagramGeneratorFastTest {
                 content.append("  ").append(formatMethodSignature(element)).append("\n");
             }
         }
-        
+
         content.append("}\n@enduml");
         return content.toString();
     }
@@ -174,7 +182,7 @@ class PlantUMLClassDiagramGeneratorFastTest {
             "testMethod",
             "com.test.TestClass.testMethod",
             "/test/TestClass.java",
-            10,
+            TEST_METHOD_LINE,
             "public void testMethod()",
             "Test method documentation",
             List.of(),
@@ -188,7 +196,7 @@ class PlantUMLClassDiagramGeneratorFastTest {
             "testField",
             "com.test.TestClass.testField",
             "/test/TestClass.java",
-            5,
+            TEST_FIELD_LINE,
             "public String testField",
             "Test field documentation",
             List.of(),
@@ -202,7 +210,7 @@ class PlantUMLClassDiagramGeneratorFastTest {
             "privateField",
             "com.test.TestClass.privateField",
             "/test/TestClass.java",
-            6,
+            PRIVATE_FIELD_LINE,
             "private int privateField",
             "Private field documentation",
             List.of(),

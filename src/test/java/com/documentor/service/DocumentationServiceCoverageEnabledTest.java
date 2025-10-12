@@ -45,7 +45,7 @@ class DocumentationServiceCoverageEnabledTest {
 
     @Mock
     private MermaidDiagramService mermaidDiagramService;
-    
+
     @Mock
     private PlantUMLDiagramService plantUMLDiagramService;
 
@@ -76,7 +76,9 @@ class DocumentationServiceCoverageEnabledTest {
         lenient().when(mermaidDiagramService.generateClassDiagrams(any(), any()))
             .thenReturn(CompletableFuture.completedFuture(List.of()));
 
-        DocumentationService documentationService = new DocumentationService(mainDocGenerator, elementDocGenerator, unitTestDocumentationGenerator, mermaidDiagramService, plantUMLDiagramService, config);
+        DocumentationService documentationService = new DocumentationService(mainDocGenerator,
+            elementDocGenerator, unitTestDocumentationGenerator, mermaidDiagramService,
+            plantUMLDiagramService, config);
 
         ProjectAnalysis analysis = new ProjectAnalysis(tempDir.toString(), List.of(), System.currentTimeMillis());
 
@@ -110,7 +112,9 @@ class DocumentationServiceCoverageEnabledTest {
         when(unitTestDocumentationGenerator.generateUnitTestDocumentation(any(), any()))
             .thenReturn(CompletableFuture.completedFuture(null));
 
-        DocumentationService documentationService = new DocumentationService(mainDocGenerator, elementDocGenerator, unitTestDocumentationGenerator, mermaidDiagramService, plantUMLDiagramService, config);
+        DocumentationService documentationService = new DocumentationService(mainDocGenerator,
+            elementDocGenerator, unitTestDocumentationGenerator, mermaidDiagramService,
+            plantUMLDiagramService, config);
 
         CodeElement elem = new CodeElement(
             CodeElementType.CLASS,

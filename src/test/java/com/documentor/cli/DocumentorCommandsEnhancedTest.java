@@ -42,15 +42,15 @@ class DocumentorCommandsEnhancedTest {
         boolean generateMermaid = true;
         String mermaidOutput = "/test/diagrams";
 
-        when(projectAnalysisHandler.handleAnalyzeProjectExtended(projectPath, configPath, generateMermaid, mermaidOutput, false, ""))
-            .thenReturn("Analysis complete");
-
-        // When
+        when(projectAnalysisHandler.handleAnalyzeProjectExtended(projectPath, configPath,
+            generateMermaid, mermaidOutput, false, ""))
+            .thenReturn("Analysis complete");        // When
         String result = commands.analyzeProject(projectPath, configPath, generateMermaid, mermaidOutput, false, "");
 
         // Then
         assertEquals("Analysis complete", result);
-        verify(projectAnalysisHandler).handleAnalyzeProjectExtended(projectPath, configPath, generateMermaid, mermaidOutput, false, "");
+        verify(projectAnalysisHandler).handleAnalyzeProjectExtended(projectPath, configPath,
+            generateMermaid, mermaidOutput, false, "");
     }
 
     @Test

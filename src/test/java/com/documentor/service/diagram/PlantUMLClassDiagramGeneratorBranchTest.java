@@ -10,7 +10,9 @@ import org.junit.jupiter.api.io.TempDir;
 import java.nio.file.Path;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Additional tests for PlantUMLClassDiagramGenerator focusing on branch coverage improvement.
@@ -21,7 +23,7 @@ class PlantUMLClassDiagramGeneratorBranchTest {
     private PlantUMLClassDiagramGenerator generator;
 
     @TempDir
-    Path tempDir;
+    private Path tempDir;
 
     // Constants for test data
     private static final int FIELD_LINE_NUMBER = 5;
@@ -158,7 +160,7 @@ class PlantUMLClassDiagramGeneratorBranchTest {
     @Test
     @DisplayName("Should handle null and empty method signatures")
     void shouldHandleNullAndEmptySignatures() throws Exception {
-        // Note: null signature will cause NPE in mapVisibilityToPlantUML, 
+        // Note: null signature will cause NPE in mapVisibilityToPlantUML,
         // so we test with empty string instead which is handled gracefully
         CodeElement emptySignatureMethod = new CodeElement(
             CodeElementType.METHOD,

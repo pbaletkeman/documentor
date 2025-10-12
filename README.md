@@ -8,6 +8,7 @@ A powerful Java Spring Boot Command Line application that analyzes Java and Pyth
 - **🤖 AI-Powered Documentation**: Integrates with OpenAI GPT, Anthropic Claude, and other LLM models
 - **📝 Comprehensive Output**: Generates markdown documentation with examples and usage instructions
 - **🎨 Mermaid Class Diagrams**: Generate visual class diagrams for non-private classes and methods
+- **🌿 PlantUML Class Diagrams**: Generate professional UML diagrams with advanced relationship detection
 - **🧪 Unit Test Generation**: Creates unit tests targeting 90% code coverage
 - **⚡ Multi-Threading**: Parallel processing for optimal performance with configurable thread pools
 - **🔧 Pre-commit Hooks**: Automated quality assurance with Checkstyle and testing
@@ -201,7 +202,9 @@ Create a `config.json` file in the project root with your LLM configurations:
     "generate_unit_tests": true,
     "target_coverage": 0.9,
     "generate_mermaid_diagrams": true,
-    "mermaid_output_path": "./diagrams"
+    "mermaid_output_path": "./diagrams",
+    "generate_plantuml_diagrams": true,
+    "plantuml_output_path": "./plantuml-diagrams"
   },
   "analysis_settings": {
     "include_private_members": false,
@@ -309,6 +312,54 @@ The `config-ollama.json` includes optimal settings for local development:
     "target_coverage": 0.8,
     "generate_mermaid_diagrams": true,
     "mermaid_output_path": "./diagrams"
+  }
+}
+```
+
+#### 🌿 PlantUML Configuration Example
+
+For projects requiring professional UML diagrams with advanced relationship detection:
+
+```json
+{
+  "llm_models": [
+    {
+      "name": "codellama",
+      "endpoint": "http://localhost:11434/api/generate",
+      "max_tokens": 4096,
+      "temperature": 0.3,
+      "timeout_seconds": 60
+    }
+  ],
+  "output_settings": {
+    "output_path": "./docs",
+    "format": "markdown",
+    "include_icons": true,
+    "generate_unit_tests": true,
+    "target_coverage": 0.8,
+    "generate_mermaid_diagrams": false,
+    "generate_plantuml_diagrams": true,
+    "plantuml_output_path": "./uml-diagrams"
+  }
+}
+```
+
+#### 🎯 Combined Diagram Generation
+
+For comprehensive visual documentation with both Mermaid and PlantUML:
+
+```json
+{
+  "output_settings": {
+    "output_path": "./docs",
+    "format": "markdown",
+    "include_icons": true,
+    "generate_unit_tests": true,
+    "target_coverage": 0.9,
+    "generate_mermaid_diagrams": true,
+    "mermaid_output_path": "./mermaid-diagrams",
+    "generate_plantuml_diagrams": true,
+    "plantuml_output_path": "./plantuml-diagrams"
   }
 }
 ```
@@ -469,12 +520,27 @@ analyze --project-path /path/to/your/project --generate-mermaid true --mermaid-o
 analyze --project-path /path/to/your/project --generate-mermaid true --mermaid-output ./diagrams
 ```
 
+**PlantUML Diagram Options:**
+
+```bash
+# Generate documentation with PlantUML class diagrams
+analyze --project-path /path/to/your/project --generate-plantuml true
+
+# Specify custom output directory for PlantUML diagrams
+analyze --project-path /path/to/your/project --generate-plantuml true --plantuml-output ./uml-diagrams
+
+# Generate both Mermaid and PlantUML diagrams
+analyze --project-path /path/to/your/project --generate-mermaid true --generate-plantuml true
+```
+
 **Command Options:**
 
 - `--project-path`: Path to the project directory (required)
 - `--config`: Configuration file path (default: config.json)
 - `--generate-mermaid`: Generate Mermaid class diagrams (default: false)
 - `--mermaid-output`: Output directory for diagrams (default: same as source files)
+- `--generate-plantuml`: Generate PlantUML class diagrams (default: false)
+- `--plantuml-output`: Output directory for PlantUML diagrams (default: same as source files)
 
 #### 🔍 Scan Project (Analysis Only)
 
@@ -543,6 +609,12 @@ cp config-ollama.json config.json
 
 # 5. Analyze your project with Mermaid diagrams
 analyze --project-path ./src/main/java --generate-mermaid true --mermaid-output ./diagrams
+
+# 6. Or analyze with PlantUML diagrams
+analyze --project-path ./src/main/java --generate-plantuml true --plantuml-output ./uml-diagrams
+
+# 7. Or generate both diagram types
+analyze --project-path ./src/main/java --generate-mermaid true --generate-plantuml true
 ```
 
 **Expected Output:**
@@ -552,9 +624,11 @@ analyze --project-path ./src/main/java --generate-mermaid true --mermaid-output 
 🚀 Starting analysis of project: ./src/main/java
 📊 Analyzing 23 Java files...
 🎨 Generating Mermaid diagrams...
+🌿 Generating PlantUML diagrams...
 ✅ Analysis complete!
 📄 Documentation: ./docs/
 📊 Mermaid diagrams: ./diagrams/
+🌿 PlantUML diagrams: ./uml-diagrams/
 📈 Coverage: 15 classes, 89 methods, 34 fields analyzed
 ⏱️  Total time: 2m 15s (local processing)
 ```
@@ -650,12 +724,58 @@ passwordEncoder : PasswordEncoder
     UserService --> UserRepository : uses
     UserService --> PasswordEncoder : uses
 
-​
-
 Generated on: 2025-10-08T10:30:15
 ```
 
-### Example 4: Generated Documentation Structure
+### Example 4: Generating PlantUML Class Diagrams
+
+```bash
+# Generate documentation with PlantUML diagrams
+documentor:> analyze --project-path /path/to/java-project --generate-plantuml true
+
+# Or specify custom output directory
+documentor:> analyze --project-path /path/to/java-project --generate-plantuml true --plantuml-output ./uml-diagrams
+```
+
+**Output:**
+
+```text
+✅ Analysis complete! Documentation generated at: ./docs
+📊 Generated 5 PlantUML diagrams
+Diagram files:
+  - /path/to/java-project/UserService.puml
+  - /path/to/java-project/ProductController.puml
+  - /path/to/java-project/DatabaseConfig.puml
+  - /path/to/java-project/SecurityConfig.puml
+  - /path/to/java-project/EmailService.puml
+📊 Analysis Summary: 125 total elements (15 classes, 89 methods, 21 fields) across 12 files
+```
+
+**Generated PlantUML Diagram Example:**
+
+```plantuml
+@startuml UserService
+!theme plain
+
+class UserService {
+  - userRepository : UserRepository
+  - passwordEncoder : PasswordEncoder
+  + createUser(userData: UserCreateRequest) : UserDto
+  + findByEmail(email: String) : Optional<UserDto>
+  + updateUser(id: Long, userData: UserUpdateRequest) : UserDto
+  + deleteUser(id: Long) : void
+  + validateUser(userData: UserCreateRequest) : boolean
+}
+
+UserService --> UserRepository : uses
+UserService --> PasswordEncoder : uses
+
+note top of UserService : Service for managing user operations\nHandles CRUD operations and validation
+
+@enduml
+```
+
+### Example 5: Generated Documentation Structure
 
 After running `analyze`, you'll find documentation in the `./docs` directory:
 
@@ -684,6 +804,39 @@ project-root/
 └── my-diagrams/                  # Custom diagram location (if specified)
     ├── UserService_diagram.md
     └── ProductController_diagram.md
+```
+
+**With PlantUML diagrams enabled:**
+
+```text
+project-root/
+├── src/main/java/
+│   ├── UserService.java
+│   ├── UserService.puml          # Generated PlantUML diagram
+│   ├── ProductController.java
+│   ├── ProductController.puml
+│   └── ...
+├── docs/                         # Main documentation
+└── uml-diagrams/                 # Custom PlantUML location (if specified)
+    ├── UserService.puml
+    └── ProductController.puml
+```
+
+**With both diagram types enabled:**
+
+```text
+project-root/
+├── src/main/java/
+│   ├── UserService.java
+│   ├── UserService_diagram.md    # Mermaid diagram
+│   ├── UserService.puml          # PlantUML diagram
+│   ├── ProductController.java
+│   ├── ProductController_diagram.md
+│   ├── ProductController.puml
+│   └── ...
+├── docs/                         # Main documentation
+├── my-diagrams/                  # Mermaid diagrams
+└── uml-diagrams/                 # PlantUML diagrams
 ```
 
 ### Example 4: Status Command Overview
@@ -761,14 +914,20 @@ documentor/
 │   │   │   │   ├── JavaCodeAnalyzer.java
 │   │   │   │   ├── LlmService.java
 │   │   │   │   ├── MermaidDiagramService.java
+│   │   │   │   ├── PlantUMLDiagramService.java
 │   │   │   │   ├── PythonCodeAnalyzer.java
 │   │   │   │   ├── analysis/
 │   │   │   │   │   └── CodeAnalysisOrchestrator.java
 │   │   │   │   ├── diagram/
+│   │   │   │   │   ├── DiagramElementFilter.java
 │   │   │   │   │   ├── DiagramGenerator.java
+│   │   │   │   │   ├── DiagramGeneratorFactory.java
+│   │   │   │   │   ├── DiagramPathManager.java
 │   │   │   │   │   ├── MermaidClassDiagramGenerator.java
 │   │   │   │   │   ├── MermaidElementFormatter.java
-│   │   │   │   │   └── MermaidFileManager.java
+│   │   │   │   │   ├── MermaidFileManager.java
+│   │   │   │   │   ├── PlantUMLClassDiagramGenerator.java
+│   │   │   │   │   └── PlantUMLElementFormatter.java
 │   │   │   │   ├── documentation/
 │   │   │   │   │   ├── DocumentationFormatter.java
 │   │   │   │   │   ├── ElementDocumentationGenerator.java
@@ -817,10 +976,11 @@ documentor/
 4. **🤖 LlmService**: Handles LLM API communication with multiple provider support
 5. **📝 DocumentationService**: Generates comprehensive markdown documentation
 6. **🎨 MermaidDiagramService**: Creates visual class diagrams with advanced formatting
-7. **🖥️ DocumentorCommands**: Spring Shell CLI interface with status monitoring
-8. **⚙️ Configuration Management**: Flexible JSON-based configuration with validation
-9. **🔧 Command Handlers**: Specialized handlers for different CLI operations
-10. **📊 Analysis Orchestrator**: Coordinates complex analysis workflows
+7. **🌿 PlantUMLDiagramService**: Generates professional UML diagrams with relationship detection
+8. **🖥️ DocumentorCommands**: Spring Shell CLI interface with status monitoring
+9. **⚙️ Configuration Management**: Flexible JSON-based configuration with validation
+10. **🔧 Command Handlers**: Specialized handlers for different CLI operations
+11. **📊 Analysis Orchestrator**: Coordinates complex analysis workflows
 
 ### Adding Support for New Languages
 
@@ -871,6 +1031,53 @@ To add support for a new programming language:
 - **Error Handling**: Improved error messages and graceful failure handling
 - **Logging**: Structured logging with configurable levels
 - **Documentation**: Auto-generated API documentation and usage examples
+
+#### 🌿 **PlantUML Diagram Generation**
+
+- **Professional UML Diagrams**: Generate standard PlantUML class diagrams with .puml extension
+- **Advanced Relationship Detection**: Automatic dependency and association detection between classes
+- **Visibility Mapping**: Proper UML visibility symbols (+, -, #, ~) for methods and fields
+- **Class Type Support**: Full support for classes, interfaces, abstract classes, and enums
+- **Async Processing**: Non-blocking diagram generation with CompletableFuture-based architecture
+- **Configurable Output**: Flexible output directory configuration independent of Mermaid diagrams
+- **Integration Ready**: Seamlessly works alongside Mermaid diagram generation
+- **Professional Formatting**: Clean PlantUML syntax with proper themes and annotations
+
+##### PlantUML Features Highlight:
+
+```bash
+# Generate PlantUML diagrams with custom output
+analyze --project-path ./src --generate-plantuml true --plantuml-output ./uml
+
+# Configuration example
+"output_settings": {
+  "generate_plantuml_diagrams": true,
+  "plantuml_output_path": "./plantuml-diagrams"
+}
+```
+
+##### Generated PlantUML Example:
+
+```plantuml
+@startuml OrderService
+!theme plain
+
+class OrderService {
+  - orderRepository : OrderRepository
+  - paymentService : PaymentService
+  + processOrder(order: Order) : OrderResult
+  + cancelOrder(orderId: Long) : void
+  # validateOrder(order: Order) : boolean
+  ~ calculateTotal(items: List<OrderItem>) : BigDecimal
+}
+
+OrderService --> OrderRepository : uses
+OrderService --> PaymentService : uses
+
+note top of OrderService : Handles order processing workflow\nIntegrates with payment and inventory systems
+
+@enduml
+```
 
 ## 🧪 Testing
 
@@ -954,6 +1161,17 @@ The pre-commit hooks automatically run:
 - 📚 Docstring extraction
 - 🏷️ Decorator detection
 - 🔒 Private member detection (underscore convention)
+
+### PlantUML Diagram Features
+
+- 🎨 **Professional UML Syntax**: Standard PlantUML format with proper themes
+- 🔍 **Class Detection**: Supports classes, interfaces, abstract classes, and enums
+- 🔗 **Relationship Mapping**: Automatic detection of dependencies and associations
+- 🔒 **Visibility Symbols**: Proper UML visibility (+, -, #, ~) for methods and fields
+- 📁 **Flexible Output**: Configurable output directory separate from source files
+- ⚡ **Async Generation**: Non-blocking processing with CompletableFuture architecture
+- 🏗️ **Enterprise Ready**: Production-grade code with comprehensive test coverage
+- 🎯 **Integration Support**: Works alongside existing Mermaid diagram generation
 
 ## 🎯 Generated Documentation Features
 
@@ -1110,6 +1328,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Quality Enforcement**: Automated coverage verification and style checking
 - **Multiple LLM Support**: Seamless integration with various AI providers
 - **Mermaid Diagrams**: Visual class diagram generation capabilities
+- **PlantUML Diagrams**: Visual class diagram generation capabilities
 
 ---
 

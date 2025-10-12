@@ -79,7 +79,7 @@ class PlantUMLDiagramServiceFastTest {
         // Given
         ProjectAnalysis singleClassAnalysis = createSingleClassProjectAnalysis();
         CodeElement classElement = createTestClass();
-        
+
         when(mockElementFilter.getEligibleClasses(any()))
             .thenReturn(List.of(classElement));
         when(mockElementFilter.groupElementsByClass(any()))
