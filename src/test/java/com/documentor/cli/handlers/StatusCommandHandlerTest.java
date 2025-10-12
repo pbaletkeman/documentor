@@ -221,7 +221,7 @@ class StatusCommandHandlerTest {
         String status = handler.handleShowStatus(null, null);
 
         assertTrue(status.contains("🔍 Analysis Settings:"));
-        assertTrue(status.contains("Include Private Members: ❌ No")); // Default is false
+        assertTrue(status.contains("Include Private Members: ✅ Yes")); // Default is now true
         assertTrue(status.contains("Supported Languages: java, python")); // Default languages
         assertTrue(status.contains("Exclude Patterns:")); // Has default exclude patterns
     }

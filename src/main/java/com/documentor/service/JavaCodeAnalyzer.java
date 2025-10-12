@@ -43,6 +43,18 @@ public class JavaCodeAnalyzer {
      * @return List of discovered code elements
      */
     public List<CodeElement> analyzeFile(final Path filePath) throws IOException {
+        return analyzeFile(filePath, null);
+    }
+
+    /**
+     * 🔍 Analyzes a Java file and extracts code elements with optional private member override
+     *
+     * @param filePath Path to the Java source file
+     * @param includePrivateMembersOverride Optional override for including private members
+     * @return List of discovered code elements
+     */
+    public List<CodeElement> analyzeFile(final Path filePath,
+                                       final Boolean includePrivateMembersOverride) throws IOException {
         LOGGER.debug("🔍 Analyzing Java file: {}", filePath);
 
         String sourceCode = Files.readString(filePath);
@@ -52,7 +64,7 @@ public class JavaCodeAnalyzer {
             CompilationUnit cu = javaParser.parse(sourceCode).getResult()
                     .orElseThrow(() -> new IOException("Failed to parse Java file"));
 
-            elementVisitor.initialize(filePath, elements);
+            elementVisitor.initialize(filePath, elements, includePrivateMembersOverride);
             elementVisitor.visit(cu, null);
 
             LOGGER.debug("✅ Found {} elements in {}", elements.size(), filePath.getFileName());

@@ -24,7 +24,7 @@ public record AnalysisSettings(
     // Simplified defaults
     public AnalysisSettings {
         if (includePrivateMembers == null) {
-            includePrivateMembers = false;
+            includePrivateMembers = true;
         }
         if (maxDepth == null) {
             maxDepth = ApplicationConstants.DEFAULT_MAX_DEPTH;

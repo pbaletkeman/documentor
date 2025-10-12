@@ -43,14 +43,15 @@ class DocumentorCommandsEnhancedTest {
         String mermaidOutput = "/test/diagrams";
 
         when(projectAnalysisHandler.handleAnalyzeProjectExtended(projectPath, configPath,
-            generateMermaid, mermaidOutput, false, ""))
+            generateMermaid, mermaidOutput, false, "", true))
             .thenReturn("Analysis complete");        // When
-        String result = commands.analyzeProject(projectPath, configPath, generateMermaid, mermaidOutput, false, "");
+        String result = commands.analyzeProject(projectPath, configPath, true,
+                generateMermaid, mermaidOutput, false, "");
 
         // Then
         assertEquals("Analysis complete", result);
         verify(projectAnalysisHandler).handleAnalyzeProjectExtended(projectPath, configPath,
-            generateMermaid, mermaidOutput, false, "");
+            generateMermaid, mermaidOutput, false, "", true);
     }
 
     @Test
@@ -59,15 +60,15 @@ class DocumentorCommandsEnhancedTest {
         // Given
         String projectPath = "/test/project";
 
-        when(projectAnalysisHandler.handleScanProject(projectPath))
+        when(projectAnalysisHandler.handleScanProject(projectPath, true))
             .thenReturn("Scan complete");
 
         // When
-        String result = commands.scanProject(projectPath);
+        String result = commands.scanProject(projectPath, true);
 
         // Then
         assertEquals("Scan complete", result);
-        verify(projectAnalysisHandler).handleScanProject(projectPath);
+        verify(projectAnalysisHandler).handleScanProject(projectPath, true);
     }
 
     @Test
@@ -122,7 +123,7 @@ class DocumentorCommandsEnhancedTest {
     void shouldHandleShowStatus() {
         // Given
         // First set the current project and config path
-        commands.analyzeProject("/test/project", "custom-config.json", false, "", false, "");
+        commands.analyzeProject("/test/project", "custom-config.json", true, false, "", false, "");
 
         when(statusHandler.handleShowStatus("/test/project", "custom-config.json"))
             .thenReturn("Status displayed");

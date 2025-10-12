@@ -57,7 +57,7 @@ class JavaCodeAnalyzerTest {
             List<CodeElement> elements = invocation.getArgument(1);
             elements.addAll(expectedElements);
             return null;
-        }).when(mockElementVisitor).initialize(eq(tempFile), any());
+        }).when(mockElementVisitor).initialize(eq(tempFile), any(), any());
 
         try {
             // Act
@@ -65,7 +65,7 @@ class JavaCodeAnalyzerTest {
 
             // Assert
             assertNotNull(result);
-            verify(mockElementVisitor).initialize(eq(tempFile), any());
+            verify(mockElementVisitor).initialize(eq(tempFile), any(), any());
             verify(mockElementVisitor).visit(any(CompilationUnit.class), eq(null));
         } finally {
             Files.deleteIfExists(tempFile);
@@ -96,7 +96,7 @@ class JavaCodeAnalyzerTest {
 
             // Assert
             assertNotNull(result);
-            verify(mockElementVisitor).initialize(eq(tempFile), any());
+            verify(mockElementVisitor).initialize(eq(tempFile), any(), any());
             verify(mockElementVisitor).visit(any(CompilationUnit.class), eq(null));
         } finally {
             Files.deleteIfExists(tempFile);

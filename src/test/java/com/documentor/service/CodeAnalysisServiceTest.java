@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
@@ -90,7 +91,7 @@ class CodeAnalysisServiceTest {
             CodeElementType.METHOD, "method", "Test.method", javaFile.toString(), 2,
             "public void method()", "", List.of(), List.of()
         );
-        when(javaCodeAnalyzer.analyzeFile(any(Path.class)))
+        when(javaCodeAnalyzer.analyzeFile(any(Path.class), any()))
             .thenReturn(List.of(classElement, methodElement));
 
         CompletableFuture<ProjectAnalysis> future = codeAnalysisService.analyzeProject(tempDir);
@@ -118,7 +119,7 @@ class CodeAnalysisServiceTest {
             CodeElementType.CLASS, "TestClass", "TestClass", pythonFile.toString(), 1,
             "class TestClass:", "", List.of(), List.of()
         );
-        when(pythonCodeAnalyzer.analyzeFile(any(Path.class)))
+        when(pythonCodeAnalyzer.analyzeFile(any(Path.class), any()))
             .thenReturn(List.of(classElement));
 
         CompletableFuture<ProjectAnalysis> future = codeAnalysisService.analyzeProject(tempDir);
@@ -149,8 +150,8 @@ class CodeAnalysisServiceTest {
             "class TestClass:", "", List.of(), List.of()
         );
 
-        when(javaCodeAnalyzer.analyzeFile(javaFile)).thenReturn(List.of(javaElement));
-        when(pythonCodeAnalyzer.analyzeFile(pythonFile)).thenReturn(List.of(pythonElement));
+        when(javaCodeAnalyzer.analyzeFile(eq(javaFile), any())).thenReturn(List.of(javaElement));
+        when(pythonCodeAnalyzer.analyzeFile(eq(pythonFile), any())).thenReturn(List.of(pythonElement));
 
         CompletableFuture<ProjectAnalysis> future = codeAnalysisService.analyzeProject(tempDir);
         ProjectAnalysis analysis = future.get();
@@ -191,7 +192,7 @@ class CodeAnalysisServiceTest {
             CodeElementType.CLASS, "Test", "Test", javaFile.toString(), 1,
             "public class Test", "", List.of(), List.of()
         );
-        when(javaCodeAnalyzer.analyzeFile(javaFile)).thenReturn(List.of(element));
+        when(javaCodeAnalyzer.analyzeFile(eq(javaFile), any())).thenReturn(List.of(element));
 
         CompletableFuture<ProjectAnalysis> future = codeAnalysisService.analyzeProject(tempDir);
         ProjectAnalysis analysis = future.get();
@@ -207,7 +208,7 @@ class CodeAnalysisServiceTest {
         Files.writeString(javaFile, "public class Test {}");
 
         // Mock analyzer to throw exception
-        when(javaCodeAnalyzer.analyzeFile(javaFile))
+        when(javaCodeAnalyzer.analyzeFile(eq(javaFile), any()))
             .thenThrow(new IOException("Analysis failed"));
 
         CompletableFuture<ProjectAnalysis> future = codeAnalysisService.analyzeProject(tempDir);

@@ -25,6 +25,7 @@ public class JavaElementVisitor extends VoidVisitorAdapter<Void> {
     private final DocumentorConfig config;
     private Path filePath;
     private List<CodeElement> elements;
+    private Boolean includePrivateMembersOverride;
 
     public JavaElementVisitor(final DocumentorConfig configParam) {
         this.config = configParam;
@@ -34,8 +35,17 @@ public class JavaElementVisitor extends VoidVisitorAdapter<Void> {
      * Initialize visitor with file context
      */
     public void initialize(final Path filePathParam, final List<CodeElement> elementsParam) {
+        initialize(filePathParam, elementsParam, null);
+    }
+
+    /**
+     * Initialize visitor with file context and optional private member override
+     */
+    public void initialize(final Path filePathParam, final List<CodeElement> elementsParam,
+                          final Boolean includePrivateMembersOverrideParam) {
         this.filePath = filePathParam;
         this.elements = elementsParam;
+        this.includePrivateMembersOverride = includePrivateMembersOverrideParam;
     }
 
     @Override
@@ -138,7 +148,12 @@ public class JavaElementVisitor extends VoidVisitorAdapter<Void> {
 
     private boolean shouldInclude(
             final com.github.javaparser.ast.NodeList<com.github.javaparser.ast.Modifier> modifiers) {
-        if (config.analysisSettings().includePrivateMembers()) {
+        // Use override if provided, otherwise use config setting
+        boolean includePrivateMembers = includePrivateMembersOverride != null
+                ? includePrivateMembersOverride
+                : config.analysisSettings().includePrivateMembers();
+
+        if (includePrivateMembers) {
             return true;
         }
 

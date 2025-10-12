@@ -40,6 +40,18 @@ public class PythonCodeAnalyzer {
      * @return List of discovered code elements
      */
     public List<CodeElement> analyzeFile(final Path filePath) throws IOException {
+        return analyzeFile(filePath, null);
+    }
+
+    /**
+     * 📄 Analyzes a Python file and extracts code elements with optional private member override
+     *
+     * @param filePath Path to the Python source file
+     * @param includePrivateMembersOverride Optional override for including private members
+     * @return List of discovered code elements
+     */
+    public List<CodeElement> analyzeFile(final Path filePath,
+                                       final Boolean includePrivateMembersOverride) throws IOException {
         LOGGER.debug("🔍 Analyzing Python file: {}", filePath);
 
         try {

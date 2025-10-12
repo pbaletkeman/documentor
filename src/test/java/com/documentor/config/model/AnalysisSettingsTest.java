@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -57,7 +56,7 @@ class AnalysisSettingsTest {
         AnalysisSettings settings = new AnalysisSettings(null, null, null, null);
 
         // Then
-        assertFalse(settings.includePrivateMembers());
+        assertTrue(settings.includePrivateMembers());
         assertEquals(ApplicationConstants.DEFAULT_MAX_DEPTH, settings.maxDepth());
         assertEquals(List.of("**/*.java", "**/*.py"), settings.includedPatterns());
         assertEquals(List.of("**/test/**", "**/target/**"), settings.excludePatterns());
@@ -165,21 +164,21 @@ class AnalysisSettingsTest {
                 // Test with only maxDepth set
                 Arguments.of(
                         null, MAX_DEPTH_FIFTEEN, null, null,
-                        new AnalysisSettings(false, MAX_DEPTH_FIFTEEN,
+                        new AnalysisSettings(true, MAX_DEPTH_FIFTEEN,
                                 List.of("**/*.java", "**/*.py"),
                                 List.of("**/test/**", "**/target/**"))
                 ),
                 // Test with only includedPatterns set
                 Arguments.of(
                         null, null, List.of("**/*.txt"), null,
-                        new AnalysisSettings(false, ApplicationConstants.DEFAULT_MAX_DEPTH,
+                        new AnalysisSettings(true, ApplicationConstants.DEFAULT_MAX_DEPTH,
                                 List.of("**/*.txt"),
                                 List.of("**/test/**", "**/target/**"))
                 ),
                 // Test with only excludePatterns set
                 Arguments.of(
                         null, null, null, List.of("**/logs/**"),
-                        new AnalysisSettings(false, ApplicationConstants.DEFAULT_MAX_DEPTH,
+                        new AnalysisSettings(true, ApplicationConstants.DEFAULT_MAX_DEPTH,
                                 List.of("**/*.java", "**/*.py"),
                                 List.of("**/logs/**"))
                 )

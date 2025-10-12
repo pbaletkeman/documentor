@@ -49,7 +49,17 @@ public class ProjectAnalysisCommandHandler {
      */
     public String handleAnalyzeProject(final String projectPath, final String configPath,
                                      final boolean generateMermaid, final String mermaidOutput) {
-        return handleAnalyzeProjectExtended(projectPath, configPath, generateMermaid, mermaidOutput, false, "");
+        return handleAnalyzeProject(projectPath, configPath, generateMermaid, mermaidOutput, null);
+    }
+
+    /**
+     * Handle project analysis command with optional diagram generation and private member override
+     */
+    public String handleAnalyzeProject(final String projectPath, final String configPath,
+                                     final boolean generateMermaid, final String mermaidOutput,
+                                     final Boolean includePrivateMembers) {
+        return handleAnalyzeProjectExtended(projectPath, configPath, generateMermaid, mermaidOutput,
+                                          false, "", includePrivateMembers);
     }
 
     /**
@@ -58,6 +68,17 @@ public class ProjectAnalysisCommandHandler {
     public String handleAnalyzeProjectExtended(final String projectPath, final String configPath,
                                      final boolean generateMermaid, final String mermaidOutput,
                                      final boolean generatePlantUML, final String plantUMLOutput) {
+        return handleAnalyzeProjectExtended(projectPath, configPath, generateMermaid, mermaidOutput,
+                                          generatePlantUML, plantUMLOutput, null);
+    }
+
+    /**
+     * Handle project analysis command with both Mermaid and PlantUML options and private member override
+     */
+    public String handleAnalyzeProjectExtended(final String projectPath, final String configPath,
+                                     final boolean generateMermaid, final String mermaidOutput,
+                                     final boolean generatePlantUML, final String plantUMLOutput,
+                                     final Boolean includePrivateMembers) {
         try {
             LOGGER.info("🔍 Starting analysis of project: {}", projectPath);
 
@@ -65,7 +86,7 @@ public class ProjectAnalysisCommandHandler {
                 return "❌ Error: Project path does not exist or is not a directory: " + projectPath;
             }
 
-            ProjectAnalysis analysis = performAnalysis(projectPath);
+            ProjectAnalysis analysis = performAnalysis(projectPath, includePrivateMembers);
             String outputPath = generateDocumentation(analysis);
             StringBuilder result = commonHandler.createResultBuilder();
             result.append(String.format("✅ Analysis complete! Documentation generated at: %s\n", outputPath));
@@ -89,12 +110,19 @@ public class ProjectAnalysisCommandHandler {
      * Handle scanning a project without generating documentation
      */
     public String handleScanProject(final String projectPath) {
+        return handleScanProject(projectPath, null);
+    }
+
+    /**
+     * Handle scanning a project without generating documentation with private member override
+     */
+    public String handleScanProject(final String projectPath, final Boolean includePrivateMembers) {
         try {
             if (!commonHandler.directoryExists(projectPath)) {
                 return "❌ Error: Project path does not exist or is not a directory: " + projectPath;
             }
 
-            ProjectAnalysis analysis = performAnalysis(projectPath);
+            ProjectAnalysis analysis = performAnalysis(projectPath, includePrivateMembers);
             return formatAnalysisStats(analysis);
         } catch (Exception e) {
             LOGGER.error("Scan failed", e);
@@ -106,8 +134,17 @@ public class ProjectAnalysisCommandHandler {
      * Perform code analysis on the specified project
      */
     private ProjectAnalysis performAnalysis(final String projectPath) {
+        return performAnalysis(projectPath, null);
+    }
+
+    /**
+     * Perform code analysis on the specified project with optional private member override
+     */
+    private ProjectAnalysis performAnalysis(final String projectPath, final Boolean includePrivateMembers) {
         Path project = Paths.get(projectPath);
-        CompletableFuture<ProjectAnalysis> analysisFuture = codeAnalysisService.analyzeProject(project);
+        CompletableFuture<ProjectAnalysis> analysisFuture = includePrivateMembers != null
+                ? codeAnalysisService.analyzeProject(project, includePrivateMembers)
+                : codeAnalysisService.analyzeProject(project);
         return analysisFuture.join();
     }
 

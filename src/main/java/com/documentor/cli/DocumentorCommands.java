@@ -46,6 +46,10 @@ public class DocumentorCommands {
                     help = "Path to configuration JSON file",
                     defaultValue = "config.json")
             final String configPath,
+            @ShellOption(value = "--include-private-members",
+                    help = "Include private members in documentation and diagrams",
+                    defaultValue = "true")
+            final boolean includePrivateMembers,
             @ShellOption(value = "--generate-mermaid",
                     help = "Generate Mermaid class diagrams",
                     defaultValue = "false")
@@ -68,7 +72,7 @@ public class DocumentorCommands {
         this.currentConfigPath = configPath;
 
         return projectAnalysisHandler.handleAnalyzeProjectExtended(projectPath, configPath,
-                generateMermaid, mermaidOutput, generatePlantUML, plantUMLOutput);
+                generateMermaid, mermaidOutput, generatePlantUML, plantUMLOutput, includePrivateMembers);
     }
 
     /**
@@ -80,6 +84,10 @@ public class DocumentorCommands {
             @ShellOption(value = "--project-path",
                     help = "Path to the project directory to analyze")
             final String projectPath,
+            @ShellOption(value = "--include-private-members",
+                    help = "Include private members in diagrams",
+                    defaultValue = "true")
+            final boolean includePrivateMembers,
             @ShellOption(value = "--plantuml-output",
                     help = "Output directory for PlantUML diagrams (defaults to same directory as source files)",
                     defaultValue = "")
@@ -89,7 +97,7 @@ public class DocumentorCommands {
         this.currentProjectPath = projectPath;
 
         return projectAnalysisHandler.handleAnalyzeProjectExtended(projectPath, "config.json",
-                false, "", true, plantUMLOutput);
+                false, "", true, plantUMLOutput, includePrivateMembers);
     }
 
     /**
@@ -100,12 +108,16 @@ public class DocumentorCommands {
     public String scanProject(
             @ShellOption(value = "--project-path",
                     help = "Path to the project directory to analyze")
-            final String projectPath) {
+            final String projectPath,
+            @ShellOption(value = "--include-private-members",
+                    help = "Include private members in analysis",
+                    defaultValue = "true")
+            final boolean includePrivateMembers) {
 
         // Update current state
         this.currentProjectPath = projectPath;
 
-        return projectAnalysisHandler.handleScanProject(projectPath);
+        return projectAnalysisHandler.handleScanProject(projectPath, includePrivateMembers);
     }
 
     /**

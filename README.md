@@ -36,8 +36,12 @@ A powerful Java Spring Boot Command Line application that analyzes Java and Pyth
 
 - **Java 21** or higher
 - **Gradle 8.5** or higher
-- **LLM API Keys** (OpenAI, Anthropic, etc.)
 - **Git** (for pre-commit hooks)
+
+## ✨ Optional
+
+- **Ollama** instructions provided
+- **LLM API Keys** (OpenAI, Anthropic, etc.)
 
 ### Supported Languages for Analysis
 
@@ -207,7 +211,7 @@ Create a `config.json` file in the project root with your LLM configurations:
     "plantuml_output_path": "./plantuml-diagrams"
   },
   "analysis_settings": {
-    "include_private_members": false,
+    "include_private_members": true,
     "max_threads": 4,
     "supported_languages": ["java", "python"],
     "exclude_patterns": [
@@ -537,10 +541,66 @@ analyze --project-path /path/to/your/project --generate-mermaid true --generate-
 
 - `--project-path`: Path to the project directory (required)
 - `--config`: Configuration file path (default: config.json)
+- `--include-private-members`: Include private fields and methods in analysis and diagrams (default: true)
 - `--generate-mermaid`: Generate Mermaid class diagrams (default: false)
 - `--mermaid-output`: Output directory for diagrams (default: same as source files)
 - `--generate-plantuml`: Generate PlantUML class diagrams (default: false)
 - `--plantuml-output`: Output directory for PlantUML diagrams (default: same as source files)
+
+#### 🔒 Private Member Analysis
+
+Documentor now includes comprehensive support for private field and method analysis, enabled by default for thorough code documentation.
+
+**Private Member Features:**
+
+- **Complete Coverage**: Analyzes private fields, methods, and constructors in Java classes
+- **Visual Diagrams**: Includes private members in both Mermaid and PlantUML class diagrams
+- **Configurable**: Control private member inclusion through CLI parameters or JSON configuration
+- **Documentation**: Generates detailed documentation for private implementation details
+
+**CLI Examples:**
+
+```bash
+# Include private members (default behavior)
+analyze --project-path ./src --include-private-members true
+
+# Exclude private members for public API documentation only
+analyze --project-path ./src --include-private-members false
+
+# Generate complete diagrams with private implementation details
+analyze --project-path ./src --generate-plantuml true --include-private-members true
+
+# Scan only public interface (excluding private members)
+scan --project-path ./src --include-private-members false
+```
+
+**Configuration File Control:**
+
+```json
+{
+  "analysis_settings": {
+    "include_private_members": true,
+    "max_threads": 4,
+    "supported_languages": ["java", "python"]
+  }
+}
+```
+
+**What Gets Analyzed:**
+
+✅ **Included when enabled (default):**
+
+- Private fields and their types
+- Private methods and constructors
+- Private inner classes
+- Implementation details and relationships
+- Complete class structure
+
+❌ **Excluded when disabled:**
+
+- Only public and protected members analyzed
+- Cleaner API-focused documentation
+- Simplified class diagrams for external interfaces
 
 #### 🔍 Scan Project (Analysis Only)
 
@@ -878,6 +938,121 @@ documentor:> validate-config --config config.json
 ✅ Configuration file is valid: config.json
 Size: 1024 bytes
 ```
+
+### Example 6: Private Member Analysis
+
+**Scenario**: Analyzing a Java class with comprehensive private implementation details
+
+```bash
+# Analyze with private members included (default behavior)
+documentor:> analyze --project-path ./src/main/java --include-private-members true --generate-plantuml true
+```
+
+**Input Java Class:**
+
+```java
+public class UserService {
+    private UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
+    private EmailService emailService;
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    public UserDto createUser(UserCreateRequest request) {
+        validateRequest(request);
+        User user = buildUser(request);
+        User savedUser = userRepository.save(user);
+        sendWelcomeEmail(savedUser);
+        return convertToDto(savedUser);
+    }
+
+    private void validateRequest(UserCreateRequest request) {
+        // Validation logic
+    }
+
+    private User buildUser(UserCreateRequest request) {
+        // User building logic
+    }
+
+    private void sendWelcomeEmail(User user) {
+        // Email sending logic
+    }
+
+    private UserDto convertToDto(User user) {
+        // DTO conversion logic
+    }
+}
+```
+
+**Output with Private Members Enabled:**
+
+```text
+🚀 Starting analysis of project: ./src/main/java
+✅ Analysis complete! Documentation generated at: ./docs
+🌿 Generated PlantUML diagrams at: ./plantuml-diagrams
+📊 Analysis Summary: 45 total elements (1 class, 8 methods, 3 fields) across 1 file
+
+Private member analysis included:
+  ✅ 3 private fields analyzed
+  ✅ 4 private methods analyzed
+  ✅ 1 constructor analyzed
+  ✅ Complete implementation details captured
+```
+
+**Generated PlantUML Diagram (with private members):**
+
+```plantuml
+@startuml UserService
+!theme plain
+
+class UserService {
+  - userRepository : UserRepository
+  - passwordEncoder : PasswordEncoder
+  - emailService : EmailService
+  + UserService(userRepository: UserRepository, passwordEncoder: PasswordEncoder)
+  + createUser(request: UserCreateRequest) : UserDto
+  - validateRequest(request: UserCreateRequest) : void
+  - buildUser(request: UserCreateRequest) : User
+  - sendWelcomeEmail(user: User) : void
+  - convertToDto(user: User) : UserDto
+}
+
+UserService --> UserRepository : uses
+UserService --> PasswordEncoder : uses
+UserService --> EmailService : uses
+@enduml
+```
+
+**Compare with Private Members Disabled:**
+
+```bash
+# Analyze with private members excluded
+documentor:> analyze --project-path ./src/main/java --include-private-members false --generate-plantuml true
+```
+
+**Output with Private Members Disabled:**
+
+```plantuml
+@startuml UserService
+!theme plain
+
+class UserService {
+  + UserService(userRepository: UserRepository, passwordEncoder: PasswordEncoder)
+  + createUser(request: UserCreateRequest) : UserDto
+}
+
+UserService --> UserRepository : uses
+UserService --> PasswordEncoder : uses
+@enduml
+```
+
+**Use Cases:**
+
+- **Full Analysis** (`--include-private-members true`): Complete code understanding, refactoring, detailed documentation
+- **API Documentation** (`--include-private-members false`): Public interface focus, client integration guides, simplified diagrams
 
 ## 🔧 Development
 
