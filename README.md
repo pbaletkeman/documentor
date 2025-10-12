@@ -1169,6 +1169,18 @@ To add support for a new programming language:
 
 ## 🆕 Recent Enhancements
 
+### Version 1.1.1 - October 2025 Updates
+
+#### 🔒 **Private Member Analysis Support**
+
+- **Default Private Analysis**: Private fields and methods now included by default for comprehensive documentation
+- **CLI Parameter Control**: New `--include-private-members` parameter for analyze, scan, and plantuml commands
+- **JSON Configuration**: Added `include_private_members` setting in configuration files
+- **Diagram Integration**: Private members included in both Mermaid and PlantUML class diagrams
+- **Backward Compatibility**: Overloaded method patterns maintain existing API compatibility
+- **Enhanced Testing**: Comprehensive unit tests maintaining 96%+ coverage
+- **Code Quality**: Zero Checkstyle violations with complete documentation updates
+
 ### Version 1.0.1 - October 2025 Updates
 
 #### 🚀 **Spring Boot 3.5.6 Upgrade**
