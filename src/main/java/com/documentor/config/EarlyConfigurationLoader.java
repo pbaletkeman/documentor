@@ -21,10 +21,10 @@ public class EarlyConfigurationLoader implements ApplicationRunner {
 
     /**
      * Constructor that takes the external configuration loader.
-     * @param configLoader the external configuration loader
+     * @param externalConfigLoader the external configuration loader
      */
-    public EarlyConfigurationLoader(final ExternalConfigLoader configLoader) {
-        this.configLoader = configLoader;
+    public EarlyConfigurationLoader(final ExternalConfigLoader externalConfigLoader) {
+        this.configLoader = externalConfigLoader;
     }
 
     /**

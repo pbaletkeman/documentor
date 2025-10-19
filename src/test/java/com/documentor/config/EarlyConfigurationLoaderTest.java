@@ -2,6 +2,7 @@ package com.documentor.config;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.mockito.Mockito;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.DefaultApplicationArguments;
 
@@ -9,20 +10,18 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static org.mockito.Mockito.*;
-
 /**
  * Test for early configuration loading functionality.
  */
 public class EarlyConfigurationLoaderTest {
 
     @TempDir
-    Path tempDir;
+    private Path tempDir;
 
     @Test
     public void testEarlyConfigurationLoading() throws IOException {
         // Create a mock ExternalConfigLoader
-        ExternalConfigLoader mockConfigLoader = mock(ExternalConfigLoader.class);
+        ExternalConfigLoader mockConfigLoader = Mockito.mock(ExternalConfigLoader.class);
 
         // Create test arguments with config parameter
         String configPath = tempDir.resolve("test-config.json").toString();
@@ -39,13 +38,13 @@ public class EarlyConfigurationLoaderTest {
         earlyLoader.run(appArgs);
 
         // Verify that loadExternalConfig was called with the correct arguments
-        verify(mockConfigLoader).loadExternalConfig(args);
+        Mockito.verify(mockConfigLoader).loadExternalConfig(args);
     }
 
     @Test
     public void testEarlyConfigurationLoadingWithMultipleArgs() throws IOException {
         // Create a mock ExternalConfigLoader
-        ExternalConfigLoader mockConfigLoader = mock(ExternalConfigLoader.class);
+        ExternalConfigLoader mockConfigLoader = Mockito.mock(ExternalConfigLoader.class);
 
         // Create test arguments with config parameter among other args
         String configPath = tempDir.resolve("test-config.json").toString();
@@ -62,6 +61,6 @@ public class EarlyConfigurationLoaderTest {
         earlyLoader.run(appArgs);
 
         // Verify that loadExternalConfig was called with the correct arguments
-        verify(mockConfigLoader).loadExternalConfig(args);
+        Mockito.verify(mockConfigLoader).loadExternalConfig(args);
     }
 }

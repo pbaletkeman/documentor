@@ -1,6 +1,7 @@
 package com.documentor.config;
 
 import com.documentor.config.model.LlmModelConfig;
+import com.documentor.constants.ApplicationConstants;
 import com.documentor.service.LlmService;
 import com.documentor.service.documentation.ElementDocumentationGenerator;
 import com.documentor.service.llm.LlmApiClient;
@@ -33,7 +34,7 @@ public class LlmServiceConfiguration {
      */
     @Bean
     @Primary
-    public DocumentorConfig documentorConfig(DocumentorConfig existingConfig) {
+    public DocumentorConfig documentorConfig(final DocumentorConfig existingConfig) {
         LOGGER.info("Checking DocumentorConfig: {}", existingConfig);
 
         // Check if the config is valid
@@ -57,29 +58,32 @@ public class LlmServiceConfiguration {
     @Bean
     @Primary
     public LlmService llmService(
-            @Autowired(required = false) DocumentorConfig documentorConfig,
-            LlmRequestBuilder requestBuilder,
-            LlmResponseHandler responseHandler,
-            LlmApiClient apiClient) {
+            @Autowired(required = false) final DocumentorConfig documentorConfig,
+            final LlmRequestBuilder requestBuilder,
+            final LlmResponseHandler responseHandler,
+            final LlmApiClient apiClient) {
 
         LOGGER.info("Creating LlmService with DocumentorConfig: {}", documentorConfig);
 
         // Ensure we have a valid config
+        DocumentorConfig validConfig;
         if (documentorConfig == null) {
             LOGGER.error("DocumentorConfig is null when creating LlmService - using default");
-            documentorConfig = createDefaultConfig();
+            validConfig = createDefaultConfig();
         } else if (documentorConfig.llmModels() == null || documentorConfig.llmModels().isEmpty()) {
             LOGGER.warn("DocumentorConfig has no models when creating LlmService - adding default");
-            documentorConfig = addDefaultModel(documentorConfig);
+            validConfig = addDefaultModel(documentorConfig);
+        } else {
+            validConfig = documentorConfig;
         }
-        
+
         // Explicitly set the ThreadLocal config before creating the LlmService
         // This ensures any @Async method will have access to the configuration
-        LOGGER.info("Setting global ThreadLocal config with {} models", documentorConfig.llmModels().size());
-        LlmService.setThreadLocalConfig(documentorConfig);
+        LOGGER.info("Setting global ThreadLocal config with {} models", validConfig.llmModels().size());
+        LlmService.setThreadLocalConfig(validConfig);
 
-        LOGGER.info("LlmService created with {} models", documentorConfig.llmModels().size());
-        return new LlmService(documentorConfig, requestBuilder, responseHandler, apiClient);
+        LOGGER.info("LlmService created with {} models", validConfig.llmModels().size());
+        return new LlmService(validConfig, requestBuilder, responseHandler, apiClient);
     }
 
     /**
@@ -91,8 +95,9 @@ public class LlmServiceConfiguration {
             "ollama",
             "http://localhost:11434",
             "",
-            4096,
-            30);
+            // Context size and timeout parameters
+            getDefaultContextSize(),
+            getDefaultTimeoutSeconds());
 
         return new DocumentorConfig(
             List.of(defaultModel),
@@ -102,16 +107,37 @@ public class LlmServiceConfiguration {
     }
 
     /**
-     * Adds a default model to the config if none exists
+     * Returns the default context size.
+     *
+     * @return the default context size
      */
-    private DocumentorConfig addDefaultModel(DocumentorConfig config) {
+    private int getDefaultContextSize() {
+        return ApplicationConstants.DEFAULT_MAX_TOKENS;
+    }
+
+    /**
+     * Returns the default timeout in seconds.
+     *
+     * @return the default timeout in seconds
+     */
+    private int getDefaultTimeoutSeconds() {
+        return ApplicationConstants.DEFAULT_TIMEOUT_SECONDS;
+    }
+
+    /**
+     * Adds a default model to the config if none exists
+     *
+     * @param config the existing configuration
+     * @return a new configuration with a default model added
+     */
+    private DocumentorConfig addDefaultModel(final DocumentorConfig config) {
         LlmModelConfig defaultModel = new LlmModelConfig(
             "default-model",
             "ollama",
             "http://localhost:11434",
             "",
-            4096,
-            30);
+            getDefaultContextSize(),
+            getDefaultTimeoutSeconds());
 
         return new DocumentorConfig(
             List.of(defaultModel),
@@ -125,7 +151,7 @@ public class LlmServiceConfiguration {
      */
     @Bean
     @Primary
-    public ElementDocumentationGenerator elementDocumentationGenerator(LlmService llmService) {
+    public ElementDocumentationGenerator elementDocumentationGenerator(final LlmService llmService) {
         LOGGER.info("Creating ElementDocumentationGenerator with our configured LlmService");
         return new ElementDocumentationGenerator(llmService);
     }

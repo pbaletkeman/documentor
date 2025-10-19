@@ -58,7 +58,8 @@ public class TestConfig {
      * Mock LLM API Client for tests
      */
     @Bean
-    public LlmApiClient llmApiClient(final WebClient webClient, final LlmModelTypeDetector modelTypeDetector) {
+    public LlmApiClient llmApiClient(final WebClient webClient,
+                                     final LlmModelTypeDetector modelTypeDetector) {
         return new LlmApiClient(webClient, modelTypeDetector);
     }
 
@@ -66,7 +67,8 @@ public class TestConfig {
      * Mock LLM Request Builder for tests
      */
     @Bean
-    public LlmRequestBuilder llmRequestBuilder(final LlmPromptTemplates templates, final LlmRequestFormatter formatter) {
+    public LlmRequestBuilder llmRequestBuilder(final LlmPromptTemplates templates,
+                                      final LlmRequestFormatter formatter) {
         return new LlmRequestBuilder(templates, formatter);
     }
 

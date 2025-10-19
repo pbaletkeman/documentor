@@ -10,7 +10,8 @@ public class LlmPromptTemplates {
     /** 🔍 Creates documentation generation prompt with technical writer role */
     public String createDocumentationPrompt(final CodeElement codeElement) {
         String type = codeElement.type().getDescription().toLowerCase();
-        return String.format("You are an expert technical writer specializing in software documentation with years of experience documenting %s components.\n\n"
+        return String.format("You are an expert technical writer specializing in software documentation "
+                + "with years of experience documenting %s components.\n\n"
                 + "Analyze and document this %s:\n\n%s\n\n"
                 + "Provide comprehensive documentation with the following:\n"
                 + "1. A clear, concise description of the %s's purpose and functionality\n"
@@ -26,12 +27,14 @@ public class LlmPromptTemplates {
     /** 💡 Creates usage example generation prompt with developer advocate role */
     public String createUsageExamplePrompt(final CodeElement codeElement) {
         String type = codeElement.type().getDescription().toLowerCase();
-        return String.format("You are a senior developer advocate responsible for creating high-quality code examples that demonstrate proper usage of APIs and components.\n\n"
+        return String.format("You are a senior developer advocate responsible for creating high-quality code examples "
+                + "that demonstrate proper usage of APIs and components.\n\n"
                 + "Generate practical, real-world usage examples for this %s:\n\n%s\n\n"
                 + "Provide 3-4 diverse examples that include:\n"
                 + "1. A basic example showing standard usage with clear inputs and outputs\n"
                 + "2. An intermediate example demonstrating integration with other components\n"
-                + "3. An advanced example showing best practices for error handling, performance optimization, or complex scenarios\n"
+                + "3. An advanced example showing best practices for error handling, performance optimization, \n"
+                + "   or complex scenarios\n"
                 + "4. Where applicable, examples showing what NOT to do (anti-patterns)\n\n"
                 + "For each example:\n"
                 + "- Use realistic, meaningful variable names and data\n"
@@ -44,7 +47,8 @@ public class LlmPromptTemplates {
     /** 🧪 Creates unit test generation prompt with QA engineer role */
     public String createUnitTestPrompt(final CodeElement codeElement) {
         String type = codeElement.type().getDescription().toLowerCase();
-        return String.format("You are a quality assurance engineer with expertise in test-driven development and extensive experience testing %s components.\n\n"
+        return String.format("You are a quality assurance engineer with expertise in test-driven development "
+                + "and extensive experience testing %s components.\n\n"
                 + "Generate comprehensive unit tests for this %s:\n\n%s\n\n"
                 + "Create a thorough test suite that includes:\n"
                 + "1. Basic functionality tests covering the main execution paths\n"

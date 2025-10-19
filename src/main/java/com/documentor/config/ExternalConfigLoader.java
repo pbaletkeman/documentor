@@ -1,6 +1,5 @@
 package com.documentor.config;
 
-import com.documentor.config.DocumentorConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +34,12 @@ public class ExternalConfigLoader implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
 
+    /**
+     * Sets the application context.
+     *
+     * @param context the application context
+     * @throws BeansException if an error occurs
+     */
     @Override
     public void setApplicationContext(final ApplicationContext context) throws BeansException {
         this.applicationContext = context;
@@ -100,6 +105,11 @@ public class ExternalConfigLoader implements ApplicationContextAware {
         return loadedConfig;
     }
 
+    /**
+     * Creates a bean factory post processor to handle external configuration.
+     *
+     * @return a BeanFactoryPostProcessor
+     */
     @Bean
     public BeanFactoryPostProcessor configurationPostProcessor() {
         return beanFactory -> {

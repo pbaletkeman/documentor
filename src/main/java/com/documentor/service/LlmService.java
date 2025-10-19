@@ -3,6 +3,7 @@ package com.documentor.service;
 import com.documentor.config.DocumentorConfig;
 import com.documentor.config.ThreadLocalPropagatingExecutor;
 import com.documentor.config.model.LlmModelConfig;
+import com.documentor.constants.ApplicationConstants;
 import com.documentor.model.CodeElement;
 import com.documentor.service.llm.LlmApiClient;
 import com.documentor.service.llm.LlmRequestBuilder;
@@ -13,7 +14,6 @@ import org.springframework.scheduling.annotation.Async;
 
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
 
 /**
  * LLM Integration Service - Refactored for Low Complexity
@@ -38,7 +38,7 @@ public class LlmService {
 
         // Create the thread-local propagating executor
         this.threadLocalExecutor = ThreadLocalPropagatingExecutor.createExecutor(
-                4, // Number of threads
+                getWorkerThreadCount(), // Number of threads
                 "llm-worker"
         );
 
@@ -63,7 +63,7 @@ public class LlmService {
     /**
      * Set the ThreadLocal config - used by ThreadLocalTaskDecorator
      */
-    public static void setThreadLocalConfig(DocumentorConfig config) {
+    public static void setThreadLocalConfig(final DocumentorConfig config) {
         THREAD_LOCAL_CONFIG.set(config);
     }
 
@@ -177,6 +177,15 @@ public class LlmService {
      * Thread-local executor for CompletableFuture tasks to ensure config propagation
      */
     private final java.util.concurrent.Executor threadLocalExecutor;
+
+    /**
+     * Gets the worker thread count.
+     *
+     * @return the worker thread count
+     */
+    private int getWorkerThreadCount() {
+        return ApplicationConstants.DEFAULT_WORKER_THREAD_COUNT;
+    }
 
     /**
      * Generate content with the specified model

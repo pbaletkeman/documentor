@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * 🔍 Element Documentation Generator
+ * Element Documentation Generator
  *
  * Specialized component for generating detailed documentation for code elements.
  * Handles element-specific documentation files with LLM-generated content.
@@ -37,7 +37,7 @@ public class ElementDocumentationGenerator {
     }
 
     /**
-     * 🔍 Generates documentation for a single code element
+     * Generates documentation for a single code element
      *
      * This creates a single-element project analysis and delegates to the grouped approach
      */
@@ -65,7 +65,7 @@ public class ElementDocumentationGenerator {
     }
 
     /**
-     * 🔍 Generates documentation for code elements grouped by class
+     * Generates documentation for code elements grouped by class
      *
      * @param analysis Project analysis containing all code elements
      * @param outputPath Output directory for documentation files
@@ -112,7 +112,12 @@ public class ElementDocumentationGenerator {
     }
 
     /**
-     * 🔍 Generates documentation for a class and all its related elements
+     * Generates documentation for a class and all its related elements
+     *
+     * @param classElement the class element
+     * @param classElements the class elements
+     * @param outputPath the output path
+     * @return a future that completes when documentation is generated
      */
     private CompletableFuture<Void> generateClassDocumentation(final CodeElement classElement,
                                                                final List<CodeElement> classElements,
@@ -130,12 +135,14 @@ public class ElementDocumentationGenerator {
             .toList();
 
         // Generate documentation for class if it exists
-        CompletableFuture<String> classFuture = classElement != null ?
-            llmService.generateDocumentation(classElement) : CompletableFuture.completedFuture("");
+        CompletableFuture<String> classFuture = classElement != null
+            ? llmService.generateDocumentation(classElement)
+            : CompletableFuture.completedFuture("");
 
         // Generate examples for class if it exists
-        CompletableFuture<String> classExamplesFuture = classElement != null ?
-            llmService.generateUsageExamples(classElement) : CompletableFuture.completedFuture("");
+        CompletableFuture<String> classExamplesFuture = classElement != null
+            ? llmService.generateUsageExamples(classElement)
+            : CompletableFuture.completedFuture("");
 
         // Create lists to hold futures for fields and methods
         List<CompletableFuture<ElementDocPair>> fieldFutures = new ArrayList<>();
@@ -154,16 +161,16 @@ public class ElementDocumentationGenerator {
         // Wait for all field documentation to complete
         CompletableFuture<List<ElementDocPair>> allFieldsFuture =
             CompletableFuture.allOf(fieldFutures.toArray(new CompletableFuture[0]))
-            .thenApply(v -> fieldFutures.stream()
-                .map(CompletableFuture::join)
-                .toList());
+                .thenApply(v -> fieldFutures.stream()
+                    .map(CompletableFuture::join)
+                    .toList());
 
         // Wait for all method documentation to complete
         CompletableFuture<List<ElementDocPair>> allMethodsFuture =
             CompletableFuture.allOf(methodFutures.toArray(new CompletableFuture[0]))
-            .thenApply(v -> methodFutures.stream()
-                .map(CompletableFuture::join)
-                .toList());
+                .thenApply(v -> methodFutures.stream()
+                    .map(CompletableFuture::join)
+                    .toList());
 
         // Combine everything into a final document
         return CompletableFuture.allOf(classFuture, classExamplesFuture, allFieldsFuture, allMethodsFuture)
@@ -203,31 +210,75 @@ public class ElementDocumentationGenerator {
     }
 
     /**
-     * 🔍 Helper class to store an element and its documentation/examples
+     * Helper class to store an element and its documentation/examples
      */
     private static class ElementDocPair {
-        public final CodeElement element;
-        public final String documentation;
-        public final String examples;
+        private final CodeElement element;
+        private final String documentation;
+        private final String examples;
 
-        public ElementDocPair(CodeElement element, String documentation, String examples) {
-            this.element = element;
-            this.documentation = documentation;
-            this.examples = examples;
+        /**
+         * Constructor for ElementDocPair.
+         *
+         * @param codeElement the code element
+         * @param docContent the documentation content
+         * @param exampleContent the examples content
+         */
+        ElementDocPair(final CodeElement codeElement, final String docContent, final String exampleContent) {
+            this.element = codeElement;
+            this.documentation = docContent;
+            this.examples = exampleContent;
+        }
+
+        /**
+         * Gets the element.
+         *
+         * @return the element
+         */
+        public CodeElement getElement() {
+            return element;
+        }
+
+        /**
+         * Gets the documentation.
+         *
+         * @return the documentation
+         */
+        public String getDocumentation() {
+            return documentation;
+        }
+
+        /**
+         * Gets the examples.
+         *
+         * @return the examples
+         */
+        public String getExamples() {
+            return examples;
         }
     }
 
     /**
-     * 🔍 Generates documentation and examples for a single element
+     * Generates documentation and examples for a single element
+     *
+     * @param codeElement the code element
+     * @return a future with element documentation pair
      */
-    private CompletableFuture<ElementDocPair> generateElementDocPair(final CodeElement element) {
-        return llmService.generateDocumentation(element)
-            .thenCombine(llmService.generateUsageExamples(element),
-                (doc, examples) -> new ElementDocPair(element, doc, examples));
+    private CompletableFuture<ElementDocPair> generateElementDocPair(final CodeElement codeElement) {
+        return llmService.generateDocumentation(codeElement)
+            .thenCombine(llmService.generateUsageExamples(codeElement),
+                (docContent, exampleContent) -> new ElementDocPair(codeElement, docContent, exampleContent));
     }
 
     /**
-     * 🔍 Builds the complete documentation content for a class and its elements
+     * Builds the complete documentation content for a class and its elements
+     *
+     * @param classElement the class element
+     * @param classDoc the class documentation
+     * @param classExamples the class examples
+     * @param fields the fields
+     * @param methods the methods
+     * @return the documentation content
      */
     private String buildClassDocumentContent(final CodeElement classElement,
                                            final String classDoc,
@@ -266,9 +317,9 @@ public class ElementDocumentationGenerator {
                     content.append("### Fields\n\n");
                     for (ElementDocPair field : fields) {
                         content.append(String.format("- [%s %s](#%s)\n",
-                            field.element.type().getIcon(),
-                            field.element.name(),
-                            field.element.name().toLowerCase().replace(' ', '-')));
+                            field.getElement().type().getIcon(),
+                            field.getElement().name(),
+                            field.getElement().name().toLowerCase().replace(' ', '-')));
                     }
                     content.append("\n");
                 }
@@ -277,9 +328,9 @@ public class ElementDocumentationGenerator {
                     content.append("### Methods\n\n");
                     for (ElementDocPair method : methods) {
                         content.append(String.format("- [%s %s](#%s)\n",
-                            method.element.type().getIcon(),
-                            method.element.name(),
-                            method.element.name().toLowerCase().replace(' ', '-')));
+                            method.getElement().type().getIcon(),
+                            method.getElement().name(),
+                            method.getElement().name().toLowerCase().replace(' ', '-')));
                     }
                     content.append("\n");
                 }
@@ -294,14 +345,16 @@ public class ElementDocumentationGenerator {
             content.append("## Fields\n\n");
 
             for (ElementDocPair field : fields) {
-                content.append(String.format("### %s %s\n\n", field.element.type().getIcon(), field.element.name()));
+                CodeElement fieldElem = field.getElement();
+                content.append(String.format("### %s %s\n\n", fieldElem.type().getIcon(), fieldElem.name()));
                 content.append("#### Documentation\n\n");
-                content.append(field.documentation).append("\n\n");
+                content.append(field.getDocumentation()).append("\n\n");
                 content.append("#### Usage Examples\n\n");
-                content.append(field.examples).append("\n\n");
+                content.append(field.getExamples()).append("\n\n");
                 content.append("#### Signature\n\n");
-                content.append("```").append(getLanguageFromFile(field.element.filePath())).append("\n");
-                content.append(field.element.signature()).append("\n");
+                String fieldLang = getLanguageFromFile(fieldElem.filePath());
+                content.append("```").append(fieldLang).append("\n");
+                content.append(fieldElem.signature()).append("\n");
                 content.append("```\n\n");
             }
         }
@@ -311,14 +364,16 @@ public class ElementDocumentationGenerator {
             content.append("## Methods\n\n");
 
             for (ElementDocPair method : methods) {
-                content.append(String.format("### %s %s\n\n", method.element.type().getIcon(), method.element.name()));
+                CodeElement methodElem = method.getElement();
+                content.append(String.format("### %s %s\n\n", methodElem.type().getIcon(), methodElem.name()));
                 content.append("#### Documentation\n\n");
-                content.append(method.documentation).append("\n\n");
+                content.append(method.getDocumentation()).append("\n\n");
                 content.append("#### Usage Examples\n\n");
-                content.append(method.examples).append("\n\n");
+                content.append(method.getExamples()).append("\n\n");
                 content.append("#### Signature\n\n");
-                content.append("```").append(getLanguageFromFile(method.element.filePath())).append("\n");
-                content.append(method.element.signature()).append("\n");
+                String methodLang = getLanguageFromFile(methodElem.filePath());
+                content.append("```").append(methodLang).append("\n");
+                content.append(methodElem.signature()).append("\n");
                 content.append("```\n\n");
             }
         }
@@ -327,7 +382,7 @@ public class ElementDocumentationGenerator {
     }
 
     /**
-     * 🔍 Groups code elements by their parent class
+     * Groups code elements by their parent class
      *
      * @param elements List of all code elements
      * @return Map with class name as key and list of related elements as value
@@ -367,7 +422,10 @@ public class ElementDocumentationGenerator {
     }
 
     /**
-     * 🔍 Determines programming language from file extension
+     * Determines programming language from file extension
+     *
+     * @param filePath the file path
+     * @return the language identifier
      */
     private String getLanguageFromFile(final String filePath) {
         if (filePath.endsWith(".java")) {

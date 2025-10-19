@@ -1,6 +1,5 @@
 package com.documentor.config;
 
-import com.documentor.config.DocumentorConfig;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -15,8 +14,14 @@ import java.nio.file.Path;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.withSettings;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests for enhanced ExternalConfigLoader functionality.
@@ -24,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ExternalConfigLoaderEnhancedTest {
 
     @TempDir
-    Path tempDir;
+    private Path tempDir;
 
     @Test
     @Disabled("Temporarily disabled for build fix")

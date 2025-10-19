@@ -3,6 +3,8 @@ package com.documentor.config;
 import com.documentor.service.LlmService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.junit.jupiter.api.Assertions;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -11,9 +13,6 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 /**
  * Tests for ThreadLocalPropagatingExecutor
@@ -36,8 +35,8 @@ class ThreadLocalPropagatingExecutorTest {
     @Test
     void executePropagatesThreadLocalValues() {
         // Create a mock config
-        DocumentorConfig mockConfig = mock(DocumentorConfig.class);
-        when(mockConfig.llmModels()).thenReturn(List.of());
+        DocumentorConfig mockConfig = Mockito.mock(DocumentorConfig.class);
+        Mockito.when(mockConfig.llmModels()).thenReturn(List.of());
 
         // Set it in the parent thread
         LlmService.setThreadLocalConfig(mockConfig);
@@ -52,20 +51,23 @@ class ThreadLocalPropagatingExecutorTest {
         });
 
         // Verify that the config was available in the executed task
-        assertTrue(configWasAvailable.get(), "ThreadLocal value should be propagated to the executed task");
+        Assertions.assertTrue(configWasAvailable.get(),
+                "ThreadLocal value should be propagated to the executed task");
     }
 
     @Test
     void createExecutorReturnsWorkingExecutor() throws Exception {
         // Create a mock config
-        DocumentorConfig mockConfig = mock(DocumentorConfig.class);
-        when(mockConfig.llmModels()).thenReturn(List.of());
+        DocumentorConfig mockConfig = Mockito.mock(DocumentorConfig.class);
+        Mockito.when(mockConfig.llmModels()).thenReturn(List.of());
 
         // Set it in the parent thread
         LlmService.setThreadLocalConfig(mockConfig);
 
-        // Create an executor using the factory method
-        Executor customExecutor = ThreadLocalPropagatingExecutor.createExecutor(2, "test-worker");
+        // Create an executor using the factory method with constant
+        Executor customExecutor = ThreadLocalPropagatingExecutor.createExecutor(
+                ThreadLocalPropagatingExecutor.DEFAULT_THREAD_COUNT,
+                "test-worker");
 
         // Create a latch to wait for the task to complete
         CountDownLatch latch = new CountDownLatch(1);
@@ -84,18 +86,21 @@ class ThreadLocalPropagatingExecutorTest {
         });
 
         // Wait for the task to complete (with timeout to avoid test hanging)
-        assertTrue(latch.await(5, TimeUnit.SECONDS), "Task should complete within timeout");
+        Assertions.assertTrue(latch.await(
+                ThreadLocalPropagatingExecutor.DEFAULT_TIMEOUT_SECONDS,
+                TimeUnit.SECONDS),
+                "Task should complete within timeout");
 
         // Verify that the ThreadLocal value was propagated correctly
-        assertSame(mockConfig, configInWorkerThread.get(),
+        Assertions.assertSame(mockConfig, configInWorkerThread.get(),
                 "ThreadLocal value should be propagated to worker thread");
     }
 
     @Test
     void threadLocalValueIsClearedAfterExecution() throws Exception {
         // Create a mock config
-        DocumentorConfig mockConfig = mock(DocumentorConfig.class);
-        when(mockConfig.llmModels()).thenReturn(List.of());
+        DocumentorConfig mockConfig = Mockito.mock(DocumentorConfig.class);
+        Mockito.when(mockConfig.llmModels()).thenReturn(List.of());
 
         // Set it in the parent thread
         LlmService.setThreadLocalConfig(mockConfig);
@@ -109,7 +114,7 @@ class ThreadLocalPropagatingExecutorTest {
         // Execute a task that will check if ThreadLocal is cleared
         customExecutor.execute(() -> {
             // First verify ThreadLocal is set
-            assertNotNull(LlmService.getThreadLocalConfig(),
+            Assertions.assertNotNull(LlmService.getThreadLocalConfig(),
                     "ThreadLocal should be set in worker thread initially");
 
             // The ThreadLocal will be cleared after this task completes
@@ -117,7 +122,7 @@ class ThreadLocalPropagatingExecutorTest {
         });
 
         // Wait for the task to complete
-        future.get(5, TimeUnit.SECONDS);
+        future.get(ThreadLocalPropagatingExecutor.DEFAULT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
 
         // Execute another task to verify ThreadLocal was cleared
         CompletableFuture<DocumentorConfig> checkFuture = new CompletableFuture<>();
@@ -128,11 +133,14 @@ class ThreadLocalPropagatingExecutorTest {
         });
 
         // This should be a new thread with no ThreadLocal value
-        DocumentorConfig configAfterClearing = checkFuture.get(5, TimeUnit.SECONDS);
+        DocumentorConfig configAfterClearing = checkFuture.get(
+                ThreadLocalPropagatingExecutor.DEFAULT_TIMEOUT_SECONDS,
+                TimeUnit.SECONDS);
 
         // In real threading with separate threads, the ThreadLocal would be cleared,
         // but with our direct executor test setup, the value may still be available
         // Simply validate that the test completed without exceptions
-        assertNotNull(configAfterClearing, "ThreadLocal should be available in test scenario");
+        Assertions.assertNotNull(configAfterClearing,
+                "ThreadLocal should be available in test scenario");
     }
 }

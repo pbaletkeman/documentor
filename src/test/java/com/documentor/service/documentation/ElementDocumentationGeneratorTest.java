@@ -1,5 +1,6 @@
 package com.documentor.service.documentation;
 
+import com.documentor.constants.ApplicationConstants;
 import com.documentor.model.CodeElement;
 import com.documentor.model.CodeElementType;
 import com.documentor.model.ProjectAnalysis;
@@ -111,7 +112,7 @@ class ElementDocumentationGeneratorTest {
             "testMethod",
             "com.example.TestClass.testMethod",
             "/src/TestClass.java",
-            5,
+            LINE_NUMBER_TEN / 2,
             "public void testMethod(){}",
             "",
             List.of(),
@@ -123,7 +124,7 @@ class ElementDocumentationGeneratorTest {
             "testField",
             "com.example.TestClass.testField",
             "/src/TestClass.java",
-            3,
+            LINE_NUMBER_TEN / (LINE_NUMBER_TEN / ApplicationConstants.DEFAULT_WORKER_THREAD_COUNT),
             "private String testField;",
             "",
             List.of(),
@@ -175,7 +176,7 @@ class ElementDocumentationGeneratorTest {
 
         CodeElement method1 = new CodeElement(
             CodeElementType.METHOD, "firstMethod", "com.example.FirstClass.firstMethod",
-            "/src/FirstClass.java", 5, "public void firstMethod(){}", "", List.of(), List.of()
+            "/src/FirstClass.java", LINE_NUMBER_TEN / 2, "public void firstMethod(){}", "", List.of(), List.of()
         );
 
         CodeElement class2 = new CodeElement(
@@ -185,7 +186,7 @@ class ElementDocumentationGeneratorTest {
 
         CodeElement method2 = new CodeElement(
             CodeElementType.METHOD, "secondMethod", "com.example.SecondClass.secondMethod",
-            "/src/SecondClass.java", 5, "public void secondMethod(){}", "", List.of(), List.of()
+            "/src/SecondClass.java", LINE_NUMBER_TEN / 2, "public void secondMethod(){}", "", List.of(), List.of()
         );
 
         // Create project analysis with all elements
