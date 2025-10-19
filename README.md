@@ -495,7 +495,7 @@ cd llama-cpp
 
 # Start the server on the default port (8080)
 # For Windows:
-server.exe -m models/codellama-7b.Q4_K_M.gguf --host 0.0.0.0 --port 8080
+llama-server -m models/codellama-7b.Q4_K_M.gguf --host 0.0.0.0 --port 8080
 
 # For macOS/Linux:
 ./server -m models/codellama-7b.Q4_K_M.gguf --host 0.0.0.0 --port 8080
