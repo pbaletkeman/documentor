@@ -21,12 +21,24 @@ A powerful Java Spring Boot Command Line application that analyzes Java and Pyth
 
 ## 📋 Table of Contents
 
-- [Requirements](#requirements)
-- [Installation](#installation)
-- [Quick Start](#quick-start)
-- [Configuration](#configuration)
-- [Usage](#usage)
-- [Examples](#examples)
+- [Requirements](#-requirements)
+- [Installation](#-installation)
+- [Quick Start](#-quick-start)
+- [Configuration](#-configuration)
+  - [Configuration Files Overview](#configuration-files-overview)
+  - [Configuration Options Explained](#configuration-options-explained)
+  - [LLM Models Configuration](#llm-models-configuration)
+  - [Output Settings Configuration](#output-settings-configuration)
+  - [Analysis Settings Configuration](#analysis-settings-configuration)
+  - [API Key Configuration](#-api-key-configuration)
+- [LLM Integrations](#llm-integrations)
+  - [llama.cpp Integration](#-llamacpp-integration)
+  - [Ollama Integration](#-ollama-integration)
+  - [OpenAI/ChatGPT Integration](#-openaichatgpt-integration)
+  - [Diagrams Only Configuration](#-diagrams-only-configuration)
+  - [Documentation Only Configuration](#-documentation-only-configuration)
+  - [Unit Test Logging Configuration](#-unit-test-logging-configuration)
+- [Usage & Examples](#-usage--examples)
 - [Development](#development)
 - [Testing](#testing)
 - [Contributing](#contributing)
@@ -35,11 +47,12 @@ A powerful Java Spring Boot Command Line application that analyzes Java and Pyth
 ## 🛠️ Requirements
 
 - **Java 21** or higher
-- **Gradle 8.5** or higher
+- **Gradle 9.1.0** or higher
 - **Git** (for pre-commit hooks)
 
 ## ✨ Optional
 
+- **llama.cpp** instructions provided
 - **Ollama** instructions provided
 - **LLM API Keys** (OpenAI, Anthropic, etc.)
 
@@ -149,10 +162,10 @@ Get up and running with Ollama in 5 minutes!
 
 ### Option 2: Using OpenAI/Other APIs
 
-1. **Copy the default config**:
+1. **Copy the pre-configured OpenAI config**:
 
    ```bash
-   cp config.json.example config.json
+   cp config-openai.json config.json
    ```
 
 2. **Add your API key to config.json**:
@@ -176,6 +189,118 @@ Get up and running with Ollama in 5 minutes!
    ```
 
 ## ⚙️ Configuration
+
+### Configuration Files Overview
+
+Documentor provides several pre-configured settings files for different use cases:
+
+| Configuration File              | Purpose               | Description                                                                 |
+| ------------------------------- | --------------------- | --------------------------------------------------------------------------- |
+| `config.json`                   | Main Configuration    | Your active configuration file - copy one of the templates to this filename |
+| `config-openai.json`            | OpenAI/ChatGPT        | Quickstart configuration for using OpenAI API services                      |
+| `config-ollama.json`            | Ollama Integration    | Optimized configuration for local Ollama models                             |
+| `config-llamacpp.json`          | llama.cpp Integration | Settings for using local llama.cpp server                                   |
+| `config-unit-test-logging.json` | Unit Test Logging     | Minimal configuration focused on unit test command logging                  |
+| `config-diagrams-only.json`     | Diagrams Only         | Configuration focused only on generating diagrams (no documentation)        |
+| `config-docs-only.json`         | Documentation Only    | Configuration for generating only documentation (no diagrams)               |
+
+### Configuration Options Explained
+
+The configuration file is divided into three main sections:
+
+1. **llm_models**: LLM model configuration and API settings
+2. **output_settings**: Documentation generation preferences and output formats
+3. **analysis_settings**: Code analysis behavior and filtering options
+
+### LLM Models Configuration
+
+The `llm_models` section defines the LLM providers you want to use:
+
+```json
+"llm_models": [
+  {
+    "name": "model-name",         // Model name (gpt-3.5-turbo, llama3.2, codellama, etc.)
+    "api_key": "your-api-key",    // API key (only for services requiring authentication)
+    "endpoint": "api-endpoint",   // API endpoint URL
+    "max_tokens": 4096,           // Maximum tokens per response
+    "temperature": 0.7,           // Response randomness (0.0-1.0)
+    "timeout_seconds": 30,        // Request timeout in seconds
+    "additional_config": {}       // Optional provider-specific settings
+  }
+]
+```
+
+| Option              | Description                                               | Default                        |
+| ------------------- | --------------------------------------------------------- | ------------------------------ |
+| `name`              | Model identifier (for OpenAI: gpt-3.5-turbo, gpt-4, etc.) | Required                       |
+| `api_key`           | Authentication key for the LLM service                    | Required for OpenAI, Anthropic |
+| `endpoint`          | API endpoint URL                                          | Service-specific               |
+| `max_tokens`        | Maximum tokens in response                                | 4096                           |
+| `temperature`       | Response creativity/randomness (0.0-1.0)                  | 0.7                            |
+| `timeout_seconds`   | Request timeout in seconds                                | 30                             |
+| `additional_config` | Provider-specific parameters                              | {}                             |
+
+### Output Settings Configuration
+
+The `output_settings` section controls documentation generation:
+
+```json
+"output_settings": {
+  "output_directory": "./docs",         // Output directory for documentation
+  "format": "markdown",                 // Output format (currently only markdown)
+  "include_icons": true,                // Include emoji icons in output
+  "generate_unit_tests": true,          // Generate unit tests
+  "run_unit_test_commands": false,      // Run generated test commands automatically
+  "log_unit_test_commands": true,       // Log test commands to file
+  "target_coverage": 0.9,               // Target test coverage (0.0-1.0)
+  "generate_mermaid": true,             // Generate Mermaid diagrams
+  "mermaid_output_path": "./diagrams",  // Mermaid diagrams output path
+  "generate_plantuml": true,            // Generate PlantUML diagrams
+  "plantuml_output_path": "./uml"       // PlantUML diagrams output path
+}
+```
+
+| Option                   | Description                                           | Default          |
+| ------------------------ | ----------------------------------------------------- | ---------------- |
+| `output_directory`       | Directory where documentation files will be generated | `./docs`         |
+| `format`                 | Output format (currently only supports markdown)      | `markdown`       |
+| `include_icons`          | Include emoji icons in documentation                  | `true`           |
+| `generate_unit_tests`    | Generate unit tests for classes                       | `true`           |
+| `run_unit_test_commands` | Automatically run generated test commands             | `false`          |
+| `log_unit_test_commands` | Log test commands to a file for review                | `true`           |
+| `target_coverage`        | Target test coverage percentage (0.0-1.0)             | `0.9`            |
+| `generate_mermaid`       | Generate Mermaid class diagrams                       | `true`           |
+| `mermaid_output_path`    | Directory for Mermaid diagram output                  | `./diagrams`     |
+| `generate_plantuml`      | Generate PlantUML class diagrams                      | `false`          |
+| `plantuml_output_path`   | Directory for PlantUML diagram output                 | `./uml-diagrams` |
+| `verbose_output`         | Include more detailed information in logs             | `false`          |
+
+### Analysis Settings Configuration
+
+The `analysis_settings` section controls code parsing behavior:
+
+```json
+"analysis_settings": {
+  "include_private_members": false,    // Include private fields/methods
+  "max_threads": 4,                    // Maximum threads for parallel processing
+  "supported_languages": [             // Languages to analyze
+    "java",
+    "python"
+  ],
+  "exclude_patterns": [                // Patterns to exclude from analysis
+    "**/test/**",
+    "**/target/**",
+    "**/build/**"
+  ]
+}
+```
+
+| Option                    | Description                                       | Default              |
+| ------------------------- | ------------------------------------------------- | -------------------- |
+| `include_private_members` | Include private fields and methods                | `false`              |
+| `max_threads`             | Maximum number of threads for parallel processing | `4`                  |
+| `supported_languages`     | Languages to analyze                              | `["java", "python"]` |
+| `exclude_patterns`        | Glob patterns for files to exclude                | Common build folders |
 
 Create a `config.json` file in the project root with your LLM configurations:
 
@@ -239,9 +364,234 @@ You can provide API keys in several ways:
    java -DLLM_API_KEY=your-api-key-here -jar documentor.jar
    ```
 
+## LLM Integrations
+
+### 🤖 OpenAI/ChatGPT Integration
+
+Documentor provides seamless integration with OpenAI's GPT models for high-quality documentation generation.
+
+> **Why choose OpenAI/ChatGPT?**
+>
+> - **Superior Documentation Quality**: Generally produces higher quality, more nuanced documentation
+> - **Comprehensive Understanding**: Better comprehension of complex code patterns and intentions
+> - **No Local Hardware Requirements**: No need for high-end GPU or significant RAM
+> - **Best For**: Production-grade documentation that requires exceptional quality
+> - **Use When**: Documentation quality is more important than privacy or cost concerns
+
+#### 🚀 Quick Setup
+
+1. **Get your API key**:
+
+   - Sign up at [OpenAI Platform](https://platform.openai.com/)
+   - Create an API key in your account dashboard
+
+2. **Use the pre-configured OpenAI setup**:
+
+   ```bash
+   # Copy the ready-to-use OpenAI configuration
+   cp config-openai.json config.json
+
+   # Edit config.json and add your API key
+   # Replace "YOUR_OPENAI_API_KEY" with your actual key
+   ```
+
+3. **Start the application**:
+
+   ```bash
+   ./gradlew runApp
+   ```
+
+#### 📋 Complete OpenAI Configuration
+
+The `config-openai.json` includes optimal settings for OpenAI integration:
+
+```json
+{
+  "llm_models": [
+    {
+      "name": "gpt-3.5-turbo",
+      "api_key": "YOUR_OPENAI_API_KEY",
+      "endpoint": "https://api.openai.com/v1/chat/completions",
+      "max_tokens": 4096,
+      "temperature": 0.7,
+      "timeout_seconds": 30
+    }
+  ],
+  "output_settings": {
+    "output_directory": "./docs",
+    "format": "markdown",
+    "include_icons": true,
+    "generate_unit_tests": true,
+    "generate_mermaid": true,
+    "verbose_output": false
+  },
+  "analysis_settings": {
+    "include_private_members": false,
+    "max_threads": 4,
+    "supported_languages": ["java", "python"],
+    "exclude_patterns": ["**/test/**", "**/target/**", "**/build/**"]
+  }
+}
+```
+
+### 🦙 llama.cpp Integration
+
+Documentor supports **llama.cpp** for flexible local LLM model integration! Run your preferred models with a lightweight server implementation that keeps your data private and has no API costs.
+
+> **Why choose llama.cpp?**
+>
+> - **Maximum Control & Flexibility**: Direct access to model parameters and server configuration
+> - **Lower Resource Usage**: More efficient memory utilization compared to Ollama
+> - **More Model Customization**: Support for fine-tuned quantization levels (Q4_K_M, Q5_K_M, etc.)
+> - **Best For**: Technical users who need precise control over model parameters and server settings
+> - **Use When**: You need the most efficient resource usage or specific quantization options
+
+#### 🚀 Quick Setup
+
+##### Step 1: Download Ready-to-Use Binaries
+
+1. **Download the pre-built llama.cpp binaries** for your platform:
+
+   - **Windows**: Download the latest Windows ZIP (`llama-<version>-bin-win.zip`) from the [official releases page](https://github.com/ggerganov/llama.cpp/releases)
+   - **macOS**: Download the macOS package (`llama-<version>-bin-darwin.tar.gz`)
+   - **Linux**: Download the Linux package (`llama-<version>-bin-linux.tar.gz`)
+
+2. **Extract the downloaded package**:
+
+   ```bash
+   # Windows (PowerShell)
+   Expand-Archive -Path llama-<version>-bin-win.zip -DestinationPath llama-cpp
+
+   # Windows (Command Prompt)
+   mkdir llama-cpp
+   tar -xf llama-<version>-bin-win.zip -C llama-cpp
+
+   # macOS/Linux
+   mkdir -p llama-cpp
+   tar -xzf llama-<version>-bin-<platform>.tar.gz -C llama-cpp
+   ```
+
+##### Step 2: Get a Compatible Model
+
+1. **Download a GGUF model file** (we recommend CodeLlama for code documentation):
+
+   - Visit [HuggingFace](https://huggingface.co/TheBloke/CodeLlama-7B-GGUF/tree/main) in your browser
+   - Download `codellama-7b.Q4_K_M.gguf` (good balance of quality and speed)
+   - Or use this command to download directly:
+
+   ```bash
+   # Create models directory inside your llama-cpp folder
+   mkdir -p llama-cpp/models
+
+   # Download model with curl
+   curl -L https://huggingface.co/TheBloke/CodeLlama-7B-GGUF/resolve/main/codellama-7b.Q4_K_M.gguf -o llama-cpp/models/codellama-7b.Q4_K_M.gguf
+   ```
+
+##### Step 3: Start the Server
+
+```bash
+# Navigate to the llama-cpp directory
+cd llama-cpp
+
+# Start the server on the default port (8080)
+# For Windows:
+server.exe -m models/codellama-7b.Q4_K_M.gguf --host 0.0.0.0 --port 8080
+
+# For macOS/Linux:
+./server -m models/codellama-7b.Q4_K_M.gguf --host 0.0.0.0 --port 8080
+```
+
+##### Alternative: Using Docker (No Installation Required)
+
+If you prefer using Docker, you can run llama.cpp without installing anything:
+
+```bash
+# Step 1: Create a directory for your models
+mkdir -p ~/llama-models
+
+# Step 2: Download a model (if you don't have one)
+curl -L https://huggingface.co/TheBloke/CodeLlama-7B-GGUF/resolve/main/codellama-7b.Q4_K_M.gguf -o ~/llama-models/codellama-7b.Q4_K_M.gguf
+
+# Step 3: Run the llama.cpp server with Docker
+docker run -it --rm -p 8080:8080 -v ~/llama-models:/models \
+  ghcr.io/ggerganov/llama.cpp:full \
+  -m /models/codellama-7b.Q4_K_M.gguf --host 0.0.0.0 --port 8080
+```
+
+For Windows, use one of these commands:
+
+```cmd
+# Windows Command Prompt
+docker run -it --rm -p 8080:8080 -v "%USERPROFILE%\llama-models:/models" ^
+  ghcr.io/ggerganov/llama.cpp:full ^
+  -m /models/codellama-7b.Q4_K_M.gguf --host 0.0.0.0 --port 8080
+```
+
+```powershell
+# Windows PowerShell
+docker run -it --rm -p 8080:8080 -v "$env:USERPROFILE\llama-models:/models" `
+  ghcr.io/ggerganov/llama.cpp:full `
+  -m /models/codellama-7b.Q4_K_M.gguf --host 0.0.0.0 --port 8080
+```
+
+#### Using Documentor with llama.cpp
+
+After your llama.cpp server is running, configure Documentor to use it:
+
+```bash
+# Copy the ready-to-use llama.cpp configuration
+cp config-llamacpp.json config.json
+
+# Start the application
+./gradlew runApp
+```
+
+#### Running Your First Analysis
+
+With the llama.cpp server running and Documentor configured:
+
+```bash
+# In the Documentor shell, run an analysis
+analyze --project-path ./src --generate-mermaid true
+```
+
+#### 📋 Complete llama.cpp Configuration
+
+The `config-llamacpp.json` includes optimal settings for llama.cpp integration:
+
+```json
+{
+  "llm_models": [
+    {
+      "name": "llamacpp",
+      "endpoint": "http://localhost:8080/completion",
+      "max_tokens": 2048,
+      "temperature": 0.5,
+      "timeout_seconds": 90
+    }
+  ],
+  "output_settings": {
+    "output_directory": "./docs",
+    "format": "markdown",
+    "include_icons": true,
+    "generate_unit_tests": true,
+    "run_unit_test_commands": false,
+    "log_unit_test_commands": true
+  }
+}
+```
+
 ### 🦙 Ollama Integration
 
 Documentor provides **seamless integration with Ollama** for local LLM models! Run AI-powered documentation generation completely offline with no API costs.
+
+> **Why choose Ollama?**
+>
+> - **Simplicity & Ease of Use**: One-command installation and model management
+> - **User-Friendly Interface**: Simple CLI with model discovery and version management
+> - **Integrated Model Library**: Easy access to popular models without manual downloads
+> - **Best For**: Users who want local AI with minimal setup complexity
+> - **Use When**: You need quick setup and convenient model management without deep customization
 
 #### 🚀 Quick Setup
 
@@ -285,6 +635,127 @@ Documentor provides **seamless integration with Ollama** for local LLM models! R
    # Start the application
    ./gradlew runApp
    ```
+
+### 📊 Diagrams Only Configuration
+
+For scenarios where you want to generate only diagrams without full documentation:
+
+```bash
+# Copy the diagrams-only configuration
+cp config-diagrams-only.json config.json
+```
+
+#### 📋 Complete Diagrams Only Configuration
+
+The `config-diagrams-only.json` provides optimized settings for diagram generation:
+
+```json
+{
+  "llm_models": [
+    {
+      "name": "codellama",
+      "endpoint": "http://localhost:11434/api/generate",
+      "max_tokens": 2048,
+      "temperature": 0.3,
+      "timeout_seconds": 45
+    }
+  ],
+  "output_settings": {
+    "output_directory": "./diagrams",
+    "format": "markdown",
+    "include_icons": false,
+    "generate_unit_tests": false,
+    "generate_mermaid": true,
+    "mermaid_output_path": "./diagrams/mermaid",
+    "generate_plantuml": true,
+    "plantuml_output_path": "./diagrams/plantuml",
+    "verbose_output": false
+  },
+  "analysis_settings": {
+    "include_private_members": false,
+    "max_threads": 4,
+    "supported_languages": ["java", "python"],
+    "exclude_patterns": ["**/test/**", "**/target/**", "**/build/**"]
+  }
+}
+```
+
+### 📝 Documentation Only Configuration
+
+For scenarios where you want to generate only textual documentation without diagrams:
+
+```bash
+# Copy the documentation-only configuration
+cp config-docs-only.json config.json
+```
+
+#### 📋 Complete Documentation Only Configuration
+
+The `config-docs-only.json` focuses exclusively on comprehensive documentation:
+
+```json
+{
+  "llm_models": [
+    {
+      "name": "llama3.2",
+      "endpoint": "http://localhost:11434/api/generate",
+      "max_tokens": 4096,
+      "temperature": 0.7,
+      "timeout_seconds": 60
+    }
+  ],
+  "output_settings": {
+    "output_directory": "./docs",
+    "format": "markdown",
+    "include_icons": true,
+    "generate_unit_tests": true,
+    "run_unit_test_commands": false,
+    "log_unit_test_commands": true,
+    "generate_mermaid": false,
+    "generate_plantuml": false,
+    "verbose_output": true
+  },
+  "analysis_settings": {
+    "include_private_members": true,
+    "max_threads": 6,
+    "supported_languages": ["java", "python"],
+    "exclude_patterns": ["**/test/**", "**/target/**", "**/build/**"]
+  }
+}
+```
+
+### 🧪 Unit Test Command Options
+
+Documentor now supports fine-grained control over unit test commands with two new options:
+
+- **run_unit_test_commands**: When enabled, automatically executes the generated unit test commands
+- **log_unit_test_commands**: When enabled, logs the generated commands to a file for later review
+
+#### Configuration Example
+
+```json
+{
+  "output_settings": {
+    "generate_unit_tests": true,
+    "run_unit_test_commands": false, // Don't run tests automatically
+    "log_unit_test_commands": true, // Log commands to file
+    "target_coverage": 0.9
+  }
+}
+```
+
+#### 🚀 Usage Examples
+
+```bash
+# Generate unit tests but don't run them (only log)
+analyze --project-path ./src --generate-unit-tests true --run-unit-test-commands false --log-unit-test-commands true
+
+# Generate and immediately run unit tests
+analyze --project-path ./src --generate-unit-tests true --run-unit-test-commands true
+
+# Generate unit tests with neither logging nor running
+analyze --project-path ./src --generate-unit-tests true --log-unit-test-commands false --run-unit-test-commands false
+```
 
 #### 📋 Complete Ollama Configuration
 
@@ -350,7 +821,7 @@ For projects requiring professional UML diagrams with advanced relationship dete
 
 #### 🎯 Combined Diagram Generation
 
-For comprehensive visual documentation with both Mermaid and PlantUML:
+For comprehensive visual documentation with both Mermaid and PlantUML. Mermaid diagrams are perfect for embedding in GitHub markdown ([Mermaid.js Documentation](https://mermaid.js.org/)), while PlantUML provides professional UML notation ([PlantUML Guide](https://plantuml.com/class-diagram)):
 
 ```json
 {
@@ -489,7 +960,51 @@ Update your config to use `phi3:mini` for faster processing:
 - Increase `timeout_seconds` for large files
 - Lower `temperature` (0.1-0.3) for more consistent outputs
 
-## 🖥️ Usage
+### 🧪 Unit Test Logging Configuration
+
+For development scenarios where you want to log unit test commands without running them:
+
+```bash
+# Copy the unit test logging configuration
+cp config-unit-test-logging.json config.json
+```
+
+#### 📋 Complete Unit Test Logging Configuration
+
+The `config-unit-test-logging.json` provides minimal settings focused on test logging:
+
+````json
+{
+  "llm_models": [
+    {
+      "name": "codellama",
+      "endpoint": "http://localhost:11434/api/generate",
+      "max_tokens": 4096,
+      "temperature": 0.3,
+      "timeout_seconds": 60
+    }
+  ],
+  "output_settings": {
+    "output_directory": "./docs",
+    "format": "markdown",
+    "generate_unit_tests": true,
+    "run_unit_test_commands": false,
+    "log_unit_test_commands": true,
+    "target_coverage": 0.9
+  },
+  "analysis_settings": {
+    "include_private_members": false,
+    "max_threads": 4,
+    "supported_languages": ["java", "python"],
+    "exclude_patterns": [
+      "**/test/**",
+      "**/target/**",
+      "**/build/**"
+    ]
+  }
+}
+
+## 🖥️ Usage & Examples
 
 ### Running the Application
 
@@ -499,7 +1014,7 @@ Update your config to use `phi3:mini` for faster processing:
 
 # Or run directly with Gradle
 ./gradlew bootRun
-```
+````
 
 ### Command Line Interface
 
@@ -756,11 +1271,11 @@ documentor:> analyze --project-path /path/to/java-project --generate-mermaid tru
 ✅ Analysis complete! Documentation generated at: ./docs
 📊 Generated 5 Mermaid diagrams
 Diagram files:
-  - /path/to/java-project/UserService_diagram.md
-  - /path/to/java-project/ProductController_diagram.md
-  - /path/to/java-project/DatabaseConfig_diagram.md
-  - /path/to/java-project/SecurityConfig_diagram.md
-  - /path/to/java-project/EmailService_diagram.md
+  - /path/to/java-project/UserService_diagram.mmd
+  - /path/to/java-project/ProductController_diagram.mmd
+  - /path/to/java-project/DatabaseConfig_diagram.mmd
+  - /path/to/java-project/SecurityConfig_diagram.mmd
+  - /path/to/java-project/EmailService_diagram.mmd
 📊 Analysis Summary: 125 total elements (15 classes, 89 methods, 21 fields) across 12 files
 ```
 
@@ -856,14 +1371,14 @@ docs/
 project-root/
 ├── src/main/java/
 │   ├── UserService.java
-│   ├── UserService_diagram.md    # Generated Mermaid diagram
+│   ├── UserService_diagram.mmd    # Generated Mermaid diagram
 │   ├── ProductController.java
 │   ├── ProductController_diagram.md
 │   └── ...
 ├── docs/                         # Main documentation
 └── my-diagrams/                  # Custom diagram location (if specified)
-    ├── UserService_diagram.md
-    └── ProductController_diagram.md
+    ├── UserService_diagram.mmd
+    └── ProductController_diagram.mmd
 ```
 
 **With PlantUML diagrams enabled:**
@@ -888,8 +1403,8 @@ project-root/
 project-root/
 ├── src/main/java/
 │   ├── UserService.java
-│   ├── UserService_diagram.md    # Mermaid diagram
-│   ├── UserService.puml          # PlantUML diagram
+│   ├── UserService_diagram.mmd    # Mermaid diagram
+│   ├── UserService.puml           # PlantUML diagram
 │   ├── ProductController.java
 │   ├── ProductController_diagram.md
 │   ├── ProductController.puml
@@ -1026,6 +1541,26 @@ UserService --> EmailService : uses
 @enduml
 ```
 
+**Equivalent Mermaid Diagram (with private members):**
+
+```mermaid
+classDiagram
+    class UserService {
+        -userRepository : UserRepository
+        -passwordEncoder : PasswordEncoder
+        -emailService : EmailService
+        +UserService(userRepository: UserRepository, passwordEncoder: PasswordEncoder)
+        +createUser(request: UserCreateRequest) : UserDto
+        -validateRequest(request: UserCreateRequest) : void
+        -buildUser(request: UserCreateRequest) : User
+        -sendWelcomeEmail(user: User) : void
+        -convertToDto(user: User) : UserDto
+    }
+    UserService --> UserRepository : uses
+    UserService --> PasswordEncoder : uses
+    UserService --> EmailService : uses
+```
+
 **Compare with Private Members Disabled:**
 
 ```bash
@@ -1049,10 +1584,92 @@ UserService --> PasswordEncoder : uses
 @enduml
 ```
 
+**Equivalent Mermaid Diagram (with private members disabled):**
+
+```mermaid
+classDiagram
+    class UserService {
+        +UserService(userRepository: UserRepository, passwordEncoder: PasswordEncoder)
+        +createUser(request: UserCreateRequest) : UserDto
+    }
+    UserService --> UserRepository : uses
+    UserService --> PasswordEncoder : uses
+```
+
 **Use Cases:**
 
 - **Full Analysis** (`--include-private-members true`): Complete code understanding, refactoring, detailed documentation
 - **API Documentation** (`--include-private-members false`): Public interface focus, client integration guides, simplified diagrams
+
+### Example 7: Using Diagrams-Only Configuration
+
+This example demonstrates how to generate only class diagrams without documentation:
+
+```bash
+# 1. Start with the diagrams-only configuration
+cp config-diagrams-only.json config.json
+
+# 2. Run the application
+./gradlew runApp
+
+# 3. Analyze a project with focus only on diagrams
+analyze --project-path ./src/main/java
+```
+
+**Expected Output:**
+
+```text
+🚀 Using codellama model for diagram generation
+📊 Analyzing project: ./src/main/java
+🔍 Found 45 Java files for analysis
+🎨 Generating Mermaid class diagrams...
+🌿 Generating PlantUML diagrams...
+✅ Analysis complete!
+📊 Mermaid diagrams: ./diagrams/mermaid/
+🌿 PlantUML diagrams: ./diagrams/plantuml/
+⏱️ Total time: 1m 20s
+```
+
+**Key Benefits:**
+
+- **Faster Processing**: Generates only diagrams for quick visualization
+- **Focus on Structure**: Perfect for architecture reviews and design sessions
+- **Lightweight Output**: Minimal files generated for easier sharing and version control
+
+### Example 8: Using Documentation-Only Configuration
+
+This example shows how to generate comprehensive documentation without diagrams:
+
+```bash
+# 1. Start with the documentation-only configuration
+cp config-docs-only.json config.json
+
+# 2. Run the application
+./gradlew runApp
+
+# 3. Analyze a project focusing only on documentation
+analyze --project-path ./src/main/java
+```
+
+**Expected Output:**
+
+```text
+🚀 Using llama3.2 model for documentation generation
+📊 Analyzing project: ./src/main/java
+🔍 Found 45 Java files for analysis
+📝 Generating comprehensive documentation...
+🧪 Generating unit test suggestions...
+✅ Analysis complete!
+📄 Documentation: ./docs/
+🧪 Unit test suggestions: ./docs/unit-tests/
+⏱️ Total time: 1m 45s
+```
+
+**Key Benefits:**
+
+- **Detailed Documentation**: Rich textual descriptions of classes, methods, and fields
+- **Unit Test Coverage**: Generates comprehensive test suggestions for code quality
+- **Accessible Format**: Easily readable Markdown output for team consumption
 
 ## 🔧 Development
 
@@ -1221,6 +1838,8 @@ To add support for a new programming language:
 
 #### 🌿 **PlantUML Diagram Generation**
 
+Generate standard UML diagrams using the industry-standard PlantUML notation. View the diagrams using the [PlantUML Online Server](http://www.plantuml.com/plantuml/uml/) or integrate with your IDE using available plugins.
+
 - **Professional UML Diagrams**: Generate standard PlantUML class diagrams with .puml extension
 - **Advanced Relationship Detection**: Automatic dependency and association detection between classes
 - **Visibility Mapping**: Proper UML visibility symbols (+, -, #, ~) for methods and fields
@@ -1230,7 +1849,7 @@ To add support for a new programming language:
 - **Integration Ready**: Seamlessly works alongside Mermaid diagram generation
 - **Professional Formatting**: Clean PlantUML syntax with proper themes and annotations
 
-##### PlantUML Features Highlight:
+##### PlantUML Features Highlight
 
 ```bash
 # Generate PlantUML diagrams with custom output
@@ -1243,7 +1862,28 @@ analyze --project-path ./src --generate-plantuml true --plantuml-output ./uml
 }
 ```
 
-##### Generated PlantUML Example:
+##### Generated Mermaid Example
+
+Mermaid diagrams can be rendered directly in GitHub and many markdown viewers. Try editing this example in the [Mermaid Live Editor](https://mermaid.live/).
+
+```mermaid
+classDiagram
+    class OrderService {
+        -orderRepository: OrderRepository
+        -paymentService: PaymentService
+        +processOrder(order: Order): OrderResult
+        +cancelOrder(orderId: Long): void
+        #validateOrder(order: Order): boolean
+        ~calculateTotal(items: List~OrderItem~): BigDecimal
+    }
+
+    OrderService --> OrderRepository : uses
+    OrderService --> PaymentService : uses
+
+    note for OrderService "Handles order processing workflow\nIntegrates with payment and inventory systems"
+```
+
+##### Generated PlantUML Example
 
 ```plantuml
 @startuml OrderService
@@ -1350,6 +1990,8 @@ The pre-commit hooks automatically run:
 - 🔒 Private member detection (underscore convention)
 
 ### PlantUML Diagram Features
+
+PlantUML is a powerful UML diagram creation tool that uses a simple text language to define diagrams. Learn more at the [PlantUML Official Website](https://plantuml.com/) and explore the [PlantUML Language Reference Guide](https://plantuml.com/guide).
 
 - 🎨 **Professional UML Syntax**: Standard PlantUML format with proper themes
 - 🔍 **Class Detection**: Supports classes, interfaces, abstract classes, and enums
@@ -1476,6 +2118,9 @@ We welcome contributions! Please follow these guidelines:
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+Copyright (c) 2025 Pete Letkeman
+Email: [documentor@letkeman.ca](mailto:documentor@letkeman.ca)
+
 ## 🙏 Acknowledgments
 
 - **JavaParser** for Java AST parsing
@@ -1486,7 +2131,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- 📧 **Email**: `support@documentor.dev`
+- 📧 **Email**: `documentor@letkeman.ca`
 - 🐛 **Issues**: [GitHub Issues](https://github.com/pbaletkeman/documentor/issues)
 - 💬 **Discussions**: [GitHub Discussions](https://github.com/pbaletkeman/documentor/discussions)
 - 📖 **Wiki**: [GitHub Wiki](https://github.com/pbaletkeman/documentor/wiki)
