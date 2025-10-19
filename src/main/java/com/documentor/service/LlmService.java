@@ -1,6 +1,7 @@
 package com.documentor.service;
 
 import com.documentor.config.DocumentorConfig;
+import com.documentor.config.ThreadLocalPropagatingExecutor;
 import com.documentor.config.model.LlmModelConfig;
 import com.documentor.model.CodeElement;
 import com.documentor.service.llm.LlmApiClient;
@@ -12,6 +13,7 @@ import org.springframework.scheduling.annotation.Async;
 
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 /**
  * LLM Integration Service - Refactored for Low Complexity
@@ -33,44 +35,152 @@ public class LlmService {
         this.requestBuilder = requestBuilderParam;
         this.responseHandler = responseHandlerParam;
         this.apiClient = apiClientParam;
+
+        // Create the thread-local propagating executor
+        this.threadLocalExecutor = ThreadLocalPropagatingExecutor.createExecutor(
+                4, // Number of threads
+                "llm-worker"
+        );
+
+        // Store config in ThreadLocal when service is created
+        if (configParam != null) {
+            THREAD_LOCAL_CONFIG.set(configParam);
+        }
     }
 
+    /**
+     * Store the config in a thread-local variable to ensure it's available in async contexts
+     */
+    private static final ThreadLocal<DocumentorConfig> THREAD_LOCAL_CONFIG = new ThreadLocal<>();
+
+    /**
+     * Get the ThreadLocal config - used by ThreadLocalTaskDecorator
+     */
+    public static DocumentorConfig getThreadLocalConfig() {
+        return THREAD_LOCAL_CONFIG.get();
+    }
+
+    /**
+     * Set the ThreadLocal config - used by ThreadLocalTaskDecorator
+     */
+    public static void setThreadLocalConfig(DocumentorConfig config) {
+        THREAD_LOCAL_CONFIG.set(config);
+    }
+
+    /**
+     * Clear the ThreadLocal config - used by ThreadLocalTaskDecorator to prevent memory leaks
+     */
+    public static void clearThreadLocalConfig() {
+        THREAD_LOCAL_CONFIG.remove();
+    }
+
+    /**
+     * Generate documentation for a code element using the default LLM model
+     */
     @Async("llmExecutor")
     public final CompletableFuture<String> generateDocumentation(final CodeElement codeElement) {
-        LOGGER.debug("Generating documentation for: {}", codeElement.getDisplayName());
+        LOGGER.info("Generating documentation for: {}", codeElement.getDisplayName());
 
-        if (config.llmModels().isEmpty()) {
+        // Store config in ThreadLocal to ensure it's available in this async context
+        if (config != null) {
+            setThreadLocalConfig(config);
+        }
+
+        // Try to get config from ThreadLocal if it's null
+        DocumentorConfig effectiveConfig = config != null ? config : getThreadLocalConfig();
+
+        if (effectiveConfig == null) {
+            LOGGER.error("Configuration is null in LlmService.generateDocumentation");
+            return CompletableFuture.completedFuture(
+                "Error: LLM configuration is null. Please check the application configuration.");
+        }
+
+        if (effectiveConfig.llmModels().isEmpty()) {
             return CompletableFuture.completedFuture("No LLM models configured for documentation generation.");
         }
 
-        LlmModelConfig model = config.llmModels().get(0);
-        return CompletableFuture.supplyAsync(() -> generateWithModel(codeElement, model, "documentation"));
+        final LlmModelConfig model = effectiveConfig.llmModels().get(0);
+        LOGGER.info("Using LLM model: {}", model.name());
+
+        // Use our ThreadLocalPropagatingExecutor to ensure config is available in the async thread
+        return CompletableFuture.supplyAsync(() ->
+            generateWithModel(codeElement, model, "documentation"), threadLocalExecutor
+        );
     }
 
+    /**
+     * Generate usage examples for a code element using the default LLM model
+     */
     @Async("llmExecutor")
     public final CompletableFuture<String> generateUsageExamples(final CodeElement codeElement) {
-        LOGGER.debug("Generating usage examples for: {}", codeElement.getDisplayName());
+        LOGGER.info("Generating usage examples for: {}", codeElement.getDisplayName());
 
-        if (config.llmModels().isEmpty()) {
-            return CompletableFuture.completedFuture("No LLM models configured for usage example generation.");
+        // Store config in ThreadLocal to ensure it's available
+        if (config != null) {
+            setThreadLocalConfig(config);
         }
 
-        LlmModelConfig model = config.llmModels().get(0);
-        return CompletableFuture.supplyAsync(() -> generateWithModel(codeElement, model, "usage"));
+        // Try to get config from ThreadLocal if it's null
+        DocumentorConfig effectiveConfig = config != null ? config : getThreadLocalConfig();
+
+        if (effectiveConfig == null) {
+            LOGGER.error("Configuration is null in LlmService.generateUsageExamples");
+            return CompletableFuture.completedFuture(
+                "Error: LLM configuration is null. Please check the application configuration.");
+        }
+
+        if (effectiveConfig.llmModels().isEmpty()) {
+            return CompletableFuture.completedFuture("No LLM models configured for example generation.");
+        }
+
+        final LlmModelConfig model = effectiveConfig.llmModels().get(0);
+        LOGGER.info("Using LLM model for examples: {}", model.name());
+
+        // Use our ThreadLocalPropagatingExecutor to ensure config is available in the async thread
+        return CompletableFuture.supplyAsync(() ->
+            generateWithModel(codeElement, model, "usage"), threadLocalExecutor
+        );
     }
 
     @Async("llmExecutor")
     public final CompletableFuture<String> generateUnitTests(final CodeElement codeElement) {
-        LOGGER.debug("Generating unit tests for: {}", codeElement.getDisplayName());
+        LOGGER.info("Generating unit tests for: {}", codeElement.getDisplayName());
 
-        if (config.llmModels().isEmpty()) {
+        // Store config in ThreadLocal to ensure it's available
+        if (config != null) {
+            setThreadLocalConfig(config);
+        }
+
+        // Try to get config from ThreadLocal if it's null
+        DocumentorConfig effectiveConfig = config != null ? config : getThreadLocalConfig();
+
+        if (effectiveConfig == null) {
+            LOGGER.error("Configuration is null in LlmService.generateUnitTests");
+            return CompletableFuture.completedFuture(
+                "Error: LLM configuration is null. Please check the application configuration.");
+        }
+
+        if (effectiveConfig.llmModels().isEmpty()) {
             return CompletableFuture.completedFuture("No LLM models configured for unit test generation.");
         }
 
-        LlmModelConfig model = config.llmModels().get(0);
-        return CompletableFuture.supplyAsync(() -> generateWithModel(codeElement, model, "tests"));
+        final LlmModelConfig model = effectiveConfig.llmModels().get(0);
+        LOGGER.info("Using LLM model for unit tests: {}", model.name());
+
+        // Use our ThreadLocalPropagatingExecutor to ensure config is available in the async thread
+        return CompletableFuture.supplyAsync(() ->
+            generateWithModel(codeElement, model, "tests"), threadLocalExecutor
+        );
     }
 
+    /**
+     * Thread-local executor for CompletableFuture tasks to ensure config propagation
+     */
+    private final java.util.concurrent.Executor threadLocalExecutor;
+
+    /**
+     * Generate content with the specified model
+     */
     private String generateWithModel(final CodeElement codeElement, final LlmModelConfig model, final String type) {
         try {
             String prompt = createPrompt(codeElement, type);
@@ -93,4 +203,3 @@ public class LlmService {
         };
     }
 }
-

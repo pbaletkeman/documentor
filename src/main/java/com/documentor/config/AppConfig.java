@@ -55,6 +55,7 @@ public class AppConfig implements AsyncConfigurer {
         executor.setThreadNamePrefix("LLM-");
         executor.setWaitForTasksToCompleteOnShutdown(true);
         executor.setAwaitTerminationSeconds(DEFAULT_TERMINATION_TIMEOUT_SECONDS);
+        executor.setTaskDecorator(new ThreadLocalTaskDecorator()); // Added decorator to propagate ThreadLocal values
         executor.initialize();
         return executor;
     }
@@ -95,4 +96,3 @@ public class AppConfig implements AsyncConfigurer {
         return llmExecutor();
     }
 }
-

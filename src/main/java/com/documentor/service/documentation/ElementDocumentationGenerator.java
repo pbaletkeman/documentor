@@ -32,6 +32,14 @@ public class ElementDocumentationGenerator {
      * 🔍 Generates documentation for a single code element
      */
     public CompletableFuture<Void> generateElementDocumentation(final CodeElement element, final Path outputPath) {
+        LOGGER.info("ElementDocumentationGenerator using LlmService: {}",
+                   (llmService != null ? "OK" : "NULL"));
+
+        if (llmService == null) {
+            LOGGER.error("LlmService is null in ElementDocumentationGenerator");
+            return CompletableFuture.completedFuture(null);
+        }
+
         return llmService.generateDocumentation(element)
                 .thenCombine(llmService.generateUsageExamples(element), (doc, examples) -> {
                     try {
@@ -75,4 +83,3 @@ public class ElementDocumentationGenerator {
         return "text";
     }
 }
-

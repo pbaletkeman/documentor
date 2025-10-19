@@ -1,0 +1,53 @@
+{
+  "llm_models": [
+    {
+      "name": "llama3.2",
+      "provider": "ollama",
+      "baseUrl": "http://localhost:11434",
+      "apiKey": "",
+      "maxTokens": 4096,
+      "timeoutSeconds": 60
+    },
+    {
+      "name": "llamacpp",
+      "provider": "llamacpp",
+      "baseUrl": "http://localhost:8080",
+      "apiKey": "",
+      "maxTokens": 2048,
+      "timeoutSeconds": 90
+    },
+    {
+      "name": "codellama",
+      "provider": "ollama",
+      "baseUrl": "http://localhost:11434",
+      "apiKey": "",
+      "maxTokens": 4096,
+      "timeoutSeconds": 60
+    }
+  ],
+  "output_settings": {
+    "output_directory": "./docs",
+    "format": "markdown",
+    "generate_mermaid": true,
+    "generate_plantuml": false,
+    "verbose_output": false
+  },
+  "analysis_settings": {
+    "include_private_members": false,
+    "max_threads": 4,
+    "supported_languages": [
+      "java",
+      "python"
+    ],
+    "exclude_patterns": [
+      "**/test/**",
+      "**/target/**",
+      "**/__pycache__/**",
+      "**/node_modules/**",
+      "**/.git/**",
+      "**/build/**",
+      "**/.idea/**",
+      "**/.vscode/**"
+    ]
+  }
+}
