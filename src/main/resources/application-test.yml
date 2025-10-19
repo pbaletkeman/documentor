@@ -1,0 +1,7 @@
+spring:
+  shell:
+    command:
+      default-exit-code: 0
+
+documentor:
+  config-file: ./config-test.json

@@ -2,6 +2,7 @@
   "llm_models": [
     {
       "name": "llamacpp",
+      "provider": "llamacpp",
       "baseUrl": "http://localhost:8080/completion",
       "maxTokens": 2048,
       "timeoutSeconds": 90
@@ -17,16 +18,13 @@
   "analysis_settings": {
     "include_private_members": false,
     "max_depth": 4,
-    "included_patterns": ["**/*.java", "**/*.py"],
+    "included_patterns": [
+      "**/*.java",
+      "**/*.py"
+    ],
     "excluded_patterns": [
       "**/test/**",
-      "**/target/**",
-      "**/__pycache__/**",
-      "**/node_modules/**",
-      "**/.git/**",
-      "**/build/**",
-      "**/.idea/**",
-      "**/.vscode/**"
+      "**/target/**"
     ]
   }
 }

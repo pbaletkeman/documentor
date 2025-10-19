@@ -1,6 +1,7 @@
 package com.documentor.cli;
 
 import com.documentor.cli.handlers.ConfigurationCommandHandler;
+import com.documentor.cli.handlers.EnhancedProjectAnalysisHandler;
 import com.documentor.cli.handlers.ProjectAnalysisCommandHandler;
 import com.documentor.cli.handlers.StatusCommandHandler;
 import org.springframework.shell.standard.ShellComponent;
@@ -19,6 +20,7 @@ public class DocumentorCommands {
     private final ProjectAnalysisCommandHandler projectAnalysisHandler;
     private final StatusCommandHandler statusHandler;
     private final ConfigurationCommandHandler configurationHandler;
+    private final EnhancedProjectAnalysisHandler enhancedAnalysisHandler;
 
     // Track current state
     private String currentProjectPath;
@@ -27,10 +29,12 @@ public class DocumentorCommands {
     public DocumentorCommands(
             final ProjectAnalysisCommandHandler projectAnalysisHandlerParam,
             final StatusCommandHandler statusHandlerParam,
-            final ConfigurationCommandHandler configurationHandlerParam) {
+            final ConfigurationCommandHandler configurationHandlerParam,
+            final EnhancedProjectAnalysisHandler enhancedAnalysisHandlerParam) {
         this.projectAnalysisHandler = projectAnalysisHandlerParam;
         this.statusHandler = statusHandlerParam;
         this.configurationHandler = configurationHandlerParam;
+        this.enhancedAnalysisHandler = enhancedAnalysisHandlerParam;
     }
 
     /**
@@ -157,5 +161,57 @@ public class DocumentorCommands {
     public String showStatus() {
         return statusHandler.handleShowStatus(currentProjectPath, currentConfigPath);
     }
-}
 
+    /**
+     * 🔧 Analyze a project with ThreadLocal configuration fix
+     * This command is specifically designed to address ThreadLocal configuration issues
+     */
+    @ShellMethod(value = "Analyze a project with ThreadLocal configuration fix",
+            key = {"analyze-with-fix", "fixed-analyze"})
+    public String analyzeWithFix(
+            @ShellOption(value = "--project-path",
+                    help = "Path to the project directory to analyze")
+            final String projectPath,
+            @ShellOption(value = "--config",
+                    help = "Path to configuration JSON file",
+                    defaultValue = "config.json")
+            final String configPath,
+            @ShellOption(value = "--include-private-members",
+                    help = "Include private members in documentation and diagrams",
+                    defaultValue = "true")
+            final boolean includePrivateMembers,
+            @ShellOption(value = "--generate-mermaid",
+                    help = "Generate Mermaid class diagrams",
+                    defaultValue = "false")
+            final boolean generateMermaid,
+            @ShellOption(value = "--mermaid-output",
+                    help = "Output directory for Mermaid diagrams",
+                    defaultValue = "")
+            final String mermaidOutput,
+            @ShellOption(value = "--generate-plantuml",
+                    help = "Generate PlantUML class diagrams",
+                    defaultValue = "false")
+            final boolean generatePlantUML,
+            @ShellOption(value = "--plantuml-output",
+                    help = "Output directory for PlantUML diagrams",
+                    defaultValue = "")
+            final String plantUMLOutput,
+            @ShellOption(value = "--fix",
+                    help = "Apply ThreadLocal configuration fix",
+                    defaultValue = "true")
+            final boolean useFix,
+            @ShellOption(value = "--output-dir",
+                    help = "Output directory for documentation",
+                    defaultValue = "")
+            final String outputDir) {
+
+        // Update current state
+        this.currentProjectPath = projectPath;
+        this.currentConfigPath = configPath;
+
+        return enhancedAnalysisHandler.analyzeProjectWithFix(
+            projectPath, configPath, generateMermaid, mermaidOutput,
+            generatePlantUML, plantUMLOutput, includePrivateMembers,
+            useFix, outputDir);
+    }
+}
