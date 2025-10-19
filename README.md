@@ -157,7 +157,7 @@ Get up and running with Ollama in 5 minutes!
 5. **Analyze your first project**:
 
    ```bash
-   analyze --project-path ./src --generate-mermaid true
+   analyze --project-path ./src --generate-mermaid true --config config-ollama.json
    ```
 
 ### Option 2: Using OpenAI/Other APIs
@@ -552,7 +552,7 @@ With the llama.cpp server running and Documentor configured:
 
 ```bash
 # In the Documentor shell, run an analysis
-analyze --project-path ./src --generate-mermaid true
+analyze --project-path ./src --generate-mermaid true --config config-llamacpp.json
 ```
 
 #### 📋 Complete llama.cpp Configuration
@@ -748,13 +748,13 @@ Documentor now supports fine-grained control over unit test commands with two ne
 
 ```bash
 # Generate unit tests but don't run them (only log)
-analyze --project-path ./src --generate-unit-tests true --run-unit-test-commands false --log-unit-test-commands true
+analyze --project-path ./src --generate-unit-tests true --run-unit-test-commands false --log-unit-test-commands true --config config.json
 
 # Generate and immediately run unit tests
-analyze --project-path ./src --generate-unit-tests true --run-unit-test-commands true
+analyze --project-path ./src --generate-unit-tests true --run-unit-test-commands true --config config.json
 
 # Generate unit tests with neither logging nor running
-analyze --project-path ./src --generate-unit-tests true --log-unit-test-commands false --run-unit-test-commands false
+analyze --project-path ./src --generate-unit-tests true --log-unit-test-commands false --run-unit-test-commands false --config config.json
 ```
 
 #### 📋 Complete Ollama Configuration
@@ -858,7 +858,7 @@ For comprehensive visual documentation with both Mermaid and PlantUML. Mermaid d
 ./gradlew runApp
 
 # In the interactive shell:
-analyze --project-path ./src/main/java --generate-mermaid true --mermaid-output ./diagrams
+analyze --project-path ./src/main/java --generate-mermaid true --mermaid-output ./diagrams --config config.json
 ```
 
 ##### Example 2: Generate Documentation for Python Project
@@ -1030,26 +1030,26 @@ analyze --project-path /path/to/your/project --config config.json
 
 ```bash
 # Generate documentation with Mermaid class diagrams
-analyze --project-path /path/to/your/project --generate-mermaid true
+analyze --project-path /path/to/your/project --generate-mermaid true --config config.json
 
 # Specify custom output directory for diagrams
-analyze --project-path /path/to/your/project --generate-mermaid true --mermaid-output ./custom-diagrams
+analyze --project-path /path/to/your/project --generate-mermaid true --mermaid-output ./custom-diagrams --config config.json
 
 # Generate diagrams only (without full documentation)
-analyze --project-path /path/to/your/project --generate-mermaid true --mermaid-output ./diagrams
+analyze --project-path /path/to/your/project --generate-mermaid true --mermaid-output ./diagrams --config config-diagrams-only.json
 ```
 
 **PlantUML Diagram Options:**
 
 ```bash
 # Generate documentation with PlantUML class diagrams
-analyze --project-path /path/to/your/project --generate-plantuml true
+analyze --project-path /path/to/your/project --generate-plantuml true --config config.json
 
 # Specify custom output directory for PlantUML diagrams
-analyze --project-path /path/to/your/project --generate-plantuml true --plantuml-output ./uml-diagrams
+analyze --project-path /path/to/your/project --generate-plantuml true --plantuml-output ./uml-diagrams --config config.json
 
 # Generate both Mermaid and PlantUML diagrams
-analyze --project-path /path/to/your/project --generate-mermaid true --generate-plantuml true
+analyze --project-path /path/to/your/project --generate-mermaid true --generate-plantuml true --config config.json
 ```
 
 **Command Options:**
@@ -1077,16 +1077,16 @@ Documentor now includes comprehensive support for private field and method analy
 
 ```bash
 # Include private members (default behavior)
-analyze --project-path ./src --include-private-members true
+analyze --project-path ./src --include-private-members true --config config.json
 
 # Exclude private members for public API documentation only
-analyze --project-path ./src --include-private-members false
+analyze --project-path ./src --include-private-members false --config config.json
 
 # Generate complete diagrams with private implementation details
-analyze --project-path ./src --generate-plantuml true --include-private-members true
+analyze --project-path ./src --generate-plantuml true --include-private-members true --config config.json
 
 # Scan only public interface (excluding private members)
-scan --project-path ./src --include-private-members false
+scan --project-path ./src --include-private-members false --config config.json
 ```
 
 **Configuration File Control:**
@@ -1157,10 +1157,10 @@ You can also run commands directly:
 
 ```bash
 # Analyze a Java project
-./gradlew runApp -Pargs="analyze,--project-path,/path/to/java/project"
+./gradlew runApp -Pargs="analyze,--project-path,/path/to/java/project,--config,config.json"
 
 # Scan a Python project
-./gradlew runApp -Pargs="scan,--project-path,/path/to/python/project"
+./gradlew runApp -Pargs="scan,--project-path,/path/to/python/project,--config,config.json"
 ```
 
 ## 📖 Examples
@@ -1183,13 +1183,13 @@ cp config-ollama.json config.json
 ./gradlew runApp
 
 # 5. Analyze your project with Mermaid diagrams
-analyze --project-path ./src/main/java --generate-mermaid true --mermaid-output ./diagrams
+analyze --project-path ./src/main/java --generate-mermaid true --mermaid-output ./diagrams --config config-ollama.json
 
 # 6. Or analyze with PlantUML diagrams
-analyze --project-path ./src/main/java --generate-plantuml true --plantuml-output ./uml-diagrams
+analyze --project-path ./src/main/java --generate-plantuml true --plantuml-output ./uml-diagrams --config config-ollama.json
 
 # 7. Or generate both diagram types
-analyze --project-path ./src/main/java --generate-mermaid true --generate-plantuml true
+analyze --project-path ./src/main/java --generate-mermaid true --generate-plantuml true --config config-ollama.json
 ```
 
 **Expected Output:**
@@ -1225,7 +1225,7 @@ cd /path/to/documentor
 ./gradlew runApp
 
 # In the interactive shell:
-documentor:> analyze --project-path /path/to/my-spring-project
+documentor:> analyze --project-path /path/to/my-spring-project --config config.json
 ```
 
 **Output:**
@@ -1259,10 +1259,10 @@ documentor:> scan --project-path /path/to/python-project
 
 ```bash
 # Generate documentation with Mermaid diagrams
-documentor:> analyze --project-path /path/to/java-project --generate-mermaid true
+documentor:> analyze --project-path /path/to/java-project --generate-mermaid true --config config.json
 
 # Or specify custom output directory
-documentor:> analyze --project-path /path/to/java-project --generate-mermaid true --mermaid-output ./my-diagrams
+documentor:> analyze --project-path /path/to/java-project --generate-mermaid true --mermaid-output ./my-diagrams --config config.json
 ```
 
 **Output:**
@@ -1306,10 +1306,10 @@ Generated on: 2025-10-08T10:30:15
 
 ```bash
 # Generate documentation with PlantUML diagrams
-documentor:> analyze --project-path /path/to/java-project --generate-plantuml true
+documentor:> analyze --project-path /path/to/java-project --generate-plantuml true --config config.json
 
 # Or specify custom output directory
-documentor:> analyze --project-path /path/to/java-project --generate-plantuml true --plantuml-output ./uml-diagrams
+documentor:> analyze --project-path /path/to/java-project --generate-plantuml true --plantuml-output ./uml-diagrams --config config.json
 ```
 
 **Output:**
@@ -1460,7 +1460,7 @@ Size: 1024 bytes
 
 ```bash
 # Analyze with private members included (default behavior)
-documentor:> analyze --project-path ./src/main/java --include-private-members true --generate-plantuml true
+documentor:> analyze --project-path ./src/main/java --include-private-members true --generate-plantuml true --config config.json
 ```
 
 **Input Java Class:**
@@ -1565,7 +1565,7 @@ classDiagram
 
 ```bash
 # Analyze with private members excluded
-documentor:> analyze --project-path ./src/main/java --include-private-members false --generate-plantuml true
+documentor:> analyze --project-path ./src/main/java --include-private-members false --generate-plantuml true --config config.json
 ```
 
 **Output with Private Members Disabled:**
@@ -1613,7 +1613,7 @@ cp config-diagrams-only.json config.json
 ./gradlew runApp
 
 # 3. Analyze a project with focus only on diagrams
-analyze --project-path ./src/main/java
+analyze --project-path ./src/main/java --config config-diagrams-only.json
 ```
 
 **Expected Output:**
@@ -1648,7 +1648,7 @@ cp config-docs-only.json config.json
 ./gradlew runApp
 
 # 3. Analyze a project focusing only on documentation
-analyze --project-path ./src/main/java
+analyze --project-path ./src/main/java --config config-docs-only.json
 ```
 
 **Expected Output:**
@@ -1853,7 +1853,7 @@ Generate standard UML diagrams using the industry-standard PlantUML notation. Vi
 
 ```bash
 # Generate PlantUML diagrams with custom output
-analyze --project-path ./src --generate-plantuml true --plantuml-output ./uml
+analyze --project-path ./src --generate-plantuml true --plantuml-output ./uml --config config.json
 
 # Configuration example
 "output_settings": {

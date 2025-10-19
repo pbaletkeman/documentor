@@ -17,8 +17,10 @@
     "log_unit_test_commands": true,
     "target_coverage": 0.9,
     "generate_mermaid": true,
+    "mermaid_output_path": "./diagrams/mermaid",
     "generate_plantuml": true,
-    "verbose_output": false
+    "generate_output_path": "./diagrams/plantuml",
+    "verbose_output": true
   },
   "analysis_settings": {
     "include_private_members": false,
