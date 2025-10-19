@@ -385,20 +385,29 @@ Documentor provides seamless integration with OpenAI's GPT models for high-quali
    - Sign up at [OpenAI Platform](https://platform.openai.com/)
    - Create an API key in your account dashboard
 
-2. **Use the pre-configured OpenAI setup**:
+2. **Edit the OpenAI configuration**:
+
+   - Open `config-openai.json`
+   - Add your API key: Replace "YOUR_OPENAI_API_KEY" with your actual key
+
+3. **Start the application and use the config directly**:
 
    ```bash
-   # Copy the ready-to-use OpenAI configuration
-   cp config-openai.json config.json
+   # Start the application
+   ./gradlew runApp
 
-   # Edit config.json and add your API key
-   # Replace "YOUR_OPENAI_API_KEY" with your actual key
+   # In the Documentor shell, run an analysis using the OpenAI config directly
+   analyze --project-path ./src --config config-openai.json
    ```
 
-3. **Start the application**:
+   Alternatively, if you plan to use OpenAI frequently, you can copy the config:
 
    ```bash
-   ./gradlew runApp
+   # Copy the ready-to-use OpenAI configuration for repeated use
+   cp config-openai.json config.json
+
+   # Then run your analysis with the default config
+   analyze --project-path ./src
    ```
 
 #### 📋 Complete OpenAI Configuration
@@ -536,23 +545,24 @@ docker run -it --rm -p 8080:8080 -v "$env:USERPROFILE\llama-models:/models" `
 
 #### Using Documentor with llama.cpp
 
-After your llama.cpp server is running, configure Documentor to use it:
+After your llama.cpp server is running:
 
 ```bash
-# Copy the ready-to-use llama.cpp configuration
-cp config-llamacpp.json config.json
-
 # Start the application
 ./gradlew runApp
+
+# In the Documentor shell, run an analysis using the llama.cpp config directly
+analyze --project-path ./src --generate-mermaid true --config config-llamacpp.json
 ```
 
-#### Running Your First Analysis
-
-With the llama.cpp server running and Documentor configured:
+Alternatively, if you plan to use llama.cpp frequently, you can copy the config:
 
 ```bash
-# In the Documentor shell, run an analysis
-analyze --project-path ./src --generate-mermaid true --config config-llamacpp.json
+# Copy the ready-to-use llama.cpp configuration for repeated use
+cp config-llamacpp.json config.json
+
+# Then run your analysis with the default config
+analyze --project-path ./src --generate-mermaid true
 ```
 
 #### 📋 Complete llama.cpp Configuration
@@ -626,14 +636,24 @@ Documentor provides **seamless integration with Ollama** for local LLM models! R
    ollama pull phi3:mini
    ```
 
-4. **Use the pre-configured Ollama setup**:
+4. **Use Ollama with Documentor**:
 
    ```bash
-   # Copy the ready-to-use Ollama configuration
-   cp config-ollama.json config.json
-
    # Start the application
    ./gradlew runApp
+
+   # In the Documentor shell, run an analysis using the Ollama config directly
+   analyze --project-path ./src --generate-mermaid true --config config-ollama.json
+   ```
+
+   Alternatively, if you plan to use Ollama frequently, you can copy the config:
+
+   ```bash
+   # Copy the ready-to-use Ollama configuration for repeated use
+   cp config-ollama.json config.json
+
+   # Then run your analysis with the default config
+   analyze --project-path ./src --generate-mermaid true
    ```
 
 ### 📊 Diagrams Only Configuration
@@ -641,8 +661,21 @@ Documentor provides **seamless integration with Ollama** for local LLM models! R
 For scenarios where you want to generate only diagrams without full documentation:
 
 ```bash
-# Copy the diagrams-only configuration
+# Start the application
+./gradlew runApp
+
+# In the Documentor shell, run an analysis using the diagrams-only config directly
+analyze --project-path ./src --config config-diagrams-only.json
+```
+
+Alternatively, if you plan to use this configuration frequently:
+
+```bash
+# Copy the diagrams-only configuration for repeated use
 cp config-diagrams-only.json config.json
+
+# Then run your analysis with the default config
+analyze --project-path ./src
 ```
 
 #### 📋 Complete Diagrams Only Configuration
@@ -685,8 +718,21 @@ The `config-diagrams-only.json` provides optimized settings for diagram generati
 For scenarios where you want to generate only textual documentation without diagrams:
 
 ```bash
-# Copy the documentation-only configuration
+# Start the application
+./gradlew runApp
+
+# In the Documentor shell, run an analysis using the docs-only config directly
+analyze --project-path ./src --config config-docs-only.json
+```
+
+Alternatively, if you plan to use this configuration frequently:
+
+```bash
+# Copy the documentation-only configuration for repeated use
 cp config-docs-only.json config.json
+
+# Then run your analysis with the default config
+analyze --project-path ./src
 ```
 
 #### 📋 Complete Documentation Only Configuration
@@ -965,8 +1011,21 @@ Update your config to use `phi3:mini` for faster processing:
 For development scenarios where you want to log unit test commands without running them:
 
 ```bash
-# Copy the unit test logging configuration
+# Start the application
+./gradlew runApp
+
+# In the Documentor shell, run an analysis using the unit test logging config directly
+analyze --project-path ./src --config config-unit-test-logging.json
+```
+
+Alternatively, if you plan to use this configuration frequently:
+
+```bash
+# Copy the unit test logging configuration for repeated use
 cp config-unit-test-logging.json config.json
+
+# Then run your analysis with the default config
+analyze --project-path ./src
 ```
 
 #### 📋 Complete Unit Test Logging Configuration
@@ -1606,14 +1665,21 @@ classDiagram
 This example demonstrates how to generate only class diagrams without documentation:
 
 ```bash
-# 1. Start with the diagrams-only configuration
-cp config-diagrams-only.json config.json
-
-# 2. Run the application
+# 1. Run the application
 ./gradlew runApp
 
-# 3. Analyze a project with focus only on diagrams
+# 2. Analyze a project with focus only on diagrams using the diagrams-only configuration directly
 analyze --project-path ./src/main/java --config config-diagrams-only.json
+```
+
+Alternatively, you can copy the config for repeated use:
+
+```bash
+# Copy the diagrams-only configuration if you plan to use it frequently
+cp config-diagrams-only.json config.json
+
+# Then run without specifying the config parameter
+analyze --project-path ./src/main/java
 ```
 
 **Expected Output:**
@@ -1641,14 +1707,21 @@ analyze --project-path ./src/main/java --config config-diagrams-only.json
 This example shows how to generate comprehensive documentation without diagrams:
 
 ```bash
-# 1. Start with the documentation-only configuration
-cp config-docs-only.json config.json
-
-# 2. Run the application
+# 1. Run the application
 ./gradlew runApp
 
-# 3. Analyze a project focusing only on documentation
+# 2. Analyze a project focusing only on documentation by directly specifying the docs-only config
 analyze --project-path ./src/main/java --config config-docs-only.json
+```
+
+Alternatively, you can copy the config for repeated use:
+
+```bash
+# Copy the documentation-only configuration if you plan to use it frequently
+cp config-docs-only.json config.json
+
+# Then run without specifying the config parameter
+analyze --project-path ./src/main/java
 ```
 
 **Expected Output:**
