@@ -41,7 +41,7 @@ class LlmPromptTemplatesTest {
         String prompt = templates.createUsageExamplePrompt(mockElement);
 
         // Then
-        assertTrue(prompt.contains("Generate practical usage examples for this class"));
+        assertTrue(prompt.contains("Generate practical, real-world usage examples for this class"));
         assertTrue(prompt.contains("Class context"));
     }
 
@@ -61,4 +61,3 @@ class LlmPromptTemplatesTest {
         assertTrue(prompt.contains("Field context"));
     }
 }
-

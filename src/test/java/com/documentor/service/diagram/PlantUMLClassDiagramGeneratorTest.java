@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * 🧪 PlantUML Class Diagram Generator Tests
+ * PlantUML Class Diagram Generator Tests
  */
 class PlantUMLClassDiagramGeneratorTest {
 

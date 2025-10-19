@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * 🧪 Simple tests for LlmResponseHandler component
+ * Simple tests for LlmResponseHandler component
  */
 class LlmResponseHandlerTest {
 
@@ -83,4 +83,3 @@ class LlmResponseHandlerTest {
         assertNotNull(responseHandler.getModelEndpoint(openaiModel));
     }
 }
-

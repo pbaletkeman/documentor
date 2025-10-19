@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * 🧪 Unit tests for ProjectAnalysis
+ * Unit tests for ProjectAnalysis
  */
 class ProjectAnalysisTest {
 
@@ -312,4 +312,3 @@ class ProjectAnalysisTest {
         assertEquals(0, stats.fileCount());
     }
 }
-

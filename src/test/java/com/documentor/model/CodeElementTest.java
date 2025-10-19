@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
- * 🧪 Unit tests for CodeElement
+ * Unit tests for CodeElement
  */
 class CodeElementTest {
 
@@ -288,4 +288,3 @@ class CodeElementTest {
         assertFalse(context.contains("Annotations:"));
     }
 }
-

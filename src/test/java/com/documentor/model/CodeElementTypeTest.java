@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
- * 🧪 Unit tests for CodeElementType
+ * Unit tests for CodeElementType
  */
 class CodeElementTypeTest {
 
@@ -83,4 +83,3 @@ class CodeElementTypeTest {
         }
     }
 }
-

@@ -25,7 +25,7 @@ import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.anyString;
 
 /**
- * 🧪 Tests for LlmApiClient component
+ * Tests for LlmApiClient component
  */
 @ExtendWith(MockitoExtension.class)
 class LlmApiClientTest {
@@ -318,4 +318,3 @@ class LlmApiClientTest {
         verify(requestBodySpec, never()).header(eq("Authorization"), anyString());
     }
 }
-

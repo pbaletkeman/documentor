@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 🔍 Python Regex Analyzer
+ * Python Regex Analyzer
  *
  * Specialized component for regex-based Python code analysis as a fallback
  * when AST parsing is not available or fails.
@@ -33,7 +33,7 @@ public class PythonRegexAnalyzer {
     }
 
     /**
-     * 🔍 Fallback regex-based analysis for when AST parsing fails
+     * Fallback regex-based analysis for when AST parsing fails
      */
     public List<CodeElement> analyzeWithRegex(final Path filePath, final List<String> lines) {
         List<CodeElement> elements = new ArrayList<>();
@@ -48,7 +48,7 @@ public class PythonRegexAnalyzer {
     }
 
     /**
-     * 📋 Process class declarations
+     * Process class declarations
      */
     private void processClassElements(final Path filePath, final List<String> lines, final String content,
             final List<CodeElement> elements) {
@@ -74,7 +74,7 @@ public class PythonRegexAnalyzer {
     }
 
     /**
-     * 📋 Process function declarations
+     * Process function declarations
      */
     private void processFunctionElements(final Path filePath, final List<String> lines, final String content,
             final List<CodeElement> elements) {
@@ -103,7 +103,7 @@ public class PythonRegexAnalyzer {
     }
 
     /**
-     * 📋 Process variable assignments
+     * Process variable assignments
      */
     private void processVariableElements(final Path filePath, final String content, final List<CodeElement> elements) {
         var matcher = patternMatcher.findVariableMatches(content);
@@ -128,7 +128,7 @@ public class PythonRegexAnalyzer {
     }
 
     /**
-     * 🔍 Determines line number from character position
+     * Determines line number from character position
      */
     private int getLineNumber(final String content, final int position) {
         int line = 1;
@@ -141,11 +141,10 @@ public class PythonRegexAnalyzer {
     }
 
     /**
-     * 🔍 Checks if an element should be included based on configuration
+     * Checks if an element should be included based on configuration
      */
     private boolean shouldInclude(final String name) {
         boolean isPrivate = name.startsWith("_");
         return config.analysisSettings().includePrivateMembers() || !isPrivate;
     }
 }
-
