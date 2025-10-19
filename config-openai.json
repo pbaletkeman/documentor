@@ -1,0 +1,33 @@
+{
+  "llm_models": [
+    {
+      "name": "gpt-3.5-turbo",
+      "api_key": "YOUR_OPENAI_API_KEY",
+      "endpoint": "https://api.openai.com/v1/chat/completions",
+      "max_tokens": 4096,
+      "temperature": 0.7,
+      "timeout_seconds": 30
+    }
+  ],
+  "output_settings": {
+    "output_directory": "./docs",
+    "format": "markdown",
+    "include_icons": true,
+    "generate_unit_tests": true,
+    "generate_mermaid": true,
+    "verbose_output": false
+  },
+  "analysis_settings": {
+    "include_private_members": false,
+    "max_threads": 4,
+    "supported_languages": [
+      "java",
+      "python"
+    ],
+    "exclude_patterns": [
+      "**/test/**",
+      "**/target/**",
+      "**/build/**"
+    ]
+  }
+}

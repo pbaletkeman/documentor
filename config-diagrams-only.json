@@ -1,0 +1,35 @@
+{
+  "llm_models": [
+    {
+      "name": "codellama",
+      "endpoint": "http://localhost:11434/api/generate",
+      "max_tokens": 2048,
+      "temperature": 0.3,
+      "timeout_seconds": 45
+    }
+  ],
+  "output_settings": {
+    "output_directory": "./diagrams",
+    "format": "markdown",
+    "include_icons": false,
+    "generate_unit_tests": false,
+    "generate_mermaid": true,
+    "mermaid_output_path": "./diagrams/mermaid",
+    "generate_plantuml": true,
+    "plantuml_output_path": "./diagrams/plantuml",
+    "verbose_output": false
+  },
+  "analysis_settings": {
+    "include_private_members": false,
+    "max_threads": 4,
+    "supported_languages": [
+      "java",
+      "python"
+    ],
+    "exclude_patterns": [
+      "**/test/**",
+      "**/target/**",
+      "**/build/**"
+    ]
+  }
+}

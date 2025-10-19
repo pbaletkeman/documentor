@@ -1,0 +1,32 @@
+{
+  "llm_models": [
+    {
+      "name": "codellama",
+      "endpoint": "http://localhost:11434/api/generate",
+      "max_tokens": 4096,
+      "temperature": 0.3,
+      "timeout_seconds": 60
+    }
+  ],
+  "output_settings": {
+    "output_directory": "./docs",
+    "format": "markdown",
+    "generate_unit_tests": true,
+    "run_unit_test_commands": false,
+    "log_unit_test_commands": true,
+    "target_coverage": 0.9
+  },
+  "analysis_settings": {
+    "include_private_members": false,
+    "max_threads": 4,
+    "supported_languages": [
+      "java",
+      "python"
+    ],
+    "exclude_patterns": [
+      "**/test/**",
+      "**/target/**",
+      "**/build/**"
+    ]
+  }
+}

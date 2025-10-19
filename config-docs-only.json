@@ -1,0 +1,35 @@
+{
+  "llm_models": [
+    {
+      "name": "llama3.2",
+      "endpoint": "http://localhost:11434/api/generate",
+      "max_tokens": 4096,
+      "temperature": 0.7,
+      "timeout_seconds": 60
+    }
+  ],
+  "output_settings": {
+    "output_directory": "./docs",
+    "format": "markdown",
+    "include_icons": true,
+    "generate_unit_tests": true,
+    "run_unit_test_commands": false,
+    "log_unit_test_commands": true,
+    "generate_mermaid": false,
+    "generate_plantuml": false,
+    "verbose_output": true
+  },
+  "analysis_settings": {
+    "include_private_members": true,
+    "max_threads": 6,
+    "supported_languages": [
+      "java",
+      "python"
+    ],
+    "exclude_patterns": [
+      "**/test/**",
+      "**/target/**",
+      "**/build/**"
+    ]
+  }
+}

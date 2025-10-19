@@ -8,6 +8,13 @@
       "timeout_seconds": 60
     },
     {
+      "name": "llamacpp",
+      "endpoint": "http://localhost:8080/completion",
+      "max_tokens": 2048,
+      "temperature": 0.5,
+      "timeout_seconds": 90
+    },
+    {
       "name": "codellama",
       "endpoint": "http://localhost:11434/api/generate",
       "max_tokens": 4096,
@@ -36,6 +43,8 @@
     "format": "markdown",
     "include_icons": true,
     "generate_unit_tests": true,
+    "run_unit_test_commands": false,
+    "log_unit_test_commands": true,
     "target_coverage": 0.9,
     "generate_mermaid": false,
     "generate_plantuml": false,
