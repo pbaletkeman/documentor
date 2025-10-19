@@ -106,11 +106,24 @@ public class DocumentationService {
      */
     private CompletableFuture<Void> generateDetailedDocumentation(final ProjectAnalysis analysis,
             final Path outputPath) {
-        List<CompletableFuture<Void>> futures = analysis.codeElements().stream()
-                .map(element -> elementDocGenerator.generateElementDocumentation(element, outputPath))
-                .toList();
+        LOGGER.info("Generating grouped documentation for {} elements...", analysis.codeElements().size());
 
-        return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
+        // Make sure we have a valid list of elements to process
+        if (analysis.codeElements() == null || analysis.codeElements().isEmpty()) {
+            LOGGER.info("No code elements to document");
+            return CompletableFuture.completedFuture(null);
+        }
+
+        try {
+            // Create the elements directory structure
+            Path elementsDir = outputPath.resolve("elements");
+            Files.createDirectories(elementsDir);
+        } catch (Exception e) {
+            LOGGER.error("Failed to create elements directory: {}", e.getMessage());
+            return CompletableFuture.completedFuture(null);
+        }
+
+        // Use the new grouped documentation generation approach
+        return elementDocGenerator.generateGroupedDocumentation(analysis, outputPath);
     }
 }
-

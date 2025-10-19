@@ -13,7 +13,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 /**
-  * 🐍 Python Code Analyzer
+  * Python Code Analyzer
  *
  * Orchestrates Python source file analysis using specialized components:
  * - AST-based parsing for accuracy (preferred)
@@ -34,7 +34,7 @@ public class PythonCodeAnalyzer {
     }
 
     /**
-     * 📄 Analyzes a Python file and extracts all non-private code elements
+     * Analyzes a Python file and extracts all non-private code elements
      *
      * @param filePath Path to the Python source file
      * @return List of discovered code elements
@@ -44,7 +44,7 @@ public class PythonCodeAnalyzer {
     }
 
     /**
-     * 📄 Analyzes a Python file and extracts code elements with optional private member override
+     * Analyzes a Python file and extracts code elements with optional private member override
      *
      * @param filePath Path to the Python source file
      * @param includePrivateMembersOverride Optional override for including private members
@@ -52,13 +52,13 @@ public class PythonCodeAnalyzer {
      */
     public List<CodeElement> analyzeFile(final Path filePath,
                                        final Boolean includePrivateMembersOverride) throws IOException {
-        LOGGER.debug("🔍 Analyzing Python file: {}", filePath);
+        LOGGER.debug("Analyzing Python file: {}", filePath);
 
         try {
             // Try using Python's AST module for more accurate parsing
             List<CodeElement> astElements = astProcessor.analyzeWithAST(filePath);
             if (!astElements.isEmpty()) {
-                LOGGER.debug("✅ Successfully analyzed {} with AST", filePath);
+                LOGGER.debug("Successfully analyzed {} with AST", filePath);
                 return astElements;
             }
         } catch (Exception e) {
@@ -68,10 +68,9 @@ public class PythonCodeAnalyzer {
         // Fallback to regex-based parsing
         List<String> lines = Files.readAllLines(filePath);
         List<CodeElement> regexElements = regexAnalyzer.analyzeWithRegex(filePath, lines);
-        LOGGER.debug("✅ Successfully analyzed {} with regex (found {} elements)",
+        LOGGER.debug("Successfully analyzed {} with regex (found {} elements)",
                     filePath, regexElements.size());
 
         return regexElements;
     }
 }
-

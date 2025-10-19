@@ -89,7 +89,7 @@ class DocumentationServiceUnitTest {
 
         when(mainGenerator.generateMainDocumentation(any()))
                 .thenReturn(CompletableFuture.completedFuture("# README"));
-        when(elementGenerator.generateElementDocumentation(any(), any()))
+        when(elementGenerator.generateGroupedDocumentation(any(), any()))
                 .thenReturn(CompletableFuture.completedFuture(null));
         when(testGenerator.generateUnitTestDocumentation(any(), any()))
                 .thenReturn(CompletableFuture.completedFuture(null));
@@ -112,7 +112,7 @@ class DocumentationServiceUnitTest {
 
         // Verify generators invoked
         verify(mainGenerator, atLeastOnce()).generateMainDocumentation(any());
-        verify(elementGenerator, atLeastOnce()).generateElementDocumentation(any(), any());
+        verify(elementGenerator, atLeastOnce()).generateGroupedDocumentation(any(), any());
         verify(testGenerator, atLeastOnce()).generateUnitTestDocumentation(any(), any());
         verify(mermaidService, atLeastOnce()).generateClassDiagrams(any(), anyString());
     }
@@ -135,8 +135,9 @@ class DocumentationServiceUnitTest {
         String outputPath = result.get();
         assertEquals(tempDir.toString(), outputPath);
 
-        // Should not call element generator for empty analysis
-        verify(elementGenerator, never()).generateElementDocumentation(any(), any());
+        // With the updated implementation, we don't call elementDocGenerator for empty analyses
+        // because we detect this and return early
+        verify(elementGenerator, never()).generateGroupedDocumentation(any(), any());
     }
 
     @Test
@@ -158,7 +159,7 @@ class DocumentationServiceUnitTest {
 
         when(mainGenerator.generateMainDocumentation(any()))
                 .thenReturn(CompletableFuture.completedFuture("# README"));
-        when(elementGenerator.generateElementDocumentation(any(), any()))
+        when(elementGenerator.generateGroupedDocumentation(any(), any()))
                 .thenReturn(CompletableFuture.completedFuture(null));
         when(testGenerator.generateUnitTestDocumentation(any(), any()))
                 .thenReturn(CompletableFuture.completedFuture(null));
@@ -199,7 +200,7 @@ class DocumentationServiceUnitTest {
 
         when(mainGenerator.generateMainDocumentation(any()))
                 .thenReturn(CompletableFuture.completedFuture("# README"));
-        when(elementGenerator.generateElementDocumentation(any(), any()))
+        when(elementGenerator.generateGroupedDocumentation(any(), any()))
                 .thenReturn(CompletableFuture.completedFuture(null));
         when(mermaidService.generateClassDiagrams(any(), anyString()))
                 .thenReturn(CompletableFuture.completedFuture(List.of("diagram1")));
@@ -218,4 +219,3 @@ class DocumentationServiceUnitTest {
         verify(mermaidService, atLeastOnce()).generateClassDiagrams(any(), anyString());
     }
 }
-

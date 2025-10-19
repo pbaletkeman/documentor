@@ -190,6 +190,42 @@ Get up and running with Ollama in 5 minutes!
 
 ## ⚙️ Configuration
 
+### External Configuration Loading
+
+Documentor implements an early configuration loading system that ensures settings are available to all components before command processing begins:
+
+#### How It Works
+
+1. **Early Loading**: Configuration is loaded at application startup via `EarlyConfigurationLoader` which implements `ApplicationRunner` with `@Order(0)` priority
+2. **Flexible Loading**: Multiple command-line argument formats are supported for maximum flexibility:
+   - Standard format: `--config config.json`
+   - Equals format: `--config=config.json`
+   - Comma-separated format: `analyze,--config,config.json` (for Gradle arguments)
+   - Gradle specific: `-Pargs=analyze,--config,config.json`
+3. **Bean Registration**: The loaded configuration is registered as a Spring bean with `@Primary` annotation to resolve any bean conflicts
+4. **Dependency Injection**: All services automatically receive the properly loaded configuration
+
+#### Benefits
+
+- ✅ No more null configuration errors during command processing
+- ✅ Configuration available before any commands are executed
+- ✅ Support for multiple command-line argument formats
+- ✅ Proper integration with Spring's dependency injection system
+- ✅ Clear logging of configuration loading status
+
+#### Example Usage
+
+```bash
+# Using standard format
+./gradlew runApp -Pargs="analyze --project-path ./src --config config-llamacpp.json"
+
+# Using equals format
+./gradlew runApp -Pargs="analyze --project-path ./src --config=config-llamacpp.json"
+
+# Using comma-separated format
+./gradlew runApp -Pargs="analyze,--project-path,./src,--config,config-llamacpp.json"
+```
+
 ### Configuration Files Overview
 
 Documentor provides several pre-configured settings files for different use cases:

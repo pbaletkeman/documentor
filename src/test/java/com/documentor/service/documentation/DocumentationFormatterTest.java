@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 /**
- * 🧪 Simple tests for DocumentationFormatter component
+ * Simple tests for DocumentationFormatter component
  */
 class DocumentationFormatterTest {
 
@@ -156,4 +156,3 @@ class DocumentationFormatterTest {
         assertTrue(result.contains("Project Documentation"));
     }
 }
-

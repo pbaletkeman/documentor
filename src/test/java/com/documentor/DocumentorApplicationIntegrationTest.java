@@ -3,12 +3,14 @@ package com.documentor;
 import com.documentor.cli.DocumentorCommands;
 import com.documentor.config.AppConfig;
 import com.documentor.config.DocumentorConfig;
+import com.documentor.config.TestConfig;
 import com.documentor.service.CodeAnalysisService;
 import com.documentor.service.DocumentationService;
 import com.documentor.service.LlmService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,13 +19,14 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * 🧪 Integration tests for DocumentorApplication
+ * Integration tests for DocumentorApplication
  *
  * Tests the complete Spring Boot application context and component integration.
  * This ensures all beans are properly configured and wired together.
  */
 @SpringBootTest
 @ActiveProfiles("test")
+@Import(TestConfig.class)
 class DocumentorApplicationIntegrationTest {
 
     @Autowired
@@ -131,4 +134,3 @@ class DocumentorApplicationIntegrationTest {
         assertTrue(quickStartResult.contains("config.json"), "Quick start should mention configuration");
     }
 }
-

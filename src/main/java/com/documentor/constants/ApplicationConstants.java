@@ -47,6 +47,7 @@ public final class ApplicationConstants {
     public static final int DEFAULT_TIMEOUT_SECONDS = 30;
     public static final int DEFAULT_MAX_DEPTH = 10;
     public static final String DEFAULT_OLLAMA_PORT = "11434";
+    public static final int DEFAULT_WORKER_THREAD_COUNT = 4;
 
     // Coverage and formatting
     public static final int PERCENTAGE_MULTIPLIER = 100;
@@ -59,4 +60,3 @@ public final class ApplicationConstants {
         // Utility class - prevent instantiation
     }
 }
-

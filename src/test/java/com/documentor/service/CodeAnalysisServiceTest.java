@@ -28,7 +28,7 @@ import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
 /**
- * 🧪 Unit tests for CodeAnalysisService
+ * Unit tests for CodeAnalysisService
  */
 @ExtendWith(MockitoExtension.class)
 class CodeAnalysisServiceTest {
@@ -229,4 +229,3 @@ class CodeAnalysisServiceTest {
         });
     }
 }
-

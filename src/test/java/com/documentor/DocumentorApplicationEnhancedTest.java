@@ -16,7 +16,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mockStatic;
 
 /**
- * 🧪 Enhanced tests for DocumentorApplication
+ * Enhanced tests for DocumentorApplication
  *
  * Tests focused on improving coverage of the main application class.
  */
@@ -107,4 +107,3 @@ class DocumentorApplicationEnhancedTest {
         assertEquals("com.documentor", clazz.getPackageName());
     }
 }
-

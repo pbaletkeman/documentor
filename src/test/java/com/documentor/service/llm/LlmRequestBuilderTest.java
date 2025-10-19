@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * 🧪 Tests for LlmRequestBuilder component
+ * Tests for LlmRequestBuilder component
  */
 class LlmRequestBuilderTest {
 
@@ -163,4 +163,3 @@ class LlmRequestBuilderTest {
         assertTrue(prompt.contains("unit test"));
     }
 }
-

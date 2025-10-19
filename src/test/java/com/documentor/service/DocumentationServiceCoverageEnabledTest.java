@@ -94,7 +94,7 @@ class DocumentationServiceCoverageEnabledTest {
         assertTrue(content.contains("# Project Title"));
 
         verify(mainDocGenerator, times(1)).generateMainDocumentation(any());
-        verify(elementDocGenerator, atMost(1)).generateElementDocumentation(any(), any());
+        verify(elementDocGenerator, atMost(1)).generateGroupedDocumentation(any(), any());
         verify(mermaidDiagramService, times(1)).generateClassDiagrams(any(), any());
     }
 
@@ -103,7 +103,7 @@ class DocumentationServiceCoverageEnabledTest {
         when(mainDocGenerator.generateMainDocumentation(any()))
             .thenReturn(CompletableFuture.completedFuture("Main content"));
 
-        when(elementDocGenerator.generateElementDocumentation(any(), any()))
+        when(elementDocGenerator.generateGroupedDocumentation(any(), any()))
             .thenReturn(CompletableFuture.completedFuture(null));
 
         // Also stub mermaid and unit test generator to avoid NPEs (they are invoked)
@@ -131,7 +131,6 @@ class DocumentationServiceCoverageEnabledTest {
         CompletableFuture<String> future = documentationService.generateDocumentation(analysis);
         future.get();
 
-        verify(elementDocGenerator, times(1)).generateElementDocumentation(any(), any());
+        verify(elementDocGenerator, times(1)).generateGroupedDocumentation(any(), any());
     }
 }
-
