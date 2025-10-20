@@ -1,0 +1,3 @@
+@echo off
+echo Running enhanced version of Documentor with improved error handling...
+call gradlew.bat runEnhancedApp %*

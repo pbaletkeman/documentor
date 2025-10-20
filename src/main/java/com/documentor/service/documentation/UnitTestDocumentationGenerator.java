@@ -5,6 +5,7 @@ import com.documentor.config.DocumentorConfig;
 import com.documentor.model.CodeElementType;
 import com.documentor.model.ProjectAnalysis;
 import com.documentor.service.LlmService;
+import com.documentor.service.LlmServiceFix;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -28,10 +29,14 @@ public class UnitTestDocumentationGenerator {
 
     private final LlmService llmService;
     private final DocumentorConfig config;
+    private final LlmServiceFix llmServiceFix;
 
-    public UnitTestDocumentationGenerator(final LlmService llmServiceParam, final DocumentorConfig configParam) {
+    public UnitTestDocumentationGenerator(final LlmService llmServiceParam,
+                                         final DocumentorConfig configParam,
+                                         final LlmServiceFix llmServiceFixParam) {
         this.llmService = llmServiceParam;
         this.config = configParam;
+        this.llmServiceFix = llmServiceFixParam;
     }
 
     /**
@@ -41,15 +46,45 @@ public class UnitTestDocumentationGenerator {
             final Path outputPath) {
         return CompletableFuture.supplyAsync(() -> {
             try {
+                // Ensure the ThreadLocal configuration is set before generating unit tests
+                if (config != null) {
+                    LOGGER.info("Setting ThreadLocal configuration for unit test generation");
+                    llmServiceFix.setLlmServiceThreadLocalConfig(config);
+
+                    // Verify the configuration was set properly
+                    boolean configAvailable = llmServiceFix.isThreadLocalConfigAvailable();
+                    if (!configAvailable) {
+                        LOGGER.warn("ThreadLocal configuration is still not available - unit test generation may fail");
+                    }
+                } else {
+                    LOGGER.warn("Configuration is null - cannot set ThreadLocal config for unit test generation");
+                }
+
                 Path testsDir = outputPath.resolve("tests");
                 Files.createDirectories(testsDir);
 
                 StringBuilder testDoc = new StringBuilder();
                 appendTestDocumentationHeader(testDoc);
 
+                // Create a wrapper method that handles potential executor issues
                 List<CompletableFuture<String>> testFutures = analysis.codeElements().stream()
                         .filter(element -> element.type() != CodeElementType.FIELD)
-                        .map(llmService::generateUnitTests)
+                        .map(element -> {
+                            try {
+                                // Ensure configuration is set for each element
+                                llmServiceFix.setLlmServiceThreadLocalConfig(config);
+
+                                // Safely generate unit tests, catching and handling potential exceptions
+                                return llmService.generateUnitTests(element);
+                            } catch (Exception e) {
+                                LOGGER.error("Error generating unit tests for element {}: {}",
+                                    element.name(), e.getMessage());
+
+                                // Return a CompletableFuture with an error message instead of failing
+                                return CompletableFuture.completedFuture(
+                                    "```\n// Error generating unit tests: " + e.getMessage() + "\n```");
+                            }
+                        })
                         .toList();
 
                 CompletableFuture.allOf(testFutures.toArray(new CompletableFuture[0]))
@@ -86,4 +121,3 @@ public class UnitTestDocumentationGenerator {
             config.outputSettings().targetCoverage() * ApplicationConstants.PERCENTAGE_MULTIPLIER));
     }
 }
-

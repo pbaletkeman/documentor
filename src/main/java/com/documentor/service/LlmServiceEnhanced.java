@@ -1,7 +1,8 @@
 package com.documentor.service;
 
 import com.documentor.config.DocumentorConfig;
-import com.documentor.config.ThreadLocalPropagatingExecutor;
+import com.documentor.config.ThreadLocalContextHolder;
+import com.documentor.config.ThreadLocalPropagatingExecutorEnhanced;
 import com.documentor.config.model.LlmModelConfig;
 import com.documentor.constants.ApplicationConstants;
 import com.documentor.model.CodeElement;
@@ -14,20 +15,32 @@ import org.springframework.scheduling.annotation.Async;
 
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ForkJoinPool;
 
 /**
- * LLM Integration Service - Refactored for Low Complexity
+ * LLM Integration Service - Enhanced with improved error handling and null safety
  */
-public class LlmService {
+public class LlmServiceEnhanced {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LlmService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LlmServiceEnhanced.class);
 
     private final DocumentorConfig config;
     private final LlmRequestBuilder requestBuilder;
     private final LlmResponseHandler responseHandler;
     private final LlmApiClient apiClient;
 
-    public LlmService(final DocumentorConfig configParam,
+    /**
+     * Thread-local executor for CompletableFuture tasks to ensure config propagation
+     */
+    private final Executor threadLocalExecutor;
+
+    /**
+     * Fallback executor when threadLocalExecutor is unavailable
+     */
+    private static final Executor FALLBACK_EXECUTOR = ForkJoinPool.commonPool();
+
+    public LlmServiceEnhanced(final DocumentorConfig configParam,
                      final LlmRequestBuilder requestBuilderParam,
                      final LlmResponseHandler responseHandlerParam,
                      final LlmApiClient apiClientParam) {
@@ -36,42 +49,62 @@ public class LlmService {
         this.responseHandler = responseHandlerParam;
         this.apiClient = apiClientParam;
 
-        // Create the thread-local propagating executor
-        this.threadLocalExecutor = ThreadLocalPropagatingExecutor.createExecutor(
-                getWorkerThreadCount(), // Number of threads
-                "llm-worker"
-        );
-
         // Store config in ThreadLocal when service is created
         if (configParam != null) {
-            THREAD_LOCAL_CONFIG.set(configParam);
+            ThreadLocalContextHolder.setConfig(configParam);
+            LOGGER.debug("Config stored in ThreadLocalContextHolder during LlmServiceEnhanced initialization");
         }
-    }
 
-    /**
-     * Store the config in a thread-local variable to ensure it's available in async contexts
-     */
-    private static final ThreadLocal<DocumentorConfig> THREAD_LOCAL_CONFIG = new ThreadLocal<>();
+        // Create the thread-local propagating executor with safe error handling
+        Executor safeExecutor = null;
+        try {
+            safeExecutor = ThreadLocalPropagatingExecutorEnhanced.createExecutor(
+                    getWorkerThreadCount(),
+                    "llm-worker-enhanced"
+            );
+            LOGGER.info("ThreadLocalPropagatingExecutorEnhanced created successfully");
+        } catch (Exception e) {
+            LOGGER.error("Failed to create ThreadLocalPropagatingExecutorEnhanced: {}", e.getMessage());
+            // We'll use the fallback executor later if this fails
+        }
+        this.threadLocalExecutor = safeExecutor;
+    }
 
     /**
      * Get the ThreadLocal config - used by ThreadLocalTaskDecorator
      */
     public static DocumentorConfig getThreadLocalConfig() {
-        return THREAD_LOCAL_CONFIG.get();
+        return ThreadLocalContextHolder.getConfig();
     }
 
     /**
      * Set the ThreadLocal config - used by ThreadLocalTaskDecorator
      */
     public static void setThreadLocalConfig(final DocumentorConfig config) {
-        THREAD_LOCAL_CONFIG.set(config);
+        ThreadLocalContextHolder.setConfig(config);
     }
 
     /**
      * Clear the ThreadLocal config - used by ThreadLocalTaskDecorator to prevent memory leaks
      */
     public static void clearThreadLocalConfig() {
-        THREAD_LOCAL_CONFIG.remove();
+        ThreadLocalContextHolder.clearConfig();
+    }
+
+    /**
+     * Gets the executor to use for CompletableFuture operations
+     * - Uses the ThreadLocalPropagatingExecutor if available
+     * - Falls back to common pool if ThreadLocalPropagatingExecutor is null
+     *
+     * @return An executor that's guaranteed not to be null
+     */
+    private Executor getExecutor() {
+        if (threadLocalExecutor != null) {
+            return threadLocalExecutor;
+        }
+
+        LOGGER.warn("Using fallback executor (ForkJoinPool.commonPool) - ThreadLocal values may not propagate correctly");
+        return FALLBACK_EXECUTOR;
     }
 
     /**
@@ -90,7 +123,7 @@ public class LlmService {
         DocumentorConfig effectiveConfig = config != null ? config : getThreadLocalConfig();
 
         if (effectiveConfig == null) {
-            LOGGER.error("Configuration is null in LlmService.generateDocumentation");
+            LOGGER.error("Configuration is null in LlmServiceEnhanced.generateDocumentation");
             return CompletableFuture.completedFuture(
                 "Error: LLM configuration is null. Please check the application configuration.");
         }
@@ -103,14 +136,18 @@ public class LlmService {
         LOGGER.info("Using LLM model: {}", model.name());
 
         try {
-            // Use our ThreadLocalPropagatingExecutor to ensure config is available in the async thread
+            // Use our ThreadLocalPropagatingExecutor with safe fallback to ensure config is available
             return CompletableFuture.supplyAsync(() ->
-                generateWithModel(codeElement, model, "documentation"), threadLocalExecutor
+                generateWithModel(codeElement, model, "documentation"), getExecutor()
             );
         } catch (NullPointerException e) {
             LOGGER.error("NullPointerException in CompletableFuture for documentation generation: {}", e.getMessage());
-            return CompletableFuture.completedFuture(
-                "Error: Unable to process documentation asynchronously. Using synchronous fallback.");
+            // Additional logging for diagnostic purposes
+            LOGGER.error("Documentation generation falling back to synchronous execution due to: ", e);
+
+            // Synchronous fallback - directly call the method
+            String result = generateWithModel(codeElement, model, "documentation");
+            return CompletableFuture.completedFuture(result);
         }
     }
 
@@ -130,7 +167,7 @@ public class LlmService {
         DocumentorConfig effectiveConfig = config != null ? config : getThreadLocalConfig();
 
         if (effectiveConfig == null) {
-            LOGGER.error("Configuration is null in LlmService.generateUsageExamples");
+            LOGGER.error("Configuration is null in LlmServiceEnhanced.generateUsageExamples");
             return CompletableFuture.completedFuture(
                 "Error: LLM configuration is null. Please check the application configuration.");
         }
@@ -143,14 +180,18 @@ public class LlmService {
         LOGGER.info("Using LLM model for examples: {}", model.name());
 
         try {
-            // Use our ThreadLocalPropagatingExecutor to ensure config is available in the async thread
+            // Use our ThreadLocalPropagatingExecutor with safe fallback to ensure config is available
             return CompletableFuture.supplyAsync(() ->
-                generateWithModel(codeElement, model, "usage"), threadLocalExecutor
+                generateWithModel(codeElement, model, "usage"), getExecutor()
             );
         } catch (NullPointerException e) {
             LOGGER.error("NullPointerException in CompletableFuture for usage examples: {}", e.getMessage());
-            return CompletableFuture.completedFuture(
-                "Error: Unable to process usage examples asynchronously. Using synchronous fallback.");
+            // Additional logging for diagnostic purposes
+            LOGGER.error("Usage examples generation falling back to synchronous execution due to: ", e);
+
+            // Synchronous fallback - directly call the method
+            String result = generateWithModel(codeElement, model, "usage");
+            return CompletableFuture.completedFuture(result);
         }
     }
 
@@ -167,7 +208,7 @@ public class LlmService {
         DocumentorConfig effectiveConfig = config != null ? config : getThreadLocalConfig();
 
         if (effectiveConfig == null) {
-            LOGGER.error("Configuration is null in LlmService.generateUnitTests");
+            LOGGER.error("Configuration is null in LlmServiceEnhanced.generateUnitTests");
             return CompletableFuture.completedFuture(
                 "Error: LLM configuration is null. Please check the application configuration.");
         }
@@ -180,21 +221,20 @@ public class LlmService {
         LOGGER.info("Using LLM model for unit tests: {}", model.name());
 
         try {
-            // Use our ThreadLocalPropagatingExecutor to ensure config is available in the async thread
+            // Use our ThreadLocalPropagatingExecutor with safe fallback to ensure config is available
             return CompletableFuture.supplyAsync(() ->
-                generateWithModel(codeElement, model, "tests"), threadLocalExecutor
+                generateWithModel(codeElement, model, "tests"), getExecutor()
             );
         } catch (NullPointerException e) {
             LOGGER.error("NullPointerException in CompletableFuture for unit tests: {}", e.getMessage());
-            return CompletableFuture.completedFuture(
-                "Error: Unable to process unit tests asynchronously. Using synchronous fallback.");
+            // Additional logging for diagnostic purposes
+            LOGGER.error("Unit test generation falling back to synchronous execution due to: ", e);
+
+            // Synchronous fallback - directly call the method
+            String result = generateWithModel(codeElement, model, "tests");
+            return CompletableFuture.completedFuture(result);
         }
     }
-
-    /**
-     * Thread-local executor for CompletableFuture tasks to ensure config propagation
-     */
-    private final java.util.concurrent.Executor threadLocalExecutor;
 
     /**
      * Gets the worker thread count.
@@ -210,6 +250,9 @@ public class LlmService {
      */
     private String generateWithModel(final CodeElement codeElement, final LlmModelConfig model, final String type) {
         try {
+            // Diagnostic logging to verify that ThreadLocal config is available
+            ThreadLocalContextHolder.logConfigStatus();
+
             String prompt = createPrompt(codeElement, type);
             Map<String, Object> requestBody = requestBuilder.buildRequestBody(model, prompt);
             String endpoint = responseHandler.getModelEndpoint(model);
@@ -217,7 +260,7 @@ public class LlmService {
             return responseHandler.extractResponseContent(response, model);
         } catch (Exception e) {
             LOGGER.error("Error generating {} with model {}: {}", type, model.name(), e.getMessage());
-            return "Error generating " + type + " with " + model.name();
+            return "Error generating " + type + " with " + model.name() + ": " + e.getMessage();
         }
     }
 

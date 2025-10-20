@@ -73,8 +73,12 @@ public class DocumentationService {
                 generateDetailedDocumentation(analysis, outputPath).join();
 
                 // Generate unit tests if enabled
-                if (config.outputSettings().generateUnitTests()) {
+                if (config.outputSettings().generateUnitTests() != null &&
+                    config.outputSettings().generateUnitTests()) {
+                    LOGGER.info("Generating unit tests as specified in configuration");
                     testDocGenerator.generateUnitTestDocumentation(analysis, outputPath).join();
+                } else {
+                    LOGGER.info("Unit test generation is disabled in configuration - skipping");
                 }
 
                 // Generate Mermaid diagrams if enabled

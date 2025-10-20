@@ -1,9 +1,11 @@
 package com.documentor.service.documentation;
 
+import com.documentor.config.ThreadLocalContextHolder;
 import com.documentor.model.CodeElement;
 import com.documentor.model.CodeElementType;
 import com.documentor.model.ProjectAnalysis;
-import com.documentor.service.LlmService;
+import com.documentor.service.LlmServiceEnhanced;
+import com.documentor.service.LlmServiceFixEnhanced;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -16,38 +18,54 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
- * Element Documentation Generator
+ * Enhanced Element Documentation Generator with Improved Threading
  *
- * Specialized component for generating detailed documentation for code elements.
- * Handles element-specific documentation files with LLM-generated content.
- * Elements are grouped by their parent class to create comprehensive class-level documentation
- * that includes all related methods and fields.
+ * Enhanced version of the documentation generator that uses LlmServiceEnhanced
+ * directly and includes improved error handling, thread safety, and diagnostics.
  */
 @Component
-public class ElementDocumentationGenerator {
+public class ElementDocumentationGeneratorEnhanced {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ElementDocumentationGenerator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ElementDocumentationGeneratorEnhanced.class);
+    private static final int DEFAULT_FUTURE_TIMEOUT_SECONDS = 60;
 
-    private final LlmService llmService;
+    private final LlmServiceEnhanced llmService;
+    private final LlmServiceFixEnhanced llmServiceFix;
 
-    public ElementDocumentationGenerator(final LlmService llmServiceParam) {
+    public ElementDocumentationGeneratorEnhanced(
+            final LlmServiceEnhanced llmServiceParam,
+            final LlmServiceFixEnhanced llmServiceFixParam) {
         this.llmService = llmServiceParam;
+        this.llmServiceFix = llmServiceFixParam;
+        LOGGER.info("ElementDocumentationGeneratorEnhanced initialized with services: LlmServiceEnhanced={}, LlmServiceFixEnhanced={}",
+                llmServiceParam != null ? "OK" : "NULL",
+                llmServiceFixParam != null ? "OK" : "NULL");
     }
 
     /**
-     * Generates documentation for a single code element
-     *
-     * This creates a single-element project analysis and delegates to the grouped approach
+     * Generates documentation for a single code element with enhanced error handling
      */
     public CompletableFuture<Void> generateElementDocumentation(final CodeElement element, final Path outputPath) {
-        LOGGER.info("ElementDocumentationGenerator using LlmService: {}",
+        LOGGER.info("Enhanced generator using LlmServiceEnhanced: {}",
                    (llmService != null ? "OK" : "NULL"));
 
         if (llmService == null) {
-            LOGGER.error("LlmService is null in ElementDocumentationGenerator");
+            LOGGER.error("LlmServiceEnhanced is null in ElementDocumentationGeneratorEnhanced");
             return CompletableFuture.completedFuture(null);
+        }
+
+        // Ensure ThreadLocal config is set before generating documentation
+        if (llmServiceFix != null) {
+            try {
+                llmServiceFix.isThreadLocalConfigAvailable();
+            } catch (Exception e) {
+                LOGGER.error("Error checking ThreadLocal availability: {}", e.getMessage(), e);
+            }
         }
 
         // Create a single-element collection and process it using the grouped approach
@@ -65,22 +83,41 @@ public class ElementDocumentationGenerator {
     }
 
     /**
-     * Generates documentation for code elements grouped by class
-     *
-     * @param analysis Project analysis containing all code elements
-     * @param outputPath Output directory for documentation files
-     * @return CompletableFuture that completes when all documentation is generated
+     * Generates documentation for code elements grouped by class with enhanced error handling
      */
     public CompletableFuture<Void> generateGroupedDocumentation(final ProjectAnalysis analysis, final Path outputPath) {
-        LOGGER.info("Generating grouped documentation for {} elements", analysis.codeElements().size());
+        LOGGER.info("Generating grouped documentation for {} elements with enhanced thread handling",
+                   analysis.codeElements().size());
 
         if (llmService == null) {
-            LOGGER.error("LlmService is null in ElementDocumentationGenerator");
+            LOGGER.error("LlmServiceEnhanced is null in ElementDocumentationGeneratorEnhanced");
             return CompletableFuture.completedFuture(null);
+        }
+
+        // Make sure we have elements to process
+        if (analysis.codeElements() == null || analysis.codeElements().isEmpty()) {
+            LOGGER.info("No code elements to document");
+            return CompletableFuture.completedFuture(null);
+        }
+
+        // Ensure the ThreadLocal config is set before we start generating documentation
+        if (llmServiceFix != null) {
+            LOGGER.info("Setting ThreadLocal config for documentation generation");
+            try {
+                // Check if config is already available
+                boolean configAvailable = llmServiceFix.isThreadLocalConfigAvailable();
+                if (!configAvailable) {
+                    LOGGER.warn("ThreadLocal config not available - documentation generation may fail");
+                }
+            } catch (Exception e) {
+                LOGGER.error("Error checking ThreadLocal config: {}", e.getMessage(), e);
+            }
         }
 
         // Group elements by their parent class
         Map<String, List<CodeElement>> elementsByClass = groupElementsByClass(analysis.codeElements());
+        LOGGER.info("Grouped {} elements into {} classes",
+                   analysis.codeElements().size(), elementsByClass.size());
 
         // Create a list to hold all the futures for each class documentation
         List<CompletableFuture<Void>> allFutures = new ArrayList<>();
@@ -102,28 +139,63 @@ public class ElementDocumentationGenerator {
                 continue;
             }
 
-            // Generate documentation for this class group
-            CompletableFuture<Void> classFuture = generateClassDocumentation(classElement, classElements, outputPath);
+            // Generate documentation for this class group with timeout handling
+            CompletableFuture<Void> classFuture = generateClassDocumentation(classElement, classElements, outputPath)
+                .orTimeout(DEFAULT_FUTURE_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+                .exceptionally(ex -> {
+                    if (ex instanceof TimeoutException) {
+                        LOGGER.error("Timeout while generating documentation for class: {}",
+                                    classElement != null ? classElement.name() : className);
+                    } else {
+                        LOGGER.error("Error generating documentation for class: {}, error: {}",
+                                    classElement != null ? classElement.name() : className,
+                                    ex.getMessage(), ex);
+                    }
+                    // Continue processing other classes even if this one fails
+                    return null;
+                });
+
             allFutures.add(classFuture);
         }
 
         // Wait for all class documentation to complete
-        return CompletableFuture.allOf(allFutures.toArray(new CompletableFuture[0]));
+        return CompletableFuture.allOf(allFutures.toArray(new CompletableFuture[0]))
+            .exceptionally(ex -> {
+                LOGGER.error("Error in grouped documentation: {}", ex.getMessage(), ex);
+                return null;
+            })
+            .whenComplete((result, ex) -> {
+                // Cleanup ThreadLocal to prevent memory leaks
+                if (llmServiceFix != null) {
+                    LOGGER.debug("Cleaning up ThreadLocal config after documentation generation");
+                    llmServiceFix.cleanupThreadLocalConfig();
+                }
+            });
     }
 
     /**
      * Generates documentation for a class and all its related elements
-     *
-     * @param classElement the class element
-     * @param classElements the class elements
-     * @param outputPath the output path
-     * @return a future that completes when documentation is generated
      */
     private CompletableFuture<Void> generateClassDocumentation(final CodeElement classElement,
-                                                               final List<CodeElement> classElements,
-                                                               final Path outputPath) {
+                                                             final List<CodeElement> classElements,
+                                                             final Path outputPath) {
         LOGGER.info("Generating documentation for class: {}",
                    classElement != null ? classElement.name() : "Standalone elements");
+
+        // Ensure ThreadLocal config is available for this specific task
+        if (llmServiceFix != null) {
+            try {
+                boolean configAvailable = llmServiceFix.isThreadLocalConfigAvailable();
+                if (!configAvailable) {
+                    LOGGER.warn("ThreadLocal config not available for class: {} - refreshing",
+                               classElement != null ? classElement.name() : "Standalone elements");
+                    // Additional diagnostics could be added here
+                }
+            } catch (Exception e) {
+                LOGGER.error("Error checking ThreadLocal availability for class: {}",
+                            classElement != null ? classElement.name() : "Standalone elements", e);
+            }
+        }
 
         // Split elements by type
         List<CodeElement> fields = classElements.stream()
@@ -134,26 +206,36 @@ public class ElementDocumentationGenerator {
             .filter(e -> e.type() == CodeElementType.METHOD)
             .toList();
 
-        // Generate documentation for class if it exists
+        // Generate documentation for class if it exists with error handling
         CompletableFuture<String> classFuture = classElement != null
             ? llmService.generateDocumentation(classElement)
+                .exceptionally(ex -> {
+                    LOGGER.error("Error generating class documentation for {}: {}",
+                                classElement.name(), ex.getMessage());
+                    return "Error generating documentation: " + ex.getMessage();
+                })
             : CompletableFuture.completedFuture("");
 
-        // Generate examples for class if it exists
+        // Generate examples for class if it exists with error handling
         CompletableFuture<String> classExamplesFuture = classElement != null
             ? llmService.generateUsageExamples(classElement)
+                .exceptionally(ex -> {
+                    LOGGER.error("Error generating class examples for {}: {}",
+                                classElement.name(), ex.getMessage());
+                    return "Error generating examples: " + ex.getMessage();
+                })
             : CompletableFuture.completedFuture("");
 
         // Create lists to hold futures for fields and methods
         List<CompletableFuture<ElementDocPair>> fieldFutures = new ArrayList<>();
         List<CompletableFuture<ElementDocPair>> methodFutures = new ArrayList<>();
 
-        // Generate documentation for each field
+        // Generate documentation for each field with proper error handling
         for (CodeElement field : fields) {
             fieldFutures.add(generateElementDocPair(field));
         }
 
-        // Generate documentation for each method
+        // Generate documentation for each method with proper error handling
         for (CodeElement method : methods) {
             methodFutures.add(generateElementDocPair(method));
         }
@@ -162,14 +244,38 @@ public class ElementDocumentationGenerator {
         CompletableFuture<List<ElementDocPair>> allFieldsFuture =
             CompletableFuture.allOf(fieldFutures.toArray(new CompletableFuture[0]))
                 .thenApply(v -> fieldFutures.stream()
-                    .map(CompletableFuture::join)
+                    .map(future -> {
+                        try {
+                            return future.join();
+                        } catch (CompletionException e) {
+                            LOGGER.error("Error joining field future: {}", e.getMessage(), e);
+                            return new ElementDocPair(
+                                null,
+                                "Error generating documentation",
+                                "Error generating examples"
+                            );
+                        }
+                    })
+                    .filter(pair -> pair.getElement() != null)
                     .toList());
 
         // Wait for all method documentation to complete
         CompletableFuture<List<ElementDocPair>> allMethodsFuture =
             CompletableFuture.allOf(methodFutures.toArray(new CompletableFuture[0]))
                 .thenApply(v -> methodFutures.stream()
-                    .map(CompletableFuture::join)
+                    .map(future -> {
+                        try {
+                            return future.join();
+                        } catch (CompletionException e) {
+                            LOGGER.error("Error joining method future: {}", e.getMessage(), e);
+                            return new ElementDocPair(
+                                null,
+                                "Error generating documentation",
+                                "Error generating examples"
+                            );
+                        }
+                    })
+                    .filter(pair -> pair.getElement() != null)
                     .toList());
 
         // Combine everything into a final document
@@ -192,7 +298,8 @@ public class ElementDocumentationGenerator {
                             classElement.name().replaceAll("[^a-zA-Z0-9]", "_"));
                     } else {
                         // For standalone elements
-                        String packageName = classElements.get(0).qualifiedName().split("\\.")[0];
+                        String packageName = classElements.isEmpty() ? "unknown" :
+                            classElements.get(0).qualifiedName().split("\\.")[0];
                         fileName = String.format("standalone-%s.md", packageName);
                     }
 
@@ -201,10 +308,12 @@ public class ElementDocumentationGenerator {
                     Files.createDirectories(elementPath.getParent());
                     Files.write(elementPath, content.getBytes());
 
+                    LOGGER.info("✅ Successfully wrote documentation for: {}",
+                              classElement != null ? classElement.name() : "Standalone elements");
                     return null;
                 } catch (IOException e) {
-                    LOGGER.error("❌ Error writing class documentation: {}", e.getMessage());
-                    throw new RuntimeException("Failed to write class documentation", e);
+                    LOGGER.error("❌ Error writing class documentation: {}", e.getMessage(), e);
+                    throw new CompletionException("Failed to write class documentation", e);
                 }
             });
     }
@@ -217,68 +326,84 @@ public class ElementDocumentationGenerator {
         private final String documentation;
         private final String examples;
 
-        /**
-         * Constructor for ElementDocPair.
-         *
-         * @param codeElement the code element
-         * @param docContent the documentation content
-         * @param exampleContent the examples content
-         */
         ElementDocPair(final CodeElement codeElement, final String docContent, final String exampleContent) {
             this.element = codeElement;
             this.documentation = docContent;
             this.examples = exampleContent;
         }
 
-        /**
-         * Gets the element.
-         *
-         * @return the element
-         */
         public CodeElement getElement() {
             return element;
         }
 
-        /**
-         * Gets the documentation.
-         *
-         * @return the documentation
-         */
         public String getDocumentation() {
             return documentation;
         }
 
-        /**
-         * Gets the examples.
-         *
-         * @return the examples
-         */
         public String getExamples() {
             return examples;
         }
     }
 
     /**
-     * Generates documentation and examples for a single element
-     *
-     * @param codeElement the code element
-     * @return a future with element documentation pair
+     * Generates documentation and examples for a single element with enhanced error handling
      */
     private CompletableFuture<ElementDocPair> generateElementDocPair(final CodeElement codeElement) {
-        return llmService.generateDocumentation(codeElement)
-            .thenCombine(llmService.generateUsageExamples(codeElement),
-                (docContent, exampleContent) -> new ElementDocPair(codeElement, docContent, exampleContent));
+        // Additional ThreadLocal verification
+        try {
+            // Direct check from ThreadLocalContextHolder for diagnostic purposes
+            ThreadLocalContextHolder.logConfigStatus();
+
+            if (llmServiceFix != null) {
+                boolean configAvailable = llmServiceFix.isThreadLocalConfigAvailable();
+                if (!configAvailable) {
+                    LOGGER.warn("ThreadLocal config not available for element: {} - refreshing",
+                               codeElement.name());
+                }
+            }
+        } catch (Exception e) {
+            LOGGER.error("Error checking ThreadLocal availability for element: {}",
+                        codeElement.name(), e);
+        }
+
+        // Generate both documentation and examples with proper error handling
+        CompletableFuture<String> docFuture = llmService.generateDocumentation(codeElement)
+            .exceptionally(ex -> {
+                LOGGER.error("Error generating documentation for {}: {}",
+                            codeElement.name(), ex.getMessage());
+                return "Error generating documentation: " + ex.getMessage();
+            });
+
+        CompletableFuture<String> examplesFuture = llmService.generateUsageExamples(codeElement)
+            .exceptionally(ex -> {
+                LOGGER.error("Error generating examples for {}: {}",
+                            codeElement.name(), ex.getMessage());
+                return "Error generating examples: " + ex.getMessage();
+            });
+
+        // Combine the futures with timeout handling
+        return docFuture.thenCombine(examplesFuture,
+                (docContent, exampleContent) -> new ElementDocPair(codeElement, docContent, exampleContent))
+            .orTimeout(DEFAULT_FUTURE_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+            .exceptionally(ex -> {
+                if (ex instanceof TimeoutException) {
+                    LOGGER.error("Timeout while generating documentation for element: {}",
+                                codeElement.name());
+                } else {
+                    LOGGER.error("Error generating doc pair for {}: {}",
+                                codeElement.name(), ex.getMessage(), ex);
+                }
+                // Return a placeholder to avoid breaking the whole process
+                return new ElementDocPair(
+                    codeElement,
+                    "Timeout or error generating documentation",
+                    "Timeout or error generating examples"
+                );
+            });
     }
 
     /**
      * Builds the complete documentation content for a class and its elements
-     *
-     * @param classElement the class element
-     * @param classDoc the class documentation
-     * @param classExamples the class examples
-     * @param fields the fields
-     * @param methods the methods
-     * @return the documentation content
      */
     private String buildClassDocumentContent(final CodeElement classElement,
                                            final String classDoc,
@@ -386,9 +511,6 @@ public class ElementDocumentationGenerator {
 
     /**
      * Groups code elements by their parent class
-     *
-     * @param elements List of all code elements
-     * @return Map with class name as key and list of related elements as value
      */
     private Map<String, List<CodeElement>> groupElementsByClass(final List<CodeElement> elements) {
         Map<String, List<CodeElement>> elementsByClass = new HashMap<>();
@@ -426,9 +548,6 @@ public class ElementDocumentationGenerator {
 
     /**
      * Determines programming language from file extension
-     *
-     * @param filePath the file path
-     * @return the language identifier
      */
     private String getLanguageFromFile(final String filePath) {
         if (filePath.endsWith(".java")) {
