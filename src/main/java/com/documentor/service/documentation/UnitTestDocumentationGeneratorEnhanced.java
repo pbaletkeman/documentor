@@ -90,8 +90,8 @@ public class UnitTestDocumentationGeneratorEnhanced {
 
                                 // Return a CompletableFuture with an error message instead of failing
                                 return CompletableFuture.completedFuture(
-                                    "```java\n// Error generating unit tests for " + element.name() +
-                                    ": " + e.getMessage() + "\n```");
+                                    "```java\n// Error generating unit tests for " + element.name()
+                                    + ": " + e.getMessage() + "\n```");
                             }
                         })
                         .toList();
@@ -118,8 +118,10 @@ public class UnitTestDocumentationGeneratorEnhanced {
 
                                     // Write the output file
                                     try {
-                                        Files.write(testsDir.resolve("unit-tests.md"), testDoc.toString().getBytes());
-                                        LOGGER.info("✅ Successfully wrote unit tests to {}", testsDir.resolve("unit-tests.md"));
+                                        Files.write(testsDir.resolve("unit-tests.md"),
+                                                testDoc.toString().getBytes());
+                                        LOGGER.info("✅ Successfully wrote unit tests to {}",
+                                                testsDir.resolve("unit-tests.md"));
                                     } catch (IOException e) {
                                         LOGGER.error("❌ Error writing test documentation: {}", e.getMessage());
                                     }

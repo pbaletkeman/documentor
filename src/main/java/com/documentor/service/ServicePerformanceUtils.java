@@ -9,6 +9,11 @@ import java.util.stream.Collectors;
  */
 public final class ServicePerformanceUtils {
 
+    private static final double MILLISECONDS_PER_SECOND = 1000.0;
+    private static final long MILLISECONDS_IN_SECOND = 1000L;
+    private static final long MICROSECONDS_PER_MINUTE = 60000L;
+    private static final int BYTES_PER_KB = 1024;
+
     private ServicePerformanceUtils() {
         // Utility class - prevent instantiation
     }
@@ -50,7 +55,7 @@ public final class ServicePerformanceUtils {
             return 0.0;
         }
 
-        return (double) elementCount / (timeMs / 1000.0);
+        return (double) elementCount / (timeMs / MILLISECONDS_PER_SECOND);
     }
 
     /**
@@ -107,16 +112,16 @@ public final class ServicePerformanceUtils {
             return "0ms";
         }
 
-        if (durationMs < 1000) {
+        if (durationMs < MILLISECONDS_IN_SECOND) {
             return durationMs + "ms";
         }
 
-        if (durationMs < 60000) {
-            return String.format("%.1fs", durationMs / 1000.0);
+        if (durationMs < MICROSECONDS_PER_MINUTE) {
+            return String.format("%.1fs", durationMs / MILLISECONDS_PER_SECOND);
         }
 
-        long minutes = durationMs / 60000;
-        long seconds = (durationMs % 60000) / 1000;
+        long minutes = durationMs / MICROSECONDS_PER_MINUTE;
+        long seconds = (durationMs % MICROSECONDS_PER_MINUTE) / MILLISECONDS_IN_SECOND;
         return String.format("%dm %ds", minutes, seconds);
     }
 
@@ -129,8 +134,8 @@ public final class ServicePerformanceUtils {
         }
 
         // Assume each element uses about 1KB of memory
-        long estimatedMemoryPerElement = 1024; // bytes
-        long maxMemoryBytes = maxMemoryMb * 1024 * 1024;
+        long estimatedMemoryPerElement = BYTES_PER_KB; // bytes
+        long maxMemoryBytes = maxMemoryMb * BYTES_PER_KB * BYTES_PER_KB;
 
         int maxElementsInMemory = (int) (maxMemoryBytes / estimatedMemoryPerElement);
 

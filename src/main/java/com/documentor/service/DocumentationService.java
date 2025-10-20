@@ -73,8 +73,8 @@ public class DocumentationService {
                 generateDetailedDocumentation(analysis, outputPath).join();
 
                 // Generate unit tests if enabled
-                if (config.outputSettings().generateUnitTests() != null &&
-                    config.outputSettings().generateUnitTests()) {
+                if (config.outputSettings().generateUnitTests() != null
+                    && config.outputSettings().generateUnitTests()) {
                     LOGGER.info("Generating unit tests as specified in configuration");
                     testDocGenerator.generateUnitTestDocumentation(analysis, outputPath).join();
                 } else {

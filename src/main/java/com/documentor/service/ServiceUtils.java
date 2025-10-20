@@ -18,6 +18,11 @@ public final class ServiceUtils {
      */
     public static final String SERVICE_PACKAGE = "com.documentor.service";
 
+    private static final int MAX_TIMEOUT_MS = 300000; // 5 minutes
+    private static final int TIMEOUT_PER_ELEMENT_MS = 1000;
+    private static final long MIN_SLEEP_TIME_MS = 1000L;
+    private static final long MAX_SLEEP_TIME_MS = 10000L;
+
     /**
      * Default timeout for async operations (milliseconds).
      */
@@ -90,7 +95,7 @@ public final class ServiceUtils {
             return false;
         }
 
-        return timeoutMs > 0 && timeoutMs <= 300000; // Max 5 minutes
+        return timeoutMs > 0 && timeoutMs <= MAX_TIMEOUT_MS; // Max 5 minutes
     }
 
     /**
@@ -105,10 +110,10 @@ public final class ServiceUtils {
         }
 
         // Base timeout + additional time per element
-        int adaptiveTimeout = DEFAULT_ASYNC_TIMEOUT + (elementCount * 1000);
+        int adaptiveTimeout = DEFAULT_ASYNC_TIMEOUT + (elementCount * TIMEOUT_PER_ELEMENT_MS);
 
         // Cap at maximum timeout
-        return Math.min(adaptiveTimeout, 300000);
+        return Math.min(adaptiveTimeout, MAX_TIMEOUT_MS);
     }
 
     /**
@@ -146,9 +151,9 @@ public final class ServiceUtils {
         }
 
         String normalized = docType.trim().toLowerCase();
-        return DOC_TYPE_JAVADOC.equals(normalized) ||
-               DOC_TYPE_MARKDOWN.equals(normalized) ||
-               DOC_TYPE_PLAIN.equals(normalized);
+        return DOC_TYPE_JAVADOC.equals(normalized)
+               || DOC_TYPE_MARKDOWN.equals(normalized)
+               || DOC_TYPE_PLAIN.equals(normalized);
     }
 
     /**
@@ -244,6 +249,6 @@ public final class ServiceUtils {
         }
 
         // Exponential backoff: 1s, 2s, 4s, 8s...
-        return Math.min(1000L * (1L << (attemptNumber - 1)), 10000L);
+        return Math.min(MIN_SLEEP_TIME_MS * (1L << (attemptNumber - 1)), MAX_SLEEP_TIME_MS);
     }
 }

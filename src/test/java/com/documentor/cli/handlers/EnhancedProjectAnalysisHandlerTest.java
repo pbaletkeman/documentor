@@ -114,9 +114,10 @@ class EnhancedProjectAnalysisHandlerTest {
             .thenReturn("Analysis complete with null config");
 
         // When
-        String result = handler.analyzeProjectWithFix(
+        ProjectAnalysisRequest request = new ProjectAnalysisRequest(
             projectPath, configPath, generateMermaid, mermaidOutput,
             generatePlantUML, plantUMLOutput, includePrivateMembers, useFix, outputDir);
+        String result = handler.analyzeProjectWithFix(request);
 
         // Then
         assertEquals("Analysis complete with null config", result);

@@ -27,6 +27,134 @@ public class DocumentorCommands {
     private String currentProjectPath;
     private String currentConfigPath;
 
+    /**
+     * Parameter object for analysis options
+     */
+    private static final class AnalysisOptions {
+        private final String projectPath;
+        private final String configPath;
+        private final boolean includePrivateMembers;
+        private final boolean generateMermaid;
+        private final String mermaidOutput;
+        private final boolean generatePlantUML;
+        private final String plantUMLOutput;
+        private final boolean useFix;
+        private final String outputDir;
+
+        private AnalysisOptions(final Builder builder) {
+            this.projectPath = builder.projectPath;
+            this.configPath = builder.configPath;
+            this.includePrivateMembers = builder.includePrivateMembers;
+            this.generateMermaid = builder.generateMermaid;
+            this.mermaidOutput = builder.mermaidOutput;
+            this.generatePlantUML = builder.generatePlantUML;
+            this.plantUMLOutput = builder.plantUMLOutput;
+            this.useFix = builder.useFix;
+            this.outputDir = builder.outputDir;
+        }
+
+        static Builder builder() {
+            return new Builder();
+        }
+
+        static final class Builder {
+            private String projectPath;
+            private String configPath;
+            private boolean includePrivateMembers;
+            private boolean generateMermaid;
+            private String mermaidOutput;
+            private boolean generatePlantUML;
+            private String plantUMLOutput;
+            private boolean useFix;
+            private String outputDir;
+
+            Builder projectPath(final String projectPathParam) {
+                this.projectPath = projectPathParam;
+                return this;
+            }
+
+            Builder configPath(final String configPathParam) {
+                this.configPath = configPathParam;
+                return this;
+            }
+
+            Builder includePrivateMembers(final boolean includePrivateMembersParam) {
+                this.includePrivateMembers = includePrivateMembersParam;
+                return this;
+            }
+
+            Builder generateMermaid(final boolean generateMermaidParam) {
+                this.generateMermaid = generateMermaidParam;
+                return this;
+            }
+
+            Builder mermaidOutput(final String mermaidOutputParam) {
+                this.mermaidOutput = mermaidOutputParam;
+                return this;
+            }
+
+            Builder generatePlantUML(final boolean generatePlantUMLParam) {
+                this.generatePlantUML = generatePlantUMLParam;
+                return this;
+            }
+
+            Builder plantUMLOutput(final String plantUMLOutputParam) {
+                this.plantUMLOutput = plantUMLOutputParam;
+                return this;
+            }
+
+            Builder useFix(final boolean useFixParam) {
+                this.useFix = useFixParam;
+                return this;
+            }
+
+            Builder outputDir(final String outputDirParam) {
+                this.outputDir = outputDirParam;
+                return this;
+            }
+
+            AnalysisOptions build() {
+                return new AnalysisOptions(this);
+            }
+        }
+
+        public String getProjectPath() {
+            return projectPath;
+        }
+
+        public String getConfigPath() {
+            return configPath;
+        }
+
+        public boolean isIncludePrivateMembers() {
+            return includePrivateMembers;
+        }
+
+        public boolean isGenerateMermaid() {
+            return generateMermaid;
+        }
+
+        public String getMermaidOutput() {
+            return mermaidOutput;
+        }
+
+        public boolean isGeneratePlantUML() {
+            return generatePlantUML;
+        }
+
+        public String getPlantUMLOutput() {
+            return plantUMLOutput;
+        }
+
+        public boolean isUseFix() {
+            return useFix;
+        }
+
+        public String getOutputDir() {
+            return outputDir;
+        }
+    }
+
     public DocumentorCommands(
             final ProjectAnalysisCommandHandler projectAnalysisHandlerParam,
             final StatusCommandHandler statusHandlerParam,
@@ -198,33 +326,32 @@ public class DocumentorCommands {
                     defaultValue = "")
             final String plantUMLOutput) {
 
-        return analyzeWithFixAndOptions(projectPath, configPath, includePrivateMembers,
-                generateMermaid, mermaidOutput, generatePlantUML, plantUMLOutput, true, "");
+        return analyzeWithFixAndOptions(AnalysisOptions.builder()
+                .projectPath(projectPath)
+                .configPath(configPath)
+                .includePrivateMembers(includePrivateMembers)
+                .generateMermaid(generateMermaid)
+                .mermaidOutput(mermaidOutput)
+                .generatePlantUML(generatePlantUML)
+                .plantUMLOutput(plantUMLOutput)
+                .useFix(true)
+                .outputDir("")
+                .build());
     }
 
     /**
      * Internal method to handle the full analysis with all options
      */
-    @SuppressWarnings("checkstyle:ParameterNumber")
-    private String analyzeWithFixAndOptions(
-            final String projectPath,
-            final String configPath,
-            final boolean includePrivateMembers,
-            final boolean generateMermaid,
-            final String mermaidOutput,
-            final boolean generatePlantUML,
-            final String plantUMLOutput,
-            final boolean useFix,
-            final String outputDir) {
+    private String analyzeWithFixAndOptions(final AnalysisOptions options) {
 
         // Update current state
-        this.currentProjectPath = projectPath;
-        this.currentConfigPath = configPath;
+        this.currentProjectPath = options.getProjectPath();
+        this.currentConfigPath = options.getConfigPath();
 
         ProjectAnalysisRequest request = new ProjectAnalysisRequest(
-            projectPath, configPath, generateMermaid, mermaidOutput,
-            generatePlantUML, plantUMLOutput, includePrivateMembers,
-            useFix, outputDir);
+            options.getProjectPath(), options.getConfigPath(), options.isGenerateMermaid(),
+            options.getMermaidOutput(), options.isGeneratePlantUML(), options.getPlantUMLOutput(),
+            options.isIncludePrivateMembers(), options.isUseFix(), options.getOutputDir());
 
         return enhancedAnalysisHandler.analyzeProjectWithFix(request);
     }

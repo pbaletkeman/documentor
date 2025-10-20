@@ -29,6 +29,9 @@ import java.util.concurrent.CompletableFuture;
 public class ElementDocumentationGenerator {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ElementDocumentationGenerator.class);
+    private static final int DEFAULT_INDENT_SIZE = 10;
+    private static final int MAX_DESCRIPTION_LENGTH = 200;
+    private static final int MAX_ELEMENTS_TO_SHOW = 100;
 
     private final LlmService llmService;
 
@@ -280,6 +283,7 @@ public class ElementDocumentationGenerator {
      * @param methods the methods
      * @return the documentation content
      */
+    @SuppressWarnings("checkstyle:MethodLength")
     private String buildClassDocumentContent(final CodeElement classElement,
                                            final String classDoc,
                                            final String classExamples,
@@ -332,7 +336,9 @@ public class ElementDocumentationGenerator {
                 content.append("## 📑 Table of Contents\n\n");
 
                 if (!fields.isEmpty()) {
-                    content.append("<details open>\n<summary><strong>🔹 Fields</strong> (" + fields.size() + ")</summary>\n\n");
+                    content.append("<details open>\n<summary><strong>🔹 Fields</strong> (")
+                           .append(fields.size())
+                           .append(")</summary>\n\n");
                     int fieldCount = 0;
                     for (ElementDocPair field : fields) {
                         content.append(String.format("- [%s %s](#%s)\n",
@@ -342,7 +348,7 @@ public class ElementDocumentationGenerator {
                         fieldCount++;
 
                         // Add line breaks for better readability in long lists
-                        if (fieldCount % 10 == 0 && fieldCount < fields.size()) {
+                        if (fieldCount % DEFAULT_INDENT_SIZE == 0 && fieldCount < fields.size()) {
                             content.append("\n");
                         }
                     }
@@ -350,7 +356,9 @@ public class ElementDocumentationGenerator {
                 }
 
                 if (!methods.isEmpty()) {
-                    content.append("<details open>\n<summary><strong>🔸 Methods</strong> (" + methods.size() + ")</summary>\n\n");
+                    content.append("<details open>\n<summary><strong>🔸 Methods</strong> (")
+                           .append(methods.size())
+                           .append(")</summary>\n\n");
                     int methodCount = 0;
                     for (ElementDocPair method : methods) {
                         content.append(String.format("- [%s %s](#%s)\n",
@@ -360,7 +368,7 @@ public class ElementDocumentationGenerator {
                         methodCount++;
 
                         // Add line breaks for better readability in long lists
-                        if (methodCount % 10 == 0 && methodCount < methods.size()) {
+                        if (methodCount % DEFAULT_INDENT_SIZE == 0 && methodCount < methods.size()) {
                             content.append("\n");
                         }
                     }
@@ -434,7 +442,7 @@ public class ElementDocumentationGenerator {
 
                 // Signature with better code formatting and collapsible section for long signatures
                 String methodSignature = methodElem.signature();
-                if (methodSignature.length() > 200) {
+                if (methodSignature.length() > MAX_DESCRIPTION_LENGTH) {
                     content.append("#### 📋 Signature\n\n");
                     content.append("<details>\n<summary>View Method Signature</summary>\n\n");
                     content.append("```").append(getLanguageFromFile(methodElem.filePath())).append("\n");
@@ -495,7 +503,7 @@ public class ElementDocumentationGenerator {
         String[] lines = code.split("\\n");
 
         // If it's a one-liner but has semicolons, it might be compressed Java code
-        if (lines.length == 1 && code.contains(";") && code.length() > 100) {
+        if (lines.length == 1 && code.contains(";") && code.length() > MAX_ELEMENTS_TO_SHOW) {
             // Try to format it with proper line breaks
             // Replace semicolons with semicolon + newline, except in string literals
             boolean inString = false;
@@ -506,7 +514,7 @@ public class ElementDocumentationGenerator {
                 reformatted.append(c);
 
                 // Toggle string mode
-                if (c == '"' && (i == 0 || code.charAt(i-1) != '\\')) {
+                if (c == '"' && (i == 0 || code.charAt(i - 1) != '\\')) {
                     inString = !inString;
                 }
 

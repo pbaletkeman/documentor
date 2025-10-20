@@ -103,7 +103,8 @@ public class LlmServiceEnhanced {
             return threadLocalExecutor;
         }
 
-        LOGGER.warn("Using fallback executor (ForkJoinPool.commonPool) - ThreadLocal values may not propagate correctly");
+        LOGGER.warn("Using fallback executor (ForkJoinPool.commonPool) - "
+                + "ThreadLocal values may not propagate correctly");
         return FALLBACK_EXECUTOR;
     }
 

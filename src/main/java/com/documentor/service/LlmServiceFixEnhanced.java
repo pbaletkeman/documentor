@@ -64,7 +64,8 @@ public class LlmServiceFixEnhanced {
                         modelCount);
 
                 // Log that the ThreadLocal config can be expected in child threads
-                LOGGER.info("Child threads created by ThreadLocalPropagatingExecutorEnhanced should now receive this config");
+                LOGGER.info("Child threads created by ThreadLocalPropagatingExecutorEnhanced "
+                        + "should now receive this config");
             } else {
                 LOGGER.error("Failed to set ThreadLocal config - verification returned null");
             }

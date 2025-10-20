@@ -5,6 +5,8 @@ package com.documentor.service;
  */
 public final class ServiceMetricsUtils {
 
+    private static final double HUNDRED_PERCENT = 100.0;
+
     private ServiceMetricsUtils() {
         // Utility class - prevent instantiation
     }
@@ -22,10 +24,10 @@ public final class ServiceMetricsUtils {
         }
 
         if (successful > total) {
-            return 100.0;
+            return HUNDRED_PERCENT;
         }
 
-        return (double) successful / total * 100.0;
+        return (double) successful / total * HUNDRED_PERCENT;
     }
 
     /**
@@ -36,7 +38,7 @@ public final class ServiceMetricsUtils {
             return "0.0%";
         }
 
-        if (successRate > 100) {
+        if (successRate > HUNDRED_PERCENT) {
             return "100.0%";
         }
 
@@ -47,7 +49,7 @@ public final class ServiceMetricsUtils {
      * Checks if success rate meets minimum threshold.
      */
     public static boolean meetsSuccessThreshold(final double successRate, final double threshold) {
-        if (threshold < 0 || threshold > 100) {
+        if (threshold < 0 || threshold > HUNDRED_PERCENT) {
             return false;
         }
 
@@ -67,10 +69,10 @@ public final class ServiceMetricsUtils {
         }
 
         if (errors > total) {
-            return 100.0;
+            return HUNDRED_PERCENT;
         }
 
-        return (double) errors / total * 100.0;
+        return (double) errors / total * HUNDRED_PERCENT;
     }
 
     /**
@@ -78,7 +80,7 @@ public final class ServiceMetricsUtils {
      */
     public static boolean isServiceHealthy(final double successRate, final double errorRate,
                                          final double minSuccess, final double maxError) {
-        if (minSuccess < 0 || minSuccess > 100 || maxError < 0 || maxError > 100) {
+        if (minSuccess < 0 || minSuccess > HUNDRED_PERCENT || maxError < 0 || maxError > HUNDRED_PERCENT) {
             return false;
         }
 
@@ -98,10 +100,10 @@ public final class ServiceMetricsUtils {
         }
 
         if (uptimeMs > totalTimeMs) {
-            return 100.0;
+            return HUNDRED_PERCENT;
         }
 
-        return (double) uptimeMs / totalTimeMs * 100.0;
+        return (double) uptimeMs / totalTimeMs * HUNDRED_PERCENT;
     }
 
     /**

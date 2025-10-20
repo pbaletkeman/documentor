@@ -33,14 +33,51 @@ public class EnhancedProjectAnalysisHandler {
      * Handle project analysis command with fix option for ThreadLocal configuration
      */
     public String analyzeProjectWithFix(final ProjectAnalysisRequest request) {
-        return analyzeProjectWithFixInternal(
+        // If the fix option is enabled, set the ThreadLocal configuration directly
+        if (request.useFix() && request.configPath() != null) {
+            LOGGER.info("Using LlmServiceFix to ensure ThreadLocal configuration is available");
+
+            // Get the current configuration
+            DocumentorConfig config = configLoader.getLoadedConfig();
+
+            if (config == null) {
+                // Try to load it if not already loaded
+                LOGGER.info("Configuration not loaded yet, trying to load from: {}", request.configPath());
+                String[] args = {"analyze", "--config", request.configPath()};
+                boolean loaded = configLoader.loadExternalConfig(args);
+
+                if (loaded) {
+                    config = configLoader.getLoadedConfig();
+                    LOGGER.info("Successfully loaded config with {} models",
+                                config.llmModels() != null ? config.llmModels().size() : 0);
+                } else {
+                    LOGGER.error("Failed to load configuration from: {}", request.configPath());
+                }
+            }
+
+            if (config != null) {
+                // Use our fix to set the ThreadLocal configuration directly
+                llmServiceFix.setLlmServiceThreadLocalConfig(config);
+            } else {
+                LOGGER.error("Cannot apply fix - configuration is null");
+            }
+        }
+
+        // Add output directory option if specified
+        if (request.outputDir() != null && !request.outputDir().isEmpty()) {
+            System.setProperty("documentor.output.directory", request.outputDir());
+            LOGGER.info("Set output directory to: {}", request.outputDir());
+        }
+
+        // Call the base handler to perform the analysis
+        return baseHandler.handleAnalyzeProjectExtended(
             request.projectPath(), request.configPath(), request.generateMermaid(),
             request.mermaidOutput(), request.generatePlantUML(), request.plantUMLOutput(),
-            request.includePrivateMembers(), request.useFix(), request.outputDir());
+            request.includePrivateMembers());
     }
 
     /**
-     * Legacy method signature for backward compatibility with tests
+     * Legacy method for backwards compatibility - for testing purposes only
      * @deprecated Use analyzeProjectWithFix(ProjectAnalysisRequest) instead
      */
     @Deprecated
@@ -55,64 +92,9 @@ public class EnhancedProjectAnalysisHandler {
             final Boolean includePrivateMembers,
             final boolean useFix,
             final String outputDir) {
-        return analyzeProjectWithFixInternal(projectPath, configPath, generateMermaid,
-                mermaidOutput, generatePlantUML, plantUMLOutput, includePrivateMembers, useFix, outputDir);
-    }
-
-    /**
-     * Internal implementation of project analysis with fix
-     */
-    @SuppressWarnings("checkstyle:ParameterNumber")
-    private String analyzeProjectWithFixInternal(
-            final String projectPath,
-            final String configPath,
-            final boolean generateMermaid,
-            final String mermaidOutput,
-            final boolean generatePlantUML,
-            final String plantUMLOutput,
-            final Boolean includePrivateMembers,
-            final boolean useFix,
-            final String outputDir) {
-
-        // If the fix option is enabled, set the ThreadLocal configuration directly
-        if (useFix && configPath != null) {
-            LOGGER.info("Using LlmServiceFix to ensure ThreadLocal configuration is available");
-
-            // Get the current configuration
-            DocumentorConfig config = configLoader.getLoadedConfig();
-
-            if (config == null) {
-                // Try to load it if not already loaded
-                LOGGER.info("Configuration not loaded yet, trying to load from: {}", configPath);
-                String[] args = {"analyze", "--config", configPath};
-                boolean loaded = configLoader.loadExternalConfig(args);
-
-                if (loaded) {
-                    config = configLoader.getLoadedConfig();
-                    LOGGER.info("Successfully loaded config with {} models",
-                                config.llmModels() != null ? config.llmModels().size() : 0);
-                } else {
-                    LOGGER.error("Failed to load configuration from: {}", configPath);
-                }
-            }
-
-            if (config != null) {
-                // Use our fix to set the ThreadLocal configuration directly
-                llmServiceFix.setLlmServiceThreadLocalConfig(config);
-            } else {
-                LOGGER.error("Cannot apply fix - configuration is null");
-            }
-        }
-
-        // Add output directory option if specified
-        if (outputDir != null && !outputDir.isEmpty()) {
-            System.setProperty("documentor.output.directory", outputDir);
-            LOGGER.info("Set output directory to: {}", outputDir);
-        }
-
-        // Call the base handler to perform the analysis
-        return baseHandler.handleAnalyzeProjectExtended(
+        ProjectAnalysisRequest request = new ProjectAnalysisRequest(
             projectPath, configPath, generateMermaid, mermaidOutput,
-            generatePlantUML, plantUMLOutput, includePrivateMembers);
+            generatePlantUML, plantUMLOutput, includePrivateMembers, useFix, outputDir);
+        return analyzeProjectWithFix(request);
     }
 }

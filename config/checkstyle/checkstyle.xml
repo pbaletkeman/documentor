@@ -107,5 +107,11 @@
     <module name="FinalParameters"/>
     <module name="TodoComment"/>
     <module name="UpperEll"/>
+
+    <!-- Allow suppression via @SuppressWarnings annotation -->
+    <module name="SuppressWarningsHolder"/>
   </module>
+
+  <!-- Enable SuppressWarnings filter -->
+  <module name="SuppressWarningsFilter"/>
 </module>

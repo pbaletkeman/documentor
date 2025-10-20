@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
  */
 public final class ServiceValidationUtils {
 
+    private static final double HUNDRED_PERCENT = 100.0;
+
     private ServiceValidationUtils() {
         // Utility class - prevent instantiation
     }
@@ -79,8 +81,8 @@ public final class ServiceValidationUtils {
 
         return elements.stream()
             .filter(element -> element != null)
-            .anyMatch(element -> element.documentation() == null ||
-                               element.documentation().trim().isEmpty());
+            .anyMatch(element -> element.documentation() == null
+                               || element.documentation().trim().isEmpty());
     }
 
     /**
@@ -132,10 +134,10 @@ public final class ServiceValidationUtils {
         }
 
         if (covered > total) {
-            return 100.0;
+            return HUNDRED_PERCENT;
         }
 
-        return (double) covered / total * 100.0;
+        return (double) covered / total * HUNDRED_PERCENT;
     }
 
     /**
@@ -146,7 +148,7 @@ public final class ServiceValidationUtils {
             return "0%";
         }
 
-        if (coverage > 100) {
+        if (coverage > HUNDRED_PERCENT) {
             return "100%";
         }
 
@@ -157,7 +159,7 @@ public final class ServiceValidationUtils {
      * Checks if coverage meets minimum threshold.
      */
     public static boolean meetsCoverageThreshold(final double coverage, final double threshold) {
-        if (threshold < 0 || threshold > 100) {
+        if (threshold < 0 || threshold > HUNDRED_PERCENT) {
             return false;
         }
 

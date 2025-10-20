@@ -62,6 +62,7 @@ public class DocumentationServiceEnhanced {
      * @param analysis The project analysis results
      * @return CompletableFuture containing the path to generated documentation
      */
+    @SuppressWarnings("checkstyle:MethodLength")
     public CompletableFuture<String> generateDocumentation(final ProjectAnalysis analysis) {
         LOGGER.info("📄 Starting enhanced documentation generation for project: {}", analysis.projectPath());
 
@@ -99,9 +100,9 @@ public class DocumentationServiceEnhanced {
                         } else {
                             LOGGER.error("Error generating main documentation: {}", ex.getMessage(), ex);
                         }
-                        return "# Error Generating Documentation\n\n" +
-                               "There was an error generating the main documentation: " +
-                               ex.getMessage();
+                        return "# Error Generating Documentation\n\n"
+                               + "There was an error generating the main documentation: "
+                               + ex.getMessage();
                     });
 
                 String mainDoc = mainDocFuture.join();
@@ -138,8 +139,8 @@ public class DocumentationServiceEnhanced {
                 }
 
                 // Generate unit tests if enabled
-                if (config.outputSettings().generateUnitTests() != null &&
-                    config.outputSettings().generateUnitTests()) {
+                if (config.outputSettings().generateUnitTests() != null
+                    && config.outputSettings().generateUnitTests()) {
                     try {
                         // First ensure ThreadLocal is properly set again
                         if (llmServiceFix != null) {
