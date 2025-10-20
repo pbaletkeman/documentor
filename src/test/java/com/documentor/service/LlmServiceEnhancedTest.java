@@ -270,4 +270,160 @@ class LlmServiceEnhancedTest {
             // Note: logConfigStatus may not be called in all code paths, so just verify setConfig
         }
     }
+
+    @Test
+    void testGenerateUsageExamplesWithNullConfig() throws ExecutionException, InterruptedException {
+        // Arrange - Create service with null config
+        LlmServiceEnhanced nullConfigService = new LlmServiceEnhanced(null, requestBuilder, responseHandler, apiClient);
+
+        try (MockedStatic<ThreadLocalContextHolder> mockedStatic = mockStatic(ThreadLocalContextHolder.class)) {
+            mockedStatic.when(ThreadLocalContextHolder::getConfig).thenReturn(null);
+
+            // Act
+            CompletableFuture<String> result = nullConfigService.generateUsageExamples(testCodeElement);
+            String usageExamples = result.get();
+
+            // Assert
+            assertEquals("Error: LLM configuration is null. Please check the application configuration.", usageExamples);
+        }
+    }
+
+    @Test
+    void testGenerateUsageExamplesWithEmptyModelList() throws ExecutionException, InterruptedException {
+        // Arrange - Create config with empty model list
+        DocumentorConfig emptyConfig = new DocumentorConfig(List.of(), null, null);
+        LlmServiceEnhanced emptyConfigService = new LlmServiceEnhanced(emptyConfig, requestBuilder, responseHandler, apiClient);
+
+        // Act
+        CompletableFuture<String> result = emptyConfigService.generateUsageExamples(testCodeElement);
+        String usageExamples = result.get();
+
+        // Assert
+        assertEquals("No LLM models configured for example generation.", usageExamples);
+    }
+
+    @Test
+    void testGenerateUsageExamplesWithException() throws ExecutionException, InterruptedException {
+        // Arrange
+        when(requestBuilder.createUsageExamplePrompt(testCodeElement)).thenReturn("usage prompt");
+        when(requestBuilder.buildRequestBody(any(LlmModelConfig.class), anyString()))
+            .thenThrow(new RuntimeException("Request building failed"));
+
+        // Act
+        CompletableFuture<String> result = llmService.generateUsageExamples(testCodeElement);
+        String usageExamples = result.get();
+
+        // Assert
+        System.out.println("Actual usage examples result: " + usageExamples);
+        assertTrue(usageExamples.contains("Error generating"), "Expected error message, got: " + usageExamples);
+        assertTrue(usageExamples.contains("Request building failed"), "Expected 'Request building failed', got: " + usageExamples);
+    }
+
+    @Test
+    void testGenerateUnitTestsWithNullConfig() throws ExecutionException, InterruptedException {
+        // Arrange - Create service with null config
+        LlmServiceEnhanced nullConfigService = new LlmServiceEnhanced(null, requestBuilder, responseHandler, apiClient);
+
+        try (MockedStatic<ThreadLocalContextHolder> mockedStatic = mockStatic(ThreadLocalContextHolder.class)) {
+            mockedStatic.when(ThreadLocalContextHolder::getConfig).thenReturn(null);
+
+            // Act
+            CompletableFuture<String> result = nullConfigService.generateUnitTests(testCodeElement);
+            String unitTests = result.get();
+
+            // Assert
+            assertEquals("Error: LLM configuration is null. Please check the application configuration.", unitTests);
+        }
+    }
+
+    @Test
+    void testGenerateUnitTestsWithEmptyModelList() throws ExecutionException, InterruptedException {
+        // Arrange - Create config with empty model list
+        DocumentorConfig emptyConfig = new DocumentorConfig(List.of(), null, null);
+        LlmServiceEnhanced emptyConfigService = new LlmServiceEnhanced(emptyConfig, requestBuilder, responseHandler, apiClient);
+
+        // Act
+        CompletableFuture<String> result = emptyConfigService.generateUnitTests(testCodeElement);
+        String unitTests = result.get();
+
+        // Assert
+        assertEquals("No LLM models configured for unit test generation.", unitTests);
+    }
+
+    @Test
+    void testGenerateUnitTestsWithException() throws ExecutionException, InterruptedException {
+        // Arrange
+        when(requestBuilder.createUnitTestPrompt(testCodeElement)).thenReturn("test prompt");
+        when(requestBuilder.buildRequestBody(any(LlmModelConfig.class), anyString()))
+            .thenThrow(new RuntimeException("Unit test generation failed"));
+
+        // Act
+        CompletableFuture<String> result = llmService.generateUnitTests(testCodeElement);
+        String unitTests = result.get();
+
+        // Assert
+        System.out.println("Actual unit tests result: " + unitTests);
+        assertTrue(unitTests.contains("Error generating"), "Expected error message, got: " + unitTests);
+        assertTrue(unitTests.contains("Unit test generation failed"), "Expected 'Unit test generation failed', got: " + unitTests);
+    }
+
+    @Test
+    void testGetExecutorWithNullThreadLocalExecutor() {
+        // Arrange - Create service with null executor
+        LlmServiceEnhanced serviceWithNullExecutor = new LlmServiceEnhanced(config, requestBuilder, responseHandler, apiClient);
+
+        // Use reflection to set threadLocalExecutor to null
+        try {
+            java.lang.reflect.Field executorField = LlmServiceEnhanced.class.getDeclaredField("threadLocalExecutor");
+            executorField.setAccessible(true);
+            executorField.set(serviceWithNullExecutor, null);
+
+            // Act - invoke private getExecutor method via reflection
+            java.lang.reflect.Method getExecutorMethod = LlmServiceEnhanced.class.getDeclaredMethod("getExecutor");
+            getExecutorMethod.setAccessible(true);
+            Object executor = getExecutorMethod.invoke(serviceWithNullExecutor);
+
+            // Assert - Should return fallback executor (not null)
+            assertNotNull(executor);
+        } catch (Exception e) {
+            fail("Failed to test getExecutor with null threadLocalExecutor: " + e.getMessage());
+        }
+    }
+
+    @Test
+    void testGetExecutorWithValidThreadLocalExecutor() {
+        // This test verifies the happy path where threadLocalExecutor is not null
+        // The existing tests already cover this scenario, but we'll test explicitly
+
+        try {
+            // Act - invoke private getExecutor method via reflection
+            java.lang.reflect.Method getExecutorMethod = LlmServiceEnhanced.class.getDeclaredMethod("getExecutor");
+            getExecutorMethod.setAccessible(true);
+            Object executor = getExecutorMethod.invoke(llmService);
+
+            // Assert - Should return the threadLocalExecutor (not null)
+            assertNotNull(executor);
+        } catch (Exception e) {
+            fail("Failed to test getExecutor with valid threadLocalExecutor: " + e.getMessage());
+        }
+    }
+
+    @Test
+    void testCreatePromptWithNullCodeElement() {
+        try {
+            // Arrange - Mock the request builder to return something when called with null
+            when(requestBuilder.createDocumentationPrompt(null)).thenReturn("documentation prompt for null element");
+
+            // Act - invoke private createPrompt method via reflection with null CodeElement
+            java.lang.reflect.Method createPromptMethod = LlmServiceEnhanced.class.getDeclaredMethod("createPrompt", CodeElement.class, String.class);
+            createPromptMethod.setAccessible(true);
+            String prompt = (String) createPromptMethod.invoke(llmService, null, "documentation");
+
+            // Assert - Should handle null gracefully by delegating to requestBuilder
+            assertNotNull(prompt);
+            assertEquals("documentation prompt for null element", prompt);
+        } catch (Exception e) {
+            fail("Failed to test createPrompt with null CodeElement: " + e.getMessage());
+        }
+    }
 }
