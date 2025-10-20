@@ -90,7 +90,9 @@ task testUnit(type: Test) {
     // Additional exclusion patterns to catch any other failing integration tests
     exclude '**/*IntegrationTest.class'
     exclude '**/*ApplicationTests.class'
-}// JaCoCo configuration - simplified
+}
+
+// JaCoCo configuration - simplified
 jacoco {
     toolVersion = "0.8.11"  // Updated to support Java 21
 }
