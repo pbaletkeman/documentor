@@ -44,7 +44,9 @@ public class ElementDocumentationGenerator {
      *
      * This creates a single-element project analysis and delegates to the grouped approach
      */
-    public CompletableFuture<Void> generateElementDocumentation(final CodeElement element, final Path outputPath) {
+    public CompletableFuture<Void> generateElementDocumentation(
+            final CodeElement element,
+            final Path outputPath) {
         LOGGER.info("ElementDocumentationGenerator using LlmService: {}",
                    (llmService != null ? "OK" : "NULL"));
 
@@ -74,8 +76,11 @@ public class ElementDocumentationGenerator {
      * @param outputPath Output directory for documentation files
      * @return CompletableFuture that completes when all documentation is generated
      */
-    public CompletableFuture<Void> generateGroupedDocumentation(final ProjectAnalysis analysis, final Path outputPath) {
-        LOGGER.info("Generating grouped documentation for {} elements", analysis.codeElements().size());
+    public CompletableFuture<Void> generateGroupedDocumentation(
+            final ProjectAnalysis analysis,
+            final Path outputPath) {
+        LOGGER.info("Generating grouped documentation for {} elements",
+                   analysis.codeElements().size());
 
         if (llmService == null) {
             LOGGER.error("LlmService is null in ElementDocumentationGenerator");
@@ -95,23 +100,28 @@ public class ElementDocumentationGenerator {
 
             // Find the class element itself
             CodeElement classElement = classElements.stream()
-                .filter(e -> e.type() == CodeElementType.CLASS && e.qualifiedName().equals(className))
+                .filter(e -> e.type() == CodeElementType.CLASS
+                           && e.qualifiedName().equals(className))
                 .findFirst()
                 .orElse(null);
 
             // Skip if we can't find the class element and it's not a special group
-            if (classElement == null && !className.equals("_FIELDS_") && !className.equals("_METHODS_")) {
+            boolean isSpecialGroup = className.equals("_FIELDS_")
+                                   || className.equals("_METHODS_");
+            if (classElement == null && !isSpecialGroup) {
                 LOGGER.warn("Could not find class element for {}, skipping", className);
                 continue;
             }
 
             // Generate documentation for this class group
-            CompletableFuture<Void> classFuture = generateClassDocumentation(classElement, classElements, outputPath);
+            CompletableFuture<Void> classFuture = generateClassDocumentation(
+                classElement, classElements, outputPath);
             allFutures.add(classFuture);
         }
 
         // Wait for all class documentation to complete
-        return CompletableFuture.allOf(allFutures.toArray(new CompletableFuture[0]));
+        return CompletableFuture.allOf(
+            allFutures.toArray(new CompletableFuture[0]));
     }
 
     /**
@@ -122,11 +132,14 @@ public class ElementDocumentationGenerator {
      * @param outputPath the output path
      * @return a future that completes when documentation is generated
      */
-    private CompletableFuture<Void> generateClassDocumentation(final CodeElement classElement,
-                                                               final List<CodeElement> classElements,
-                                                               final Path outputPath) {
-        LOGGER.info("Generating documentation for class: {}",
-                   classElement != null ? classElement.name() : "Standalone elements");
+    private CompletableFuture<Void> generateClassDocumentation(
+            final CodeElement classElement,
+            final List<CodeElement> classElements,
+            final Path outputPath) {
+        String className = classElement != null
+                          ? classElement.name()
+                          : "Standalone elements";
+        LOGGER.info("Generating documentation for class: {}", className);
 
         // Split elements by type
         List<CodeElement> fields = classElements.stream()
@@ -163,20 +176,23 @@ public class ElementDocumentationGenerator {
 
         // Wait for all field documentation to complete
         CompletableFuture<List<ElementDocPair>> allFieldsFuture =
-            CompletableFuture.allOf(fieldFutures.toArray(new CompletableFuture[0]))
+            CompletableFuture.allOf(
+                fieldFutures.toArray(new CompletableFuture[0]))
                 .thenApply(v -> fieldFutures.stream()
                     .map(CompletableFuture::join)
                     .toList());
 
         // Wait for all method documentation to complete
         CompletableFuture<List<ElementDocPair>> allMethodsFuture =
-            CompletableFuture.allOf(methodFutures.toArray(new CompletableFuture[0]))
+            CompletableFuture.allOf(
+                methodFutures.toArray(new CompletableFuture[0]))
                 .thenApply(v -> methodFutures.stream()
                     .map(CompletableFuture::join)
                     .toList());
 
         // Combine everything into a final document
-        return CompletableFuture.allOf(classFuture, classExamplesFuture, allFieldsFuture, allMethodsFuture)
+        return CompletableFuture.allOf(
+            classFuture, classExamplesFuture, allFieldsFuture, allMethodsFuture)
             .thenApply(v -> {
                 try {
                     // Create the content
@@ -191,11 +207,13 @@ public class ElementDocumentationGenerator {
                     // Determine the file name
                     String fileName;
                     if (classElement != null) {
-                        fileName = String.format("class-%s.md",
-                            classElement.name().replaceAll("[^a-zA-Z0-9]", "_"));
+                        String sanitizedName = classElement.name()
+                            .replaceAll("[^a-zA-Z0-9]", "_");
+                        fileName = String.format("class-%s.md", sanitizedName);
                     } else {
                         // For standalone elements
-                        String packageName = classElements.get(0).qualifiedName().split("\\.")[0];
+                        String packageName = classElements.get(0)
+                            .qualifiedName().split("\\.")[0];
                         fileName = String.format("standalone-%s.md", packageName);
                     }
 
@@ -284,22 +302,26 @@ public class ElementDocumentationGenerator {
      * @return the documentation content
      */
     @SuppressWarnings("checkstyle:MethodLength")
-    private String buildClassDocumentContent(final CodeElement classElement,
-                                           final String classDoc,
-                                           final String classExamples,
-                                           final List<ElementDocPair> fields,
-                                           final List<ElementDocPair> methods) {
+    private String buildClassDocumentContent(
+            final CodeElement classElement,
+            final String classDoc,
+            final String classExamples,
+            final List<ElementDocPair> fields,
+            final List<ElementDocPair> methods) {
         StringBuilder content = new StringBuilder();
 
         // Class header and documentation
         if (classElement != null) {
             // Add class name with larger header and package info
-            content.append(String.format("# %s %s\n\n", classElement.type().getIcon(), classElement.name()));
+            content.append(String.format("# %s %s\n\n",
+                          classElement.type().getIcon(), classElement.name()));
 
             // Safely extract package name and format it nicely
             String qualifiedName = classElement.qualifiedName();
             int lastDotIndex = qualifiedName.lastIndexOf('.');
-            String packageName = lastDotIndex > 0 ? qualifiedName.substring(0, lastDotIndex) : "(default package)";
+            String packageName = lastDotIndex > 0
+                               ? qualifiedName.substring(0, lastDotIndex)
+                               : "(default package)";
             content.append(String.format("> **Package:** `%s`\n\n", packageName));
 
             // Add horizontal rule for visual separation
@@ -499,11 +521,11 @@ public class ElementDocumentationGenerator {
 
         // Format Java code blocks properly
         // This ensures proper indentation and line breaks
-        StringBuilder formattedCode = new StringBuilder();
         String[] lines = code.split("\\n");
 
         // If it's a one-liner but has semicolons, it might be compressed Java code
-        if (lines.length == 1 && code.contains(";") && code.length() > MAX_ELEMENTS_TO_SHOW) {
+        if (lines.length == 1 && code.contains(";")
+            && code.length() > MAX_ELEMENTS_TO_SHOW) {
             // Try to format it with proper line breaks
             // Replace semicolons with semicolon + newline, except in string literals
             boolean inString = false;
@@ -563,7 +585,8 @@ public class ElementDocumentationGenerator {
      * @param elements List of all code elements
      * @return Map with class name as key and list of related elements as value
      */
-    private Map<String, List<CodeElement>> groupElementsByClass(final List<CodeElement> elements) {
+    private Map<String, List<CodeElement>> groupElementsByClass(
+            final List<CodeElement> elements) {
         Map<String, List<CodeElement>> elementsByClass = new HashMap<>();
 
         for (CodeElement element : elements) {
@@ -591,7 +614,8 @@ public class ElementDocumentationGenerator {
             }
 
             // Add to the map
-            elementsByClass.computeIfAbsent(classKey, k -> new ArrayList<>()).add(element);
+            elementsByClass.computeIfAbsent(classKey, k -> new ArrayList<>())
+                           .add(element);
         }
 
         return elementsByClass;

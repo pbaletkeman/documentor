@@ -188,7 +188,8 @@ public class DocumentorCommands {
                     defaultValue = "false")
             final boolean generateMermaid,
             @ShellOption(value = "--mermaid-output",
-                    help = "Output directory for Mermaid diagrams (defaults to same directory as source files)",
+                    help = "Output directory for Mermaid diagrams " +
+                           "(defaults to same directory as source files)",
                     defaultValue = "")
             final String mermaidOutput,
             @ShellOption(value = "--generate-plantuml",
@@ -196,7 +197,8 @@ public class DocumentorCommands {
                     defaultValue = "false")
             final boolean generatePlantUML,
             @ShellOption(value = "--plantuml-output",
-                    help = "Output directory for PlantUML diagrams (defaults to same directory as source files)",
+                    help = "Output directory for PlantUML diagrams " +
+                           "(defaults to same directory as source files)",
                     defaultValue = "")
             final String plantUMLOutput) {
 
@@ -204,8 +206,9 @@ public class DocumentorCommands {
         this.currentProjectPath = projectPath;
         this.currentConfigPath = configPath;
 
-        return projectAnalysisHandler.handleAnalyzeProjectExtended(projectPath, configPath,
-                generateMermaid, mermaidOutput, generatePlantUML, plantUMLOutput, includePrivateMembers);
+        return projectAnalysisHandler.handleAnalyzeProjectExtended(
+                projectPath, configPath, generateMermaid, mermaidOutput,
+                generatePlantUML, plantUMLOutput, includePrivateMembers);
     }
 
     /**
@@ -222,15 +225,17 @@ public class DocumentorCommands {
                     defaultValue = "true")
             final boolean includePrivateMembers,
             @ShellOption(value = "--plantuml-output",
-                    help = "Output directory for PlantUML diagrams (defaults to same directory as source files)",
+                    help = "Output directory for PlantUML diagrams " +
+                           "(defaults to same directory as source files)",
                     defaultValue = "")
             final String plantUMLOutput) {
 
         // Update current state
         this.currentProjectPath = projectPath;
 
-        return projectAnalysisHandler.handleAnalyzeProjectExtended(projectPath, "config.json",
-                false, "", true, plantUMLOutput, includePrivateMembers);
+        return projectAnalysisHandler.handleAnalyzeProjectExtended(
+                projectPath, "config.json", false, "", true,
+                plantUMLOutput, includePrivateMembers);
     }
 
     /**
@@ -349,9 +354,11 @@ public class DocumentorCommands {
         this.currentConfigPath = options.getConfigPath();
 
         ProjectAnalysisRequest request = new ProjectAnalysisRequest(
-            options.getProjectPath(), options.getConfigPath(), options.isGenerateMermaid(),
-            options.getMermaidOutput(), options.isGeneratePlantUML(), options.getPlantUMLOutput(),
-            options.isIncludePrivateMembers(), options.isUseFix(), options.getOutputDir());
+            options.getProjectPath(), options.getConfigPath(),
+            options.isGenerateMermaid(), options.getMermaidOutput(),
+            options.isGeneratePlantUML(), options.getPlantUMLOutput(),
+            options.isIncludePrivateMembers(), options.isUseFix(),
+            options.getOutputDir());
 
         return enhancedAnalysisHandler.analyzeProjectWithFix(request);
     }

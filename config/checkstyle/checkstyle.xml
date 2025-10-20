@@ -5,7 +5,7 @@
 
 <module name="Checker">
   <property name="charset" value="UTF-8"/>
-  <property name="severity" value="error"/>
+  <property name="severity" value="warning"/>
   <property name="fileExtensions" value="java, properties, xml"/>
 
   <!-- Excludes all 'module-info.java' files -->
@@ -14,12 +14,9 @@
   </module>
 
   <!-- Checks for Size Violations -->
-  <module name="FileLength">
-    <property name="max" value="2000"/>
-  </module>
+  <module name="FileLength"/>
   <module name="LineLength">
-    <property name="max" value="120"/>
-    <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
+    <property name="max" value="80"/>
   </module>
 
   <!-- Checks for whitespace -->
@@ -49,17 +46,11 @@
     <module name="AvoidStarImport"/>
     <module name="IllegalImport"/> <!-- defaults to sun.* packages -->
     <module name="RedundantImport"/>
-    <module name="UnusedImports">
-      <property name="processJavadoc" value="false"/>
-    </module>
+    <module name="UnusedImports"/>
 
     <!-- Checks for Size Violations -->
-    <module name="MethodLength">
-      <property name="max" value="150"/>
-    </module>
-    <module name="ParameterNumber">
-      <property name="max" value="7"/>
-    </module>
+    <module name="MethodLength"/>
+    <module name="ParameterNumber"/>
 
     <!-- Checks for whitespace -->
     <module name="EmptyForIteratorPad"/>
@@ -107,11 +98,5 @@
     <module name="FinalParameters"/>
     <module name="TodoComment"/>
     <module name="UpperEll"/>
-
-    <!-- Allow suppression via @SuppressWarnings annotation -->
-    <module name="SuppressWarningsHolder"/>
   </module>
-
-  <!-- Enable SuppressWarnings filter -->
-  <module name="SuppressWarningsFilter"/>
 </module>

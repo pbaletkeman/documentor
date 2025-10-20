@@ -8,8 +8,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Service utility class providing common helper methods for service layer operations.
- * This class contains utility methods used across different service implementations.
+ * Service utility class providing common helper methods for service layer
+ * operations. This class contains utility methods used across different
+ * service implementations.
  */
 public final class ServiceUtils {
 
@@ -44,7 +45,8 @@ public final class ServiceUtils {
      * Private constructor to prevent instantiation.
      */
     private ServiceUtils() {
-        throw new UnsupportedOperationException("Utility class cannot be instantiated");
+        throw new UnsupportedOperationException(
+                "Utility class cannot be instantiated");
     }
 
     /**
@@ -54,7 +56,9 @@ public final class ServiceUtils {
      * @param type the type to filter by
      * @return filtered list of code elements
      */
-    public static List<CodeElement> filterByType(final List<CodeElement> elements, final CodeElementType type) {
+    public static List<CodeElement> filterByType(
+            final List<CodeElement> elements,
+            final CodeElementType type) {
         if (elements == null || elements.isEmpty()) {
             return List.of();
         }
@@ -74,7 +78,8 @@ public final class ServiceUtils {
      * @param elements the list of code elements to group
      * @return map of elements grouped by type
      */
-    public static Map<CodeElementType, List<CodeElement>> groupByType(final List<CodeElement> elements) {
+    public static Map<CodeElementType, List<CodeElement>> groupByType(
+            final List<CodeElement> elements) {
         if (elements == null || elements.isEmpty()) {
             return Map.of();
         }
@@ -110,7 +115,8 @@ public final class ServiceUtils {
         }
 
         // Base timeout + additional time per element
-        int adaptiveTimeout = DEFAULT_ASYNC_TIMEOUT + (elementCount * TIMEOUT_PER_ELEMENT_MS);
+        int adaptiveTimeout = DEFAULT_ASYNC_TIMEOUT
+                + (elementCount * TIMEOUT_PER_ELEMENT_MS);
 
         // Cap at maximum timeout
         return Math.min(adaptiveTimeout, MAX_TIMEOUT_MS);
@@ -168,7 +174,8 @@ public final class ServiceUtils {
         }
 
         if (element.name() == null || element.name().isEmpty()) {
-            return element.type() != null ? element.type().toString() : "Unknown Element";
+            return element.type() != null ? element.type().toString()
+                    : "Unknown Element";
         }
 
         return String.format("[%s] %s",
@@ -183,7 +190,8 @@ public final class ServiceUtils {
      * @param parameters the parameters to validate
      * @return true if parameters are valid
      */
-    public static boolean validateOperationParameters(final String operation, final Map<String, Object> parameters) {
+    public static boolean validateOperationParameters(final String operation,
+            final Map<String, Object> parameters) {
         if (operation == null || operation.trim().isEmpty()) {
             return false;
         }
@@ -194,7 +202,8 @@ public final class ServiceUtils {
 
         // Check for null values in required parameters
         return parameters.values().stream()
-            .noneMatch(value -> value == null && isRequiredParameter(operation, parameters));
+            .noneMatch(value -> value == null
+                    && isRequiredParameter(operation, parameters));
     }
 
     /**
@@ -204,9 +213,12 @@ public final class ServiceUtils {
      * @param parameters the parameter map
      * @return true if required parameters are present
      */
-    private static boolean isRequiredParameter(final String operation, final Map<String, Object> parameters) {
-        // Simple heuristic: operations with "generate" typically require non-null parameters
-        return operation.toLowerCase().contains("generate") && !parameters.isEmpty();
+    private static boolean isRequiredParameter(final String operation,
+            final Map<String, Object> parameters) {
+        // Simple heuristic: operations with "generate" typically require
+        // non-null parameters
+        return operation.toLowerCase().contains("generate")
+                && !parameters.isEmpty();
     }
 
     /**
@@ -217,7 +229,9 @@ public final class ServiceUtils {
      * @param cause the underlying cause
      * @return formatted error message
      */
-    public static String formatErrorMessage(final String serviceName, final String operation, final String cause) {
+    public static String formatErrorMessage(final String serviceName,
+                                            final String operation,
+                                            final String cause) {
         StringBuilder sb = new StringBuilder();
 
         if (serviceName != null && !serviceName.isEmpty()) {
@@ -249,6 +263,7 @@ public final class ServiceUtils {
         }
 
         // Exponential backoff: 1s, 2s, 4s, 8s...
-        return Math.min(MIN_SLEEP_TIME_MS * (1L << (attemptNumber - 1)), MAX_SLEEP_TIME_MS);
+        return Math.min(MIN_SLEEP_TIME_MS * (1L << (attemptNumber - 1)),
+                MAX_SLEEP_TIME_MS);
     }
 }

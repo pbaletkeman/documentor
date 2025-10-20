@@ -155,6 +155,7 @@ public final class ServicePerformanceUtils {
             return false;
         }
 
-        return throughput >= minThroughput && avgResponseTime <= maxResponseTime;
+        return throughput >= minThroughput
+                && avgResponseTime <= maxResponseTime;
     }
 }

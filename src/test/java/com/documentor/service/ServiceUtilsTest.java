@@ -16,12 +16,36 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class ServiceUtilsTest {
 
+    // Test constant values
+    private static final int THIRTY_THOUSAND = 30000;
+    private static final int THREE = 3;
+    private static final int ONE = 1;
+    private static final int TWO = 2;
+    private static final int FOUR = 4;
+    private static final int FIVE = 5;
+    private static final int TEN = 10;
+    private static final int FIFTEEN = 15;
+    private static final int FORTY_TWO = 42;
+    private static final int ZERO = 0;
+    private static final int NEGATIVE_ONE = -1;
+    private static final int NEGATIVE_FIVE = -5;
+
+    // Timeout values in milliseconds
+    private static final int ONE_THOUSAND_MS = 1000;
+    private static final int TWO_THOUSAND_MS = 2000;
+    private static final int FOUR_THOUSAND_MS = 4000;
+    private static final int EIGHT_THOUSAND_MS = 8000;
+    private static final int TEN_THOUSAND_MS = 10000;
+    private static final int NEGATIVE_ONE_THOUSAND_MS = -1000;
+    private static final int THREE_HUNDRED_THOUSAND_MS = 300000; // 5 minutes
+    private static final int THREE_HUNDRED_THOUSAND_PLUS_ONE_MS = 300001;
+
     @Test
     void testConstants() {
         // Test all public constants
         assertEquals("com.documentor.service", ServiceUtils.SERVICE_PACKAGE);
-        assertEquals(30000, ServiceUtils.DEFAULT_ASYNC_TIMEOUT);
-        assertEquals(3, ServiceUtils.MAX_RETRY_ATTEMPTS);
+        assertEquals(THIRTY_THOUSAND, ServiceUtils.DEFAULT_ASYNC_TIMEOUT);
+        assertEquals(THREE, ServiceUtils.MAX_RETRY_ATTEMPTS);
         assertEquals("javadoc", ServiceUtils.DOC_TYPE_JAVADOC);
         assertEquals("markdown", ServiceUtils.DOC_TYPE_MARKDOWN);
         assertEquals("plain", ServiceUtils.DOC_TYPE_PLAIN);
@@ -39,9 +63,10 @@ class ServiceUtilsTest {
 
         // The exception should be either UnsupportedOperationException directly
         // or wrapped in InvocationTargetException
-        assertTrue(exception instanceof UnsupportedOperationException ||
-                   (exception.getCause() instanceof UnsupportedOperationException),
-                   "Expected UnsupportedOperationException but got: " + exception.getClass());
+        assertTrue(exception instanceof UnsupportedOperationException
+                   || (exception.getCause() instanceof UnsupportedOperationException),
+                   "Expected UnsupportedOperationException but got: "
+                   + exception.getClass());
     }
 
     @Test
@@ -49,41 +74,47 @@ class ServiceUtilsTest {
         // Create test code elements
         CodeElement classElement = new CodeElement(
             CodeElementType.CLASS, "TestClass", "com.test.TestClass",
-            "TestClass.java", 1, "class TestClass", "", List.of(), List.of()
+            "TestClass.java", ONE, "class TestClass", "", List.of(), List.of()
         );
 
         CodeElement methodElement = new CodeElement(
             CodeElementType.METHOD, "testMethod", "com.test.TestClass.testMethod",
-            "TestClass.java", 10, "public void testMethod()", "", List.of(), List.of()
+            "TestClass.java", TEN, "public void testMethod()", "",
+            List.of(), List.of()
         );
 
         List<CodeElement> elements = List.of(classElement, methodElement);
 
         // Test filtering by CLASS type
-        List<CodeElement> classElements = ServiceUtils.filterByType(elements, CodeElementType.CLASS);
-        assertEquals(1, classElements.size());
-        assertEquals("TestClass", classElements.get(0).name());
+        List<CodeElement> classElements = ServiceUtils.filterByType(elements,
+                CodeElementType.CLASS);
+        assertEquals(ONE, classElements.size());
+        assertEquals("TestClass", classElements.get(ZERO).name());
 
         // Test filtering by METHOD type
-        List<CodeElement> methodElements = ServiceUtils.filterByType(elements, CodeElementType.METHOD);
-        assertEquals(1, methodElements.size());
-        assertEquals("testMethod", methodElements.get(0).name());
+        List<CodeElement> methodElements = ServiceUtils.filterByType(elements,
+                CodeElementType.METHOD);
+        assertEquals(ONE, methodElements.size());
+        assertEquals("testMethod", methodElements.get(ZERO).name());
 
         // Test filtering by non-existent type
-        List<CodeElement> fieldElements = ServiceUtils.filterByType(elements, CodeElementType.FIELD);
+        List<CodeElement> fieldElements = ServiceUtils.filterByType(elements,
+                CodeElementType.FIELD);
         assertTrue(fieldElements.isEmpty());
 
         // Test with null list
-        List<CodeElement> nullResult = ServiceUtils.filterByType(null, CodeElementType.CLASS);
+        List<CodeElement> nullResult = ServiceUtils.filterByType(null,
+                CodeElementType.CLASS);
         assertTrue(nullResult.isEmpty());
 
         // Test with empty list
-        List<CodeElement> emptyResult = ServiceUtils.filterByType(List.of(), CodeElementType.CLASS);
+        List<CodeElement> emptyResult = ServiceUtils.filterByType(List.of(),
+                CodeElementType.CLASS);
         assertTrue(emptyResult.isEmpty());
 
         // Test with null type (should return copy of all elements)
         List<CodeElement> allElements = ServiceUtils.filterByType(elements, null);
-        assertEquals(2, allElements.size());
+        assertEquals(TWO, allElements.size());
     }
 
     @Test
@@ -98,7 +129,8 @@ class ServiceUtilsTest {
         elementsWithNull.add(validElement);
         elementsWithNull.add(null);
 
-        List<CodeElement> filtered = ServiceUtils.filterByType(elementsWithNull, CodeElementType.CLASS);
+        List<CodeElement> filtered = ServiceUtils.filterByType(elementsWithNull,
+                CodeElementType.CLASS);
 
         assertEquals(1, filtered.size());
         assertEquals("TestClass", filtered.get(0).name());
@@ -107,17 +139,18 @@ class ServiceUtilsTest {
         // Create test code elements
         CodeElement classElement1 = new CodeElement(
             CodeElementType.CLASS, "TestClass1", "com.test.TestClass1",
-            "TestClass1.java", 1, "class TestClass1", "", List.of(), List.of()
+            "TestClass1.java", ONE, "class TestClass1", "", List.of(), List.of()
         );
 
         CodeElement classElement2 = new CodeElement(
             CodeElementType.CLASS, "TestClass2", "com.test.TestClass2",
-            "TestClass2.java", 1, "class TestClass2", "", List.of(), List.of()
+            "TestClass2.java", ONE, "class TestClass2", "", List.of(), List.of()
         );
 
         CodeElement methodElement = new CodeElement(
             CodeElementType.METHOD, "testMethod", "com.test.TestClass1.testMethod",
-            "TestClass1.java", 10, "public void testMethod()", "", List.of(), List.of()
+            "TestClass1.java", TEN, "public void testMethod()", "",
+            List.of(), List.of()
         );
 
         List<CodeElement> elements = List.of(classElement1, classElement2, methodElement);
@@ -125,19 +158,21 @@ class ServiceUtilsTest {
         // Test grouping
         Map<CodeElementType, List<CodeElement>> grouped = ServiceUtils.groupByType(elements);
 
-        assertEquals(2, grouped.size());
+        assertEquals(TWO, grouped.size());
         assertTrue(grouped.containsKey(CodeElementType.CLASS));
         assertTrue(grouped.containsKey(CodeElementType.METHOD));
 
-        assertEquals(2, grouped.get(CodeElementType.CLASS).size());
-        assertEquals(1, grouped.get(CodeElementType.METHOD).size());
+        assertEquals(TWO, grouped.get(CodeElementType.CLASS).size());
+        assertEquals(ONE, grouped.get(CodeElementType.METHOD).size());
 
         // Test with null list
-        Map<CodeElementType, List<CodeElement>> nullResult = ServiceUtils.groupByType(null);
+        Map<CodeElementType, List<CodeElement>> nullResult =
+                ServiceUtils.groupByType(null);
         assertTrue(nullResult.isEmpty());
 
         // Test with empty list
-        Map<CodeElementType, List<CodeElement>> emptyResult = ServiceUtils.groupByType(List.of());
+        Map<CodeElementType, List<CodeElement>> emptyResult =
+                ServiceUtils.groupByType(List.of());
         assertTrue(emptyResult.isEmpty());
     }
 
@@ -151,7 +186,7 @@ class ServiceUtilsTest {
 
         CodeElement nullTypeElement = new CodeElement(
             null, "NullType", "com.test.NullType",
-            "NullType.java", 1, "class NullType", "", List.of(), List.of()
+            "NullType.java", ONE, "class NullType", "", List.of(), List.of()
         );
 
         List<CodeElement> elementsWithNull = new java.util.ArrayList<>();
@@ -159,42 +194,47 @@ class ServiceUtilsTest {
         elementsWithNull.add(null);
         elementsWithNull.add(nullTypeElement);
 
-        Map<CodeElementType, List<CodeElement>> grouped = ServiceUtils.groupByType(elementsWithNull);
+        Map<CodeElementType, List<CodeElement>> grouped =
+                ServiceUtils.groupByType(elementsWithNull);
 
-        assertEquals(1, grouped.size());
+        assertEquals(ONE, grouped.size());
         assertTrue(grouped.containsKey(CodeElementType.CLASS));
-        assertEquals(1, grouped.get(CodeElementType.CLASS).size());
+        assertEquals(ONE, grouped.get(CodeElementType.CLASS).size());
     }
 
     @Test
     void testIsValidTimeout() {
         // Test valid timeouts
-        assertTrue(ServiceUtils.isValidTimeout(1000));
-        assertTrue(ServiceUtils.isValidTimeout(30000));
-        assertTrue(ServiceUtils.isValidTimeout(300000)); // Max 5 minutes
+        assertTrue(ServiceUtils.isValidTimeout(ONE_THOUSAND_MS));
+        assertTrue(ServiceUtils.isValidTimeout(THIRTY_THOUSAND));
+        assertTrue(ServiceUtils.isValidTimeout(THREE_HUNDRED_THOUSAND_MS)); // Max 5 minutes
 
         // Test invalid timeouts
         assertFalse(ServiceUtils.isValidTimeout(null));
-        assertFalse(ServiceUtils.isValidTimeout(0));
-        assertFalse(ServiceUtils.isValidTimeout(-1000));
-        assertFalse(ServiceUtils.isValidTimeout(300001)); // Over 5 minutes
+        assertFalse(ServiceUtils.isValidTimeout(ZERO));
+        assertFalse(ServiceUtils.isValidTimeout(NEGATIVE_ONE_THOUSAND_MS));
+        assertFalse(ServiceUtils.isValidTimeout(THREE_HUNDRED_THOUSAND_PLUS_ONE_MS)); // Over 5 minutes
     }
 
     @Test
     void testCalculateAdaptiveTimeout() {
         // Test with zero elements
-        assertEquals(ServiceUtils.DEFAULT_ASYNC_TIMEOUT, ServiceUtils.calculateAdaptiveTimeout(0));
+        assertEquals(ServiceUtils.DEFAULT_ASYNC_TIMEOUT,
+                ServiceUtils.calculateAdaptiveTimeout(ZERO));
 
         // Test with negative elements
-        assertEquals(ServiceUtils.DEFAULT_ASYNC_TIMEOUT, ServiceUtils.calculateAdaptiveTimeout(-5));
+        assertEquals(ServiceUtils.DEFAULT_ASYNC_TIMEOUT,
+                ServiceUtils.calculateAdaptiveTimeout(NEGATIVE_FIVE));
 
         // Test with small number of elements
-        int timeout10 = ServiceUtils.calculateAdaptiveTimeout(10);
-        assertEquals(ServiceUtils.DEFAULT_ASYNC_TIMEOUT + 10000, timeout10);
+        int timeout10 = ServiceUtils.calculateAdaptiveTimeout(TEN);
+        assertEquals(ServiceUtils.DEFAULT_ASYNC_TIMEOUT + TEN_THOUSAND_MS,
+                timeout10);
 
         // Test capping at maximum
-        int timeoutHuge = ServiceUtils.calculateAdaptiveTimeout(1000);
-        assertEquals(300000, timeoutHuge); // Should be capped at 5 minutes
+        int timeoutHuge = ServiceUtils.calculateAdaptiveTimeout(ONE_THOUSAND_MS);
+        assertEquals(THREE_HUNDRED_THOUSAND_MS,
+                timeoutHuge); // Should be capped at 5 minutes
     }
 
     @Test
@@ -205,10 +245,12 @@ class ServiceUtilsTest {
         assertEquals("", ServiceUtils.sanitizeFilePath("   "));
 
         // Test backslash to forward slash conversion
-        assertEquals("com/test/TestClass.java", ServiceUtils.sanitizeFilePath("com\\test\\TestClass.java"));
+        assertEquals("com/test/TestClass.java",
+                ServiceUtils.sanitizeFilePath("com\\test\\TestClass.java"));
 
         // Test duplicate slash removal
-        assertEquals("com/test/TestClass.java", ServiceUtils.sanitizeFilePath("com//test///TestClass.java"));
+        assertEquals("com/test/TestClass.java",
+                ServiceUtils.sanitizeFilePath("com//test///TestClass.java"));
 
         // Test leading slash removal
         assertEquals("com/test/TestClass.java", ServiceUtils.sanitizeFilePath("/com/test/TestClass.java"));
@@ -253,7 +295,7 @@ class ServiceUtilsTest {
         // Test normal element
         CodeElement element = new CodeElement(
             CodeElementType.CLASS, "TestClass", "com.test.TestClass",
-            "TestClass.java", 1, "class TestClass", "", List.of(), List.of()
+            "TestClass.java", ONE, "class TestClass", "", List.of(), List.of()
         );
 
         assertEquals("[CLASS] TestClass", ServiceUtils.createDisplayName(element));
@@ -264,7 +306,7 @@ class ServiceUtilsTest {
         // Test element with null name
         CodeElement nullNameElement = new CodeElement(
             CodeElementType.METHOD, null, "com.test.TestClass.method",
-            "TestClass.java", 10, "method", "", List.of(), List.of()
+            "TestClass.java", TEN, "method", "", List.of(), List.of()
         );
 
         assertEquals("METHOD", ServiceUtils.createDisplayName(nullNameElement));
@@ -272,7 +314,7 @@ class ServiceUtilsTest {
         // Test element with empty name
         CodeElement emptyNameElement = new CodeElement(
             CodeElementType.FIELD, "", "com.test.TestClass.field",
-            "TestClass.java", 5, "field", "", List.of(), List.of()
+            "TestClass.java", FIVE, "field", "", List.of(), List.of()
         );
 
         assertEquals("FIELD", ServiceUtils.createDisplayName(emptyNameElement));
@@ -280,7 +322,7 @@ class ServiceUtilsTest {
         // Test element with null type
         CodeElement nullTypeElement = new CodeElement(
             null, "TestElement", "com.test.TestElement",
-            "TestElement.java", 1, "element", "", List.of(), List.of()
+            "TestElement.java", ONE, "element", "", List.of(), List.of()
         );
 
         assertEquals("[UNKNOWN] TestElement", ServiceUtils.createDisplayName(nullTypeElement));
@@ -288,7 +330,7 @@ class ServiceUtilsTest {
         // Test element with both null name and type
         CodeElement bothNullElement = new CodeElement(
             null, null, "com.test.Unknown",
-            "Unknown.java", 1, "unknown", "", List.of(), List.of()
+            "Unknown.java", ONE, "unknown", "", List.of(), List.of()
         );
 
         assertEquals("Unknown Element", ServiceUtils.createDisplayName(bothNullElement));
@@ -305,16 +347,19 @@ class ServiceUtilsTest {
         assertTrue(ServiceUtils.validateOperationParameters("testOperation", null));
 
         // Test with valid operation and empty parameters
-        assertTrue(ServiceUtils.validateOperationParameters("testOperation", Map.of()));
+        assertTrue(ServiceUtils.validateOperationParameters("testOperation",
+                Map.of()));
 
         // Test with valid operation and valid parameters
         Map<String, Object> validParams = new HashMap<>();
         validParams.put("param1", "value1");
-        validParams.put("param2", 42);
-        assertTrue(ServiceUtils.validateOperationParameters("testOperation", validParams));
+        validParams.put("param2", FORTY_TWO);
+        assertTrue(ServiceUtils.validateOperationParameters("testOperation",
+                validParams));
 
         // Test generate operation with parameters
-        assertTrue(ServiceUtils.validateOperationParameters("generateDocs", validParams));
+        assertTrue(ServiceUtils.validateOperationParameters("generateDocs",
+                validParams));
 
         // Test generate operation with null values in parameters
         Map<String, Object> paramsWithNull = new HashMap<>();
@@ -322,7 +367,8 @@ class ServiceUtilsTest {
         paramsWithNull.put("param2", null);
 
         // Generate operations with null values should return false
-        boolean result = ServiceUtils.validateOperationParameters("generateDocs", paramsWithNull);
+        boolean result = ServiceUtils.validateOperationParameters("generateDocs",
+                paramsWithNull);
         // The method rejects generate operations with null parameter values
         assertFalse(result); // Generate operations require non-null parameters
     }
@@ -365,19 +411,19 @@ class ServiceUtilsTest {
     @Test
     void testGetRetryDelay() {
         // Test first attempt (should be 0)
-        assertEquals(0, ServiceUtils.getRetryDelay(1));
-        assertEquals(0, ServiceUtils.getRetryDelay(0));
-        assertEquals(0, ServiceUtils.getRetryDelay(-1));
+        assertEquals(ZERO, ServiceUtils.getRetryDelay(ONE));
+        assertEquals(ZERO, ServiceUtils.getRetryDelay(ZERO));
+        assertEquals(ZERO, ServiceUtils.getRetryDelay(NEGATIVE_ONE));
 
         // Test exponential backoff: 1000 * (1 << (attemptNumber - 1))
-        assertEquals(2000, ServiceUtils.getRetryDelay(2));   // 1000 * (1 << 1) = 2000
-        assertEquals(4000, ServiceUtils.getRetryDelay(3));   // 1000 * (1 << 2) = 4000
-        assertEquals(8000, ServiceUtils.getRetryDelay(4));   // 1000 * (1 << 3) = 8000
-        assertEquals(10000, ServiceUtils.getRetryDelay(5));  // 1000 * (1 << 4) = 16000, capped at 10000
+        assertEquals(TWO_THOUSAND_MS, ServiceUtils.getRetryDelay(TWO));
+        assertEquals(FOUR_THOUSAND_MS, ServiceUtils.getRetryDelay(THREE));
+        assertEquals(EIGHT_THOUSAND_MS, ServiceUtils.getRetryDelay(FOUR));
+        assertEquals(TEN_THOUSAND_MS, ServiceUtils.getRetryDelay(FIVE));
 
         // Test capping at maximum (10 seconds)
-        assertEquals(10000, ServiceUtils.getRetryDelay(10)); // Should be capped at 10s
-        assertEquals(10000, ServiceUtils.getRetryDelay(15)); // Should be capped at 10s
+        assertEquals(TEN_THOUSAND_MS, ServiceUtils.getRetryDelay(TEN));
+        assertEquals(TEN_THOUSAND_MS, ServiceUtils.getRetryDelay(FIFTEEN));
     }
 
     @Test
@@ -413,19 +459,26 @@ class ServiceUtilsTest {
     void testComplexGroupingScenarios() {
         // Test with multiple elements of same type
         List<CodeElement> manyClasses = List.of(
-            new CodeElement(CodeElementType.CLASS, "Class1", "com.test.Class1", "Class1.java", 1, "", "", List.of(), List.of()),
-            new CodeElement(CodeElementType.CLASS, "Class2", "com.test.Class2", "Class2.java", 1, "", "", List.of(), List.of()),
-            new CodeElement(CodeElementType.CLASS, "Class3", "com.test.Class3", "Class3.java", 1, "", "", List.of(), List.of()),
-            new CodeElement(CodeElementType.METHOD, "method1", "com.test.Class1.method1", "Class1.java", 10, "", "", List.of(), List.of()),
-            new CodeElement(CodeElementType.METHOD, "method2", "com.test.Class2.method2", "Class2.java", 10, "", "", List.of(), List.of()),
-            new CodeElement(CodeElementType.FIELD, "field1", "com.test.Class1.field1", "Class1.java", 5, "", "", List.of(), List.of())
+            new CodeElement(CodeElementType.CLASS, "Class1", "com.test.Class1",
+                    "Class1.java", ONE, "", "", List.of(), List.of()),
+            new CodeElement(CodeElementType.CLASS, "Class2", "com.test.Class2",
+                    "Class2.java", ONE, "", "", List.of(), List.of()),
+            new CodeElement(CodeElementType.CLASS, "Class3", "com.test.Class3",
+                    "Class3.java", ONE, "", "", List.of(), List.of()),
+            new CodeElement(CodeElementType.METHOD, "method1", "com.test.Class1.method1",
+                    "Class1.java", TEN, "", "", List.of(), List.of()),
+            new CodeElement(CodeElementType.METHOD, "method2", "com.test.Class2.method2",
+                    "Class2.java", TEN, "", "", List.of(), List.of()),
+            new CodeElement(CodeElementType.FIELD, "field1", "com.test.Class1.field1",
+                    "Class1.java", FIVE, "", "", List.of(), List.of())
         );
 
-        Map<CodeElementType, List<CodeElement>> grouped = ServiceUtils.groupByType(manyClasses);
+        Map<CodeElementType, List<CodeElement>> grouped =
+                ServiceUtils.groupByType(manyClasses);
 
-        assertEquals(3, grouped.size());
-        assertEquals(3, grouped.get(CodeElementType.CLASS).size());
-        assertEquals(2, grouped.get(CodeElementType.METHOD).size());
-        assertEquals(1, grouped.get(CodeElementType.FIELD).size());
+        assertEquals(THREE, grouped.size());
+        assertEquals(THREE, grouped.get(CodeElementType.CLASS).size());
+        assertEquals(TWO, grouped.get(CodeElementType.METHOD).size());
+        assertEquals(ONE, grouped.get(CodeElementType.FIELD).size());
     }
 }

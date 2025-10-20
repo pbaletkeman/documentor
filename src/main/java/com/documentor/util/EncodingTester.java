@@ -1,6 +1,7 @@
 package com.documentor.util;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.io.File;
 import java.io.PrintWriter;
 import java.nio.file.Files;
@@ -23,7 +24,8 @@ public final class EncodingTester {
      * Private constructor to prevent instantiation of utility class.
      */
     private EncodingTester() {
-        throw new UnsupportedOperationException("Utility class should not be instantiated");
+        throw new UnsupportedOperationException(
+                "Utility class should not be instantiated");
     }
 
     public static void main(final String[] args) {
@@ -46,18 +48,21 @@ public final class EncodingTester {
         System.out.println("\nSystem Encoding Information:");
         System.out.println("---------------------------");
         System.out.println("Default Charset: " + Charset.defaultCharset());
-        System.out.println("File Encoding: " + System.getProperty("file.encoding"));
+        System.out.println("File Encoding: "
+                + System.getProperty("file.encoding"));
         System.out.println("Console Encoding: " + (System.console() != null
-                           ? "Available" : "Not available (running from IDE or redirected)"));
+                ? "Available" : "Not available (IDE or redirected)"));
         System.out.println("OS Name: " + System.getProperty("os.name"));
-        System.out.println("Java Version: " + System.getProperty("java.version"));
+        System.out.println("Java Version: "
+                + System.getProperty("java.version"));
     }
 
     private static void testConsoleOutput() {
         System.out.println("\nTesting Console Output:");
         System.out.println("----------------------");
 
-        System.out.println("If you see symbols below, encoding is working correctly:");
+        System.out.println(
+                "If you see symbols below, encoding is working correctly:");
 
         // Print all test symbols
         for (String symbol : TEST_SYMBOLS) {
@@ -69,7 +74,8 @@ public final class EncodingTester {
         System.out.println("Task completed " + TEST_SYMBOLS[0]);
         System.out.println("Error occurred " + TEST_SYMBOLS[1]);
         System.out.println("Warning: file not found " + TEST_SYMBOLS[2]);
-        System.out.println("Information " + TEST_SYMBOLS[INFO_SYMBOL_INDEX] + " This is working correctly");
+        System.out.println("Information " + TEST_SYMBOLS[INFO_SYMBOL_INDEX]
+                + " This is working correctly");
     }
 
     private static void testFileWriting() {
@@ -79,12 +85,14 @@ public final class EncodingTester {
         try {
             // Create a test file with UTF-8 encoding
             File testFile = new File("encoding-test.txt");
-            try (PrintWriter writer = new PrintWriter(testFile, "UTF-8")) {
+            try (PrintWriter writer = new PrintWriter(testFile,
+                    StandardCharsets.UTF_8)) {
                 writer.println("Documentor Encoding Test File");
                 writer.println("============================");
                 writer.println();
 
-                writer.println("This file contains UTF-8 encoded special characters:");
+                writer.println(
+                        "This file contains UTF-8 encoded special characters:");
                 writer.println();
 
                 // Write all test symbols to file
@@ -97,26 +105,30 @@ public final class EncodingTester {
                 writer.println("Task completed " + TEST_SYMBOLS[0]);
                 writer.println("Error occurred " + TEST_SYMBOLS[1]);
                 writer.println("Warning: file not found " + TEST_SYMBOLS[2]);
-                writer.println("Information " + TEST_SYMBOLS[INFO_SYMBOL_INDEX] + " This is working correctly");
+                writer.println("Information " + TEST_SYMBOLS[INFO_SYMBOL_INDEX]
+                        + " This is working correctly");
             }
 
             System.out.println("Created file: " + testFile.getAbsolutePath());
 
             // Read the file back to verify encoding
             System.out.println("Reading file back to verify encoding:");
-            byte[] bytes = Files.readAllBytes(Paths.get(testFile.getAbsolutePath()));
+            byte[] bytes = Files.readAllBytes(
+                    Paths.get(testFile.getAbsolutePath()));
             String content = new String(bytes, "UTF-8");
 
             // Print just the first few lines to avoid overwhelming the console
             String[] lines = content.split("\n");
-            for (int i = 0; i < Math.min(lines.length, MAX_DISPLAY_LINES); i++) {
+            for (int i = 0; i < Math.min(lines.length, MAX_DISPLAY_LINES);
+                    i++) {
                 System.out.println("> " + lines[i]);
             }
 
             System.out.println("\nFile encoding test successful!");
 
         } catch (Exception e) {
-            System.out.println("Error during file writing test: " + e.getMessage());
+            System.out.println("Error during file writing test: "
+                    + e.getMessage());
             e.printStackTrace();
         }
     }

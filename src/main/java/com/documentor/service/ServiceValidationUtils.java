@@ -61,7 +61,8 @@ public final class ServiceValidationUtils {
     /**
      * Counts elements by type.
      */
-    public static long countByType(final List<CodeElement> elements, final CodeElementType type) {
+    public static long countByType(final List<CodeElement> elements,
+            final CodeElementType type) {
         if (elements == null || type == null) {
             return 0L;
         }
@@ -74,7 +75,8 @@ public final class ServiceValidationUtils {
     /**
      * Checks if any element has missing documentation.
      */
-    public static boolean hasMissingDocumentation(final List<CodeElement> elements) {
+    public static boolean hasMissingDocumentation(
+            final List<CodeElement> elements) {
         if (elements == null) {
             return false;
         }
@@ -88,7 +90,8 @@ public final class ServiceValidationUtils {
     /**
      * Gets all unique file paths from elements.
      */
-    public static Set<String> getUniqueFilePaths(final List<CodeElement> elements) {
+    public static Set<String> getUniqueFilePaths(
+            final List<CodeElement> elements) {
         if (elements == null) {
             return Set.of();
         }
@@ -102,7 +105,8 @@ public final class ServiceValidationUtils {
     /**
      * Validates operation configuration.
      */
-    public static boolean isValidOperation(final String operation, final Object config) {
+    public static boolean isValidOperation(final String operation,
+            final Object config) {
         if (operation == null || operation.trim().isEmpty()) {
             return false;
         }
@@ -124,7 +128,8 @@ public final class ServiceValidationUtils {
     /**
      * Calculates coverage percentage.
      */
-    public static double calculateCoverage(final long covered, final long total) {
+    public static double calculateCoverage(final long covered,
+            final long total) {
         if (total <= 0) {
             return 0.0;
         }
@@ -158,7 +163,8 @@ public final class ServiceValidationUtils {
     /**
      * Checks if coverage meets minimum threshold.
      */
-    public static boolean meetsCoverageThreshold(final double coverage, final double threshold) {
+    public static boolean meetsCoverageThreshold(final double coverage,
+            final double threshold) {
         if (threshold < 0 || threshold > HUNDRED_PERCENT) {
             return false;
         }

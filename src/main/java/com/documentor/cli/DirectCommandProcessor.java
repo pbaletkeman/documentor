@@ -22,9 +22,10 @@ public class DirectCommandProcessor implements ApplicationRunner {
     private final DocumentorConfig documentorConfig;
     private final LlmServiceFix llmServiceFix;
 
-    public DirectCommandProcessor(final DocumentorCommands documentorCommandsParam,
-                                 final DocumentorConfig documentorConfigParam,
-                                 final LlmServiceFix llmServiceFixParam) {
+    public DirectCommandProcessor(
+            final DocumentorCommands documentorCommandsParam,
+            final DocumentorConfig documentorConfigParam,
+            final LlmServiceFix llmServiceFixParam) {
         this.documentorCommands = documentorCommandsParam;
         this.documentorConfig = documentorConfigParam;
         this.llmServiceFix = llmServiceFixParam;
@@ -41,7 +42,8 @@ public class DirectCommandProcessor implements ApplicationRunner {
     @Override
     public void run(final ApplicationArguments args) throws Exception {
         String[] sourceArgs = args.getSourceArgs();
-        LOGGER.info("Processing command arguments: {}", Arrays.toString(sourceArgs));
+        LOGGER.info("Processing command arguments: {}",
+                   Arrays.toString(sourceArgs));
 
         // Ensure the configuration is set in the ThreadLocal for all threads
         if (documentorConfig != null) {
@@ -50,9 +52,11 @@ public class DirectCommandProcessor implements ApplicationRunner {
 
             // Verify the configuration was set properly
             boolean configAvailable = llmServiceFix.isThreadLocalConfigAvailable();
-            LOGGER.info("ThreadLocal config verification: {}", configAvailable ? "AVAILABLE" : "NOT AVAILABLE");
+            String status = configAvailable ? "AVAILABLE" : "NOT AVAILABLE";
+            LOGGER.info("ThreadLocal config verification: {}", status);
         } else {
-            LOGGER.warn("No DocumentorConfig bean available - ThreadLocal configuration may be unavailable");
+            LOGGER.warn("No DocumentorConfig bean available - " +
+                       "ThreadLocal configuration may be unavailable");
         }
 
         // Process the arguments directly if they match our expected format
@@ -83,7 +87,8 @@ public class DirectCommandProcessor implements ApplicationRunner {
             } else if ("--config".equals(args[i]) && i + 1 < args.length) {
                 configPath = args[i + 1];
                 i++;
-            } else if ("--include-private-members".equals(args[i]) && i + 1 < args.length) {
+            } else if ("--include-private-members".equals(args[i])
+                       && i + 1 < args.length) {
                 includePrivateMembers = Boolean.parseBoolean(args[i + 1]);
                 i++;
             } else if ("--generate-mermaid".equals(args[i]) && i + 1 < args.length) {
@@ -92,7 +97,8 @@ public class DirectCommandProcessor implements ApplicationRunner {
             } else if ("--mermaid-output".equals(args[i]) && i + 1 < args.length) {
                 mermaidOutput = args[i + 1];
                 i++;
-            } else if ("--generate-plantuml".equals(args[i]) && i + 1 < args.length) {
+            } else if ("--generate-plantuml".equals(args[i])
+                       && i + 1 < args.length) {
                 generatePlantUML = Boolean.parseBoolean(args[i + 1]);
                 i++;
             } else if ("--plantuml-output".equals(args[i]) && i + 1 < args.length) {
@@ -106,7 +112,8 @@ public class DirectCommandProcessor implements ApplicationRunner {
 
         // Double-check ThreadLocal configuration before processing
         if (documentorConfig != null) {
-            LOGGER.info("Ensuring ThreadLocal config is set before analyze command execution");
+            LOGGER.info("Ensuring ThreadLocal config is set " +
+                       "before analyze command execution");
             llmServiceFix.setLlmServiceThreadLocalConfig(documentorConfig);
         }
 
@@ -114,7 +121,8 @@ public class DirectCommandProcessor implements ApplicationRunner {
             // Directly call the DocumentorCommands method
             String result = documentorCommands.analyzeProject(
                 projectPath, configPath, includePrivateMembers,
-                generateMermaid, mermaidOutput, generatePlantUML, plantUMLOutput);
+                generateMermaid, mermaidOutput, generatePlantUML,
+                plantUMLOutput);
 
             LOGGER.info("Command execution result: {}", result);
         } catch (Exception e) {

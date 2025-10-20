@@ -7,7 +7,8 @@ package com.documentor.util;
 public final class ApplicationConstants {
     // Private constructor to prevent instantiation
     private ApplicationConstants() {
-        throw new UnsupportedOperationException("Utility class cannot be instantiated");
+        throw new UnsupportedOperationException(
+                "Utility class cannot be instantiated");
     }
 
     /** Minimum number of parts required for parsing function definitions */
@@ -25,4 +26,3 @@ public final class ApplicationConstants {
     /** Maximum number of lines to process in a single batch */
     public static final int MAX_LINES_PER_BATCH = 1000;
 }
-
