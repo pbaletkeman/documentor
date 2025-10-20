@@ -29,9 +29,8 @@ import static org.mockito.Mockito.*;
  *
  * Integration tests for the Documentor Spring Boot application.
  */
-@SpringBootTest(classes = DocumentorApplication.class)
+@SpringBootTest(classes = DocumentorTestApplication.class)
 @ActiveProfiles("test")
-@Import(TestConfig.class)
 @ExtendWith(MockitoExtension.class)
 class DocumentorApplicationTests {
 

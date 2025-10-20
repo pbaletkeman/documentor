@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.documentor.config.TestConfig;
-import com.documentor.DocumentorApplication;
+import com.documentor.DocumentorTestApplication;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -26,7 +26,7 @@ import org.springframework.test.context.ActiveProfiles;
  * Integration test specifically focused on verifying that ThreadLocal values are
  * properly propagated from parent threads to child threads in asynchronous operations.
  */
-@SpringBootTest(classes = DocumentorApplication.class)
+@SpringBootTest(classes = DocumentorTestApplication.class)
 @ActiveProfiles("test")
 @Import(TestConfig.class)
 public class ThreadLocalPropagationIntegrationTest {

@@ -1,5 +1,6 @@
 package com.documentor.service;
 
+import com.documentor.DocumentorTestApplication;
 import com.documentor.config.DocumentorConfig;
 import com.documentor.config.model.AnalysisSettings;
 import com.documentor.config.model.LlmModelConfig;
@@ -27,7 +28,6 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 import com.documentor.config.TestConfig;
-import com.documentor.DocumentorApplication;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -36,7 +36,7 @@ import org.springframework.test.context.ActiveProfiles;
  * This test verifies that the LlmService works correctly with the ThreadLocal configuration
  * in multiple async operations.
  */
-@SpringBootTest(classes = DocumentorApplication.class)
+@SpringBootTest(classes = DocumentorTestApplication.class)
 @ActiveProfiles("test")
 @Import(TestConfig.class)
 public class LlmServiceFixIntegrationTest {

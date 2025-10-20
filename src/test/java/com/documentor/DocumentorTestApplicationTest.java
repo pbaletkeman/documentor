@@ -326,22 +326,33 @@ class DocumentorTestApplicationTest {
 
     @Test
     void testClassModifiers() {
-        // Test class modifiers and properties
+        // Test class accessibility and modifiers
         Class<DocumentorTestApplication> clazz = DocumentorTestApplication.class;
 
         assertTrue(java.lang.reflect.Modifier.isPublic(clazz.getModifiers()));
-        assertFalse(java.lang.reflect.Modifier.isFinal(clazz.getModifiers()));
+        assertTrue(java.lang.reflect.Modifier.isFinal(clazz.getModifiers())); // Class is final
         assertFalse(java.lang.reflect.Modifier.isStatic(clazz.getModifiers()));
     }
 
     @Test
     void testConstructorExists() throws NoSuchMethodException {
-        // Test that default constructor exists
+        // Test that private constructor exists and throws exception when called
         java.lang.reflect.Constructor<DocumentorTestApplication> constructor =
             DocumentorTestApplication.class.getDeclaredConstructor();
 
         assertNotNull(constructor);
-        assertTrue(java.lang.reflect.Modifier.isPublic(constructor.getModifiers()));
+        assertTrue(java.lang.reflect.Modifier.isPrivate(constructor.getModifiers())); // Constructor is private
+
+        // Test that calling the constructor throws UnsupportedOperationException
+        constructor.setAccessible(true);
+        java.lang.reflect.InvocationTargetException exception = assertThrows(java.lang.reflect.InvocationTargetException.class, () -> {
+            constructor.newInstance();
+        });
+
+        // Verify the cause is UnsupportedOperationException with correct message
+        Throwable cause = exception.getCause();
+        assertInstanceOf(UnsupportedOperationException.class, cause);
+        assertEquals("Utility class should not be instantiated", cause.getMessage());
     }
 
     @Test
