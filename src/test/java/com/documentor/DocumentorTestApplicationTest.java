@@ -255,4 +255,110 @@ class DocumentorTestApplicationTest {
         assertNotNull(clazz.getName());
         assertEquals("com.documentor.DocumentorTestApplication", clazz.getName());
     }
+
+    @Test
+    void testMainMethodWithExtensiveArguments() {
+        // Test main method with extensive argument combinations
+        try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
+            String[] extensiveArgs = {
+                "--spring.profiles.active=test,integration",
+                "--logging.level.com.documentor=TRACE",
+                "--server.port=9999",
+                "--spring.application.name=documentor-test",
+                "--management.server.port=9998",
+                "--spring.jpa.hibernate.ddl-auto=none"
+            };
+
+            // When
+            DocumentorTestApplication.main(extensiveArgs);
+
+            // Then
+            mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorTestApplication.class), eq(extensiveArgs)));
+        }
+    }
+
+    @Test
+    void testMainMethodWithDocumentorSpecificArgs() {
+        // Test main method with documentor-specific arguments
+        try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
+            String[] documentorArgs = {
+                "--documentor.analysis.enabled=true",
+                "--documentor.llm.model=gpt-4",
+                "--documentor.output.format=markdown",
+                "--documentor.project.path=/test/project"
+            };
+
+            // When
+            DocumentorTestApplication.main(documentorArgs);
+
+            // Then
+            mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorTestApplication.class), eq(documentorArgs)));
+        }
+    }
+
+    @Test
+    void testMainMethodWithProfiling() {
+        // Test main method with profiling arguments
+        try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
+            String[] profilingArgs = {
+                "--spring.profiles.active=test",
+                "-XX:+PrintGC",
+                "--management.endpoints.web.exposure.include=health,info,metrics"
+            };
+
+            // When
+            DocumentorTestApplication.main(profilingArgs);
+
+            // Then
+            mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorTestApplication.class), eq(profilingArgs)));
+        }
+    }
+
+    @Test
+    void testMainMethodReturnType() throws NoSuchMethodException {
+        // Additional verification of main method properties
+        java.lang.reflect.Method mainMethod = DocumentorTestApplication.class.getDeclaredMethod("main", String[].class);
+
+        // Verify it's exactly void, not Void
+        assertEquals(void.class, mainMethod.getReturnType());
+        assertFalse(mainMethod.getReturnType().isPrimitive() == false); // double negative to ensure it's primitive void
+    }
+
+    @Test
+    void testClassModifiers() {
+        // Test class modifiers and properties
+        Class<DocumentorTestApplication> clazz = DocumentorTestApplication.class;
+
+        assertTrue(java.lang.reflect.Modifier.isPublic(clazz.getModifiers()));
+        assertFalse(java.lang.reflect.Modifier.isFinal(clazz.getModifiers()));
+        assertFalse(java.lang.reflect.Modifier.isStatic(clazz.getModifiers()));
+    }
+
+    @Test
+    void testConstructorExists() throws NoSuchMethodException {
+        // Test that default constructor exists
+        java.lang.reflect.Constructor<DocumentorTestApplication> constructor =
+            DocumentorTestApplication.class.getDeclaredConstructor();
+
+        assertNotNull(constructor);
+        assertTrue(java.lang.reflect.Modifier.isPublic(constructor.getModifiers()));
+    }
+
+    @Test
+    void testSuccessfulApplicationExecution() {
+        // Test that successful execution doesn't throw exceptions
+        try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
+            // Mock successful return
+            mockedSpringApp.when(() -> SpringApplication.run(eq(DocumentorTestApplication.class), any(String[].class)))
+                .thenReturn(mock(org.springframework.context.ConfigurableApplicationContext.class));
+
+            // This should not throw any exceptions
+            assertDoesNotThrow(() -> {
+                DocumentorTestApplication.main(new String[]{"--success-test"});
+            });
+
+            // Verify the call was made
+            mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorTestApplication.class), any(String[].class)));
+        }
+    }
 }
