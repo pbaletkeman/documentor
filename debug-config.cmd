@@ -1,3 +1,5 @@
 @echo off
+chcp 65001 > nul
+@echo off
 echo Running config-test.json with debug logging...
 call gradlew.bat runApp --args="analyze --project-path ./src --config ./config-test.json" -Dlogging.level.com.documentor.config=DEBUG -Dlogging.level.com.documentor.service=DEBUG

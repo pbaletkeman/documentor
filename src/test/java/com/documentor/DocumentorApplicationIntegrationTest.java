@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * Tests the complete Spring Boot application context and component integration.
  * This ensures all beans are properly configured and wired together.
  */
-@SpringBootTest
+@SpringBootTest(classes = DocumentorApplication.class)
 @ActiveProfiles("test")
 @Import(TestConfig.class)
 class DocumentorApplicationIntegrationTest {

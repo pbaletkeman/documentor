@@ -1,4 +1,6 @@
 @echo off
+chcp 65001 > nul
+@echo off
 REM Dedicated test script for running just the enhanced version without bean conflicts
 
 echo =====================================================

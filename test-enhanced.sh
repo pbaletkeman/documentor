@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Set UTF-8 encoding for terminal output
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+
 # Test script for enhanced Documentor with improved error handling
 
 # Set any needed environment variables

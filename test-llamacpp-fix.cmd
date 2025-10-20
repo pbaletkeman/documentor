@@ -1,4 +1,6 @@
 @echo off
+chcp 65001 > nul
+@echo off
 echo Running llamacpp test with LlmServiceFix...
 
 rem Create test directory for output

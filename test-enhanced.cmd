@@ -1,4 +1,6 @@
 @echo off
+chcp 65001 > nul
+@echo off
 REM Test script for enhanced Documentor with improved error handling
 
 REM Set any needed environment variables

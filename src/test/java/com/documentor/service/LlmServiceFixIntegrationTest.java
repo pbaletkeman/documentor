@@ -26,12 +26,19 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
+import com.documentor.config.TestConfig;
+import com.documentor.DocumentorApplication;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
+
 /**
  * Comprehensive integration test for the LlmService with ThreadLocal configuration fix.
  * This test verifies that the LlmService works correctly with the ThreadLocal configuration
  * in multiple async operations.
  */
-@SpringBootTest
+@SpringBootTest(classes = DocumentorApplication.class)
+@ActiveProfiles("test")
+@Import(TestConfig.class)
 public class LlmServiceFixIntegrationTest {
 
     @Mock

@@ -1,3 +1,5 @@
+@echo off
+chcp 65001 >nul
 @rem
 @rem Copyright 2015 the original author or authors.
 @rem
@@ -14,7 +16,6 @@
 @rem limitations under the License.
 @rem
 
-@if "%DEBUG%"=="" @echo off
 @rem ##########################################################################
 @rem
 @rem  Gradle startup script for Windows

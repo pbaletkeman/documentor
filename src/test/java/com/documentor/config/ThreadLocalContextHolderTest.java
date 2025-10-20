@@ -42,11 +42,6 @@ public class ThreadLocalContextHolderTest {
     public void setUp() {
         // Clear ThreadLocal before each test
         ThreadLocalContextHolder.clearConfig();
-
-        // Set up common mocks
-        when(mockConfig.llmModels()).thenReturn(mockLlmModels);
-        when(mockLlmModels.size()).thenReturn(2);
-        when(mockConfig.outputSettings()).thenReturn(mockOutputSettings);
     }
 
     @Test
@@ -89,24 +84,18 @@ public class ThreadLocalContextHolderTest {
     public void testRunWithConfig() {
         // Create a second mock config for testing
         DocumentorConfig mockConfig2 = mock(DocumentorConfig.class);
-        List<LlmModelConfig> mockLlmModels2 = mock(List.class);
-        when(mockConfig2.llmModels()).thenReturn(mockLlmModels2);
 
         // Set initial config
         ThreadLocalContextHolder.setConfig(mockConfig);
 
         // Reference variable to capture config inside runnable
         final AtomicBoolean runnableExecuted = new AtomicBoolean(false);
-        final AtomicInteger configModelSize = new AtomicInteger(0);
 
         // Run with different config
         ThreadLocalContextHolder.runWithConfig(mockConfig2, () -> {
             // Inside runnable, should have mockConfig2
             DocumentorConfig configInRunnable = ThreadLocalContextHolder.getConfig();
             assertEquals(mockConfig2, configInRunnable);
-
-            // Capture model size
-            configModelSize.set(configInRunnable.llmModels().size());
 
             runnableExecuted.set(true);
         });
@@ -182,7 +171,6 @@ public class ThreadLocalContextHolderTest {
     public void testThreadLocalPropagationWithExecutorService() throws Exception {
         // Test ThreadLocal propagation using ThreadLocalPropagatingExecutorEnhanced
         DocumentorConfig mainThreadConfig = mock(DocumentorConfig.class);
-        when(mainThreadConfig.llmModels()).thenReturn(mockLlmModels);
 
         // Set config in main thread
         ThreadLocalContextHolder.setConfig(mainThreadConfig);
