@@ -6,11 +6,7 @@ import com.documentor.service.LlmServiceFix;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.shell.standard.ShellComponent;
-import org.springframework.shell.standard.ShellMethod;
-import org.springframework.shell.standard.ShellOption;
 
-import java.nio.file.Paths;
 
 /**
  * Enhanced project analysis command handler with ThreadLocal fix support
@@ -36,7 +32,38 @@ public class EnhancedProjectAnalysisHandler {
     /**
      * Handle project analysis command with fix option for ThreadLocal configuration
      */
+    public String analyzeProjectWithFix(final ProjectAnalysisRequest request) {
+        return analyzeProjectWithFixInternal(
+            request.projectPath(), request.configPath(), request.generateMermaid(),
+            request.mermaidOutput(), request.generatePlantUML(), request.plantUMLOutput(),
+            request.includePrivateMembers(), request.useFix(), request.outputDir());
+    }
+
+    /**
+     * Legacy method signature for backward compatibility with tests
+     * @deprecated Use analyzeProjectWithFix(ProjectAnalysisRequest) instead
+     */
+    @Deprecated
+    @SuppressWarnings("checkstyle:ParameterNumber")
     public String analyzeProjectWithFix(
+            final String projectPath,
+            final String configPath,
+            final boolean generateMermaid,
+            final String mermaidOutput,
+            final boolean generatePlantUML,
+            final String plantUMLOutput,
+            final Boolean includePrivateMembers,
+            final boolean useFix,
+            final String outputDir) {
+        return analyzeProjectWithFixInternal(projectPath, configPath, generateMermaid,
+                mermaidOutput, generatePlantUML, plantUMLOutput, includePrivateMembers, useFix, outputDir);
+    }
+
+    /**
+     * Internal implementation of project analysis with fix
+     */
+    @SuppressWarnings("checkstyle:ParameterNumber")
+    private String analyzeProjectWithFixInternal(
             final String projectPath,
             final String configPath,
             final boolean generateMermaid,

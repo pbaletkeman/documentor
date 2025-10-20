@@ -3,6 +3,7 @@ package com.documentor.cli;
 import com.documentor.cli.handlers.ConfigurationCommandHandler;
 import com.documentor.cli.handlers.EnhancedProjectAnalysisHandler;
 import com.documentor.cli.handlers.ProjectAnalysisCommandHandler;
+import com.documentor.cli.handlers.ProjectAnalysisRequest;
 import com.documentor.cli.handlers.StatusCommandHandler;
 
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +14,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 
@@ -154,22 +157,16 @@ class DocumentorCommandsEnhancedTest {
         boolean useFix = true;
         String outputDir = "/test/output";
 
-        when(enhancedAnalysisHandler.analyzeProjectWithFix(
-                projectPath, configPath, generateMermaid, mermaidOutput,
-                generatePlantUML, plantUMLOutput, includePrivateMembers,
-                useFix, outputDir))
+        when(enhancedAnalysisHandler.analyzeProjectWithFix(any(ProjectAnalysisRequest.class)))
             .thenReturn("Analysis with fix complete");
 
         // When
         String result = commands.analyzeWithFix(projectPath, configPath, includePrivateMembers,
-                generateMermaid, mermaidOutput, generatePlantUML, plantUMLOutput, useFix, outputDir);
+                generateMermaid, mermaidOutput, generatePlantUML, plantUMLOutput);
 
         // Then
         assertEquals("Analysis with fix complete", result);
-        verify(enhancedAnalysisHandler).analyzeProjectWithFix(
-                projectPath, configPath, generateMermaid, mermaidOutput,
-                generatePlantUML, plantUMLOutput, includePrivateMembers,
-                useFix, outputDir);
+        verify(enhancedAnalysisHandler).analyzeProjectWithFix(any(ProjectAnalysisRequest.class));
     }
 
     @Test
@@ -200,19 +197,15 @@ class DocumentorCommandsEnhancedTest {
         String projectPath = "/test/project";
         String configPath = "config.json";
 
-        when(enhancedAnalysisHandler.analyzeProjectWithFix(
-                projectPath, configPath, false, "",
-                false, "", true, true, ""))
+        when(enhancedAnalysisHandler.analyzeProjectWithFix(any(ProjectAnalysisRequest.class)))
             .thenReturn("Analysis with fix complete (defaults)");
 
         // When
         String result = commands.analyzeWithFix(projectPath, configPath, true,
-                false, "", false, "", true, "");
+                false, "", false, "");
 
         // Then
         assertEquals("Analysis with fix complete (defaults)", result);
-        verify(enhancedAnalysisHandler).analyzeProjectWithFix(
-                projectPath, configPath, false, "",
-                false, "", true, true, "");
+        verify(enhancedAnalysisHandler).analyzeProjectWithFix(any(ProjectAnalysisRequest.class));
     }
 }

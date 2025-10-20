@@ -3,6 +3,7 @@ package com.documentor.cli;
 import com.documentor.cli.handlers.ConfigurationCommandHandler;
 import com.documentor.cli.handlers.EnhancedProjectAnalysisHandler;
 import com.documentor.cli.handlers.ProjectAnalysisCommandHandler;
+import com.documentor.cli.handlers.ProjectAnalysisRequest;
 import com.documentor.cli.handlers.StatusCommandHandler;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -195,23 +196,36 @@ public class DocumentorCommands {
             @ShellOption(value = "--plantuml-output",
                     help = "Output directory for PlantUML diagrams",
                     defaultValue = "")
+            final String plantUMLOutput) {
+
+        return analyzeWithFixAndOptions(projectPath, configPath, includePrivateMembers,
+                generateMermaid, mermaidOutput, generatePlantUML, plantUMLOutput, true, "");
+    }
+
+    /**
+     * Internal method to handle the full analysis with all options
+     */
+    @SuppressWarnings("checkstyle:ParameterNumber")
+    private String analyzeWithFixAndOptions(
+            final String projectPath,
+            final String configPath,
+            final boolean includePrivateMembers,
+            final boolean generateMermaid,
+            final String mermaidOutput,
+            final boolean generatePlantUML,
             final String plantUMLOutput,
-            @ShellOption(value = "--fix",
-                    help = "Apply ThreadLocal configuration fix",
-                    defaultValue = "true")
             final boolean useFix,
-            @ShellOption(value = "--output-dir",
-                    help = "Output directory for documentation",
-                    defaultValue = "")
             final String outputDir) {
 
         // Update current state
         this.currentProjectPath = projectPath;
         this.currentConfigPath = configPath;
 
-        return enhancedAnalysisHandler.analyzeProjectWithFix(
+        ProjectAnalysisRequest request = new ProjectAnalysisRequest(
             projectPath, configPath, generateMermaid, mermaidOutput,
             generatePlantUML, plantUMLOutput, includePrivateMembers,
             useFix, outputDir);
+
+        return enhancedAnalysisHandler.analyzeProjectWithFix(request);
     }
 }

@@ -5,19 +5,28 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
 
 /**
  * A simple utility to test and verify UTF-8 encoding in the console and files.
  */
-public class EncodingTester {
+public final class EncodingTester {
+
+    private static final int MAX_DISPLAY_LINES = 10;
+    private static final int INFO_SYMBOL_INDEX = 3;
 
     private static final String[] TEST_SYMBOLS = {
         "✅", "❌", "⚠️", "ℹ️", "🔍", "📂", "📄", "🔧", "⚙️", "🔄", "▶️",
         "⏸️", "⏹️", "✨", "🔒", "🔓", "📊", "📈", "⭐", "❤️", "✔️"
     };
 
-    public static void main(String[] args) {
+    /**
+     * Private constructor to prevent instantiation of utility class.
+     */
+    private EncodingTester() {
+        throw new UnsupportedOperationException("Utility class should not be instantiated");
+    }
+
+    public static void main(final String[] args) {
         System.out.println("Documentor Encoding Test Utility");
         System.out.println("==============================");
 
@@ -38,8 +47,8 @@ public class EncodingTester {
         System.out.println("---------------------------");
         System.out.println("Default Charset: " + Charset.defaultCharset());
         System.out.println("File Encoding: " + System.getProperty("file.encoding"));
-        System.out.println("Console Encoding: " + System.console() != null ?
-                           "Available" : "Not available (running from IDE or redirected)");
+        System.out.println("Console Encoding: " + (System.console() != null
+                           ? "Available" : "Not available (running from IDE or redirected)"));
         System.out.println("OS Name: " + System.getProperty("os.name"));
         System.out.println("Java Version: " + System.getProperty("java.version"));
     }
@@ -60,7 +69,7 @@ public class EncodingTester {
         System.out.println("Task completed " + TEST_SYMBOLS[0]);
         System.out.println("Error occurred " + TEST_SYMBOLS[1]);
         System.out.println("Warning: file not found " + TEST_SYMBOLS[2]);
-        System.out.println("Information " + TEST_SYMBOLS[3] + " This is working correctly");
+        System.out.println("Information " + TEST_SYMBOLS[INFO_SYMBOL_INDEX] + " This is working correctly");
     }
 
     private static void testFileWriting() {
@@ -88,7 +97,7 @@ public class EncodingTester {
                 writer.println("Task completed " + TEST_SYMBOLS[0]);
                 writer.println("Error occurred " + TEST_SYMBOLS[1]);
                 writer.println("Warning: file not found " + TEST_SYMBOLS[2]);
-                writer.println("Information " + TEST_SYMBOLS[3] + " This is working correctly");
+                writer.println("Information " + TEST_SYMBOLS[INFO_SYMBOL_INDEX] + " This is working correctly");
             }
 
             System.out.println("Created file: " + testFile.getAbsolutePath());
@@ -100,7 +109,7 @@ public class EncodingTester {
 
             // Print just the first few lines to avoid overwhelming the console
             String[] lines = content.split("\n");
-            for (int i = 0; i < Math.min(lines.length, 10); i++) {
+            for (int i = 0; i < Math.min(lines.length, MAX_DISPLAY_LINES); i++) {
                 System.out.println("> " + lines[i]);
             }
 

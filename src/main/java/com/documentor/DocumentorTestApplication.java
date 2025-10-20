@@ -38,9 +38,16 @@ import com.documentor.config.AppConfigEnhanced;
         )
     }
 )
-public class DocumentorTestApplication {
+public final class DocumentorTestApplication {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DocumentorTestApplication.class);
+
+    /**
+     * Private constructor to prevent instantiation of utility class.
+     */
+    private DocumentorTestApplication() {
+        throw new UnsupportedOperationException("Utility class should not be instantiated");
+    }
 
     public static void main(final String[] args) {
         LOGGER.info("Starting DocumentorTestApplication - Test version with enhanced error handling");

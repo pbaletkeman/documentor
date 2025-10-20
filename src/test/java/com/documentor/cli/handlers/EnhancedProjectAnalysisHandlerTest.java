@@ -49,6 +49,16 @@ class EnhancedProjectAnalysisHandlerTest {
         );
     }
 
+    /**
+     * Helper method to create a ProjectAnalysisRequest
+     */
+    private ProjectAnalysisRequest createRequest(String projectPath, String configPath,
+            boolean generateMermaid, String mermaidOutput, boolean generatePlantUML,
+            String plantUMLOutput, Boolean includePrivateMembers, boolean useFix, String outputDir) {
+        return new ProjectAnalysisRequest(projectPath, configPath, generateMermaid, mermaidOutput,
+                generatePlantUML, plantUMLOutput, includePrivateMembers, useFix, outputDir);
+    }
+
     @Test
     @DisplayName("Should handle analyze with fix when useFix is false")
     void shouldHandleAnalyzeWithoutFix() {
@@ -69,9 +79,9 @@ class EnhancedProjectAnalysisHandlerTest {
             .thenReturn("Analysis complete without fix");
 
         // When
-        String result = handler.analyzeProjectWithFix(
-            projectPath, configPath, generateMermaid, mermaidOutput,
-            generatePlantUML, plantUMLOutput, includePrivateMembers, useFix, outputDir);
+        ProjectAnalysisRequest request = createRequest(projectPath, configPath, generateMermaid,
+                mermaidOutput, generatePlantUML, plantUMLOutput, includePrivateMembers, useFix, outputDir);
+        String result = handler.analyzeProjectWithFix(request);
 
         // Then
         assertEquals("Analysis complete without fix", result);

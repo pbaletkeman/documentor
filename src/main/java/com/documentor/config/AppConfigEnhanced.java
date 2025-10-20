@@ -24,6 +24,7 @@ import com.documentor.service.LlmServiceEnhanced;
 public class AppConfigEnhanced implements AsyncConfigurer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AppConfigEnhanced.class);
+    private static final int DEFAULT_CORE_POOL_SIZE = 5;
     private static final int DEFAULT_MAX_MEMORY_SIZE_MB = 10;
     private static final int BYTES_PER_MB = 1024 * 1024;
     private static final int DEFAULT_QUEUE_CAPACITY = 100;
@@ -59,9 +60,10 @@ public class AppConfigEnhanced implements AsyncConfigurer {
     @Bean("llmExecutor")
     @org.springframework.context.annotation.Primary
     public ThreadPoolTaskExecutor llmExecutorEnhanced() {
-        int corePoolSize = documentorConfig != null &&
-                           documentorConfig.analysisSettings() != null ?
-                           documentorConfig.analysisSettings().maxThreads() : 5;
+        int corePoolSize = documentorConfig != null
+                           && documentorConfig.analysisSettings() != null
+                           ? documentorConfig.analysisSettings().maxThreads()
+                           : DEFAULT_CORE_POOL_SIZE;
 
         LOGGER.info("Creating enhanced LLM executor with core pool size: {}", corePoolSize);
 
@@ -115,7 +117,8 @@ public class AppConfigEnhanced implements AsyncConfigurer {
             final com.documentor.service.llm.LlmResponseHandler responseHandler,
             final com.documentor.service.llm.LlmApiClient apiClient) {
         LOGGER.info("Creating enhanced LlmService (no longer PRIMARY)");
-        return new com.documentor.service.LlmServiceEnhanced(documentorConfigParam, requestBuilder, responseHandler, apiClient);
+        return new com.documentor.service.LlmServiceEnhanced(documentorConfigParam, requestBuilder,
+                responseHandler, apiClient);
     }
 
     /**
@@ -147,17 +150,19 @@ public class AppConfigEnhanced implements AsyncConfigurer {
      * 🧪 Enhanced Unit Test Documentation Generator with improved error handling
      */
     @Bean
-    public com.documentor.service.documentation.UnitTestDocumentationGeneratorEnhanced unitTestDocumentationGeneratorEnhanced(
-            final DocumentorConfig documentorConfig,
+    public com.documentor.service.documentation.UnitTestDocumentationGeneratorEnhanced
+            unitTestDocumentationGeneratorEnhanced(
+            final DocumentorConfig documentorConfigParam,
             final com.documentor.service.LlmServiceFixEnhanced llmServiceFixEnhanced,
             final com.documentor.service.llm.LlmRequestBuilder requestBuilder,
             final com.documentor.service.llm.LlmResponseHandler responseHandler,
             final com.documentor.service.llm.LlmApiClient apiClient) {
-        LOGGER.info("Creating enhanced UnitTestDocumentationGenerator with direct LlmServiceEnhanced instance");
+        LOGGER.info("Creating enhanced UnitTestDocumentationGenerator with direct "
+                + "LlmServiceEnhanced instance");
 
         // Create a new instance of LlmServiceEnhanced directly instead of injecting
         LlmServiceEnhanced serviceEnhanced = new LlmServiceEnhanced(
-            documentorConfig, requestBuilder, responseHandler, apiClient);
+            documentorConfigParam, requestBuilder, responseHandler, apiClient);
 
         return new com.documentor.service.documentation.UnitTestDocumentationGeneratorEnhanced(
             serviceEnhanced, documentorConfig, llmServiceFixEnhanced);

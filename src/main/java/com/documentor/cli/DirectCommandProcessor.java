@@ -22,14 +22,22 @@ public class DirectCommandProcessor implements ApplicationRunner {
     private final DocumentorConfig documentorConfig;
     private final LlmServiceFix llmServiceFix;
 
-    public DirectCommandProcessor(final DocumentorCommands documentorCommands,
-                                 final DocumentorConfig documentorConfig,
-                                 final LlmServiceFix llmServiceFix) {
-        this.documentorCommands = documentorCommands;
-        this.documentorConfig = documentorConfig;
-        this.llmServiceFix = llmServiceFix;
+    public DirectCommandProcessor(final DocumentorCommands documentorCommandsParam,
+                                 final DocumentorConfig documentorConfigParam,
+                                 final LlmServiceFix llmServiceFixParam) {
+        this.documentorCommands = documentorCommandsParam;
+        this.documentorConfig = documentorConfigParam;
+        this.llmServiceFix = llmServiceFixParam;
     }
 
+    /**
+     * Runs the command processor with application arguments.
+     * This method is not intended for extension. Override behavior should be implemented
+     * through dependency injection of different command handlers.
+     *
+     * @param args application arguments containing command line parameters
+     * @throws Exception if command processing fails
+     */
     @Override
     public void run(final ApplicationArguments args) throws Exception {
         String[] sourceArgs = args.getSourceArgs();

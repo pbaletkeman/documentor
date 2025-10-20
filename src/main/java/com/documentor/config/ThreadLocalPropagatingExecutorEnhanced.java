@@ -114,7 +114,8 @@ public final class ThreadLocalPropagatingExecutorEnhanced implements Executor {
                 LOGGER.info("[{}] Attempting to execute with fallback executor", executorName);
                 FALLBACK_EXECUTOR.execute(contextAwareRunnable);
             } catch (Exception fallbackEx) {
-                LOGGER.error("[{}] Fallback executor also failed: {}", executorName, fallbackEx.getMessage(), fallbackEx);
+                LOGGER.error("[{}] Fallback executor also failed: {}", executorName,
+                        fallbackEx.getMessage(), fallbackEx);
                 // Execute directly in the current thread as last resort
                 LOGGER.warn("[{}] Executing task in current thread as last resort", executorName);
                 contextAwareRunnable.run();

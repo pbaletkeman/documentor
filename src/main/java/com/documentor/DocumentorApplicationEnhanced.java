@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.documentor.config.AppConfigEnhanced;
-import com.documentor.config.ThreadLocalTaskDecoratorEnhanced;
 
 /**
  * Enhanced Documentor Application
@@ -45,9 +44,16 @@ import com.documentor.config.ThreadLocalTaskDecoratorEnhanced;
         )
     }
 )
-public class DocumentorApplicationEnhanced {
+public final class DocumentorApplicationEnhanced {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DocumentorApplicationEnhanced.class);
+
+    /**
+     * Private constructor to prevent instantiation of utility class.
+     */
+    private DocumentorApplicationEnhanced() {
+        throw new UnsupportedOperationException("Utility class should not be instantiated");
+    }
 
     public static void main(final String[] args) {
         LOGGER.info("Starting DocumentorApplicationEnhanced - Enhanced version with improved error handling");
