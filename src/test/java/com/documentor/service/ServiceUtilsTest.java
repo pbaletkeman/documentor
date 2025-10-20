@@ -113,7 +113,8 @@ class ServiceUtilsTest {
         assertTrue(emptyResult.isEmpty());
 
         // Test with null type (should return copy of all elements)
-        List<CodeElement> allElements = ServiceUtils.filterByType(elements, null);
+        List<CodeElement> allElements = ServiceUtils.filterByType(
+                elements, null);
         assertEquals(TWO, allElements.size());
     }
 
@@ -148,15 +149,17 @@ class ServiceUtilsTest {
         );
 
         CodeElement methodElement = new CodeElement(
-            CodeElementType.METHOD, "testMethod", "com.test.TestClass1.testMethod",
-            "TestClass1.java", TEN, "public void testMethod()", "",
-            List.of(), List.of()
+            CodeElementType.METHOD, "testMethod",
+            "com.test.TestClass1.testMethod", "TestClass1.java", TEN,
+            "public void testMethod()", "", List.of(), List.of()
         );
 
-        List<CodeElement> elements = List.of(classElement1, classElement2, methodElement);
+        List<CodeElement> elements = List.of(
+                classElement1, classElement2, methodElement);
 
         // Test grouping
-        Map<CodeElementType, List<CodeElement>> grouped = ServiceUtils.groupByType(elements);
+        Map<CodeElementType, List<CodeElement>> grouped =
+                ServiceUtils.groupByType(elements);
 
         assertEquals(TWO, grouped.size());
         assertTrue(grouped.containsKey(CodeElementType.CLASS));
@@ -298,7 +301,8 @@ class ServiceUtilsTest {
             "TestClass.java", ONE, "class TestClass", "", List.of(), List.of()
         );
 
-        assertEquals("[CLASS] TestClass", ServiceUtils.createDisplayName(element));
+        assertEquals("[CLASS] TestClass",
+                ServiceUtils.createDisplayName(element));
 
         // Test null element
         assertEquals("Unknown Element", ServiceUtils.createDisplayName(null));
@@ -325,7 +329,8 @@ class ServiceUtilsTest {
             "TestElement.java", ONE, "element", "", List.of(), List.of()
         );
 
-        assertEquals("[UNKNOWN] TestElement", ServiceUtils.createDisplayName(nullTypeElement));
+        assertEquals("[UNKNOWN] TestElement",
+                ServiceUtils.createDisplayName(nullTypeElement));
 
         // Test element with both null name and type
         CodeElement bothNullElement = new CodeElement(
@@ -333,7 +338,8 @@ class ServiceUtilsTest {
             "Unknown.java", ONE, "unknown", "", List.of(), List.of()
         );
 
-        assertEquals("Unknown Element", ServiceUtils.createDisplayName(bothNullElement));
+        assertEquals("Unknown Element",
+                ServiceUtils.createDisplayName(bothNullElement));
     }
 
     @Test
@@ -344,7 +350,8 @@ class ServiceUtilsTest {
         assertFalse(ServiceUtils.validateOperationParameters("   ", Map.of()));
 
         // Test with valid operation and null parameters
-        assertTrue(ServiceUtils.validateOperationParameters("testOperation", null));
+        assertTrue(ServiceUtils.validateOperationParameters("testOperation",
+                null));
 
         // Test with valid operation and empty parameters
         assertTrue(ServiceUtils.validateOperationParameters("testOperation",
@@ -376,32 +383,46 @@ class ServiceUtilsTest {
     @Test
     void testFormatErrorMessage() {
         // Test with all parameters
-        String fullMessage = ServiceUtils.formatErrorMessage("TestService", "testOperation", "Test error");
-        assertEquals("[TestService] Operation 'testOperation' failed: Test error", fullMessage);
+        String fullMessage = ServiceUtils.formatErrorMessage("TestService",
+                "testOperation", "Test error");
+        assertEquals("[TestService] Operation 'testOperation' failed: Test error",
+                fullMessage);
 
         // Test with null service name
-        String noServiceMessage = ServiceUtils.formatErrorMessage(null, "testOperation", "Test error");
-        assertEquals("Operation 'testOperation' failed: Test error", noServiceMessage);
+        String noServiceMessage = ServiceUtils.formatErrorMessage(null,
+                "testOperation", "Test error");
+        assertEquals("Operation 'testOperation' failed: Test error",
+                noServiceMessage);
 
         // Test with empty service name
-        String emptyServiceMessage = ServiceUtils.formatErrorMessage("", "testOperation", "Test error");
-        assertEquals("Operation 'testOperation' failed: Test error", emptyServiceMessage);
+        String emptyServiceMessage = ServiceUtils.formatErrorMessage("",
+                "testOperation", "Test error");
+        assertEquals("Operation 'testOperation' failed: Test error",
+                emptyServiceMessage);
 
         // Test with null operation
-        String noOperationMessage = ServiceUtils.formatErrorMessage("TestService", null, "Test error");
-        assertEquals("[TestService] Operation failed: Test error", noOperationMessage);
+        String noOperationMessage = ServiceUtils.formatErrorMessage("TestService",
+                null, "Test error");
+        assertEquals("[TestService] Operation failed: Test error",
+                noOperationMessage);
 
         // Test with empty operation
-        String emptyOperationMessage = ServiceUtils.formatErrorMessage("TestService", "", "Test error");
-        assertEquals("[TestService] Operation failed: Test error", emptyOperationMessage);
+        String emptyOperationMessage = ServiceUtils.formatErrorMessage(
+                "TestService", "", "Test error");
+        assertEquals("[TestService] Operation failed: Test error",
+                emptyOperationMessage);
 
         // Test with null cause
-        String noCauseMessage = ServiceUtils.formatErrorMessage("TestService", "testOperation", null);
-        assertEquals("[TestService] Operation 'testOperation' failed", noCauseMessage);
+        String noCauseMessage = ServiceUtils.formatErrorMessage("TestService",
+                "testOperation", null);
+        assertEquals("[TestService] Operation 'testOperation' failed",
+                noCauseMessage);
 
         // Test with empty cause
-        String emptyCauseMessage = ServiceUtils.formatErrorMessage("TestService", "testOperation", "");
-        assertEquals("[TestService] Operation 'testOperation' failed", emptyCauseMessage);
+        String emptyCauseMessage = ServiceUtils.formatErrorMessage("TestService",
+                "testOperation", "");
+        assertEquals("[TestService] Operation 'testOperation' failed",
+                emptyCauseMessage);
 
         // Test with all null values
         String allNullMessage = ServiceUtils.formatErrorMessage(null, null, null);

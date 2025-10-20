@@ -31,7 +31,8 @@ import org.springframework.test.context.ActiveProfiles;
 @Import(TestConfig.class)
 public class ThreadLocalPropagationIntegrationTest {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ThreadLocalPropagationIntegrationTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+            ThreadLocalPropagationIntegrationTest.class);
 
     /**
      * Test that verifies ThreadLocal propagation works correctly with our custom executor.
@@ -62,13 +63,15 @@ public class ThreadLocalPropagationIntegrationTest {
             List.of("**/test/**")
         );
 
-        DocumentorConfig testConfig = new DocumentorConfig(List.of(testModel), outputSettings, analysisSettings);
+        DocumentorConfig testConfig = new DocumentorConfig(
+                List.of(testModel), outputSettings, analysisSettings);
 
         // Set the config in the main thread
         LlmService.setThreadLocalConfig(testConfig);
 
         // Create our propagating executor
-        Executor executor = ThreadLocalPropagatingExecutor.createExecutor(2, "test-thread");
+        Executor executor = ThreadLocalPropagatingExecutor.createExecutor(
+                2, "test-thread");
 
         // Latch to wait for async operation to complete
         CountDownLatch latch = new CountDownLatch(1);
@@ -85,16 +88,18 @@ public class ThreadLocalPropagationIntegrationTest {
                 DocumentorConfig propagatedConfig = LlmService.getThreadLocalConfig();
 
                 if (propagatedConfig != null) {
-                    LOGGER.info("ThreadLocal config available in child thread with {} models",
-                        propagatedConfig.llmModels().size());
+                    LOGGER.info(
+                            "ThreadLocal config available in child thread with {} models",
+                            propagatedConfig.llmModels().size());
 
                     // Verify it's the same config
                     if (propagatedConfig.llmModels().size() == 1 &&
-                        "test-model".equals(propagatedConfig.llmModels().get(0).name())) {
+                            "test-model".equals(propagatedConfig.llmModels().get(0).name())) {
                         configAvailableInChildThread.set(true);
                     }
                 } else {
-                    LOGGER.error("ThreadLocal config NOT available in child thread");
+                    LOGGER.error(
+                            "ThreadLocal config NOT available in child thread");
                 }
             } finally {
                 latch.countDown();
@@ -109,7 +114,7 @@ public class ThreadLocalPropagationIntegrationTest {
 
         // Assert that config was successfully propagated
         assertTrue(configAvailableInChildThread.get(),
-            "ThreadLocal config should be available in the child thread");
+                "ThreadLocal config should be available in the child thread");
     }
 
     /**
@@ -141,7 +146,8 @@ public class ThreadLocalPropagationIntegrationTest {
             List.of("**/test/**")
         );
 
-        DocumentorConfig testConfig = new DocumentorConfig(List.of(testModel), outputSettings, analysisSettings);
+        DocumentorConfig testConfig = new DocumentorConfig(
+                List.of(testModel), outputSettings, analysisSettings);
 
         // Create our service fix
         LlmServiceFix serviceFix = new LlmServiceFix();
@@ -151,10 +157,12 @@ public class ThreadLocalPropagationIntegrationTest {
 
         // Verify the config was set correctly
         DocumentorConfig retrievedConfig = LlmService.getThreadLocalConfig();
-        assertTrue(retrievedConfig != null, "Config should not be null after setting with LlmServiceFix");
-        assertTrue(retrievedConfig.llmModels().size() == 1, "Config should have one model");
+        assertTrue(retrievedConfig != null,
+                "Config should not be null after setting with LlmServiceFix");
+        assertTrue(retrievedConfig.llmModels().size() == 1,
+                "Config should have one model");
         assertTrue("test-model-fix".equals(retrievedConfig.llmModels().get(0).name()),
-            "Config should contain the correct model name");
+                "Config should contain the correct model name");
 
         // Cleanup
         LlmService.clearThreadLocalConfig();

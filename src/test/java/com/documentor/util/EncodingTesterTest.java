@@ -43,15 +43,15 @@ class EncodingTesterTest {
 
         // Verify that output contains expected sections
         assertTrue(output.contains("Documentor Encoding Test Utility"),
-                   "Should contain utility title");
+                "Should contain utility title");
         assertTrue(output.contains("System Encoding Information"),
-                   "Should contain encoding information section");
+                "Should contain encoding information section");
         assertTrue(output.contains("Testing Console Output"),
-                   "Should contain console output test section");
+                "Should contain console output test section");
         assertTrue(output.contains("Testing File Writing"),
-                   "Should contain file writing test section");
+                "Should contain file writing test section");
         assertTrue(output.contains("Encoding test completed"),
-                   "Should contain completion message");
+                "Should contain completion message");
     }
 
     @Test
@@ -61,13 +61,13 @@ class EncodingTesterTest {
 
         // Verify system information is displayed
         assertTrue(output.contains("Default Charset"),
-                   "Should display default charset");
+                "Should display default charset");
         assertTrue(output.contains("File Encoding"),
-                   "Should display file encoding");
+                "Should display file encoding");
         assertTrue(output.contains("OS Name"),
-                   "Should display OS name");
+                "Should display OS name");
         assertTrue(output.contains("Java Version"),
-                   "Should display Java version");
+                "Should display Java version");
     }
 
     @Test
@@ -77,15 +77,15 @@ class EncodingTesterTest {
 
         // Verify that console output section contains test symbols
         assertTrue(output.contains("If you see symbols below"),
-                   "Should contain symbol visibility test");
+                "Should contain symbol visibility test");
         assertTrue(output.contains("Task completed"),
-                   "Should contain task completion message");
+                "Should contain task completion message");
         assertTrue(output.contains("Error occurred"),
-                   "Should contain error message example");
+                "Should contain error message example");
         assertTrue(output.contains("Warning: file not found"),
-                   "Should contain warning message example");
+                "Should contain warning message example");
         assertTrue(output.contains("Information"),
-                   "Should contain information message example");
+                "Should contain information message example");
     }
 
     @Test
@@ -105,7 +105,7 @@ class EncodingTesterTest {
         // Verify that the output mentions file writing
         String output = outContent.toString();
         assertTrue(output.contains("Documentor Encoding Test Utility"),
-                   "Should contain utility title");
+                "Should contain utility title");
     }
 
     @Test
@@ -114,11 +114,11 @@ class EncodingTesterTest {
         String output = outContent.toString();
 
         assertTrue(output.contains("Created file"),
-                   "Should report successful file creation");
+                "Should report successful file creation");
         assertTrue(output.contains("Reading file back to verify encoding"),
-                   "Should mention file verification");
+                "Should mention file verification");
         assertTrue(output.contains("File encoding test successful"),
-                   "Should report test success");
+                "Should report test success");
     }
 
     @Test
@@ -129,19 +129,19 @@ class EncodingTesterTest {
         // Test that system encoding info is actually displayed
         String defaultCharset = Charset.defaultCharset().toString();
         assertTrue(output.contains(defaultCharset),
-                   "Should display actual default charset: " + defaultCharset);
+                "Should display actual default charset: " + defaultCharset);
 
         String fileEncoding = System.getProperty("file.encoding");
         assertTrue(output.contains(fileEncoding),
-                   "Should display actual file encoding: " + fileEncoding);
+                "Should display actual file encoding: " + fileEncoding);
 
         String javaVersion = System.getProperty("java.version");
         assertTrue(output.contains(javaVersion),
-                   "Should display actual Java version: " + javaVersion);
+                "Should display actual Java version: " + javaVersion);
 
         String osName = System.getProperty("os.name");
         assertTrue(output.contains(osName),
-                   "Should display actual OS name: " + osName);
+                "Should display actual OS name: " + osName);
     }
 
     @Test
@@ -151,9 +151,9 @@ class EncodingTesterTest {
 
         // The output should contain basic encoding test information
         assertTrue(output.contains("Documentor Encoding Test Utility"),
-                   "Should display the utility title");
+                "Should display the utility title");
         assertTrue(output.contains("Default Charset:"),
-                   "Should display charset information");
+                "Should display charset information");
     }
 
     @Test
@@ -164,13 +164,13 @@ class EncodingTesterTest {
 
         // Check that the basic structure is present
         assertTrue(output.contains("Documentor Encoding Test Utility"),
-                   "Should have the utility title");
+                "Should have the utility title");
         assertTrue(output.contains("System Encoding Information"),
-                   "Should have encoding information section");
+                "Should have encoding information section");
         assertTrue(output.contains("Default Charset:"),
-                   "Should display default charset");
+                "Should display default charset");
         assertTrue(output.contains("Encoding test completed"),
-                   "Should indicate completion");
+                "Should indicate completion");
     }
 
     @Test
@@ -184,9 +184,9 @@ class EncodingTesterTest {
 
             // Should contain readback content markers
             assertTrue(output.contains("Reading file back to verify encoding"),
-                       "Should mention reading file back");
+                    "Should mention reading file back");
             assertTrue(output.contains("Documentor Encoding Test File"),
-                       "Should show file title from readback");
+                    "Should show file title from readback");
 
         } finally {
             System.setProperty("user.dir", originalUserDir);
@@ -205,9 +205,13 @@ class EncodingTesterTest {
         int fileTestIndex = output.indexOf("Testing File Writing");
         int completionIndex = output.indexOf("Encoding test completed");
 
-        assertTrue(titleIndex < systemInfoIndex, "Title should come before system info");
-        assertTrue(systemInfoIndex < consoleTestIndex, "System info should come before console test");
-        assertTrue(consoleTestIndex < fileTestIndex, "Console test should come before file test");
-        assertTrue(fileTestIndex < completionIndex, "File test should come before completion");
+        assertTrue(titleIndex < systemInfoIndex,
+                "Title should come before system info");
+        assertTrue(systemInfoIndex < consoleTestIndex,
+                "System info should come before console test");
+        assertTrue(consoleTestIndex < fileTestIndex,
+                "Console test should come before file test");
+        assertTrue(fileTestIndex < completionIndex,
+                "File test should come before completion");
     }
 }
