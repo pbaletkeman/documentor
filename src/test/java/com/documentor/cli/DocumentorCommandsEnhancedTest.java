@@ -1,6 +1,7 @@
 package com.documentor.cli;
 
 import com.documentor.cli.handlers.ConfigurationCommandHandler;
+import com.documentor.cli.handlers.EnhancedProjectAnalysisHandler;
 import com.documentor.cli.handlers.ProjectAnalysisCommandHandler;
 import com.documentor.cli.handlers.StatusCommandHandler;
 
@@ -29,6 +30,9 @@ class DocumentorCommandsEnhancedTest {
 
     @Mock
     private ConfigurationCommandHandler configurationHandler;
+
+    @Mock
+    private EnhancedProjectAnalysisHandler enhancedAnalysisHandler;
 
     @InjectMocks
     private DocumentorCommands commands;
@@ -135,5 +139,80 @@ class DocumentorCommandsEnhancedTest {
         assertEquals("Status displayed", result);
         verify(statusHandler).handleShowStatus("/test/project", "custom-config.json");
     }
-}
 
+    @Test
+    @DisplayName("Should handle analyze with fix command")
+    void shouldHandleAnalyzeWithFix() {
+        // Given
+        String projectPath = "/test/project";
+        String configPath = "config.json";
+        boolean includePrivateMembers = true;
+        boolean generateMermaid = false;
+        String mermaidOutput = "";
+        boolean generatePlantUML = true;
+        String plantUMLOutput = "/test/plantuml";
+        boolean useFix = true;
+        String outputDir = "/test/output";
+
+        when(enhancedAnalysisHandler.analyzeProjectWithFix(
+                projectPath, configPath, generateMermaid, mermaidOutput,
+                generatePlantUML, plantUMLOutput, includePrivateMembers,
+                useFix, outputDir))
+            .thenReturn("Analysis with fix complete");
+
+        // When
+        String result = commands.analyzeWithFix(projectPath, configPath, includePrivateMembers,
+                generateMermaid, mermaidOutput, generatePlantUML, plantUMLOutput, useFix, outputDir);
+
+        // Then
+        assertEquals("Analysis with fix complete", result);
+        verify(enhancedAnalysisHandler).analyzeProjectWithFix(
+                projectPath, configPath, generateMermaid, mermaidOutput,
+                generatePlantUML, plantUMLOutput, includePrivateMembers,
+                useFix, outputDir);
+    }
+
+    @Test
+    @DisplayName("Should handle generate PlantUML diagrams command")
+    void shouldHandleGeneratePlantUMLDiagrams() {
+        // Given
+        String projectPath = "/test/project";
+        boolean includePrivateMembers = true;
+        String plantUMLOutput = "/test/plantuml";
+
+        when(projectAnalysisHandler.handleAnalyzeProjectExtended(projectPath, "config.json",
+                false, "", true, plantUMLOutput, includePrivateMembers))
+            .thenReturn("PlantUML diagrams generated");
+
+        // When
+        String result = commands.generatePlantUMLDiagrams(projectPath, includePrivateMembers, plantUMLOutput);
+
+        // Then
+        assertEquals("PlantUML diagrams generated", result);
+        verify(projectAnalysisHandler).handleAnalyzeProjectExtended(projectPath, "config.json",
+                false, "", true, plantUMLOutput, includePrivateMembers);
+    }
+
+    @Test
+    @DisplayName("Should handle analyze with fix command with default parameters")
+    void shouldHandleAnalyzeWithFixDefaultParams() {
+        // Given
+        String projectPath = "/test/project";
+        String configPath = "config.json";
+
+        when(enhancedAnalysisHandler.analyzeProjectWithFix(
+                projectPath, configPath, false, "",
+                false, "", true, true, ""))
+            .thenReturn("Analysis with fix complete (defaults)");
+
+        // When
+        String result = commands.analyzeWithFix(projectPath, configPath, true,
+                false, "", false, "", true, "");
+
+        // Then
+        assertEquals("Analysis with fix complete (defaults)", result);
+        verify(enhancedAnalysisHandler).analyzeProjectWithFix(
+                projectPath, configPath, false, "",
+                false, "", true, true, "");
+    }
+}
