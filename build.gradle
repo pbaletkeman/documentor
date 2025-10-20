@@ -92,7 +92,7 @@ checkstyleTest {
 }
 
 springBoot {
-    mainClass = 'com.documentor.DocumentorApplication'
+    mainClass = 'com.documentor.DocumentorApplicationEnhanced'
 }
 
 // Simplified JAR configuration
@@ -102,7 +102,7 @@ jar {
 
 bootJar {
     archiveFileName = 'documentor.jar'
-    mainClass = 'com.documentor.DocumentorApplication'
+    mainClass = 'com.documentor.DocumentorApplicationEnhanced'
 }
 
 // Simplified run configuration

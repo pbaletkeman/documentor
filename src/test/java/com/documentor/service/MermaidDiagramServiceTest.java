@@ -65,7 +65,7 @@ class MermaidDiagramServiceTest {
         assertThat(generatedFiles).hasSize(1); // One public class
 
         String diagramFile = generatedFiles.get(0);
-        assertThat(diagramFile).contains("TestClass_diagram.md");
+        assertThat(diagramFile).contains("TestClass_diagram.mmd");
 
         Path diagramPath = Path.of(diagramFile);
         assertThat(Files.exists(diagramPath)).isTrue();
@@ -102,7 +102,7 @@ class MermaidDiagramServiceTest {
         // Then
         assertThat(generatedFiles).isNotEmpty();
         String diagramFile = generatedFiles.get(0);
-        assertThat(diagramFile).contains("TestClass_diagram.md");
+        assertThat(diagramFile).contains("TestClass_diagram.mmd");
     }
 
     @Test
@@ -195,8 +195,8 @@ class MermaidDiagramServiceTest {
 
         // Then
         assertThat(generatedFiles).hasSize(2); // Two public classes
-        assertThat(generatedFiles).anyMatch(file -> file.contains("FirstClass_diagram.md"));
-        assertThat(generatedFiles).anyMatch(file -> file.contains("SecondClass_diagram.md"));
+        assertThat(generatedFiles).anyMatch(file -> file.contains("FirstClass_diagram.mmd"));
+        assertThat(generatedFiles).anyMatch(file -> file.contains("SecondClass_diagram.mmd"));
     }
 
     @Test
@@ -456,4 +456,3 @@ class MermaidDiagramServiceTest {
         return new ProjectAnalysis("/src/main/java", elements, System.currentTimeMillis());
     }
 }
-

@@ -8,18 +8,25 @@ echo =====================================================
 echo   TESTING ENHANCED DOCUMENTOR WITH ERROR HANDLING
 echo =====================================================
 echo.
-echo This test will use config-llamacpp.json - a configuration that
-echo previously caused NullPointerException errors in CompletableFuture.
+echo This test specifically validates the fix for:
+echo  - NullPointerException in CompletableFuture for unit tests
+echo  - ThreadLocal configuration handling issues
+echo  - Enhanced error recovery in async operations
+echo.
+echo Using config-llamacpp.json - a configuration that previously
+echo caused NullPointerException errors in the original version.
 echo.
 echo First, building the project to ensure all classes are compiled...
 call gradlew.bat compileJava
 
 echo.
-echo Now running the test application with the special configuration...
+echo Now running the enhanced application with the test configuration...
+echo This uses runEnhancedApp which includes all the fixes for
+echo the NullPointerException issues.
 echo.
 
-REM Run the special test version with specific test configuration
-call gradlew.bat runTestApp -Pargs="--config,config-llamacpp.json,analyze,--path,./src/main/java"
+REM Run the enhanced version with the test configuration
+call gradlew.bat runEnhancedApp -Pargs="--config,config-llamacpp.json,analyze,--path,./src/main/java,--generate-unit-tests,true"
 
 echo.
 if %ERRORLEVEL% EQU 0 (

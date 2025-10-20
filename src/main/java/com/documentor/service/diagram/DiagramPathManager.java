@@ -31,7 +31,7 @@ public class DiagramPathManager {
      * 🏷️ Generates a standardized diagram file name
      */
     public String generateDiagramFileName(final String className) {
-        return sanitizeFileName(className) + "_diagram.md";
+        return sanitizeFileName(className) + "_diagram.mmd";
     }
 
     /**
@@ -48,4 +48,3 @@ public class DiagramPathManager {
         return Paths.get(outputPath);
     }
 }
-

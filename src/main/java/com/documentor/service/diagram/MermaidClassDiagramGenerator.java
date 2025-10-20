@@ -31,7 +31,7 @@ public class MermaidClassDiagramGenerator {
     public String generateClassDiagram(final CodeElement classElement, final List<CodeElement> allElements,
             final Path outputPath) throws IOException {
         String className = classElement.name();
-        String diagramFileName = className + "_diagram.md";
+        String diagramFileName = className + "_diagram.mmd";
         Path diagramPath = outputPath.resolve(diagramFileName);
 
         // Generate Mermaid diagram content
@@ -162,4 +162,3 @@ public class MermaidClassDiagramGenerator {
         return visibility.shouldInclude(false); // Don't include private elements in diagrams
     }
 }
-

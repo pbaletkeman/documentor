@@ -72,7 +72,7 @@ class MermaidClassDiagramGeneratorTest {
         assertNotNull(result);
 
         // Verify file was created
-        Path diagramPath = tempDir.resolve("TestClass_diagram.md");
+        Path diagramPath = tempDir.resolve("TestClass_diagram.mmd");
         assertTrue(Files.exists(diagramPath));
         String fileContent = Files.readString(diagramPath);
 
@@ -86,4 +86,3 @@ class MermaidClassDiagramGeneratorTest {
         assertEquals(diagramPath.toString(), result);
     }
 }
-

@@ -27,7 +27,10 @@ import com.documentor.config.ThreadLocalTaskDecoratorEnhanced;
  * This ensures our enhanced components with @Primary annotations take precedence
  */
 @Import({
-    AppConfigEnhanced.class
+    AppConfigEnhanced.class,
+    com.documentor.config.LlmServiceConfigurationEnhanced.class,
+    com.documentor.config.DocumentationServiceConfiguration.class,
+    com.documentor.config.DiagramServiceConfiguration.class
 })
 @ComponentScan(
     basePackages = "com.documentor",

@@ -46,7 +46,7 @@ class DiagramPathManagerEnhancedTest {
         assertFalse(fileName.contains("#"));
         assertFalse(fileName.contains("&"));
         assertFalse(fileName.contains("%"));
-        assertTrue(fileName.endsWith("_diagram.md"));
+        assertTrue(fileName.endsWith("_diagram.mmd"));
     }
 
     @Test
@@ -83,4 +83,3 @@ class DiagramPathManagerEnhancedTest {
         assertEquals(Paths.get("/tmp/diagrams/class/samples"), outputPath);
     }
 }
-

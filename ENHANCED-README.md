@@ -30,7 +30,13 @@ The original application was experiencing NullPointerExceptions in CompletableFu
 - `ThreadLocalPropagatingExecutorEnhanced`: Enhanced executor with null-safety features
 - `ThreadLocalTaskDecoratorEnhanced`: Enhanced task decorator with better error handling
 - `UnitTestDocumentationGeneratorEnhanced`: Enhanced test generator with improved error handling
+- `ElementDocumentationGeneratorEnhanced`: Enhanced documentation generator with improved error handling
+- `DocumentationServiceEnhanced`: Enhanced documentation service with improved error handling
+- `ThreadLocalContextHolder`: Centralized management of ThreadLocal values
 - `AppConfigEnhanced`: Configuration that uses the enhanced components and marks beans as @Primary
+- `LlmServiceConfigurationEnhanced`: Configuration for LLM service beans marked as @Primary
+- `DocumentationServiceConfiguration`: Configuration for enhanced documentation services
+- `DiagramServiceConfiguration`: Configuration for diagram services with ThreadLocal support
 - `DocumentorApplicationEnhanced`: Enhanced application entry point
 - `DocumentorTestApplication`: Special test application that excludes original components
 

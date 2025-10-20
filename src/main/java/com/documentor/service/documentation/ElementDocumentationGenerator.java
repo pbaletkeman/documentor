@@ -289,99 +289,264 @@ public class ElementDocumentationGenerator {
 
         // Class header and documentation
         if (classElement != null) {
-            // Add class name and package info
+            // Add class name with larger header and package info
             content.append(String.format("# %s %s\n\n", classElement.type().getIcon(), classElement.name()));
 
-            // Safely extract package name
+            // Safely extract package name and format it nicely
             String qualifiedName = classElement.qualifiedName();
             int lastDotIndex = qualifiedName.lastIndexOf('.');
             String packageName = lastDotIndex > 0 ? qualifiedName.substring(0, lastDotIndex) : "(default package)";
             content.append(String.format("> **Package:** `%s`\n\n", packageName));
 
-            // Add class documentation
-            content.append("## Class Documentation\n\n");
-            content.append(classDoc).append("\n\n");
+            // Add horizontal rule for visual separation
+            content.append("---\n\n");
 
-            // Add class usage examples
-            content.append("## Class Usage Examples\n\n");
-            content.append(classExamples).append("\n\n");
+            // Add class documentation in a highlighted section
+            content.append("## 📄 Class Documentation\n\n");
+            // Format the documentation content nicely
+            String formattedDoc = formatContent(classDoc);
+            content.append(formattedDoc).append("\n\n");
 
-            // Add class signature
-            content.append("## Class Signature\n\n");
-            content.append("```").append(getLanguageFromFile(classElement.filePath())).append("\n");
-            content.append(classElement.signature()).append("\n");
+            // Add horizontal rule for visual separation
+            content.append("---\n\n");
+
+            // Add class usage examples in a highlighted section
+            content.append("## 💡 Class Usage Examples\n\n");
+            // Format the examples content nicely
+            String formattedExamples = formatContent(classExamples);
+            content.append(formattedExamples).append("\n\n");
+
+            // Add horizontal rule for visual separation
+            content.append("---\n\n");
+
+            // Add class signature with proper formatting
+            content.append("## 📋 Class Signature\n\n");
+            // Format the code block properly with line breaks and indentation
+            String language = getLanguageFromFile(classElement.filePath());
+            content.append("```").append(language).append("\n");
+            content.append(formatCodeBlock(classElement.signature())).append("\n");
             content.append("```\n\n");
 
-            // Add table of contents for fields and methods
+            // Add table of contents with better organization
             if (!fields.isEmpty() || !methods.isEmpty()) {
-                content.append("## Table of Contents\n\n");
+                content.append("## 📑 Table of Contents\n\n");
 
                 if (!fields.isEmpty()) {
-                    content.append("### Fields\n\n");
+                    content.append("<details open>\n<summary><strong>🔹 Fields</strong> (" + fields.size() + ")</summary>\n\n");
+                    int fieldCount = 0;
                     for (ElementDocPair field : fields) {
                         content.append(String.format("- [%s %s](#%s)\n",
                             field.getElement().type().getIcon(),
                             field.getElement().name(),
-                            field.getElement().name().toLowerCase().replace(' ', '-')));
+                            sanitizeAnchor(field.getElement().name())));
+                        fieldCount++;
+
+                        // Add line breaks for better readability in long lists
+                        if (fieldCount % 10 == 0 && fieldCount < fields.size()) {
+                            content.append("\n");
+                        }
                     }
-                    content.append("\n");
+                    content.append("\n</details>\n\n");
                 }
 
                 if (!methods.isEmpty()) {
-                    content.append("### Methods\n\n");
+                    content.append("<details open>\n<summary><strong>🔸 Methods</strong> (" + methods.size() + ")</summary>\n\n");
+                    int methodCount = 0;
                     for (ElementDocPair method : methods) {
                         content.append(String.format("- [%s %s](#%s)\n",
                             method.getElement().type().getIcon(),
                             method.getElement().name(),
-                            method.getElement().name().toLowerCase().replace(' ', '-')));
+                            sanitizeAnchor(method.getElement().name())));
+                        methodCount++;
+
+                        // Add line breaks for better readability in long lists
+                        if (methodCount % 10 == 0 && methodCount < methods.size()) {
+                            content.append("\n");
+                        }
                     }
-                    content.append("\n");
+                    content.append("\n</details>\n\n");
                 }
+
+                // Add horizontal rule for visual separation
+                content.append("---\n\n");
             }
         } else {
-            content.append("# Standalone Elements\n\n");
+            content.append("# 📁 Standalone Elements\n\n");
             content.append("These elements are not associated with a specific class.\n\n");
+            // Add horizontal rule for visual separation
+            content.append("---\n\n");
         }
 
-        // Fields section
+        // Fields section with improved formatting
         if (!fields.isEmpty()) {
-            content.append("## Fields\n\n");
+            content.append("## 🔹 Fields\n\n");
 
             for (ElementDocPair field : fields) {
                 CodeElement fieldElem = field.getElement();
+                // Add a box around each field for visual separation
+                content.append("<div class=\"element-box\">\n\n");
                 content.append(String.format("### %s %s\n\n", fieldElem.type().getIcon(), fieldElem.name()));
-                content.append("#### Documentation\n\n");
-                content.append(field.getDocumentation()).append("\n\n");
-                content.append("#### Usage Examples\n\n");
-                content.append(field.getExamples()).append("\n\n");
-                content.append("#### Signature\n\n");
+
+                // Documentation section with better formatting
+                content.append("#### 📄 Documentation\n\n");
+                String formattedFieldDoc = formatContent(field.getDocumentation());
+                content.append(formattedFieldDoc).append("\n\n");
+
+                // Usage examples section with better formatting
+                content.append("#### 💡 Usage Examples\n\n");
+                String formattedFieldExamples = formatContent(field.getExamples());
+                content.append(formattedFieldExamples).append("\n\n");
+
+                // Signature with better code formatting
+                content.append("#### 📋 Signature\n\n");
                 String fieldLang = getLanguageFromFile(fieldElem.filePath());
                 content.append("```").append(fieldLang).append("\n");
-                content.append(fieldElem.signature()).append("\n");
+                content.append(formatCodeBlock(fieldElem.signature())).append("\n");
                 content.append("```\n\n");
+
+                // Close the box
+                content.append("</div>\n\n");
+
+                // Add horizontal rule for visual separation between fields
+                content.append("---\n\n");
             }
         }
 
-        // Methods section
+        // Methods section with improved formatting
         if (!methods.isEmpty()) {
-            content.append("## Methods\n\n");
+            content.append("## 🔸 Methods\n\n");
 
             for (ElementDocPair method : methods) {
                 CodeElement methodElem = method.getElement();
+                // Add a box around each method for visual separation
+                content.append("<div class=\"element-box\">\n\n");
                 content.append(String.format("### %s %s\n\n", methodElem.type().getIcon(), methodElem.name()));
-                content.append("#### Documentation\n\n");
-                content.append(method.getDocumentation()).append("\n\n");
-                content.append("#### Usage Examples\n\n");
-                content.append(method.getExamples()).append("\n\n");
-                content.append("#### Signature\n\n");
-                String methodLang = getLanguageFromFile(methodElem.filePath());
-                content.append("```").append(methodLang).append("\n");
-                content.append(methodElem.signature()).append("\n");
-                content.append("```\n\n");
+
+                // Documentation section with better formatting
+                content.append("#### 📄 Documentation\n\n");
+                String formattedMethodDoc = formatContent(method.getDocumentation());
+                content.append(formattedMethodDoc).append("\n\n");
+
+                // Usage examples section with better formatting
+                content.append("#### 💡 Usage Examples\n\n");
+                String formattedMethodExamples = formatContent(method.getExamples());
+                content.append(formattedMethodExamples).append("\n\n");
+
+                // Signature with better code formatting and collapsible section for long signatures
+                String methodSignature = methodElem.signature();
+                if (methodSignature.length() > 200) {
+                    content.append("#### 📋 Signature\n\n");
+                    content.append("<details>\n<summary>View Method Signature</summary>\n\n");
+                    content.append("```").append(getLanguageFromFile(methodElem.filePath())).append("\n");
+                    content.append(formatCodeBlock(methodSignature)).append("\n");
+                    content.append("```\n\n</details>\n\n");
+                } else {
+                    content.append("#### 📋 Signature\n\n");
+                    content.append("```").append(getLanguageFromFile(methodElem.filePath())).append("\n");
+                    content.append(formatCodeBlock(methodSignature)).append("\n");
+                    content.append("```\n\n");
+                }
+
+                // Close the box
+                content.append("</div>\n\n");
+
+                // Add horizontal rule for visual separation between methods
+                content.append("---\n\n");
             }
         }
 
         return content.toString();
+    }
+
+    /**
+     * Formats content text for better readability
+     *
+     * @param content The raw content text
+     * @return Formatted content
+     */
+    private String formatContent(final String content) {
+        if (content == null || content.isEmpty()) {
+            return "_No content available_";
+        }
+
+        // If content contains error message, return it as is
+        if (content.startsWith("Error:") || content.startsWith("Timeout")) {
+            return content;
+        }
+
+        // Return the content as is, already formatted by the LLM
+        return content;
+    }
+
+    /**
+     * Formats code blocks for better readability
+     *
+     * @param code The raw code block
+     * @return Formatted code block
+     */
+    private String formatCodeBlock(final String code) {
+        if (code == null || code.isEmpty()) {
+            return "";
+        }
+
+        // Format Java code blocks properly
+        // This ensures proper indentation and line breaks
+        StringBuilder formattedCode = new StringBuilder();
+        String[] lines = code.split("\\n");
+
+        // If it's a one-liner but has semicolons, it might be compressed Java code
+        if (lines.length == 1 && code.contains(";") && code.length() > 100) {
+            // Try to format it with proper line breaks
+            // Replace semicolons with semicolon + newline, except in string literals
+            boolean inString = false;
+            StringBuilder reformatted = new StringBuilder();
+
+            for (int i = 0; i < code.length(); i++) {
+                char c = code.charAt(i);
+                reformatted.append(c);
+
+                // Toggle string mode
+                if (c == '"' && (i == 0 || code.charAt(i-1) != '\\')) {
+                    inString = !inString;
+                }
+
+                // Add newlines after semicolons and open braces when not in a string
+                if (!inString && (c == '{' || c == ';')) {
+                    reformatted.append("\n");
+
+                    // Add indentation after open brace
+                    if (c == '{') {
+                        reformatted.append("  ");
+                    }
+                }
+            }
+
+            return reformatted.toString();
+        }
+
+        // Otherwise, return code as is
+        return code;
+    }
+
+    /**
+     * Sanitizes a string to be used as a Markdown anchor
+     *
+     * @param text The text to sanitize
+     * @return Sanitized anchor text
+     */
+    private String sanitizeAnchor(final String text) {
+        if (text == null || text.isEmpty()) {
+            return "";
+        }
+
+        // Convert to lowercase
+        String result = text.toLowerCase();
+
+        // Replace spaces and special characters
+        result = result.replace(' ', '-')
+            .replaceAll("[^a-z0-9\\-_]", "");
+
+        return result;
     }
 
     /**

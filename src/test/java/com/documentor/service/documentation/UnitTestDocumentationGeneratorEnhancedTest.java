@@ -5,8 +5,8 @@ import com.documentor.config.model.OutputSettings;
 import com.documentor.model.CodeElement;
 import com.documentor.model.CodeElementType;
 import com.documentor.model.ProjectAnalysis;
-import com.documentor.service.LlmService;
-import com.documentor.service.LlmServiceFix;
+import com.documentor.service.LlmServiceEnhanced;
+import com.documentor.service.LlmServiceFixEnhanced;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -23,7 +23,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class UnitTestDocumentationGeneratorTest {
+class UnitTestDocumentationGeneratorEnhancedTest {
 
     // Test constants for magic number violations
     private static final double TARGET_COVERAGE_HIGH = 0.85;
@@ -35,7 +35,7 @@ class UnitTestDocumentationGeneratorTest {
 
     @Test
     void generateUnitTestDocumentationWritesFileAndIncludesHeader(@TempDir final Path tempDir) throws Exception {
-        LlmService llm = mock(LlmService.class);
+        LlmServiceEnhanced llm = mock(LlmServiceEnhanced.class);
 
         DocumentorConfig config = mock(DocumentorConfig.class);
         OutputSettings outputSettings = mock(OutputSettings.class);
@@ -58,9 +58,9 @@ class UnitTestDocumentationGeneratorTest {
 
         when(llm.generateUnitTests(element)).thenReturn(CompletableFuture.completedFuture("// test for TestClass"));
 
-        // Add mock for LlmServiceFix
-        LlmServiceFix llmServiceFix = mock(LlmServiceFix.class);
-        UnitTestDocumentationGenerator generator = new UnitTestDocumentationGenerator(llm, config, llmServiceFix);
+        // Add mock for LlmServiceFixEnhanced
+        LlmServiceFixEnhanced llmServiceFix = mock(LlmServiceFixEnhanced.class);
+        UnitTestDocumentationGeneratorEnhanced generator = new UnitTestDocumentationGeneratorEnhanced(llm, config, llmServiceFix);
 
         ProjectAnalysis analysis = new ProjectAnalysis("/tmp/project", List.of(element), System.currentTimeMillis());
 
@@ -76,7 +76,7 @@ class UnitTestDocumentationGeneratorTest {
 
     @Test
     void appendHeaderHandlesIconsDisabled(@TempDir final Path tempDir) throws Exception {
-        LlmService llm = mock(LlmService.class);
+        LlmServiceEnhanced llm = mock(LlmServiceEnhanced.class);
 
         DocumentorConfig config = mock(DocumentorConfig.class);
         OutputSettings outputSettings = mock(OutputSettings.class);
@@ -84,11 +84,11 @@ class UnitTestDocumentationGeneratorTest {
         when(outputSettings.includeIcons()).thenReturn(false);
         when(outputSettings.targetCoverage()).thenReturn(TARGET_COVERAGE_MEDIUM);
 
-        // Add mock for LlmServiceFix
-        LlmServiceFix llmServiceFix = mock(LlmServiceFix.class);
-        UnitTestDocumentationGenerator generator = new UnitTestDocumentationGenerator(llm, config, llmServiceFix);
+        // Add mock for LlmServiceFixEnhanced
+        LlmServiceFixEnhanced llmServiceFix = mock(LlmServiceFixEnhanced.class);
+        UnitTestDocumentationGeneratorEnhanced generator = new UnitTestDocumentationGeneratorEnhanced(llm, config, llmServiceFix);
 
-    ProjectAnalysis analysis = new ProjectAnalysis("/tmp/project", List.of(), System.currentTimeMillis());
+        ProjectAnalysis analysis = new ProjectAnalysis("/tmp/project", List.of(), System.currentTimeMillis());
 
         // Should not throw and will write an (empty) tests file
         generator.generateUnitTestDocumentation(analysis, tempDir).join();
@@ -103,7 +103,7 @@ class UnitTestDocumentationGeneratorTest {
 
     @Test
     void generateUnitTestDocumentationFiltersOutFieldElements(@TempDir final Path tempDir) throws Exception {
-        LlmService llm = mock(LlmService.class);
+        LlmServiceEnhanced llm = mock(LlmServiceEnhanced.class);
 
         DocumentorConfig config = mock(DocumentorConfig.class);
         OutputSettings outputSettings = mock(OutputSettings.class);
@@ -143,9 +143,9 @@ class UnitTestDocumentationGeneratorTest {
                 .thenReturn(CompletableFuture.completedFuture("// test for testMethod"));
         // The field element should never be passed to generateUnitTests due to filtering
 
-        // Add mock for LlmServiceFix
-        LlmServiceFix llmServiceFix = mock(LlmServiceFix.class);
-        UnitTestDocumentationGenerator generator = new UnitTestDocumentationGenerator(llm, config, llmServiceFix);
+        // Add mock for LlmServiceFixEnhanced
+        LlmServiceFixEnhanced llmServiceFix = mock(LlmServiceFixEnhanced.class);
+        UnitTestDocumentationGeneratorEnhanced generator = new UnitTestDocumentationGeneratorEnhanced(llm, config, llmServiceFix);
 
         ProjectAnalysis analysis = new ProjectAnalysis("/tmp/project",
                 List.of(fieldElement, methodElement), System.currentTimeMillis());
@@ -160,5 +160,85 @@ class UnitTestDocumentationGeneratorTest {
         String content = Files.readString(testsFile);
         assertTrue(content.contains("test for testMethod"));
         assertTrue(content.contains("Target Coverage: 80%"));
+    }
+
+    @Test
+    void handlesNullConfigGracefully(@TempDir final Path tempDir) throws Exception {
+        LlmServiceEnhanced llm = mock(LlmServiceEnhanced.class);
+        LlmServiceFixEnhanced llmServiceFix = mock(LlmServiceFixEnhanced.class);
+
+        // Create generator with null config
+        UnitTestDocumentationGeneratorEnhanced generator = new UnitTestDocumentationGeneratorEnhanced(
+            llm, null, llmServiceFix);
+
+        CodeElement element = new CodeElement(
+            CodeElementType.CLASS,
+            "TestClass",
+            "com.example.TestClass",
+            "src/TestClass.java",
+            LINE_NUMBER_TEN,
+            "public class TestClass {}",
+            "Some doc",
+            List.of(),
+            List.of()
+        );
+
+        when(llm.generateUnitTests(element)).thenReturn(CompletableFuture.completedFuture("// test for TestClass"));
+
+        ProjectAnalysis analysis = new ProjectAnalysis("/tmp/project", List.of(element), System.currentTimeMillis());
+
+        // Should not throw exception with null config
+        generator.generateUnitTestDocumentation(analysis, tempDir).join();
+
+        // Verify file was created without exceptions
+        Path testsFile = tempDir.resolve("tests").resolve("unit-tests.md");
+        assertTrue(Files.exists(testsFile), "unit-tests.md should be created even with null config");
+    }
+
+    @Test
+    void handlesExceptionsInFutureProcessing(@TempDir final Path tempDir) throws Exception {
+        // Create required directories first to ensure they exist
+        Files.createDirectories(tempDir.resolve("tests"));
+
+        LlmServiceEnhanced llm = mock(LlmServiceEnhanced.class);
+
+        DocumentorConfig config = mock(DocumentorConfig.class);
+        OutputSettings outputSettings = mock(OutputSettings.class);
+        when(config.outputSettings()).thenReturn(outputSettings);
+        when(outputSettings.includeIcons()).thenReturn(true);
+        when(outputSettings.targetCoverage()).thenReturn(TARGET_COVERAGE_HIGH);
+
+        List<String> empty = List.of();
+        CodeElement element = new CodeElement(
+            CodeElementType.CLASS,
+            "TestClass",
+            "com.example.TestClass",
+            "src/TestClass.java",
+            LINE_NUMBER_TEN,
+            "public class TestClass {}",
+            "Some doc",
+            empty,
+            empty
+        );
+
+        // Set up a future that will throw an exception when joined
+        CompletableFuture<String> failingFuture = new CompletableFuture<>();
+        failingFuture.completeExceptionally(new RuntimeException("Test exception"));
+        when(llm.generateUnitTests(element)).thenReturn(failingFuture);
+
+        LlmServiceFixEnhanced llmServiceFix = mock(LlmServiceFixEnhanced.class);
+        UnitTestDocumentationGeneratorEnhanced generator = new UnitTestDocumentationGeneratorEnhanced(llm, config, llmServiceFix);
+
+        ProjectAnalysis analysis = new ProjectAnalysis("/tmp/project", List.of(element), System.currentTimeMillis());
+
+        // Should not propagate the exception
+        generator.generateUnitTestDocumentation(analysis, tempDir).join();
+
+        // The test only verifies that the exception doesn't propagate
+        // We don't check for file existence since error handling in the
+        // UnitTestDocumentationGeneratorEnhanced catches the exception at
+        // a level that prevents file creation
+
+        // This test passes if we get here without an exception
     }
 }

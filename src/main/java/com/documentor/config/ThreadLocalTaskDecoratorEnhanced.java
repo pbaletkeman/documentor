@@ -1,6 +1,5 @@
 package com.documentor.config;
 
-import com.documentor.service.LlmServiceEnhanced;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskDecorator;
@@ -12,6 +11,8 @@ import org.springframework.core.task.TaskDecorator;
  * in async operations. This ensures that configuration data is properly available
  * across thread boundaries. This enhanced version adds additional null checks
  * and error handling to ensure robustness.
+ *
+ * Uses ThreadLocalContextHolder for centralized ThreadLocal value management.
  */
 public final class ThreadLocalTaskDecoratorEnhanced implements TaskDecorator {
 
@@ -31,11 +32,13 @@ public final class ThreadLocalTaskDecoratorEnhanced implements TaskDecorator {
         }
 
         // Capture the config from the parent thread
-        DocumentorConfig capturedConfig = LlmServiceEnhanced.getThreadLocalConfig();
+        DocumentorConfig capturedConfig = ThreadLocalContextHolder.getConfig();
+        boolean wasExplicitlySet = ThreadLocalContextHolder.isConfigExplicitlySet();
 
         if (capturedConfig != null) {
             int modelCount = capturedConfig.llmModels() != null ? capturedConfig.llmModels().size() : 0;
-            LOGGER.info("Captured ThreadLocal config from parent thread with {} models", modelCount);
+            LOGGER.info("Captured ThreadLocal config from parent thread with {} models (explicitly set: {})",
+                modelCount, wasExplicitlySet);
         } else {
             LOGGER.warn("No ThreadLocal config available in parent thread - service may not work correctly");
         }
@@ -45,7 +48,7 @@ public final class ThreadLocalTaskDecoratorEnhanced implements TaskDecorator {
             try {
                 // Set the config in the child thread before execution
                 if (capturedConfig != null) {
-                    LlmServiceEnhanced.setThreadLocalConfig(capturedConfig);
+                    ThreadLocalContextHolder.setConfig(capturedConfig);
                     int modelCount = capturedConfig.llmModels() != null ? capturedConfig.llmModels().size() : 0;
                     LOGGER.info("Set ThreadLocal config in child thread with {} models", modelCount);
                 } else {
@@ -63,7 +66,7 @@ public final class ThreadLocalTaskDecoratorEnhanced implements TaskDecorator {
             } finally {
                 // Clean up ThreadLocal to prevent memory leaks
                 try {
-                    LlmServiceEnhanced.clearThreadLocalConfig();
+                    ThreadLocalContextHolder.clearConfig();
                     LOGGER.debug("Cleaned up ThreadLocal config in child thread");
                 } catch (Exception e) {
                     LOGGER.error("Error cleaning up ThreadLocal: {}", e.getMessage());

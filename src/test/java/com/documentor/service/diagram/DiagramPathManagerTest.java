@@ -52,7 +52,7 @@ class DiagramPathManagerTest {
         String fileName = pathManager.generateDiagramFileName("TestClass");
 
         // Then
-        assertEquals("TestClass_diagram.md", fileName);
+        assertEquals("TestClass_diagram.mmd", fileName);
     }
 
     @Test
@@ -62,7 +62,7 @@ class DiagramPathManagerTest {
         String fileName = pathManager.generateDiagramFileName("Test:Class?With*Invalid/Chars");
 
         // Then
-        assertEquals("Test_Class_With_Invalid_Chars_diagram.md", fileName);
+        assertEquals("Test_Class_With_Invalid_Chars_diagram.mmd", fileName);
     }
 
     @Test
@@ -75,4 +75,3 @@ class DiagramPathManagerTest {
         assertEquals(Paths.get("/output/dir"), dirPath);
     }
 }
-

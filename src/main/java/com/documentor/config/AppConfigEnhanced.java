@@ -73,14 +73,18 @@ public class AppConfigEnhanced implements AsyncConfigurer {
         executor.setWaitForTasksToCompleteOnShutdown(true);
         executor.setAwaitTerminationSeconds(DEFAULT_TERMINATION_TIMEOUT_SECONDS);
 
-        // Use enhanced ThreadLocalTaskDecorator that is null-safe
+        // Use enhanced ThreadLocalTaskDecorator that uses ThreadLocalContextHolder
         executor.setTaskDecorator(task -> {
-            DocumentorConfig capturedConfig = com.documentor.service.LlmServiceEnhanced.getThreadLocalConfig();
+            DocumentorConfig capturedConfig = ThreadLocalContextHolder.getConfig();
+            boolean wasExplicitlySet = ThreadLocalContextHolder.isConfigExplicitlySet();
+
             return () -> {
                 try {
                     // Set ThreadLocal in the new thread if available
                     if (capturedConfig != null) {
-                        com.documentor.service.LlmServiceEnhanced.setThreadLocalConfig(capturedConfig);
+                        ThreadLocalContextHolder.setConfig(capturedConfig);
+                        LOGGER.debug("ThreadLocal config set in task thread (explicitly set: {})",
+                            wasExplicitlySet);
                     }
 
                     // Execute the original task
@@ -89,7 +93,8 @@ public class AppConfigEnhanced implements AsyncConfigurer {
                     LOGGER.error("Error in async task execution: {}", e.getMessage(), e);
                 } finally {
                     // Clean up ThreadLocal
-                    com.documentor.service.LlmServiceEnhanced.clearThreadLocalConfig();
+                    ThreadLocalContextHolder.clearConfig();
+                    LOGGER.debug("ThreadLocal config cleared in task thread");
                 }
             };
         });
@@ -101,23 +106,23 @@ public class AppConfigEnhanced implements AsyncConfigurer {
     /**
      * 🔍 Enhanced LLM Service with proper dependency injection and improved error handling
      * With a custom name that matches the original service for compatibility
+     * Removed @Primary to avoid conflicts with LlmServiceConfigurationEnhanced
      */
     @Bean("llmService")
-    @org.springframework.context.annotation.Primary
     public com.documentor.service.LlmServiceEnhanced llmServiceEnhanced(
             final DocumentorConfig documentorConfigParam,
             final com.documentor.service.llm.LlmRequestBuilder requestBuilder,
             final com.documentor.service.llm.LlmResponseHandler responseHandler,
             final com.documentor.service.llm.LlmApiClient apiClient) {
-        LOGGER.info("Creating enhanced LlmService (PRIMARY)");
+        LOGGER.info("Creating enhanced LlmService (no longer PRIMARY)");
         return new com.documentor.service.LlmServiceEnhanced(documentorConfigParam, requestBuilder, responseHandler, apiClient);
     }
 
     /**
      * 🔍 Bean specifically for component scanning to resolve autowiring of LlmServiceEnhanced
+     * Removed @Primary to avoid conflicts with LlmServiceConfigurationEnhanced
      */
     @Bean("llmServiceEnhancedBean")
-    @org.springframework.context.annotation.Primary
     public com.documentor.service.LlmServiceEnhanced llmServiceEnhancedForAutowiring(
             final com.documentor.service.llm.LlmRequestBuilder requestBuilder,
             final com.documentor.service.llm.LlmResponseHandler responseHandler,
@@ -130,10 +135,11 @@ public class AppConfigEnhanced implements AsyncConfigurer {
 
     /**
      * 🔍 Enhanced LLM Service Fix with improved error handling
+     * Intentionally not marked as @Primary to avoid conflicts with LlmServiceConfigurationEnhanced
      */
-    @Bean
+    @Bean("llmServiceFixEnhancedSecondary")
     public com.documentor.service.LlmServiceFixEnhanced llmServiceFixEnhanced() {
-        LOGGER.info("Creating enhanced LlmServiceFix");
+        LOGGER.info("Creating enhanced LlmServiceFix (secondary)");
         return new com.documentor.service.LlmServiceFixEnhanced();
     }
 

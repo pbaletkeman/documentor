@@ -1,0 +1,26 @@
+{
+  "llm_models": [
+    {
+      "name": "llamacpp",
+      "baseUrl": "http://localhost:8080/completion",
+      "maxTokens": 2048,
+      "timeoutSeconds": 90,
+      "mockResponses": true
+    }
+  ],
+  "output_settings": {
+    "output_directory": "./docs-test",
+    "format": "markdown",
+    "generate_mermaid": true,
+    "generate_plantuml": false,
+    "verbose_output": true
+  },
+  "analysis_settings": {
+    "include_private_members": true,
+    "max_depth": 4,
+    "included_patterns": [
+      "**/*.java"
+    ],
+    "excluded_patterns": []
+  }
+}
