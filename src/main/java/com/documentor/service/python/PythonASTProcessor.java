@@ -22,7 +22,8 @@ import java.util.List;
 @Component
 public class PythonASTProcessor {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PythonASTProcessor.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(PythonASTProcessor.class);
     // Logger used in future error handling methods - required by design
     private final PythonASTCommandBuilder commandBuilder;
 

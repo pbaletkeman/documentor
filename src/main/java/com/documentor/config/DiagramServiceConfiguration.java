@@ -18,7 +18,8 @@ import org.springframework.context.annotation.Primary;
 @Configuration
 public class DiagramServiceConfiguration {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DiagramServiceConfiguration.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(DiagramServiceConfiguration.class);
 
     /**
      * Creates a MermaidDiagramService with ThreadLocalContextHolder support
@@ -64,3 +65,4 @@ public class DiagramServiceConfiguration {
         return new PlantUMLDiagramService(elementFilter, pathManager, generatorFactory);
     }
 }
+

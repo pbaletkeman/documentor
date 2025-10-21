@@ -16,7 +16,8 @@ import org.springframework.core.task.TaskDecorator;
  */
 public final class ThreadLocalTaskDecoratorEnhanced implements TaskDecorator {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ThreadLocalTaskDecoratorEnhanced.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(ThreadLocalTaskDecoratorEnhanced.class);
 
     /**
      * Decorates the given runnable with ThreadLocal propagation and enhanced error handling.
@@ -36,7 +37,8 @@ public final class ThreadLocalTaskDecoratorEnhanced implements TaskDecorator {
         boolean wasExplicitlySet = ThreadLocalContextHolder.isConfigExplicitlySet();
 
         if (capturedConfig != null) {
-            int modelCount = capturedConfig.llmModels() != null ? capturedConfig.llmModels().size() : 0;
+            int modelCount =
+                    capturedConfig.llmModels() != null ? capturedConfig.llmModels().size() : 0;
             LOGGER.info("Captured ThreadLocal config from parent thread with {} models (explicitly set: {})",
                 modelCount, wasExplicitlySet);
         } else {
@@ -49,7 +51,8 @@ public final class ThreadLocalTaskDecoratorEnhanced implements TaskDecorator {
                 // Set the config in the child thread before execution
                 if (capturedConfig != null) {
                     ThreadLocalContextHolder.setConfig(capturedConfig);
-                    int modelCount = capturedConfig.llmModels() != null ? capturedConfig.llmModels().size() : 0;
+                    int modelCount =
+                            capturedConfig.llmModels() != null ? capturedConfig.llmModels().size() : 0;
                     LOGGER.info("Set ThreadLocal config in child thread with {} models", modelCount);
                 } else {
                     LOGGER.warn("Could not set ThreadLocal config in child thread - null config");

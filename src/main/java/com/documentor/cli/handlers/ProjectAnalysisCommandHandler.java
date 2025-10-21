@@ -100,8 +100,8 @@ public class ProjectAnalysisCommandHandler {
                     projectPath);
 
             if (!commonHandler.directoryExists(projectPath)) {
-                return "❌ Error: Project path does not exist or is not a directory: "
-                        + projectPath;
+                return "❌ Error: Project path does not exist or is not a "
+                        + "directory: " + projectPath;
             }
 
             ProjectAnalysis analysis = performAnalysis(projectPath,
@@ -142,8 +142,8 @@ public class ProjectAnalysisCommandHandler {
                                   final Boolean includePrivateMembers) {
         try {
             if (!commonHandler.directoryExists(projectPath)) {
-                return "❌ Error: Project path does not exist or is not a directory: "
-                        + projectPath;
+                return "❌ Error: Project path does not exist or is not a "
+                        + "directory: " + projectPath;
             }
 
             ProjectAnalysis analysis = performAnalysis(projectPath,

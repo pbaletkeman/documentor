@@ -39,7 +39,8 @@ public final class ServicePerformanceUtils {
     /**
      * Checks if processing time is within acceptable limits.
      */
-    public static boolean isWithinTimeLimit(final long actualTime, final long limitMs) {
+    public static boolean isWithinTimeLimit(final long actualTime,
+            final long limitMs) {
         if (limitMs <= 0) {
             return false;
         }
@@ -50,7 +51,8 @@ public final class ServicePerformanceUtils {
     /**
      * Calculates throughput (elements per second).
      */
-    public static double calculateThroughput(final int elementCount, final long timeMs) {
+    public static double calculateThroughput(final int elementCount,
+            final long timeMs) {
         if (timeMs <= 0 || elementCount < 0) {
             return 0.0;
         }
@@ -61,7 +63,8 @@ public final class ServicePerformanceUtils {
     /**
      * Batches elements for processing.
      */
-    public static <T> List<List<T>> batchElements(final List<T> elements, final int batchSize) {
+    public static <T> List<List<T>> batchElements(final List<T> elements,
+            final int batchSize) {
         if (elements == null || elements.isEmpty()) {
             return List.of();
         }
@@ -80,7 +83,8 @@ public final class ServicePerformanceUtils {
     /**
      * Estimates processing time based on element count.
      */
-    public static long estimateProcessingTime(final int elementCount, final double avgTimePerElement) {
+    public static long estimateProcessingTime(final int elementCount,
+            final double avgTimePerElement) {
         if (elementCount < 0 || avgTimePerElement < 0) {
             return 0L;
         }
@@ -91,7 +95,8 @@ public final class ServicePerformanceUtils {
     /**
      * Checks if a future is completed within timeout.
      */
-    public static boolean isCompletedWithinTimeout(final CompletableFuture<?> future, final long timeoutMs) {
+    public static boolean isCompletedWithinTimeout(
+            final CompletableFuture<?> future, final long timeoutMs) {
         if (future == null || timeoutMs <= 0) {
             return false;
         }
@@ -117,18 +122,21 @@ public final class ServicePerformanceUtils {
         }
 
         if (durationMs < MICROSECONDS_PER_MINUTE) {
-            return String.format("%.1fs", durationMs / MILLISECONDS_PER_SECOND);
+            return String.format("%.1fs",
+                durationMs / MILLISECONDS_PER_SECOND);
         }
 
         long minutes = durationMs / MICROSECONDS_PER_MINUTE;
-        long seconds = (durationMs % MICROSECONDS_PER_MINUTE) / MILLISECONDS_IN_SECOND;
+        long seconds = (durationMs % MICROSECONDS_PER_MINUTE)
+            / MILLISECONDS_IN_SECOND;
         return String.format("%dm %ds", minutes, seconds);
     }
 
     /**
      * Calculates optimal batch size based on memory constraints.
      */
-    public static int calculateOptimalBatchSize(final int totalElements, final long maxMemoryMb) {
+    public static int calculateOptimalBatchSize(final int totalElements,
+            final long maxMemoryMb) {
         if (totalElements <= 0 || maxMemoryMb <= 0) {
             return 1;
         }
@@ -137,20 +145,23 @@ public final class ServicePerformanceUtils {
         long estimatedMemoryPerElement = BYTES_PER_KB; // bytes
         long maxMemoryBytes = maxMemoryMb * BYTES_PER_KB * BYTES_PER_KB;
 
-        int maxElementsInMemory = (int) (maxMemoryBytes / estimatedMemoryPerElement);
+        int maxElementsInMemory = (int) (maxMemoryBytes
+            / estimatedMemoryPerElement);
 
         if (maxElementsInMemory >= totalElements) {
             return totalElements;
         }
 
-        return Math.max(1, maxElementsInMemory / 2); // Use half of available memory for safety
+        return Math.max(1, maxElementsInMemory / 2);
+        // Use half of available memory for safety
     }
 
     /**
      * Validates performance metrics.
      */
-    public static boolean validatePerformanceMetrics(final double throughput, final long avgResponseTime,
-                                                   final double minThroughput, final long maxResponseTime) {
+    public static boolean validatePerformanceMetrics(final double throughput,
+            final long avgResponseTime, final double minThroughput,
+            final long maxResponseTime) {
         if (minThroughput < 0 || maxResponseTime < 0) {
             return false;
         }

@@ -114,7 +114,8 @@ public class MainDocumentationGenerator {
             elements.stream()
                     .collect(Collectors.groupingBy(CodeElement::type))
                     .forEach((type, typeElements) -> {
-                        String typeIcon = config.outputSettings().includeIcons() ? type.getIcon() + " " : "";
+                        String typeIcon =
+                                config.outputSettings().includeIcons() ? type.getIcon() + " " : "";
                         doc.append(String.format("#### %s%s\n\n", typeIcon, type.getDescription()));
                         typeElements.forEach(element -> {
                             doc.append(String.format("- **%s** - `%s`\n", element.name(), element.signature()));

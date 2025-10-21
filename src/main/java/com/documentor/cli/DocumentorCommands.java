@@ -12,7 +12,8 @@ import org.springframework.shell.standard.ShellOption;
 /**
  * 🔍 Command Line Interface for Documentor
  *
- * Provides interactive commands for analyzing projects and generating documentation.
+ * Provides interactive commands for analyzing projects and generating
+ * documentation.
  * Uses Spring Shell for a rich CLI experience with delegated command handlers.
  */
 @ShellComponent
@@ -78,7 +79,8 @@ public class DocumentorCommands {
                 return this;
             }
 
-            Builder includePrivateMembers(final boolean includePrivateMembersParam) {
+            Builder includePrivateMembers(
+                    final boolean includePrivateMembersParam) {
                 this.includePrivateMembers = includePrivateMembersParam;
                 return this;
             }
@@ -180,7 +182,8 @@ public class DocumentorCommands {
                     defaultValue = "config.json")
             final String configPath,
             @ShellOption(value = "--include-private-members",
-                    help = "Include private members in documentation and diagrams",
+                    help = "Include private members in documentation "
+                           + "and diagrams",
                     defaultValue = "true")
             final boolean includePrivateMembers,
             @ShellOption(value = "--generate-mermaid",
@@ -188,8 +191,8 @@ public class DocumentorCommands {
                     defaultValue = "false")
             final boolean generateMermaid,
             @ShellOption(value = "--mermaid-output",
-                    help = "Output directory for Mermaid diagrams " +
-                           "(defaults to same directory as source files)",
+                    help = "Output directory for Mermaid diagrams "
+                           + "(defaults to same directory as source files)",
                     defaultValue = "")
             final String mermaidOutput,
             @ShellOption(value = "--generate-plantuml",
@@ -197,8 +200,8 @@ public class DocumentorCommands {
                     defaultValue = "false")
             final boolean generatePlantUML,
             @ShellOption(value = "--plantuml-output",
-                    help = "Output directory for PlantUML diagrams " +
-                           "(defaults to same directory as source files)",
+                    help = "Output directory for PlantUML diagrams "
+                           + "(defaults to same directory as source files)",
                     defaultValue = "")
             final String plantUMLOutput) {
 
@@ -225,8 +228,8 @@ public class DocumentorCommands {
                     defaultValue = "true")
             final boolean includePrivateMembers,
             @ShellOption(value = "--plantuml-output",
-                    help = "Output directory for PlantUML diagrams " +
-                           "(defaults to same directory as source files)",
+                    help = "Output directory for PlantUML diagrams "
+                           + "(defaults to same directory as source files)",
                     defaultValue = "")
             final String plantUMLOutput) {
 
@@ -255,7 +258,8 @@ public class DocumentorCommands {
         // Update current state
         this.currentProjectPath = projectPath;
 
-        return projectAnalysisHandler.handleScanProject(projectPath, includePrivateMembers);
+        return projectAnalysisHandler.handleScanProject(projectPath,
+                                                        includePrivateMembers);
     }
 
     /**
@@ -275,7 +279,8 @@ public class DocumentorCommands {
     /**
      * 🔍 Show supported file types and features
      */
-    @ShellMethod(value = "Show supported file types and features", key = {"info", "help-extended"})
+    @ShellMethod(value = "Show supported file types and features",
+                 key = {"info", "help-extended"})
     public String showInfo() {
         return statusHandler.handleShowInfo();
     }
@@ -283,7 +288,8 @@ public class DocumentorCommands {
     /**
      * 🔍 Show quick start guide
      */
-    @ShellMethod(value = "Show quick start guide", key = {"quick-start", "getting-started"})
+    @ShellMethod(value = "Show quick start guide",
+                 key = {"quick-start", "getting-started"})
     public String quickStart() {
         return statusHandler.handleQuickStart();
     }
@@ -291,14 +297,17 @@ public class DocumentorCommands {
     /**
      * 🔍 Show current application status
      */
-    @ShellMethod(value = "Show current application status", key = {"status", "current"})
+    @ShellMethod(value = "Show current application status",
+                 key = {"status", "current"})
     public String showStatus() {
-        return statusHandler.handleShowStatus(currentProjectPath, currentConfigPath);
+        return statusHandler.handleShowStatus(currentProjectPath,
+                                               currentConfigPath);
     }
 
     /**
      * 🔧 Analyze a project with ThreadLocal configuration fix
-     * This command is specifically designed to address ThreadLocal configuration issues
+     * This command is specifically designed to address ThreadLocal
+     * configuration issues
      */
     @ShellMethod(value = "Analyze a project with ThreadLocal configuration fix",
             key = {"analyze-with-fix", "fixed-analyze"})
@@ -311,7 +320,8 @@ public class DocumentorCommands {
                     defaultValue = "config.json")
             final String configPath,
             @ShellOption(value = "--include-private-members",
-                    help = "Include private members in documentation and diagrams",
+                    help = "Include private members in documentation "
+                           + "and diagrams",
                     defaultValue = "true")
             final boolean includePrivateMembers,
             @ShellOption(value = "--generate-mermaid",
@@ -363,3 +373,4 @@ public class DocumentorCommands {
         return enhancedAnalysisHandler.analyzeProjectWithFix(request);
     }
 }
+

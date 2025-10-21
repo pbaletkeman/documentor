@@ -15,7 +15,8 @@ import java.util.concurrent.Executor;
  */
 public final class ThreadLocalPropagatingExecutor implements Executor {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ThreadLocalPropagatingExecutor.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(ThreadLocalPropagatingExecutor.class);
 
     /**
      * Default number of threads for the executor.
@@ -84,7 +85,8 @@ public final class ThreadLocalPropagatingExecutor implements Executor {
      */
     public static Executor createExecutor(final int threads, final String namePrefix) {
         // Thread counter for naming
-        final java.util.concurrent.atomic.AtomicInteger counter = new java.util.concurrent.atomic.AtomicInteger();
+        final java.util.concurrent.atomic.AtomicInteger counter =
+                new java.util.concurrent.atomic.AtomicInteger();
 
         // Max queue size
         final int maxQueueSize = 100;

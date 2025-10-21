@@ -13,7 +13,8 @@ import java.util.Map;
 @Component
 public class LlmApiClient {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LlmApiClient.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(LlmApiClient.class);
     private final WebClient webClient;
     private final LlmModelTypeDetector modelTypeDetector;
 

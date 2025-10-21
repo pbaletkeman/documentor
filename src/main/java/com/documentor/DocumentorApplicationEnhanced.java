@@ -46,7 +46,8 @@ import com.documentor.config.AppConfigEnhanced;
 )
 public final class DocumentorApplicationEnhanced {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DocumentorApplicationEnhanced.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(DocumentorApplicationEnhanced.class);
 
     /**
      * Private constructor to prevent instantiation of utility class.

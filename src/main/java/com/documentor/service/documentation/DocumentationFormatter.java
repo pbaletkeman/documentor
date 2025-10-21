@@ -38,9 +38,12 @@ public class DocumentationFormatter {
         doc.append("## 🔍 Project Statistics\n\n");
 
         List<CodeElement> elements = analysis.codeElements();
-        long classCount = elements.stream().filter(e -> e.type().name().equals("CLASS")).count();
-        long methodCount = elements.stream().filter(e -> e.type().name().equals("METHOD")).count();
-        long fieldCount = elements.stream().filter(e -> e.type().name().equals("FIELD")).count();
+        long classCount =
+                elements.stream().filter(e -> e.type().name().equals("CLASS")).count();
+        long methodCount =
+                elements.stream().filter(e -> e.type().name().equals("METHOD")).count();
+        long fieldCount =
+                elements.stream().filter(e -> e.type().name().equals("FIELD")).count();
 
         doc.append("- **Total Elements:** ").append(elements.size()).append("\n");
         doc.append("- **Classes:** ").append(classCount).append("\n");

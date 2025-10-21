@@ -25,7 +25,8 @@ import java.util.concurrent.CompletableFuture;
 @Service
 public class PlantUMLDiagramService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PlantUMLDiagramService.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(PlantUMLDiagramService.class);
 
     private final DiagramElementFilter elementFilter;
     private final DiagramPathManager pathManager;
@@ -76,7 +77,8 @@ public class PlantUMLDiagramService {
         // Process each eligible class
         eligibleClasses.forEach(classElement -> {
             try {
-                String diagram = processSingleClassDiagram(classElement, elementsByClass, outputPath);
+                String diagram =
+                        processSingleClassDiagram(classElement, elementsByClass, outputPath);
                 generatedFiles.add(diagram);
             } catch (Exception e) {
                 LOGGER.warn("⚠️ Failed to generate PlantUML diagram for {}: {}",

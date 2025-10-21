@@ -20,7 +20,8 @@ import org.springframework.context.annotation.Primary;
 @Configuration
 public class DocumentationServiceConfiguration {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DocumentationServiceConfiguration.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(DocumentationServiceConfiguration.class);
 
     /**
      * Creates an enhanced DocumentationService with improved error handling

@@ -26,7 +26,8 @@ import java.util.List;
 @Component
 public class JavaCodeAnalyzer {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(JavaCodeAnalyzer.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(JavaCodeAnalyzer.class);
 
     private final JavaParser javaParser;
     private final JavaElementVisitor elementVisitor;

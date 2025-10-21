@@ -14,7 +14,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class EnhancedProjectAnalysisHandler {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(EnhancedProjectAnalysisHandler.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(EnhancedProjectAnalysisHandler.class);
 
     private final ProjectAnalysisCommandHandler baseHandler;
     private final LlmServiceFix llmServiceFix;
@@ -30,28 +31,32 @@ public class EnhancedProjectAnalysisHandler {
     }
 
     /**
-     * Handle project analysis command with fix option for ThreadLocal configuration
+     * Handle project analysis command with fix option for ThreadLocal config
      */
     public String analyzeProjectWithFix(final ProjectAnalysisRequest request) {
-        // If the fix option is enabled, set the ThreadLocal configuration directly
+        // If the fix option is enabled, set the ThreadLocal config directly
         if (request.useFix() && request.configPath() != null) {
-            LOGGER.info("Using LlmServiceFix to ensure ThreadLocal configuration is available");
+            LOGGER.info("Using LlmServiceFix to ensure ThreadLocal config "
+                    + "is available");
 
             // Get the current configuration
             DocumentorConfig config = configLoader.getLoadedConfig();
 
             if (config == null) {
                 // Try to load it if not already loaded
-                LOGGER.info("Configuration not loaded yet, trying to load from: {}", request.configPath());
+                LOGGER.info("Configuration not loaded yet, trying to load from: {}",
+                        request.configPath());
                 String[] args = {"analyze", "--config", request.configPath()};
                 boolean loaded = configLoader.loadExternalConfig(args);
 
                 if (loaded) {
                     config = configLoader.getLoadedConfig();
                     LOGGER.info("Successfully loaded config with {} models",
-                                config.llmModels() != null ? config.llmModels().size() : 0);
+                            config.llmModels() != null
+                                    ? config.llmModels().size() : 0);
                 } else {
-                    LOGGER.error("Failed to load configuration from: {}", request.configPath());
+                    LOGGER.error("Failed to load configuration from: {}",
+                            request.configPath());
                 }
             }
 
@@ -65,15 +70,17 @@ public class EnhancedProjectAnalysisHandler {
 
         // Add output directory option if specified
         if (request.outputDir() != null && !request.outputDir().isEmpty()) {
-            System.setProperty("documentor.output.directory", request.outputDir());
+            System.setProperty("documentor.output.directory",
+                    request.outputDir());
             LOGGER.info("Set output directory to: {}", request.outputDir());
         }
 
         // Call the base handler to perform the analysis
         return baseHandler.handleAnalyzeProjectExtended(
-            request.projectPath(), request.configPath(), request.generateMermaid(),
-            request.mermaidOutput(), request.generatePlantUML(), request.plantUMLOutput(),
-            request.includePrivateMembers());
+                request.projectPath(), request.configPath(),
+                request.generateMermaid(), request.mermaidOutput(),
+                request.generatePlantUML(), request.plantUMLOutput(),
+                request.includePrivateMembers());
     }
 
     /**
@@ -89,12 +96,12 @@ public class EnhancedProjectAnalysisHandler {
             final String mermaidOutput,
             final boolean generatePlantUML,
             final String plantUMLOutput,
-            final Boolean includePrivateMembers,
-            final boolean useFix,
-            final String outputDir) {
+            final Boolean includePrivateMembers) {
+        // Create request object with default values for remaining parameters
         ProjectAnalysisRequest request = new ProjectAnalysisRequest(
-            projectPath, configPath, generateMermaid, mermaidOutput,
-            generatePlantUML, plantUMLOutput, includePrivateMembers, useFix, outputDir);
+                projectPath, configPath, generateMermaid, mermaidOutput,
+                generatePlantUML, plantUMLOutput, includePrivateMembers,
+                true, null); // Default: useFix=true, outputDir=null
         return analyzeProjectWithFix(request);
     }
 }

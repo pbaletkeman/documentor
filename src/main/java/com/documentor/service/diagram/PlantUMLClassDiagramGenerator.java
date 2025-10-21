@@ -21,7 +21,8 @@ import java.util.List;
 @Component
 public class PlantUMLClassDiagramGenerator {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PlantUMLClassDiagramGenerator.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(PlantUMLClassDiagramGenerator.class);
 
     /**
      * 📊 Generates a PlantUML class diagram for a single class
@@ -77,8 +78,10 @@ public class PlantUMLClassDiagramGenerator {
             .forEach(field -> addFieldToPlantUML(diagram, field));
 
         // Add separator if we have both fields and methods
-        boolean hasFields = classMembers.stream().anyMatch(e -> e.type() == CodeElementType.FIELD);
-        boolean hasMethods = classMembers.stream().anyMatch(e -> e.type() == CodeElementType.METHOD);
+        boolean hasFields =
+                classMembers.stream().anyMatch(e -> e.type() == CodeElementType.FIELD);
+        boolean hasMethods =
+                classMembers.stream().anyMatch(e -> e.type() == CodeElementType.METHOD);
         if (hasFields && hasMethods) {
             diagram.append("  --\n");
         }

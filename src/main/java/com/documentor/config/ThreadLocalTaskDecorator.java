@@ -14,7 +14,8 @@ import org.springframework.core.task.TaskDecorator;
  */
 public final class ThreadLocalTaskDecorator implements TaskDecorator {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ThreadLocalTaskDecorator.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(ThreadLocalTaskDecorator.class);
 
     /**
      * Decorates the given runnable with ThreadLocal propagation.

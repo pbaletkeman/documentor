@@ -12,12 +12,14 @@ import org.springframework.stereotype.Component;
 /**
  * Command processor that directly handles application arguments.
  * This is an alternative approach to Spring Shell for command processing.
- * It intercepts command line arguments and delegates to the appropriate handlers.
+ * It intercepts command line arguments and delegates to the appropriate
+ * handlers.
  */
 @Component
 public class DirectCommandProcessor implements ApplicationRunner {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DirectCommandProcessor.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(DirectCommandProcessor.class);
     private final DocumentorCommands documentorCommands;
     private final DocumentorConfig documentorConfig;
     private final LlmServiceFix llmServiceFix;
@@ -33,8 +35,8 @@ public class DirectCommandProcessor implements ApplicationRunner {
 
     /**
      * Runs the command processor with application arguments.
-     * This method is not intended for extension. Override behavior should be implemented
-     * through dependency injection of different command handlers.
+     * This method is not intended for extension. Override behavior should be
+     * implemented through dependency injection of different command handlers.
      *
      * @param args application arguments containing command line parameters
      * @throws Exception if command processing fails
@@ -47,16 +49,18 @@ public class DirectCommandProcessor implements ApplicationRunner {
 
         // Ensure the configuration is set in the ThreadLocal for all threads
         if (documentorConfig != null) {
-            LOGGER.info("Setting ThreadLocal config directly via LlmServiceFix");
+            LOGGER.info(
+                    "Setting ThreadLocal config directly via LlmServiceFix");
             llmServiceFix.setLlmServiceThreadLocalConfig(documentorConfig);
 
             // Verify the configuration was set properly
-            boolean configAvailable = llmServiceFix.isThreadLocalConfigAvailable();
+            boolean configAvailable =
+                    llmServiceFix.isThreadLocalConfigAvailable();
             String status = configAvailable ? "AVAILABLE" : "NOT AVAILABLE";
             LOGGER.info("ThreadLocal config verification: {}", status);
         } else {
-            LOGGER.warn("No DocumentorConfig bean available - " +
-                       "ThreadLocal configuration may be unavailable");
+            LOGGER.warn("No DocumentorConfig bean available - "
+                       + "ThreadLocal configuration may be unavailable");
         }
 
         // Process the arguments directly if they match our expected format
@@ -91,29 +95,33 @@ public class DirectCommandProcessor implements ApplicationRunner {
                        && i + 1 < args.length) {
                 includePrivateMembers = Boolean.parseBoolean(args[i + 1]);
                 i++;
-            } else if ("--generate-mermaid".equals(args[i]) && i + 1 < args.length) {
+            } else if ("--generate-mermaid".equals(args[i])
+                       && i + 1 < args.length) {
                 generateMermaid = Boolean.parseBoolean(args[i + 1]);
                 i++;
-            } else if ("--mermaid-output".equals(args[i]) && i + 1 < args.length) {
+            } else if ("--mermaid-output".equals(args[i])
+                       && i + 1 < args.length) {
                 mermaidOutput = args[i + 1];
                 i++;
             } else if ("--generate-plantuml".equals(args[i])
                        && i + 1 < args.length) {
                 generatePlantUML = Boolean.parseBoolean(args[i + 1]);
                 i++;
-            } else if ("--plantuml-output".equals(args[i]) && i + 1 < args.length) {
+            } else if ("--plantuml-output".equals(args[i])
+                       && i + 1 < args.length) {
                 plantUMLOutput = args[i + 1];
                 i++;
             }
         }
 
-        LOGGER.info("Executing analyze command with: project={}, config={}, mermaid={}",
+        LOGGER.info("Executing analyze command with: "
+                    + "project={}, config={}, mermaid={}",
                     projectPath, configPath, generateMermaid);
 
         // Double-check ThreadLocal configuration before processing
         if (documentorConfig != null) {
-            LOGGER.info("Ensuring ThreadLocal config is set " +
-                       "before analyze command execution");
+            LOGGER.info("Ensuring ThreadLocal config is set "
+                       + "before analyze command execution");
             llmServiceFix.setLlmServiceThreadLocalConfig(documentorConfig);
         }
 
@@ -130,3 +138,4 @@ public class DirectCommandProcessor implements ApplicationRunner {
         }
     }
 }
+

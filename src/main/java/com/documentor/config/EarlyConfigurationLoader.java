@@ -16,7 +16,8 @@ import org.springframework.stereotype.Component;
 @Order(0) // Highest priority to run before other components
 public class EarlyConfigurationLoader implements ApplicationRunner {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(EarlyConfigurationLoader.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(EarlyConfigurationLoader.class);
     private final ExternalConfigLoader configLoader;
 
     /**

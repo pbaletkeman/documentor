@@ -25,7 +25,8 @@ import java.util.concurrent.CompletableFuture;
 @Service
 public class DocumentationService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DocumentationService.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(DocumentationService.class);
 
     private final MainDocumentationGenerator mainDocGenerator;
     private final ElementDocumentationGenerator elementDocGenerator;

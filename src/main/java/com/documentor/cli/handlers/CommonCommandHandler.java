@@ -68,3 +68,4 @@ public class CommonCommandHandler {
         return "❌ " + message + ": " + e.getMessage();
     }
 }
+

@@ -25,7 +25,8 @@ import java.util.concurrent.CompletableFuture;
 @Component
 public class UnitTestDocumentationGenerator {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UnitTestDocumentationGenerator.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(UnitTestDocumentationGenerator.class);
 
     private final LlmService llmService;
     private final DocumentorConfig config;

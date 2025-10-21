@@ -25,7 +25,8 @@ import java.util.List;
 @Order(1) // Run after ExternalConfigLoader
 public class LlmServiceConfiguration {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LlmServiceConfiguration.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(LlmServiceConfiguration.class);
 
     /**
      * Creates a DocumentorConfig bean post-processor that ensures it's not null and has valid models.

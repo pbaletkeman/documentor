@@ -10,13 +10,16 @@ import org.slf4j.LoggerFactory;
  * This centralizes all ThreadLocal access and provides diagnostic capabilities.
  */
 public final class ThreadLocalContextHolder {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ThreadLocalContextHolder.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(ThreadLocalContextHolder.class);
 
     // Store the DocumentorConfig in a thread-local variable
-    private static final ThreadLocal<DocumentorConfig> CONFIG_THREAD_LOCAL = new ThreadLocal<>();
+    private static final ThreadLocal<DocumentorConfig> CONFIG_THREAD_LOCAL =
+            new ThreadLocal<>();
 
     // Track whether this thread's config was explicitly set
-    private static final ThreadLocal<Boolean> CONFIG_EXPLICITLY_SET = new ThreadLocal<>();
+    private static final ThreadLocal<Boolean> CONFIG_EXPLICITLY_SET =
+            new ThreadLocal<>();
 
     private ThreadLocalContextHolder() {
         // Private constructor to prevent instantiation

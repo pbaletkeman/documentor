@@ -26,7 +26,8 @@ import java.util.List;
 @Order(1) // Run after ExternalConfigLoader
 public class LlmServiceConfigurationEnhanced {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LlmServiceConfigurationEnhanced.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(LlmServiceConfigurationEnhanced.class);
 
     /**
      * Creates an enhanced LlmService with improved error handling

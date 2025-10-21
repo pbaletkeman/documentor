@@ -26,7 +26,8 @@ import java.util.stream.Stream;
 @Service
 public class CodeAnalysisService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CodeAnalysisService.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(CodeAnalysisService.class);
 
     private final JavaCodeAnalyzer javaCodeAnalyzer;
     private final PythonCodeAnalyzer pythonCodeAnalyzer;
@@ -64,7 +65,8 @@ public class CodeAnalysisService {
 
         return CompletableFuture.supplyAsync(() -> {
             try {
-                List<CodeElement> allElements = discoverAndAnalyzeFiles(projectPath, includePrivateMembersOverride);
+                List<CodeElement> allElements =
+                        discoverAndAnalyzeFiles(projectPath, includePrivateMembersOverride);
 
                 ProjectAnalysis analysis = new ProjectAnalysis(
                     projectPath.toString(),

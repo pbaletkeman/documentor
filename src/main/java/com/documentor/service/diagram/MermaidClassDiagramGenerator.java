@@ -23,7 +23,8 @@ import java.util.List;
 @Component
 public class MermaidClassDiagramGenerator {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MermaidClassDiagramGenerator.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(MermaidClassDiagramGenerator.class);
 
     /**
      * 📊 Generates a Mermaid class diagram for a single class
@@ -158,7 +159,8 @@ public class MermaidClassDiagramGenerator {
      * 🔍 Simplified visibility check using enum
      */
     private boolean isNonPrivate(final CodeElement element) {
-        CodeVisibility visibility = CodeVisibility.fromSignatureAndName(element.signature(), element.name());
+        CodeVisibility visibility =
+                CodeVisibility.fromSignatureAndName(element.signature(), element.name());
         return visibility.shouldInclude(false); // Don't include private elements in diagrams
     }
 }

@@ -22,7 +22,8 @@ import java.util.List;
 @Component
 public class PythonCodeAnalyzer {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PythonCodeAnalyzer.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(PythonCodeAnalyzer.class);
 
     private final PythonASTProcessor astProcessor;
     private final PythonRegexAnalyzer regexAnalyzer;
@@ -67,7 +68,8 @@ public class PythonCodeAnalyzer {
 
         // Fallback to regex-based parsing
         List<String> lines = Files.readAllLines(filePath);
-        List<CodeElement> regexElements = regexAnalyzer.analyzeWithRegex(filePath, lines);
+        List<CodeElement> regexElements =
+                regexAnalyzer.analyzeWithRegex(filePath, lines);
         LOGGER.debug("Successfully analyzed {} with regex (found {} elements)",
                     filePath, regexElements.size());
 

@@ -14,7 +14,8 @@ import com.documentor.config.model.LlmModelConfig;
 @Service
 public class LlmServiceFix {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LlmServiceFix.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(LlmServiceFix.class);
 
     /**
      * Directly set the ThreadLocal configuration in the LlmService class.

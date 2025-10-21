@@ -14,3 +14,4 @@ public record ProjectAnalysisRequest(
         boolean useFix,
         String outputDir) {
 }
+
