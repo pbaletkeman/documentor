@@ -19,21 +19,23 @@ import java.util.concurrent.CompletableFuture;
 /**
  * 🧪 Enhanced Unit Test Documentation Generator
  *
- * Enhanced specialized component for generating unit test documentation and suggestions
- * with improved error handling and null safety.
+ * Enhanced specialized component for generating unit test documentation and
+ * suggestions with improved error handling and null safety.
  */
 @Component
 public class UnitTestDocumentationGeneratorEnhanced {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UnitTestDocumentationGeneratorEnhanced.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+            UnitTestDocumentationGeneratorEnhanced.class);
 
     private final LlmServiceEnhanced llmService;
     private final DocumentorConfig config;
     private final LlmServiceFixEnhanced llmServiceFix;
 
-    public UnitTestDocumentationGeneratorEnhanced(final LlmServiceEnhanced llmServiceParam,
-                                         final DocumentorConfig configParam,
-                                         final LlmServiceFixEnhanced llmServiceFixParam) {
+    public UnitTestDocumentationGeneratorEnhanced(
+            final LlmServiceEnhanced llmServiceParam,
+            final DocumentorConfig configParam,
+            final LlmServiceFixEnhanced llmServiceFixParam) {
         this.llmService = llmServiceParam;
         this.config = configParam;
         this.llmServiceFix = llmServiceFixParam;
@@ -42,22 +44,28 @@ public class UnitTestDocumentationGeneratorEnhanced {
     /**
      * 🧪 Generates unit test documentation with enhanced error handling
      */
-    public CompletableFuture<Void> generateUnitTestDocumentation(final ProjectAnalysis analysis,
-            final Path outputPath) {
+    public CompletableFuture<Void> generateUnitTestDocumentation(
+            final ProjectAnalysis analysis, final Path outputPath) {
         return CompletableFuture.supplyAsync(() -> {
             try {
-                // Ensure the ThreadLocal configuration is set before generating unit tests
+                // Ensure the ThreadLocal configuration is set before
+                // generating unit tests
                 if (config != null) {
-                    LOGGER.info("Setting ThreadLocal configuration for unit test generation");
-                    llmServiceFix.setLlmServiceThreadLocalConfig(config);
+                    LOGGER.info("Setting ThreadLocal configuration "
+                            + "for unit test generation");
+                    llmServiceFix.setLlmServiceThreadLocalConfig(
+                            config);
 
                     // Verify the configuration was set properly
-                    boolean configAvailable = llmServiceFix.isThreadLocalConfigAvailable();
+                    boolean configAvailable = llmServiceFix
+                            .isThreadLocalConfigAvailable();
                     if (!configAvailable) {
-                        LOGGER.warn("ThreadLocal configuration is still not available - unit test generation may fail");
+                        LOGGER.warn("ThreadLocal configuration is still not "
+                                + "available - unit test generation may fail");
                     }
                 } else {
-                    LOGGER.warn("Configuration is null - cannot set ThreadLocal config for unit test generation");
+                    LOGGER.warn("Configuration is null - cannot set "
+                            + "ThreadLocal config for unit test generation");
                 }
 
                 // Create the tests directory
@@ -65,40 +73,52 @@ public class UnitTestDocumentationGeneratorEnhanced {
                 try {
                     Files.createDirectories(testsDir);
                 } catch (IOException e) {
-                    LOGGER.error("Failed to create tests directory: {}", e.getMessage());
+                    LOGGER.error("Failed to create tests directory: {}",
+                            e.getMessage());
                     return null;
                 }
 
                 StringBuilder testDoc = new StringBuilder();
                 appendTestDocumentationHeader(testDoc);
 
-                // Filter out elements that are not appropriate for unit testing
-                List<CompletableFuture<String>> testFutures = analysis.codeElements().stream()
-                        .filter(element -> element != null && element.type() != null
-                                        && element.type() != CodeElementType.FIELD)
+                // Filter out elements that are not appropriate for
+                // unit testing
+                List<CompletableFuture<String>> testFutures = analysis
+                        .codeElements().stream()
+                        .filter(element -> element != null
+                                && element.type() != null
+                                && element.type() != CodeElementType.FIELD)
                         .map(element -> {
                             try {
                                 // Ensure configuration is set for each element
-                                llmServiceFix.setLlmServiceThreadLocalConfig(config);
-                                LOGGER.info("Generating unit tests for: {}", element.name());
+                                llmServiceFix.setLlmServiceThreadLocalConfig(
+                                        config);
+                                LOGGER.info("Generating unit tests for: {}",
+                                        element.name());
 
-                                // Safely generate unit tests, catching and handling potential exceptions
+                                // Safely generate unit tests, catching and
+                                // handling potential exceptions
                                 return llmService.generateUnitTests(element);
                             } catch (Exception e) {
-                                LOGGER.error("Error generating unit tests for element {}: {}",
-                                    element.name(), e.getMessage(), e);
+                                LOGGER.error(
+                                        "Error generating unit tests for "
+                                        + "element {}: {}",
+                                        element.name(), e.getMessage(), e);
 
-                                // Return a CompletableFuture with an error message instead of failing
+                                // Return a CompletableFuture with an error
+                                // message instead of failing
                                 return CompletableFuture.completedFuture(
-                                    "```java\n// Error generating unit tests for " + element.name()
-                                    + ": " + e.getMessage() + "\n```");
+                                    "```java\n// Error generating unit "
+                                    + "tests for " + element.name() + ": "
+                                    + e.getMessage() + "\n```");
                             }
                         })
                         .toList();
 
                 // Wait for all futures to complete
                 try {
-                    CompletableFuture.allOf(testFutures.toArray(new CompletableFuture[0]))
+                    CompletableFuture.allOf(
+                            testFutures.toArray(new CompletableFuture[0]))
                             .thenRun(() -> {
                                 try {
                                     // Process results
@@ -106,40 +126,60 @@ public class UnitTestDocumentationGeneratorEnhanced {
                                         try {
                                             String testContent = future.join();
                                             if (testContent != null) {
-                                                testDoc.append(testContent).append("\n\n");
+                                                testDoc.append(testContent)
+                                                        .append("\n\n");
                                             }
                                         } catch (Exception e) {
-                                            LOGGER.error("Error processing test future result: {}", e.getMessage());
-                                            testDoc.append("// Error processing test: ")
-                                                  .append(e.getMessage())
-                                                  .append("\n\n");
+                                            LOGGER.error(
+                                                    "Error processing test "
+                                                    + "future result: {}",
+                                                    e.getMessage());
+                                            testDoc
+                                                    .append(
+                                                            "// Error processing ")
+                                                    .append("test: ")
+                                                    .append(e.getMessage())
+                                                    .append("\n\n");
                                         }
                                     });
 
                                     // Write the output file
                                     try {
-                                        Files.write(testsDir.resolve("unit-tests.md"),
+                                        Files.write(
+                                                testsDir.resolve("unit-tests.md"),
                                                 testDoc.toString().getBytes());
-                                        LOGGER.info("✅ Successfully wrote unit tests to {}",
-                                                testsDir.resolve("unit-tests.md"));
+                                        LOGGER.info(
+                                                "✅ Successfully wrote "
+                                                + "unit tests to {}",
+                                                testsDir
+                                                        .resolve("unit-tests.md"));
                                     } catch (IOException e) {
-                                        LOGGER.error("❌ Error writing test documentation: {}", e.getMessage());
+                                        LOGGER.error(
+                                                "❌ Error writing test "
+                                                + "documentation: {}",
+                                                e.getMessage());
                                     }
                                 } catch (Exception e) {
-                                    LOGGER.error("Error in test future completion handler: {}", e.getMessage(), e);
+                                    LOGGER.error(
+                                            "Error in test future completion "
+                                            + "handler: {}",
+                                            e.getMessage(), e);
                                 } finally {
-                                    // Clean up ThreadLocal to prevent memory leaks
+                                    // Clean up ThreadLocal to prevent
+                                    // memory leaks
                                     llmServiceFix.cleanupThreadLocalConfig();
                                 }
                             })
                             .join();
                 } catch (Exception e) {
-                    LOGGER.error("Error waiting for test futures: {}", e.getMessage(), e);
+                    LOGGER.error("Error waiting for test futures: {}",
+                            e.getMessage(), e);
                 }
 
                 return null;
             } catch (Exception e) {
-                LOGGER.error("❌ Error generating test documentation: {}", e.getMessage(), e);
+                LOGGER.error("❌ Error generating test documentation: {}",
+                        e.getMessage(), e);
                 return null;
             }
         });
@@ -154,16 +194,20 @@ public class UnitTestDocumentationGeneratorEnhanced {
                         && config.outputSettings().includeIcons() ? "🧪 " : "";
 
             doc.append(String.format("# %sGenerated Unit Tests\n\n", icon));
-            doc.append("This file contains AI-generated unit test suggestions for the analyzed code.\n\n");
+            doc.append("This file contains AI-generated unit test suggestions "
+                    + "for the analyzed code.\n\n");
 
             if (config != null && config.outputSettings() != null) {
                 doc.append(String.format("Target Coverage: %.0f%%\n\n",
-                    config.outputSettings().targetCoverage() * ApplicationConstants.PERCENTAGE_MULTIPLIER));
+                    config.outputSettings().targetCoverage()
+                    * ApplicationConstants.PERCENTAGE_MULTIPLIER));
             }
         } catch (Exception e) {
-            LOGGER.error("Error creating test documentation header: {}", e.getMessage());
+            LOGGER.error("Error creating test documentation header: {}",
+                    e.getMessage());
             doc.append("# Generated Unit Tests\n\n");
-            doc.append("This file contains AI-generated unit test suggestions for the analyzed code.\n\n");
+            doc.append("This file contains AI-generated unit test suggestions "
+                    + "for the analyzed code.\n\n");
         }
     }
 }

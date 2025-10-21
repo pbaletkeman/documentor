@@ -23,7 +23,8 @@ import java.util.concurrent.CompletableFuture;
 @Component
 public class ProjectAnalysisCommandHandler {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ProjectAnalysisCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+            ProjectAnalysisCommandHandler.class);
 
     private final CodeAnalysisService codeAnalysisService;
     private final DocumentationService documentationService;
@@ -47,49 +48,69 @@ public class ProjectAnalysisCommandHandler {
     /**
      * Handle project analysis command with optional diagram generation
      */
-    public String handleAnalyzeProject(final String projectPath, final String configPath,
-                                     final boolean generateMermaid, final String mermaidOutput) {
-        return handleAnalyzeProject(projectPath, configPath, generateMermaid, mermaidOutput, null);
+    public String handleAnalyzeProject(final String projectPath,
+                                     final String configPath,
+                                     final boolean generateMermaid,
+                                     final String mermaidOutput) {
+        return handleAnalyzeProject(projectPath, configPath,
+                generateMermaid, mermaidOutput, null);
     }
 
     /**
-     * Handle project analysis command with optional diagram generation and private member override
+     * Handle project analysis command with optional diagram generation
+     * and private member override
      */
-    public String handleAnalyzeProject(final String projectPath, final String configPath,
-                                     final boolean generateMermaid, final String mermaidOutput,
+    public String handleAnalyzeProject(final String projectPath,
+                                     final String configPath,
+                                     final boolean generateMermaid,
+                                     final String mermaidOutput,
                                      final Boolean includePrivateMembers) {
-        return handleAnalyzeProjectExtended(projectPath, configPath, generateMermaid, mermaidOutput,
-                                          false, "", includePrivateMembers);
+        return handleAnalyzeProjectExtended(projectPath, configPath,
+                generateMermaid, mermaidOutput,
+                false, "", includePrivateMembers);
     }
 
     /**
      * Handle project analysis command with both Mermaid and PlantUML options
      */
-    public String handleAnalyzeProjectExtended(final String projectPath, final String configPath,
-                                     final boolean generateMermaid, final String mermaidOutput,
-                                     final boolean generatePlantUML, final String plantUMLOutput) {
-        return handleAnalyzeProjectExtended(projectPath, configPath, generateMermaid, mermaidOutput,
-                                          generatePlantUML, plantUMLOutput, null);
+    public String handleAnalyzeProjectExtended(final String projectPath,
+                                             final String configPath,
+                                             final boolean generateMermaid,
+                                             final String mermaidOutput,
+                                             final boolean generatePlantUML,
+                                             final String plantUMLOutput) {
+        return handleAnalyzeProjectExtended(projectPath, configPath,
+                generateMermaid, mermaidOutput,
+                generatePlantUML, plantUMLOutput, null);
     }
 
     /**
-     * Handle project analysis command with both Mermaid and PlantUML options and private member override
+     * Handle project analysis command with both Mermaid and PlantUML options
+     * and private member override
      */
-    public String handleAnalyzeProjectExtended(final String projectPath, final String configPath,
-                                     final boolean generateMermaid, final String mermaidOutput,
-                                     final boolean generatePlantUML, final String plantUMLOutput,
-                                     final Boolean includePrivateMembers) {
+    public String handleAnalyzeProjectExtended(final String projectPath,
+                                             final String configPath,
+                                             final boolean generateMermaid,
+                                             final String mermaidOutput,
+                                             final boolean generatePlantUML,
+                                             final String plantUMLOutput,
+                                             final Boolean includePrivateMembers) {
         try {
-            LOGGER.info("🔍 Starting analysis of project: {}", projectPath);
+            LOGGER.info("🔍 Starting analysis of project: {}",
+                    projectPath);
 
             if (!commonHandler.directoryExists(projectPath)) {
-                return "❌ Error: Project path does not exist or is not a directory: " + projectPath;
+                return "❌ Error: Project path does not exist or is not a directory: "
+                        + projectPath;
             }
 
-            ProjectAnalysis analysis = performAnalysis(projectPath, includePrivateMembers);
+            ProjectAnalysis analysis = performAnalysis(projectPath,
+                    includePrivateMembers);
             String outputPath = generateDocumentation(analysis);
             StringBuilder result = commonHandler.createResultBuilder();
-            result.append(String.format("✅ Analysis complete! Documentation generated at: %s\n", outputPath));
+            result.append(String.format(
+                    "✅ Analysis complete! Documentation generated at: %s\n",
+                    outputPath));
 
             if (generateMermaid) {
                 handleMermaidGeneration(analysis, mermaidOutput, result);
@@ -114,15 +135,19 @@ public class ProjectAnalysisCommandHandler {
     }
 
     /**
-     * Handle scanning a project without generating documentation with private member override
+     * Handle scanning a project without generating documentation
+     * with private member override
      */
-    public String handleScanProject(final String projectPath, final Boolean includePrivateMembers) {
+    public String handleScanProject(final String projectPath,
+                                  final Boolean includePrivateMembers) {
         try {
             if (!commonHandler.directoryExists(projectPath)) {
-                return "❌ Error: Project path does not exist or is not a directory: " + projectPath;
+                return "❌ Error: Project path does not exist or is not a directory: "
+                        + projectPath;
             }
 
-            ProjectAnalysis analysis = performAnalysis(projectPath, includePrivateMembers);
+            ProjectAnalysis analysis = performAnalysis(projectPath,
+                    includePrivateMembers);
             return formatAnalysisStats(analysis);
         } catch (Exception e) {
             LOGGER.error("Scan failed", e);
@@ -138,12 +163,16 @@ public class ProjectAnalysisCommandHandler {
     }
 
     /**
-     * Perform code analysis on the specified project with optional private member override
+     * Perform code analysis on the specified project
+     * with optional private member override
      */
-    private ProjectAnalysis performAnalysis(final String projectPath, final Boolean includePrivateMembers) {
+    private ProjectAnalysis performAnalysis(final String projectPath,
+                                          final Boolean includePrivateMembers) {
         Path project = Paths.get(projectPath);
-        CompletableFuture<ProjectAnalysis> analysisFuture = includePrivateMembers != null
-                ? codeAnalysisService.analyzeProject(project, includePrivateMembers)
+        CompletableFuture<ProjectAnalysis> analysisFuture =
+                includePrivateMembers != null
+                ? codeAnalysisService.analyzeProject(project,
+                        includePrivateMembers)
                 : codeAnalysisService.analyzeProject(project);
         return analysisFuture.join();
     }
@@ -152,17 +181,20 @@ public class ProjectAnalysisCommandHandler {
      * Generate documentation for the analyzed project
      */
     private String generateDocumentation(final ProjectAnalysis analysis) {
-        CompletableFuture<String> docFuture = documentationService.generateDocumentation(analysis);
+        CompletableFuture<String> docFuture =
+                documentationService.generateDocumentation(analysis);
         return docFuture.join();
     }
 
     /**
      * Generate and handle Mermaid diagrams
      */
-    private void handleMermaidGeneration(final ProjectAnalysis analysis, final String mermaidOutput,
+    private void handleMermaidGeneration(final ProjectAnalysis analysis,
+                                       final String mermaidOutput,
                                        final StringBuilder result) {
         LOGGER.info("🧩 Generating Mermaid diagrams...");
-        String mermaidOutputPath = mermaidOutput.trim().isEmpty() ? null : mermaidOutput;
+        String mermaidOutputPath = mermaidOutput.trim().isEmpty()
+                ? null : mermaidOutput;
         CompletableFuture<List<String>> mermaidFuture = mermaidDiagramService
                 .generateClassDiagrams(analysis, mermaidOutputPath);
         List<String> mermaidResult = mermaidFuture.join();
@@ -173,10 +205,12 @@ public class ProjectAnalysisCommandHandler {
     /**
      * Generate and handle PlantUML diagrams
      */
-    private void handlePlantUMLGeneration(final ProjectAnalysis analysis, final String plantUMLOutput,
+    private void handlePlantUMLGeneration(final ProjectAnalysis analysis,
+                                        final String plantUMLOutput,
                                         final StringBuilder result) {
         LOGGER.info("🌱 Generating PlantUML diagrams...");
-        String plantUMLOutputPath = plantUMLOutput.trim().isEmpty() ? null : plantUMLOutput;
+        String plantUMLOutputPath = plantUMLOutput.trim().isEmpty()
+                ? null : plantUMLOutput;
         CompletableFuture<List<String>> plantUMLFuture = plantUMLDiagramService
                 .generateClassDiagrams(analysis, plantUMLOutputPath);
         List<String> plantUMLResult = plantUMLFuture.join();
@@ -191,9 +225,10 @@ public class ProjectAnalysisCommandHandler {
         Map<String, Object> stats = new HashMap<>();
         stats.put("Project", analysis.projectPath());
         stats.put("Total Elements", analysis.codeElements().size());
-        stats.put("Analysis Time", java.time.Instant.ofEpochMilli(analysis.timestamp()));
+        stats.put("Analysis Time",
+                java.time.Instant.ofEpochMilli(analysis.timestamp()));
 
-        return commonHandler.formatStatistics("Project Analysis Statistics", stats);
+        return commonHandler.formatStatistics(
+                "Project Analysis Statistics", stats);
     }
 }
-
