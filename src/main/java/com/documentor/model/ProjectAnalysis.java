@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 /**
  * 📊 Project Analysis Result
  *
- * Contains the complete analysis results for a project, including all discovered
- * code elements organized by type and file.
+ * Contains the complete analysis results for a project, including all
+ * discovered code elements organized by type and file.
  */
 public record ProjectAnalysis(
     String projectPath,
@@ -95,10 +95,10 @@ public record ProjectAnalysis(
     ) {
         public String getFormattedSummary() {
             return String.format(
-                "📊 Analysis Summary: %d total elements (%d classes, %d methods, %d fields) across %d files",
+                "📊 Analysis Summary: %d total elements (%d classes, "
+                + "%d methods, %d fields) across %d files",
                 totalElements, classCount, methodCount, fieldCount, fileCount
             );
         }
     }
 }
-
