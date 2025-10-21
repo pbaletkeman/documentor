@@ -56,7 +56,8 @@ class ServiceUtilsTest {
         // Test that the private constructor throws UnsupportedOperationException
         Exception exception = assertThrows(Exception.class, () -> {
             // Use reflection to access private constructor
-            var constructor = ServiceUtils.class.getDeclaredConstructor();
+            var constructor = ServiceUtils.class
+                    .getDeclaredConstructor();
             constructor.setAccessible(true);
             constructor.newInstance();
         });
@@ -64,7 +65,8 @@ class ServiceUtilsTest {
         // The exception should be either UnsupportedOperationException directly
         // or wrapped in InvocationTargetException
         assertTrue(exception instanceof UnsupportedOperationException
-                   || (exception.getCause() instanceof UnsupportedOperationException),
+                   || (exception.getCause()
+                       instanceof UnsupportedOperationException),
                    "Expected UnsupportedOperationException but got: "
                    + exception.getClass());
     }
@@ -78,9 +80,9 @@ class ServiceUtilsTest {
         );
 
         CodeElement methodElement = new CodeElement(
-            CodeElementType.METHOD, "testMethod", "com.test.TestClass.testMethod",
-            "TestClass.java", TEN, "public void testMethod()", "",
-            List.of(), List.of()
+            CodeElementType.METHOD, "testMethod",
+            "com.test.TestClass.testMethod", "TestClass.java", TEN,
+            "public void testMethod()", "", List.of(), List.of()
         );
 
         List<CodeElement> elements = List.of(classElement, methodElement);
@@ -210,13 +212,15 @@ class ServiceUtilsTest {
         // Test valid timeouts
         assertTrue(ServiceUtils.isValidTimeout(ONE_THOUSAND_MS));
         assertTrue(ServiceUtils.isValidTimeout(THIRTY_THOUSAND));
-        assertTrue(ServiceUtils.isValidTimeout(THREE_HUNDRED_THOUSAND_MS)); // Max 5 minutes
+        assertTrue(ServiceUtils.isValidTimeout(
+                THREE_HUNDRED_THOUSAND_MS)); // Max 5 minutes
 
         // Test invalid timeouts
         assertFalse(ServiceUtils.isValidTimeout(null));
         assertFalse(ServiceUtils.isValidTimeout(ZERO));
         assertFalse(ServiceUtils.isValidTimeout(NEGATIVE_ONE_THOUSAND_MS));
-        assertFalse(ServiceUtils.isValidTimeout(THREE_HUNDRED_THOUSAND_PLUS_ONE_MS)); // Over 5 minutes
+        assertFalse(ServiceUtils.isValidTimeout(
+                THREE_HUNDRED_THOUSAND_PLUS_ONE_MS)); // Over 5 minutes
     }
 
     @Test
@@ -235,7 +239,8 @@ class ServiceUtilsTest {
                 timeout10);
 
         // Test capping at maximum
-        int timeoutHuge = ServiceUtils.calculateAdaptiveTimeout(ONE_THOUSAND_MS);
+        int timeoutHuge = ServiceUtils.calculateAdaptiveTimeout(
+                ONE_THOUSAND_MS);
         assertEquals(THREE_HUNDRED_THOUSAND_MS,
                 timeoutHuge); // Should be capped at 5 minutes
     }
@@ -256,14 +261,17 @@ class ServiceUtilsTest {
                 ServiceUtils.sanitizeFilePath("com//test///TestClass.java"));
 
         // Test leading slash removal
-        assertEquals("com/test/TestClass.java", ServiceUtils.sanitizeFilePath("/com/test/TestClass.java"));
+        assertEquals("com/test/TestClass.java",
+                ServiceUtils.sanitizeFilePath("/com/test/TestClass.java"));
 
         // Test whitespace trimming
-        assertEquals("com/test/TestClass.java", ServiceUtils.sanitizeFilePath("  com/test/TestClass.java  "));
+        assertEquals("com/test/TestClass.java",
+                ServiceUtils.sanitizeFilePath("  com/test/TestClass.java  "));
 
         // Test complex path
         assertEquals("src/main/java/com/test/TestClass.java",
-            ServiceUtils.sanitizeFilePath("  /src\\\\main//java\\com\\test\\TestClass.java  "));
+                ServiceUtils.sanitizeFilePath(
+                        "  /src\\\\main//java\\com\\test\\TestClass.java  "));
     }
 
     @Test
@@ -374,7 +382,8 @@ class ServiceUtilsTest {
         paramsWithNull.put("param2", null);
 
         // Generate operations with null values should return false
-        boolean result = ServiceUtils.validateOperationParameters("generateDocs",
+        boolean result = ServiceUtils.validateOperationParameters(
+                "generateDocs",
                 paramsWithNull);
         // The method rejects generate operations with null parameter values
         assertFalse(result); // Generate operations require non-null parameters
@@ -383,26 +392,27 @@ class ServiceUtilsTest {
     @Test
     void testFormatErrorMessage() {
         // Test with all parameters
-        String fullMessage = ServiceUtils.formatErrorMessage("TestService",
-                "testOperation", "Test error");
-        assertEquals("[TestService] Operation 'testOperation' failed: Test error",
+        String fullMessage = ServiceUtils.formatErrorMessage(
+                "TestService", "testOperation", "Test error");
+        assertEquals(
+                "[TestService] Operation 'testOperation' failed: Test error",
                 fullMessage);
 
         // Test with null service name
-        String noServiceMessage = ServiceUtils.formatErrorMessage(null,
-                "testOperation", "Test error");
+        String noServiceMessage = ServiceUtils.formatErrorMessage(
+                null, "testOperation", "Test error");
         assertEquals("Operation 'testOperation' failed: Test error",
                 noServiceMessage);
 
         // Test with empty service name
-        String emptyServiceMessage = ServiceUtils.formatErrorMessage("",
-                "testOperation", "Test error");
+        String emptyServiceMessage = ServiceUtils.formatErrorMessage(
+                "", "testOperation", "Test error");
         assertEquals("Operation 'testOperation' failed: Test error",
                 emptyServiceMessage);
 
         // Test with null operation
-        String noOperationMessage = ServiceUtils.formatErrorMessage("TestService",
-                null, "Test error");
+        String noOperationMessage = ServiceUtils.formatErrorMessage(
+                "TestService", null, "Test error");
         assertEquals("[TestService] Operation failed: Test error",
                 noOperationMessage);
 
@@ -419,13 +429,14 @@ class ServiceUtilsTest {
                 noCauseMessage);
 
         // Test with empty cause
-        String emptyCauseMessage = ServiceUtils.formatErrorMessage("TestService",
-                "testOperation", "");
+        String emptyCauseMessage = ServiceUtils.formatErrorMessage(
+                "TestService", "testOperation", "");
         assertEquals("[TestService] Operation 'testOperation' failed",
                 emptyCauseMessage);
 
         // Test with all null values
-        String allNullMessage = ServiceUtils.formatErrorMessage(null, null, null);
+        String allNullMessage = ServiceUtils.formatErrorMessage(
+                null, null, null);
         assertEquals("Operation failed", allNullMessage);
     }
 
@@ -480,18 +491,24 @@ class ServiceUtilsTest {
     void testComplexGroupingScenarios() {
         // Test with multiple elements of same type
         List<CodeElement> manyClasses = List.of(
-            new CodeElement(CodeElementType.CLASS, "Class1", "com.test.Class1",
-                    "Class1.java", ONE, "", "", List.of(), List.of()),
-            new CodeElement(CodeElementType.CLASS, "Class2", "com.test.Class2",
-                    "Class2.java", ONE, "", "", List.of(), List.of()),
-            new CodeElement(CodeElementType.CLASS, "Class3", "com.test.Class3",
-                    "Class3.java", ONE, "", "", List.of(), List.of()),
-            new CodeElement(CodeElementType.METHOD, "method1", "com.test.Class1.method1",
-                    "Class1.java", TEN, "", "", List.of(), List.of()),
-            new CodeElement(CodeElementType.METHOD, "method2", "com.test.Class2.method2",
-                    "Class2.java", TEN, "", "", List.of(), List.of()),
-            new CodeElement(CodeElementType.FIELD, "field1", "com.test.Class1.field1",
-                    "Class1.java", FIVE, "", "", List.of(), List.of())
+            new CodeElement(CodeElementType.CLASS, "Class1",
+                    "com.test.Class1", "Class1.java", ONE, "", "", List.of(),
+                    List.of()),
+            new CodeElement(CodeElementType.CLASS, "Class2",
+                    "com.test.Class2", "Class2.java", ONE, "", "", List.of(),
+                    List.of()),
+            new CodeElement(CodeElementType.CLASS, "Class3",
+                    "com.test.Class3", "Class3.java", ONE, "", "", List.of(),
+                    List.of()),
+            new CodeElement(CodeElementType.METHOD, "method1",
+                    "com.test.Class1.method1", "Class1.java", TEN, "", "",
+                    List.of(), List.of()),
+            new CodeElement(CodeElementType.METHOD, "method2",
+                    "com.test.Class2.method2", "Class2.java", TEN, "", "",
+                    List.of(), List.of()),
+            new CodeElement(CodeElementType.FIELD, "field1",
+                    "com.test.Class1.field1", "Class1.java", FIVE, "", "",
+                    List.of(), List.of())
         );
 
         Map<CodeElementType, List<CodeElement>> grouped =

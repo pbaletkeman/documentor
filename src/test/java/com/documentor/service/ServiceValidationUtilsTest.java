@@ -202,10 +202,12 @@ class ServiceValidationUtilsTest {
     @Test
     void testHasMissingDocumentationWithAllDocs() {
         List<CodeElement> elements = List.of(
-            new CodeElement(CodeElementType.CLASS, "Class1", "com.test.Class1",
-                "Class1.java", 1, "class Class1", "Good documentation", List.of(), List.of()),
-            new CodeElement(CodeElementType.CLASS, "Class2", "com.test.Class2",
-                "Class2.java", 1, "class Class2", "Also good docs", List.of(), List.of())
+            new CodeElement(CodeElementType.CLASS, "Class1",
+                    "com.test.Class1", "Class1.java", 1, "class Class1",
+                    "Good documentation", List.of(), List.of()),
+            new CodeElement(CodeElementType.CLASS, "Class2",
+                    "com.test.Class2", "Class2.java", 1, "class Class2",
+                    "Also good docs", List.of(), List.of())
         );
 
         assertFalse(ServiceValidationUtils.hasMissingDocumentation(elements));

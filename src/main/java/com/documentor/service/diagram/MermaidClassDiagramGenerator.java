@@ -39,7 +39,7 @@ public class MermaidClassDiagramGenerator {
         diagram.append("# ").append(className).append(" Class Diagram\n\n");
         diagram.append("```mermaid\n");
         diagram.append("---\n");
-        diagram.append("title: sample title\n");
+        diagram.append("title: ").append(diagramFileName).append("\n");
         diagram.append("config: \n");
         diagram.append("  layout: elk\n");
         diagram.append("  theme: forest %% neutral, for black-and-white documents commented out\n");

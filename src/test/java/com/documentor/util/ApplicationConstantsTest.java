@@ -46,7 +46,8 @@ class ApplicationConstantsTest {
     }
 
     @Test
-    @DisplayName("Should verify constructor is private and throws exception when called")
+    @DisplayName("Should verify constructor is private and throws exception "
+            + "when called")
     void shouldVerifyPrivateConstructor() throws Exception {
         // Verify constructor is private
         Constructor<ApplicationConstants> constructor =

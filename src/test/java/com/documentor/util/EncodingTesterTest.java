@@ -18,7 +18,8 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
  */
 class EncodingTesterTest {
 
-    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    private final ByteArrayOutputStream outContent =
+            new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
 
     @TempDir
