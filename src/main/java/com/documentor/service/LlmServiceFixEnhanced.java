@@ -11,25 +11,29 @@ import com.documentor.config.model.LlmModelConfig;
  * Enhanced version of LlmServiceFix with improved error handling
  * that works with LlmServiceEnhanced.
  *
- * This class provides utility methods to directly set the ThreadLocalContextHolder's
- * configuration. It's designed to work around threading issues where the ThreadLocal value
- * is not being properly propagated to worker threads.
+      * This class provides utility methods to directly set the
+     * ThreadLocalContextHolder's configuration. It's designed to work around
+     * threading issues where the ThreadLocal value is not being properly
+     * propagated to worker threads.
  */
 @Service
 public class LlmServiceFixEnhanced {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LlmServiceFixEnhanced.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(LlmServiceFixEnhanced.class);
 
     /**
-     * Directly set the ThreadLocal configuration in the LlmServiceEnhanced class.
-     * Call this method before running any LLM operations to ensure the configuration
-     * is available to all threads.
+     * Directly set the ThreadLocal configuration in the LlmServiceEnhanced
+     * class. Call this method before running any LLM operations to ensure the
+     * configuration is available to all threads.
      *
      * @param config The DocumentorConfig to set
      */
-    public void setLlmServiceThreadLocalConfig(final DocumentorConfig config) {
+    public void setLlmServiceThreadLocalConfig(
+            final DocumentorConfig config) {
         if (config == null) {
-            LOGGER.warn("Attempted to set null configuration in LlmServiceFixEnhanced");
+            LOGGER.warn("Attempted to set null configuration in " +
+                    "LlmServiceFixEnhanced");
             return;
         }
 
@@ -41,16 +45,19 @@ public class LlmServiceFixEnhanced {
 
             // Log model details
             if (config.llmModels() != null && !config.llmModels().isEmpty()) {
-                LOGGER.info("Setting global ThreadLocal config through LlmServiceFixEnhanced with {} models",
+                LOGGER.info("Setting global ThreadLocal config through " +
+                        "LlmServiceFixEnhanced with {} models",
                         config.llmModels().size());
 
                 for (int i = 0; i < config.llmModels().size(); i++) {
                     LlmModelConfig model = config.llmModels().get(i);
                     LOGGER.debug("Model {}: name={}, provider={}, baseUrl={}",
-                            i + 1, model.name(), model.provider(), model.baseUrl());
+                            i + 1, model.name(), model.provider(),
+                            model.baseUrl());
                 }
             } else {
-                LOGGER.warn("Setting ThreadLocal config, but the model list is empty or null");
+                LOGGER.warn("Setting ThreadLocal config, but the model list "
+                        + "is empty or null");
             }
 
             // Directly set the ThreadLocal value in ThreadLocalContextHolder
@@ -59,24 +66,29 @@ public class LlmServiceFixEnhanced {
             // Verify it was set correctly
             DocumentorConfig verifyConfig = ThreadLocalContextHolder.getConfig();
             if (verifyConfig != null) {
-                int modelCount = verifyConfig.llmModels() != null ? verifyConfig.llmModels().size() : 0;
-                LOGGER.info("Successfully set and verified ThreadLocal config with {} models",
-                        modelCount);
+                int modelCount = verifyConfig.llmModels() != null ?
+                        verifyConfig.llmModels().size() : 0;
+                LOGGER.info("Successfully set and verified ThreadLocal "
+                        + "config with {} models", modelCount);
 
                 // Log that the ThreadLocal config can be expected in child threads
-                LOGGER.info("Child threads created by ThreadLocalPropagatingExecutorEnhanced "
+                LOGGER.info("Child threads created by "
+                        + "ThreadLocalPropagatingExecutorEnhanced "
                         + "should now receive this config");
             } else {
-                LOGGER.error("Failed to set ThreadLocal config - verification returned null");
+                LOGGER.error("Failed to set ThreadLocal config - "
+                        + "verification returned null");
             }
         } catch (Exception e) {
-            LOGGER.error("Error setting ThreadLocal config: {}", e.getMessage(), e);
+            LOGGER.error("Error setting ThreadLocal config: {}",
+                    e.getMessage(), e);
         }
     }
 
     /**
-     * Diagnostic method to check if ThreadLocal config is available in the current thread.
-     * Can be called from any thread to verify if the configuration is accessible.
+     * Diagnostic method to check if ThreadLocal config is available in the
+     * current thread. Can be called from any thread to verify if the
+     * configuration is accessible.
      *
      * @return true if config is available, false otherwise
      */
@@ -86,17 +98,19 @@ public class LlmServiceFixEnhanced {
             DocumentorConfig config = ThreadLocalContextHolder.getConfig();
 
             if (config != null) {
-                int modelCount = config.llmModels() != null ? config.llmModels().size() : 0;
-                LOGGER.info("ThreadLocal config IS available in thread [{}] with {} models",
-                        currentThread.getName(), modelCount);
+                int modelCount = config.llmModels() != null
+                        ? config.llmModels().size() : 0;
+                LOGGER.info("ThreadLocal config IS available in thread [{}] "
+                        + "with {} models", currentThread.getName(), modelCount);
                 return true;
             } else {
-                LOGGER.warn("ThreadLocal config is NOT available in thread [{}]",
-                        currentThread.getName());
+                LOGGER.warn("ThreadLocal config is NOT available in "
+                        + "thread [{}]", currentThread.getName());
                 return false;
             }
         } catch (Exception e) {
-            LOGGER.error("Error checking ThreadLocal config availability: {}", e.getMessage(), e);
+            LOGGER.error("Error checking ThreadLocal config availability: {}",
+                    e.getMessage(), e);
             return false;
         }
     }
@@ -108,20 +122,24 @@ public class LlmServiceFixEnhanced {
     public void cleanupThreadLocalConfig() {
         try {
             Thread currentThread = Thread.currentThread();
-            LOGGER.debug("Cleaning up ThreadLocal config in thread [{}]", currentThread.getName());
+            LOGGER.debug("Cleaning up ThreadLocal config in thread [{}]",
+                    currentThread.getName());
             ThreadLocalContextHolder.clearConfig();
         } catch (Exception e) {
-            LOGGER.error("Error cleaning up ThreadLocal config: {}", e.getMessage(), e);
+            LOGGER.error("Error cleaning up ThreadLocal config: {}",
+                    e.getMessage(), e);
         }
     }
 
     /**
-     * Executes the provided runnable with the specified config set in the thread context
+     * Executes the provided runnable with the specified config set in the
+     * thread context
      *
      * @param config The configuration to set
      * @param runnable The runnable to execute
      */
-    public void executeWithConfig(final DocumentorConfig config, final Runnable runnable) {
+    public void executeWithConfig(final DocumentorConfig config,
+            final Runnable runnable) {
         ThreadLocalContextHolder.runWithConfig(config, runnable);
     }
 }

@@ -23,7 +23,8 @@ import com.documentor.service.LlmServiceEnhanced;
 @Configuration
 public class AppConfigEnhanced implements AsyncConfigurer {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AppConfigEnhanced.class);
+    private static final Logger LOGGER =
+        LoggerFactory.getLogger(AppConfigEnhanced.class);
     private static final int DEFAULT_CORE_POOL_SIZE = 5;
     private static final int DEFAULT_MAX_MEMORY_SIZE_MB = 10;
     private static final int BYTES_PER_MB = 1024 * 1024;
@@ -40,8 +41,8 @@ public class AppConfigEnhanced implements AsyncConfigurer {
     }
 
     /**
-     * 🔍 WebClient for making HTTP requests to LLM APIs with enhanced error handling
-     * Marked as @Primary to resolve the bean conflict
+     * 🔍 WebClient for making HTTP requests to LLM APIs with enhanced error
+     * handling Marked as @Primary to resolve the bean conflict
      */
     @Bean
     @org.springframework.context.annotation.Primary
@@ -49,13 +50,15 @@ public class AppConfigEnhanced implements AsyncConfigurer {
         LOGGER.info("Creating enhanced WebClient (PRIMARY)");
         return WebClient.builder()
                 .codecs(configurer -> configurer.defaultCodecs()
-                        .maxInMemorySize(DEFAULT_MAX_MEMORY_SIZE_MB * BYTES_PER_MB))
+                        .maxInMemorySize(DEFAULT_MAX_MEMORY_SIZE_MB
+                            * BYTES_PER_MB))
                 .build();
     }
 
     /**
-     * ⚡ Thread pool executor for parallel LLM processing with enhanced error handling
-     * Marked with a specific name and as @Primary to resolve bean conflicts
+     * ⚡ Thread pool executor for parallel LLM processing with enhanced error
+     * handling Marked with a specific name and as @Primary to resolve bean
+     * conflicts
      */
     @Bean("llmExecutor")
     @org.springframework.context.annotation.Primary
@@ -65,7 +68,8 @@ public class AppConfigEnhanced implements AsyncConfigurer {
                            ? documentorConfig.analysisSettings().maxThreads()
                            : DEFAULT_CORE_POOL_SIZE;
 
-        LOGGER.info("Creating enhanced LLM executor with core pool size: {}", corePoolSize);
+        LOGGER.info("Creating enhanced LLM executor with core pool size: {}",
+            corePoolSize);
 
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(corePoolSize);
@@ -73,26 +77,31 @@ public class AppConfigEnhanced implements AsyncConfigurer {
         executor.setQueueCapacity(DEFAULT_QUEUE_CAPACITY);
         executor.setThreadNamePrefix("LLM-Enhanced-");
         executor.setWaitForTasksToCompleteOnShutdown(true);
-        executor.setAwaitTerminationSeconds(DEFAULT_TERMINATION_TIMEOUT_SECONDS);
+        executor.setAwaitTerminationSeconds(
+            DEFAULT_TERMINATION_TIMEOUT_SECONDS);
 
-        // Use enhanced ThreadLocalTaskDecorator that uses ThreadLocalContextHolder
+        // Use enhanced ThreadLocalTaskDecorator that uses
+        // ThreadLocalContextHolder
         executor.setTaskDecorator(task -> {
-            DocumentorConfig capturedConfig = ThreadLocalContextHolder.getConfig();
-            boolean wasExplicitlySet = ThreadLocalContextHolder.isConfigExplicitlySet();
+            DocumentorConfig capturedConfig =
+                ThreadLocalContextHolder.getConfig();
+            boolean wasExplicitlySet =
+                ThreadLocalContextHolder.isConfigExplicitlySet();
 
             return () -> {
                 try {
                     // Set ThreadLocal in the new thread if available
                     if (capturedConfig != null) {
                         ThreadLocalContextHolder.setConfig(capturedConfig);
-                        LOGGER.debug("ThreadLocal config set in task thread (explicitly set: {})",
-                            wasExplicitlySet);
+                        LOGGER.debug("ThreadLocal config set in task thread "
+                            + "(explicitly set: {})", wasExplicitlySet);
                     }
 
                     // Execute the original task
                     task.run();
                 } catch (Exception e) {
-                    LOGGER.error("Error in async task execution: {}", e.getMessage(), e);
+                    LOGGER.error("Error in async task execution: {}",
+                        e.getMessage(), e);
                 } finally {
                     // Clean up ThreadLocal
                     ThreadLocalContextHolder.clearConfig();
@@ -106,9 +115,10 @@ public class AppConfigEnhanced implements AsyncConfigurer {
     }
 
     /**
-     * 🔍 Enhanced LLM Service with proper dependency injection and improved error handling
-     * With a custom name that matches the original service for compatibility
-     * Removed @Primary to avoid conflicts with LlmServiceConfigurationEnhanced
+     * 🔍 Enhanced LLM Service with proper dependency injection and improved
+     * error handling With a custom name that matches the original service for
+     * compatibility Removed @Primary to avoid conflicts with
+     * LlmServiceConfigurationEnhanced
      */
     @Bean("llmService")
     public com.documentor.service.LlmServiceEnhanced llmServiceEnhanced(
@@ -117,31 +127,37 @@ public class AppConfigEnhanced implements AsyncConfigurer {
             final com.documentor.service.llm.LlmResponseHandler responseHandler,
             final com.documentor.service.llm.LlmApiClient apiClient) {
         LOGGER.info("Creating enhanced LlmService (no longer PRIMARY)");
-        return new com.documentor.service.LlmServiceEnhanced(documentorConfigParam, requestBuilder,
-                responseHandler, apiClient);
+        return new com.documentor.service.LlmServiceEnhanced(
+            documentorConfigParam, requestBuilder, responseHandler, apiClient);
     }
 
     /**
-     * 🔍 Bean specifically for component scanning to resolve autowiring of LlmServiceEnhanced
-     * Removed @Primary to avoid conflicts with LlmServiceConfigurationEnhanced
+     * 🔍 Bean specifically for component scanning to resolve autowiring of
+     * LlmServiceEnhanced Removed @Primary to avoid conflicts with
+     * LlmServiceConfigurationEnhanced
      */
     @Bean("llmServiceEnhancedBean")
-    public com.documentor.service.LlmServiceEnhanced llmServiceEnhancedForAutowiring(
+    public com.documentor.service.LlmServiceEnhanced
+            llmServiceEnhancedForAutowiring(
             final com.documentor.service.llm.LlmRequestBuilder requestBuilder,
             final com.documentor.service.llm.LlmResponseHandler responseHandler,
             final com.documentor.service.llm.LlmApiClient apiClient) {
-        LOGGER.info("Creating standalone LlmServiceEnhanced bean for autowiring");
-        // Create a new instance directly instead of calling the other method to avoid conflicts
+        LOGGER.info("Creating standalone LlmServiceEnhanced bean for "
+            + "autowiring");
+        // Create a new instance directly instead of calling the other method
+        // to avoid conflicts
         return new com.documentor.service.LlmServiceEnhanced(
             documentorConfig, requestBuilder, responseHandler, apiClient);
     }
 
     /**
-     * 🔍 Enhanced LLM Service Fix with improved error handling
-     * Intentionally not marked as @Primary to avoid conflicts with LlmServiceConfigurationEnhanced
+     * 🔍 Enhanced LLM Service Fix with improved error handling Intentionally
+     * not marked as @Primary to avoid conflicts with
+     * LlmServiceConfigurationEnhanced
      */
     @Bean("llmServiceFixEnhancedSecondary")
-    public com.documentor.service.LlmServiceFixEnhanced llmServiceFixEnhanced() {
+    public com.documentor.service.LlmServiceFixEnhanced
+            llmServiceFixEnhanced() {
         LOGGER.info("Creating enhanced LlmServiceFix (secondary)");
         return new com.documentor.service.LlmServiceFixEnhanced();
     }
@@ -150,21 +166,25 @@ public class AppConfigEnhanced implements AsyncConfigurer {
      * 🧪 Enhanced Unit Test Documentation Generator with improved error handling
      */
     @Bean
-    public com.documentor.service.documentation.UnitTestDocumentationGeneratorEnhanced
+    public com.documentor.service.documentation
+            .UnitTestDocumentationGeneratorEnhanced
             unitTestDocumentationGeneratorEnhanced(
             final DocumentorConfig documentorConfigParam,
-            final com.documentor.service.LlmServiceFixEnhanced llmServiceFixEnhanced,
+            final com.documentor.service.LlmServiceFixEnhanced
+                llmServiceFixEnhanced,
             final com.documentor.service.llm.LlmRequestBuilder requestBuilder,
             final com.documentor.service.llm.LlmResponseHandler responseHandler,
             final com.documentor.service.llm.LlmApiClient apiClient) {
-        LOGGER.info("Creating enhanced UnitTestDocumentationGenerator with direct "
-                + "LlmServiceEnhanced instance");
+        LOGGER.info("Creating enhanced UnitTestDocumentationGenerator with "
+                + "direct LlmServiceEnhanced instance");
 
-        // Create a new instance of LlmServiceEnhanced directly instead of injecting
+        // Create a new instance of LlmServiceEnhanced directly instead of
+        // injecting
         LlmServiceEnhanced serviceEnhanced = new LlmServiceEnhanced(
             documentorConfigParam, requestBuilder, responseHandler, apiClient);
 
-        return new com.documentor.service.documentation.UnitTestDocumentationGeneratorEnhanced(
+        return new com.documentor.service.documentation
+            .UnitTestDocumentationGeneratorEnhanced(
             serviceEnhanced, documentorConfig, llmServiceFixEnhanced);
     }
 

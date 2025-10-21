@@ -68,13 +68,15 @@ public class DocumentationServiceEnhanced {
      * @param analysis The project analysis results
      * @return CompletableFuture containing the path to generated documentation
      */
-    public CompletableFuture<String> generateDocumentation(final ProjectAnalysis analysis) {
+    public CompletableFuture<String> generateDocumentation(
+            final ProjectAnalysis analysis) {
         setupThreadLocalConfig(analysis);
 
         return CompletableFuture.supplyAsync(() -> {
             try {
                 // Create output directory
-                Path outputPath = Paths.get(config.outputSettings().outputPath());
+                Path outputPath =
+                        Paths.get(config.outputSettings().outputPath());
                 Files.createDirectories(outputPath);
                 LOGGER.info("Created output directory: {}", outputPath);
 
@@ -85,12 +87,13 @@ public class DocumentationServiceEnhanced {
                 generateMermaidDiagrams(analysis);
                 generatePlantUMLDiagrams(analysis);
 
-                LOGGER.info("✅ Documentation generated successfully at: {}", outputPath);
+                LOGGER.info("✅ Documentation generated successfully at: {}",
+                        outputPath);
                 return outputPath.toString();
 
             } catch (Exception e) {
                 LOGGER.error("❌ Critical error generating documentation: {}",
-                    e.getMessage(), e);
+                        e.getMessage(), e);
                 throw new RuntimeException("Failed to generate documentation", e);
             } finally {
                 cleanupThreadLocalResources();
@@ -103,23 +106,26 @@ public class DocumentationServiceEnhanced {
      * @param analysis Project analysis data
      */
     private void setupThreadLocalConfig(final ProjectAnalysis analysis) {
-        LOGGER.info("📄 Starting enhanced documentation generation for project: {}",
-            analysis.projectPath());
+        LOGGER.info("📄 Starting enhanced documentation generation " +
+                "for project: {}", analysis.projectPath());
 
         // Ensure ThreadLocal configuration is properly set up first
         if (llmServiceFix != null) {
             try {
-                LOGGER.info("Setting ThreadLocal config for documentation generation");
+                LOGGER.info("Setting ThreadLocal config for " +
+                        "documentation generation");
                 llmServiceFix.setLlmServiceThreadLocalConfig(config);
 
                 // Verify the configuration was set properly
-                boolean configAvailable = llmServiceFix.isThreadLocalConfigAvailable();
+                boolean configAvailable =
+                        llmServiceFix.isThreadLocalConfigAvailable();
                 if (!configAvailable) {
-                    LOGGER.warn("ThreadLocal configuration is still not available - "
-                        + "documentation generation may fail");
+                    LOGGER.warn("ThreadLocal configuration is still not " +
+                            "available - documentation generation may fail");
                 }
             } catch (Exception e) {
-                LOGGER.error("Error setting up ThreadLocal config: {}", e.getMessage(), e);
+                LOGGER.error("Error setting up ThreadLocal config: {}",
+                        e.getMessage(), e);
             }
         } else {
             LOGGER.warn("LlmServiceFixEnhanced is null - ThreadLocal config not set up");
@@ -143,7 +149,7 @@ public class DocumentationServiceEnhanced {
                     LOGGER.error("Timeout while generating main documentation");
                 } else {
                     LOGGER.error("Error generating main documentation: {}",
-                        ex.getMessage(), ex);
+                            ex.getMessage(), ex);
                 }
                 return "# Error Generating Documentation\n\n"
                        + "There was an error generating the main documentation: "
@@ -172,13 +178,15 @@ public class DocumentationServiceEnhanced {
             // Use the enhanced element doc generator with better threading
             CompletableFuture<Void> elementDocFuture = elementDocGenerator
                 .generateGroupedDocumentation(analysis, outputPath)
-                .orTimeout(DEFAULT_FUTURE_TIMEOUT_SECONDS * 2, TimeUnit.SECONDS)
+                .orTimeout(DEFAULT_FUTURE_TIMEOUT_SECONDS * 2,
+                        TimeUnit.SECONDS)
                 .exceptionally(ex -> {
                     if (ex instanceof TimeoutException) {
-                        LOGGER.error("Timeout while generating element documentation");
+                        LOGGER.error("Timeout while generating " +
+                                "element documentation");
                     } else {
                         LOGGER.error("Error generating element documentation: {}",
-                            ex.getMessage(), ex);
+                                ex.getMessage(), ex);
                     }
                     return null; // Continue with other tasks
                 });
@@ -187,7 +195,8 @@ public class DocumentationServiceEnhanced {
             elementDocFuture.join();
             LOGGER.info("✅ Element documentation completed");
         } catch (Exception e) {
-            LOGGER.error("Error in element documentation generation: {}", e.getMessage(), e);
+            LOGGER.error("Error in element documentation generation: {}",
+                    e.getMessage(), e);
             // Continue with other tasks despite errors
         }
     }
@@ -197,27 +206,32 @@ public class DocumentationServiceEnhanced {
      * @param analysis Project analysis data
      * @param outputPath Output directory path
      */
-    private void generateUnitTestDocumentation(final ProjectAnalysis analysis,
-            final Path outputPath) {
+    private void generateUnitTestDocumentation(
+            final ProjectAnalysis analysis, final Path outputPath) {
         // Generate unit tests if enabled
         if (config.outputSettings().generateUnitTests() != null
-            && config.outputSettings().generateUnitTests()) {
+                && config.outputSettings().generateUnitTests()) {
             try {
                 // First ensure ThreadLocal is properly set again
                 if (llmServiceFix != null) {
-                    LOGGER.info("Refreshing ThreadLocal config before unit test generation");
+                    LOGGER.info("Refreshing ThreadLocal config before " +
+                            "unit test generation");
                     llmServiceFix.setLlmServiceThreadLocalConfig(config);
                 }
 
-                LOGGER.info("Generating unit tests as specified in configuration");
+                LOGGER.info("Generating unit tests as specified " +
+                        "in configuration");
                 CompletableFuture<Void> testFuture = testDocGenerator
                     .generateUnitTestDocumentation(analysis, outputPath)
-                    .orTimeout(DEFAULT_FUTURE_TIMEOUT_SECONDS * 2, TimeUnit.SECONDS)
+                    .orTimeout(DEFAULT_FUTURE_TIMEOUT_SECONDS * 2,
+                            TimeUnit.SECONDS)
                     .exceptionally(ex -> {
                         if (ex instanceof TimeoutException) {
-                            LOGGER.error("Timeout while generating unit test documentation");
+                            LOGGER.error("Timeout while generating " +
+                                    "unit test documentation");
                         } else {
-                            LOGGER.error("Error generating unit tests: {}", ex.getMessage(), ex);
+                            LOGGER.error("Error generating unit tests: {}",
+                                    ex.getMessage(), ex);
                         }
                         return null; // Continue with other tasks
                     });
@@ -227,11 +241,12 @@ public class DocumentationServiceEnhanced {
                 LOGGER.info("✅ Unit test documentation completed");
             } catch (Exception e) {
                 LOGGER.error("Error in unit test documentation generation: {}",
-                    e.getMessage(), e);
+                        e.getMessage(), e);
                 // Continue with other tasks despite errors
             }
         } else {
-            LOGGER.info("Unit test generation is disabled in configuration - skipping");
+            LOGGER.info("Unit test generation is disabled in configuration " +
+                    "- skipping");
         }
     }
 
@@ -243,20 +258,23 @@ public class DocumentationServiceEnhanced {
         // Generate Mermaid diagrams if enabled
         if (config.outputSettings().generateMermaidDiagrams()) {
             try {
-                CompletableFuture<List<String>> diagramFuture = mermaidDiagramService
+                CompletableFuture<List<String>> diagramFuture =
+                        mermaidDiagramService
                     .generateClassDiagrams(analysis,
-                        config.outputSettings().mermaidOutputPath())
+                            config.outputSettings().mermaidOutputPath())
                     .orTimeout(DEFAULT_FUTURE_TIMEOUT_SECONDS, TimeUnit.SECONDS)
                     .exceptionally(ex -> {
                         LOGGER.error("Error generating Mermaid diagrams: {}",
-                            ex.getMessage(), ex);
+                                ex.getMessage(), ex);
                         return List.of(); // Return empty list to avoid NPE
                     });
 
                 List<String> diagramPaths = diagramFuture.join();
-                LOGGER.info("✅ Generated {} Mermaid diagrams", diagramPaths.size());
+                LOGGER.info("✅ Generated {} Mermaid diagrams",
+                        diagramPaths.size());
             } catch (Exception e) {
-                LOGGER.error("Error in Mermaid diagram generation: {}", e.getMessage(), e);
+                LOGGER.error("Error in Mermaid diagram generation: {}",
+                        e.getMessage(), e);
             }
         }
     }
@@ -269,20 +287,23 @@ public class DocumentationServiceEnhanced {
         // Generate PlantUML diagrams if enabled
         if (config.outputSettings().generatePlantUMLDiagrams()) {
             try {
-                CompletableFuture<List<String>> plantUMLFuture = plantUMLDiagramService
+                CompletableFuture<List<String>> plantUMLFuture =
+                        plantUMLDiagramService
                     .generateClassDiagrams(analysis,
-                        config.outputSettings().plantUMLOutputPath())
+                            config.outputSettings().plantUMLOutputPath())
                     .orTimeout(DEFAULT_FUTURE_TIMEOUT_SECONDS, TimeUnit.SECONDS)
                     .exceptionally(ex -> {
                         LOGGER.error("Error generating PlantUML diagrams: {}",
-                            ex.getMessage(), ex);
+                                ex.getMessage(), ex);
                         return List.of(); // Return empty list to avoid NPE
                     });
 
                 List<String> plantUMLPaths = plantUMLFuture.join();
-                LOGGER.info("✅ Generated {} PlantUML diagrams", plantUMLPaths.size());
+                LOGGER.info("✅ Generated {} PlantUML diagrams",
+                        plantUMLPaths.size());
             } catch (Exception e) {
-                LOGGER.error("Error in PlantUML diagram generation: {}", e.getMessage(), e);
+                LOGGER.error("Error in PlantUML diagram generation: {}",
+                        e.getMessage(), e);
             }
         }
     }

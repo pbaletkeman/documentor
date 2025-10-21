@@ -29,7 +29,8 @@ import java.util.Arrays;
 @Profile("!test")
 public class ExternalConfigLoader implements ApplicationContextAware {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ExternalConfigLoader.class);
+    private static final Logger LOGGER =
+        LoggerFactory.getLogger(ExternalConfigLoader.class);
     private static final String CONFIG_ARG = "--config";
 
     private ApplicationContext applicationContext;
@@ -41,7 +42,8 @@ public class ExternalConfigLoader implements ApplicationContextAware {
      * @throws BeansException if an error occurs
      */
     @Override
-    public void setApplicationContext(final ApplicationContext context) throws BeansException {
+    public void setApplicationContext(final ApplicationContext context)
+            throws BeansException {
         this.applicationContext = context;
     }
 
@@ -50,14 +52,15 @@ public class ExternalConfigLoader implements ApplicationContextAware {
      * @return a BeanFactoryPostProcessor
      */
     /**
-     * Load configuration from command line arguments.
-     * This method can be called directly by other components early in the startup process.
+     * Load configuration from command line arguments. This method can be
+     * called directly by other components early in the startup process.
      *
      * @param args the command line arguments
      * @return true if configuration was loaded successfully, false otherwise
      */
     public boolean loadExternalConfig(final String[] args) {
-        LOGGER.info("Loading external config from arguments: {}", Arrays.toString(args));
+        LOGGER.info("Loading external config from arguments: {}",
+            Arrays.toString(args));
 
         // Extract config path
         String configPath = extractConfigPath(args);
@@ -80,8 +83,8 @@ public class ExternalConfigLoader implements ApplicationContextAware {
             ObjectMapper objectMapper = new ObjectMapper();
             DocumentorConfig externalConfig = objectMapper.readValue(
                     configFile.toFile(), DocumentorConfig.class);
-            LOGGER.info("External configuration loaded successfully with {} LLM models",
-                    externalConfig.llmModels().size());
+            LOGGER.info("External configuration loaded successfully with {} LLM "
+                + "models", externalConfig.llmModels().size());
 
             // Store the config for later use
             this.loadedConfig = externalConfig;
@@ -113,26 +116,33 @@ public class ExternalConfigLoader implements ApplicationContextAware {
     @Bean
     public BeanFactoryPostProcessor configurationPostProcessor() {
         return beanFactory -> {
-            LOGGER.info("ExternalConfigLoader's BeanFactoryPostProcessor running");
+            LOGGER.info("ExternalConfigLoader's BeanFactoryPostProcessor "
+                + "running");
 
-            // Check if we already have a loaded configuration from EarlyConfigurationLoader
+            // Check if we already have a loaded configuration from
+            // EarlyConfigurationLoader
             if (loadedConfig != null) {
-                LOGGER.info("Using configuration already loaded by EarlyConfigurationLoader");
+                LOGGER.info("Using configuration already loaded by "
+                    + "EarlyConfigurationLoader");
 
-                // Define the DocumentorConfig bean with the already loaded configuration
+                // Define the DocumentorConfig bean with the already loaded
+                // configuration
                 BeanDefinition beanDefinition =
-                    BeanDefinitionBuilder.genericBeanDefinition(DocumentorConfig.class, () -> loadedConfig)
+                    BeanDefinitionBuilder.genericBeanDefinition(
+                        DocumentorConfig.class, () -> loadedConfig)
                         .setPrimary(true)
                         .getBeanDefinition();
 
                 // Register or replace the bean definition
-                ((BeanDefinitionRegistry) beanFactory).registerBeanDefinition("documentorConfig", beanDefinition);
+                ((BeanDefinitionRegistry) beanFactory).registerBeanDefinition(
+                    "documentorConfig", beanDefinition);
                 LOGGER.info("External configuration registered successfully");
                 return;
             }
 
             // If not loaded yet, try loading from command line args (fallback)
-            LOGGER.info("No configuration loaded yet, trying command line arguments as fallback");
+            LOGGER.info("No configuration loaded yet, trying command line "
+                + "arguments as fallback");
 
             // Get command line arguments
             String[] args = null;
@@ -147,19 +157,22 @@ public class ExternalConfigLoader implements ApplicationContextAware {
                 if (mainClassEnd > 0) {
                     String argsStr = cmdArgs.substring(mainClassEnd + 1);
                     args = argsStr.split(" ");
-                    LOGGER.info("Extracted args: {}", Arrays.toString(args));
+                    LOGGER.info("Extracted args: {}",
+                        Arrays.toString(args));
                 }
             } catch (Exception e) {
                 LOGGER.warn("Error extracting command line arguments: {}", e.getMessage());
             }
 
-            // If we couldn't get arguments from system properties, handle the Gradle case
+            // If we couldn't get arguments from system properties, handle the
+            // Gradle case
             if (args == null || args.length == 0) {
                 String gradleArgs = System.getProperty("args", "");
                 LOGGER.info("Gradle args property: {}", gradleArgs);
                 if (!gradleArgs.isEmpty()) {
                     args = gradleArgs.split(",");
-                    LOGGER.info("Gradle args split: {}", Arrays.toString(args));
+                    LOGGER.info("Gradle args split: {}",
+                    Arrays.toString(args));
                 }
             }
 
@@ -190,8 +203,8 @@ public class ExternalConfigLoader implements ApplicationContextAware {
                 ObjectMapper objectMapper = new ObjectMapper();
                 DocumentorConfig externalConfig = objectMapper.readValue(
                         configFile.toFile(), DocumentorConfig.class);
-                LOGGER.info("External configuration loaded successfully with {} LLM models",
-                        externalConfig.llmModels().size());
+                LOGGER.info("External configuration loaded successfully with {} "
+                    + "LLM models", externalConfig.llmModels().size());
 
                 // Save for future reference
                 this.loadedConfig = externalConfig;
@@ -199,22 +212,25 @@ public class ExternalConfigLoader implements ApplicationContextAware {
                 // Define the DocumentorConfig bean with the loaded configuration
                 // This will override any existing definition
                 BeanDefinition beanDefinition =
-                    BeanDefinitionBuilder.genericBeanDefinition(DocumentorConfig.class, () -> externalConfig)
+                    BeanDefinitionBuilder.genericBeanDefinition(
+                        DocumentorConfig.class, () -> externalConfig)
                         .setPrimary(true)
                         .getBeanDefinition();
 
                 // Register or replace the bean definition
-                ((BeanDefinitionRegistry) beanFactory).registerBeanDefinition("documentorConfig", beanDefinition);
+                ((BeanDefinitionRegistry) beanFactory).registerBeanDefinition(
+                    "documentorConfig", beanDefinition);
                 LOGGER.info("External configuration registered successfully");
             } catch (Exception e) {
-                LOGGER.error("Failed to load external configuration from {}: {}",
-                        configPath, e.getMessage(), e);
+                LOGGER.error("Failed to load external configuration from {}: "
+                    + "{}", configPath, e.getMessage(), e);
             }
         };
     }
 
         /**
-     * Extract the path to the configuration file from command line arguments.
+     * Extract the path to the configuration file from command line
+     * arguments.
      * @param args command line arguments
      * @return path to configuration file or null if not found
      */
@@ -223,7 +239,8 @@ public class ExternalConfigLoader implements ApplicationContextAware {
             return null;
         }
 
-        LOGGER.info("Extracting config path from args: {}", Arrays.toString(args));
+        LOGGER.info("Extracting config path from args: {}",
+            Arrays.toString(args));
 
         // Handle different ways the config might be specified:
         // 1. As separate arguments: "--config" "file.json"
@@ -238,7 +255,8 @@ public class ExternalConfigLoader implements ApplicationContextAware {
                 String[] parts = arg.split(",");
                 for (int i = 0; i < parts.length - 1; i++) {
                     if (CONFIG_ARG.equals(parts[i]) && i + 1 < parts.length) {
-                        LOGGER.info("Found config in comma-separated args: {}", parts[i + 1]);
+                        LOGGER.info("Found config in comma-separated args: {}",
+                            parts[i + 1]);
                         return parts[i + 1];
                     }
                 }

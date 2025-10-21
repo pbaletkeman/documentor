@@ -14,15 +14,19 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Enhanced ThreadLocal Propagating Executor with improved error handling
  *
- * Special executor that ensures ThreadLocal values are properly propagated from parent
- * threads to child threads in asynchronous operations. This is particularly important
- * for CompletableFuture chains and other async operations that span multiple threads.
+ * Special executor that ensures ThreadLocal values are properly propagated
+ * from parent threads to child threads in asynchronous operations. This is
+ * particularly important for CompletableFuture chains and other async
+ * operations that span multiple threads.
  *
- * Uses ThreadLocalContextHolder for centralized management of thread-local values.
+ * Uses ThreadLocalContextHolder for centralized management of
+ * thread-local values.
  */
-public final class ThreadLocalPropagatingExecutorEnhanced implements Executor {
+public final class ThreadLocalPropagatingExecutorEnhanced
+        implements Executor {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ThreadLocalPropagatingExecutorEnhanced.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(ThreadLocalPropagatingExecutorEnhanced.class);
 
     /**
      * Default number of threads for the executor.
@@ -42,12 +46,15 @@ public final class ThreadLocalPropagatingExecutorEnhanced implements Executor {
     private final Executor delegate;
     private final String executorName;
 
-    public ThreadLocalPropagatingExecutorEnhanced(final Executor delegateExecutor, final String name) {
-        this.delegate = delegateExecutor != null ? delegateExecutor : FALLBACK_EXECUTOR;
+    public ThreadLocalPropagatingExecutorEnhanced(
+            final Executor delegateExecutor, final String name) {
+        this.delegate = delegateExecutor != null ?
+                delegateExecutor : FALLBACK_EXECUTOR;
         this.executorName = name != null ? name : "unnamed";
 
         if (delegateExecutor == null) {
-            LOGGER.warn("Delegate executor was null for '{}', using ForkJoinPool.commonPool() as fallback",
+            LOGGER.warn("Delegate executor was null for '{}', " +
+                    "using ForkJoinPool.commonPool() as fallback",
                 this.executorName);
         }
     }
@@ -61,20 +68,25 @@ public final class ThreadLocalPropagatingExecutorEnhanced implements Executor {
     @Override
     public void execute(final Runnable command) {
         if (command == null) {
-            LOGGER.error("Null command passed to execute() in '{}' - ignoring", executorName);
+            LOGGER.error("Null command passed to execute() in '{}' - ignoring",
+                    executorName);
             return;
         }
 
         // Capture the ThreadLocal config from the current thread
         DocumentorConfig capturedConfig = ThreadLocalContextHolder.getConfig();
-        boolean wasExplicitlySet = ThreadLocalContextHolder.isConfigExplicitlySet();
+        boolean wasExplicitlySet =
+                ThreadLocalContextHolder.isConfigExplicitlySet();
 
         if (capturedConfig != null) {
-            LOGGER.debug("[{}] Captured ThreadLocal config from parent thread with {} models",
+            LOGGER.debug("[{}] Captured ThreadLocal config from parent " +
+                    "thread with {} models",
                 executorName,
-                capturedConfig.llmModels() != null ? capturedConfig.llmModels().size() : 0);
+                capturedConfig.llmModels() != null ?
+                        capturedConfig.llmModels().size() : 0);
         } else {
-            LOGGER.warn("[{}] No ThreadLocal config available in parent thread - service may not work correctly",
+            LOGGER.warn("[{}] No ThreadLocal config available in parent " +
+                    "thread - service may not work correctly",
                 executorName);
         }
 
@@ -86,20 +98,24 @@ public final class ThreadLocalPropagatingExecutorEnhanced implements Executor {
                     ThreadLocalContextHolder.setConfig(capturedConfig);
 
                     if (wasExplicitlySet) {
-                        LOGGER.debug("[{}] Set ThreadLocal config in child thread with {} models (explicitly set)",
+                        LOGGER.debug("[{}] Set ThreadLocal config in child " +
+                                "thread with {} models (explicitly set)",
                             executorName,
-                            capturedConfig.llmModels() != null ? capturedConfig.llmModels().size() : 0);
+                            capturedConfig.llmModels() != null ?
+                                    capturedConfig.llmModels().size() : 0);
                     }
                 }
 
                 // Execute the original task
                 command.run();
             } catch (Exception e) {
-                LOGGER.error("[{}] Error in thread execution: {}", executorName, e.getMessage(), e);
+                LOGGER.error("[{}] Error in thread execution: {}",
+                        executorName, e.getMessage(), e);
             } finally {
                 // Clean up ThreadLocal to prevent memory leaks
                 ThreadLocalContextHolder.clearConfig();
-                LOGGER.debug("[{}] Cleaned up ThreadLocal config in child thread", executorName);
+                LOGGER.debug("[{}] Cleaned up ThreadLocal config in child thread",
+                        executorName);
             }
         };
 
@@ -107,17 +123,20 @@ public final class ThreadLocalPropagatingExecutorEnhanced implements Executor {
             // Execute the wrapped task using the delegate executor
             delegate.execute(contextAwareRunnable);
         } catch (Exception e) {
-            LOGGER.error("[{}] Failed to execute task with delegate executor: {}", executorName, e.getMessage(), e);
+            LOGGER.error("[{}] Failed to execute task with delegate executor: {}",
+                    executorName, e.getMessage(), e);
 
             // Try with fallback executor
             try {
-                LOGGER.info("[{}] Attempting to execute with fallback executor", executorName);
+                LOGGER.info("[{}] Attempting to execute with fallback executor",
+                        executorName);
                 FALLBACK_EXECUTOR.execute(contextAwareRunnable);
             } catch (Exception fallbackEx) {
-                LOGGER.error("[{}] Fallback executor also failed: {}", executorName,
-                        fallbackEx.getMessage(), fallbackEx);
+                LOGGER.error("[{}] Fallback executor also failed: {}",
+                        executorName, fallbackEx.getMessage(), fallbackEx);
                 // Execute directly in the current thread as last resort
-                LOGGER.warn("[{}] Executing task in current thread as last resort", executorName);
+                LOGGER.warn("[{}] Executing task in current thread as last resort",
+                        executorName);
                 contextAwareRunnable.run();
             }
         }
@@ -129,9 +148,11 @@ public final class ThreadLocalPropagatingExecutorEnhanced implements Executor {
      *
      * @param threads Number of threads to use in the pool
      * @param namePrefix Prefix for naming the threads
-     * @return An Executor that propagates ThreadLocal values or null if creation fails
+     * @return An Executor that propagates ThreadLocal values or null if
+     *         creation fails
      */
-    public static Executor createExecutor(final int threads, final String namePrefix) {
+    public static Executor createExecutor(final int threads,
+            final String namePrefix) {
         // Thread counter for naming
         final AtomicInteger counter = new AtomicInteger();
 
@@ -147,9 +168,11 @@ public final class ThreadLocalPropagatingExecutorEnhanced implements Executor {
                 thread.setName(namePrefix + "-" + counter.incrementAndGet());
                 thread.setDaemon(true);
 
-                // Add an uncaught exception handler to prevent thread death on uncaught exceptions
+                // Add an uncaught exception handler to prevent thread death
+                // on uncaught exceptions
                 thread.setUncaughtExceptionHandler((t, e) ->
-                    LOGGER.error("Uncaught exception in thread {}: {}", t.getName(), e.getMessage(), e)
+                    LOGGER.error("Uncaught exception in thread {}: {}",
+                            t.getName(), e.getMessage(), e)
                 );
 
                 return thread;
@@ -160,23 +183,27 @@ public final class ThreadLocalPropagatingExecutorEnhanced implements Executor {
                 threads * 2,               // max pool size
                 keepAliveSeconds,          // keep alive time
                 TimeUnit.SECONDS,
-                new LinkedBlockingQueue<>(maxQueueSize), // queue with capacity limit
+                new LinkedBlockingQueue<>(maxQueueSize), // queue with limit
                 threadFactory
             );
 
             // Set rejection handler to log and use caller thread as fallback
             executor.setRejectedExecutionHandler((r, e) -> {
-                LOGGER.warn("Task rejected from executor {} - running in caller thread", namePrefix);
+                LOGGER.warn("Task rejected from executor {} - " +
+                        "running in caller thread", namePrefix);
                 if (r != null) {
                     r.run();
                 }
             });
 
-            return new ThreadLocalPropagatingExecutorEnhanced(executor, namePrefix);
+            return new ThreadLocalPropagatingExecutorEnhanced(executor,
+                    namePrefix);
         } catch (Exception e) {
-            LOGGER.error("Failed to create thread pool executor {}: {}", namePrefix, e.getMessage(), e);
+            LOGGER.error("Failed to create thread pool executor {}: {}",
+                    namePrefix, e.getMessage(), e);
             // Return a wrapped version of the fallback executor
-            return new ThreadLocalPropagatingExecutorEnhanced(FALLBACK_EXECUTOR, namePrefix + "-fallback");
+            return new ThreadLocalPropagatingExecutorEnhanced(FALLBACK_EXECUTOR,
+                    namePrefix + "-fallback");
         }
     }
 }
