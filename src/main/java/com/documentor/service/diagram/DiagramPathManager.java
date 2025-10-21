@@ -17,14 +17,16 @@ public class DiagramPathManager {
     /**
      * 🔍 Determines the output path for the diagram
      */
-    public String determineOutputPath(final String sourceFilePath, final String customOutputPath) {
+    public String determineOutputPath(final String sourceFilePath,
+            final String customOutputPath) {
         if (customOutputPath != null && !customOutputPath.trim().isEmpty()) {
             return customOutputPath;
         }
 
         // Default to same directory as source file
         Path sourcePath = Paths.get(sourceFilePath);
-        return sourcePath.getParent() != null ? sourcePath.getParent().toString() : ".";
+        return sourcePath.getParent() != null
+                ? sourcePath.getParent().toString() : ".";
     }
 
     /**

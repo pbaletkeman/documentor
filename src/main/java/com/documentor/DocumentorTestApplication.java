@@ -15,8 +15,8 @@ import com.documentor.config.AppConfigEnhanced;
 /**
  * Standalone Test Application for Enhanced Documentor
  *
- * This is a special test version that completely excludes all original components
- * to eliminate any potential bean conflicts.
+ * This is a special test version that completely excludes all original
+ * components to eliminate any potential bean conflicts.
  */
 @SpringBootApplication
 @ConfigurationPropertiesScan
@@ -40,17 +40,20 @@ import com.documentor.config.AppConfigEnhanced;
 )
 public final class DocumentorTestApplication {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DocumentorTestApplication.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        DocumentorTestApplication.class);
 
     /**
      * Private constructor to prevent instantiation of utility class.
      */
     private DocumentorTestApplication() {
-        throw new UnsupportedOperationException("Utility class should not be instantiated");
+        throw new UnsupportedOperationException(
+            "Utility class should not be instantiated");
     }
 
     public static void main(final String[] args) {
-        LOGGER.info("Starting DocumentorTestApplication - Test version with enhanced error handling");
+        LOGGER.info("Starting DocumentorTestApplication - Test version with "
+            + "enhanced error handling");
         try {
             SpringApplication.run(DocumentorTestApplication.class, args);
         } catch (Exception e) {

@@ -35,7 +35,8 @@ public class PythonRegexAnalyzer {
     /**
      * Fallback regex-based analysis for when AST parsing fails
      */
-    public List<CodeElement> analyzeWithRegex(final Path filePath, final List<String> lines) {
+    public List<CodeElement> analyzeWithRegex(final Path filePath,
+            final List<String> lines) {
         List<CodeElement> elements = new ArrayList<>();
         String content = String.join("\n", lines);
 
@@ -50,7 +51,8 @@ public class PythonRegexAnalyzer {
     /**
      * Process class declarations
      */
-    private void processClassElements(final Path filePath, final List<String> lines, final String content,
+    private void processClassElements(final Path filePath,
+            final List<String> lines, final String content,
             final List<CodeElement> elements) {
         var matcher = patternMatcher.findClassMatches(content);
 
@@ -76,7 +78,8 @@ public class PythonRegexAnalyzer {
     /**
      * Process function declarations
      */
-    private void processFunctionElements(final Path filePath, final List<String> lines, final String content,
+    private void processFunctionElements(final Path filePath,
+            final List<String> lines, final String content,
             final List<CodeElement> elements) {
         var matcher = patternMatcher.findFunctionMatches(content);
 
@@ -85,7 +88,8 @@ public class PythonRegexAnalyzer {
             if (shouldInclude(functionName)) {
                 int lineNumber = getLineNumber(content, matcher.start());
                 String paramString = matcher.group(2);
-                List<String> params = List.of(patternMatcher.extractParameters(paramString));
+                List<String> params =
+                        List.of(patternMatcher.extractParameters(paramString));
 
                 elements.add(new CodeElement(
                     CodeElementType.METHOD,
@@ -105,7 +109,8 @@ public class PythonRegexAnalyzer {
     /**
      * Process variable assignments
      */
-    private void processVariableElements(final Path filePath, final String content, final List<CodeElement> elements) {
+    private void processVariableElements(final Path filePath,
+            final String content, final List<CodeElement> elements) {
         var matcher = patternMatcher.findVariableMatches(content);
 
         while (matcher.find()) {

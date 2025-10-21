@@ -2,8 +2,8 @@ package com.documentor;
 
 /**
  * Package utility constants and helper methods for Documentor applications.
- * This class provides common constants and utility methods used across different
- * Documentor application variants.
+ * This class provides common constants and utility methods used across
+ * different Documentor application variants.
  */
 public final class DocumentorPackageUtils {
 
@@ -36,7 +36,8 @@ public final class DocumentorPackageUtils {
      * Private constructor to prevent instantiation.
      */
     private DocumentorPackageUtils() {
-        throw new UnsupportedOperationException("Utility class cannot be instantiated");
+        throw new UnsupportedOperationException(
+            "Utility class cannot be instantiated");
     }
 
     /**
@@ -66,7 +67,8 @@ public final class DocumentorPackageUtils {
             return false;
         }
 
-        return trimmed.endsWith(".json") || trimmed.endsWith(".yml") || trimmed.endsWith(".yaml");
+        return trimmed.endsWith(".json") || trimmed.endsWith(".yml")
+            || trimmed.endsWith(".yaml");
     }
 
     /**
@@ -107,7 +109,8 @@ public final class DocumentorPackageUtils {
     }
 
     /**
-     * Checks if the application is running in test mode based on system properties.
+     * Checks if the application is running in test mode based on system
+     * properties.
      *
      * @return true if running in test mode
      */

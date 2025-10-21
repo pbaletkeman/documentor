@@ -14,7 +14,8 @@ public enum CodeVisibility {
     /**
      * 🔍 Determines visibility from signature and element name
      */
-    public static CodeVisibility fromSignatureAndName(final String signature, final String name) {
+    public static CodeVisibility fromSignatureAndName(final String signature,
+            final String name) {
         String lowerSignature = signature.toLowerCase();
 
         // Check explicit modifiers first
@@ -44,4 +45,3 @@ public enum CodeVisibility {
         return includePrivate || this != PRIVATE;
     }
 }
-

@@ -34,13 +34,15 @@ public class CommonCommandHandler {
         }
 
         java.nio.file.Path dirPath = java.nio.file.Paths.get(path);
-        return java.nio.file.Files.exists(dirPath) && java.nio.file.Files.isDirectory(dirPath);
+        return java.nio.file.Files.exists(dirPath)
+                && java.nio.file.Files.isDirectory(dirPath);
     }
 
     /**
      * 📊 Creates standardized statistics section
      */
-    public String formatStatistics(final String title, final Map<String, Object> stats) {
+    public String formatStatistics(final String title,
+            final Map<String, Object> stats) {
         StringBuilder result = new StringBuilder();
         result.append("📊 ").append(title).append("\n");
         result.append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n");
@@ -66,4 +68,3 @@ public class CommonCommandHandler {
         return "❌ " + message + ": " + e.getMessage();
     }
 }
-

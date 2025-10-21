@@ -39,10 +39,10 @@ public record AnalysisSettings(
 
     // Backward compatibility methods
     public Integer maxThreads() {
-        // If a maxDepth is provided in configuration, interpret it as the desired
-        // number of worker threads. The executor will then set max pool size as
-        // core * DEFAULT_THREAD_MULTIPLIER in AppConfig. If not provided fall back
-        // to the available processors.
+        // If a maxDepth is provided in configuration, interpret it as the
+        // desired number of worker threads. The executor will then set max pool
+        // size as core * DEFAULT_THREAD_MULTIPLIER in AppConfig. If not
+        // provided fall back to the available processors.
         if (maxDepth != null && maxDepth > 0) {
             return Math.max(1, maxDepth);
         }
@@ -53,4 +53,3 @@ public record AnalysisSettings(
         return List.of("java", "python");
     }
 }
-

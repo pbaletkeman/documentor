@@ -22,7 +22,8 @@ public class LlmRequestBuilder {
     }
 
     /** 🔍 Builds complete request body for LLM API */
-    public Map<String, Object> buildRequestBody(final LlmModelConfig model, final String prompt) {
+    public Map<String, Object> buildRequestBody(final LlmModelConfig model,
+            final String prompt) {
         return requestFormatter.createRequest(model, prompt);
     }
 
@@ -41,4 +42,3 @@ public class LlmRequestBuilder {
         return promptTemplates.createUnitTestPrompt(codeElement);
     }
 }
-

@@ -25,7 +25,8 @@ import java.util.concurrent.CompletableFuture;
 @Service
 public class MermaidDiagramService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MermaidDiagramService.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(MermaidDiagramService.class);
 
     private final DiagramElementFilter elementFilter;
     private final DiagramPathManager pathManager;
@@ -54,8 +55,10 @@ public class MermaidDiagramService {
             try {
                 return generateDiagrams(analysis, outputPath);
             } catch (Exception e) {
-                LOGGER.error("❌ Error generating Mermaid diagrams: {}", e.getMessage(), e);
-                throw new RuntimeException("Failed to generate Mermaid diagrams", e);
+                LOGGER.error("❌ Error generating Mermaid diagrams: {}",
+                        e.getMessage(), e);
+                throw new RuntimeException(
+                        "Failed to generate Mermaid diagrams", e);
             }
         });
     }
@@ -63,11 +66,13 @@ public class MermaidDiagramService {
     /**
      * 📊 Core diagram generation logic
      */
-    private List<String> generateDiagrams(final ProjectAnalysis analysis, final String outputPath) {
+    private List<String> generateDiagrams(final ProjectAnalysis analysis,
+            final String outputPath) {
         List<String> generatedFiles = new ArrayList<>();
 
         // Get eligible classes for diagram generation
-        List<CodeElement> eligibleClasses = elementFilter.getEligibleClasses(analysis);
+        List<CodeElement> eligibleClasses =
+                elementFilter.getEligibleClasses(analysis);
 
         // Group elements by class
         Map<CodeElement, List<CodeElement>> elementsByClass =
@@ -76,7 +81,8 @@ public class MermaidDiagramService {
         // Process each eligible class
         eligibleClasses.forEach(classElement -> {
             try {
-                String diagram = processSingleClassDiagram(classElement, elementsByClass, outputPath);
+                String diagram = processSingleClassDiagram(classElement,
+                        elementsByClass, outputPath);
                 generatedFiles.add(diagram);
             } catch (Exception e) {
                 LOGGER.warn("⚠️ Failed to generate diagram for {}: {}",
@@ -111,4 +117,3 @@ public class MermaidDiagramService {
             .generateClassDiagram(classElement, classElements, outputDir);
     }
 }
-
