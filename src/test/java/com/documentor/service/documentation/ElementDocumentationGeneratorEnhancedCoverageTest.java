@@ -31,8 +31,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 /**
- * Enhanced coverage tests for ElementDocumentationGenerator to achieve >70% branch coverage.
- * Focuses on testing edge cases and branch conditions not covered in the main test file.
+ * Enhanced coverage tests for ElementDocumentationGenerator to achieve >70%
+ * branch coverage. Focuses on testing edge cases and branch conditions not
+ * covered in the main test file.
  */
 class ElementDocumentationGeneratorEnhancedCoverageTest {
 
@@ -55,11 +56,13 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
 
     @Test
     void testGenerateElementDocumentationWithNullLlmService() {
-        ElementDocumentationGenerator generatorWithNullLlm = new ElementDocumentationGenerator(null);
+        ElementDocumentationGenerator generatorWithNullLlm =
+                new ElementDocumentationGenerator(null);
 
         CodeElement element = createTestClassElement();
 
-        CompletableFuture<Void> result = generatorWithNullLlm.generateElementDocumentation(element, tempDir);
+        CompletableFuture<Void> result =
+                generatorWithNullLlm.generateElementDocumentation(element, tempDir);
 
         // Should complete and return null without throwing exception
         assertNotNull(result);
@@ -68,11 +71,13 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
 
     @Test
     void testGenerateGroupedDocumentationWithNullLlmService() {
-        ElementDocumentationGenerator generatorWithNullLlm = new ElementDocumentationGenerator(null);
+        ElementDocumentationGenerator generatorWithNullLlm =
+                new ElementDocumentationGenerator(null);
 
         ProjectAnalysis analysis = createTestProjectAnalysis();
 
-        CompletableFuture<Void> result = generatorWithNullLlm.generateGroupedDocumentation(analysis, tempDir);
+        CompletableFuture<Void> result =
+                generatorWithNullLlm.generateGroupedDocumentation(analysis, tempDir);
 
         // Should complete and return null without throwing exception
         assertNotNull(result);
@@ -81,8 +86,10 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
 
     @Test
     void testFormatContentWithNull() throws Exception {
-        when(llmService.generateDocumentation(any())).thenReturn(CompletableFuture.completedFuture(null));
-        when(llmService.generateUsageExamples(any())).thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
+        when(llmService.generateDocumentation(any()))
+                .thenReturn(CompletableFuture.completedFuture(null));
+        when(llmService.generateUsageExamples(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
 
         CodeElement element = createTestClassElement();
 
@@ -96,13 +103,16 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
         assertTrue(Files.exists(classFile));
 
         String content = Files.readString(classFile);
-        assertTrue(content.contains("_No content available_"), "Should handle null content gracefully");
+        assertTrue(content.contains("_No content available_"),
+                "Should handle null content gracefully");
     }
 
     @Test
     void testFormatContentWithEmpty() throws Exception {
-        when(llmService.generateDocumentation(any())).thenReturn(CompletableFuture.completedFuture(""));
-        when(llmService.generateUsageExamples(any())).thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
+        when(llmService.generateDocumentation(any()))
+                .thenReturn(CompletableFuture.completedFuture(""));
+        when(llmService.generateUsageExamples(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
 
         CodeElement element = createTestClassElement();
 
@@ -116,13 +126,16 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
         assertTrue(Files.exists(classFile));
 
         String content = Files.readString(classFile);
-        assertTrue(content.contains("_No content available_"), "Should handle empty content gracefully");
+        assertTrue(content.contains("_No content available_"),
+                "Should handle empty content gracefully");
     }
 
     @Test
     void testFormatContentWithErrorMessage() throws Exception {
-        when(llmService.generateDocumentation(any())).thenReturn(CompletableFuture.completedFuture("Error: Failed to generate"));
-        when(llmService.generateUsageExamples(any())).thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
+        when(llmService.generateDocumentation(any()))
+                .thenReturn(CompletableFuture.completedFuture("Error: Failed to generate"));
+        when(llmService.generateUsageExamples(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
 
         CodeElement element = createTestClassElement();
 
@@ -136,13 +149,16 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
         assertTrue(Files.exists(classFile));
 
         String content = Files.readString(classFile);
-        assertTrue(content.contains("Error: Failed to generate"), "Should preserve error messages");
+        assertTrue(content.contains("Error: Failed to generate"),
+                "Should preserve error messages");
     }
 
     @Test
     void testFormatContentWithTimeoutMessage() throws Exception {
-        when(llmService.generateDocumentation(any())).thenReturn(CompletableFuture.completedFuture("Timeout occurred"));
-        when(llmService.generateUsageExamples(any())).thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
+        when(llmService.generateDocumentation(any()))
+                .thenReturn(CompletableFuture.completedFuture("Timeout occurred"));
+        when(llmService.generateUsageExamples(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
 
         CodeElement element = createTestClassElement();
 
@@ -156,13 +172,16 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
         assertTrue(Files.exists(classFile));
 
         String content = Files.readString(classFile);
-        assertTrue(content.contains("Timeout occurred"), "Should preserve timeout messages");
+        assertTrue(content.contains("Timeout occurred"),
+                "Should preserve timeout messages");
     }
 
     @Test
     void testFormatCodeBlockWithNull() throws Exception {
-        when(llmService.generateDocumentation(any())).thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
-        when(llmService.generateUsageExamples(any())).thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
+        when(llmService.generateDocumentation(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
+        when(llmService.generateUsageExamples(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
 
         // Create element with null signature to test formatCodeBlock with null input
         CodeElement elementWithNullSignature = new CodeElement(
@@ -186,8 +205,10 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
 
     @Test
     void testFormatCodeBlockWithEmpty() throws Exception {
-        when(llmService.generateDocumentation(any())).thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
-        when(llmService.generateUsageExamples(any())).thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
+        when(llmService.generateDocumentation(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
+        when(llmService.generateUsageExamples(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
 
         // Create element with empty signature to test formatCodeBlock with empty input
         CodeElement elementWithEmptySignature = new CodeElement(
@@ -211,11 +232,16 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
 
     @Test
     void testFormatCodeBlockWithLongCompressedJavaCode() throws Exception {
-        when(llmService.generateDocumentation(any())).thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
-        when(llmService.generateUsageExamples(any())).thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
+        when(llmService.generateDocumentation(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
+        when(llmService.generateUsageExamples(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
 
         // Create a long, compressed Java code signature (>100 chars with semicolons)
-        String longCompressedCode = "public class TestClass{private String field1;private int field2;public void method1(){System.out.println(\"Hello\");};public String method2(){return \"World\";}}";
+        String longCompressedCode = "public class TestClass{private String field1;"
+                + "private int field2;public void method1(){"
+                + "System.out.println(\"Hello\");};public String method2(){"
+                + "return \"World\";}}";
 
         CodeElement elementWithLongCode = new CodeElement(
             CodeElementType.CLASS,
@@ -240,16 +266,20 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
 
         String content = Files.readString(classFile);
         // Should contain formatted Java code with line breaks
-        assertTrue(content.contains("public class TestClass"), "Should contain the class signature");
+        assertTrue(content.contains("public class TestClass"),
+                "Should contain the class signature");
     }
 
     @Test
     void testFormatCodeBlockWithStringLiterals() throws Exception {
-        when(llmService.generateDocumentation(any())).thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
-        when(llmService.generateUsageExamples(any())).thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
+        when(llmService.generateDocumentation(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
+        when(llmService.generateUsageExamples(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
 
         // Create code with string literals containing semicolons (should not be formatted)
-        String codeWithStrings = "public void test(){String message=\"Hello; World; Test;\";System.out.println(message);}";
+        String codeWithStrings = "public void test(){String message=\"Hello; World; Test;\";"
+                + "System.out.println(message);}";
 
         CodeElement elementWithStrings = new CodeElement(
             CodeElementType.METHOD,
@@ -266,7 +296,8 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
         // Also need a class element for proper grouping
         CodeElement classElement = createTestClassElement();
         List<CodeElement> elements = Arrays.asList(classElement, elementWithStrings);
-        ProjectAnalysis analysis = new ProjectAnalysis("/test/path", elements, System.currentTimeMillis());
+        ProjectAnalysis analysis = new ProjectAnalysis("/test/path", elements,
+                System.currentTimeMillis());
 
         generator.generateGroupedDocumentation(analysis, tempDir).join();
 
@@ -283,8 +314,10 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
 
     @Test
     void testSanitizeAnchorWithNull() throws Exception {
-        when(llmService.generateDocumentation(any())).thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
-        when(llmService.generateUsageExamples(any())).thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
+        when(llmService.generateDocumentation(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
+        when(llmService.generateUsageExamples(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
 
         // Create element with null name to test sanitizeAnchor with null input
         CodeElement elementWithNullName = new CodeElement(
@@ -302,7 +335,8 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
         // Also need a class element for proper grouping
         CodeElement classElement = createTestClassElement();
         List<CodeElement> elements = Arrays.asList(classElement, elementWithNullName);
-        ProjectAnalysis analysis = new ProjectAnalysis("/test/path", elements, System.currentTimeMillis());
+        ProjectAnalysis analysis = new ProjectAnalysis("/test/path", elements,
+                System.currentTimeMillis());
 
         generator.generateGroupedDocumentation(analysis, tempDir).join();
 
@@ -313,8 +347,10 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
 
     @Test
     void testSanitizeAnchorWithEmpty() throws Exception {
-        when(llmService.generateDocumentation(any())).thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
-        when(llmService.generateUsageExamples(any())).thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
+        when(llmService.generateDocumentation(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
+        when(llmService.generateUsageExamples(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
 
         // Create element with empty name to test sanitizeAnchor with empty input
         CodeElement elementWithEmptyName = new CodeElement(
@@ -332,7 +368,8 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
         // Also need a class element for proper grouping
         CodeElement classElement = createTestClassElement();
         List<CodeElement> elements = Arrays.asList(classElement, elementWithEmptyName);
-        ProjectAnalysis analysis = new ProjectAnalysis("/test/path", elements, System.currentTimeMillis());
+        ProjectAnalysis analysis = new ProjectAnalysis("/test/path", elements,
+                System.currentTimeMillis());
 
         generator.generateGroupedDocumentation(analysis, tempDir).join();
 
@@ -343,8 +380,10 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
 
     @Test
     void testGroupElementsByClassWithStandaloneField() throws Exception {
-        when(llmService.generateDocumentation(any())).thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
-        when(llmService.generateUsageExamples(any())).thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
+        when(llmService.generateDocumentation(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
+        when(llmService.generateUsageExamples(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
 
         // Create standalone field without proper class qualification (triggers _FIELDS_ group)
         CodeElement standaloneField = new CodeElement(
@@ -360,7 +399,8 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
         );
 
         List<CodeElement> elements = Collections.singletonList(standaloneField);
-        ProjectAnalysis analysis = new ProjectAnalysis("/test/path", elements, System.currentTimeMillis());
+        ProjectAnalysis analysis = new ProjectAnalysis("/test/path", elements,
+                System.currentTimeMillis());
 
         generator.generateGroupedDocumentation(analysis, tempDir).join();
 
@@ -371,8 +411,10 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
 
     @Test
     void testGroupElementsByClassWithStandaloneMethod() throws Exception {
-        when(llmService.generateDocumentation(any())).thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
-        when(llmService.generateUsageExamples(any())).thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
+        when(llmService.generateDocumentation(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
+        when(llmService.generateUsageExamples(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
 
         // Create standalone method without proper class qualification (triggers _METHODS_ group)
         CodeElement standaloneMethod = new CodeElement(
@@ -388,7 +430,8 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
         );
 
         List<CodeElement> elements = Collections.singletonList(standaloneMethod);
-        ProjectAnalysis analysis = new ProjectAnalysis("/test/path", elements, System.currentTimeMillis());
+        ProjectAnalysis analysis = new ProjectAnalysis("/test/path", elements,
+                System.currentTimeMillis());
 
         generator.generateGroupedDocumentation(analysis, tempDir).join();
 
@@ -399,11 +442,17 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
 
     @Test
     void testBuildClassDocumentContentLongMethodSignature() throws Exception {
-        when(llmService.generateDocumentation(any())).thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
-        when(llmService.generateUsageExamples(any())).thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
+        when(llmService.generateDocumentation(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
+        when(llmService.generateUsageExamples(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
 
         // Create a method with a very long signature (>200 chars) to test collapsible section
-        String longSignature = "public synchronized final Optional<List<Map<String, Object>>> veryLongMethodNameWithManyParameters(String parameter1, Integer parameter2, List<String> parameter3, Map<String, Object> parameter4, Optional<Boolean> parameter5) throws IOException, IllegalArgumentException, RuntimeException";
+        String longSignature = "public synchronized final Optional<List<Map<String, Object>>> "
+                + "veryLongMethodNameWithManyParameters(String parameter1, "
+                + "Integer parameter2, List<String> parameter3, "
+                + "Map<String, Object> parameter4, Optional<Boolean> parameter5) "
+                + "throws IOException, IllegalArgumentException, RuntimeException";
 
         CodeElement methodWithLongSig = new CodeElement(
             CodeElementType.METHOD,
@@ -420,7 +469,8 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
         // Also need a class element for proper grouping
         CodeElement classElement = createTestClassElement();
         List<CodeElement> elements = Arrays.asList(classElement, methodWithLongSig);
-        ProjectAnalysis analysis = new ProjectAnalysis("/test/path", elements, System.currentTimeMillis());
+        ProjectAnalysis analysis = new ProjectAnalysis("/test/path", elements,
+                System.currentTimeMillis());
 
         generator.generateGroupedDocumentation(analysis, tempDir).join();
 
@@ -438,8 +488,10 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
 
     @Test
     void testBuildClassDocumentContentShortMethodSignature() throws Exception {
-        when(llmService.generateDocumentation(any())).thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
-        when(llmService.generateUsageExamples(any())).thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
+        when(llmService.generateDocumentation(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
+        when(llmService.generateUsageExamples(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
 
         // Create a method with a short signature (<200 chars) to test regular section
         String shortSignature = "public void shortMethod()";
@@ -459,7 +511,8 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
         // Also need a class element for proper grouping
         CodeElement classElement = createTestClassElement();
         List<CodeElement> elements = Arrays.asList(classElement, methodWithShortSig);
-        ProjectAnalysis analysis = new ProjectAnalysis("/test/path", elements, System.currentTimeMillis());
+        ProjectAnalysis analysis = new ProjectAnalysis("/test/path", elements,
+                System.currentTimeMillis());
 
         generator.generateGroupedDocumentation(analysis, tempDir).join();
 
@@ -473,14 +526,18 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
         String content = Files.readString(classFile);
         assertFalse(content.contains("<details>") && content.contains("View Method Signature"),
                     "Should use regular section for short signatures");
-        assertTrue(content.contains("public void shortMethod()"), "Should contain the short signature");
+        assertTrue(content.contains("public void shortMethod()"),
+                "Should contain the short signature");
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"/test/script.rb", "/test/config.xml", "/test/style.css", "/test/README.md", "noextension"})
+    @ValueSource(strings = {"/test/script.rb", "/test/config.xml", "/test/style.css",
+            "/test/README.md", "noextension"})
     void testGetLanguageFromFileWithVariousExtensions(String filePath) throws Exception {
-        when(llmService.generateDocumentation(any())).thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
-        when(llmService.generateUsageExamples(any())).thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
+        when(llmService.generateDocumentation(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
+        when(llmService.generateUsageExamples(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
 
         CodeElement element = new CodeElement(
             CodeElementType.CLASS,
@@ -504,13 +561,16 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
         assertTrue(Files.exists(classFile));
 
         String content = Files.readString(classFile);
-        assertTrue(content.contains("```text"), "Should use text language for unknown extensions");
+        assertTrue(content.contains("```text"),
+                "Should use text language for unknown extensions");
     }
 
     @Test
     void testBuildClassDocumentContentWithNullClassElement() throws Exception {
-        when(llmService.generateDocumentation(any())).thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
-        when(llmService.generateUsageExamples(any())).thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
+        when(llmService.generateDocumentation(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
+        when(llmService.generateUsageExamples(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
 
         // Create standalone elements without a class element
         CodeElement standaloneMethod = new CodeElement(
@@ -526,7 +586,8 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
         );
 
         List<CodeElement> elements = Collections.singletonList(standaloneMethod);
-        ProjectAnalysis analysis = new ProjectAnalysis("/test/path", elements, System.currentTimeMillis());
+        ProjectAnalysis analysis = new ProjectAnalysis("/test/path", elements,
+                System.currentTimeMillis());
 
         generator.generateGroupedDocumentation(analysis, tempDir).join();
 
@@ -537,8 +598,10 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
 
     @Test
     void testGenerateClassDocumentationWithIOException() throws Exception {
-        when(llmService.generateDocumentation(any())).thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
-        when(llmService.generateUsageExamples(any())).thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
+        when(llmService.generateDocumentation(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
+        when(llmService.generateUsageExamples(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
 
         // Create a file where the elements directory should be to cause IOException
         Path elementsPath = tempDir.resolve("elements");
@@ -546,18 +609,23 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
 
         CodeElement element = createTestClassElement();
 
-        CompletableFuture<Void> result = generator.generateElementDocumentation(element, tempDir);
+        CompletableFuture<Void> result =
+                generator.generateElementDocumentation(element, tempDir);
 
         // Should throw CompletionException wrapping RuntimeException
-        CompletionException exception = assertThrows(CompletionException.class, () -> result.join());
+        CompletionException exception = assertThrows(CompletionException.class,
+                () -> result.join());
         assertTrue(exception.getCause() instanceof RuntimeException);
-        assertEquals("Failed to write class documentation", exception.getCause().getMessage());
+        assertEquals("Failed to write class documentation",
+                exception.getCause().getMessage());
     }
 
     @Test
     void testBuildClassDocumentContentWithManyFields() throws Exception {
-        when(llmService.generateDocumentation(any())).thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
-        when(llmService.generateUsageExamples(any())).thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
+        when(llmService.generateDocumentation(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
+        when(llmService.generateUsageExamples(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
 
         // Create class with many fields (>10) to test line break logic in table of contents
         CodeElement classElement = createTestClassElement();
@@ -580,7 +648,8 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
             elements.add(field);
         }
 
-        ProjectAnalysis analysis = new ProjectAnalysis("/test/path", elements, System.currentTimeMillis());
+        ProjectAnalysis analysis = new ProjectAnalysis("/test/path", elements,
+                System.currentTimeMillis());
 
         generator.generateGroupedDocumentation(analysis, tempDir).join();
 
@@ -592,15 +661,19 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
         assertTrue(Files.exists(classFile));
 
         String content = Files.readString(classFile);
-        assertTrue(content.contains("Fields") && content.contains("(15)"), "Should contain all 15 fields");
+        assertTrue(content.contains("Fields") && content.contains("(15)"),
+                "Should contain all 15 fields");
         // Should contain line breaks every 10 fields
-        assertTrue(content.contains("field10") && content.contains("field15"), "Should contain all field names");
+        assertTrue(content.contains("field10") && content.contains("field15"),
+                "Should contain all field names");
     }
 
     @Test
     void testBuildClassDocumentContentWithManyMethods() throws Exception {
-        when(llmService.generateDocumentation(any())).thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
-        when(llmService.generateUsageExamples(any())).thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
+        when(llmService.generateDocumentation(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
+        when(llmService.generateUsageExamples(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
 
         // Create class with many methods (>10) to test line break logic in table of contents
         CodeElement classElement = createTestClassElement();
@@ -623,7 +696,8 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
             elements.add(method);
         }
 
-        ProjectAnalysis analysis = new ProjectAnalysis("/test/path", elements, System.currentTimeMillis());
+        ProjectAnalysis analysis = new ProjectAnalysis("/test/path", elements,
+                System.currentTimeMillis());
 
         generator.generateGroupedDocumentation(analysis, tempDir).join();
 
@@ -635,15 +709,19 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
         assertTrue(Files.exists(classFile));
 
         String content = Files.readString(classFile);
-        assertTrue(content.contains("Methods") && content.contains("(15)"), "Should contain all 15 methods");
+        assertTrue(content.contains("Methods") && content.contains("(15)"),
+                "Should contain all 15 methods");
         // Should contain line breaks every 10 methods
-        assertTrue(content.contains("method10") && content.contains("method15"), "Should contain all method names");
+        assertTrue(content.contains("method10") && content.contains("method15"),
+                "Should contain all method names");
     }
 
     @Test
     void testBuildClassDocumentContentWithDefaultPackage() throws Exception {
-        when(llmService.generateDocumentation(any())).thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
-        when(llmService.generateUsageExamples(any())).thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
+        when(llmService.generateDocumentation(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
+        when(llmService.generateUsageExamples(any()))
+                .thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
 
         // Create class with no package (triggers default package logic)
         CodeElement classInDefaultPackage = new CodeElement(
@@ -668,7 +746,8 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
         assertTrue(Files.exists(classFile));
 
         String content = Files.readString(classFile);
-        assertTrue(content.contains("(default package)"), "Should show default package for classes without package");
+        assertTrue(content.contains("(default package)"),
+                "Should show default package for classes without package");
     }
 
     // Helper methods
