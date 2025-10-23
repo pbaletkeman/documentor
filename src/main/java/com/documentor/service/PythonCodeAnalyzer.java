@@ -29,7 +29,7 @@ public class PythonCodeAnalyzer {
     private final PythonRegexAnalyzer regexAnalyzer;
 
     public PythonCodeAnalyzer(final PythonASTProcessor astProcessorParam,
-                             final PythonRegexAnalyzer regexAnalyzerParam) {
+            final PythonRegexAnalyzer regexAnalyzerParam) {
         this.astProcessor = astProcessorParam;
         this.regexAnalyzer = regexAnalyzerParam;
     }
@@ -40,30 +40,35 @@ public class PythonCodeAnalyzer {
      * @param filePath Path to the Python source file
      * @return List of discovered code elements
      */
-    public List<CodeElement> analyzeFile(final Path filePath) throws IOException {
+    public List<CodeElement> analyzeFile(final Path filePath)
+            throws IOException {
         return analyzeFile(filePath, null);
     }
 
     /**
-     * Analyzes a Python file and extracts code elements with optional private member override
+     * Analyzes a Python file and extracts code elements with optional private
+     * member override
      *
      * @param filePath Path to the Python source file
-     * @param includePrivateMembersOverride Optional override for including private members
+     * @param includePrivateMembersOverride Optional override for including
+     * private members
      * @return List of discovered code elements
      */
     public List<CodeElement> analyzeFile(final Path filePath,
-                                       final Boolean includePrivateMembersOverride) throws IOException {
+            final Boolean includePrivateMembersOverride) throws IOException {
         LOGGER.debug("Analyzing Python file: {}", filePath);
 
         try {
             // Try using Python's AST module for more accurate parsing
-            List<CodeElement> astElements = astProcessor.analyzeWithAST(filePath);
+            List<CodeElement> astElements =
+                    astProcessor.analyzeWithAST(filePath);
             if (!astElements.isEmpty()) {
                 LOGGER.debug("Successfully analyzed {} with AST", filePath);
                 return astElements;
             }
         } catch (Exception e) {
-            LOGGER.debug("AST analysis failed, falling back to regex parsing: {}", e.getMessage());
+            LOGGER.debug("AST analysis failed, falling back to regex parsing: "
+                    + "{}", e.getMessage());
         }
 
         // Fallback to regex-based parsing
@@ -71,7 +76,7 @@ public class PythonCodeAnalyzer {
         List<CodeElement> regexElements =
                 regexAnalyzer.analyzeWithRegex(filePath, lines);
         LOGGER.debug("Successfully analyzed {} with regex (found {} elements)",
-                    filePath, regexElements.size());
+                filePath, regexElements.size());
 
         return regexElements;
     }

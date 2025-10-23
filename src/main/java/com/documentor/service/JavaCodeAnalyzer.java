@@ -32,7 +32,8 @@ public class JavaCodeAnalyzer {
     private final JavaParser javaParser;
     private final JavaElementVisitor elementVisitor;
 
-    public JavaCodeAnalyzer(final DocumentorConfig config, final JavaElementVisitor elementVisitorParam) {
+    public JavaCodeAnalyzer(final DocumentorConfig config,
+                           final JavaElementVisitor elementVisitorParam) {
         this.javaParser = new JavaParser();
         this.elementVisitor = elementVisitorParam;
     }
@@ -43,19 +44,24 @@ public class JavaCodeAnalyzer {
      * @param filePath Path to the Java source file
      * @return List of discovered code elements
      */
-    public List<CodeElement> analyzeFile(final Path filePath) throws IOException {
+    public List<CodeElement> analyzeFile(final Path filePath)
+            throws IOException {
         return analyzeFile(filePath, null);
     }
 
     /**
-     * 🔍 Analyzes a Java file and extracts code elements with optional private member override
+     * 🔍 Analyzes a Java file and extracts code elements with optional
+     * private member override
      *
      * @param filePath Path to the Java source file
-     * @param includePrivateMembersOverride Optional override for including private members
+     * @param includePrivateMembersOverride Optional override for including
+     *        private members
      * @return List of discovered code elements
      */
     public List<CodeElement> analyzeFile(final Path filePath,
-                                       final Boolean includePrivateMembersOverride) throws IOException {
+                                       final Boolean
+                                           includePrivateMembersOverride)
+            throws IOException {
         LOGGER.debug("🔍 Analyzing Java file: {}", filePath);
 
         String sourceCode = Files.readString(filePath);
@@ -63,18 +69,21 @@ public class JavaCodeAnalyzer {
 
         try {
             CompilationUnit cu = javaParser.parse(sourceCode).getResult()
-                    .orElseThrow(() -> new IOException("Failed to parse Java file"));
+                    .orElseThrow(() -> new IOException(
+                            "Failed to parse Java file"));
 
-            elementVisitor.initialize(filePath, elements, includePrivateMembersOverride);
+            elementVisitor.initialize(filePath, elements,
+                                    includePrivateMembersOverride);
             elementVisitor.visit(cu, null);
 
-            LOGGER.debug("✅ Found {} elements in {}", elements.size(), filePath.getFileName());
+            LOGGER.debug("✅ Found {} elements in {}", elements.size(),
+                        filePath.getFileName());
             return elements;
 
         } catch (Exception e) {
-            LOGGER.error("❌ Error parsing Java file {}: {}", filePath, e.getMessage());
+            LOGGER.error("❌ Error parsing Java file {}: {}", filePath,
+                        e.getMessage());
             throw new IOException("Failed to analyze Java file", e);
         }
     }
 }
-

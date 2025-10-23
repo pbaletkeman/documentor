@@ -18,22 +18,26 @@ public class LlmApiClient {
     private final WebClient webClient;
     private final LlmModelTypeDetector modelTypeDetector;
 
-    public LlmApiClient(final WebClient webClientParam, final LlmModelTypeDetector modelTypeDetectorParam) {
+    public LlmApiClient(final WebClient webClientParam,
+            final LlmModelTypeDetector modelTypeDetectorParam) {
         this.webClient = webClientParam;
         this.modelTypeDetector = modelTypeDetectorParam;
     }
 
     /** 📞 Makes API call to LLM model */
-    public String callLlmModel(final LlmModelConfig model, final String endpoint,
-            final Map<String, Object> requestBody) {
+    public String callLlmModel(final LlmModelConfig model,
+            final String endpoint, final Map<String, Object> requestBody) {
         try {
             WebClient.RequestBodySpec request = webClient.post()
                     .uri(endpoint)
                     .header("Content-Type", "application/json");
 
-            // Add authentication header only if not Ollama (Ollama typically doesn't require auth)
-            if (!modelTypeDetector.isOllamaModel(model) && model.apiKey() != null && !model.apiKey().isEmpty()) {
-                request = request.header("Authorization", "Bearer " + model.apiKey());
+            // Add authentication header only if not Ollama (Ollama typically
+            // doesn't require auth)
+            if (!modelTypeDetector.isOllamaModel(model)
+                    && model.apiKey() != null && !model.apiKey().isEmpty()) {
+                request = request.header("Authorization",
+                        "Bearer " + model.apiKey());
             }
 
             String response = request
@@ -46,9 +50,9 @@ public class LlmApiClient {
             return response;
 
         } catch (Exception e) {
-            LOGGER.error("❌ LLM API call failed for model {}: {}", model.name(), e.getMessage());
+            LOGGER.error("❌ LLM API call failed for model {}: {}",
+                    model.name(), e.getMessage());
             return "Error generating content with " + model.name();
         }
     }
 }
-

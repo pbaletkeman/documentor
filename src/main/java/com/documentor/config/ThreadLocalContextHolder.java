@@ -32,14 +32,17 @@ public final class ThreadLocalContextHolder {
      */
     public static void setConfig(final DocumentorConfig config) {
         if (config == null) {
-            LOGGER.warn("Attempted to set null configuration in ThreadLocalContextHolder");
+            LOGGER.warn("Attempted to set null configuration "
+                    + "in ThreadLocalContextHolder");
             return;
         }
 
         Thread currentThread = Thread.currentThread();
-        int modelCount = config.llmModels() != null ? config.llmModels().size() : 0;
+        int modelCount = config.llmModels() != null
+                ? config.llmModels().size() : 0;
 
-        LOGGER.debug("Setting ThreadLocal config in thread [{}] with {} models",
+        LOGGER.debug("Setting ThreadLocal config in thread [{}] "
+                + "with {} models",
             currentThread.getName(), modelCount);
 
         CONFIG_THREAD_LOCAL.set(config);
@@ -55,7 +58,8 @@ public final class ThreadLocalContextHolder {
         DocumentorConfig config = CONFIG_THREAD_LOCAL.get();
 
         if (config == null) {
-            LOGGER.debug("ThreadLocal config is not available in thread [{}]",
+            LOGGER.debug("ThreadLocal config is not available "
+                    + "in thread [{}]",
                 Thread.currentThread().getName());
         }
 
@@ -69,7 +73,8 @@ public final class ThreadLocalContextHolder {
         Thread currentThread = Thread.currentThread();
         Boolean wasExplicitlySet = CONFIG_EXPLICITLY_SET.get();
 
-        LOGGER.debug("Clearing ThreadLocal config in thread [{}] (explicitly set: {})",
+        LOGGER.debug("Clearing ThreadLocal config in thread [{}] "
+                + "(explicitly set: {})",
             currentThread.getName(), wasExplicitlySet);
 
         CONFIG_THREAD_LOCAL.remove();
@@ -87,12 +92,14 @@ public final class ThreadLocalContextHolder {
     }
 
     /**
-     * Runs the provided runnable with the specified config set in the thread context
+     * Runs the provided runnable with the specified config set in the
+     * thread context
      *
      * @param config The configuration to set
      * @param runnable The runnable to execute
      */
-    public static void runWithConfig(final DocumentorConfig config, final Runnable runnable) {
+    public static void runWithConfig(final DocumentorConfig config,
+            final Runnable runnable) {
         if (config == null || runnable == null) {
             LOGGER.warn("Cannot run with null config or null runnable");
             return;
@@ -109,14 +116,16 @@ public final class ThreadLocalContextHolder {
             // Run the provided code
             runnable.run();
         } catch (Exception e) {
-            LOGGER.error("Error while running with config: {}", e.getMessage(), e);
+            LOGGER.error("Error while running with config: {}",
+                    e.getMessage(), e);
             throw e; // Rethrow to allow caller to handle
         } finally {
             // Restore original config state
             if (originalConfig != null) {
                 CONFIG_THREAD_LOCAL.set(originalConfig);
                 CONFIG_EXPLICITLY_SET.set(originallySet);
-                LOGGER.debug("Restored previous ThreadLocal config in thread [{}]",
+                LOGGER.debug("Restored previous ThreadLocal config "
+                        + "in thread [{}]",
                     Thread.currentThread().getName());
             } else {
                 clearConfig();
@@ -125,7 +134,8 @@ public final class ThreadLocalContextHolder {
     }
 
     /**
-     * Helper method to log the current thread's configuration status for diagnostics
+     * Helper method to log the current thread's configuration status
+     * for diagnostics
      */
     public static void logConfigStatus() {
         Thread currentThread = Thread.currentThread();
@@ -133,11 +143,14 @@ public final class ThreadLocalContextHolder {
         Boolean explicitlySet = CONFIG_EXPLICITLY_SET.get();
 
         if (config != null) {
-            int modelCount = config.llmModels() != null ? config.llmModels().size() : 0;
-            LOGGER.info("Thread [{}] has config with {} models (explicitly set: {})",
+            int modelCount = config.llmModels() != null
+                    ? config.llmModels().size() : 0;
+            LOGGER.info("Thread [{}] has config with {} models "
+                    + "(explicitly set: {})",
                 currentThread.getName(), modelCount, explicitlySet);
         } else {
-            LOGGER.info("Thread [{}] has no config set", currentThread.getName());
+            LOGGER.info("Thread [{}] has no config set",
+                    currentThread.getName());
         }
     }
 }

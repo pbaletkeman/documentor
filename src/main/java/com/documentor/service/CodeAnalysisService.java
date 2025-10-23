@@ -43,30 +43,37 @@ public class CodeAnalysisService {
     }
 
     /**
-     * 🔍 Analyzes a project directory and returns comprehensive analysis results
+     * 🔍 Analyzes a project directory and returns comprehensive analysis
+     * results
      *
      * @param projectPath Path to the project directory
      * @return ProjectAnalysis containing all discovered code elements
      */
-    public CompletableFuture<ProjectAnalysis> analyzeProject(final Path projectPath) {
+    public CompletableFuture<ProjectAnalysis> analyzeProject(
+            final Path projectPath) {
         return analyzeProject(projectPath, null);
     }
 
     /**
-     * 🔍 Analyzes a project directory with optional override for private member inclusion
+     * 🔍 Analyzes a project directory with optional override for private
+     * member inclusion
      *
      * @param projectPath Path to the project directory
-     * @param includePrivateMembersOverride Optional override for including private members
+     * @param includePrivateMembersOverride Optional override for including
+     *                                      private members
      * @return ProjectAnalysis containing all discovered code elements
      */
-    public CompletableFuture<ProjectAnalysis> analyzeProject(final Path projectPath,
-                                                           final Boolean includePrivateMembersOverride) {
-        LOGGER.info("🔍 Starting analysis of project: {}", projectPath);
+    public CompletableFuture<ProjectAnalysis> analyzeProject(
+            final Path projectPath,
+            final Boolean includePrivateMembersOverride) {
+        LOGGER.info("🔍 Starting analysis of project: {}",
+                projectPath);
 
         return CompletableFuture.supplyAsync(() -> {
             try {
                 List<CodeElement> allElements =
-                        discoverAndAnalyzeFiles(projectPath, includePrivateMembersOverride);
+                        discoverAndAnalyzeFiles(projectPath,
+                                includePrivateMembersOverride);
 
                 ProjectAnalysis analysis = new ProjectAnalysis(
                     projectPath.toString(),
@@ -74,12 +81,15 @@ public class CodeAnalysisService {
                     System.currentTimeMillis()
                 );
 
-                LOGGER.info("✅ Analysis completed. Found {} code elements", allElements.size());
+                LOGGER.info("✅ Analysis completed. Found {} code elements",
+                        allElements.size());
                 return analysis;
 
             } catch (Exception e) {
-                LOGGER.error("❌ Error analyzing project: {}", e.getMessage(), e);
-                throw new RuntimeException("Failed to analyze project", e);
+                LOGGER.error("❌ Error analyzing project: {}",
+                        e.getMessage(), e);
+                throw new RuntimeException(
+                        "Failed to analyze project", e);
             }
         });
     }
@@ -87,21 +97,25 @@ public class CodeAnalysisService {
     /**
      * 🔍 Discovers and analyzes all supported source files in the project
      */
-    private List<CodeElement> discoverAndAnalyzeFiles(final Path projectPath) throws IOException {
+    private List<CodeElement> discoverAndAnalyzeFiles(
+            final Path projectPath) throws IOException {
         return discoverAndAnalyzeFiles(projectPath, null);
     }
 
     /**
-     * 🔍 Discovers and analyzes all supported source files in the project with optional override
+     * 🔍 Discovers and analyzes all supported source files in the project
+     * with optional override
      */
-    private List<CodeElement> discoverAndAnalyzeFiles(final Path projectPath,
-                                                     final Boolean includePrivateMembersOverride) throws IOException {
+    private List<CodeElement> discoverAndAnalyzeFiles(
+            final Path projectPath,
+            final Boolean includePrivateMembersOverride) throws IOException {
         try (Stream<Path> fileStream = Files.walk(projectPath)) {
             return fileStream
                     .filter(Files::isRegularFile)
                     .filter(this::isSupportedFile)
                     .filter(this::shouldAnalyzeFile)
-                    .flatMap(file -> analyzeFileSafely(file, includePrivateMembersOverride))
+                    .flatMap(file -> analyzeFileSafely(file,
+                            includePrivateMembersOverride))
                     .toList();
         }
     }
@@ -112,7 +126,8 @@ public class CodeAnalysisService {
     private boolean isSupportedFile(final Path file) {
         String fileName = file.getFileName().toString().toLowerCase();
         return fileName.endsWith(ApplicationConstants.JAVA_EXTENSION)
-               || fileName.endsWith(ApplicationConstants.PYTHON_EXTENSION);
+               || fileName.endsWith(
+                       ApplicationConstants.PYTHON_EXTENSION);
     }
 
     /**
@@ -122,7 +137,8 @@ public class CodeAnalysisService {
         String filePath = file.toString();
         return config.analysisSettings().excludePatterns().stream()
                 .noneMatch(pattern -> filePath.matches(
-                    pattern.replace(ApplicationConstants.WILDCARD_PATTERN, ApplicationConstants.REGEX_REPLACEMENT)));
+                    pattern.replace(ApplicationConstants.WILDCARD_PATTERN,
+                            ApplicationConstants.REGEX_REPLACEMENT)));
     }
 
     /**
@@ -133,13 +149,16 @@ public class CodeAnalysisService {
     }
 
     /**
-     * 🔍 Safely analyzes a single file with optional override, returning empty stream on error
+     * 🔍 Safely analyzes a single file with optional override, returning
+     * empty stream on error
      */
-    private Stream<CodeElement> analyzeFileSafely(final Path file, final Boolean includePrivateMembersOverride) {
+    private Stream<CodeElement> analyzeFileSafely(final Path file,
+            final Boolean includePrivateMembersOverride) {
         try {
             return analyzeFileByType(file, includePrivateMembersOverride);
         } catch (Exception e) {
-            LOGGER.warn("⚠️ Failed to analyze file {}: {}", file, e.getMessage());
+            LOGGER.warn("⚠️ Failed to analyze file {}: {}",
+                    file, e.getMessage());
             return Stream.empty();
         }
     }
@@ -147,24 +166,28 @@ public class CodeAnalysisService {
     /**
      * 🔍 Analyzes a single file by determining its type
      */
-    private Stream<CodeElement> analyzeFileByType(final Path file) throws IOException {
+    private Stream<CodeElement> analyzeFileByType(
+            final Path file) throws IOException {
         return analyzeFileByType(file, null);
     }
 
     /**
-     * 🔍 Analyzes a single file by determining its type with optional override
+     * 🔍 Analyzes a single file by determining its type with optional
+     * override
      */
     private Stream<CodeElement> analyzeFileByType(final Path file,
-                                                 final Boolean includePrivateMembersOverride) throws IOException {
+            final Boolean includePrivateMembersOverride) throws IOException {
         String fileName = file.getFileName().toString().toLowerCase();
 
         if (fileName.endsWith(ApplicationConstants.JAVA_EXTENSION)) {
-            return javaCodeAnalyzer.analyzeFile(file, includePrivateMembersOverride).stream();
-        } else if (fileName.endsWith(ApplicationConstants.PYTHON_EXTENSION)) {
-            return pythonCodeAnalyzer.analyzeFile(file, includePrivateMembersOverride).stream();
+            return javaCodeAnalyzer.analyzeFile(file,
+                    includePrivateMembersOverride).stream();
+        } else if (fileName.endsWith(
+                ApplicationConstants.PYTHON_EXTENSION)) {
+            return pythonCodeAnalyzer.analyzeFile(file,
+                    includePrivateMembersOverride).stream();
         }
 
         return Stream.empty();
     }
 }
-

@@ -20,7 +20,8 @@ import java.util.List;
 
 /**
  * Enhanced Configuration class for LLM services.
- * Provides enhanced versions of LLM services with improved error handling and ThreadLocal management.
+ * Provides enhanced versions of LLM services with improved error handling
+ * and ThreadLocal management.
  */
 @Configuration
 @Order(1) // Run after ExternalConfigLoader
@@ -35,54 +36,67 @@ public class LlmServiceConfigurationEnhanced {
     @Bean
     @Primary
     public LlmServiceEnhanced llmServiceEnhanced(
-            @Autowired(required = false) final DocumentorConfig documentorConfig,
+            @Autowired(required = false)
+            final DocumentorConfig documentorConfig,
             final LlmRequestBuilder requestBuilder,
             final LlmResponseHandler responseHandler,
             final LlmApiClient apiClient) {
 
-        LOGGER.info("Creating enhanced LlmServiceEnhanced with DocumentorConfig: {}", documentorConfig);
+        LOGGER.info("Creating enhanced LlmServiceEnhanced with "
+                + "DocumentorConfig: {}", documentorConfig);
 
         // Ensure we have a valid config
         DocumentorConfig validConfig;
         if (documentorConfig == null) {
-            LOGGER.error("DocumentorConfig is null when creating LlmServiceEnhanced - using default");
+            LOGGER.error("DocumentorConfig is null when creating "
+                    + "LlmServiceEnhanced - using default");
             validConfig = createDefaultConfig();
-        } else if (documentorConfig.llmModels() == null || documentorConfig.llmModels().isEmpty()) {
-            LOGGER.warn("DocumentorConfig has no models when creating LlmServiceEnhanced - adding default");
+        } else if (documentorConfig.llmModels() == null
+                || documentorConfig.llmModels().isEmpty()) {
+            LOGGER.warn("DocumentorConfig has no models when creating "
+                    + "LlmServiceEnhanced - adding default");
             validConfig = addDefaultModel(documentorConfig);
         } else {
             validConfig = documentorConfig;
         }
 
         // Explicitly set the ThreadLocalContextHolder config
-        LOGGER.info("Setting global ThreadLocalContextHolder config with {} models",
-                validConfig.llmModels().size());
+        LOGGER.info("Setting global ThreadLocalContextHolder config with {} "
+                + "models", validConfig.llmModels().size());
         ThreadLocalContextHolder.setConfig(validConfig);
 
-        LOGGER.info("LlmServiceEnhanced created with {} models", validConfig.llmModels().size());
-        return new LlmServiceEnhanced(validConfig, requestBuilder, responseHandler, apiClient);
+        LOGGER.info("LlmServiceEnhanced created with {} models",
+                validConfig.llmModels().size());
+        return new LlmServiceEnhanced(validConfig, requestBuilder,
+                responseHandler, apiClient);
     }
 
     /**
-     * Primary bean for LlmServiceFixEnhanced to ensure proper configuration handling
+     * Primary bean for LlmServiceFixEnhanced to ensure proper
+     * configuration handling
      */
     @Bean
     @Primary
     public LlmServiceFixEnhanced llmServiceFixEnhanced() {
-        LOGGER.info("Creating enhanced LlmServiceFixEnhanced for ThreadLocal management");
+        LOGGER.info("Creating enhanced LlmServiceFixEnhanced for "
+                + "ThreadLocal management");
         return new LlmServiceFixEnhanced();
     }
 
     /**
-     * Primary bean for ElementDocumentationGeneratorEnhanced with improved error handling
+     * Primary bean for ElementDocumentationGeneratorEnhanced with
+     * improved error handling
      */
     @Bean
     @Primary
-    public ElementDocumentationGeneratorEnhanced elementDocumentationGeneratorEnhanced(
+    public ElementDocumentationGeneratorEnhanced
+            elementDocumentationGeneratorEnhanced(
             final LlmServiceEnhanced llmServiceEnhanced,
             final LlmServiceFixEnhanced llmServiceFixEnhanced) {
-        LOGGER.info("Creating ElementDocumentationGeneratorEnhanced with enhanced services");
-        return new ElementDocumentationGeneratorEnhanced(llmServiceEnhanced, llmServiceFixEnhanced);
+        LOGGER.info("Creating ElementDocumentationGeneratorEnhanced "
+                + "with enhanced services");
+        return new ElementDocumentationGeneratorEnhanced(
+                llmServiceEnhanced, llmServiceFixEnhanced);
     }
 
     /**

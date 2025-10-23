@@ -15,19 +15,22 @@ import java.util.List;
 /**
  * 📊 PlantUML Class Diagram Generator
  *
- * Specialized component for generating individual class diagrams in PlantUML format.
+ * Specialized component for generating individual class diagrams
+ * in PlantUML format.
  * Handles the creation of class structure diagrams with fields and methods.
  */
 @Component
 public class PlantUMLClassDiagramGenerator {
 
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(PlantUMLClassDiagramGenerator.class);
+            LoggerFactory.getLogger(
+                    PlantUMLClassDiagramGenerator.class);
 
     /**
      * 📊 Generates a PlantUML class diagram for a single class
      */
-    public String generateClassDiagram(final CodeElement classElement, final List<CodeElement> allElements,
+    public String generateClassDiagram(final CodeElement classElement,
+            final List<CodeElement> allElements,
             final Path outputPath) throws IOException {
         String className = classElement.name();
         String diagramFileName = className + "_plantuml.puml";
@@ -42,14 +45,16 @@ public class PlantUMLClassDiagramGenerator {
         // Add the main class
         addClassToPlantUML(diagram, classElement, allElements);
 
-        // Add relationships (if we can detect them from method parameters/return types)
+        // Add relationships (if we can detect them from method
+        // parameters/return types)
         addRelationshipsToPlantUML(diagram, classElement, allElements);
 
         diagram.append("\n@enduml\n");
 
         // Write to file
         Files.writeString(diagramPath, diagram.toString(),
-            StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+                StandardOpenOption.CREATE,
+                StandardOpenOption.TRUNCATE_EXISTING);
 
         LOGGER.debug("✅ Generated PlantUML diagram: {}", diagramPath);
         return diagramPath.toString();
@@ -58,15 +63,17 @@ public class PlantUMLClassDiagramGenerator {
     /**
      * 🔍 Adds a class definition to the PlantUML diagram
      */
-    private void addClassToPlantUML(final StringBuilder diagram, final CodeElement classElement,
+    private void addClassToPlantUML(final StringBuilder diagram,
+            final CodeElement classElement,
             final List<CodeElement> allElements) {
         String className = sanitizeClassName(classElement.name());
 
         // Get all methods and fields for this class
         List<CodeElement> classMembers = allElements.stream()
-            .filter(e -> e.qualifiedName().startsWith(classElement.qualifiedName()))
-            .filter(this::isNonPrivate)
-            .toList();
+                .filter(e -> e.qualifiedName()
+                        .startsWith(classElement.qualifiedName()))
+                .filter(this::isNonPrivate)
+                .toList();
 
         // Determine class type
         String classType = determineClassType(classElement);
@@ -78,10 +85,10 @@ public class PlantUMLClassDiagramGenerator {
             .forEach(field -> addFieldToPlantUML(diagram, field));
 
         // Add separator if we have both fields and methods
-        boolean hasFields =
-                classMembers.stream().anyMatch(e -> e.type() == CodeElementType.FIELD);
-        boolean hasMethods =
-                classMembers.stream().anyMatch(e -> e.type() == CodeElementType.METHOD);
+        boolean hasFields = classMembers.stream()
+                .anyMatch(e -> e.type() == CodeElementType.FIELD);
+        boolean hasMethods = classMembers.stream()
+                .anyMatch(e -> e.type() == CodeElementType.METHOD);
         if (hasFields && hasMethods) {
             diagram.append("  --\n");
         }
@@ -114,7 +121,8 @@ public class PlantUMLClassDiagramGenerator {
     /**
      * 🔍 Adds a field to the PlantUML diagram
      */
-    private void addFieldToPlantUML(final StringBuilder diagram, final CodeElement field) {
+    private void addFieldToPlantUML(final StringBuilder diagram,
+            final CodeElement field) {
         String visibility = mapVisibilityToPlantUML(field);
         String fieldType = extractReturnType(field.signature());
         String fieldName = field.name();
@@ -126,7 +134,8 @@ public class PlantUMLClassDiagramGenerator {
     /**
      * 🔍 Adds a method to the PlantUML diagram
      */
-    private void addMethodToPlantUML(final StringBuilder diagram, final CodeElement method) {
+    private void addMethodToPlantUML(final StringBuilder diagram,
+            final CodeElement method) {
         String visibility = mapVisibilityToPlantUML(method);
         String methodName = method.name();
         String returnType = extractReturnType(method.signature());
@@ -158,17 +167,20 @@ public class PlantUMLClassDiagramGenerator {
     /**
      * 🔍 Adds relationships to the PlantUML diagram
      */
-    private void addRelationshipsToPlantUML(final StringBuilder diagram, final CodeElement classElement,
+    private void addRelationshipsToPlantUML(final StringBuilder diagram,
+            final CodeElement classElement,
             final List<CodeElement> allElements) {
         String className = sanitizeClassName(classElement.name());
 
         // Look for relationships based on method parameters and return types
         allElements.stream()
-            .filter(e -> e.qualifiedName().startsWith(classElement.qualifiedName()))
-            .filter(e -> e.type() == CodeElementType.METHOD)
+                .filter(e -> e.qualifiedName()
+                        .startsWith(classElement.qualifiedName()))
+                .filter(e -> e.type() == CodeElementType.METHOD)
             .forEach(method -> {
                 String signature = method.signature();
-                // Simple relationship detection - look for other classes in parameters/return types
+                // Simple relationship detection - look for other classes
+                // in parameters/return types
                 allElements.stream()
                     .filter(other -> other.type() == CodeElementType.CLASS)
                     .filter(other -> !other.equals(classElement))
@@ -176,8 +188,10 @@ public class PlantUMLClassDiagramGenerator {
                         String otherClassName = sanitizeClassName(other.name());
                         if (signature.contains(other.name())) {
                             // Add a simple dependency relationship
-                            diagram.append(className).append(" ..> ").append(otherClassName)
-                                .append(" : uses\n");
+                            diagram.append(className)
+                                    .append(" ..> ")
+                                    .append(otherClassName)
+                                    .append(" : uses\n");
                         }
                     });
             });
@@ -216,8 +230,10 @@ public class PlantUMLClassDiagramGenerator {
 
         int startIndex = signature.indexOf('(');
         int endIndex = signature.lastIndexOf(')');
-        if (startIndex != -1 && endIndex != -1 && endIndex > startIndex) {
-            String params = signature.substring(startIndex + 1, endIndex).trim();
+        if (startIndex != -1 && endIndex != -1
+                && endIndex > startIndex) {
+            String params = signature.substring(startIndex + 1, endIndex)
+                    .trim();
             if (params.isEmpty()) {
                 return "";
             }
@@ -257,6 +273,7 @@ public class PlantUMLClassDiagramGenerator {
      * 🔍 Checks if element should be included (non-private)
      */
     private boolean isNonPrivate(final CodeElement element) {
-        return element.isPublic() || !element.signature().toLowerCase().contains("private");
+        return element.isPublic()
+                || !element.signature().toLowerCase().contains("private");
     }
 }

@@ -12,8 +12,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
 /**
- * Configuration class for diagram services with ThreadLocalContextHolder support.
- * Provides enhanced versions of diagram services with improved thread-local context handling.
+ * Configuration class for diagram services with ThreadLocalContextHolder
+ * support. Provides enhanced versions of diagram services with improved
+ * thread-local context handling.
  */
 @Configuration
 public class DiagramServiceConfiguration {
@@ -32,15 +33,18 @@ public class DiagramServiceConfiguration {
             final DiagramGeneratorFactory generatorFactory,
             final DocumentorConfig documentorConfig) {
 
-        LOGGER.info("Creating MermaidDiagramService with ThreadLocalContextHolder support");
+        LOGGER.info("Creating MermaidDiagramService with "
+                + "ThreadLocalContextHolder support");
 
         // Set the config in ThreadLocalContextHolder for good measure
         if (documentorConfig != null) {
             ThreadLocalContextHolder.setConfig(documentorConfig);
-            LOGGER.debug("Config set in ThreadLocalContextHolder during MermaidDiagramService creation");
+            LOGGER.debug("Config set in ThreadLocalContextHolder during "
+                    + "MermaidDiagramService creation");
         }
 
-        return new MermaidDiagramService(elementFilter, pathManager, generatorFactory);
+        return new MermaidDiagramService(elementFilter, pathManager,
+                generatorFactory);
     }
 
     /**
@@ -54,15 +58,17 @@ public class DiagramServiceConfiguration {
             final DiagramGeneratorFactory generatorFactory,
             final DocumentorConfig documentorConfig) {
 
-        LOGGER.info("Creating PlantUMLDiagramService with ThreadLocalContextHolder support");
+        LOGGER.info("Creating PlantUMLDiagramService with "
+                + "ThreadLocalContextHolder support");
 
         // Set the config in ThreadLocalContextHolder for good measure
         if (documentorConfig != null) {
             ThreadLocalContextHolder.setConfig(documentorConfig);
-            LOGGER.debug("Config set in ThreadLocalContextHolder during PlantUMLDiagramService creation");
+            LOGGER.debug("Config set in ThreadLocalContextHolder during "
+                    + "PlantUMLDiagramService creation");
         }
 
-        return new PlantUMLDiagramService(elementFilter, pathManager, generatorFactory);
+        return new PlantUMLDiagramService(elementFilter, pathManager,
+                generatorFactory);
     }
 }
-

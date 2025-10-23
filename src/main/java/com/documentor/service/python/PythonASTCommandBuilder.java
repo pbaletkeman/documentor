@@ -36,16 +36,22 @@ public class PythonASTCommandBuilder {
                     for node in ast.walk(tree):
                         if isinstance(node, ast.ClassDef):
                             if not node.name.startswith('_'):
-                                print(f"CLASS|{node.name}|{node.lineno}|{ast.get_docstring(node) or ''}")
+                                docstring = ast.get_docstring(node) or ''
+                                print(f"CLASS|{node.name}|{node.lineno}|"
+                                      f"{docstring}")
                         elif isinstance(node, ast.FunctionDef):
                             if not node.name.startswith('_'):
                                 args = [arg.arg for arg in node.args.args]
                                 docstring = ast.get_docstring(node) or ''
-                                print(f"FUNCTION|{node.name}|{node.lineno}|{docstring}|{','.join(args)}")
+                                args_str = ','.join(args)
+                                print(f"FUNCTION|{node.name}|{node.lineno}|"
+                                      f"{docstring}|{args_str}")
                         elif isinstance(node, ast.Assign):
                             for target in node.targets:
-                                if isinstance(target, ast.Name) and not target.id.startswith('_'):
-                                    print(f"VARIABLE|{target.id}|{node.lineno}||")
+                                if (isinstance(target, ast.Name)
+                                    and not target.id.startswith('_')):
+                                    print(f"VARIABLE|{target.id}|"
+                                          f"{node.lineno}||")
                 except Exception as e:
                     print(f"ERROR|{str(e)}", file=sys.stderr)
 
@@ -66,14 +72,17 @@ public class PythonASTCommandBuilder {
     /**
      * 🔍 Creates a process builder for Python execution
      */
-    public ProcessBuilder createProcessBuilder(final Path scriptPath, final Path filePath) {
-        return new ProcessBuilder("python", scriptPath.toString(), filePath.toString());
+    public ProcessBuilder createProcessBuilder(final Path scriptPath,
+                                             final Path filePath) {
+        return new ProcessBuilder("python", scriptPath.toString(),
+                                filePath.toString());
     }
 
     /**
      * 🔍 Parses a single line of AST output
      */
-    public CodeElement parseASTOutputLine(final String line, final Path filePath) {
+    public CodeElement parseASTOutputLine(final String line,
+                                        final Path filePath) {
         String[] parts = line.split("\\|", -1);
         if (parts.length < ApplicationConstants.MINIMUM_PARTS_FOR_PARSING) {
             return null;
@@ -82,7 +91,8 @@ public class PythonASTCommandBuilder {
         String type = parts[0];
         String name = parts[1];
         int lineNumber = Integer.parseInt(parts[2]);
-        String docstring = parts[ApplicationConstants.FUNCTION_DEF_PREFIX_LENGTH];
+        String docstring =
+                parts[ApplicationConstants.FUNCTION_DEF_PREFIX_LENGTH];
 
         return switch (type) {
             case "CLASS" -> new CodeElement(
@@ -97,9 +107,12 @@ public class PythonASTCommandBuilder {
                 List.of()
             );
             case "FUNCTION" -> {
-                List<String> parameters = parts.length > ApplicationConstants.PARAMETERS_ARRAY_INDEX
-                    && !parts[ApplicationConstants.PARAMETERS_ARRAY_INDEX].isEmpty()
-                    ? List.of(parts[ApplicationConstants.PARAMETERS_ARRAY_INDEX].split(","))
+                List<String> parameters = parts.length
+                    > ApplicationConstants.PARAMETERS_ARRAY_INDEX
+                    && !parts[ApplicationConstants.PARAMETERS_ARRAY_INDEX]
+                            .isEmpty()
+                    ? List.of(parts[ApplicationConstants.PARAMETERS_ARRAY_INDEX]
+                             .split(","))
                     : List.of();
                 yield new CodeElement(
                     CodeElementType.METHOD,
@@ -128,4 +141,3 @@ public class PythonASTCommandBuilder {
         };
     }
 }
-

@@ -29,26 +29,29 @@ public class LlmServiceConfiguration {
             LoggerFactory.getLogger(LlmServiceConfiguration.class);
 
     /**
-     * Creates a DocumentorConfig bean post-processor that ensures it's not null and has valid models.
+     * Creates a DocumentorConfig bean post-processor that ensures it's not null
+     * and has valid models.
      *
      * @return A modified DocumentorConfig if needed
      */
     @Bean
     @Primary
-    public DocumentorConfig documentorConfig(final DocumentorConfig existingConfig) {
+    public DocumentorConfig documentorConfig(
+            final DocumentorConfig existingConfig) {
         LOGGER.info("Checking DocumentorConfig: {}", existingConfig);
 
         // Check if the config is valid
         if (existingConfig == null) {
             LOGGER.error("DocumentorConfig is null - creating default config");
             return createDefaultConfig();
-        } else if (existingConfig.llmModels() == null || existingConfig.llmModels().isEmpty()) {
+        } else if (existingConfig.llmModels() == null
+                   || existingConfig.llmModels().isEmpty()) {
             LOGGER.warn("No LLM models in config - adding default model");
             return addDefaultModel(existingConfig);
         }
 
         LOGGER.info("Using DocumentorConfig with {} models",
-                   existingConfig.llmModels().size());
+                    existingConfig.llmModels().size());
 
         return existingConfig;
     }
@@ -59,20 +62,25 @@ public class LlmServiceConfiguration {
     @Bean
     @Primary
     public LlmService llmService(
-            @Autowired(required = false) final DocumentorConfig documentorConfig,
+            @Autowired(required = false)
+            final DocumentorConfig documentorConfig,
             final LlmRequestBuilder requestBuilder,
             final LlmResponseHandler responseHandler,
             final LlmApiClient apiClient) {
 
-        LOGGER.info("Creating LlmService with DocumentorConfig: {}", documentorConfig);
+        LOGGER.info("Creating LlmService with DocumentorConfig: {}",
+                    documentorConfig);
 
         // Ensure we have a valid config
         DocumentorConfig validConfig;
         if (documentorConfig == null) {
-            LOGGER.error("DocumentorConfig is null when creating LlmService - using default");
+            LOGGER.error("DocumentorConfig is null when creating LlmService "
+                         + "- using default");
             validConfig = createDefaultConfig();
-        } else if (documentorConfig.llmModels() == null || documentorConfig.llmModels().isEmpty()) {
-            LOGGER.warn("DocumentorConfig has no models when creating LlmService - adding default");
+        } else if (documentorConfig.llmModels() == null
+                   || documentorConfig.llmModels().isEmpty()) {
+            LOGGER.warn("DocumentorConfig has no models when creating "
+                        + "LlmService - adding default");
             validConfig = addDefaultModel(documentorConfig);
         } else {
             validConfig = documentorConfig;
@@ -80,11 +88,14 @@ public class LlmServiceConfiguration {
 
         // Explicitly set the ThreadLocal config before creating the LlmService
         // This ensures any @Async method will have access to the configuration
-        LOGGER.info("Setting global ThreadLocal config with {} models", validConfig.llmModels().size());
+        LOGGER.info("Setting global ThreadLocal config with {} models",
+                    validConfig.llmModels().size());
         LlmService.setThreadLocalConfig(validConfig);
 
-        LOGGER.info("LlmService created with {} models", validConfig.llmModels().size());
-        return new LlmService(validConfig, requestBuilder, responseHandler, apiClient);
+        LOGGER.info("LlmService created with {} models",
+                    validConfig.llmModels().size());
+        return new LlmService(validConfig, requestBuilder, responseHandler,
+                              apiClient);
     }
 
     /**
@@ -148,12 +159,15 @@ public class LlmServiceConfiguration {
     }
 
     /**
-     * Primary bean for ElementDocumentationGenerator to ensure it uses our configured LlmService
+     * Primary bean for ElementDocumentationGenerator to ensure it uses
+     * our configured LlmService
      */
     @Bean
     @Primary
-    public ElementDocumentationGenerator elementDocumentationGenerator(final LlmService llmService) {
-        LOGGER.info("Creating ElementDocumentationGenerator with our configured LlmService");
+    public ElementDocumentationGenerator elementDocumentationGenerator(
+            final LlmService llmService) {
+        LOGGER.info("Creating ElementDocumentationGenerator with our "
+                    + "configured LlmService");
         return new ElementDocumentationGenerator(llmService);
     }
 }

@@ -25,8 +25,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public final class ThreadLocalPropagatingExecutorEnhanced
         implements Executor {
 
-    private static final Logger LOGGER =
-            LoggerFactory.getLogger(ThreadLocalPropagatingExecutorEnhanced.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+            ThreadLocalPropagatingExecutorEnhanced.class);
 
     /**
      * Default number of threads for the executor.
@@ -48,13 +48,13 @@ public final class ThreadLocalPropagatingExecutorEnhanced
 
     public ThreadLocalPropagatingExecutorEnhanced(
             final Executor delegateExecutor, final String name) {
-        this.delegate = delegateExecutor != null ?
-                delegateExecutor : FALLBACK_EXECUTOR;
+        this.delegate = delegateExecutor != null
+                ? delegateExecutor : FALLBACK_EXECUTOR;
         this.executorName = name != null ? name : "unnamed";
 
         if (delegateExecutor == null) {
-            LOGGER.warn("Delegate executor was null for '{}', " +
-                    "using ForkJoinPool.commonPool() as fallback",
+            LOGGER.warn("Delegate executor was null for '{}', "
+                    + "using ForkJoinPool.commonPool() as fallback",
                 this.executorName);
         }
     }
@@ -79,14 +79,14 @@ public final class ThreadLocalPropagatingExecutorEnhanced
                 ThreadLocalContextHolder.isConfigExplicitlySet();
 
         if (capturedConfig != null) {
-            LOGGER.debug("[{}] Captured ThreadLocal config from parent " +
-                    "thread with {} models",
+            LOGGER.debug("[{}] Captured ThreadLocal config from parent "
+                    + "thread with {} models",
                 executorName,
-                capturedConfig.llmModels() != null ?
-                        capturedConfig.llmModels().size() : 0);
+                capturedConfig.llmModels() != null
+                        ? capturedConfig.llmModels().size() : 0);
         } else {
-            LOGGER.warn("[{}] No ThreadLocal config available in parent " +
-                    "thread - service may not work correctly",
+            LOGGER.warn("[{}] No ThreadLocal config available in parent "
+                    + "thread - service may not work correctly",
                 executorName);
         }
 
@@ -98,11 +98,11 @@ public final class ThreadLocalPropagatingExecutorEnhanced
                     ThreadLocalContextHolder.setConfig(capturedConfig);
 
                     if (wasExplicitlySet) {
-                        LOGGER.debug("[{}] Set ThreadLocal config in child " +
-                                "thread with {} models (explicitly set)",
+                        LOGGER.debug("[{}] Set ThreadLocal config in child "
+                                + "thread with {} models (explicitly set)",
                             executorName,
-                            capturedConfig.llmModels() != null ?
-                                    capturedConfig.llmModels().size() : 0);
+                            capturedConfig.llmModels() != null
+                                    ? capturedConfig.llmModels().size() : 0);
                     }
                 }
 
@@ -114,8 +114,8 @@ public final class ThreadLocalPropagatingExecutorEnhanced
             } finally {
                 // Clean up ThreadLocal to prevent memory leaks
                 ThreadLocalContextHolder.clearConfig();
-                LOGGER.debug("[{}] Cleaned up ThreadLocal config in child thread",
-                        executorName);
+                LOGGER.debug("[{}] Cleaned up ThreadLocal config in child "
+                        + "thread", executorName);
             }
         };
 
@@ -123,8 +123,8 @@ public final class ThreadLocalPropagatingExecutorEnhanced
             // Execute the wrapped task using the delegate executor
             delegate.execute(contextAwareRunnable);
         } catch (Exception e) {
-            LOGGER.error("[{}] Failed to execute task with delegate executor: {}",
-                    executorName, e.getMessage(), e);
+            LOGGER.error("[{}] Failed to execute task with delegate "
+                    + "executor: {}", executorName, e.getMessage(), e);
 
             // Try with fallback executor
             try {
@@ -135,8 +135,8 @@ public final class ThreadLocalPropagatingExecutorEnhanced
                 LOGGER.error("[{}] Fallback executor also failed: {}",
                         executorName, fallbackEx.getMessage(), fallbackEx);
                 // Execute directly in the current thread as last resort
-                LOGGER.warn("[{}] Executing task in current thread as last resort",
-                        executorName);
+                LOGGER.warn("[{}] Executing task in current thread as "
+                        + "last resort", executorName);
                 contextAwareRunnable.run();
             }
         }
@@ -189,8 +189,8 @@ public final class ThreadLocalPropagatingExecutorEnhanced
 
             // Set rejection handler to log and use caller thread as fallback
             executor.setRejectedExecutionHandler((r, e) -> {
-                LOGGER.warn("Task rejected from executor {} - " +
-                        "running in caller thread", namePrefix);
+                LOGGER.warn("Task rejected from executor {} - "
+                        + "running in caller thread", namePrefix);
                 if (r != null) {
                     r.run();
                 }

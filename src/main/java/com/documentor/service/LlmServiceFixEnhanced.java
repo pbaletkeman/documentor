@@ -32,8 +32,8 @@ public class LlmServiceFixEnhanced {
     public void setLlmServiceThreadLocalConfig(
             final DocumentorConfig config) {
         if (config == null) {
-            LOGGER.warn("Attempted to set null configuration in " +
-                    "LlmServiceFixEnhanced");
+            LOGGER.warn("Attempted to set null configuration in "
+                    + "LlmServiceFixEnhanced");
             return;
         }
 
@@ -45,8 +45,8 @@ public class LlmServiceFixEnhanced {
 
             // Log model details
             if (config.llmModels() != null && !config.llmModels().isEmpty()) {
-                LOGGER.info("Setting global ThreadLocal config through " +
-                        "LlmServiceFixEnhanced with {} models",
+                LOGGER.info("Setting global ThreadLocal config through "
+                        + "LlmServiceFixEnhanced with {} models",
                         config.llmModels().size());
 
                 for (int i = 0; i < config.llmModels().size(); i++) {
@@ -64,14 +64,16 @@ public class LlmServiceFixEnhanced {
             ThreadLocalContextHolder.setConfig(config);
 
             // Verify it was set correctly
-            DocumentorConfig verifyConfig = ThreadLocalContextHolder.getConfig();
+            DocumentorConfig verifyConfig =
+                    ThreadLocalContextHolder.getConfig();
             if (verifyConfig != null) {
-                int modelCount = verifyConfig.llmModels() != null ?
-                        verifyConfig.llmModels().size() : 0;
+                int modelCount = verifyConfig.llmModels() != null
+                        ? verifyConfig.llmModels().size() : 0;
                 LOGGER.info("Successfully set and verified ThreadLocal "
                         + "config with {} models", modelCount);
 
-                // Log that the ThreadLocal config can be expected in child threads
+                // Log that the ThreadLocal config can be expected in
+                // child threads
                 LOGGER.info("Child threads created by "
                         + "ThreadLocalPropagatingExecutorEnhanced "
                         + "should now receive this config");
@@ -101,7 +103,8 @@ public class LlmServiceFixEnhanced {
                 int modelCount = config.llmModels() != null
                         ? config.llmModels().size() : 0;
                 LOGGER.info("ThreadLocal config IS available in thread [{}] "
-                        + "with {} models", currentThread.getName(), modelCount);
+                        + "with {} models",
+                        currentThread.getName(), modelCount);
                 return true;
             } else {
                 LOGGER.warn("ThreadLocal config is NOT available in "

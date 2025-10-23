@@ -22,8 +22,9 @@ import java.util.Arrays;
 /**
  * External Configuration Loader for Documentor.
  *
- * Loads configuration from an external JSON file when specified via the --config parameter.
- * This runs at application startup before any other components.
+ * Loads configuration from an external JSON file when specified via the
+ * --config parameter. This runs at application startup before any other
+ * components.
  */
 @Configuration
 @Profile("!test")
@@ -83,8 +84,8 @@ public class ExternalConfigLoader implements ApplicationContextAware {
             ObjectMapper objectMapper = new ObjectMapper();
             DocumentorConfig externalConfig = objectMapper.readValue(
                     configFile.toFile(), DocumentorConfig.class);
-            LOGGER.info("External configuration loaded successfully with {} LLM "
-                + "models", externalConfig.llmModels().size());
+            LOGGER.info("External configuration loaded successfully with {} "
+                    + "LLM models", externalConfig.llmModels().size());
 
             // Store the config for later use
             this.loadedConfig = externalConfig;
@@ -161,7 +162,8 @@ public class ExternalConfigLoader implements ApplicationContextAware {
                         Arrays.toString(args));
                 }
             } catch (Exception e) {
-                LOGGER.warn("Error extracting command line arguments: {}", e.getMessage());
+                LOGGER.warn("Error extracting command line arguments: {}",
+                        e.getMessage());
             }
 
             // If we couldn't get arguments from system properties, handle the
@@ -199,17 +201,20 @@ public class ExternalConfigLoader implements ApplicationContextAware {
             }
 
             try {
-                LOGGER.info("Loading external configuration from: {}", configPath);
+                LOGGER.info("Loading external configuration from: {}",
+                        configPath);
                 ObjectMapper objectMapper = new ObjectMapper();
                 DocumentorConfig externalConfig = objectMapper.readValue(
                         configFile.toFile(), DocumentorConfig.class);
-                LOGGER.info("External configuration loaded successfully with {} "
-                    + "LLM models", externalConfig.llmModels().size());
+                LOGGER.info("External configuration loaded successfully "
+                        + "with {} LLM models",
+                        externalConfig.llmModels().size());
 
                 // Save for future reference
                 this.loadedConfig = externalConfig;
 
-                // Define the DocumentorConfig bean with the loaded configuration
+                // Define the DocumentorConfig bean with the loaded
+                // configuration
                 // This will override any existing definition
                 BeanDefinition beanDefinition =
                     BeanDefinitionBuilder.genericBeanDefinition(
@@ -277,7 +282,8 @@ public class ExternalConfigLoader implements ApplicationContextAware {
             // Look for --config=value style
             if (arg.startsWith(CONFIG_ARG + "=")) {
                 String configPath = arg.substring(CONFIG_ARG.length() + 1);
-                LOGGER.info("Found config in --config=value style: {}", configPath);
+                LOGGER.info("Found config in --config=value style: {}",
+                        configPath);
                 return configPath;
             }
         }

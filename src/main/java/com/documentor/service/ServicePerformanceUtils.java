@@ -74,7 +74,8 @@ public final class ServicePerformanceUtils {
         }
 
         return elements.stream()
-            .collect(Collectors.groupingBy(e -> elements.indexOf(e) / batchSize))
+            .collect(Collectors.groupingBy(
+                    e -> elements.indexOf(e) / batchSize))
             .values()
             .stream()
             .collect(Collectors.toList());

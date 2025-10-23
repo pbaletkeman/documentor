@@ -94,7 +94,8 @@ public class DocumentationServiceEnhanced {
             } catch (Exception e) {
                 LOGGER.error("❌ Critical error generating documentation: {}",
                         e.getMessage(), e);
-                throw new RuntimeException("Failed to generate documentation", e);
+                throw new RuntimeException(
+                        "Failed to generate documentation", e);
             } finally {
                 cleanupThreadLocalResources();
             }
@@ -106,29 +107,30 @@ public class DocumentationServiceEnhanced {
      * @param analysis Project analysis data
      */
     private void setupThreadLocalConfig(final ProjectAnalysis analysis) {
-        LOGGER.info("📄 Starting enhanced documentation generation " +
-                "for project: {}", analysis.projectPath());
+        LOGGER.info("📄 Starting enhanced documentation generation "
+                + "for project: {}", analysis.projectPath());
 
         // Ensure ThreadLocal configuration is properly set up first
         if (llmServiceFix != null) {
             try {
-                LOGGER.info("Setting ThreadLocal config for " +
-                        "documentation generation");
+                LOGGER.info("Setting ThreadLocal config for "
+                        + "documentation generation");
                 llmServiceFix.setLlmServiceThreadLocalConfig(config);
 
                 // Verify the configuration was set properly
                 boolean configAvailable =
                         llmServiceFix.isThreadLocalConfigAvailable();
                 if (!configAvailable) {
-                    LOGGER.warn("ThreadLocal configuration is still not " +
-                            "available - documentation generation may fail");
+                    LOGGER.warn("ThreadLocal configuration is still not "
+                            + "available - documentation generation may fail");
                 }
             } catch (Exception e) {
                 LOGGER.error("Error setting up ThreadLocal config: {}",
                         e.getMessage(), e);
             }
         } else {
-            LOGGER.warn("LlmServiceFixEnhanced is null - ThreadLocal config not set up");
+            LOGGER.warn("LlmServiceFixEnhanced is null - ThreadLocal config "
+                    + "not set up");
         }
     }
 
@@ -152,8 +154,8 @@ public class DocumentationServiceEnhanced {
                             ex.getMessage(), ex);
                 }
                 return "# Error Generating Documentation\n\n"
-                       + "There was an error generating the main documentation: "
-                       + ex.getMessage();
+                        + "There was an error generating the main "
+                        + "documentation: " + ex.getMessage();
             });
 
         String mainDoc = mainDocFuture.join();
@@ -182,10 +184,11 @@ public class DocumentationServiceEnhanced {
                         TimeUnit.SECONDS)
                 .exceptionally(ex -> {
                     if (ex instanceof TimeoutException) {
-                        LOGGER.error("Timeout while generating " +
-                                "element documentation");
+                        LOGGER.error("Timeout while generating "
+                                + "element documentation");
                     } else {
-                        LOGGER.error("Error generating element documentation: {}",
+                        LOGGER.error("Error generating element "
+                                + "documentation: {}",
                                 ex.getMessage(), ex);
                     }
                     return null; // Continue with other tasks
@@ -214,21 +217,21 @@ public class DocumentationServiceEnhanced {
             try {
                 // First ensure ThreadLocal is properly set again
                 if (llmServiceFix != null) {
-                    LOGGER.info("Refreshing ThreadLocal config before " +
-                            "unit test generation");
+                    LOGGER.info("Refreshing ThreadLocal config before "
+                            + "unit test generation");
                     llmServiceFix.setLlmServiceThreadLocalConfig(config);
                 }
 
-                LOGGER.info("Generating unit tests as specified " +
-                        "in configuration");
+                LOGGER.info("Generating unit tests as specified "
+                        + "in configuration");
                 CompletableFuture<Void> testFuture = testDocGenerator
                     .generateUnitTestDocumentation(analysis, outputPath)
                     .orTimeout(DEFAULT_FUTURE_TIMEOUT_SECONDS * 2,
                             TimeUnit.SECONDS)
                     .exceptionally(ex -> {
                         if (ex instanceof TimeoutException) {
-                            LOGGER.error("Timeout while generating " +
-                                    "unit test documentation");
+                            LOGGER.error("Timeout while generating "
+                                    + "unit test documentation");
                         } else {
                             LOGGER.error("Error generating unit tests: {}",
                                     ex.getMessage(), ex);
@@ -245,8 +248,8 @@ public class DocumentationServiceEnhanced {
                 // Continue with other tasks despite errors
             }
         } else {
-            LOGGER.info("Unit test generation is disabled in configuration " +
-                    "- skipping");
+            LOGGER.info("Unit test generation is disabled in configuration "
+                    + "- skipping");
         }
     }
 
@@ -314,7 +317,8 @@ public class DocumentationServiceEnhanced {
     private void cleanupThreadLocalResources() {
         // Always clean up ThreadLocal resources to prevent memory leaks
         if (llmServiceFix != null) {
-            LOGGER.info("Cleaning up ThreadLocal resources after documentation generation");
+            LOGGER.info("Cleaning up ThreadLocal resources after "
+                    + "documentation generation");
             llmServiceFix.cleanupThreadLocalConfig();
         }
     }

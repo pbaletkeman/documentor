@@ -134,9 +134,8 @@ public class UnitTestDocumentationGeneratorEnhanced {
                                                     "Error processing test "
                                                     + "future result: {}",
                                                     e.getMessage());
-                                            testDoc
-                                                    .append(
-                                                            "// Error processing ")
+                                            testDoc.append(
+                                                    "// Error processing ")
                                                     .append("test: ")
                                                     .append(e.getMessage())
                                                     .append("\n\n");
@@ -146,17 +145,18 @@ public class UnitTestDocumentationGeneratorEnhanced {
                                     // Write the output file
                                     try {
                                         Files.write(
-                                                testsDir.resolve("unit-tests.md"),
+                                                testsDir.resolve(
+                                                        "unit-tests.md"),
                                                 testDoc.toString().getBytes());
                                         LOGGER.info(
                                                 "✅ Successfully wrote "
-                                                + "unit tests to {}",
-                                                testsDir
-                                                        .resolve("unit-tests.md"));
+                                                        + "unit tests to {}",
+                                                testsDir.resolve(
+                                                        "unit-tests.md"));
                                     } catch (IOException e) {
                                         LOGGER.error(
                                                 "❌ Error writing test "
-                                                + "documentation: {}",
+                                                        + "documentation: {}",
                                                 e.getMessage());
                                     }
                                 } catch (Exception e) {

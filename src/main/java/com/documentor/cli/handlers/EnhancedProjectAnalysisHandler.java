@@ -44,8 +44,8 @@ public class EnhancedProjectAnalysisHandler {
 
             if (config == null) {
                 // Try to load it if not already loaded
-                LOGGER.info("Configuration not loaded yet, trying to load from: {}",
-                        request.configPath());
+                LOGGER.info("Configuration not loaded yet, trying to load "
+                        + "from: {}", request.configPath());
                 String[] args = {"analyze", "--config", request.configPath()};
                 boolean loaded = configLoader.loadExternalConfig(args);
 

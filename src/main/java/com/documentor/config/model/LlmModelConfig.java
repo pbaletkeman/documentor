@@ -27,16 +27,20 @@ public record LlmModelConfig(
         return new LlmModelConfig(
             name != null ? name : "default",
             provider != null ? provider : "ollama",
-            baseUrl != null ? baseUrl : "http://localhost:" + ApplicationConstants.DEFAULT_OLLAMA_PORT,
+            baseUrl != null ? baseUrl : "http://localhost:"
+                    + ApplicationConstants.DEFAULT_OLLAMA_PORT,
             apiKey,
-            maxTokens != null ? maxTokens : ApplicationConstants.DEFAULT_MAX_TOKENS,
-            timeoutSeconds != null ? timeoutSeconds : ApplicationConstants.DEFAULT_TIMEOUT_SECONDS
+            maxTokens != null ? maxTokens
+                    : ApplicationConstants.DEFAULT_MAX_TOKENS,
+            timeoutSeconds != null ? timeoutSeconds
+                    : ApplicationConstants.DEFAULT_TIMEOUT_SECONDS
         );
     }
 
     /**
-     * Applies defaults for null fields (in-place style for legacy compatibility)
-     * Note: Records are immutable, so this returns a new instance with defaults
+     * Applies defaults for null fields (in-place style for legacy
+     * compatibility) Note: Records are immutable, so this returns a new
+     * instance with defaults
      *
      * @return new LlmModelConfig with defaults applied
      */
@@ -51,11 +55,12 @@ public record LlmModelConfig(
      */
     public void validate() {
         if (name == null || name.trim().isEmpty()) {
-            throw new IllegalArgumentException("LLM model name cannot be null or empty");
+            throw new IllegalArgumentException(
+                    "LLM model name cannot be null or empty");
         }
         if (provider == null || provider.trim().isEmpty()) {
-            throw new IllegalArgumentException("LLM provider cannot be null or empty");
+            throw new IllegalArgumentException(
+                    "LLM provider cannot be null or empty");
         }
     }
 }
-

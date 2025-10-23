@@ -45,18 +45,19 @@ public class PlantUMLDiagramService {
      * 📊 Generates class diagrams for the analyzed project
      */
     public CompletableFuture<List<String>> generateClassDiagrams(
-            final ProjectAnalysis analysis,
-            final String outputPath) {
+            final ProjectAnalysis analysis, final String outputPath) {
 
         return CompletableFuture.supplyAsync(() -> {
-            LOGGER.info("📊 Starting PlantUML diagram generation for {} elements",
-                    analysis.codeElements().size());
+            LOGGER.info("📊 Starting PlantUML diagram generation for {} "
+                    + "elements", analysis.codeElements().size());
 
             try {
                 return generateDiagrams(analysis, outputPath);
             } catch (Exception e) {
-                LOGGER.error("❌ Error generating PlantUML diagrams: {}", e.getMessage(), e);
-                throw new RuntimeException("Failed to generate PlantUML diagrams", e);
+                LOGGER.error("❌ Error generating PlantUML diagrams: {}",
+                        e.getMessage(), e);
+                throw new RuntimeException(
+                        "Failed to generate PlantUML diagrams", e);
             }
         });
     }
@@ -64,25 +65,27 @@ public class PlantUMLDiagramService {
     /**
      * 📊 Core diagram generation logic
      */
-    private List<String> generateDiagrams(final ProjectAnalysis analysis, final String outputPath) {
+    private List<String> generateDiagrams(final ProjectAnalysis analysis,
+            final String outputPath) {
         List<String> generatedFiles = new ArrayList<>();
 
         // Get eligible classes for diagram generation
-        List<CodeElement> eligibleClasses = elementFilter.getEligibleClasses(analysis);
+        List<CodeElement> eligibleClasses =
+                elementFilter.getEligibleClasses(analysis);
 
         // Group elements by class
         Map<CodeElement, List<CodeElement>> elementsByClass =
-            elementFilter.groupElementsByClass(analysis);
+                elementFilter.groupElementsByClass(analysis);
 
         // Process each eligible class
         eligibleClasses.forEach(classElement -> {
             try {
-                String diagram =
-                        processSingleClassDiagram(classElement, elementsByClass, outputPath);
+                String diagram = processSingleClassDiagram(classElement,
+                        elementsByClass, outputPath);
                 generatedFiles.add(diagram);
             } catch (Exception e) {
                 LOGGER.warn("⚠️ Failed to generate PlantUML diagram for {}: {}",
-                     classElement.name(), e.getMessage());
+                        classElement.name(), e.getMessage());
             }
         });
 

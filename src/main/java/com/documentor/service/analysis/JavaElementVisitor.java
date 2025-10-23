@@ -34,14 +34,19 @@ public class JavaElementVisitor extends VoidVisitorAdapter<Void> {
     /**
      * Initialize visitor with file context
      */
-    public void initialize(final Path filePathParam, final List<CodeElement> elementsParam) {
+    public void initialize(
+            final Path filePathParam,
+            final List<CodeElement> elementsParam) {
         initialize(filePathParam, elementsParam, null);
     }
 
     /**
-     * Initialize visitor with file context and optional private member override
+     * Initialize visitor with file context and optional private member
+     * override
      */
-    public void initialize(final Path filePathParam, final List<CodeElement> elementsParam,
+    public void initialize(
+            final Path filePathParam,
+                          final List<CodeElement> elementsParam,
                           final Boolean includePrivateMembersOverrideParam) {
         this.filePath = filePathParam;
         this.elements = elementsParam;
@@ -49,10 +54,12 @@ public class JavaElementVisitor extends VoidVisitorAdapter<Void> {
     }
 
     @Override
-    public final void visit(final ClassOrInterfaceDeclaration declaration, final Void arg) {
+    public final void visit(final ClassOrInterfaceDeclaration declaration,
+                           final Void arg) {
         if (shouldInclude(declaration.getModifiers())) {
             String name = declaration.getNameAsString();
-            String qualifiedName = declaration.getFullyQualifiedName().orElse(name);
+            String qualifiedName = declaration.getFullyQualifiedName()
+                    .orElse(name);
 
             CodeElement classElement = new CodeElement(
                 CodeElementType.CLASS,
@@ -73,10 +80,12 @@ public class JavaElementVisitor extends VoidVisitorAdapter<Void> {
     }
 
     @Override
-    public final void visit(final EnumDeclaration declaration, final Void arg) {
+    public final void visit(final EnumDeclaration declaration,
+                           final Void arg) {
         if (shouldInclude(declaration.getModifiers())) {
             String name = declaration.getNameAsString();
-            String qualifiedName = declaration.getFullyQualifiedName().orElse(name);
+            String qualifiedName = declaration.getFullyQualifiedName()
+                    .orElse(name);
 
             CodeElement enumElement = new CodeElement(
                 CodeElementType.CLASS, // Treat enums as classes
@@ -97,7 +106,8 @@ public class JavaElementVisitor extends VoidVisitorAdapter<Void> {
     }
 
     @Override
-    public final void visit(final MethodDeclaration declaration, final Void arg) {
+    public final void visit(
+            final MethodDeclaration declaration, final Void arg) {
         if (shouldInclude(declaration.getModifiers())) {
             String name = declaration.getNameAsString();
             String signature = declaration.getDeclarationAsString();
@@ -121,7 +131,8 @@ public class JavaElementVisitor extends VoidVisitorAdapter<Void> {
     }
 
     @Override
-    public final void visit(final FieldDeclaration declaration, final Void arg) {
+    public final void visit(
+            final FieldDeclaration declaration, final Void arg) {
         if (shouldInclude(declaration.getModifiers())) {
             declaration.getVariables().forEach(variable -> {
                 String name = variable.getNameAsString();
@@ -133,7 +144,10 @@ public class JavaElementVisitor extends VoidVisitorAdapter<Void> {
                     qualifiedName,
                     filePath.toString(),
                     declaration.getBegin().map(pos -> pos.line).orElse(0),
-                    declaration.toString().replace("\n", " ").replaceAll("\\s+", " ").trim(),
+                    declaration.toString()
+                            .replace("\n", " ")
+                            .replaceAll("\\s+", " ")
+                            .trim(),
                     extractJavadoc(declaration),
                     List.of(),
                     extractAnnotations(declaration)
@@ -147,46 +161,61 @@ public class JavaElementVisitor extends VoidVisitorAdapter<Void> {
     }
 
     private boolean shouldInclude(
-            final com.github.javaparser.ast.NodeList<com.github.javaparser.ast.Modifier> modifiers) {
+            final com.github.javaparser.ast.NodeList<
+                    com.github.javaparser.ast.Modifier> modifiers) {
         // Use override if provided, otherwise use config setting
-        boolean includePrivateMembers = includePrivateMembersOverride != null
-                ? includePrivateMembersOverride
-                : config.analysisSettings().includePrivateMembers();
+        boolean includePrivateMembers =
+                includePrivateMembersOverride != null
+                        ? includePrivateMembersOverride
+                        : config.analysisSettings().includePrivateMembers();
 
         if (includePrivateMembers) {
             return true;
         }
 
         boolean isPrivate = modifiers.stream()
-            .anyMatch(mod -> mod.getKeyword() == com.github.javaparser.ast.Modifier.Keyword.PRIVATE);
+            .anyMatch(mod -> mod.getKeyword()
+                    == com.github.javaparser.ast.Modifier.Keyword.PRIVATE);
 
         return !isPrivate;
     }
 
-    private String extractSignature(final ClassOrInterfaceDeclaration declaration) {
-        return declaration.toString().replace("\n", " ").replaceAll("\\s+", " ").trim();
+    private String extractSignature(
+            final ClassOrInterfaceDeclaration declaration) {
+        return declaration.toString()
+                .replace("\n", " ")
+                .replaceAll("\\s+", " ")
+                .trim();
     }
 
     private String extractSignature(final EnumDeclaration declaration) {
-        return declaration.toString().replace("\n", " ").replaceAll("\\s+", " ").trim();
+        return declaration.toString()
+                .replace("\n", " ")
+                .replaceAll("\\s+", " ")
+                .trim();
     }
 
-    private String extractJavadoc(final com.github.javaparser.ast.nodeTypes.NodeWithJavadoc<?> node) {
+    private String extractJavadoc(
+            final com.github.javaparser.ast.nodeTypes.NodeWithJavadoc<?> node) {
         return node.getJavadoc()
             .map(javadoc -> javadoc.getDescription().toText())
             .orElse("");
     }
 
-    private List<String> extractParameters(final MethodDeclaration declaration) {
+    private List<String> extractParameters(
+            final MethodDeclaration declaration) {
         return declaration.getParameters().stream()
-            .map(param -> param.getType().asString() + " " + param.getNameAsString())
+            .map(param -> param.getType().asString()
+                    + " " + param.getNameAsString())
             .toList();
     }
 
-    private List<String> extractAnnotations(final com.github.javaparser.ast.nodeTypes.NodeWithAnnotations<?> node) {
+    private List<String> extractAnnotations(
+            final com.github.javaparser.ast.nodeTypes
+                    .NodeWithAnnotations<?> node) {
         return node.getAnnotations().stream()
-            .map(annotation -> "@" + annotation.getNameAsString())
+            .map(annotation -> "@"
+                    + annotation.getNameAsString())
             .toList();
     }
 }
-

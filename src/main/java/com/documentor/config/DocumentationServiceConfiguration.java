@@ -15,7 +15,8 @@ import org.springframework.context.annotation.Primary;
 
 /**
  * Configuration class for enhanced documentation services.
- * Provides enhanced versions of documentation services with improved error handling and ThreadLocal management.
+ * Provides enhanced versions of documentation services with improved error
+ * handling and ThreadLocal management.
  */
 @Configuration
 public class DocumentationServiceConfiguration {
@@ -30,19 +31,23 @@ public class DocumentationServiceConfiguration {
     @Primary
     public DocumentationServiceEnhanced documentationServiceEnhanced(
             final MainDocumentationGenerator mainDocGenerator,
-            final ElementDocumentationGeneratorEnhanced elementDocGeneratorEnhanced,
-            final UnitTestDocumentationGeneratorEnhanced testDocGeneratorEnhanced,
+            final ElementDocumentationGeneratorEnhanced
+                    elementDocGeneratorEnhanced,
+            final UnitTestDocumentationGeneratorEnhanced
+                    testDocGeneratorEnhanced,
             final MermaidDiagramService mermaidDiagramService,
             final PlantUMLDiagramService plantUMLDiagramService,
             final DocumentorConfig documentorConfig,
             final LlmServiceFixEnhanced llmServiceFixEnhanced) {
 
-        LOGGER.info("Creating enhanced DocumentationService with ThreadLocalContextHolder support");
+        LOGGER.info("Creating enhanced DocumentationService with "
+                + "ThreadLocalContextHolder support");
 
         // Set the config in ThreadLocalContextHolder for good measure
         if (documentorConfig != null) {
             ThreadLocalContextHolder.setConfig(documentorConfig);
-            LOGGER.debug("Config set in ThreadLocalContextHolder during DocumentationServiceEnhanced creation");
+            LOGGER.debug("Config set in ThreadLocalContextHolder during "
+                    + "DocumentationServiceEnhanced creation");
         }
 
         return new DocumentationServiceEnhanced(

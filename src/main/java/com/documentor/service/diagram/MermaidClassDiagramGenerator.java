@@ -17,8 +17,9 @@ import java.util.List;
 /**
  * 📊 Mermaid Class Diagram Generator
  *
- * Specialized component for generating individual class diagrams in Mermaid format.
- * Handles the creation of class structure diagrams with fields and methods.
+ * Specialized component for generating individual class diagrams in Mermaid
+ * format. Handles the creation of class structure diagrams with fields and
+ * methods.
  */
 @Component
 public class MermaidClassDiagramGenerator {
@@ -29,8 +30,9 @@ public class MermaidClassDiagramGenerator {
     /**
      * 📊 Generates a Mermaid class diagram for a single class
      */
-    public String generateClassDiagram(final CodeElement classElement, final List<CodeElement> allElements,
-            final Path outputPath) throws IOException {
+    public String generateClassDiagram(final CodeElement classElement,
+            final List<CodeElement> allElements, final Path outputPath)
+            throws IOException {
         String className = classElement.name();
         String diagramFileName = className + "_diagram.mmd";
         Path diagramPath = outputPath.resolve(diagramFileName);
@@ -43,22 +45,26 @@ public class MermaidClassDiagramGenerator {
         diagram.append("title: ").append(diagramFileName).append("\n");
         diagram.append("config: \n");
         diagram.append("  layout: elk\n");
-        diagram.append("  theme: forest %% neutral, for black-and-white documents commented out\n");
+        diagram.append("  theme: forest %% neutral, for black-and-white "
+                + "documents commented out\n");
         diagram.append("---\n");
         diagram.append("classDiagram\n");
 
         // Add the main class
         addClassToMermaid(diagram, classElement, allElements);
 
-        // Add relationships (if we can detect them from method parameters/return types)
+        // Add relationships (if we can detect them from method
+        // parameters/return types)
         addRelationshipsToMermaid(diagram, classElement, allElements);
 
         diagram.append("```\n\n");
-        diagram.append("Generated on: ").append(java.time.LocalDateTime.now()).append("\n");
+        diagram.append("Generated on: ").append(java.time.LocalDateTime.now())
+                .append("\n");
 
         // Write to file
         Files.writeString(diagramPath, diagram.toString(),
-            StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+            StandardOpenOption.CREATE,
+            StandardOpenOption.TRUNCATE_EXISTING);
 
         LOGGER.debug("✅ Generated diagram: {}", diagramPath);
         return diagramPath.toString();
@@ -67,13 +73,15 @@ public class MermaidClassDiagramGenerator {
     /**
      * 🔍 Adds a class definition to the Mermaid diagram
      */
-    private void addClassToMermaid(final StringBuilder diagram, final CodeElement classElement,
+    private void addClassToMermaid(final StringBuilder diagram,
+            final CodeElement classElement,
             final List<CodeElement> allElements) {
         String className = sanitizeClassName(classElement.name());
 
         // Get all methods and fields for this class
         List<CodeElement> classMembers = allElements.stream()
-            .filter(e -> e.qualifiedName().startsWith(classElement.qualifiedName()))
+            .filter(e -> e.qualifiedName().startsWith(
+                    classElement.qualifiedName()))
             .filter(this::isNonPrivate)
             .toList();
 
@@ -84,15 +92,18 @@ public class MermaidClassDiagramGenerator {
             .filter(e -> e.type() == CodeElementType.FIELD)
             .forEach(field -> {
                 String fieldSignature = sanitizeSignature(field.signature());
-                diagram.append("        ").append(fieldSignature).append("\n");
+                diagram.append("        ").append(fieldSignature)
+                        .append("\n");
             });
 
         // Add non-private methods
         classMembers.stream()
             .filter(e -> e.type() == CodeElementType.METHOD)
             .forEach(method -> {
-                String methodSignature = sanitizeSignature(method.signature());
-                diagram.append("        ").append(methodSignature).append("\n");
+                String methodSignature = sanitizeSignature(
+                        method.signature());
+                diagram.append("        ").append(methodSignature)
+                        .append("\n");
             });
 
         diagram.append("    }\n\n");
@@ -101,32 +112,38 @@ public class MermaidClassDiagramGenerator {
     /**
      * 🔗 Adds relationships between classes to the Mermaid diagram
      */
-    private void addRelationshipsToMermaid(final StringBuilder diagram, final CodeElement classElement,
+    private void addRelationshipsToMermaid(final StringBuilder diagram,
+            final CodeElement classElement,
             final List<CodeElement> allElements) {
         // This is a simplified relationship detection
-        // In a full implementation, we would analyze method parameters, return types, and field types
-        // to detect associations, dependencies, and inheritance relationships
+        // In a full implementation, we would analyze method parameters,
+        // return types, and field types to detect associations, dependencies,
+        // and inheritance relationships
 
         String className = sanitizeClassName(classElement.name());
 
         // Look for potential relationships in method signatures
         List<CodeElement> methods = allElements.stream()
             .filter(e -> e.type() == CodeElementType.METHOD)
-            .filter(e -> e.qualifiedName().startsWith(classElement.qualifiedName()))
+            .filter(e -> e.qualifiedName().startsWith(
+                    classElement.qualifiedName()))
             .filter(this::isNonPrivate)
             .toList();
 
         methods.forEach(method -> {
-            // Simple heuristic: if method signature contains another class name, add dependency
+            // Simple heuristic: if method signature contains another class
+            // name, add dependency
             String signature = method.signature();
             allElements.stream()
                 .filter(e -> e.type() == CodeElementType.CLASS)
                 .filter(e -> !e.name().equals(classElement.name()))
                 .filter(e -> signature.contains(e.name()))
                 .forEach(relatedClass -> {
-                    String relatedClassName = sanitizeClassName(relatedClass.name());
+                    String relatedClassName = sanitizeClassName(
+                            relatedClass.name());
                     diagram.append("    ").append(className)
-                          .append(" --> ").append(relatedClassName).append(" : uses\n");
+                          .append(" --> ").append(relatedClassName)
+                          .append(" : uses\n");
                 });
         });
     }
@@ -148,7 +165,8 @@ public class MermaidClassDiagramGenerator {
 
         // Limit length for diagram readability using constants
         if (cleaned.length() > ApplicationConstants.MAX_SIGNATURE_LENGTH) {
-            cleaned = cleaned.substring(0, ApplicationConstants.MAX_SIGNATURE_LENGTH
+            cleaned = cleaned.substring(0,
+                    ApplicationConstants.MAX_SIGNATURE_LENGTH
                     - ApplicationConstants.TRUNCATE_SUFFIX_LENGTH) + "...";
         }
 
@@ -159,8 +177,9 @@ public class MermaidClassDiagramGenerator {
      * 🔍 Simplified visibility check using enum
      */
     private boolean isNonPrivate(final CodeElement element) {
-        CodeVisibility visibility =
-                CodeVisibility.fromSignatureAndName(element.signature(), element.name());
-        return visibility.shouldInclude(false); // Don't include private elements in diagrams
+        CodeVisibility visibility = CodeVisibility.fromSignatureAndName(
+                element.signature(), element.name());
+        return visibility.shouldInclude(false); // Don't include private
+                                                // elements in diagrams
     }
 }

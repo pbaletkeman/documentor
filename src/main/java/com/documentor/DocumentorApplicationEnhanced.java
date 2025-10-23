@@ -15,15 +15,17 @@ import com.documentor.config.AppConfigEnhanced;
 /**
  * Enhanced Documentor Application
  *
- * This is an enhanced version of the DocumentorApplication with improved error handling
- * and null safety to fix the "NullPointerException in CompletableFuture" issues.
+ * This is an enhanced version of the DocumentorApplication with improved
+ * error handling and null safety to fix the "NullPointerException in
+ * CompletableFuture" issues.
  */
 @SpringBootApplication
 @ConfigurationPropertiesScan
 @EnableAsync
 /*
  * Import the enhanced configuration explicitly
- * This ensures our enhanced components with @Primary annotations take precedence
+ * This ensures our enhanced components with @Primary annotations take
+ * precedence
  */
 @Import({
     AppConfigEnhanced.class,
@@ -53,11 +55,13 @@ public final class DocumentorApplicationEnhanced {
      * Private constructor to prevent instantiation of utility class.
      */
     private DocumentorApplicationEnhanced() {
-        throw new UnsupportedOperationException("Utility class should not be instantiated");
+        throw new UnsupportedOperationException(
+                "Utility class should not be instantiated");
     }
 
     public static void main(final String[] args) {
-        LOGGER.info("Starting DocumentorApplicationEnhanced - Enhanced version with improved error handling");
+        LOGGER.info("Starting DocumentorApplicationEnhanced - Enhanced "
+                + "version with improved error handling");
         SpringApplication.run(DocumentorApplicationEnhanced.class, args);
     }
 }

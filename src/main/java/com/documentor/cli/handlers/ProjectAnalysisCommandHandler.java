@@ -89,12 +89,12 @@ public class ProjectAnalysisCommandHandler {
      * and private member override
      */
     public String handleAnalyzeProjectExtended(final String projectPath,
-                                             final String configPath,
-                                             final boolean generateMermaid,
-                                             final String mermaidOutput,
-                                             final boolean generatePlantUML,
-                                             final String plantUMLOutput,
-                                             final Boolean includePrivateMembers) {
+                                            final String configPath,
+                                            final boolean generateMermaid,
+                                            final String mermaidOutput,
+                                            final boolean generatePlantUML,
+                                        final String plantUMLOutput,
+                                        final Boolean includePrivateMembers) {
         try {
             LOGGER.info("🔍 Starting analysis of project: {}",
                     projectPath);

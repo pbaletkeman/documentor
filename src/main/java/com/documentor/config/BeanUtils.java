@@ -67,13 +67,14 @@ public final class BeanUtils {
 
                 // Check if bean is singleton
                 if (!beanFactory.isSingleton(beanName)) {
-                    LOGGER.warn("Bean '{}' is not a singleton. " +
-                            "Will not override.", beanName);
+                    LOGGER.warn("Bean '{}' is not a singleton. "
+                            + "Will not override.", beanName);
                     return;
                 }
 
                 // Get bean definition for logging
-                BeanDefinition beanDef = beanFactory.getBeanDefinition(beanName);
+                BeanDefinition beanDef = beanFactory.getBeanDefinition(
+                        beanName);
                 LOGGER.info("Bean class: {}", beanDef.getBeanClassName());
 
                 // Get original bean for comparison
@@ -88,8 +89,10 @@ public final class BeanUtils {
                         beanName);
 
                 // Use reflection to access protected methods if necessary
-                if (beanFactory instanceof DefaultSingletonBeanRegistry registry) {
-                    LOGGER.info("Using DefaultSingletonBeanRegistry direct method");
+                if (beanFactory instanceof DefaultSingletonBeanRegistry
+                        registry) {
+                    LOGGER.info(
+                            "Using DefaultSingletonBeanRegistry direct method");
                     registry.destroySingleton(beanName);
                     registry.registerSingleton(beanName, newBean);
                 } else {
@@ -107,18 +110,18 @@ public final class BeanUtils {
                 // Verify the bean was actually replaced
                 Object updatedBean = beanFactory.getBean(beanName);
                 if (updatedBean == newBean) {
-                    LOGGER.info("Successfully replaced bean '{}' " +
-                            "(identity verified)", beanName);
+                    LOGGER.info("Successfully replaced bean '{}' "
+                            + "(identity verified)", beanName);
                 } else {
-                    LOGGER.warn("Bean replacement verification failed - " +
-                            "objects are not identical");
+                    LOGGER.warn("Bean replacement verification failed - "
+                            + "objects are not identical");
                 }
 
                 LOGGER.info("Bean override operation completed for '{}'",
                         beanName);
             } else {
-                LOGGER.error("ApplicationContext is not configurable, " +
-                        "cannot override bean");
+                LOGGER.error("ApplicationContext is not configurable, "
+                        + "cannot override bean");
             }
         } catch (Exception e) {
             LOGGER.error("Failed to override bean '{}': {}",
@@ -151,7 +154,8 @@ public final class BeanUtils {
         if (registryField != null) {
             registryField.setAccessible(true);
             DefaultSingletonBeanRegistry registry =
-                    (DefaultSingletonBeanRegistry) registryField.get(beanFactory);
+                    (DefaultSingletonBeanRegistry)
+                            registryField.get(beanFactory);
             registry.destroySingleton(beanName);
             registry.registerSingleton(beanName, newBean);
         } else {
@@ -193,8 +197,8 @@ public final class BeanUtils {
         for (String name : allBeanNames) {
             try {
                 // Skip the bean itself and Spring internal beans
-                if (name.equals(beanName) ||
-                        name.startsWith("org.springframework")) {
+                if (name.equals(beanName)
+                        || name.startsWith("org.springframework")) {
                     continue;
                 }
 
@@ -227,8 +231,8 @@ public final class BeanUtils {
 
         // Specifically update LlmService which we know uses DocumentorConfig
         if (context.containsBean("llmService")) {
-            LOGGER.info("Found llmService bean - " +
-                    "updating with new config");
+            LOGGER.info("Found llmService bean - "
+                    + "updating with new config");
             Object llmService = context.getBean("llmService");
             boolean updated = updateBeanFields(llmService, "config", newConfig);
             LOGGER.info("LlmService config update result: {}",
@@ -237,8 +241,8 @@ public final class BeanUtils {
 
         // Update DocumentationService which also uses DocumentorConfig
         if (context.containsBean("documentationService")) {
-            LOGGER.info("Found documentationService bean - " +
-                    "updating with new config");
+            LOGGER.info("Found documentationService bean - "
+                    + "updating with new config");
             Object docService = context.getBean("documentationService");
             boolean updated = updateBeanFields(docService, "config", newConfig);
             LOGGER.info("DocumentationService config update result: {}",
@@ -250,7 +254,8 @@ public final class BeanUtils {
      * Updates fields in a bean that match the overridden bean's type.
      *
      * @param bean the bean to update
-     * @param overriddenBeanName the name of the bean that was overridden or field name
+     * @param overriddenBeanName the name of the bean that was overridden
+     * or field name
      * @param newValue the new value for fields of matching type
      * @return true if at least one field was updated, false otherwise
      */
@@ -268,7 +273,8 @@ public final class BeanUtils {
         boolean updated = false;
 
         LOGGER.debug("Updating fields in {} that match type {}",
-                bean.getClass().getName(), valueClass.getName());
+                bean.getClass().getName(),
+                valueClass.getName());
 
         // Check all declared fields
         while (targetClass != null) {
@@ -284,16 +290,17 @@ public final class BeanUtils {
                         field.setAccessible(true);
                         Object currentValue = field.get(bean);
 
-                        // Only update if field has a value (to avoid NPEs elsewhere)
+                        // Only update if field has a value
+                        // (to avoid NPEs elsewhere)
                         if (currentValue != null) {
                             field.set(bean, newValue);
-                            LOGGER.info("Updated field '{}' in bean of type {}",
-                                    field.getName(),
-                                    bean.getClass().getName());
+                            LOGGER.info(
+                                    "Updated field '{}' in bean of type {}",
+                                    field.getName(), bean.getClass().getName());
                             updated = true;
                         } else {
-                            LOGGER.debug("Field '{}' has null value, " +
-                                    "not updating", field.getName());
+                            LOGGER.debug("Field '{}' has null value, "
+                                    + "not updating", field.getName());
                         }
                     }
                 } catch (Exception e) {
@@ -308,4 +315,3 @@ public final class BeanUtils {
         return updated;
     }
 }
-

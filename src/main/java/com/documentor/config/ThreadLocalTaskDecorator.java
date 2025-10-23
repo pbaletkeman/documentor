@@ -8,9 +8,9 @@ import org.springframework.core.task.TaskDecorator;
 /**
  * Thread Local Task Decorator
  *
- * Responsible for propagating ThreadLocal values from parent threads to child threads
- * in async operations. This ensures that configuration data is properly available
- * across thread boundaries.
+ * Responsible for propagating ThreadLocal values from parent threads to
+ * child threads in async operations. This ensures that configuration data
+ * is properly available across thread boundaries.
  */
 public final class ThreadLocalTaskDecorator implements TaskDecorator {
 
@@ -29,22 +29,26 @@ public final class ThreadLocalTaskDecorator implements TaskDecorator {
         DocumentorConfig capturedConfig = LlmService.getThreadLocalConfig();
 
         if (capturedConfig != null) {
-            LOGGER.info("Captured ThreadLocal config from parent thread with {} models",
-                capturedConfig.llmModels().size());
+            LOGGER.info("Captured ThreadLocal config from parent thread "
+                    + "with {} models", capturedConfig.llmModels().size());
         } else {
-            LOGGER.warn("No ThreadLocal config available in parent thread - service may not work correctly");
+            LOGGER.warn("No ThreadLocal config available in parent thread "
+                    + "- service may not work correctly");
         }
 
-        // Return a wrapped Runnable that sets up the ThreadLocal in the child thread
+        // Return a wrapped Runnable that sets up the ThreadLocal
+        // in the child thread
         return () -> {
             try {
                 // Set the config in the child thread before execution
                 if (capturedConfig != null) {
                     LlmService.setThreadLocalConfig(capturedConfig);
-                    LOGGER.info("Set ThreadLocal config in child thread with {} models",
-                        capturedConfig.llmModels().size());
+                    LOGGER.info("Set ThreadLocal config in child thread "
+                            + "with {} models",
+                            capturedConfig.llmModels().size());
                 } else {
-                    LOGGER.warn("Could not set ThreadLocal config in child thread - null config");
+                    LOGGER.warn("Could not set ThreadLocal config in child "
+                            + "thread - null config");
                 }
 
                 // Execute the original task

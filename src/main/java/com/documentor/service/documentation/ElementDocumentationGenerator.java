@@ -329,7 +329,28 @@ public class ElementDocumentationGenerator {
             final List<ElementDocPair> methods) {
         StringBuilder content = new StringBuilder();
 
-        // Class header and documentation
+        // Build class header section
+        buildClassHeaderSection(content, classElement, classDoc, classExamples);
+
+        // Build table of contents
+        buildTableOfContents(content, fields, methods);
+
+        // Build fields section
+        buildFieldsSection(content, fields);
+
+        // Build methods section
+        buildMethodsSection(content, methods);
+
+        return content.toString();
+    }
+
+    /**
+     * Builds the class header section including documentation and examples.
+     */
+    private void buildClassHeaderSection(final StringBuilder content,
+                                       final CodeElement classElement,
+                                       final String classDoc,
+                                       final String classExamples) {
         if (classElement != null) {
             // Add class name with larger header and package info
             content.append(String.format("# %s %s\n\n",
@@ -374,58 +395,6 @@ public class ElementDocumentationGenerator {
             content.append(formatCodeBlock(classElement.signature()))
                 .append("\n");
             content.append("```\n\n");
-
-            // Add table of contents with better organization
-            if (!fields.isEmpty() || !methods.isEmpty()) {
-                content.append("## 📑 Table of Contents\n\n");
-
-                if (!fields.isEmpty()) {
-                    content.append("<details open>\n<summary><strong>🔹 "
-                        + "Fields</strong> (")
-                           .append(fields.size())
-                           .append(")</summary>\n\n");
-                    int fieldCount = 0;
-                    for (ElementDocPair field : fields) {
-                        content.append(String.format("- [%s %s](#%s)\n",
-                            field.getElement().type().getIcon(),
-                            field.getElement().name(),
-                            sanitizeAnchor(field.getElement().name())));
-                        fieldCount++;
-
-                        // Add line breaks for better readability in long lists
-                        if (fieldCount % DEFAULT_INDENT_SIZE == 0
-                            && fieldCount < fields.size()) {
-                            content.append("\n");
-                        }
-                    }
-                    content.append("\n</details>\n\n");
-                }
-
-                if (!methods.isEmpty()) {
-                    content.append("<details open>\n<summary><strong>🔸 "
-                        + "Methods</strong> (")
-                           .append(methods.size())
-                           .append(")</summary>\n\n");
-                    int methodCount = 0;
-                    for (ElementDocPair method : methods) {
-                        content.append(String.format("- [%s %s](#%s)\n",
-                            method.getElement().type().getIcon(),
-                            method.getElement().name(),
-                            sanitizeAnchor(method.getElement().name())));
-                        methodCount++;
-
-                        // Add line breaks for better readability in long lists
-                        if (methodCount % DEFAULT_INDENT_SIZE == 0
-                            && methodCount < methods.size()) {
-                            content.append("\n");
-                        }
-                    }
-                    content.append("\n</details>\n\n");
-                }
-
-                // Add horizontal rule for visual separation
-                content.append("---\n\n");
-            }
         } else {
             content.append("# 📁 Standalone Elements\n\n");
             content.append("These elements are not associated with a "
@@ -433,8 +402,71 @@ public class ElementDocumentationGenerator {
             // Add horizontal rule for visual separation
             content.append("---\n\n");
         }
+    }
 
-        // Fields section with improved formatting
+    /**
+     * Builds the table of contents section.
+     */
+    private void buildTableOfContents(final StringBuilder content,
+                                    final List<ElementDocPair> fields,
+                                    final List<ElementDocPair> methods) {
+        if (!fields.isEmpty() || !methods.isEmpty()) {
+            content.append("## 📑 Table of Contents\n\n");
+
+            if (!fields.isEmpty()) {
+                content.append("<details open>\n<summary><strong>🔹 "
+                    + "Fields</strong> (")
+                       .append(fields.size())
+                       .append(")</summary>\n\n");
+                int fieldCount = 0;
+                for (ElementDocPair field : fields) {
+                    content.append(String.format("- [%s %s](#%s)\n",
+                        field.getElement().type().getIcon(),
+                        field.getElement().name(),
+                        sanitizeAnchor(field.getElement().name())));
+                    fieldCount++;
+
+                    // Add line breaks for better readability in long lists
+                    if (fieldCount % DEFAULT_INDENT_SIZE == 0
+                        && fieldCount < fields.size()) {
+                        content.append("\n");
+                    }
+                }
+                content.append("\n</details>\n\n");
+            }
+
+            if (!methods.isEmpty()) {
+                content.append("<details open>\n<summary><strong>🔸 "
+                    + "Methods</strong> (")
+                       .append(methods.size())
+                       .append(")</summary>\n\n");
+                int methodCount = 0;
+                for (ElementDocPair method : methods) {
+                    content.append(String.format("- [%s %s](#%s)\n",
+                        method.getElement().type().getIcon(),
+                        method.getElement().name(),
+                        sanitizeAnchor(method.getElement().name())));
+                    methodCount++;
+
+                    // Add line breaks for better readability in long lists
+                    if (methodCount % DEFAULT_INDENT_SIZE == 0
+                        && methodCount < methods.size()) {
+                        content.append("\n");
+                    }
+                }
+                content.append("\n</details>\n\n");
+            }
+
+            // Add horizontal rule for visual separation
+            content.append("---\n\n");
+        }
+    }
+
+    /**
+     * Builds the fields documentation section.
+     */
+    private void buildFieldsSection(final StringBuilder content,
+                                  final List<ElementDocPair> fields) {
         if (!fields.isEmpty()) {
             content.append("## 🔹 Fields\n\n");
 
@@ -472,8 +504,13 @@ public class ElementDocumentationGenerator {
                 content.append("---\n\n");
             }
         }
+    }
 
-        // Methods section with improved formatting
+    /**
+     * Builds the methods documentation section.
+     */
+    private void buildMethodsSection(final StringBuilder content,
+                                   final List<ElementDocPair> methods) {
         if (!methods.isEmpty()) {
             content.append("## 🔸 Methods\n\n");
 
@@ -524,8 +561,6 @@ public class ElementDocumentationGenerator {
                 content.append("---\n\n");
             }
         }
-
-        return content.toString();
     }
 
     /**

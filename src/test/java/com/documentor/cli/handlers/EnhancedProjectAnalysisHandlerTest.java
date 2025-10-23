@@ -154,9 +154,9 @@ class EnhancedProjectAnalysisHandlerTest {
             .thenReturn("Analysis complete with loaded config");
 
         // When
-        String result = handler.analyzeProjectWithFix(
-            projectPath, configPath, generateMermaid, mermaidOutput,
-            generatePlantUML, plantUMLOutput, includePrivateMembers, useFix, outputDir);
+        ProjectAnalysisRequest request = createRequest(projectPath, configPath, generateMermaid,
+                mermaidOutput, generatePlantUML, plantUMLOutput, includePrivateMembers, useFix, outputDir);
+        String result = handler.analyzeProjectWithFix(request);
 
         // Then
         assertEquals("Analysis complete with loaded config", result);
@@ -194,9 +194,9 @@ class EnhancedProjectAnalysisHandlerTest {
             .thenReturn("Analysis complete with newly loaded config");
 
         // When
-        String result = handler.analyzeProjectWithFix(
-            projectPath, configPath, generateMermaid, mermaidOutput,
-            generatePlantUML, plantUMLOutput, includePrivateMembers, useFix, outputDir);
+        ProjectAnalysisRequest request = createRequest(projectPath, configPath, generateMermaid,
+                mermaidOutput, generatePlantUML, plantUMLOutput, includePrivateMembers, useFix, outputDir);
+        String result = handler.analyzeProjectWithFix(request);
 
         // Then
         assertEquals("Analysis complete with newly loaded config", result);
@@ -233,9 +233,9 @@ class EnhancedProjectAnalysisHandlerTest {
             .thenReturn("Analysis complete with failed config loading");
 
         // When
-        String result = handler.analyzeProjectWithFix(
-            projectPath, configPath, generateMermaid, mermaidOutput,
-            generatePlantUML, plantUMLOutput, includePrivateMembers, useFix, outputDir);
+        ProjectAnalysisRequest request = createRequest(projectPath, configPath, generateMermaid,
+                mermaidOutput, generatePlantUML, plantUMLOutput, includePrivateMembers, useFix, outputDir);
+        String result = handler.analyzeProjectWithFix(request);
 
         // Then
         assertEquals("Analysis complete with failed config loading", result);
@@ -268,9 +268,9 @@ class EnhancedProjectAnalysisHandlerTest {
         // When & Then - This should throw NPE due to a bug in production code
         // The production code tries to access config.llmModels() without null check
         assertThrows(NullPointerException.class, () -> {
-            handler.analyzeProjectWithFix(
-                projectPath, configPath, generateMermaid, mermaidOutput,
-                generatePlantUML, plantUMLOutput, includePrivateMembers, useFix, outputDir);
+            ProjectAnalysisRequest request = createRequest(projectPath, configPath, generateMermaid,
+                    mermaidOutput, generatePlantUML, plantUMLOutput, includePrivateMembers, useFix, outputDir);
+            handler.analyzeProjectWithFix(request);
         });
 
         verify(configLoader, times(2)).getLoadedConfig();
@@ -299,9 +299,9 @@ class EnhancedProjectAnalysisHandlerTest {
             .thenReturn("Analysis complete with custom output directory");
 
         // When
-        String result = handler.analyzeProjectWithFix(
-            projectPath, configPath, generateMermaid, mermaidOutput,
-            generatePlantUML, plantUMLOutput, includePrivateMembers, useFix, outputDir);
+        ProjectAnalysisRequest request = createRequest(projectPath, configPath, generateMermaid,
+                mermaidOutput, generatePlantUML, plantUMLOutput, includePrivateMembers, useFix, outputDir);
+        String result = handler.analyzeProjectWithFix(request);
 
         // Then
         assertEquals("Analysis complete with custom output directory", result);
@@ -339,9 +339,9 @@ class EnhancedProjectAnalysisHandlerTest {
             .thenReturn("Analysis complete without output directory");
 
         // When
-        String result = handler.analyzeProjectWithFix(
-            projectPath, configPath, generateMermaid, mermaidOutput,
-            generatePlantUML, plantUMLOutput, includePrivateMembers, useFix, outputDir);
+        ProjectAnalysisRequest request = createRequest(projectPath, configPath, generateMermaid,
+                mermaidOutput, generatePlantUML, plantUMLOutput, includePrivateMembers, useFix, outputDir);
+        String result = handler.analyzeProjectWithFix(request);
 
         // Then
         assertEquals("Analysis complete without output directory", result);
@@ -386,9 +386,9 @@ class EnhancedProjectAnalysisHandlerTest {
             .thenReturn("Analysis complete with null llmModels");
 
         // When
-        String result = handler.analyzeProjectWithFix(
-            projectPath, configPath, generateMermaid, mermaidOutput,
-            generatePlantUML, plantUMLOutput, includePrivateMembers, useFix, outputDir);
+        ProjectAnalysisRequest request = createRequest(projectPath, configPath, generateMermaid,
+                mermaidOutput, generatePlantUML, plantUMLOutput, includePrivateMembers, useFix, outputDir);
+        String result = handler.analyzeProjectWithFix(request);
 
         // Then
         assertEquals("Analysis complete with null llmModels", result);

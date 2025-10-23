@@ -9,9 +9,10 @@ import java.util.concurrent.Executor;
 /**
  * ThreadLocal Propagating Executor
  *
- * Special executor that ensures ThreadLocal values are properly propagated from parent
- * threads to child threads in asynchronous operations. This is particularly important
- * for CompletableFuture chains and other async operations that span multiple threads.
+ * Special executor that ensures ThreadLocal values are properly propagated
+ * from parent threads to child threads in asynchronous operations. This is
+ * particularly important for CompletableFuture chains and other async
+ * operations that span multiple threads.
  */
 public final class ThreadLocalPropagatingExecutor implements Executor {
 
@@ -35,8 +36,8 @@ public final class ThreadLocalPropagatingExecutor implements Executor {
     }
 
     /**
-     * Executes the given command in a thread with ThreadLocal values propagated
-     * from the current thread.
+     * Executes the given command in a thread with ThreadLocal values
+     * propagated from the current thread.
      *
      * @param command the runnable task to execute
      */
@@ -46,10 +47,11 @@ public final class ThreadLocalPropagatingExecutor implements Executor {
         DocumentorConfig capturedConfig = LlmService.getThreadLocalConfig();
 
         if (capturedConfig != null) {
-            LOGGER.debug("Captured ThreadLocal config from parent thread with {} models",
-                capturedConfig.llmModels().size());
+            LOGGER.debug("Captured ThreadLocal config from parent thread"
+                    + " with {} models", capturedConfig.llmModels().size());
         } else {
-            LOGGER.warn("No ThreadLocal config available in parent thread - service may not work correctly");
+            LOGGER.warn("No ThreadLocal config available in parent thread"
+                    + " - service may not work correctly");
         }
 
         // Create a wrapper that sets the ThreadLocal in the new thread
@@ -58,8 +60,9 @@ public final class ThreadLocalPropagatingExecutor implements Executor {
             try {
                 if (capturedConfig != null) {
                     LlmService.setThreadLocalConfig(capturedConfig);
-                    LOGGER.debug("Set ThreadLocal config in child thread with {} models",
-                        capturedConfig.llmModels().size());
+                    LOGGER.debug("Set ThreadLocal config in child thread"
+                            + " with {} models",
+                            capturedConfig.llmModels().size());
                 }
 
                 // Execute the original task
@@ -83,7 +86,8 @@ public final class ThreadLocalPropagatingExecutor implements Executor {
      * @param namePrefix Prefix for naming the threads
      * @return An Executor that propagates ThreadLocal values
      */
-    public static Executor createExecutor(final int threads, final String namePrefix) {
+    public static Executor createExecutor(final int threads,
+            final String namePrefix) {
         // Thread counter for naming
         final java.util.concurrent.atomic.AtomicInteger counter =
                 new java.util.concurrent.atomic.AtomicInteger();
@@ -100,10 +104,12 @@ public final class ThreadLocalPropagatingExecutor implements Executor {
                         threads * 2, // max pool size
                         keepAliveSeconds, // keep alive time
                         java.util.concurrent.TimeUnit.SECONDS,
-                        new java.util.concurrent.LinkedBlockingQueue<>(maxQueueSize), // queue with capacity limit
+                        new java.util.concurrent.LinkedBlockingQueue<>(
+                                maxQueueSize), // queue with capacity limit
                         r -> { // thread factory
                             Thread thread = new Thread(r);
-                            thread.setName(namePrefix + "-" + counter.incrementAndGet());
+                            thread.setName(namePrefix + "-"
+                                    + counter.incrementAndGet());
                             thread.setDaemon(true);
                             return thread;
                         }

@@ -27,14 +27,16 @@ public class PythonASTProcessor {
     // Logger used in future error handling methods - required by design
     private final PythonASTCommandBuilder commandBuilder;
 
-    public PythonASTProcessor(final PythonASTCommandBuilder commandBuilderParam) {
+    public PythonASTProcessor(
+            final PythonASTCommandBuilder commandBuilderParam) {
         this.commandBuilder = commandBuilderParam;
     }
 
     /**
      * 🔬 Analyzes Python file using Python's AST module via subprocess
      */
-    public List<CodeElement> analyzeWithAST(final Path filePath) throws IOException, InterruptedException {
+    public List<CodeElement> analyzeWithAST(final Path filePath)
+            throws IOException, InterruptedException {
         List<CodeElement> elements = new ArrayList<>();
         Path tempScript = null;
 
@@ -43,7 +45,8 @@ public class PythonASTProcessor {
             tempScript = commandBuilder.writeTempScript();
 
             // Create and execute process
-            ProcessBuilder pb = commandBuilder.createProcessBuilder(tempScript, filePath);
+            ProcessBuilder pb = commandBuilder.createProcessBuilder(
+                    tempScript, filePath);
             Process process = pb.start();
 
             // Process the output
@@ -52,7 +55,9 @@ public class PythonASTProcessor {
             // Check exit code
             int exitCode = process.waitFor();
             if (exitCode != 0) {
-                throw new IOException("Python AST analysis failed with exit code: " + exitCode);
+                throw new IOException(
+                        "Python AST analysis failed with exit code: "
+                                + exitCode);
             }
         } finally {
             // Clean up
@@ -67,7 +72,8 @@ public class PythonASTProcessor {
     /**
      * 📋 Processes the output of the Python process
      */
-    private List<CodeElement> processOutput(final Process process, final Path filePath) throws IOException {
+    private List<CodeElement> processOutput(final Process process,
+            final Path filePath) throws IOException {
         List<CodeElement> elements = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(
@@ -75,12 +81,14 @@ public class PythonASTProcessor {
             String line;
             while ((line = reader.readLine()) != null) {
                 try {
-                    CodeElement element = commandBuilder.parseASTOutputLine(line, filePath);
+                    CodeElement element = commandBuilder
+                            .parseASTOutputLine(line, filePath);
                     if (element != null) {
                         elements.add(element);
                     }
                 } catch (Exception e) {
-                    LOGGER.warn("Failed to parse Python AST output line: {}", line, e);
+                    LOGGER.warn("Failed to parse Python AST output line: {}",
+                            line, e);
                 }
             }
         }
@@ -88,4 +96,3 @@ public class PythonASTProcessor {
         return elements;
     }
 }
-

@@ -14,7 +14,8 @@ public class LlmRequestFormatter {
 
     private final LlmModelTypeDetector modelTypeDetector;
 
-    public LlmRequestFormatter(final LlmModelTypeDetector modelTypeDetectorParam) {
+    public LlmRequestFormatter(
+            final LlmModelTypeDetector modelTypeDetectorParam) {
         this.modelTypeDetector = modelTypeDetectorParam;
     }
 
@@ -22,10 +23,11 @@ public class LlmRequestFormatter {
     private static final double DEFAULT_OPENAI_TEMPERATURE = 0.7;
     private static final double DEFAULT_GENERIC_TEMPERATURE = 0.5;
 
-        /**
+    /**
      * 🔍 Creates request body based on model type
      */
-    public Map<String, Object> createRequest(final LlmModelConfig model, final String prompt) {
+    public Map<String, Object> createRequest(final LlmModelConfig model,
+            final String prompt) {
         if (modelTypeDetector.isOllamaModel(model)) {
             return createOllamaRequest(model, prompt);
         } else if (modelTypeDetector.isOpenAICompatible(model)) {
@@ -35,9 +37,10 @@ public class LlmRequestFormatter {
         }
     }
 
-    private Map<String, Object> createOllamaRequest(final LlmModelConfig model, final String prompt) {
-        // Ollama expects model, prompt and optional streaming flag. Tests expect
-        // a 'stream' boolean (default false) to be present.
+    private Map<String, Object> createOllamaRequest(
+            final LlmModelConfig model, final String prompt) {
+        // Ollama expects model, prompt and optional streaming flag.
+        // Tests expect a 'stream' boolean (default false) to be present.
         return Map.of(
             "model", model.name(),
             "prompt", prompt,
@@ -46,19 +49,23 @@ public class LlmRequestFormatter {
         );
     }
 
-    private Map<String, Object> createOpenAIRequest(final LlmModelConfig model, final String prompt) {
-        // OpenAI-compatible payload: include temperature default (0.7) and ensure
-        // numeric types are present for max_tokens. Use messages for chat models.
+    private Map<String, Object> createOpenAIRequest(
+            final LlmModelConfig model, final String prompt) {
+        // OpenAI-compatible payload: include temperature default (0.7)
+        // and ensure numeric types are present for max_tokens.
+        // Use messages for chat models.
         return Map.of(
             "model", model.name(),
-            "messages", List.of(Map.of("role", "user", "content", prompt)),
+            "messages", List.of(
+                    Map.of("role", "user", "content", prompt)),
             "max_tokens", model.maxTokens(),
             "temperature", Double.valueOf(DEFAULT_OPENAI_TEMPERATURE),
             "timeout", model.timeoutSeconds()
         );
     }
 
-    private Map<String, Object> createGenericRequest(final LlmModelConfig model, final String prompt) {
+    private Map<String, Object> createGenericRequest(
+            final LlmModelConfig model, final String prompt) {
         // Generic providers: expose a top-level 'prompt' and common parameters
         // like temperature (default 0.5) and max_tokens so tests can assert on
         // these values directly.
@@ -70,4 +77,3 @@ public class LlmRequestFormatter {
         );
     }
 }
-
