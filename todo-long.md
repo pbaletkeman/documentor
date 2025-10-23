@@ -1,11 +1,10 @@
 ﻿# Long Line Issues - Test Files
 
-Total LineLength violations: 2561
+Total LineLength violations: 2506
 Files with violations: 110
 
 ## Files ordered by number of violations:
 
-- **C:\Users\Pete\Desktop\documentor\src\test\java\com\documentor\service\LlmServiceEnhancedTest.java** - 105 violations
 - **C:\Users\Pete\Desktop\documentor\src\test\java\com\documentor\service\documentation\ElementDocumentationGeneratorEnhancedTest.java** - 83 violations
 - **C:\Users\Pete\Desktop\documentor\src\test\java\com\documentor\config\BeanUtilsComprehensiveTest.java** - 78 violations
 - **C:\Users\Pete\Desktop\documentor\src\test\java\com\documentor\service\LlmServiceBranchCoverageTest.java** - 76 violations
@@ -13,13 +12,14 @@ Files with violations: 110
 - **C:\Users\Pete\Desktop\documentor\src\test\java\com\documentor\service\documentation\ElementDocumentationGeneratorTest.java** - 57 violations
 - **C:\Users\Pete\Desktop\documentor\src\test\java\com\documentor\service\documentation\ElementDocumentationGeneratorEnhancedCoverageTest.java** - 56 violations
 - **C:\Users\Pete\Desktop\documentor\src\test\java\com\documentor\DocumentorTestApplicationTest.java** - 55 violations
-- **C:\Users\Pete\Desktop\documentor\src\test\java\com\documentor\service\LlmServiceBranchTest.java** - 50 violations
 - **C:\Users\Pete\Desktop\documentor\src\test\java\com\documentor\cli\DirectCommandProcessorTest.java** - 50 violations
+- **C:\Users\Pete\Desktop\documentor\src\test\java\com\documentor\service\LlmServiceEnhancedTest.java** - 50 violations
+- **C:\Users\Pete\Desktop\documentor\src\test\java\com\documentor\service\LlmServiceBranchTest.java** - 50 violations
 - **C:\Users\Pete\Desktop\documentor\src\test\java\com\documentor\service\documentation\UnitTestDocumentationGeneratorBranchTest.java** - 49 violations
 - **C:\Users\Pete\Desktop\documentor\src\test\java\com\documentor\service\documentation\UnitTestDocumentationGeneratorEnhancedCoverageTest.java** - 48 violations
 - **C:\Users\Pete\Desktop\documentor\src\test\java\com\documentor\config\ExternalConfigLoaderTest.java** - 45 violations
-- **C:\Users\Pete\Desktop\documentor\src\test\java\com\documentor\model\ProjectAnalysisTest.java** - 45 violations
 - **C:\Users\Pete\Desktop\documentor\src\test\java\com\documentor\service\LlmServiceIntegrationTest.java** - 45 violations
+- **C:\Users\Pete\Desktop\documentor\src\test\java\com\documentor\model\ProjectAnalysisTest.java** - 45 violations
 - **C:\Users\Pete\Desktop\documentor\src\test\java\com\documentor\config\BeanUtilsTest.java** - 43 violations
 - **C:\Users\Pete\Desktop\documentor\src\test\java\com\documentor\config\ThreadLocalPropagatingExecutorEnhancedTest.java** - 43 violations
 - **C:\Users\Pete\Desktop\documentor\src\test\java\com\documentor\service\DocumentationServiceUnitTest.java** - 41 violations
