@@ -137,7 +137,8 @@ class LlmServiceEnhancedTest {
 
         try (MockedStatic<ThreadLocalContextHolder> mockedStatic =
                 mockStatic(ThreadLocalContextHolder.class)) {
-            mockedStatic.when(ThreadLocalContextHolder::getConfig).thenReturn(null);
+                        mockedStatic.when(ThreadLocalContextHolder::getConfig)
+                                .thenReturn(null);
 
             // Act
             CompletableFuture<String> result =
@@ -145,7 +146,9 @@ class LlmServiceEnhancedTest {
             String documentation = result.get();
 
             // Assert
-            assertTrue(documentation.contains("Error: LLM configuration is null"));
+                        assertTrue(
+                                documentation.contains("Error: LLM configuration is null")
+                        );
         }
     }
 

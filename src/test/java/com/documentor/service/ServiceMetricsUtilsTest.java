@@ -47,69 +47,119 @@ class ServiceMetricsUtilsTest {
 
     @Test
     void testCalculateSuccessRate() {
-        assertEquals(EIGHTY_PERCENT, ServiceMetricsUtils.calculateSuccessRate(EIGHTY, ONE_HUNDRED), DELTA);
-        assertEquals(HUNDRED_PERCENT, ServiceMetricsUtils.calculateSuccessRate(ONE_HUNDRED, ONE_HUNDRED), DELTA);
-        assertEquals(ZERO_PERCENT, ServiceMetricsUtils.calculateSuccessRate(0, ONE_HUNDRED), DELTA);
-        assertEquals(ZERO_PERCENT, ServiceMetricsUtils.calculateSuccessRate(FIFTY, 0), DELTA);
-        assertEquals(ZERO_PERCENT, ServiceMetricsUtils.calculateSuccessRate(NEGATIVE_TEN_INT, ONE_HUNDRED), DELTA);
-        assertEquals(HUNDRED_PERCENT, ServiceMetricsUtils.calculateSuccessRate(ONE_FIFTY_INT, ONE_HUNDRED), DELTA);
+        assertEquals(EIGHTY_PERCENT,
+            ServiceMetricsUtils.calculateSuccessRate(EIGHTY, ONE_HUNDRED),
+            DELTA);
+        assertEquals(HUNDRED_PERCENT,
+            ServiceMetricsUtils.calculateSuccessRate(ONE_HUNDRED, ONE_HUNDRED),
+            DELTA);
+        assertEquals(ZERO_PERCENT,
+            ServiceMetricsUtils.calculateSuccessRate(0, ONE_HUNDRED), DELTA);
+        assertEquals(ZERO_PERCENT,
+            ServiceMetricsUtils.calculateSuccessRate(FIFTY, 0), DELTA);
+        assertEquals(ZERO_PERCENT,
+            ServiceMetricsUtils.calculateSuccessRate(NEGATIVE_TEN_INT,
+                ONE_HUNDRED), DELTA);
+        assertEquals(HUNDRED_PERCENT,
+            ServiceMetricsUtils.calculateSuccessRate(ONE_FIFTY_INT,
+                ONE_HUNDRED), DELTA);
     }
 
     @Test
     void testFormatSuccessRate() {
-        assertEquals("80.0%", ServiceMetricsUtils.formatSuccessRate(EIGHTY_PERCENT));
-        assertEquals("95.5%", ServiceMetricsUtils.formatSuccessRate(NINETY_FIVE_POINT_FIVE));
-        assertEquals("0.0%", ServiceMetricsUtils.formatSuccessRate(NEGATIVE_FIVE));
-        assertEquals("100.0%", ServiceMetricsUtils.formatSuccessRate(ONE_FIFTY));
+        assertEquals("80.0%",
+            ServiceMetricsUtils.formatSuccessRate(EIGHTY_PERCENT));
+        assertEquals("95.5%",
+            ServiceMetricsUtils.formatSuccessRate(NINETY_FIVE_POINT_FIVE));
+        assertEquals("0.0%",
+            ServiceMetricsUtils.formatSuccessRate(NEGATIVE_FIVE));
+        assertEquals("100.0%",
+            ServiceMetricsUtils.formatSuccessRate(ONE_FIFTY));
     }
 
     @Test
     void testMeetsSuccessThreshold() {
-        assertTrue(ServiceMetricsUtils.meetsSuccessThreshold(NINETY_FIVE_PERCENT, NINETY_PERCENT));
-        assertTrue(ServiceMetricsUtils.meetsSuccessThreshold(NINETY_PERCENT, NINETY_PERCENT));
-        assertFalse(ServiceMetricsUtils.meetsSuccessThreshold(EIGHTY_FIVE_PERCENT, NINETY_PERCENT));
-        assertFalse(ServiceMetricsUtils.meetsSuccessThreshold(NINETY_FIVE_PERCENT, NEGATIVE_TEN));
-        assertFalse(ServiceMetricsUtils.meetsSuccessThreshold(NINETY_FIVE_PERCENT, ONE_FIFTY));
+        assertTrue(ServiceMetricsUtils.meetsSuccessThreshold(
+            NINETY_FIVE_PERCENT, NINETY_PERCENT));
+        assertTrue(ServiceMetricsUtils.meetsSuccessThreshold(
+            NINETY_PERCENT, NINETY_PERCENT));
+        assertFalse(ServiceMetricsUtils.meetsSuccessThreshold(
+            EIGHTY_FIVE_PERCENT, NINETY_PERCENT));
+        assertFalse(ServiceMetricsUtils.meetsSuccessThreshold(
+            NINETY_FIVE_PERCENT, NEGATIVE_TEN));
+        assertFalse(ServiceMetricsUtils.meetsSuccessThreshold(
+            NINETY_FIVE_PERCENT, ONE_FIFTY));
     }
 
     @Test
     void testCalculateErrorRate() {
-        assertEquals(TWENTY_PERCENT, ServiceMetricsUtils.calculateErrorRate(TWENTY, ONE_HUNDRED), DELTA);
-        assertEquals(ZERO_PERCENT, ServiceMetricsUtils.calculateErrorRate(0, ONE_HUNDRED), DELTA);
-        assertEquals(HUNDRED_PERCENT, ServiceMetricsUtils.calculateErrorRate(ONE_HUNDRED, ONE_HUNDRED), DELTA);
-        assertEquals(ZERO_PERCENT, ServiceMetricsUtils.calculateErrorRate(FIFTY, 0), DELTA);
-        assertEquals(ZERO_PERCENT, ServiceMetricsUtils.calculateErrorRate(NEGATIVE_TEN_INT, ONE_HUNDRED), DELTA);
-        assertEquals(HUNDRED_PERCENT, ServiceMetricsUtils.calculateErrorRate(ONE_FIFTY_INT, ONE_HUNDRED), DELTA);
+        assertEquals(TWENTY_PERCENT,
+            ServiceMetricsUtils.calculateErrorRate(TWENTY, ONE_HUNDRED), DELTA);
+        assertEquals(ZERO_PERCENT,
+            ServiceMetricsUtils.calculateErrorRate(0, ONE_HUNDRED), DELTA);
+        assertEquals(HUNDRED_PERCENT,
+            ServiceMetricsUtils.calculateErrorRate(ONE_HUNDRED, ONE_HUNDRED),
+            DELTA);
+        assertEquals(ZERO_PERCENT,
+            ServiceMetricsUtils.calculateErrorRate(FIFTY, 0), DELTA);
+        assertEquals(ZERO_PERCENT,
+            ServiceMetricsUtils.calculateErrorRate(NEGATIVE_TEN_INT,
+                ONE_HUNDRED), DELTA);
+        assertEquals(HUNDRED_PERCENT,
+            ServiceMetricsUtils.calculateErrorRate(ONE_FIFTY_INT,
+                ONE_HUNDRED), DELTA);
     }
 
     @Test
     void testIsServiceHealthy() {
-        assertTrue(ServiceMetricsUtils.isServiceHealthy(NINETY_FIVE_PERCENT, FIVE_PERCENT, NINETY_PERCENT, TEN_PERCENT));
-        assertTrue(ServiceMetricsUtils.isServiceHealthy(NINETY_PERCENT, TEN_PERCENT, NINETY_PERCENT, TEN_PERCENT));
-        assertFalse(ServiceMetricsUtils.isServiceHealthy(EIGHTY_FIVE_PERCENT, FIVE_PERCENT, NINETY_PERCENT, TEN_PERCENT));
-        assertFalse(ServiceMetricsUtils.isServiceHealthy(NINETY_FIVE_PERCENT, FIFTEEN_PERCENT, NINETY_PERCENT, TEN_PERCENT));
-        assertFalse(ServiceMetricsUtils.isServiceHealthy(NINETY_FIVE_PERCENT, FIVE_PERCENT, NEGATIVE_TEN, TEN_PERCENT));
-        assertFalse(ServiceMetricsUtils.isServiceHealthy(NINETY_FIVE_PERCENT, FIVE_PERCENT, NINETY_PERCENT, NEGATIVE_FIVE_DOT_ZERO));
-        assertFalse(ServiceMetricsUtils.isServiceHealthy(NINETY_FIVE_PERCENT, FIVE_PERCENT, ONE_FIFTY, TEN_PERCENT));
-        assertFalse(ServiceMetricsUtils.isServiceHealthy(NINETY_FIVE_PERCENT, FIVE_PERCENT, NINETY_PERCENT, ONE_FIFTY));
+        assertTrue(ServiceMetricsUtils.isServiceHealthy(NINETY_FIVE_PERCENT,
+            FIVE_PERCENT, NINETY_PERCENT, TEN_PERCENT));
+        assertTrue(ServiceMetricsUtils.isServiceHealthy(NINETY_PERCENT,
+            TEN_PERCENT, NINETY_PERCENT, TEN_PERCENT));
+        assertFalse(ServiceMetricsUtils.isServiceHealthy(EIGHTY_FIVE_PERCENT,
+            FIVE_PERCENT, NINETY_PERCENT, TEN_PERCENT));
+        assertFalse(ServiceMetricsUtils.isServiceHealthy(NINETY_FIVE_PERCENT,
+            FIFTEEN_PERCENT, NINETY_PERCENT, TEN_PERCENT));
+        assertFalse(ServiceMetricsUtils.isServiceHealthy(NINETY_FIVE_PERCENT,
+            FIVE_PERCENT, NEGATIVE_TEN, TEN_PERCENT));
+        assertFalse(ServiceMetricsUtils.isServiceHealthy(NINETY_FIVE_PERCENT,
+            FIVE_PERCENT, NINETY_PERCENT, NEGATIVE_FIVE_DOT_ZERO));
+        assertFalse(ServiceMetricsUtils.isServiceHealthy(NINETY_FIVE_PERCENT,
+            FIVE_PERCENT, ONE_FIFTY, TEN_PERCENT));
+        assertFalse(ServiceMetricsUtils.isServiceHealthy(NINETY_FIVE_PERCENT,
+            FIVE_PERCENT, NINETY_PERCENT, ONE_FIFTY));
     }
 
     @Test
     void testCalculateAvailability() {
-        assertEquals(NINETY_NINE_POINT_NINE, ServiceMetricsUtils.calculateAvailability(NINE_NINETY_NINE, ONE_THOUSAND), DELTA);
-        assertEquals(HUNDRED_PERCENT, ServiceMetricsUtils.calculateAvailability(ONE_THOUSAND, ONE_THOUSAND), DELTA);
-        assertEquals(ZERO_PERCENT, ServiceMetricsUtils.calculateAvailability(0, ONE_THOUSAND), DELTA);
-        assertEquals(ZERO_PERCENT, ServiceMetricsUtils.calculateAvailability(FIVE_HUNDRED, 0), DELTA);
-        assertEquals(ZERO_PERCENT, ServiceMetricsUtils.calculateAvailability(NEGATIVE_ONE_HUNDRED, ONE_THOUSAND), DELTA);
-        assertEquals(HUNDRED_PERCENT, ServiceMetricsUtils.calculateAvailability(FIFTEEN_HUNDRED, ONE_THOUSAND), DELTA);
+        assertEquals(NINETY_NINE_POINT_NINE,
+            ServiceMetricsUtils.calculateAvailability(NINE_NINETY_NINE,
+                ONE_THOUSAND), DELTA);
+        assertEquals(HUNDRED_PERCENT,
+            ServiceMetricsUtils.calculateAvailability(ONE_THOUSAND,
+                ONE_THOUSAND), DELTA);
+        assertEquals(ZERO_PERCENT,
+            ServiceMetricsUtils.calculateAvailability(0, ONE_THOUSAND), DELTA);
+        assertEquals(ZERO_PERCENT,
+            ServiceMetricsUtils.calculateAvailability(FIVE_HUNDRED, 0), DELTA);
+        assertEquals(ZERO_PERCENT,
+            ServiceMetricsUtils.calculateAvailability(NEGATIVE_ONE_HUNDRED,
+                ONE_THOUSAND), DELTA);
+        assertEquals(HUNDRED_PERCENT,
+            ServiceMetricsUtils.calculateAvailability(FIFTEEN_HUNDRED,
+                ONE_THOUSAND), DELTA);
     }
 
     @Test
     void testFormatMetricsSummary() {
-        String summary = ServiceMetricsUtils.formatMetricsSummary(NINETY_FIVE_POINT_FIVE, FOUR_POINT_FIVE, NINETY_NINE_POINT_NINE);
-        assertEquals("Success: 95.5%, Errors: 4.5%, Availability: 99.9%", summary);
+        String summary = ServiceMetricsUtils.formatMetricsSummary(
+            NINETY_FIVE_POINT_FIVE, FOUR_POINT_FIVE, NINETY_NINE_POINT_NINE);
+        assertEquals("Success: 95.5%, Errors: 4.5%, Availability: 99.9%",
+            summary);
 
-        summary = ServiceMetricsUtils.formatMetricsSummary(HUNDRED_PERCENT, ZERO_PERCENT, HUNDRED_PERCENT);
-        assertEquals("Success: 100.0%, Errors: 0.0%, Availability: 100.0%", summary);
+        summary = ServiceMetricsUtils.formatMetricsSummary(HUNDRED_PERCENT,
+            ZERO_PERCENT, HUNDRED_PERCENT);
+        assertEquals("Success: 100.0%, Errors: 0.0%, Availability: 100.0%",
+            summary);
     }
 }

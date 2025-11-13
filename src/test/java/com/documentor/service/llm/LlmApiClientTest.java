@@ -55,19 +55,23 @@ class LlmApiClientTest {
         apiClient = new LlmApiClient(mockWebClient, modelTypeDetector);
 
         openAiModel = new LlmModelConfig(
-            "gpt-4", "openai", "https://api.openai.com/v1/completions", "sk-test-key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
+            "gpt-4", "openai", "https://api.openai.com/v1/completions",
+            "sk-test-key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
         );
 
         ollamaModel = new LlmModelConfig(
-            "llama2", "ollama", "http://localhost:11434/api/generate", "", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
+            "llama2", "ollama", "http://localhost:11434/api/generate",
+            "", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
         );
 
         codelamaModel = new LlmModelConfig(
-            "codellama:7b", "ollama", "http://localhost:11434/api/generate", "", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
+            "codellama:7b", "ollama", "http://localhost:11434/api/generate",
+            "", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
         );
 
         mistralModel = new LlmModelConfig(
-            "mistral:latest", "ollama", "http://localhost:11434/api/generate", "", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
+            "mistral:latest", "ollama", "http://localhost:11434/api/generate",
+            "", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
         );
     }
 
@@ -84,10 +88,12 @@ class LlmApiClientTest {
         Map<String, Object> requestBody = Map.of("prompt", "test prompt");
 
         // Mock WebClient to throw exception during the call
-        when(mockWebClient.post()).thenThrow(new RuntimeException("Network error"));
+        when(mockWebClient.post())
+                .thenThrow(new RuntimeException("Network error"));
 
         // When
-        String result = apiClient.callLlmModel(openAiModel, "http://test.api", requestBody);
+        String result = apiClient.callLlmModel(openAiModel, "http://test.api",
+                requestBody);
 
         // Then
         assertTrue(result.contains("Error generating content with gpt-4"));
@@ -166,7 +172,8 @@ class LlmApiClientTest {
     @Test
     @DisplayName("Should add authorization header for non-Ollama models with API key")
     void testAuthHeaderAddedForNonOllamaModels() {
-        // This test is simplified - we can verify that non-Ollama models need auth headers
+        // This test is simplified - we can verify that non-Ollama models need auth
+        // headers
         // by checking the openAiModel API key setup
         assertFalse(openAiModel.apiKey().isEmpty());
         assertEquals("sk-test-key", openAiModel.apiKey());
@@ -199,11 +206,15 @@ class LlmApiClientTest {
 
         when(mockWebClient.post()).thenReturn(requestBodyUriSpec);
         when(requestBodyUriSpec.uri(anyString())).thenReturn(requestBodySpec);
-        when(requestBodySpec.header(eq("Content-Type"), eq("application/json"))).thenReturn(requestBodySpec);
-        when(requestBodySpec.header(eq("Authorization"), eq("Bearer sk-test-key"))).thenReturn(requestBodySpec);
-        when(requestBodySpec.bodyValue(requestBody)).thenReturn(requestHeadersSpec);
+        when(requestBodySpec.header(eq("Content-Type"), eq("application/json")))
+                .thenReturn(requestBodySpec);
+        when(requestBodySpec.header(eq("Authorization"), eq("Bearer sk-test-key")))
+                .thenReturn(requestBodySpec);
+        when(requestBodySpec.bodyValue(requestBody))
+                .thenReturn(requestHeadersSpec);
         when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
-        when(responseSpec.bodyToMono(String.class)).thenReturn(Mono.just("response"));
+        when(responseSpec.bodyToMono(String.class))
+                .thenReturn(Mono.just("response"));
 
         // Configure model detector to return false (not Ollama)
         when(modelTypeDetector.isOllamaModel(openAiModel)).thenReturn(false);
@@ -232,10 +243,13 @@ class LlmApiClientTest {
 
         when(mockWebClient.post()).thenReturn(requestBodyUriSpec);
         when(requestBodyUriSpec.uri(anyString())).thenReturn(requestBodySpec);
-        when(requestBodySpec.header(eq("Content-Type"), eq("application/json"))).thenReturn(requestBodySpec);
-        when(requestBodySpec.bodyValue(requestBody)).thenReturn(requestHeadersSpec);
+        when(requestBodySpec.header(eq("Content-Type"), eq("application/json")))
+                .thenReturn(requestBodySpec);
+        when(requestBodySpec.bodyValue(requestBody))
+                .thenReturn(requestHeadersSpec);
         when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
-        when(responseSpec.bodyToMono(String.class)).thenReturn(Mono.just("ollama response"));
+        when(responseSpec.bodyToMono(String.class))
+                .thenReturn(Mono.just("ollama response"));
 
         // Configure model detector to return true (is Ollama)
         when(modelTypeDetector.isOllamaModel(ollamaModel)).thenReturn(true);
@@ -267,13 +281,17 @@ class LlmApiClientTest {
 
         when(mockWebClient.post()).thenReturn(requestBodyUriSpec);
         when(requestBodyUriSpec.uri(anyString())).thenReturn(requestBodySpec);
-        when(requestBodySpec.header(eq("Content-Type"), eq("application/json"))).thenReturn(requestBodySpec);
-        when(requestBodySpec.bodyValue(requestBody)).thenReturn(requestHeadersSpec);
+        when(requestBodySpec.header(eq("Content-Type"), eq("application/json")))
+                .thenReturn(requestBodySpec);
+        when(requestBodySpec.bodyValue(requestBody))
+                .thenReturn(requestHeadersSpec);
         when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
-        when(responseSpec.bodyToMono(String.class)).thenReturn(Mono.just("no auth response"));
+        when(responseSpec.bodyToMono(String.class))
+                .thenReturn(Mono.just("no auth response"));
 
         // Configure model detector to return false (not Ollama)
-        when(modelTypeDetector.isOllamaModel(modelWithNullKey)).thenReturn(false);
+        when(modelTypeDetector.isOllamaModel(modelWithNullKey))
+                .thenReturn(false);
 
         // When
         String result = apiClient.callLlmModel(modelWithNullKey, "http://test.api", requestBody);
@@ -302,13 +320,17 @@ class LlmApiClientTest {
 
         when(mockWebClient.post()).thenReturn(requestBodyUriSpec);
         when(requestBodyUriSpec.uri(anyString())).thenReturn(requestBodySpec);
-        when(requestBodySpec.header(eq("Content-Type"), eq("application/json"))).thenReturn(requestBodySpec);
-        when(requestBodySpec.bodyValue(requestBody)).thenReturn(requestHeadersSpec);
+        when(requestBodySpec.header(eq("Content-Type"), eq("application/json")))
+                .thenReturn(requestBodySpec);
+        when(requestBodySpec.bodyValue(requestBody))
+                .thenReturn(requestHeadersSpec);
         when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
-        when(responseSpec.bodyToMono(String.class)).thenReturn(Mono.just("empty key response"));
+        when(responseSpec.bodyToMono(String.class))
+                .thenReturn(Mono.just("empty key response"));
 
         // Configure model detector to return false (not Ollama)
-        when(modelTypeDetector.isOllamaModel(modelWithEmptyKey)).thenReturn(false);
+        when(modelTypeDetector.isOllamaModel(modelWithEmptyKey))
+                .thenReturn(false);
 
         // When
         String result = apiClient.callLlmModel(modelWithEmptyKey, "http://test.api", requestBody);

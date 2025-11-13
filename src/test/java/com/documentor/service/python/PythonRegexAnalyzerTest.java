@@ -34,9 +34,12 @@ class PythonRegexAnalyzerTest {
     private static final int EXPECTED_COUNT_ONE = 1;
     private static final int MATCHER_GROUP_ONE = 1;
     private static final int MATCHER_GROUP_TWO = 2;
-    private static final String PUBLIC_VAR_ASSIGNMENT = "public_var = " + TEST_VALUE_100;
-    private static final String PRIVATE_VAR_ASSIGNMENT = "_private_var = " + TEST_VALUE_42;
-    private static final String TEST_VAR_ASSIGNMENT = "test_var = " + TEST_VALUE_100;
+    private static final String PUBLIC_VAR_ASSIGNMENT =
+            "public_var = " + TEST_VALUE_100;
+    private static final String PRIVATE_VAR_ASSIGNMENT =
+            "_private_var = " + TEST_VALUE_42;
+    private static final String TEST_VAR_ASSIGNMENT =
+            "test_var = " + TEST_VALUE_100;
 
     private DocumentorConfig mockConfig;
     private AnalysisSettings mockAnalysisSettings;
@@ -56,9 +59,11 @@ class PythonRegexAnalyzerTest {
         when(mockConfig.analysisSettings()).thenReturn(mockAnalysisSettings);
 
         // Setup default mocks for line numbers
-        when(mockElementExtractor.extractDocstring(any(), anyInt())).thenReturn("");
+        when(mockElementExtractor.extractDocstring(any(), anyInt()))
+                .thenReturn("");
 
-        regexAnalyzer = new PythonRegexAnalyzer(mockConfig, mockElementExtractor, mockPatternMatcher);
+        regexAnalyzer = new PythonRegexAnalyzer(mockConfig, mockElementExtractor,
+                mockPatternMatcher);
         testFilePath = Path.of("test_file.py");
     }
 
@@ -252,4 +257,3 @@ class PythonRegexAnalyzerTest {
         when(mockPatternMatcher.extractParameters(anyString())).thenReturn(new String[0]);
     }
 }
-

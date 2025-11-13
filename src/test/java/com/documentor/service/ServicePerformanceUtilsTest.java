@@ -76,8 +76,8 @@ class ServicePerformanceUtilsTest {
                 ONE_THOUSAND_MS));
         assertTrue(ServicePerformanceUtils.isWithinTimeLimit(ONE_THOUSAND_MS,
                 ONE_THOUSAND_MS));
-        assertFalse(ServicePerformanceUtils.isWithinTimeLimit(FIFTEEN_HUNDRED_MS,
-                ONE_THOUSAND_MS));
+        assertFalse(ServicePerformanceUtils.isWithinTimeLimit(
+                FIFTEEN_HUNDRED_MS, ONE_THOUSAND_MS));
         assertFalse(ServicePerformanceUtils.isWithinTimeLimit(FIVE_HUNDRED_MS,
                 ZERO));
         assertFalse(ServicePerformanceUtils.isWithinTimeLimit(FIVE_HUNDRED_MS,
@@ -90,8 +90,8 @@ class ServicePerformanceUtilsTest {
                 ServicePerformanceUtils.calculateThroughput(ONE_HUNDRED,
                 TEN_THOUSAND_MS), DELTA);
         assertEquals(HALF,
-                ServicePerformanceUtils.calculateThroughput(ONE, TWO_THOUSAND_MS),
-                DELTA);
+                ServicePerformanceUtils.calculateThroughput(ONE,
+                        TWO_THOUSAND_MS), DELTA);
         assertEquals(0.0,
                 ServicePerformanceUtils.calculateThroughput(ONE_HUNDRED, ZERO),
                 DELTA);
@@ -99,32 +99,34 @@ class ServicePerformanceUtilsTest {
                 ServicePerformanceUtils.calculateThroughput(ONE_HUNDRED,
                 NEGATIVE_ONE_THOUSAND), DELTA);
         assertEquals(0.0,
-                ServicePerformanceUtils.calculateThroughput(NEGATIVE_ONE_HUNDRED,
-                ONE_THOUSAND_MS), DELTA);
+                ServicePerformanceUtils.calculateThroughput(
+                        NEGATIVE_ONE_HUNDRED, ONE_THOUSAND_MS), DELTA);
     }
 
     @Test
     void testBatchElementsWithValidInput() {
         List<String> elements = List.of("a", "b", "c", "d", "e");
-        List<List<String>> batches = ServicePerformanceUtils.batchElements(elements,
-                TWO);
+        List<List<String>> batches = ServicePerformanceUtils.batchElements(
+                elements, TWO);
 
         assertFalse(batches.isEmpty());
-        // Note: The current implementation may not work as expected due to indexOf usage
-        // This test verifies the method doesn't crash
+        // Note: The current implementation may not work as expected due to
+        // indexOf usage - This test verifies the method doesn't crash
     }
 
     @Test
     void testBatchElementsWithNullOrEmptyList() {
-        assertTrue(ServicePerformanceUtils.batchElements(null, TWO).isEmpty());
-        assertTrue(ServicePerformanceUtils.batchElements(List.of(), TWO).isEmpty());
+        assertTrue(ServicePerformanceUtils.batchElements(null, TWO)
+                .isEmpty());
+        assertTrue(ServicePerformanceUtils.batchElements(List.of(), TWO)
+                .isEmpty());
     }
 
     @Test
     void testBatchElementsWithInvalidBatchSize() {
         List<String> elements = List.of("a", "b", "c");
-        List<List<String>> result = ServicePerformanceUtils.batchElements(elements,
-                ZERO);
+        List<List<String>> result = ServicePerformanceUtils.batchElements(
+                elements, ZERO);
         assertEquals(ONE, result.size());
         assertEquals(elements, result.get(ZERO));
 
@@ -137,10 +139,10 @@ class ServicePerformanceUtilsTest {
     void testEstimateProcessingTime() {
         assertEquals(ONE_THOUSAND_MS,
                 ServicePerformanceUtils.estimateProcessingTime(ONE_HUNDRED,
-                TEN_POINT_ZERO));
+                        TEN_POINT_ZERO));
         assertEquals(0L,
-                ServicePerformanceUtils.estimateProcessingTime(NEGATIVE_ONE_HUNDRED,
-                TEN_POINT_ZERO));
+                ServicePerformanceUtils.estimateProcessingTime(
+                        NEGATIVE_ONE_HUNDRED, TEN_POINT_ZERO));
         assertEquals(0L,
                 ServicePerformanceUtils.estimateProcessingTime(ONE_HUNDRED,
                 NEGATIVE_TEN_POINT_ZERO));
@@ -151,7 +153,8 @@ class ServicePerformanceUtilsTest {
 
     @Test
     void testIsCompletedWithinTimeoutWithCompletedFuture() {
-        CompletableFuture<String> future = CompletableFuture.completedFuture("test");
+        CompletableFuture<String> future = CompletableFuture
+                .completedFuture("test");
         assertTrue(ServicePerformanceUtils.isCompletedWithinTimeout(future,
                 ONE_THOUSAND_MS));
     }
@@ -164,8 +167,10 @@ class ServicePerformanceUtilsTest {
 
     @Test
     void testIsCompletedWithinTimeoutWithInvalidTimeout() {
-        CompletableFuture<String> future = CompletableFuture.completedFuture("test");
-        assertFalse(ServicePerformanceUtils.isCompletedWithinTimeout(future, ZERO));
+        CompletableFuture<String> future = CompletableFuture
+                .completedFuture("test");
+        assertFalse(ServicePerformanceUtils.isCompletedWithinTimeout(
+                future, ZERO));
         assertFalse(ServicePerformanceUtils.isCompletedWithinTimeout(future,
                 NEGATIVE_ONE_THOUSAND));
     }
@@ -188,27 +193,32 @@ class ServicePerformanceUtilsTest {
 
     @Test
     void testFormatDuration() {
-        assertEquals("0ms", ServicePerformanceUtils.formatDuration(NEGATIVE_ONE_HUNDRED));
-        assertEquals("500ms", ServicePerformanceUtils.formatDuration(FIVE_HUNDRED_MS));
-        assertEquals("1.5s", ServicePerformanceUtils.formatDuration(FIFTEEN_HUNDRED_MS));
-        assertEquals("2m 30s", ServicePerformanceUtils.formatDuration(ONE_HUNDRED_FIFTY_THOUSAND_MS));
-        assertEquals("1m 0s", ServicePerformanceUtils.formatDuration(SIXTY_THOUSAND_MS));
+        assertEquals("0ms", ServicePerformanceUtils.formatDuration(
+                NEGATIVE_ONE_HUNDRED));
+        assertEquals("500ms", ServicePerformanceUtils.formatDuration(
+                FIVE_HUNDRED_MS));
+        assertEquals("1.5s", ServicePerformanceUtils.formatDuration(
+                FIFTEEN_HUNDRED_MS));
+        assertEquals("2m 30s", ServicePerformanceUtils.formatDuration(
+                ONE_HUNDRED_FIFTY_THOUSAND_MS));
+        assertEquals("1m 0s", ServicePerformanceUtils.formatDuration(
+                SIXTY_THOUSAND_MS));
     }
 
     @Test
     void testCalculateOptimalBatchSize() {
-        assertEquals(ONE, ServicePerformanceUtils.calculateOptimalBatchSize(ZERO,
-                ONE_HUNDRED));
-        assertEquals(ONE, ServicePerformanceUtils.calculateOptimalBatchSize(ONE_HUNDRED,
-                ZERO));
-        assertEquals(ONE, ServicePerformanceUtils.calculateOptimalBatchSize(NEGATIVE_ONE_HUNDRED,
-                ONE_HUNDRED));
-        assertEquals(ONE, ServicePerformanceUtils.calculateOptimalBatchSize(ONE_HUNDRED,
-                NEGATIVE_ONE_HUNDRED));
+        assertEquals(ONE, ServicePerformanceUtils.calculateOptimalBatchSize(
+                ZERO, ONE_HUNDRED));
+        assertEquals(ONE, ServicePerformanceUtils.calculateOptimalBatchSize(
+                ONE_HUNDRED, ZERO));
+        assertEquals(ONE, ServicePerformanceUtils.calculateOptimalBatchSize(
+                NEGATIVE_ONE_HUNDRED, ONE_HUNDRED));
+        assertEquals(ONE, ServicePerformanceUtils.calculateOptimalBatchSize(
+                ONE_HUNDRED, NEGATIVE_ONE_HUNDRED));
 
         // Normal case
-        int batchSize = ServicePerformanceUtils.calculateOptimalBatchSize(ONE_THOUSAND,
-                ONE_HUNDRED);
+        int batchSize = ServicePerformanceUtils.calculateOptimalBatchSize(
+                ONE_THOUSAND, ONE_HUNDRED);
         assertTrue(batchSize > ZERO);
         assertTrue(batchSize <= ONE_THOUSAND);
     }
@@ -223,17 +233,23 @@ class ServicePerformanceUtilsTest {
 
     @Test
     void testValidatePerformanceMetrics() {
-        assertTrue(ServicePerformanceUtils.validatePerformanceMetrics(TEN_POINT_ZERO,
-                FIVE_HUNDRED_MS, FIVE_POINT_ZERO, ONE_THOUSAND_MS));
-        assertTrue(ServicePerformanceUtils.validatePerformanceMetrics(FIVE_POINT_ZERO,
-                ONE_THOUSAND_MS, FIVE_POINT_ZERO, ONE_THOUSAND_MS));
-        assertFalse(ServicePerformanceUtils.validatePerformanceMetrics(THREE_POINT_ZERO,
-                FIVE_HUNDRED_MS, FIVE_POINT_ZERO, ONE_THOUSAND_MS));
-        assertFalse(ServicePerformanceUtils.validatePerformanceMetrics(TEN_POINT_ZERO,
-                FIFTEEN_HUNDRED_MS, FIVE_POINT_ZERO, ONE_THOUSAND_MS));
-        assertFalse(ServicePerformanceUtils.validatePerformanceMetrics(TEN_POINT_ZERO,
-                FIVE_HUNDRED_MS, NEGATIVE_FIVE_POINT_ZERO, ONE_THOUSAND_MS));
-        assertFalse(ServicePerformanceUtils.validatePerformanceMetrics(TEN_POINT_ZERO,
-                FIVE_HUNDRED_MS, FIVE_POINT_ZERO, NEGATIVE_ONE_THOUSAND));
+        assertTrue(ServicePerformanceUtils.validatePerformanceMetrics(
+                TEN_POINT_ZERO, FIVE_HUNDRED_MS, FIVE_POINT_ZERO,
+                ONE_THOUSAND_MS));
+        assertTrue(ServicePerformanceUtils.validatePerformanceMetrics(
+                FIVE_POINT_ZERO, ONE_THOUSAND_MS, FIVE_POINT_ZERO,
+                ONE_THOUSAND_MS));
+        assertFalse(ServicePerformanceUtils.validatePerformanceMetrics(
+                THREE_POINT_ZERO, FIVE_HUNDRED_MS, FIVE_POINT_ZERO,
+                ONE_THOUSAND_MS));
+        assertFalse(ServicePerformanceUtils.validatePerformanceMetrics(
+                TEN_POINT_ZERO, FIFTEEN_HUNDRED_MS, FIVE_POINT_ZERO,
+                ONE_THOUSAND_MS));
+        assertFalse(ServicePerformanceUtils.validatePerformanceMetrics(
+                TEN_POINT_ZERO, FIVE_HUNDRED_MS, NEGATIVE_FIVE_POINT_ZERO,
+                ONE_THOUSAND_MS));
+        assertFalse(ServicePerformanceUtils.validatePerformanceMetrics(
+                TEN_POINT_ZERO, FIVE_HUNDRED_MS, FIVE_POINT_ZERO,
+                NEGATIVE_ONE_THOUSAND));
     }
 }
