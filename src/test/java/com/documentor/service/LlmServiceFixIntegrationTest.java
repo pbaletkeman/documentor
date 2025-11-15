@@ -24,7 +24,9 @@ import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.Mockito.when;
 
 import com.documentor.config.TestConfig;
@@ -32,14 +34,15 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
 /**
- * Comprehensive integration test for the LlmService with ThreadLocal configuration fix.
- * This test verifies that the LlmService works correctly with the ThreadLocal configuration
+ * Comprehensive integration test for the LlmService with
+ * ThreadLocal configuration fix. This test verifies that the
+ * LlmService works correctly with the ThreadLocal configuration
  * in multiple async operations.
  */
 @SpringBootTest(classes = DocumentorTestApplication.class)
 @ActiveProfiles("test")
 @Import(TestConfig.class)
-public class LlmServiceFixIntegrationTest {
+public final class LlmServiceFixIntegrationTest {
 
     @Mock
     private LlmRequestBuilder mockRequestBuilder;
@@ -82,32 +85,42 @@ public class LlmServiceFixIntegrationTest {
                 List.of("**/test/**")
         );
 
-        testConfig = new DocumentorConfig(List.of(testModel), outputSettings, analysisSettings);
+        testConfig =
+                new DocumentorConfig(List.of(testModel), outputSettings,
+                analysisSettings);
 
         // Clear any previous ThreadLocal configuration
         LlmService.clearThreadLocalConfig();
 
         // Initialize the services
-        llmService = new LlmService(testConfig, mockRequestBuilder, mockResponseHandler, mockApiClient);
+        llmService =
+                new LlmService(testConfig, mockRequestBuilder,
+                mockResponseHandler, mockApiClient);
 
         // Set up mock responses
-        when(mockRequestBuilder.createDocumentationPrompt(any(CodeElement.class)))
+        when(mockRequestBuilder.createDocumentationPrompt(any(
+                CodeElement.class)))
                 .thenReturn("Test documentation prompt");
-        when(mockRequestBuilder.createUsageExamplePrompt(any(CodeElement.class)))
+        when(mockRequestBuilder.createUsageExamplePrompt(any(
+                CodeElement.class)))
                 .thenReturn("Test usage examples prompt");
-        when(mockRequestBuilder.createUnitTestPrompt(any(CodeElement.class)))
+        when(mockRequestBuilder.createUnitTestPrompt(any(
+                CodeElement.class)))
                 .thenReturn("Test unit tests prompt");
 
-        when(mockRequestBuilder.buildRequestBody(any(LlmModelConfig.class), anyString()))
+        when(mockRequestBuilder.buildRequestBody(any(
+                LlmModelConfig.class), anyString()))
                 .thenReturn(Map.of("prompt", "test prompt"));
 
         when(mockResponseHandler.getModelEndpoint(any(LlmModelConfig.class)))
                 .thenReturn("/v1/completions");
 
-        when(mockApiClient.callLlmModel(any(LlmModelConfig.class), anyString(), anyMap()))
+        when(mockApiClient.callLlmModel(any(LlmModelConfig.class),
+                anyString(), anyMap()))
                 .thenReturn("Test LLM response");
 
-        when(mockResponseHandler.extractResponseContent(anyString(), any(LlmModelConfig.class)))
+        when(mockResponseHandler.extractResponseContent(anyString(),
+                any(LlmModelConfig.class)))
                 .thenReturn("Generated content");
     }
 
@@ -116,7 +129,9 @@ public class LlmServiceFixIntegrationTest {
      * after the ThreadLocal configuration is set with LlmServiceFix.
      */
     @Test
-    public void testGenerateDocumentationWithFix() throws ExecutionException, InterruptedException {
+    public void testGenerateDocumentationWithFix()
+        throws ExecutionException, InterruptedException {
+
         // Use the fix to set the ThreadLocal configuration
         llmServiceFix.setLlmServiceThreadLocalConfig(testConfig);
 
@@ -134,7 +149,8 @@ public class LlmServiceFixIntegrationTest {
         );
 
         // Generate documentation
-        CompletableFuture<String> docFuture = llmService.generateDocumentation(testElement);
+        CompletableFuture<String> docFuture =
+                llmService.generateDocumentation(testElement);
 
         // Wait for the result
         String result = docFuture.get();
@@ -149,7 +165,8 @@ public class LlmServiceFixIntegrationTest {
      * after the ThreadLocal configuration is set with LlmServiceFix.
      */
     @Test
-    public void testGenerateUsageExamplesWithFix() throws ExecutionException, InterruptedException {
+    public void testGenerateUsageExamplesWithFix()
+        throws ExecutionException, InterruptedException {
         // Use the fix to set the ThreadLocal configuration
         llmServiceFix.setLlmServiceThreadLocalConfig(testConfig);
 
@@ -167,7 +184,8 @@ public class LlmServiceFixIntegrationTest {
         );
 
         // Generate usage examples
-        CompletableFuture<String> examplesFuture = llmService.generateUsageExamples(testElement);
+        CompletableFuture<String> examplesFuture =
+        llmService.generateUsageExamples(testElement);
 
         // Wait for the result
         String result = examplesFuture.get();
@@ -182,7 +200,8 @@ public class LlmServiceFixIntegrationTest {
      * after the ThreadLocal configuration is set with LlmServiceFix.
      */
     @Test
-    public void testGenerateUnitTestsWithFix() throws ExecutionException, InterruptedException {
+    public void testGenerateUnitTestsWithFix()
+        throws ExecutionException, InterruptedException {
         // Use the fix to set the ThreadLocal configuration
         llmServiceFix.setLlmServiceThreadLocalConfig(testConfig);
 
@@ -204,7 +223,8 @@ public class LlmServiceFixIntegrationTest {
         );
 
         // Generate unit tests
-        CompletableFuture<String> testsFuture = llmService.generateUnitTests(testElement);
+        CompletableFuture<String> testsFuture =
+                llmService.generateUnitTests(testElement);
 
         // Wait for the result
         String result = testsFuture.get();
@@ -219,7 +239,8 @@ public class LlmServiceFixIntegrationTest {
      * with the ThreadLocal configuration set correctly.
      */
     @Test
-    public void testParallelOperationsWithFix() throws ExecutionException, InterruptedException {
+    public void testParallelOperationsWithFix()
+        throws ExecutionException, InterruptedException {
         // Use the fix to set the ThreadLocal configuration
         llmServiceFix.setLlmServiceThreadLocalConfig(testConfig);
 
@@ -261,9 +282,12 @@ public class LlmServiceFixIntegrationTest {
         );
 
         // Generate content in parallel
-        CompletableFuture<String> docFuture = llmService.generateDocumentation(class1);
-        CompletableFuture<String> examplesFuture = llmService.generateUsageExamples(class2);
-        CompletableFuture<String> testsFuture = llmService.generateUnitTests(method1);
+        CompletableFuture<String> docFuture =
+                llmService.generateDocumentation(class1);
+        CompletableFuture<String> examplesFuture =
+                llmService.generateUsageExamples(class2);
+        CompletableFuture<String> testsFuture =
+                llmService.generateUnitTests(method1);
 
         // Wait for all operations to complete
         CompletableFuture.allOf(docFuture, examplesFuture, testsFuture).get();
@@ -284,21 +308,27 @@ public class LlmServiceFixIntegrationTest {
         LlmService.clearThreadLocalConfig();
 
         // Check availability (should be false)
-        boolean initialAvailability = llmServiceFix.isThreadLocalConfigAvailable();
-        assertEquals(false, initialAvailability, "Config should not be available initially");
+        boolean initialAvailability = llmServiceFix
+                .isThreadLocalConfigAvailable();
+        assertEquals(false, initialAvailability,
+                "Config should not be available initially");
 
         // Set the config
         llmServiceFix.setLlmServiceThreadLocalConfig(testConfig);
 
         // Check availability again (should be true)
-        boolean afterSettingAvailability = llmServiceFix.isThreadLocalConfigAvailable();
-        assertEquals(true, afterSettingAvailability, "Config should be available after setting");
+        boolean afterSettingAvailability = llmServiceFix
+                .isThreadLocalConfigAvailable();
+        assertEquals(true, afterSettingAvailability,
+                "Config should be available after setting");
 
         // Clear again
         LlmService.clearThreadLocalConfig();
 
         // Check final availability (should be false again)
-        boolean finalAvailability = llmServiceFix.isThreadLocalConfigAvailable();
-        assertEquals(false, finalAvailability, "Config should not be available after clearing");
+        boolean finalAvailability =
+                llmServiceFix.isThreadLocalConfigAvailable();
+        assertEquals(false, finalAvailability,
+                "Config should not be available after clearing");
     }
 }

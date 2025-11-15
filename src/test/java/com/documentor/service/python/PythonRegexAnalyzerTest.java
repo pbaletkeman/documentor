@@ -62,8 +62,8 @@ class PythonRegexAnalyzerTest {
         when(mockElementExtractor.extractDocstring(any(), anyInt()))
                 .thenReturn("");
 
-        regexAnalyzer = new PythonRegexAnalyzer(mockConfig, mockElementExtractor,
-                mockPatternMatcher);
+        regexAnalyzer = new PythonRegexAnalyzer(mockConfig,
+            mockElementExtractor, mockPatternMatcher);
         testFilePath = Path.of("test_file.py");
     }
 
@@ -71,25 +71,32 @@ class PythonRegexAnalyzerTest {
     @DisplayName("Should handle empty Python file")
     void shouldHandleEmptyPythonFile() {
         // Given
-        List<String> emptyLines = List.of("");  // Use a single empty line instead of an empty list
+        // Use a single empty line instead of an empty list
+        List<String> emptyLines = List.of("");
 
-        // Setup pattern matchers to return no matches but with appropriate behavior
+        // Setup pattern matchers to return no matches
+        // but with appropriate behavior
         Matcher mockClassMatcher = mock(Matcher.class);
         Matcher mockFunctionMatcher = mock(Matcher.class);
         Matcher mockVariableMatcher = mock(Matcher.class);
 
-        // Setup the mocks to return false for find() to avoid IndexOutOfBoundsException
+        // Setup the mocks to return false for find()
+        // to avoid IndexOutOfBoundsException
         when(mockClassMatcher.find()).thenReturn(false);
         when(mockFunctionMatcher.find()).thenReturn(false);
         when(mockVariableMatcher.find()).thenReturn(false);
 
         // Configure the mockPatternMatcher to return our controlled matchers
-        when(mockPatternMatcher.findClassMatches(anyString())).thenReturn(mockClassMatcher);
-        when(mockPatternMatcher.findFunctionMatches(anyString())).thenReturn(mockFunctionMatcher);
-        when(mockPatternMatcher.findVariableMatches(anyString())).thenReturn(mockVariableMatcher);
+        when(mockPatternMatcher.findClassMatches(anyString()))
+            .thenReturn(mockClassMatcher);
+        when(mockPatternMatcher.findFunctionMatches(anyString()))
+            .thenReturn(mockFunctionMatcher);
+        when(mockPatternMatcher.findVariableMatches(anyString()))
+            .thenReturn(mockVariableMatcher);
 
         // When
-        List<CodeElement> elements = regexAnalyzer.analyzeWithRegex(testFilePath, emptyLines);
+        List<CodeElement> elements = regexAnalyzer
+            .analyzeWithRegex(testFilePath, emptyLines);
 
         // Then
         assertTrue(elements.isEmpty(), "Empty file should produce no elements");
@@ -119,7 +126,8 @@ class PythonRegexAnalyzerTest {
         setupMockMatchersWithCustomMatches(testFileLines);
 
         // When
-        List<CodeElement> elements = regexAnalyzer.analyzeWithRegex(testFilePath, testFileLines);
+        List<CodeElement> elements = regexAnalyzer
+            .analyzeWithRegex(testFilePath, testFileLines);
 
         // Then - verify we only have public elements
         assertFalse(elements.isEmpty(), "Should have at least one element");
@@ -153,7 +161,8 @@ class PythonRegexAnalyzerTest {
         setupMockMatchersWithCustomMatches(testFileLines);
 
         // When
-        List<CodeElement> elements = regexAnalyzer.analyzeWithRegex(testFilePath, testFileLines);
+        List<CodeElement> elements = regexAnalyzer
+            .analyzeWithRegex(testFilePath, testFileLines);
 
         // Then - verify we have both public and private elements
         assertFalse(elements.isEmpty(), "Should have at least one element");
@@ -162,7 +171,8 @@ class PythonRegexAnalyzerTest {
         boolean hasPrivateElement = elements.stream()
                 .anyMatch(element -> element.name().startsWith("_"));
 
-        assertTrue(hasPrivateElement, "Should have at least one private element");
+        assertTrue(hasPrivateElement,
+            "Should have at least one private element");
     }
 
     @Test
@@ -184,7 +194,8 @@ class PythonRegexAnalyzerTest {
         setupMockMatchersWithSimpleMatches();
 
         // When
-        List<CodeElement> elements = regexAnalyzer.analyzeWithRegex(testFilePath, testFileLines);
+        List<CodeElement> elements = regexAnalyzer
+            .analyzeWithRegex(testFilePath, testFileLines);
 
         // Then - verify correct element types
         assertFalse(elements.isEmpty(), "Should have elements");
@@ -202,15 +213,19 @@ class PythonRegexAnalyzerTest {
                 .filter(e -> e.type() == CodeElementType.FIELD)
                 .count();
 
-        assertEquals(EXPECTED_COUNT_ONE, classCount, "Should have one class");
-        assertEquals(EXPECTED_COUNT_ONE, methodCount, "Should have one method");
-        assertEquals(EXPECTED_COUNT_ONE, fieldCount, "Should have one field");
+        assertEquals(EXPECTED_COUNT_ONE, classCount,
+            "Should have one class");
+        assertEquals(EXPECTED_COUNT_ONE, methodCount,
+            "Should have one method");
+        assertEquals(EXPECTED_COUNT_ONE, fieldCount,
+            "Should have one field");
     }
 
     // Helper methods to set up the test
 
     private void setupMockMatchersWithCustomMatches(final List<String> lines) {
-        // We'll use the real pattern matcher for this test to avoid complex mocking
+        // We'll use the real pattern matcher for this test
+        // to avoid complex mocking
         PythonPatternMatcher realMatcher = new PythonPatternMatcher();
         String content = String.join("\n", lines);
 
@@ -240,7 +255,8 @@ class PythonRegexAnalyzerTest {
         Matcher functionMatcher = Mockito.mock(Matcher.class);
         when(functionMatcher.find()).thenReturn(true, false);
         when(functionMatcher.group()).thenReturn("def test_function():");
-        when(functionMatcher.group(MATCHER_GROUP_ONE)).thenReturn("test_function");
+        when(functionMatcher.group(MATCHER_GROUP_ONE))
+            .thenReturn("test_function");
         when(functionMatcher.group(MATCHER_GROUP_TWO)).thenReturn("");
         when(functionMatcher.start()).thenReturn(FUNCTION_LINE_START);
 
@@ -251,9 +267,13 @@ class PythonRegexAnalyzerTest {
         when(variableMatcher.group(MATCHER_GROUP_ONE)).thenReturn("test_var");
         when(variableMatcher.start()).thenReturn(VARIABLE_LINE_START);
 
-        when(mockPatternMatcher.findClassMatches(anyString())).thenReturn(classMatcher);
-        when(mockPatternMatcher.findFunctionMatches(anyString())).thenReturn(functionMatcher);
-        when(mockPatternMatcher.findVariableMatches(anyString())).thenReturn(variableMatcher);
-        when(mockPatternMatcher.extractParameters(anyString())).thenReturn(new String[0]);
+        when(mockPatternMatcher.findClassMatches(anyString()))
+            .thenReturn(classMatcher);
+        when(mockPatternMatcher.findFunctionMatches(anyString()))
+            .thenReturn(functionMatcher);
+        when(mockPatternMatcher.findVariableMatches(anyString()))
+            .thenReturn(variableMatcher);
+        when(mockPatternMatcher.extractParameters(anyString()))
+            .thenReturn(new String[0]);
     }
 }

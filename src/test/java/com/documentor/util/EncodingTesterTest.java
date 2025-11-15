@@ -23,7 +23,7 @@ class EncodingTesterTest {
     private final PrintStream originalOut = System.out;
 
     @TempDir
-    Path tempDir;
+    private Path tempDir;
 
     @BeforeEach
     void setUpStreams() {
@@ -33,6 +33,22 @@ class EncodingTesterTest {
     @AfterEach
     void restoreStreams() {
         System.setOut(originalOut);
+    }
+
+    /**
+     * Gets the temporary directory for testing.
+     * @return the temporary directory path
+     */
+    public Path getTempDir() {
+        return tempDir;
+    }
+
+    /**
+     * Sets the temporary directory for testing.
+     * @param tempDirPath the temporary directory path
+     */
+    public void setTempDir(final Path tempDirPath) {
+        this.tempDir = tempDirPath;
     }
 
     @Test
@@ -178,7 +194,7 @@ class EncodingTesterTest {
     void testFileContentReadback() throws Exception {
         String originalUserDir = System.getProperty("user.dir");
         try {
-            System.setProperty("user.dir", tempDir.toString());
+            System.setProperty("user.dir", getTempDir().toString());
 
             EncodingTester.main(new String[]{});
             String output = outContent.toString();

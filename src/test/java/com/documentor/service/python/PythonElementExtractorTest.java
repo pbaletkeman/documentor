@@ -53,7 +53,8 @@ class PythonElementExtractorTest {
         String result = extractor.extractDocstring(lines, 1);
 
         // Assert
-        assertEquals("This is a multi-line docstring\n    with multiple lines of text.", result);
+        assertEquals("This is a multi-line docstring\n    "
+            + "with multiple lines of text.", result);
     }
 
     @Test
@@ -117,13 +118,15 @@ class PythonElementExtractorTest {
     @Test
     void extractParametersShouldHandleComplexParameters() {
         // Arrange
-        String functionLine = "def complex_function(self, param1: str, param2: int = 10, *args, **kwargs):";
+        String functionLine = "def complex_function(self, param1: str, "
+            + " param2: int = 10, *args, **kwargs):";
 
         // Act
         List<String> result = extractor.extractParameters(functionLine);
 
         // Assert
-        assertEquals(List.of("self", "param1: str", "param2: int = 10", "*args", "**kwargs"), result);
+        assertEquals(List.of("self", "param1: str", "param2: int = 10",
+            "*args", "**kwargs"), result);
     }
 
     @Test
@@ -150,4 +153,3 @@ class PythonElementExtractorTest {
         assertTrue(result.isEmpty());
     }
 }
-

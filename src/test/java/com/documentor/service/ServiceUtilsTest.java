@@ -8,7 +8,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Comprehensive test coverage for ServiceUtils.
@@ -53,7 +57,8 @@ class ServiceUtilsTest {
 
     @Test
     void testConstructorThrowsException() {
-        // Test that the private constructor throws UnsupportedOperationException
+        // Test that the private constructor throws
+        // UnsupportedOperationException
         Exception exception = assertThrows(Exception.class, () -> {
             // Use reflection to access private constructor
             var constructor = ServiceUtils.class

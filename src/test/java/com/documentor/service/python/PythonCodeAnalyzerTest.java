@@ -43,15 +43,19 @@ class PythonCodeAnalyzerTest {
     private Path tempDir;
 
     @Test
-    void analyzeFileWithSuccessfulAstProcessingReturnsAstElements() throws IOException, InterruptedException {
+    void analyzeFileWithSuccessfulAstProcessingReturnsAstElements()
+        throws IOException, InterruptedException {
         // Arrange
         Path testFile = createPythonTestFile();
         List<CodeElement> expectedElements = List.of(
-            new CodeElement(CodeElementType.CLASS, "TestClass", "class TestClass",
-                testFile.toString(), 1, "class TestClass:", "", Collections.emptyList(), Collections.emptyList())
+            new CodeElement(CodeElementType.CLASS, "TestClass",
+                "class TestClass",
+                testFile.toString(), 1, "class TestClass:", "",
+                Collections.emptyList(), Collections.emptyList())
         );
 
-        when(astProcessor.analyzeWithAST(any(Path.class))).thenReturn(expectedElements);
+        when(astProcessor.analyzeWithAST(any(Path.class)))
+        .thenReturn(expectedElements);
 
         // Act
         List<CodeElement> result = analyzer.analyzeFile(testFile);
@@ -63,16 +67,22 @@ class PythonCodeAnalyzerTest {
     }
 
     @Test
-    void analyzeFileWhenAstProcessingFailsUsesRegexAnalyzer() throws IOException, InterruptedException {
+    void analyzeFileWhenAstProcessingFailsUsesRegexAnalyzer()
+        throws IOException, InterruptedException {
         // Arrange
         Path testFile = createPythonTestFile();
         List<CodeElement> expectedElements = List.of(
-            new CodeElement(CodeElementType.METHOD, "test_method", "def test_method()",
-                testFile.toString(), 2, "def test_method():", "", Collections.emptyList(), Collections.emptyList())
+            new CodeElement(CodeElementType.METHOD, "test_method",
+                "def test_method()",
+                testFile.toString(), 2, "def test_method():",
+                    "", Collections.emptyList(), Collections.emptyList())
         );
 
-        when(astProcessor.analyzeWithAST(any(Path.class))).thenThrow(new IOException("AST processing failed"));
-        when(regexAnalyzer.analyzeWithRegex(eq(testFile), anyList())).thenReturn(expectedElements);
+        when(astProcessor.analyzeWithAST(any(Path.class)))
+        .thenThrow(new IOException(
+                "AST processing failed"));
+        when(regexAnalyzer.analyzeWithRegex(eq(testFile), anyList()))
+        .thenReturn(expectedElements);
 
         // Act
         List<CodeElement> result = analyzer.analyzeFile(testFile);
@@ -84,7 +94,8 @@ class PythonCodeAnalyzerTest {
     }
 
     @Test
-    void analyzeFileWhenAstReturnsEmptyUsesRegexAnalyzer() throws IOException, InterruptedException {
+    void analyzeFileWhenAstReturnsEmptyUsesRegexAnalyzer()
+        throws IOException, InterruptedException {
         // Arrange
         Path testFile = createPythonTestFile();
         List<CodeElement> expectedElements = List.of(
@@ -93,8 +104,10 @@ class PythonCodeAnalyzerTest {
                 Collections.emptyList(), Collections.emptyList())
         );
 
-        when(astProcessor.analyzeWithAST(any(Path.class))).thenReturn(Collections.emptyList());
-        when(regexAnalyzer.analyzeWithRegex(eq(testFile), anyList())).thenReturn(expectedElements);
+        when(astProcessor.analyzeWithAST(any(Path.class)))
+            .thenReturn(Collections.emptyList());
+        when(regexAnalyzer.analyzeWithRegex(eq(testFile), anyList()))
+            .thenReturn(expectedElements);
 
         // Act
         List<CodeElement> result = analyzer.analyzeFile(testFile);
@@ -118,4 +131,3 @@ class PythonCodeAnalyzerTest {
         return filePath;
     }
 }
-

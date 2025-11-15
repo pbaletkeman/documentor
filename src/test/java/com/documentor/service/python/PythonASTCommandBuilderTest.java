@@ -27,7 +27,8 @@ class PythonASTCommandBuilderTest {
     private static final int LINE_NUMBER_FIFTEEN = 15;
     private static final int LINE_NUMBER_FIVE = 5;
 
-    private final PythonASTCommandBuilder commandBuilder = new PythonASTCommandBuilder();
+    private final PythonASTCommandBuilder commandBuilder =
+        new PythonASTCommandBuilder();
 
     @Test
     @DisplayName("Should return a valid Python AST script")
@@ -50,7 +51,8 @@ class PythonASTCommandBuilderTest {
 
     @Test
     @DisplayName("Should write temporary Python script to filesystem")
-    void shouldWriteTempScript(@TempDir final Path tempDir) throws IOException {
+    void shouldWriteTempScript(@TempDir final Path tempDir)
+        throws IOException {
         // Set the temp directory (optional)
         System.setProperty("java.io.tmpdir", tempDir.toString());
 
@@ -60,8 +62,10 @@ class PythonASTCommandBuilderTest {
         // Then
         assertNotNull(scriptPath);
         assertTrue(Files.exists(scriptPath));
-        assertTrue(scriptPath.getFileName().toString().startsWith("python_analyzer"));
-        assertTrue(scriptPath.getFileName().toString().endsWith(".py"));
+        assertTrue(scriptPath.getFileName().toString()
+        .startsWith("python_analyzer"));
+        assertTrue(scriptPath.getFileName().toString()
+        .endsWith(".py"));
 
         // Content check
         String content = Files.readString(scriptPath);
@@ -70,7 +74,8 @@ class PythonASTCommandBuilderTest {
 
     @Test
     @DisplayName("Should create a valid process builder")
-    void shouldCreateProcessBuilder(@TempDir final Path tempDir) throws IOException {
+    void shouldCreateProcessBuilder(@TempDir final Path tempDir)
+        throws IOException {
         // Given
         Path scriptPath = tempDir.resolve("test_script.py");
         Path filePath = tempDir.resolve("test_file.py");
@@ -78,7 +83,8 @@ class PythonASTCommandBuilderTest {
         Files.writeString(filePath, "class Test: pass");
 
         // When
-        ProcessBuilder processBuilder = commandBuilder.createProcessBuilder(scriptPath, filePath);
+        ProcessBuilder processBuilder = commandBuilder
+        .createProcessBuilder(scriptPath, filePath);
 
         // Then
         assertNotNull(processBuilder);
@@ -97,7 +103,8 @@ class PythonASTCommandBuilderTest {
         Path filePath = Path.of("test.py");
 
         // When
-        CodeElement element = commandBuilder.parseASTOutputLine(classLine, filePath);
+        CodeElement element = commandBuilder
+            .parseASTOutputLine(classLine, filePath);
 
         // Then
         assertNotNull(element);
@@ -107,7 +114,8 @@ class PythonASTCommandBuilderTest {
         assertEquals(filePath.toString(), element.filePath());
         assertEquals(LINE_NUMBER_TEN, element.lineNumber());
         assertEquals("class TestClass:", element.signature());
-        assertEquals("This is a test class docstring", element.documentation());
+        assertEquals("This is a test class docstring",
+            element.documentation());
         assertTrue(element.parameters().isEmpty());
         assertTrue(element.annotations().isEmpty());
     }
@@ -116,21 +124,26 @@ class PythonASTCommandBuilderTest {
     @DisplayName("Should parse FUNCTION output line")
     void shouldParseFunctionOutputLine() {
         // Given
-        String functionLine = "FUNCTION|test_function|15|This is a function docstring|param1,param2,param3";
+        String functionLine = "FUNCTION|test_function|15|This is a function"
+        + " docstring|param1,param2,param3";
         Path filePath = Path.of("test.py");
 
         // When
-        CodeElement element = commandBuilder.parseASTOutputLine(functionLine, filePath);
+        CodeElement element = commandBuilder
+            .parseASTOutputLine(functionLine, filePath);
 
         // Then
         assertNotNull(element);
         assertEquals(CodeElementType.METHOD, element.type());
         assertEquals("test_function", element.name());
-        assertEquals("def test_function(param1, param2, param3)", element.qualifiedName());
+        assertEquals("def test_function(param1, param2, param3)",
+            element.qualifiedName());
         assertEquals(filePath.toString(), element.filePath());
         assertEquals(LINE_NUMBER_FIFTEEN, element.lineNumber());
-        assertEquals("def test_function(param1, param2, param3):", element.signature());
-        assertEquals("This is a function docstring", element.documentation());
+        assertEquals("def test_function(param1, param2, param3):",
+            element.signature());
+        assertEquals("This is a function docstring",
+            element.documentation());
 
         // Parameters check
         assertEquals(LINE_NUMBER_THREE, element.parameters().size());
@@ -149,7 +162,8 @@ class PythonASTCommandBuilderTest {
         Path filePath = Path.of("test.py");
 
         // When
-        CodeElement element = commandBuilder.parseASTOutputLine(variableLine, filePath);
+        CodeElement element = commandBuilder
+            .parseASTOutputLine(variableLine, filePath);
 
         // Then
         assertNotNull(element);
@@ -173,7 +187,8 @@ class PythonASTCommandBuilderTest {
         Path filePath = Path.of("test.py");
 
         // When
-        CodeElement element = commandBuilder.parseASTOutputLine(invalidLine, filePath);
+        CodeElement element = commandBuilder
+            .parseASTOutputLine(invalidLine, filePath);
 
         // Then
         assertNull(element);
@@ -187,7 +202,8 @@ class PythonASTCommandBuilderTest {
         Path filePath = Path.of("test.py");
 
         // When
-        CodeElement element = commandBuilder.parseASTOutputLine(lineWithEmptyParts, filePath);
+        CodeElement element = commandBuilder
+            .parseASTOutputLine(lineWithEmptyParts, filePath);
 
         // Then
         assertNotNull(element);
@@ -198,4 +214,3 @@ class PythonASTCommandBuilderTest {
         assertTrue(element.parameters().isEmpty());
     }
 }
-

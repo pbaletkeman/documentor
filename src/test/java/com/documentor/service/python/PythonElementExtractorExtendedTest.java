@@ -38,7 +38,8 @@ class PythonElementExtractorExtendedTest {
         String result = extractor.extractDocstring(lines, 1);
 
         // Assert
-        assertEquals("This is an indented docstring\n        with varying levels of indentation\n"
+        assertEquals("This is an indented docstring\n"
+                + "        with varying levels of indentation\n"
                 + "            that should be preserved", result);
     }
 
@@ -62,7 +63,8 @@ class PythonElementExtractorExtendedTest {
     @Test
     void extractDocstringSingleLineDocstringInOneLineShouldExtractCorrectly() {
         // Arrange
-        List<String> lines = Collections.singletonList("    \"\"\"Single line all in one\"\"\"");
+        List<String> lines = Collections.singletonList(
+                "    \"\"\"Single line all in one\"\"\"");
 
         // Act
         String result = extractor.extractDocstring(lines, 0);
@@ -86,31 +88,36 @@ class PythonElementExtractorExtendedTest {
     @Test
     void extractParametersWithSpacesInParamListShouldHandleCorrectly() {
         // Arrange
-        String functionLine = "def spaced_params(  param1,  param2   ,param3  ):";
+        String functionLine = "def spaced_params(  param1,  param2   "
+            + ",param3  ):";
 
         // Act
         List<String> result = extractor.extractParameters(functionLine);
 
         // Assert
-        // Note: The current implementation doesn't trim individual parameters, which is acceptable
+        // Note: The current implementation doesn't trim individual parameters,
+        //which is acceptable
         assertEquals(List.of("  param1", "  param2   ", "param3  "), result);
     }
 
     @Test
     void extractParametersWithNestedParenthesesShouldExtractCorrectly() {
         // Arrange
-        String functionLine = "def nested_params(param1, func(param2), (param3, param4)):";
+        String functionLine = "def nested_params(param1, func(param2), "
+            + "(param3, param4)):";
 
         // Act
         List<String> result = extractor.extractParameters(functionLine);
 
         // Assert
-        // This is a simplistic test - in reality more complex parsing would be needed
-        assertEquals(List.of("param1", "func(param2)", "(param3", "param4)"), result);
+        // This is a simplistic test - in reality more complex parsing
+        // would be needed
+        assertEquals(List.of("param1", "func(param2)", "(param3", "param4)"),
+            result);
     }
 
     @Test
-    void extractParametersWithMissingClosingParenthesisShouldHandleGracefully() {
+    void extractParamsWithMissingClosingParenthesisShouldHandleGracefully() {
         // Arrange
         String functionLine = "def invalid_params(param1, param2:";
 
@@ -133,4 +140,3 @@ class PythonElementExtractorExtendedTest {
         assertTrue(result.isEmpty());
     }
 }
-

@@ -32,6 +32,9 @@ import org.springframework.test.context.ActiveProfiles;
 @Import(TestConfig.class)
 public class ThreadLocalPropagationIntegrationTest {
 
+    private static final int MAX_DEPTH = 3;
+    private static final int TIMEOUT_SECONDS = 60;
+    private static final int MAX_TOKENS = 2048;
     private static final Logger LOGGER = LoggerFactory.getLogger(
             ThreadLocalPropagationIntegrationTest.class);
 
@@ -47,8 +50,8 @@ public class ThreadLocalPropagationIntegrationTest {
             "test-provider",
             "http://localhost:8080",
             "test-api-key",
-            2048,
-            60);
+            MAX_TOKENS,
+            TIMEOUT_SECONDS);
 
         OutputSettings outputSettings = new OutputSettings(
             "./output",
@@ -60,7 +63,7 @@ public class ThreadLocalPropagationIntegrationTest {
 
         AnalysisSettings analysisSettings = new AnalysisSettings(
             true,
-            3,
+            MAX_DEPTH,
             List.of("**/*.java"),
             List.of("**/test/**")
         );
@@ -99,7 +102,10 @@ public class ThreadLocalPropagationIntegrationTest {
                     // Verify it's the same config
                     if (propagatedConfig.llmModels().size() == 1
                             && "test-model".equals(
-                                    propagatedConfig.llmModels().get(0).name())) {
+                                    propagatedConfig
+                                    .llmModels()
+                                    .get(0)
+                                    .name())) {
                         configAvailableInChildThread.set(true);
                     }
                 } else {
@@ -133,8 +139,8 @@ public class ThreadLocalPropagationIntegrationTest {
             "test-provider-fix",
             "http://localhost:8080",
             "test-api-key",
-            2048,
-            60);
+            MAX_TOKENS,
+            TIMEOUT_SECONDS);
 
         OutputSettings outputSettings = new OutputSettings(
             "./output",
@@ -146,7 +152,7 @@ public class ThreadLocalPropagationIntegrationTest {
 
         AnalysisSettings analysisSettings = new AnalysisSettings(
             true,
-            3,
+            MAX_DEPTH,
             List.of("**/*.java"),
             List.of("**/test/**")
         );
