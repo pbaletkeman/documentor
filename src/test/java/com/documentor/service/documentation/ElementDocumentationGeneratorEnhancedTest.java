@@ -264,7 +264,8 @@ class ElementDocumentationGeneratorEnhancedTest {
         CodeElement standaloneMethod = new CodeElement(
             CodeElementType.METHOD,
             "standaloneMethod",
-            "standaloneMethod", // No dots, so it's treated as standalone
+            // No dots, so it's treated as standalone
+            "standaloneMethod",
             "/test/StandaloneTest.java",
             10,
             "public static void standaloneMethod() {}",
@@ -497,17 +498,24 @@ class ElementDocumentationGeneratorEnhancedTest {
 
     @Test
     void testUnknownFileExtension() throws Exception {
-        when(llmService.generateDocumentation(any())).thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
-        when(llmService.generateUsageExamples(any())).thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
-        when(llmServiceFix.isThreadLocalConfigAvailable()).thenReturn(true);
+        when(llmService.generateDocumentation(any()))
+        .thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
+        when(llmService.generateUsageExamples(any()))
+        .thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
+        when(llmServiceFix.isThreadLocalConfigAvailable())
+        .thenReturn(true);
 
         // Test with unknown file extension
         CodeElement unknownElement = new CodeElement(
-            CodeElementType.CLASS, "UnknownClass", "com.example.UnknownClass",
-            "/test/UnknownClass.xyz", 1, "class UnknownClass", "", Collections.emptyList(), Collections.emptyList()
+            CodeElementType.CLASS, "UnknownClass",
+            "com.example.UnknownClass",
+            "/test/UnknownClass.xyz", 1,
+            "class UnknownClass", "",
+            Collections.emptyList(), Collections.emptyList()
         );
 
-        CompletableFuture<Void> result = generator.generateElementDocumentation(unknownElement, tempDir);
+        CompletableFuture<Void> result = generator
+            .generateElementDocumentation(unknownElement, tempDir);
         result.join();
 
         Path elementsDir = tempDir.resolve("elements");
@@ -515,18 +523,22 @@ class ElementDocumentationGeneratorEnhancedTest {
         assertTrue(Files.exists(unknownFile));
 
         String content = Files.readString(unknownFile);
-        assertTrue(content.contains("```text"), "Should use text language for unknown extensions");
+        assertTrue(content.contains("```text"),
+        "Should use text language for unknown extensions");
     }
 
     @Test
     void testFormatContentWithNullOrEmpty() throws Exception {
-        when(llmService.generateDocumentation(any())).thenReturn(CompletableFuture.completedFuture(""));
-        when(llmService.generateUsageExamples(any())).thenReturn(CompletableFuture.completedFuture(null));
+        when(llmService.generateDocumentation(any())).thenReturn(
+            CompletableFuture.completedFuture(""));
+        when(llmService.generateUsageExamples(any())).thenReturn(
+            CompletableFuture.completedFuture(null));
         when(llmServiceFix.isThreadLocalConfigAvailable()).thenReturn(true);
 
         CodeElement element = createTestClassElement();
 
-        CompletableFuture<Void> result = generator.generateElementDocumentation(element, tempDir);
+        CompletableFuture<Void> result =
+            generator.generateElementDocumentation(element, tempDir);
         result.join();
 
         Path elementsDir = tempDir.resolve("elements");
@@ -534,25 +546,34 @@ class ElementDocumentationGeneratorEnhancedTest {
         assertTrue(Files.exists(classFile));
 
         String content = Files.readString(classFile);
-        assertTrue(content.contains("_No content available_"), "Should handle null/empty content gracefully");
+        assertTrue(content.contains("_No content available_"),
+        "Should handle null/empty content gracefully");
     }
 
     @Test
     void testBuildClassDocumentContentWithNullClassElement() throws Exception {
-        when(llmService.generateDocumentation(any())).thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
-        when(llmService.generateUsageExamples(any())).thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
+        when(llmService.generateDocumentation(any())).thenReturn(
+            CompletableFuture.completedFuture(TEST_DOCUMENTATION));
+        when(llmService.generateUsageExamples(any())).thenReturn(
+            CompletableFuture.completedFuture(TEST_EXAMPLES));
         when(llmServiceFix.isThreadLocalConfigAvailable()).thenReturn(true);
 
         // Create standalone method without class
         CodeElement standaloneMethod = new CodeElement(
             CodeElementType.METHOD, "standaloneMethod", "standaloneMethod",
-            "/test/Standalone.java", 1, "public void standaloneMethod() {}", "", Collections.emptyList(), Collections.emptyList()
+            "/test/Standalone.java", 1,
+            "public void standaloneMethod() {}", "",
+            Collections.emptyList(), Collections.emptyList()
         );
 
-        List<CodeElement> elements = Collections.singletonList(standaloneMethod);
-        ProjectAnalysis analysis = new ProjectAnalysis("/test/path", elements, System.currentTimeMillis());
+        List<CodeElement> elements =
+            Collections.singletonList(standaloneMethod);
+        ProjectAnalysis analysis =
+        new ProjectAnalysis("/test/path", elements,
+            System.currentTimeMillis());
 
-        CompletableFuture<Void> result = generator.generateGroupedDocumentation(analysis, tempDir);
+        CompletableFuture<Void> result =
+            generator.generateGroupedDocumentation(analysis, tempDir);
         result.join();
 
         Path elementsDir = tempDir.resolve("elements");
@@ -560,7 +581,8 @@ class ElementDocumentationGeneratorEnhancedTest {
 
         // Should create a file for standalone elements
         long fileCount = Files.list(elementsDir).count();
-        assertTrue(fileCount > 0, "Should create file for standalone elements");
+        assertTrue(fileCount > 0,
+            "Should create file for standalone elements");
     }
 
     // Helper methods
@@ -609,6 +631,7 @@ class ElementDocumentationGeneratorEnhancedTest {
     private ProjectAnalysis createTestProjectAnalysis() {
         CodeElement element = createTestClassElement();
         List<CodeElement> elements = Collections.singletonList(element);
-        return new ProjectAnalysis("/test/path", elements, System.currentTimeMillis());
+        return new ProjectAnalysis("/test/path", elements,
+            System.currentTimeMillis());
     }
 }

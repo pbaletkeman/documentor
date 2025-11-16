@@ -65,96 +65,122 @@ class DiagramServicesCoverageTest {
             mockElementFilter, mockPathManager, mockGeneratorFactory);
 
         // Setup common mocks with lenient behavior
-        lenient().when(mockGeneratorFactory.getClassDiagramGenerator()).thenReturn(mockMermaidClassDiagramGenerator);
-        lenient().when(mockGeneratorFactory.getPlantUMLClassDiagramGenerator()).thenReturn(mockPlantUMLClassDiagramGenerator);
-        lenient().when(mockPathManager.determineOutputPath(anyString(), anyString())).thenReturn(tempDir.toString());
-        lenient().when(mockPathManager.createOutputDirectory(anyString())).thenReturn(tempDir);
+        lenient().when(mockGeneratorFactory.getClassDiagramGenerator())
+            .thenReturn(mockMermaidClassDiagramGenerator);
+        lenient().when(mockGeneratorFactory.getPlantUMLClassDiagramGenerator())
+            .thenReturn(mockPlantUMLClassDiagramGenerator);
+        lenient().when(mockPathManager.determineOutputPath(anyString(),
+            anyString())).thenReturn(tempDir.toString());
+        lenient().when(mockPathManager.createOutputDirectory(anyString()))
+            .thenReturn(tempDir);
     }
 
     @Test
     void testMermaidDiagramGenerationWithException() {
         // Test exception handling in the lambda
-        when(mockElementFilter.getEligibleClasses(any())).thenThrow(new RuntimeException("Filter failed"));
+        when(mockElementFilter.getEligibleClasses(any()))
+            .thenThrow(new RuntimeException("Filter failed"));
 
         ProjectAnalysis analysis = createTestProjectAnalysis();
 
-        CompletableFuture<List<String>> result = mermaidDiagramService.generateClassDiagrams(analysis, "/output");
+        CompletableFuture<List<String>> result = mermaidDiagramService
+            .generateClassDiagrams(analysis, "/output");
 
-        assertThrows(CompletionException.class, () -> result.join());
+        assertThrows(
+            CompletionException.class, () -> result.join());
     }
 
     @Test
-    void testMermaidDiagramGenerationWithSingleClassException() throws Exception {
+    void testMermaidDiagramGenerationWithSingleClassException()
+        throws Exception {
         // Test exception handling when processing individual classes
         CodeElement testClass = createTestClassElement();
-        when(mockElementFilter.getEligibleClasses(any())).thenReturn(List.of(testClass));
+        when(mockElementFilter.getEligibleClasses(any()))
+            .thenReturn(List.of(testClass));
 
         Map<CodeElement, List<CodeElement>> elementsByClass = new HashMap<>();
         elementsByClass.put(testClass, List.of(testClass));
-        when(mockElementFilter.groupElementsByClass(any())).thenReturn(elementsByClass);
+        when(mockElementFilter.groupElementsByClass(any()))
+            .thenReturn(elementsByClass);
 
         // Make the class diagram generator throw an exception
-        when(mockMermaidClassDiagramGenerator.generateClassDiagram(any(), any(), any()))
+        when(mockMermaidClassDiagramGenerator
+            .generateClassDiagram(any(), any(), any()))
             .thenThrow(new RuntimeException("Diagram generation failed"));
 
         ProjectAnalysis analysis = createTestProjectAnalysis();
 
-        CompletableFuture<List<String>> result = mermaidDiagramService.generateClassDiagrams(analysis, "/output");
+        CompletableFuture<List<String>> result = mermaidDiagramService
+            .generateClassDiagrams(analysis, "/output");
 
         // Should not throw but handle the exception gracefully
         List<String> diagrams = assertDoesNotThrow(() -> result.join());
-        assertTrue(diagrams.isEmpty()); // No diagrams generated due to exception
+        // No diagrams generated due to exception
+        assertTrue(diagrams.isEmpty());
     }    @Test
     void testPlantUMLDiagramGenerationWithException() {
         // Test exception handling in PlantUML service lambda
-        when(mockElementFilter.getEligibleClasses(any())).thenThrow(new RuntimeException("Filter failed"));
+        when(mockElementFilter.getEligibleClasses(any()))
+            .thenThrow(new RuntimeException("Filter failed"));
 
         ProjectAnalysis analysis = createTestProjectAnalysis();
 
-        CompletableFuture<List<String>> result = plantUMLDiagramService.generateClassDiagrams(analysis, "/output");
+        CompletableFuture<List<String>> result = plantUMLDiagramService
+            .generateClassDiagrams(analysis, "/output");
 
         assertThrows(CompletionException.class, () -> result.join());
     }
 
     @Test
-    void testPlantUMLDiagramGenerationWithSingleClassException() throws Exception {
-        // Test exception handling when processing individual classes in PlantUML service
+    void testPlantUMLDiagramGenerationWithSingleClassException()
+        throws Exception {
+        // Test exception handling when processing individual
+        // classes in PlantUML service
         CodeElement testClass = createTestClassElement();
-        lenient().when(mockElementFilter.getEligibleClasses(any())).thenReturn(List.of(testClass));
+        lenient().when(mockElementFilter.getEligibleClasses(any()))
+            .thenReturn(List.of(testClass));
 
         Map<CodeElement, List<CodeElement>> elementsByClass = new HashMap<>();
         elementsByClass.put(testClass, List.of(testClass));
-        lenient().when(mockElementFilter.groupElementsByClass(any())).thenReturn(elementsByClass);
+        lenient().when(mockElementFilter.groupElementsByClass(any()))
+            .thenReturn(elementsByClass);
 
         // Make the class diagram generator throw an exception
-        lenient().when(mockPlantUMLClassDiagramGenerator.generateClassDiagram(any(), any(), any()))
+        lenient().when(mockPlantUMLClassDiagramGenerator
+            .generateClassDiagram(any(), any(), any()))
             .thenThrow(new RuntimeException("Diagram generation failed"));
 
         ProjectAnalysis analysis = createTestProjectAnalysis();
 
-        CompletableFuture<List<String>> result = plantUMLDiagramService.generateClassDiagrams(analysis, "/output");
+        CompletableFuture<List<String>> result =
+            plantUMLDiagramService.generateClassDiagrams(analysis, "/output");
 
         // Should not throw but handle the exception gracefully
         List<String> diagrams = assertDoesNotThrow(() -> result.join());
-        assertTrue(diagrams.isEmpty()); // No diagrams generated due to exception
+        // No diagrams generated due to exception
+        assertTrue(diagrams.isEmpty());
     }
 
     @Test
     void testMermaidDiagramSuccessfulGeneration() throws Exception {
         // Test successful generation to ensure normal path coverage
         CodeElement testClass = createTestClassElement();
-        when(mockElementFilter.getEligibleClasses(any())).thenReturn(List.of(testClass));
+        when(mockElementFilter.getEligibleClasses(any()))
+        .thenReturn(List.of(testClass));
 
         Map<CodeElement, List<CodeElement>> elementsByClass = new HashMap<>();
         elementsByClass.put(testClass, List.of(testClass));
-        when(mockElementFilter.groupElementsByClass(any())).thenReturn(elementsByClass);
+        when(mockElementFilter.groupElementsByClass(any()))
+            .thenReturn(elementsByClass);
 
-        when(mockMermaidClassDiagramGenerator.generateClassDiagram(any(), any(), any()))
+        when(mockMermaidClassDiagramGenerator
+        .generateClassDiagram(any(), any(), any()))
             .thenReturn("generated-diagram.mmd");
 
         ProjectAnalysis analysis = createTestProjectAnalysis();
 
-        CompletableFuture<List<String>> result = mermaidDiagramService.generateClassDiagrams(analysis, "/output");
+        CompletableFuture<List<String>> result =
+            mermaidDiagramService.generateClassDiagrams(analysis, "/output");
 
         List<String> diagrams = assertDoesNotThrow(() -> result.join());
         assertEquals(1, diagrams.size());
@@ -165,18 +191,22 @@ class DiagramServicesCoverageTest {
     void testPlantUMLDiagramSuccessfulGeneration() throws Exception {
         // Test successful generation to ensure normal path coverage
         CodeElement testClass = createTestClassElement();
-        when(mockElementFilter.getEligibleClasses(any())).thenReturn(List.of(testClass));
+        when(mockElementFilter.getEligibleClasses(any()))
+            .thenReturn(List.of(testClass));
 
         Map<CodeElement, List<CodeElement>> elementsByClass = new HashMap<>();
         elementsByClass.put(testClass, List.of(testClass));
-        when(mockElementFilter.groupElementsByClass(any())).thenReturn(elementsByClass);
+        when(mockElementFilter.groupElementsByClass(any()))
+            .thenReturn(elementsByClass);
 
-        when(mockPlantUMLClassDiagramGenerator.generateClassDiagram(any(), any(), any()))
+        when(mockPlantUMLClassDiagramGenerator
+            .generateClassDiagram(any(), any(), any()))
             .thenReturn("generated-diagram.puml");
 
         ProjectAnalysis analysis = createTestProjectAnalysis();
 
-        CompletableFuture<List<String>> result = plantUMLDiagramService.generateClassDiagrams(analysis, "/output");
+        CompletableFuture<List<String>> result =
+            plantUMLDiagramService.generateClassDiagrams(analysis, "/output");
 
         List<String> diagrams = assertDoesNotThrow(() -> result.join());
         assertEquals(1, diagrams.size());

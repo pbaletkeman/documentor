@@ -32,21 +32,29 @@ class MainDocumentationGeneratorTest {
 
     @BeforeEach
     void setUp() {
-        OutputSettings outputSettings = new OutputSettings("out", "markdown", true, false, false);
-        AnalysisSettings analysisSettings = new AnalysisSettings(true, MAX_DEPTH, List.of("**/*.java"), List.of());
-        LlmModelConfig model = new LlmModelConfig("m", "ollama", "http://x", null, MAX_TOKENS, TIMEOUT_SECONDS);
-        config = new DocumentorConfig(List.of(model), outputSettings, analysisSettings);
+        OutputSettings outputSettings = new OutputSettings(
+            "out", "markdown", true, false, false);
+        AnalysisSettings analysisSettings = new AnalysisSettings(
+            true, MAX_DEPTH, List.of("**/*.java"), List.of());
+        LlmModelConfig model = new LlmModelConfig("m", "ollama",
+            "http://x", null, MAX_TOKENS, TIMEOUT_SECONDS);
+        config = new DocumentorConfig(List.of(model), outputSettings,
+            analysisSettings);
         generator = new MainDocumentationGenerator(config);
     }
 
     @Test
     void testGenerateMainDocumentationContainsSections() {
-        CodeElement e1 = new CodeElement(CodeElementType.CLASS, "TestClass", "com.example.TestClass",
-                "/src/TestClass.java", LINE_NUMBER_ONE, "public class TestClass{}", "",
+        CodeElement e1 = new CodeElement(CodeElementType.CLASS,
+             "TestClass", "com.example.TestClass",
+                "/src/TestClass.java", LINE_NUMBER_ONE,
+                "public class TestClass{}", "",
                 List.of(), List.of());
-        ProjectAnalysis analysis = new ProjectAnalysis("/project/path", List.of(e1), System.currentTimeMillis());
+        ProjectAnalysis analysis = new ProjectAnalysis(
+            "/project/path", List.of(e1), System.currentTimeMillis());
 
-        CompletableFuture<String> fut = generator.generateMainDocumentation(analysis);
+        CompletableFuture<String> fut =
+            generator.generateMainDocumentation(analysis);
         String doc = fut.join();
 
         assertNotNull(doc);
@@ -61,33 +69,48 @@ class MainDocumentationGeneratorTest {
         MockitoAnnotations.openMocks(this);
 
         // Create mocked output settings that return false for includeIcons
-        OutputSettings mockOutputSettings = org.mockito.Mockito.mock(OutputSettings.class);
+        OutputSettings mockOutputSettings =
+            org.mockito.Mockito.mock(OutputSettings.class);
         when(mockOutputSettings.includeIcons()).thenReturn(false);
         when(mockOutputSettings.outputPath()).thenReturn("test-output");
         when(mockOutputSettings.format()).thenReturn("markdown");
 
         // Create config with mocked output settings
-        AnalysisSettings analysisSettings = new AnalysisSettings(true, MAX_DEPTH, List.of("**/*.java"), List.of());
-        LlmModelConfig model = new LlmModelConfig("m", "ollama", "http://x", null, MAX_TOKENS, TIMEOUT_SECONDS);
-        DocumentorConfig mockConfig = new DocumentorConfig(List.of(model), mockOutputSettings, analysisSettings);
+        AnalysisSettings analysisSettings = new AnalysisSettings(true,
+            MAX_DEPTH, List.of("**/*.java"), List.of());
+        LlmModelConfig model = new LlmModelConfig("m", "ollama",
+            "http://x", null, MAX_TOKENS, TIMEOUT_SECONDS);
+        DocumentorConfig mockConfig = new DocumentorConfig(List.of(model),
+            mockOutputSettings, analysisSettings);
 
-        MainDocumentationGenerator generatorWithMock = new MainDocumentationGenerator(mockConfig);
+        MainDocumentationGenerator generatorWithMock =
+            new MainDocumentationGenerator(mockConfig);
 
-        CodeElement e1 = new CodeElement(CodeElementType.CLASS, "TestClass", "com.example.TestClass",
-                "/src/TestClass.java", 1, "public class TestClass{}", "", List.of(), List.of());
-        ProjectAnalysis analysis = new ProjectAnalysis("/project/path", List.of(e1), System.currentTimeMillis());
+        CodeElement e1 = new CodeElement(CodeElementType.CLASS, "TestClass",
+                "com.example.TestClass",
+                "/src/TestClass.java", 1,
+                "public class TestClass{}", "", List.of(), List.of());
+        ProjectAnalysis analysis = new ProjectAnalysis(
+            "/project/path", List.of(e1), System.currentTimeMillis());
 
-        CompletableFuture<String> fut = generatorWithMock.generateMainDocumentation(analysis);
+        CompletableFuture<String> fut =
+            generatorWithMock.generateMainDocumentation(analysis);
         String doc = fut.join();
 
         assertNotNull(doc);
         // Check that icons are NOT included when includeIcons() returns false
-        assertFalse(doc.contains("📚"), "Should not contain book icon when icons disabled");
-        assertFalse(doc.contains("📊"), "Should not contain chart icon when icons disabled");
-        assertFalse(doc.contains("📦"), "Should not contain package icon when icons disabled");
-        assertFalse(doc.contains("🔧"), "Should not contain tool icon when icons disabled");
-        assertFalse(doc.contains("📋"), "Should not contain clipboard icon when icons disabled");
-        assertFalse(doc.contains("💡"), "Should not contain lightbulb icon when icons disabled");
+        assertFalse(doc.contains("📚"),
+        "Should not contain book icon when icons disabled");
+        assertFalse(doc.contains("📊"),
+        "Should not contain chart icon when icons disabled");
+        assertFalse(doc.contains("📦"),
+        "Should not contain package icon when icons disabled");
+        assertFalse(doc.contains("🔧"),
+        "Should not contain tool icon when icons disabled");
+        assertFalse(doc.contains("📋"),
+        "Should not contain clipboard icon when icons disabled");
+        assertFalse(doc.contains("💡"),
+        "Should not contain lightbulb icon when icons disabled");
 
         // But the content should still be there
         assertTrue(doc.contains("Project Statistics"));
@@ -96,4 +119,3 @@ class MainDocumentationGeneratorTest {
         assertTrue(doc.contains("TestClass"));
     }
 }
-

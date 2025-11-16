@@ -31,7 +31,9 @@ class LlmResponseParserEnhancedTest {
     @Test
     void testParseResponseDelegatesCorrectlyForOllamaModel() {
         // Given
-        LlmModelConfig model = new LlmModelConfig("llama", "ollama", "http://localhost:11434", "", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS);
+        LlmModelConfig model = new LlmModelConfig("llama",
+            "ollama", "http://localhost:11434", "",
+            DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS);
         String response = "{\"response\": \"Ollama generated content\"}";
         when(detector.isOllamaModel(model)).thenReturn(true);
         when(detector.isOpenAICompatible(model)).thenReturn(false);
@@ -42,14 +44,18 @@ class LlmResponseParserEnhancedTest {
         // Then
         assertEquals("Ollama generated content", result);
         verify(detector).isOllamaModel(model);
-        // Removed verification that may not be reached if first condition is true
+        // Removed verification that may not be reached
+        // if first condition is true
     }
 
     @Test
     void testParseResponseDelegatesCorrectlyForOpenAIModel() {
         // Given
-        LlmModelConfig model = new LlmModelConfig("gpt-4", "openai", "https://api.openai.com", "key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS);
-        String response = "{\"choices\":[{\"message\":{\"content\":\"OpenAI generated content\"}}]}";
+        LlmModelConfig model = new LlmModelConfig("gpt-4",
+            "openai", "https://api.openai.com", "key",
+            DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS);
+        String response = "{\"choices\":[{\"message\":"
+            + "{\"content\":\"OpenAI generated content\"}}]}";
         when(detector.isOllamaModel(model)).thenReturn(false);
         when(detector.isOpenAICompatible(model)).thenReturn(true);
 
@@ -65,7 +71,9 @@ class LlmResponseParserEnhancedTest {
     @Test
     void testParseResponseDelegatesCorrectlyForGenericModel() {
         // Given
-        LlmModelConfig model = new LlmModelConfig("other-model", "other", "https://api.other.com", "key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS);
+        LlmModelConfig model = new LlmModelConfig("other-model",
+            "other", "https://api.other.com", "key",
+            DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS);
         String response = "{\"text\": \"Generic model content\"}";
         when(detector.isOllamaModel(model)).thenReturn(false);
         when(detector.isOpenAICompatible(model)).thenReturn(false);
@@ -82,9 +90,12 @@ class LlmResponseParserEnhancedTest {
     @Test
     void testParseResponseHandlesParsingExceptionGracefully() {
         // Given
-        LlmModelConfig model = new LlmModelConfig("model", "provider", "http://api", "key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS);
+        LlmModelConfig model = new LlmModelConfig("model",
+            "provider", "http://api", "key",
+            DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS);
         String response = "Invalid JSON";
-        when(detector.isOllamaModel(model)).thenThrow(new RuntimeException("Unexpected error"));
+        when(detector.isOllamaModel(model)).thenThrow(
+                new RuntimeException("Unexpected error"));
 
         // When
         String result = parser.parseResponse(response, model);
@@ -108,7 +119,9 @@ class LlmResponseParserEnhancedTest {
     @Test
     void testParseOpenAIResponseWithMessageContent() {
         // Given
-        String response = "{\"choices\":[{\"message\":{\"content\":\"Message content field\"}}]}";
+        String response =
+            "{\"choices\":[{\"message\":{\"content\":\"Message "
+             + "content field\"}}]}";
 
         // When
         String result = parser.parseOpenAIResponse(response);
@@ -178,13 +191,15 @@ class LlmResponseParserEnhancedTest {
 
         // Then - just check that we get the response back in some form
         assertNotNull(result);
-        // The exact format of nested JSON handling may vary, so we don't assert on specific format
+        // The exact format of nested JSON handling may vary, so we don't
+        // assert on specific format
     }
 
     @Test
     void testParseOllamaResponseSpecificFormat() {
         // Given
-        String ollamaJson = "{\"response\":\"Ollama specific response\",\"other\":\"field\"}";
+        String ollamaJson =
+            "{\"response\":\"Ollama specific response\",\"other\":\"field\"}";
 
         // When
         String result = parser.parseOllamaResponse(ollamaJson);
@@ -193,4 +208,3 @@ class LlmResponseParserEnhancedTest {
         assertEquals("Ollama specific response", result);
     }
 }
-

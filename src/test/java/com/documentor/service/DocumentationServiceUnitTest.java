@@ -69,23 +69,31 @@ class DocumentationServiceUnitTest {
         );
 
         AnalysisSettings analysisSettings = new AnalysisSettings(
-            true, MAX_DEPTH_FIVE, List.of("**/*.java"), List.of("**/test/**")
+            true, MAX_DEPTH_FIVE,
+            List.of("**/*.java"), List.of("**/test/**")
         );
 
-        LlmModelConfig model = new LlmModelConfig("m", "ollama", "http://x", null, MAX_TOKENS_500, TIMEOUT_SECONDS_TEN);
-        config = new DocumentorConfig(List.of(model), outputSettings, analysisSettings);
+        LlmModelConfig model = new LlmModelConfig("m", "ollama",
+        "http://x", null, MAX_TOKENS_500, TIMEOUT_SECONDS_TEN);
+        config = new DocumentorConfig(List.of(model),
+                outputSettings, analysisSettings);
 
-        documentationService = new DocumentationService(mainGenerator, elementGenerator,
-                testGenerator, mermaidService, plantUMLService, config);
+        documentationService = new DocumentationService(mainGenerator,
+                elementGenerator, testGenerator, mermaidService,
+                plantUMLService, config);
     }
 
     @Test
-    void testGenerateDocumentationWritesFilesAndInvokesGenerators() throws Exception {
+    void testGenerateDocumentationWritesFilesAndInvokesGenerators()
+        throws Exception {
         // Arrange
-        CodeElement element = new CodeElement(CodeElementType.CLASS, "TestClass", "com.test.TestClass",
-            "/src/TestClass.java", 1, "public class TestClass {}", "", List.of(), List.of());
+        CodeElement element = new CodeElement(CodeElementType.CLASS,
+                "TestClass", "com.test.TestClass",
+            "/src/TestClass.java", 1,
+            "public class TestClass {}", "", List.of(), List.of());
 
-        ProjectAnalysis analysis = new ProjectAnalysis("/project", List.of(element), System.currentTimeMillis());
+        ProjectAnalysis analysis = new ProjectAnalysis("/project",
+                List.of(element), System.currentTimeMillis());
 
         when(mainGenerator.generateMainDocumentation(any()))
                 .thenReturn(CompletableFuture.completedFuture("# README"));
@@ -94,10 +102,12 @@ class DocumentationServiceUnitTest {
         when(testGenerator.generateUnitTestDocumentation(any(), any()))
                 .thenReturn(CompletableFuture.completedFuture(null));
         when(mermaidService.generateClassDiagrams(any(), anyString()))
-                .thenReturn(CompletableFuture.completedFuture(List.of("diagram1")));
+                .thenReturn(CompletableFuture.completedFuture(List.of(
+                        "diagram1")));
 
         // Act
-        CompletableFuture<String> result = documentationService.generateDocumentation(analysis);
+        CompletableFuture<String> result = documentationService
+                .generateDocumentation(analysis);
 
         // Assert
         assertNotNull(result);
@@ -112,14 +122,19 @@ class DocumentationServiceUnitTest {
 
         // Verify generators invoked
         verify(mainGenerator, atLeastOnce()).generateMainDocumentation(any());
-        verify(elementGenerator, atLeastOnce()).generateGroupedDocumentation(any(), any());
-        verify(testGenerator, atLeastOnce()).generateUnitTestDocumentation(any(), any());
-        verify(mermaidService, atLeastOnce()).generateClassDiagrams(any(), anyString());
+        verify(elementGenerator, atLeastOnce())
+                .generateGroupedDocumentation(any(), any());
+        verify(testGenerator, atLeastOnce())
+                .generateUnitTestDocumentation(any(), any());
+        verify(mermaidService, atLeastOnce())
+                .generateClassDiagrams(any(), anyString());
     }
 
     @Test
     void testGenerateDocumentationHandlesEmptyAnalysis() throws Exception {
-        ProjectAnalysis empty = new ProjectAnalysis("/empty", List.of(), System.currentTimeMillis());
+        ProjectAnalysis empty =
+                new ProjectAnalysis("/empty", List.of(),
+                System.currentTimeMillis());
 
         when(mainGenerator.generateMainDocumentation(any()))
                 .thenReturn(CompletableFuture.completedFuture("# README"));
@@ -129,33 +144,44 @@ class DocumentationServiceUnitTest {
         when(mermaidService.generateClassDiagrams(any(), anyString()))
                 .thenReturn(CompletableFuture.completedFuture(List.of()));
 
-        CompletableFuture<String> result = documentationService.generateDocumentation(empty);
+        CompletableFuture<String> result = documentationService
+                .generateDocumentation(empty);
 
         assertNotNull(result);
         String outputPath = result.get();
         assertEquals(tempDir.toString(), outputPath);
 
-        // With the updated implementation, we don't call elementDocGenerator for empty analyses
+        // With the updated implementation, we don't call
+        // elementDocGenerator for empty analyses
         // because we detect this and return early
-        verify(elementGenerator, never()).generateGroupedDocumentation(any(), any());
+        verify(elementGenerator, never())
+                .generateGroupedDocumentation(any(), any());
     }
 
     @Test
-    void testGenerateDocumentationWithMermaidDiagramsDisabled() throws Exception {
+    void testGenerateDocumentationWithMermaidDiagramsDisabled()
+        throws Exception {
         // Create config with generateMermaidDiagrams = false (third parameter)
         OutputSettings outputSettings = new OutputSettings(
             tempDir.toString(), "markdown", false, false, true
         );
         AnalysisSettings analysisSettings = new AnalysisSettings(
-            true, MAX_DEPTH_FIVE, List.of("**/*.java"), List.of("**/test/**")
+            true, MAX_DEPTH_FIVE,
+            List.of("**/*.java"), List.of("**/test/**")
         );
-        DocumentorConfig testConfig = new DocumentorConfig(List.of(), outputSettings, analysisSettings);
-        DocumentationService testService = new DocumentationService(mainGenerator,
-                elementGenerator, testGenerator, mermaidService, plantUMLService, testConfig);
+        DocumentorConfig testConfig = new DocumentorConfig(List.of(),
+        outputSettings, analysisSettings);
+        DocumentationService testService =
+                new DocumentationService(mainGenerator,
+                elementGenerator, testGenerator, mermaidService,
+                plantUMLService, testConfig);
 
-        CodeElement element = new CodeElement(CodeElementType.CLASS, "TestClass", "com.test.TestClass",
-            "/src/TestClass.java", 1, "public class TestClass {}", "", List.of(), List.of());
-        ProjectAnalysis analysis = new ProjectAnalysis("/project", List.of(element), System.currentTimeMillis());
+        CodeElement element = new CodeElement(CodeElementType.CLASS,
+        "TestClass", "com.test.TestClass",
+            "/src/TestClass.java", 1,
+            "public class TestClass {}", "", List.of(), List.of());
+        ProjectAnalysis analysis = new ProjectAnalysis(
+                "/project", List.of(element), System.currentTimeMillis());
 
         when(mainGenerator.generateMainDocumentation(any()))
                 .thenReturn(CompletableFuture.completedFuture("# README"));
@@ -165,7 +191,8 @@ class DocumentationServiceUnitTest {
                 .thenReturn(CompletableFuture.completedFuture(null));
 
         // Act
-        CompletableFuture<String> result = testService.generateDocumentation(analysis);
+        CompletableFuture<String> result = testService
+                .generateDocumentation(analysis);
 
         // Assert
         assertNotNull(result);
@@ -173,49 +200,66 @@ class DocumentationServiceUnitTest {
         assertEquals(tempDir.toString(), outputPath);
 
         // Verify mermaid service was NOT called since generateMermaid = false
-        verify(mermaidService, never()).generateClassDiagrams(any(), anyString());
-        // Unit test generator should still be called since generateUnitTests() always returns true
-        verify(testGenerator, atLeastOnce()).generateUnitTestDocumentation(any(), any());
+        verify(mermaidService, never()).generateClassDiagrams(any(),
+                anyString());
+        // Unit test generator should still be called since generateUnitTests()
+        // always returns true
+        verify(testGenerator, atLeastOnce())
+                .generateUnitTestDocumentation(any(), any());
     }
 
     @Test
     void testGenerateDocumentationWithUnitTestsDisabled() throws Exception {
-        // Create a mock OutputSettings that returns false for generateUnitTests()
+        // Create a mock OutputSettings that returns false for
+        // generateUnitTests()
         OutputSettings mockOutputSettings = mock(OutputSettings.class);
         when(mockOutputSettings.outputPath()).thenReturn(tempDir.toString());
         when(mockOutputSettings.generateUnitTests()).thenReturn(false);
         when(mockOutputSettings.generateMermaidDiagrams()).thenReturn(true);
-        when(mockOutputSettings.mermaidOutputPath()).thenReturn(tempDir.toString());
+        when(mockOutputSettings.mermaidOutputPath()).thenReturn(
+                tempDir.toString());
 
         AnalysisSettings analysisSettings = new AnalysisSettings(
-            true, MAX_DEPTH_FIVE, List.of("**/*.java"), List.of("**/test/**")
+            true, MAX_DEPTH_FIVE,
+            List.of("**/*.java"), List.of("**/test/**")
         );
-        DocumentorConfig testConfig = new DocumentorConfig(List.of(), mockOutputSettings, analysisSettings);
-        DocumentationService testService = new DocumentationService(mainGenerator,
-                elementGenerator, testGenerator, mermaidService, plantUMLService, testConfig);
+        DocumentorConfig testConfig = new DocumentorConfig(List.of(),
+                mockOutputSettings, analysisSettings);
+        DocumentationService testService = new DocumentationService(
+                mainGenerator, elementGenerator, testGenerator, mermaidService,
+                plantUMLService, testConfig);
 
-        CodeElement element = new CodeElement(CodeElementType.CLASS, "TestClass", "com.test.TestClass",
-            "/src/TestClass.java", 1, "public class TestClass {}", "", List.of(), List.of());
-        ProjectAnalysis analysis = new ProjectAnalysis("/project", List.of(element), System.currentTimeMillis());
+        CodeElement element = new CodeElement(CodeElementType.CLASS,
+                "TestClass", "com.test.TestClass",
+            "/src/TestClass.java", 1,
+            "public class TestClass {}", "", List.of(), List.of());
+        ProjectAnalysis analysis = new ProjectAnalysis("/project",
+                List.of(element), System.currentTimeMillis());
 
         when(mainGenerator.generateMainDocumentation(any()))
                 .thenReturn(CompletableFuture.completedFuture("# README"));
         when(elementGenerator.generateGroupedDocumentation(any(), any()))
                 .thenReturn(CompletableFuture.completedFuture(null));
         when(mermaidService.generateClassDiagrams(any(), anyString()))
-                .thenReturn(CompletableFuture.completedFuture(List.of("diagram1")));
+                .thenReturn(CompletableFuture.completedFuture(
+                        List.of("diagram1")));
 
         // Act
-        CompletableFuture<String> result = testService.generateDocumentation(analysis);
+        CompletableFuture<String> result =
+                testService.generateDocumentation(analysis);
 
         // Assert
         assertNotNull(result);
         String outputPath = result.get();
         assertEquals(tempDir.toString(), outputPath);
 
-        // Verify unit test generator was NOT called since generateUnitTests = false
-        verify(testGenerator, never()).generateUnitTestDocumentation(any(), any());
-        // Mermaid service should still be called since generateMermaidDiagrams = true
-        verify(mermaidService, atLeastOnce()).generateClassDiagrams(any(), anyString());
+        // Verify unit test generator was NOT called since
+        // generateUnitTests = false
+        verify(testGenerator, never()).generateUnitTestDocumentation(
+                any(), any());
+        // Mermaid service should still be called
+        // since generateMermaidDiagrams = true
+        verify(mermaidService, atLeastOnce())
+                .generateClassDiagrams(any(), anyString());
     }
 }

@@ -97,9 +97,17 @@ class DirectCommandProcessorTest {
     @Test
     void testAnalyzeCommandWithDefaultParameters() throws Exception {
         when(applicationArguments.getSourceArgs()).thenReturn(new String[]{"analyze"});
-        when(documentorCommands.analyzeProject(anyString(), anyString(), anyBoolean(),
-                                             anyBoolean(), anyString(), anyBoolean(), anyString()))
-            .thenReturn("Analysis complete");
+        when(
+            documentorCommands.analyzeProject(
+                anyString(),
+                anyString(),
+                anyBoolean(),
+                anyBoolean(),
+                anyString(),
+                anyBoolean(),
+                anyString()
+            )
+        ).thenReturn("Analysis complete");
 
         processor.run(applicationArguments);
 
@@ -112,9 +120,17 @@ class DirectCommandProcessorTest {
         when(applicationArguments.getSourceArgs()).thenReturn(new String[]{
             "analyze", "--project-path", "/custom/path"
         });
-        when(documentorCommands.analyzeProject(anyString(), anyString(), anyBoolean(),
-                                             anyBoolean(), anyString(), anyBoolean(), anyString()))
-            .thenReturn("Analysis complete");
+        when(
+            documentorCommands.analyzeProject(
+                anyString(),
+                anyString(),
+                anyBoolean(),
+                anyBoolean(),
+                anyString(),
+                anyBoolean(),
+                anyString()
+            )
+        ).thenReturn("Analysis complete");
 
         processor.run(applicationArguments);
 
@@ -126,9 +142,17 @@ class DirectCommandProcessorTest {
         when(applicationArguments.getSourceArgs()).thenReturn(new String[]{
             "analyze", "--config", "custom-config.json"
         });
-        when(documentorCommands.analyzeProject(anyString(), anyString(), anyBoolean(),
-                                             anyBoolean(), anyString(), anyBoolean(), anyString()))
-            .thenReturn("Analysis complete");
+        when(
+            documentorCommands.analyzeProject(
+                anyString(),
+                anyString(),
+                anyBoolean(),
+                anyBoolean(),
+                anyString(),
+                anyBoolean(),
+                anyString()
+            )
+        ).thenReturn("Analysis complete");
 
         processor.run(applicationArguments);
 
@@ -140,9 +164,17 @@ class DirectCommandProcessorTest {
         when(applicationArguments.getSourceArgs()).thenReturn(new String[]{
             "analyze", "--include-private-members", "false"
         });
-        when(documentorCommands.analyzeProject(anyString(), anyString(), anyBoolean(),
-                                             anyBoolean(), anyString(), anyBoolean(), anyString()))
-            .thenReturn("Analysis complete");
+        when(
+            documentorCommands.analyzeProject(
+                anyString(),
+                anyString(),
+                anyBoolean(),
+                anyBoolean(),
+                anyString(),
+                anyBoolean(),
+                anyString()
+            )
+        ).thenReturn("Analysis complete");
 
         processor.run(applicationArguments);
 
@@ -154,9 +186,10 @@ class DirectCommandProcessorTest {
         when(applicationArguments.getSourceArgs()).thenReturn(new String[]{
             "analyze", "--generate-mermaid", "true", "--mermaid-output", "diagram.mmd"
         });
-        when(documentorCommands.analyzeProject(anyString(), anyString(), anyBoolean(),
-                                             anyBoolean(), anyString(), anyBoolean(), anyString()))
-            .thenReturn("Analysis complete");
+        when(
+            documentorCommands.analyzeProject(anyString(), anyString(), anyBoolean(),
+                anyBoolean(), anyString(), anyBoolean(), anyString())
+        ).thenReturn("Analysis complete");
 
         processor.run(applicationArguments);
 
@@ -168,9 +201,10 @@ class DirectCommandProcessorTest {
         when(applicationArguments.getSourceArgs()).thenReturn(new String[]{
             "analyze", "--generate-plantuml", "true", "--plantuml-output", "diagram.puml"
         });
-        when(documentorCommands.analyzeProject(anyString(), anyString(), anyBoolean(),
-                                             anyBoolean(), anyString(), anyBoolean(), anyString()))
-            .thenReturn("Analysis complete");
+        when(
+            documentorCommands.analyzeProject(anyString(), anyString(), anyBoolean(),
+                anyBoolean(), anyString(), anyBoolean(), anyString())
+        ).thenReturn("Analysis complete");
 
         processor.run(applicationArguments);
 
@@ -189,14 +223,31 @@ class DirectCommandProcessorTest {
             "--generate-plantuml", "true",
             "--plantuml-output", "plantuml.puml"
         });
-        when(documentorCommands.analyzeProject(anyString(), anyString(), anyBoolean(),
-                                             anyBoolean(), anyString(), anyBoolean(), anyString()))
-            .thenReturn("Analysis complete");
+        when(
+            documentorCommands.analyzeProject(
+                anyString(),
+                anyString(),
+                anyBoolean(),
+                anyBoolean(),
+                anyString(),
+                anyBoolean(),
+                anyString()
+            )
+        ).thenReturn("Analysis complete");
 
         processor.run(applicationArguments);
 
-        verify(documentorCommands).analyzeProject("/custom/project", "custom.json", false,
-                                               true, "mermaid.mmd", true, "plantuml.puml");
+        verify(
+            documentorCommands
+        ).analyzeProject(
+            "/custom/project",
+            "custom.json",
+            false,
+            true,
+            "mermaid.mmd",
+            true,
+            "plantuml.puml"
+        );
     }
 
     @Test
@@ -205,9 +256,17 @@ class DirectCommandProcessorTest {
         when(applicationArguments.getSourceArgs()).thenReturn(new String[]{
             "analyze", "--project-path"  // Missing value
         });
-        when(documentorCommands.analyzeProject(anyString(), anyString(), anyBoolean(),
-                                             anyBoolean(), anyString(), anyBoolean(), anyString()))
-            .thenReturn("Analysis complete");
+        when(
+            documentorCommands.analyzeProject(
+                anyString(),
+                anyString(),
+                anyBoolean(),
+                anyBoolean(),
+                anyString(),
+                anyBoolean(),
+                anyString()
+            )
+        ).thenReturn("Analysis complete");
 
         processor.run(applicationArguments);
 
@@ -231,9 +290,17 @@ class DirectCommandProcessorTest {
     @Test
     void testAnalyzeCommandWithDoubleConfigSet() throws Exception {
         when(applicationArguments.getSourceArgs()).thenReturn(new String[]{"analyze"});
-        when(documentorCommands.analyzeProject(anyString(), anyString(), anyBoolean(),
-                                             anyBoolean(), anyString(), anyBoolean(), anyString()))
-            .thenReturn("Analysis complete");
+        when(
+            documentorCommands.analyzeProject(
+                anyString(),
+                anyString(),
+                anyBoolean(),
+                anyBoolean(),
+                anyString(),
+                anyBoolean(),
+                anyString()
+            )
+        ).thenReturn("Analysis complete");
 
         processor.run(applicationArguments);
 

@@ -11,8 +11,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
- * Comprehensive test coverage for BeanUtils to achieve 82%+ coverage for
- * config package.
+ * Comprehensive test coverage for BeanUtils to achieve 82%+ coverage
+ * for config package.
  */
 class BeanUtilsComprehensiveTest {
 
@@ -25,24 +25,38 @@ class BeanUtilsComprehensiveTest {
             mock(ConfigurableApplicationContext.class);
         DefaultSingletonBeanRegistry beanFactory =
             mock(DefaultSingletonBeanRegistry.class,
-            withSettings().extraInterfaces(ConfigurableListableBeanFactory.class));
+                withSettings()
+                    .extraInterfaces(ConfigurableListableBeanFactory.class));
         ConfigurableListableBeanFactory configurableFactory =
             (ConfigurableListableBeanFactory) beanFactory;
         BeanDefinition beanDefinition = mock(BeanDefinition.class);
 
-        when(context.getBeanFactory()).thenReturn(configurableFactory);
-        when(configurableFactory.containsBean("testBean")).thenReturn(true);
-        when(configurableFactory.isSingleton("testBean")).thenReturn(true);
+        when(context.getBeanFactory())
+            .thenReturn(configurableFactory);
+        when(configurableFactory.containsBean("testBean"))
+            .thenReturn(true);
+        when(configurableFactory.isSingleton("testBean"))
+            .thenReturn(true);
         when(configurableFactory.getBeanDefinition("testBean"))
             .thenReturn(beanDefinition);
         when(beanDefinition.getBeanClassName()).thenReturn("java.lang.String");
         when(configurableFactory.getBean("testBean"))
-            .thenReturn("originalValue")  // First call - get original
-            .thenReturn("newValue");      // Second call - verify replacement
+            // First call - get original
+            .thenReturn("originalValue")
+            // Second call - verify replacement
+            .thenReturn("newValue");
         when(configurableFactory.getBeanDefinitionNames())
-            .thenReturn(new String[]{"testBean"});
+            .thenReturn(
+                new String[]{
+                    "testBean",
+                }
+            );
         when(context.getBeanDefinitionNames())
-            .thenReturn(new String[]{"testBean"});
+            .thenReturn(
+                new String[]{
+                    "testBean",
+                }
+            );
 
         String newValue = "newValue";
         assertDoesNotThrow(() ->
@@ -62,7 +76,8 @@ class BeanUtilsComprehensiveTest {
             mock(ConfigurableApplicationContext.class);
         DefaultSingletonBeanRegistry beanFactory =
             mock(DefaultSingletonBeanRegistry.class,
-            withSettings().extraInterfaces(ConfigurableListableBeanFactory.class));
+                withSettings()
+                    .extraInterfaces(ConfigurableListableBeanFactory.class));
         ConfigurableListableBeanFactory configurableFactory =
             (ConfigurableListableBeanFactory) beanFactory;
         BeanDefinition beanDefinition = mock(BeanDefinition.class);
@@ -79,11 +94,19 @@ class BeanUtilsComprehensiveTest {
             .thenReturn(mock(DocumentorConfig.class))
             .thenReturn(newConfig);
         when(configurableFactory.getBeanDefinitionNames()).thenReturn(
-            new String[]{"documentorConfig", "llmService",
-                        "documentationService"});
+            new String[] {
+                "documentorConfig",
+                "llmService",
+                "documentationService",
+            }
+        );
         when(context.getBeanDefinitionNames()).thenReturn(
-            new String[]{"documentorConfig", "llmService",
-                        "documentationService"});
+            new String[] {
+                "documentorConfig",
+                "llmService",
+                "documentationService",
+            }
+        );
 
         // Mock dependent services
         when(context.containsBean("llmService")).thenReturn(true);
@@ -113,26 +136,44 @@ class BeanUtilsComprehensiveTest {
             mock(ConfigurableApplicationContext.class);
         DefaultSingletonBeanRegistry beanFactory =
             mock(DefaultSingletonBeanRegistry.class,
-            withSettings().extraInterfaces(ConfigurableListableBeanFactory.class));
+                withSettings()
+                    .extraInterfaces(ConfigurableListableBeanFactory.class));
         ConfigurableListableBeanFactory configurableFactory =
             (ConfigurableListableBeanFactory) beanFactory;
         BeanDefinition beanDefinition = mock(BeanDefinition.class);
 
-        when(context.getBeanFactory()).thenReturn(configurableFactory);
-        when(configurableFactory.containsBean("configBean")).thenReturn(true);
-        when(configurableFactory.isSingleton("configBean")).thenReturn(true);
-        when(configurableFactory.getBeanDefinition("configBean")).thenReturn(beanDefinition);
-        when(beanDefinition.getBeanClassName()).thenReturn("com.documentor.config.DocumentorConfig");
+        when(context.getBeanFactory())
+            .thenReturn(configurableFactory);
+        when(configurableFactory.containsBean("configBean"))
+            .thenReturn(true);
+        when(configurableFactory.isSingleton("configBean"))
+            .thenReturn(true);
+        when(configurableFactory.getBeanDefinition("configBean"))
+            .thenReturn(beanDefinition);
+        when(beanDefinition.getBeanClassName())
+            .thenReturn("com.documentor.config.DocumentorConfig");
 
         DocumentorConfig originalConfig = mock(DocumentorConfig.class);
         DocumentorConfig newConfig = mock(DocumentorConfig.class);
         when(configurableFactory.getBean("configBean"))
             .thenReturn(originalConfig)
             .thenReturn(newConfig);
-        when(configurableFactory.getBeanDefinitionNames()).thenReturn(
-            new String[]{"configBean", "serviceBean", "inheritedBean"});
-        when(context.getBeanDefinitionNames()).thenReturn(
-            new String[]{"configBean", "serviceBean", "inheritedBean"});
+        when(configurableFactory.getBeanDefinitionNames())
+            .thenReturn(
+                new String[] {
+                    "configBean",
+                    "serviceBean",
+                    "inheritedBean",
+                }
+            );
+        when(context.getBeanDefinitionNames())
+            .thenReturn(
+                new String[] {
+                    "configBean",
+                    "serviceBean",
+                    "inheritedBean",
+                }
+            );
 
         // Create beans with fields to update
         TestServiceWithConfig serviceBean = new TestServiceWithConfig();
@@ -161,7 +202,11 @@ class BeanUtilsComprehensiveTest {
 
         // Test bean not found
         when(beanFactory.containsBean("missingBean")).thenReturn(false);
-        when(beanFactory.getBeanDefinitionNames()).thenReturn(new String[]{"otherBean"});
+        when(beanFactory.getBeanDefinitionNames()).thenReturn(
+            new String[]{
+                "otherBean",
+            }
+        );
         assertDoesNotThrow(() -> BeanUtils.overrideBean(context, "missingBean", "newValue"));
 
         // Test non-singleton bean
@@ -217,8 +262,16 @@ class BeanUtilsComprehensiveTest {
         when(beanFactory.getBeanDefinition("testBean")).thenReturn(beanDefinition);
         when(beanDefinition.getBeanClassName()).thenReturn("java.lang.String");
         when(beanFactory.getBean("testBean")).thenReturn("originalValue");
-        when(beanFactory.getBeanDefinitionNames()).thenReturn(new String[]{"testBean"});
-        when(context.getBeanDefinitionNames()).thenReturn(new String[]{"testBean"});
+        when(beanFactory.getBeanDefinitionNames()).thenReturn(
+            new String[] {
+                "testBean",
+            }
+        );
+        when(context.getBeanDefinitionNames()).thenReturn(
+            new String[]{
+                "testBean",
+            }
+        );
 
         // This should complete without throwing, even though reflection fails
         assertDoesNotThrow(() -> BeanUtils.overrideBean(context, "testBean", "newValue"));
@@ -246,7 +299,8 @@ class BeanUtilsComprehensiveTest {
     void testUpdateBeanFieldsWithNullValues() {
         ConfigurableApplicationContext context = mock(ConfigurableApplicationContext.class);
         DefaultSingletonBeanRegistry beanFactory = mock(DefaultSingletonBeanRegistry.class,
-            withSettings().extraInterfaces(ConfigurableListableBeanFactory.class));
+            withSettings()
+                .extraInterfaces(ConfigurableListableBeanFactory.class));
         ConfigurableListableBeanFactory configurableFactory = (ConfigurableListableBeanFactory) beanFactory;
         BeanDefinition beanDefinition = mock(BeanDefinition.class);
 
@@ -259,9 +313,15 @@ class BeanUtilsComprehensiveTest {
             .thenReturn("originalValue")
             .thenReturn("newValue");
         when(configurableFactory.getBeanDefinitionNames()).thenReturn(
-            new String[]{"testBean", "nullBean"});
+            new String[] {
+                "testBean",
+                "nullBean"
+            });
         when(context.getBeanDefinitionNames()).thenReturn(
-            new String[]{"testBean", "nullBean"});
+            new String[] {
+                "testBean",
+                "nullBean"
+            });
 
         // Test with bean that has null field value
         TestBeanWithStringField nullFieldBean = new TestBeanWithStringField(null);
@@ -280,7 +340,8 @@ class BeanUtilsComprehensiveTest {
     void testUpdateDocumentorConfigMissingServices() {
         ConfigurableApplicationContext context = mock(ConfigurableApplicationContext.class);
         DefaultSingletonBeanRegistry beanFactory = mock(DefaultSingletonBeanRegistry.class,
-            withSettings().extraInterfaces(ConfigurableListableBeanFactory.class));
+            withSettings()
+                .extraInterfaces(ConfigurableListableBeanFactory.class));
         ConfigurableListableBeanFactory configurableFactory = (ConfigurableListableBeanFactory) beanFactory;
         BeanDefinition beanDefinition = mock(BeanDefinition.class);
         DocumentorConfig newConfig = mock(DocumentorConfig.class);
@@ -293,14 +354,23 @@ class BeanUtilsComprehensiveTest {
         when(configurableFactory.getBean("documentorConfig"))
             .thenReturn(mock(DocumentorConfig.class))
             .thenReturn(newConfig);
-        when(configurableFactory.getBeanDefinitionNames()).thenReturn(new String[]{"documentorConfig"});
-        when(context.getBeanDefinitionNames()).thenReturn(new String[]{"documentorConfig"});
+        when(configurableFactory.getBeanDefinitionNames()).thenReturn(
+            new String[]{
+                "documentorConfig",
+            }
+        );
+        when(context.getBeanDefinitionNames()).thenReturn(
+            new String[]{
+                "documentorConfig",
+            }
+        );
 
         // Mock services as NOT present
         when(context.containsBean("llmService")).thenReturn(false);
         when(context.containsBean("documentationService")).thenReturn(false);
 
-        assertDoesNotThrow(() -> BeanUtils.overrideBean(context, "documentorConfig", newConfig));
+        assertDoesNotThrow(() ->
+            BeanUtils.overrideBean(context, "documentorConfig", newConfig));
 
         // Verify containsBean calls were made
         verify(context).containsBean("llmService");
@@ -314,20 +384,34 @@ class BeanUtilsComprehensiveTest {
     void testBeanIdentityVerificationFailure() {
         ConfigurableApplicationContext context = mock(ConfigurableApplicationContext.class);
         DefaultSingletonBeanRegistry beanFactory = mock(DefaultSingletonBeanRegistry.class,
-            withSettings().extraInterfaces(ConfigurableListableBeanFactory.class));
+            withSettings()
+                .extraInterfaces(ConfigurableListableBeanFactory.class));
         ConfigurableListableBeanFactory configurableFactory = (ConfigurableListableBeanFactory) beanFactory;
         BeanDefinition beanDefinition = mock(BeanDefinition.class);
 
-        when(context.getBeanFactory()).thenReturn(configurableFactory);
-        when(configurableFactory.containsBean("testBean")).thenReturn(true);
-        when(configurableFactory.isSingleton("testBean")).thenReturn(true);
-        when(configurableFactory.getBeanDefinition("testBean")).thenReturn(beanDefinition);
-        when(beanDefinition.getBeanClassName()).thenReturn("java.lang.String");
+        when(context.getBeanFactory())
+            .thenReturn(configurableFactory);
+        when(configurableFactory.containsBean("testBean"))
+            .thenReturn(true);
+        when(configurableFactory.isSingleton("testBean"))
+            .thenReturn(true);
+        when(configurableFactory.getBeanDefinition("testBean"))
+            .thenReturn(beanDefinition);
+        when(beanDefinition.getBeanClassName())
+            .thenReturn("java.lang.String");
         when(configurableFactory.getBean("testBean"))
-            .thenReturn("originalValue")    // First call - get original
-            .thenReturn("differentValue");  // Second call - verification fails
-        when(configurableFactory.getBeanDefinitionNames()).thenReturn(new String[]{"testBean"});
-        when(context.getBeanDefinitionNames()).thenReturn(new String[]{"testBean"});
+            // First call - get original
+            .thenReturn("originalValue")
+            // Second call - verification fails
+            .thenReturn("differentValue");
+        when(configurableFactory.getBeanDefinitionNames())
+            .thenReturn(new String[]{"testBean"});
+        when(context.getBeanDefinitionNames())
+            .thenReturn(
+                new String[] {
+                    "testBean",
+                }
+            );
 
         String newValue = "newValue";
         assertDoesNotThrow(() -> BeanUtils.overrideBean(context, "testBean", newValue));
@@ -348,18 +432,33 @@ class BeanUtilsComprehensiveTest {
         ConfigurableListableBeanFactory configurableFactory = (ConfigurableListableBeanFactory) beanFactory;
         BeanDefinition beanDefinition = mock(BeanDefinition.class);
 
-        when(context.getBeanFactory()).thenReturn(configurableFactory);
-        when(configurableFactory.containsBean("testBean")).thenReturn(true);
-        when(configurableFactory.isSingleton("testBean")).thenReturn(true);
-        when(configurableFactory.getBeanDefinition("testBean")).thenReturn(beanDefinition);
-        when(beanDefinition.getBeanClassName()).thenReturn("java.lang.String");
+        when(context.getBeanFactory())
+            .thenReturn(configurableFactory);
+        when(configurableFactory.containsBean("testBean"))
+            .thenReturn(true);
+        when(configurableFactory.isSingleton("testBean"))
+            .thenReturn(true);
+        when(configurableFactory.getBeanDefinition("testBean"))
+            .thenReturn(beanDefinition);
+        when(beanDefinition.getBeanClassName())
+            .thenReturn("java.lang.String");
         when(configurableFactory.getBean("testBean"))
             .thenReturn("originalValue")
             .thenReturn("newValue");
-        when(configurableFactory.getBeanDefinitionNames()).thenReturn(
-            new String[]{"testBean", "problematicBean"});
-        when(context.getBeanDefinitionNames()).thenReturn(
-            new String[]{"testBean", "problematicBean"});
+        when(configurableFactory.getBeanDefinitionNames())
+            .thenReturn(
+                new String[]{
+                    "testBean",
+                    "problematicBean",
+                }
+            );
+        when(context.getBeanDefinitionNames())
+            .thenReturn(
+                new String[]{
+                    "testBean",
+                    "problematicBean",
+                }
+            );
 
         // Mock a problematic bean that throws exception
         when(context.getBean("problematicBean")).thenThrow(new RuntimeException("Bean access error"));

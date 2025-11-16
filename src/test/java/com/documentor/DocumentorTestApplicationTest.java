@@ -38,7 +38,12 @@ class DocumentorTestApplicationTest {
             DocumentorTestApplication.main(new String[]{"--spring.profiles.active=test"});
 
             // Then
-            mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorTestApplication.class), any(String[].class)));
+            mockedSpringApp.verify(() ->
+                SpringApplication.run(
+                    eq(DocumentorTestApplication.class),
+                    any(String[].class)
+                )
+            );
         }
     }
 
@@ -50,7 +55,12 @@ class DocumentorTestApplicationTest {
             DocumentorTestApplication.main(new String[]{});
 
             // Then
-            mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorTestApplication.class), any(String[].class)));
+            mockedSpringApp.verify(() ->
+                SpringApplication.run(
+                    eq(DocumentorTestApplication.class),
+                    any(String[].class)
+                )
+            );
         }
     }
 
@@ -62,7 +72,12 @@ class DocumentorTestApplicationTest {
             DocumentorTestApplication.main(null);
 
             // Then
-            mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorTestApplication.class), any()));
+            mockedSpringApp.verify(() ->
+                SpringApplication.run(
+                    eq(DocumentorTestApplication.class),
+                    any()
+                )
+            );
         }
     }
 
@@ -128,14 +143,19 @@ class DocumentorTestApplicationTest {
                 "--spring.profiles.active=test",
                 "--debug",
                 "--trace",
-                "--project-path=/test/path"
+                "--project-path=/test/path",
             };
 
             // When
             DocumentorTestApplication.main(testArgs);
 
             // Then
-            mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorTestApplication.class), eq(testArgs)));
+            mockedSpringApp.verify(() ->
+                SpringApplication.run(
+                    eq(DocumentorTestApplication.class),
+                    eq(testArgs)
+                )
+            );
         }
     }
 
@@ -145,14 +165,23 @@ class DocumentorTestApplicationTest {
         // This verifies the try-catch block exists without actually triggering it
         try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
             // Setup successful execution
-            mockedSpringApp.when(() -> SpringApplication.run(eq(DocumentorTestApplication.class), any(String[].class)))
-                .thenReturn(null);
+            mockedSpringApp.when(() ->
+                SpringApplication.run(
+                    eq(DocumentorTestApplication.class),
+                    any(String[].class)
+                )
+            ).thenReturn(null);
 
             // When - normal execution should not trigger exception handling
             DocumentorTestApplication.main(new String[]{"--test"});
 
             // Then - verify normal path was taken
-            mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorTestApplication.class), any(String[].class)));
+            mockedSpringApp.verify(() ->
+                SpringApplication.run(
+                    eq(DocumentorTestApplication.class),
+                    any(String[].class)
+                )
+            );
         }
     }
 
@@ -185,14 +214,19 @@ class DocumentorTestApplicationTest {
                 "--spring.profiles.active=test,enhanced",
                 "--logging.level.com.documentor=DEBUG",
                 "--server.port=0",
-                "--management.endpoints.enabled-by-default=false"
+                "--management.endpoints.enabled-by-default=false",
             };
 
             // When
             DocumentorTestApplication.main(complexArgs);
 
             // Then
-            mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorTestApplication.class), eq(complexArgs)));
+            mockedSpringApp.verify(() ->
+                SpringApplication.run(
+                    eq(DocumentorTestApplication.class),
+                    eq(complexArgs)
+                )
+            );
         }
     }
 
@@ -204,14 +238,19 @@ class DocumentorTestApplicationTest {
                 "--spring.profiles.active=test",
                 "--documentor.llm.provider=test-provider",
                 "--documentor.output.enabled=true",
-                "--logging.level.root=WARN"
+                "--logging.level.root=WARN",
             };
 
             // When
             DocumentorTestApplication.main(configArgs);
 
             // Then
-            mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorTestApplication.class), eq(configArgs)));
+            mockedSpringApp.verify(() ->
+                SpringApplication.run(
+                    eq(DocumentorTestApplication.class),
+                    eq(configArgs)
+                )
+            );
         }
     }
 
@@ -219,13 +258,20 @@ class DocumentorTestApplicationTest {
     void testMainMethodWithSingleArgument() {
         // Test main method with single argument
         try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
-            String[] singleArg = {"--help"};
+            String[] singleArg = {
+                "--help",
+            };
 
             // When
             DocumentorTestApplication.main(singleArg);
 
             // Then
-            mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorTestApplication.class), eq(singleArg)));
+            mockedSpringApp.verify(() ->
+                SpringApplication.run(
+                    eq(DocumentorTestApplication.class),
+                    eq(singleArg)
+                )
+            );
         }
     }
 
@@ -244,14 +290,19 @@ class DocumentorTestApplicationTest {
             String[] systemArgs = {
                 "-Dspring.profiles.active=test",
                 "--spring.main.banner-mode=off",
-                "--spring.jpa.show-sql=false"
+                "--spring.jpa.show-sql=false",
             };
 
             // When
             DocumentorTestApplication.main(systemArgs);
 
             // Then
-            mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorTestApplication.class), eq(systemArgs)));
+            mockedSpringApp.verify(() ->
+                SpringApplication.run(
+                    eq(DocumentorTestApplication.class),
+                    eq(systemArgs)
+                )
+            );
         }
     }
 
@@ -274,14 +325,19 @@ class DocumentorTestApplicationTest {
                 "--server.port=9999",
                 "--spring.application.name=documentor-test",
                 "--management.server.port=9998",
-                "--spring.jpa.hibernate.ddl-auto=none"
+                "--spring.jpa.hibernate.ddl-auto=none",
             };
 
             // When
             DocumentorTestApplication.main(extensiveArgs);
 
             // Then
-            mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorTestApplication.class), eq(extensiveArgs)));
+            mockedSpringApp.verify(() ->
+                SpringApplication.run(
+                    eq(DocumentorTestApplication.class),
+                    eq(extensiveArgs)
+                )
+            );
         }
     }
 
@@ -293,14 +349,19 @@ class DocumentorTestApplicationTest {
                 "--documentor.analysis.enabled=true",
                 "--documentor.llm.model=gpt-4",
                 "--documentor.output.format=markdown",
-                "--documentor.project.path=/test/project"
+                "--documentor.project.path=/test/project",
             };
 
             // When
             DocumentorTestApplication.main(documentorArgs);
 
             // Then
-            mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorTestApplication.class), eq(documentorArgs)));
+            mockedSpringApp.verify(() ->
+                SpringApplication.run(
+                    eq(DocumentorTestApplication.class),
+                    eq(documentorArgs)
+                )
+            );
         }
     }
 
@@ -311,14 +372,19 @@ class DocumentorTestApplicationTest {
             String[] profilingArgs = {
                 "--spring.profiles.active=test",
                 "-XX:+PrintGC",
-                "--management.endpoints.web.exposure.include=health,info,metrics"
+                "--management.endpoints.web.exposure.include=health,info,metrics",
             };
 
             // When
             DocumentorTestApplication.main(profilingArgs);
 
             // Then
-            mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorTestApplication.class), eq(profilingArgs)));
+            mockedSpringApp.verify(() ->
+                SpringApplication.run(
+                    eq(DocumentorTestApplication.class),
+                    eq(profilingArgs)
+                )
+            );
         }
     }
 
@@ -329,7 +395,9 @@ class DocumentorTestApplicationTest {
 
         // Verify it's exactly void, not Void
         assertEquals(void.class, mainMethod.getReturnType());
-        assertFalse(mainMethod.getReturnType().isPrimitive() == false); // double negative to ensure it's primitive void
+        assertFalse(
+            mainMethod.getReturnType().isPrimitive() == false
+        ); // double negative to ensure it's primitive void
     }
 
     @Test
@@ -353,14 +421,20 @@ class DocumentorTestApplicationTest {
 
         // Test that calling the constructor throws UnsupportedOperationException
         constructor.setAccessible(true);
-        java.lang.reflect.InvocationTargetException exception = assertThrows(java.lang.reflect.InvocationTargetException.class, () -> {
-            constructor.newInstance();
-        });
+        java.lang.reflect.InvocationTargetException exception = assertThrows(
+            java.lang.reflect.InvocationTargetException.class,
+            () -> {
+                constructor.newInstance();
+            }
+        );
 
         // Verify the cause is UnsupportedOperationException with correct message
         Throwable cause = exception.getCause();
         assertInstanceOf(UnsupportedOperationException.class, cause);
-        assertEquals("Utility class should not be instantiated", cause.getMessage());
+        assertEquals(
+            "Utility class should not be instantiated",
+            cause.getMessage()
+        );
     }
 
     @Test
@@ -368,16 +442,27 @@ class DocumentorTestApplicationTest {
         // Test that successful execution doesn't throw exceptions
         try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
             // Mock successful return
-            mockedSpringApp.when(() -> SpringApplication.run(eq(DocumentorTestApplication.class), any(String[].class)))
-                .thenReturn(mock(org.springframework.context.ConfigurableApplicationContext.class));
+            mockedSpringApp.when(() ->
+                SpringApplication.run(
+                    eq(DocumentorTestApplication.class),
+                    any(String[].class)
+                )
+            ).thenReturn(
+                mock(org.springframework.context.ConfigurableApplicationContext.class)
+            );
 
             // This should not throw any exceptions
-            assertDoesNotThrow(() -> {
-                DocumentorTestApplication.main(new String[]{"--success-test"});
-            });
+            assertDoesNotThrow(() ->
+                DocumentorTestApplication.main(new String[]{"--success-test"})
+            );
 
             // Verify the call was made
-            mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorTestApplication.class), any(String[].class)));
+            mockedSpringApp.verify(() ->
+                SpringApplication.run(
+                    eq(DocumentorTestApplication.class),
+                    any(String[].class)
+                )
+            );
         }
     }
 }

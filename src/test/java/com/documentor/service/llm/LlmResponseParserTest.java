@@ -22,7 +22,9 @@ class LlmResponseParserTest {
 
     @Test
     void parseGenericResponseReturnsResponseField() {
-        LlmModelConfig model = new LlmModelConfig("test", "other", "http://api.test", "key", TEST_MAX_TOKENS, TEST_TIMEOUT_SECONDS);
+        LlmModelConfig model = new LlmModelConfig("test", "other",
+        "http://api.test", "key", TEST_MAX_TOKENS,
+        TEST_TIMEOUT_SECONDS);
         String json = "{\"response\": \"ok\"}";
         String out = parser.parseResponse(json, model);
         assertEquals("ok", out);
@@ -30,10 +32,11 @@ class LlmResponseParserTest {
 
     @Test
     void parseOpenAIResponseHandlesSimpleResponseField() {
-        LlmModelConfig model = new LlmModelConfig("gpt", "openai", "https://api.openai.com/v1", "key", TEST_MAX_TOKENS, TEST_TIMEOUT_SECONDS);
+        LlmModelConfig model = new LlmModelConfig("gpt", "openai",
+            "https://api.openai.com/v1", "key", TEST_MAX_TOKENS,
+            TEST_TIMEOUT_SECONDS);
         String json = "{\"response\": \"fallback\"}";
         String out = parser.parseResponse(json, model);
         assertEquals("fallback", out);
     }
 }
-

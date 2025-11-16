@@ -5,8 +5,8 @@ package com.documentor.service.diagram;
  */
 public class TestDiagramGeneratorFactory extends DiagramGeneratorFactory {
 
-    public TestDiagramGeneratorFactory(final MermaidClassDiagramGenerator classDiagramGenerator) {
+    public TestDiagramGeneratorFactory(final MermaidClassDiagramGenerator
+        classDiagramGenerator) {
         super(classDiagramGenerator, null);
     }
 }
-

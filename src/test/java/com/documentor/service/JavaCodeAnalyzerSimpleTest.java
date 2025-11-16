@@ -45,11 +45,13 @@ class JavaCodeAnalyzerSimpleTest {
     void analyzeFileWithPrivateMembersOverride() throws IOException {
         // Arrange
         Path javaFile = tempDir.resolve("TestClass.java");
-        String javaCode = "public class TestClass { private void privateMethod() {} }";
+        String javaCode = "public class TestClass "
+            + "{ private void privateMethod() {} }";
         Files.writeString(javaFile, javaCode);
 
         // Act
-        List<CodeElement> result = javaCodeAnalyzer.analyzeFile(javaFile, Boolean.TRUE);
+        List<CodeElement> result = javaCodeAnalyzer.analyzeFile(
+            javaFile, Boolean.TRUE);
 
         // Assert
         assertNotNull(result);
@@ -64,7 +66,8 @@ class JavaCodeAnalyzerSimpleTest {
         Files.writeString(javaFile, javaCode);
 
         // Act
-        List<CodeElement> result = javaCodeAnalyzer.analyzeFile(javaFile, null);
+        List<CodeElement> result = javaCodeAnalyzer
+            .analyzeFile(javaFile, null);
 
         // Assert
         assertNotNull(result);
@@ -78,9 +81,11 @@ class JavaCodeAnalyzerSimpleTest {
         String javaCode = "public class TestClass {}";
         Files.writeString(javaFile, javaCode);
 
-        doThrow(new RuntimeException("Visitor failed")).when(mockElementVisitor).initialize(any(), any(), any());
+        doThrow(new RuntimeException("Visitor failed"))
+            .when(mockElementVisitor).initialize(any(), any(), any());
 
         // Act & Assert
-        assertThrows(IOException.class, () -> javaCodeAnalyzer.analyzeFile(javaFile));
+        assertThrows(IOException.class, () ->
+            javaCodeAnalyzer.analyzeFile(javaFile));
     }
 }

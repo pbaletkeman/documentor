@@ -39,15 +39,19 @@ class LlmRequestBuilderTest {
     void setUp() {
         LlmModelTypeDetector modelTypeDetector = new LlmModelTypeDetector();
         LlmPromptTemplates promptTemplates = new LlmPromptTemplates();
-        LlmRequestFormatter requestFormatter = new LlmRequestFormatter(modelTypeDetector);
-        requestBuilder = new LlmRequestBuilder(promptTemplates, requestFormatter);
+        LlmRequestFormatter requestFormatter =
+            new LlmRequestFormatter(modelTypeDetector);
+        requestBuilder =
+            new LlmRequestBuilder(promptTemplates, requestFormatter);
 
         ollamaModel = new LlmModelConfig(
-            "llama2", "ollama", "http://localhost:11434/api/generate", "", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
+            "llama2", "ollama", "http://localhost:11434/api/generate",
+            "", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
         );
 
         openaiModel = new LlmModelConfig(
-            "gpt-4", "openai", "https://api.openai.com/v1/completions", "sk-test", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
+            "gpt-4", "openai", "https://api.openai.com/v1/completions",
+            "sk-test", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
         );
     }
 
@@ -70,7 +74,8 @@ class LlmRequestBuilderTest {
     void testCreateRequestBodyForOllama() {
         String prompt = "Test prompt";
 
-        Map<String, Object> requestBody = requestBuilder.buildRequestBody(ollamaModel, prompt);
+        Map<String, Object> requestBody =
+            requestBuilder.buildRequestBody(ollamaModel, prompt);
 
         assertNotNull(requestBody);
         assertEquals("llama2", requestBody.get("model"));
@@ -82,7 +87,8 @@ class LlmRequestBuilderTest {
     void testCreateRequestBodyForOpenAI() {
         String prompt = "Test prompt";
 
-        Map<String, Object> requestBody = requestBuilder.buildRequestBody(openaiModel, prompt);
+        Map<String, Object> requestBody =
+            requestBuilder.buildRequestBody(openaiModel, prompt);
 
         assertNotNull(requestBody);
         assertEquals("gpt-4", requestBody.get("model"));
@@ -97,10 +103,13 @@ class LlmRequestBuilderTest {
 
         // Test generic model (not Ollama or OpenAI)
         LlmModelConfig genericModel = new LlmModelConfig(
-            "claude-3", "anthropic", "https://api.anthropic.com", "api-key", LARGE_MAX_TOKENS, LARGE_TIMEOUT_SECONDS
+            "claude-3", "anthropic",
+            "https://api.anthropic.com",
+            "api-key", LARGE_MAX_TOKENS, LARGE_TIMEOUT_SECONDS
         );
 
-        Map<String, Object> requestBody = requestBuilder.buildRequestBody(genericModel, prompt);
+        Map<String, Object> requestBody =
+            requestBuilder.buildRequestBody(genericModel, prompt);
 
         assertNotNull(requestBody);
         // Generic models should contain basic fields
@@ -112,19 +121,23 @@ class LlmRequestBuilderTest {
     @Test
     void testCreateDocumentationPromptWithDifferentElementTypes() {
         CodeElement methodElement = new CodeElement(
-            CodeElementType.METHOD, "testMethod", "com.example.TestClass.testMethod",
+            CodeElementType.METHOD, "testMethod",
+            "com.example.TestClass.testMethod",
             "TestClass.java", LINE_NUMBER_FIVE, "public void testMethod() {}",
             "", List.of(), List.of()
         );
 
         CodeElement fieldElement = new CodeElement(
-            CodeElementType.FIELD, "testField", "com.example.TestClass.testField",
+            CodeElementType.FIELD, "testField",
+            "com.example.TestClass.testField",
             "TestClass.java", LINE_NUMBER_THREE, "private String testField",
             "", List.of(), List.of()
         );
 
-        String methodPrompt = requestBuilder.createDocumentationPrompt(methodElement);
-        String fieldPrompt = requestBuilder.createDocumentationPrompt(fieldElement);
+        String methodPrompt =
+        requestBuilder.createDocumentationPrompt(methodElement);
+        String fieldPrompt =
+            requestBuilder.createDocumentationPrompt(fieldElement);
 
         assertNotNull(methodPrompt);
         assertNotNull(fieldPrompt);
@@ -135,8 +148,10 @@ class LlmRequestBuilderTest {
     @Test
     void testCreateUsageExamplePrompt() {
         CodeElement codeElement = new CodeElement(
-            CodeElementType.METHOD, "exampleMethod", "com.example.TestClass.exampleMethod",
-            "TestClass.java", LINE_NUMBER_TEN, "public String exampleMethod(int param) { return \"test\"; }",
+            CodeElementType.METHOD, "exampleMethod",
+            "com.example.TestClass.exampleMethod",
+            "TestClass.java", LINE_NUMBER_TEN,
+            "public String exampleMethod(int param) { return \"test\"; }",
             "", List.of(), List.of()
         );
 
@@ -150,8 +165,11 @@ class LlmRequestBuilderTest {
     @Test
     void testCreateUnitTestPrompt() {
         CodeElement codeElement = new CodeElement(
-            CodeElementType.METHOD, "methodToTest", "com.example.TestClass.methodToTest",
-            "TestClass.java", LINE_NUMBER_FIFTEEN, "public int methodToTest(String input) { return input.length(); }",
+            CodeElementType.METHOD, "methodToTest",
+            "com.example.TestClass.methodToTest",
+            "TestClass.java", LINE_NUMBER_FIFTEEN,
+                "public int methodToTest(String input) {"
+                + " return input.length(); }",
             "", List.of(), List.of()
         );
 

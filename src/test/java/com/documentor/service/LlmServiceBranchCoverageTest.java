@@ -65,7 +65,8 @@ class LlmServiceBranchCoverageTest {
     void testGenerateDocumentation_NullConfig() {
         // Arrange - Clear any leftover ThreadLocal config from other tests
         LlmService.clearThreadLocalConfig();
-        LlmService serviceWithNullConfig = new LlmService(null, mockRequestBuilder,
+        LlmService serviceWithNullConfig =
+                new LlmService(null, mockRequestBuilder,
                 mockResponseHandler, mockApiClient);
 
         // Act
@@ -75,7 +76,8 @@ class LlmServiceBranchCoverageTest {
         // Assert
         assertNotNull(result);
         String errorMessage = result.join();
-        assertTrue(errorMessage.contains("Error: LLM configuration is null"));
+        assertTrue(errorMessage.contains(
+                "Error: LLM configuration is null"));
     }    /**
      * Test generateDocumentation with configuration having empty models list
      */
@@ -91,7 +93,8 @@ class LlmServiceBranchCoverageTest {
         // Assert
         assertNotNull(result);
         String message = result.join();
-        assertTrue(message.contains("No LLM models configured for documentation generation"));
+        assertTrue(message.contains(
+                "No LLM models configured for documentation generation"));
     }    /**
      * Test generateDocumentation with null models list
      */
@@ -100,8 +103,8 @@ class LlmServiceBranchCoverageTest {
         // Arrange
         when(mockConfig.llmModels()).thenReturn(null);
 
-        // Act & Assert - This should throw NullPointerException when trying to call
-        // isEmpty() on null
+        // Act & Assert - This should throw NullPointerException
+        // when trying to call isEmpty() on null
         assertThrows(NullPointerException.class, () -> {
             CompletableFuture<String> result = llmService
                     .generateDocumentation(mockCodeElement);
@@ -119,13 +122,17 @@ class LlmServiceBranchCoverageTest {
         when(mockModelConfig.name()).thenReturn("test-model");
         when(mockRequestBuilder.createDocumentationPrompt(mockCodeElement))
                 .thenReturn("test prompt");
-        when(mockRequestBuilder.buildRequestBody(mockModelConfig, "test prompt"))
+        when(mockRequestBuilder.buildRequestBody(
+                        mockModelConfig, "test prompt"))
                 .thenReturn(Map.of("prompt", "test"));
         when(mockResponseHandler.getModelEndpoint(mockModelConfig))
                 .thenReturn("http://test.com");
-        when(mockApiClient.callLlmModel(mockModelConfig, "http://test.com", Map.of("prompt", "test")))
+        when(mockApiClient.callLlmModel(
+                        mockModelConfig, "http://test.com",
+                        Map.of("prompt", "test")))
                 .thenReturn("test response");
-        when(mockResponseHandler.extractResponseContent("test response", mockModelConfig))
+        when(mockResponseHandler.extractResponseContent(
+                        "test response", mockModelConfig))
                 .thenReturn("Generated documentation");
 
         // Act
@@ -141,13 +148,16 @@ class LlmServiceBranchCoverageTest {
      * Test generateDocumentation with exception during generation
      */
     @Test
-    void testGenerateDocumentation_ExceptionDuringGeneration() throws Exception {
+    void testGenerateDocumentation_ExceptionDuringGeneration()
+        throws Exception {
         // Arrange
         when(mockConfig.llmModels()).thenReturn(List.of(mockModelConfig));
         when(mockModelConfig.name()).thenReturn("test-model");
         when(mockRequestBuilder.createDocumentationPrompt(mockCodeElement))
                 .thenReturn("test prompt");
-        when(mockRequestBuilder.buildRequestBody(mockModelConfig, "test prompt")).thenThrow(new RuntimeException("Build error"));
+        when(mockRequestBuilder.buildRequestBody(
+                mockModelConfig, "test prompt"))
+                .thenThrow(new RuntimeException("Build error"));
 
         // Act
         CompletableFuture<String> result = llmService
@@ -156,7 +166,8 @@ class LlmServiceBranchCoverageTest {
         // Assert
         assertNotNull(result);
         String errorResult = result.join();
-        assertTrue(errorResult.contains("Error generating documentation with test-model"));
+        assertTrue(errorResult.contains(
+                "Error generating documentation with test-model"));
     }
 
     /**
@@ -166,11 +177,13 @@ class LlmServiceBranchCoverageTest {
     void testGenerateUsageExamples_NullConfig() {
         // Arrange - Clear any leftover ThreadLocal config from other tests
         LlmService.clearThreadLocalConfig();
-        LlmService serviceWithNullConfig = new LlmService(null, mockRequestBuilder,
+        LlmService serviceWithNullConfig =
+                new LlmService(null, mockRequestBuilder,
                 mockResponseHandler, mockApiClient);
 
         // Act
-        CompletableFuture<String> result = serviceWithNullConfig.generateUsageExamples(mockCodeElement);
+        CompletableFuture<String> result =
+                serviceWithNullConfig.generateUsageExamples(mockCodeElement);
 
         // Assert
         assertNotNull(result);
@@ -185,12 +198,14 @@ class LlmServiceBranchCoverageTest {
         when(mockConfig.llmModels()).thenReturn(Collections.emptyList());
 
         // Act
-        CompletableFuture<String> result = llmService.generateUsageExamples(mockCodeElement);
+        CompletableFuture<String> result =
+                llmService.generateUsageExamples(mockCodeElement);
 
         // Assert
         assertNotNull(result);
         String message = result.join();
-        assertTrue(message.contains("No LLM models configured for example generation"));
+        assertTrue(message.contains(
+                "No LLM models configured for example generation"));
     }    /**
      * Test generateUsageExamples with successful generation
      */
@@ -201,17 +216,22 @@ class LlmServiceBranchCoverageTest {
         when(mockModelConfig.name()).thenReturn("test-model");
         when(mockRequestBuilder.createUsageExamplePrompt(mockCodeElement))
                 .thenReturn("usage prompt");
-        when(mockRequestBuilder.buildRequestBody(mockModelConfig, "usage prompt"))
+        when(mockRequestBuilder.buildRequestBody(
+                        mockModelConfig, "usage prompt"))
                 .thenReturn(Map.of("prompt", "usage"));
         when(mockResponseHandler.getModelEndpoint(mockModelConfig))
                 .thenReturn("http://test.com");
-        when(mockApiClient.callLlmModel(mockModelConfig, "http://test.com", Map.of("prompt", "usage")))
+        when(mockApiClient.callLlmModel(
+                        mockModelConfig, "http://test.com",
+                        Map.of("prompt", "usage")))
                 .thenReturn("usage response");
-        when(mockResponseHandler.extractResponseContent("usage response", mockModelConfig))
+        when(mockResponseHandler.extractResponseContent(
+                        "usage response", mockModelConfig))
                 .thenReturn("Generated usage examples");
 
         // Act
-        CompletableFuture<String> result = llmService.generateUsageExamples(mockCodeElement);
+        CompletableFuture<String> result =
+                llmService.generateUsageExamples(mockCodeElement);
 
         // Assert
         assertNotNull(result);
@@ -222,19 +242,23 @@ class LlmServiceBranchCoverageTest {
      * Test generateUsageExamples with exception during generation
      */
     @Test
-    void testGenerateUsageExamples_ExceptionDuringGeneration() throws Exception {
+    void testGenerateUsageExamples_ExceptionDuringGeneration()
+        throws Exception {
         // Arrange
         when(mockConfig.llmModels()).thenReturn(List.of(mockModelConfig));
         when(mockModelConfig.name()).thenReturn("test-model");
-        when(mockRequestBuilder.createUsageExamplePrompt(mockCodeElement)).thenThrow(new RuntimeException("Prompt error"));
+        when(mockRequestBuilder.createUsageExamplePrompt(mockCodeElement))
+                .thenThrow(new RuntimeException("Prompt error"));
 
         // Act
-        CompletableFuture<String> result = llmService.generateUsageExamples(mockCodeElement);
+        CompletableFuture<String> result =
+                llmService.generateUsageExamples(mockCodeElement);
 
         // Assert
         assertNotNull(result);
         String errorResult = result.join();
-        assertTrue(errorResult.contains("Error generating usage with test-model"));
+        assertTrue(errorResult.contains(
+                "Error generating usage with test-model"));
     }
 
     /**
@@ -244,11 +268,13 @@ class LlmServiceBranchCoverageTest {
     void testGenerateUnitTests_NullConfig() {
         // Arrange - Clear any leftover ThreadLocal config from other tests
         LlmService.clearThreadLocalConfig();
-        LlmService serviceWithNullConfig = new LlmService(null, mockRequestBuilder,
+        LlmService serviceWithNullConfig =
+                new LlmService(null, mockRequestBuilder,
                 mockResponseHandler, mockApiClient);
 
         // Act
-        CompletableFuture<String> result = serviceWithNullConfig.generateUnitTests(mockCodeElement);
+        CompletableFuture<String> result =
+                serviceWithNullConfig.generateUnitTests(mockCodeElement);
 
         // Assert
         assertNotNull(result);
@@ -262,10 +288,11 @@ class LlmServiceBranchCoverageTest {
         // Arrange
         when(mockConfig.llmModels()).thenReturn(null);
 
-        // Act & Assert - This should throw NullPointerException when trying to call
-        // isEmpty() on null
+        // Act & Assert - This should throw NullPointerException when
+        // trying to call isEmpty() on null
         assertThrows(NullPointerException.class, () -> {
-            CompletableFuture<String> result = llmService.generateUnitTests(mockCodeElement);
+            CompletableFuture<String> result =
+            llmService.generateUnitTests(mockCodeElement);
             result.join(); // This will trigger the NPE
         });
     }    /**
@@ -278,17 +305,22 @@ class LlmServiceBranchCoverageTest {
         when(mockModelConfig.name()).thenReturn("test-model");
         when(mockRequestBuilder.createUnitTestPrompt(mockCodeElement))
                 .thenReturn("test prompt");
-        when(mockRequestBuilder.buildRequestBody(mockModelConfig, "test prompt"))
+        when(mockRequestBuilder.buildRequestBody(
+                        mockModelConfig, "test prompt"))
                 .thenReturn(Map.of("prompt", "test"));
         when(mockResponseHandler.getModelEndpoint(mockModelConfig))
                 .thenReturn("http://test.com");
-        when(mockApiClient.callLlmModel(mockModelConfig, "http://test.com", Map.of("prompt", "test")))
+        when(mockApiClient.callLlmModel(
+                        mockModelConfig, "http://test.com",
+                        Map.of("prompt", "test")))
                 .thenReturn("test response");
-        when(mockResponseHandler.extractResponseContent("test response", mockModelConfig))
+        when(mockResponseHandler.extractResponseContent(
+                        "test response", mockModelConfig))
                 .thenReturn("Generated unit tests");
 
         // Act
-        CompletableFuture<String> result = llmService.generateUnitTests(mockCodeElement);
+        CompletableFuture<String> result = llmService
+                .generateUnitTests(mockCodeElement);
 
         // Assert
         assertNotNull(result);
@@ -303,20 +335,24 @@ class LlmServiceBranchCoverageTest {
         when(mockModelConfig.name()).thenReturn("test-model");
         when(mockRequestBuilder.createUnitTestPrompt(mockCodeElement))
                 .thenReturn("test prompt");
-        when(mockRequestBuilder.buildRequestBody(mockModelConfig, "test prompt"))
+        when(mockRequestBuilder.buildRequestBody(
+                        mockModelConfig, "test prompt"))
                 .thenReturn(Map.of("prompt", "test"));
         when(mockResponseHandler.getModelEndpoint(mockModelConfig))
                 .thenReturn("http://test.com");
-        when(mockApiClient.callLlmModel(mockModelConfig, "http://test.com", Map.of("prompt", "test")))
+        when(mockApiClient.callLlmModel(
+                mockModelConfig, "http://test.com", Map.of("prompt", "test")))
             .thenThrow(new RuntimeException("API error"));
 
         // Act
-        CompletableFuture<String> result = llmService.generateUnitTests(mockCodeElement);
+        CompletableFuture<String> result =
+                llmService.generateUnitTests(mockCodeElement);
 
         // Assert
         assertNotNull(result);
         String errorResult = result.join();
-        assertTrue(errorResult.contains("Error generating tests with test-model"));
+        assertTrue(errorResult.contains(
+                "Error generating tests with test-model"));
     }
 
     /**
@@ -371,12 +407,14 @@ class LlmServiceBranchCoverageTest {
                 .thenReturn("http://slow.com");
 
         // Simulate a slow API call
-        when(mockApiClient.callLlmModel(mockModelConfig, "http://slow.com", Map.of("prompt", "test")))
+        when(mockApiClient.callLlmModel(
+                mockModelConfig, "http://slow.com", Map.of("prompt", "test")))
             .thenAnswer(invocation -> {
                 Thread.sleep(100); // Simulate slow response
                 return "delayed response";
             });
-        when(mockResponseHandler.extractResponseContent("delayed response", mockModelConfig))
+        when(mockResponseHandler.extractResponseContent(
+                "delayed response", mockModelConfig))
                 .thenReturn("delayed result");
 
         // Act
@@ -405,7 +443,8 @@ class LlmServiceBranchCoverageTest {
                 .thenReturn(Map.of("prompt", "test"));
         when(mockResponseHandler.getModelEndpoint(mockModelConfig))
                 .thenReturn("http://error.com");
-        when(mockApiClient.callLlmModel(mockModelConfig, "http://error.com", Map.of("prompt", "test")))
+        when(mockApiClient.callLlmModel(
+                mockModelConfig, "http://error.com", Map.of("prompt", "test")))
             .thenThrow(new RuntimeException("Network error"));
 
         // Act
@@ -415,7 +454,8 @@ class LlmServiceBranchCoverageTest {
         // Assert - Exception should be handled and error message returned
         assertNotNull(result);
         String errorResult = result.join();
-        assertTrue(errorResult.contains("Error generating documentation with error-model"));
+        assertTrue(errorResult.contains(
+                "Error generating documentation with error-model"));
     }
 
     /**
@@ -432,9 +472,11 @@ class LlmServiceBranchCoverageTest {
                 .thenReturn(Map.of("prompt", "test"));
         when(mockResponseHandler.getModelEndpoint(mockModelConfig))
                 .thenReturn("http://test.com");
-        when(mockApiClient.callLlmModel(mockModelConfig, "http://test.com", Map.of("prompt", "test")))
+        when(mockApiClient.callLlmModel(
+                mockModelConfig, "http://test.com", Map.of("prompt", "test")))
                 .thenReturn("response");
-        when(mockResponseHandler.extractResponseContent("response", mockModelConfig))
+        when(mockResponseHandler.extractResponseContent(
+                "response", mockModelConfig))
                 .thenReturn("result");
 
         // Act - Execute on async thread
@@ -447,6 +489,7 @@ class LlmServiceBranchCoverageTest {
 
         // Verify that the executor was used for async execution
         verify(mockRequestBuilder).createDocumentationPrompt(mockCodeElement);
-        verify(mockApiClient).callLlmModel(mockModelConfig, "http://test.com", Map.of("prompt", "test"));
+        verify(mockApiClient).callLlmModel(mockModelConfig,
+                "http://test.com", Map.of("prompt", "test"));
     }
 }

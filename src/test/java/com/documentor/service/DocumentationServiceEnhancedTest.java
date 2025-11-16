@@ -53,8 +53,10 @@ class DocumentationServiceEnhancedTest {
     @BeforeEach
     void setUp() {
         config = new DocumentorConfig(
-            List.of(new LlmModelConfig("test-model", "ollama", "http://localhost:11434", "test-key", 1000, 30)),
-            new OutputSettings("./test-output", "markdown", true, true, false),
+            List.of(new LlmModelConfig("test-model", "ollama",
+            "http://localhost:11434", "test-key", 1000, 30)),
+            new OutputSettings("./test-output",
+            "markdown", true, true, false),
             new AnalysisSettings(null, null, null, null)
         );
 
@@ -79,26 +81,33 @@ class DocumentationServiceEnhancedTest {
     void testConstructorWithNullParameters() {
         // Test that constructor handles null parameters gracefully
         assertDoesNotThrow(() -> new DocumentationServiceEnhanced(
-            null, null, null, null, null, null, null
+            null,
+            null, null, null, null, null, null
         ));
     }
 
     @Test
-    void testGenerateDocumentationWithValidProject() throws ExecutionException, InterruptedException {
+    void testGenerateDocumentationWithValidProject()
+        throws ExecutionException, InterruptedException {
         // Arrange
         ProjectAnalysis project = createTestProject();
 
-        when(mainDocGenerator.generateMainDocumentation(any(ProjectAnalysis.class)))
-            .thenReturn(CompletableFuture.completedFuture("# Main Documentation"));
+        when(mainDocGenerator
+            .generateMainDocumentation(any(ProjectAnalysis.class)))
+            .thenReturn(CompletableFuture
+            .completedFuture("# Main Documentation"));
 
         // Act
-        CompletableFuture<String> result = documentationService.generateDocumentation(project);
+        CompletableFuture<String> result =
+            documentationService.generateDocumentation(project);
         String documentation = result.get();
 
         // Assert
         assertNotNull(documentation);
-        assertTrue(documentation.contains("Main Documentation") || documentation.length() > 0);
-        verify(llmServiceFix, atLeastOnce()).setLlmServiceThreadLocalConfig(config);
+        assertTrue(documentation.contains("Main Documentation")
+            || documentation.length() > 0);
+        verify(llmServiceFix, atLeastOnce())
+            .setLlmServiceThreadLocalConfig(config);
     }
 
     @Test
@@ -109,7 +118,8 @@ class DocumentationServiceEnhancedTest {
     }
 
     @Test
-    void testGenerateDocumentationWithEmptyProject() throws ExecutionException, InterruptedException {
+    void testGenerateDocumentationWithEmptyProject()
+        throws ExecutionException, InterruptedException {
         // Arrange
         ProjectAnalysis emptyProject = new ProjectAnalysis(
             "./test",
@@ -117,11 +127,14 @@ class DocumentationServiceEnhancedTest {
             System.currentTimeMillis()
         );
 
-        when(mainDocGenerator.generateMainDocumentation(any(ProjectAnalysis.class)))
-            .thenReturn(CompletableFuture.completedFuture("# Empty Project Documentation"));
+        when(mainDocGenerator
+            .generateMainDocumentation(any(ProjectAnalysis.class)))
+            .thenReturn(CompletableFuture
+            .completedFuture("# Empty Project Documentation"));
 
         // Act
-        CompletableFuture<String> result = documentationService.generateDocumentation(emptyProject);
+        CompletableFuture<String> result =
+            documentationService.generateDocumentation(emptyProject);
         String documentation = result.get();
 
         // Assert
@@ -130,9 +143,11 @@ class DocumentationServiceEnhancedTest {
     }
 
     @Test
-    void testGenerateDocumentationWithLlmServiceFixNull() throws ExecutionException, InterruptedException {
+    void testGenerateDocumentationWithLlmServiceFixNull()
+        throws ExecutionException, InterruptedException {
         // Arrange
-        DocumentationServiceEnhanced serviceWithNullFix = new DocumentationServiceEnhanced(
+        DocumentationServiceEnhanced serviceWithNullFix =
+            new DocumentationServiceEnhanced(
             mainDocGenerator,
             elementDocGenerator,
             testDocGenerator,
@@ -143,11 +158,13 @@ class DocumentationServiceEnhancedTest {
         );
 
         ProjectAnalysis project = createTestProject();
-        when(mainDocGenerator.generateMainDocumentation(any(ProjectAnalysis.class)))
+        when(mainDocGenerator
+            .generateMainDocumentation(any(ProjectAnalysis.class)))
             .thenReturn(CompletableFuture.completedFuture("# Documentation"));
 
         // Act
-        CompletableFuture<String> result = serviceWithNullFix.generateDocumentation(project);
+        CompletableFuture<String> result =
+            serviceWithNullFix.generateDocumentation(project);
         String documentation = result.get();
 
         // Assert
@@ -155,15 +172,19 @@ class DocumentationServiceEnhancedTest {
     }
 
     @Test
-    void testGenerateDocumentationWithException() throws ExecutionException, InterruptedException {
+    void testGenerateDocumentationWithException()
+        throws ExecutionException, InterruptedException {
         // Arrange
         ProjectAnalysis project = createTestProject();
 
-        when(mainDocGenerator.generateMainDocumentation(any(ProjectAnalysis.class)))
-            .thenReturn(CompletableFuture.failedFuture(new RuntimeException("Generation failed")));
+        when(mainDocGenerator
+            .generateMainDocumentation(any(ProjectAnalysis.class)))
+            .thenReturn(CompletableFuture
+            .failedFuture(new RuntimeException("Generation failed")));
 
         // Act
-        CompletableFuture<String> result = documentationService.generateDocumentation(project);
+        CompletableFuture<String> result =
+            documentationService.generateDocumentation(project);
         String documentation = result.get();
 
         // Assert

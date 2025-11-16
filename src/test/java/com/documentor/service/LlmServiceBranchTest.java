@@ -50,142 +50,352 @@ class LlmServiceBranchTest {
 
     @BeforeEach
     void setUp() {
-        llmService = new LlmService(config, requestBuilder, responseHandler, apiClient);
+        llmService = new LlmService(
+            config,
+            requestBuilder,
+            responseHandler,
+            apiClient
+        );
         testElement = new CodeElement(
-                CodeElementType.CLASS,
-                "TestClass",
-                "com.test.TestClass",
-                "/path/to/TestClass.java",
-                1,
-                "public class TestClass {}",
-                "Test class documentation",
-                List.of(),
-                List.of()
+            CodeElementType.CLASS,
+            "TestClass",
+            "com.test.TestClass",
+            "/path/to/TestClass.java",
+            1,
+            "public class TestClass {}",
+            "Test class documentation",
+            List.of(),
+            List.of()
         );
     }
 
     @Test
     @org.junit.jupiter.api.Disabled("Temporarily disabled for build fix")
-    void generateUsageExamplesWithEmptyModelsReturnsErrorMessage() throws ExecutionException, InterruptedException {
+        void generateUsageExamplesWithEmptyModelsReturnsErrorMessage()
+            throws ExecutionException, InterruptedException {
         // Given: Empty model list
         when(config.llmModels()).thenReturn(Collections.emptyList());
 
         // When
-        CompletableFuture<String> result = llmService.generateUsageExamples(testElement);
+        CompletableFuture<String> result =
+            llmService.generateUsageExamples(testElement);
 
         // Then: Returns error message for empty configuration
-        assertThat(result.get()).isEqualTo("No LLM models configured for usage example generation.");
+        assertThat(result.get())
+            .isEqualTo(
+                "No LLM models configured for usage "
+                + "example generation."
+            );
     }
 
     @Test
-    void generateUsageExamplesWithAvailableModelsGeneratesExamples() throws ExecutionException, InterruptedException {
+        void generateUsageExamplesWithAvailableModelsGeneratesExamples()
+            throws ExecutionException, InterruptedException {
         // Given: Available models
         when(config.llmModels()).thenReturn(List.of(modelConfig));
-        when(requestBuilder.createUsageExamplePrompt(testElement)).thenReturn("Generate usage examples");
-        when(requestBuilder.buildRequestBody(any(), anyString())).thenReturn(Map.of("prompt", "test"));
-        when(responseHandler.getModelEndpoint(modelConfig)).thenReturn("http://test.com");
-        when(apiClient.callLlmModel(any(), anyString(), any())).thenReturn("Response");
-        when(responseHandler.extractResponseContent(anyString(), any())).thenReturn("Generated examples");
+        when(
+            requestBuilder.createUsageExamplePrompt(
+                testElement
+            )
+        ).thenReturn("Generate usage examples");
+
+        when(
+            requestBuilder.buildRequestBody(
+                any(),
+                anyString()
+            )
+        ).thenReturn(
+            Map.of(
+                "prompt",
+                "test"
+            )
+        );
+
+        when(
+            responseHandler.getModelEndpoint(
+                modelConfig
+            )
+        ).thenReturn("http://test.com");
+
+        when(
+            apiClient.callLlmModel(
+                any(),
+                anyString(),
+                any()
+            )
+        ).thenReturn("Response");
+
+        when(
+            responseHandler.extractResponseContent(
+                anyString(),
+                any()
+            )
+        ).thenReturn("Generated examples");
 
         // When
-        CompletableFuture<String> result = llmService.generateUsageExamples(testElement);
+        CompletableFuture<String> result =
+            llmService.generateUsageExamples(testElement);
 
         // Then: Returns generated content
-        assertThat(result.get()).isEqualTo("Generated examples");
+        assertThat(result.get())
+            .isEqualTo(
+                "Generated examples"
+            );
     }
 
     @Test
-    void generateUnitTestsWithEmptyModelsReturnsErrorMessage() throws ExecutionException, InterruptedException {
+        void generateUnitTestsWithEmptyModelsReturnsErrorMessage()
+            throws ExecutionException, InterruptedException {
         // Given: Empty model list
         when(config.llmModels()).thenReturn(Collections.emptyList());
 
         // When
-        CompletableFuture<String> result = llmService.generateUnitTests(testElement);
+        CompletableFuture<String> result =
+            llmService.generateUnitTests(testElement);
 
         // Then: Returns error message for empty configuration
-        assertThat(result.get()).isEqualTo("No LLM models configured for unit test generation.");
+        assertThat(result.get())
+            .isEqualTo(
+                "No LLM models configured for unit test "
+                + "generation."
+            );
     }
 
     @Test
-    void generateUnitTestsWithAvailableModelsGeneratesTests() throws ExecutionException, InterruptedException {
+        void generateUnitTestsWithAvailableModelsGeneratesTests()
+            throws ExecutionException, InterruptedException {
         // Given: Available models
         when(config.llmModels()).thenReturn(List.of(modelConfig));
-        when(requestBuilder.createUnitTestPrompt(testElement)).thenReturn("Generate unit tests");
-        when(requestBuilder.buildRequestBody(any(), anyString())).thenReturn(Map.of("prompt", "test"));
-        when(responseHandler.getModelEndpoint(modelConfig)).thenReturn("http://test.com");
-        when(apiClient.callLlmModel(any(), anyString(), any())).thenReturn("Response");
-        when(responseHandler.extractResponseContent(anyString(), any())).thenReturn("Generated tests");
+
+        when(
+            requestBuilder.createUnitTestPrompt(
+                testElement
+            )
+        ).thenReturn("Generate unit tests");
+
+        when(
+            requestBuilder.buildRequestBody(
+                any(),
+                anyString()
+            )
+        ).thenReturn(Map.of("prompt", "test"));
+
+        when(
+            responseHandler.getModelEndpoint(
+                modelConfig
+            )
+        ).thenReturn("http://test.com");
+
+        when(
+            apiClient.callLlmModel(
+                any(),
+                anyString(),
+                any()
+            )
+        ).thenReturn("Response");
+
+        when(
+            responseHandler.extractResponseContent(
+                anyString(),
+                any()
+            )
+        ).thenReturn("Generated tests");
 
         // When
-        CompletableFuture<String> result = llmService.generateUnitTests(testElement);
+        CompletableFuture<String> result =
+            llmService.generateUnitTests(testElement);
 
         // Then: Returns generated content
-        assertThat(result.get()).isEqualTo("Generated tests");
+        assertThat(result.get())
+            .isEqualTo(
+                "Generated tests"
+            );
     }
 
     @Test
-    void generateWithModelWhenExceptionOccursReturnsErrorMessage() throws ExecutionException, InterruptedException {
+        void generateWithModelWhenExceptionOccursReturnsErrorMessage()
+            throws ExecutionException, InterruptedException {
         // Given: Configuration that will cause exception
         when(config.llmModels()).thenReturn(List.of(modelConfig));
         when(modelConfig.name()).thenReturn("test-model");
-        when(requestBuilder.createUsageExamplePrompt(testElement)).thenReturn("Generate usage examples");
-        when(requestBuilder.buildRequestBody(any(), anyString())).thenThrow(new RuntimeException("API Error"));
+
+        when(
+            requestBuilder.createUsageExamplePrompt(
+                testElement
+            )
+        ).thenReturn("Generate usage examples");
+
+        when(
+            requestBuilder.buildRequestBody(
+                any(),
+                anyString()
+            )
+        ).thenThrow(new RuntimeException("API Error"));
 
         // When
-        CompletableFuture<String> result = llmService.generateUsageExamples(testElement);
+        CompletableFuture<String> result =
+            llmService.generateUsageExamples(testElement);
 
         // Then: Returns error message with model name
-        assertThat(result.get()).isEqualTo("Error generating usage with test-model");
+        assertThat(result.get())
+            .isEqualTo(
+                "Error generating usage with test-model"
+            );
     }
 
     @Test
-    void createPromptWithUsageTypeCreatesUsagePrompt() throws ExecutionException, InterruptedException {
+        void createPromptWithUsageTypeCreatesUsagePrompt()
+            throws ExecutionException, InterruptedException {
         // Given: Model configured for usage generation
         when(config.llmModels()).thenReturn(List.of(modelConfig));
-        when(requestBuilder.createUsageExamplePrompt(testElement)).thenReturn("Usage prompt");
-        when(requestBuilder.buildRequestBody(any(), anyString())).thenReturn(Map.of("prompt", "test"));
-        when(responseHandler.getModelEndpoint(modelConfig)).thenReturn("http://test.com");
-        when(apiClient.callLlmModel(any(), anyString(), any())).thenReturn("Response");
-        when(responseHandler.extractResponseContent(anyString(), any())).thenReturn("Usage examples");
 
-        // When: Generate usage examples (which calls createPrompt with "usage" type)
-        CompletableFuture<String> result = llmService.generateUsageExamples(testElement);
+        when(
+            requestBuilder.createUsageExamplePrompt(
+                testElement
+            )
+        ).thenReturn("Usage prompt");
+
+        when(
+            requestBuilder.buildRequestBody(
+                any(),
+                anyString()
+            )
+        ).thenReturn(Map.of("prompt", "test"));
+
+        when(
+            responseHandler.getModelEndpoint(
+                modelConfig
+            )
+        ).thenReturn("http://test.com");
+
+        when(
+            apiClient.callLlmModel(
+                any(),
+                anyString(),
+                any()
+            )
+        ).thenReturn("Response");
+
+        when(
+            responseHandler.extractResponseContent(
+                anyString(),
+                any()
+            )
+        ).thenReturn("Usage examples");
+
+        // When: Generate usage examples (which calls createPrompt
+        // with "usage" type)
+        CompletableFuture<String> result =
+            llmService.generateUsageExamples(testElement);
 
         // Then: Verify usage prompt was called
-        assertThat(result.get()).isEqualTo("Usage examples");
+        assertThat(result.get())
+            .isEqualTo(
+                "Usage examples"
+            );
     }
 
     @Test
-    void createPromptWithTestsTypeCreatesTestPrompt() throws ExecutionException, InterruptedException {
+        void createPromptWithTestsTypeCreatesTestPrompt()
+            throws ExecutionException, InterruptedException {
         // Given: Model configured for test generation
         when(config.llmModels()).thenReturn(List.of(modelConfig));
-        when(requestBuilder.createUnitTestPrompt(testElement)).thenReturn("Test prompt");
-        when(requestBuilder.buildRequestBody(any(), anyString())).thenReturn(Map.of("prompt", "test"));
-        when(responseHandler.getModelEndpoint(modelConfig)).thenReturn("http://test.com");
-        when(apiClient.callLlmModel(any(), anyString(), any())).thenReturn("Response");
-        when(responseHandler.extractResponseContent(anyString(), any())).thenReturn("Unit tests");
 
-        // When: Generate unit tests (which calls createPrompt with "tests" type)
-        CompletableFuture<String> result = llmService.generateUnitTests(testElement);
+        when(
+            requestBuilder.createUnitTestPrompt(
+                testElement
+            )
+        ).thenReturn("Test prompt");
+
+        when(
+            requestBuilder.buildRequestBody(
+                any(),
+                anyString()
+            )
+        ).thenReturn(Map.of("prompt", "test"));
+
+        when(
+            responseHandler.getModelEndpoint(
+                modelConfig
+            )
+        ).thenReturn("http://test.com");
+
+        when(
+            apiClient.callLlmModel(
+                any(),
+                anyString(),
+                any()
+            )
+        ).thenReturn("Response");
+
+        when(
+            responseHandler.extractResponseContent(
+                anyString(),
+                any()
+            )
+        ).thenReturn("Unit tests");
+
+        // When: Generate unit tests (which calls createPrompt
+        // with "tests" type)
+        CompletableFuture<String> result =
+            llmService.generateUnitTests(testElement);
 
         // Then: Verify test prompt was called
-        assertThat(result.get()).isEqualTo("Unit tests");
+        assertThat(result.get())
+            .isEqualTo(
+                "Unit tests"
+            );
     }
 
     @Test
-    void createPromptWithDefaultTypeCreatesDocumentationPrompt() throws ExecutionException, InterruptedException {
+        void createPromptWithDefaultTypeCreatesDocumentationPrompt()
+            throws ExecutionException, InterruptedException {
         // Given: Model configured and unknown type causes default behavior
         when(config.llmModels()).thenReturn(List.of(modelConfig));
-        when(requestBuilder.createDocumentationPrompt(testElement)).thenReturn("Documentation prompt");
-        when(requestBuilder.buildRequestBody(any(), anyString())).thenReturn(Map.of("prompt", "test"));
-        when(responseHandler.getModelEndpoint(modelConfig)).thenReturn("http://test.com");
-        when(apiClient.callLlmModel(any(), anyString(), any())).thenReturn("Response");
-        when(responseHandler.extractResponseContent(anyString(), any())).thenReturn("Documentation");
 
-        // When: Generate documentation (which calls createPrompt with "documentation" type - covers default case)
-        CompletableFuture<String> result = llmService.generateDocumentation(testElement);
+        when(
+            requestBuilder.createDocumentationPrompt(
+                testElement
+            )
+        ).thenReturn("Documentation prompt");
+
+        when(
+            requestBuilder.buildRequestBody(
+                any(),
+                anyString()
+            )
+        ).thenReturn(Map.of("prompt", "test"));
+
+        when(
+            responseHandler.getModelEndpoint(
+                modelConfig
+            )
+        ).thenReturn("http://test.com");
+
+        when(
+            apiClient.callLlmModel(
+                any(),
+                anyString(),
+                any()
+            )
+        ).thenReturn("Response");
+
+        when(
+            responseHandler.extractResponseContent(
+                anyString(),
+                any()
+            )
+        ).thenReturn("Documentation");
+
+        // When: Generate documentation (which calls createPrompt with
+        // "documentation" type - covers default case)
+        CompletableFuture<String> result =
+            llmService.generateDocumentation(testElement);
 
         // Then: Verify documentation prompt was called (default case)
-        assertThat(result.get()).isEqualTo("Documentation");
+        assertThat(result.get())
+            .isEqualTo(
+                "Documentation"
+            );
     }
 }

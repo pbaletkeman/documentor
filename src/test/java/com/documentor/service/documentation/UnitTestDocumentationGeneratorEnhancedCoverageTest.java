@@ -30,9 +30,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * Enhanced coverage tests for UnitTestDocumentationGeneratorEnhanced to achieve >70% branch coverage.
- */
 @ExtendWith(MockitoExtension.class)
 class UnitTestDocumentationGeneratorEnhancedCoverageTest {
 
@@ -61,20 +58,26 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
         lenient().when(config.outputSettings()).thenReturn(outputSettings);
         lenient().when(outputSettings.includeIcons()).thenReturn(true);
         lenient().when(outputSettings.targetCoverage()).thenReturn(0.8);
-        lenient().when(llmServiceFix.isThreadLocalConfigAvailable()).thenReturn(true);
-        lenient().when(llmService.generateUnitTests(any())).thenReturn(CompletableFuture.completedFuture(TEST_UNIT_TESTS));
+        lenient().when(llmServiceFix.isThreadLocalConfigAvailable())
+            .thenReturn(true);
+        lenient().when(llmService.generateUnitTests(any()))
+            .thenReturn(CompletableFuture.completedFuture(TEST_UNIT_TESTS));
 
-        generator = new UnitTestDocumentationGeneratorEnhanced(llmService, config, llmServiceFix);
+        generator = new UnitTestDocumentationGeneratorEnhanced(
+            llmService, config, llmServiceFix);
     }
 
     @Test
     void testGenerateUnitTestDocumentationWithNullConfig() {
-        UnitTestDocumentationGeneratorEnhanced generatorWithNullConfig =
-            new UnitTestDocumentationGeneratorEnhanced(llmService, null, llmServiceFix);
+        UnitTestDocumentationGeneratorEnhanced
+            generatorWithNullConfig =
+            new UnitTestDocumentationGeneratorEnhanced(
+                llmService, null, llmServiceFix);
 
         ProjectAnalysis analysis = createTestProjectAnalysis();
 
-        CompletableFuture<Void> result = generatorWithNullConfig.generateUnitTestDocumentation(analysis, tempDir);
+        CompletableFuture<Void> result = generatorWithNullConfig
+            .generateUnitTestDocumentation(analysis, tempDir);
 
         // Should complete without error even with null config
         assertDoesNotThrow(() -> result.join());
@@ -86,11 +89,13 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
 
     @Test
     void testGenerateUnitTestDocumentationWithConfigSetFails() {
-        when(llmServiceFix.isThreadLocalConfigAvailable()).thenReturn(false); // Config not available after set
+        when(llmServiceFix.isThreadLocalConfigAvailable())
+            .thenReturn(false); // Config not available after set
 
         ProjectAnalysis analysis = createTestProjectAnalysis();
 
-        CompletableFuture<Void> result = generator.generateUnitTestDocumentation(analysis, tempDir);
+        CompletableFuture<Void> result =
+            generator.generateUnitTestDocumentation(analysis, tempDir);
 
         // Should complete with warning but not fail
         assertDoesNotThrow(() -> result.join());
@@ -101,14 +106,17 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
     }
 
     @Test
-    void testGenerateUnitTestDocumentationWithIOExceptionCreatingDirectory() throws IOException {
-        // Create a file where the tests directory should be to cause IOException
+    void testGenUnitTestDocWithIOExceptionCreatingDirectory()
+        throws IOException {
+        // Create a file where the tests directory
+        // should be to cause IOException
         Path testsPath = tempDir.resolve("tests");
         Files.createFile(testsPath);
 
         ProjectAnalysis analysis = createTestProjectAnalysis();
 
-        CompletableFuture<Void> result = generator.generateUnitTestDocumentation(analysis, tempDir);
+        CompletableFuture<Void> result =
+            generator.generateUnitTestDocumentation(analysis, tempDir);
 
         // Should handle IOException gracefully
         assertDoesNotThrow(() -> result.join());
@@ -116,11 +124,13 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
 
     @Test
     void testGenerateUnitTestDocumentationWithElementGenerationException() {
-        when(llmService.generateUnitTests(any())).thenThrow(new RuntimeException("LLM service error"));
+        when(llmService.generateUnitTests(any()))
+            .thenThrow(new RuntimeException("LLM service error"));
 
         ProjectAnalysis analysis = createTestProjectAnalysis();
 
-        CompletableFuture<Void> result = generator.generateUnitTestDocumentation(analysis, tempDir);
+        CompletableFuture<Void> result =
+            generator.generateUnitTestDocumentation(analysis, tempDir);
 
         // Should handle element generation exceptions gracefully
         assertDoesNotThrow(() -> result.join());
@@ -138,17 +148,21 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
     void testGenerateUnitTestDocumentationWithFutureCompletionException() {
         // Create a future that will fail
         CompletableFuture<String> failedFuture = new CompletableFuture<>();
-        failedFuture.completeExceptionally(new RuntimeException("Future completion error"));
+        failedFuture.completeExceptionally(
+            new RuntimeException("Future completion error")
+        );
         when(llmService.generateUnitTests(any())).thenReturn(failedFuture);
 
         ProjectAnalysis analysis = createTestProjectAnalysis();
 
-        CompletableFuture<Void> result = generator.generateUnitTestDocumentation(analysis, tempDir);
+        CompletableFuture<Void> result = generator
+            .generateUnitTestDocumentation(analysis, tempDir);
 
         // Should handle future completion exceptions gracefully
         assertDoesNotThrow(() -> result.join());
 
-        // Just verify it doesn't crash - the implementation may or may not create files with exceptions
+        // Just verify it doesn't crash - the implementation may
+        // or may not create files with exceptions
     }
 
     @Test
@@ -161,11 +175,14 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
         // Create analysis with null elements mixed in
         CodeElement validElement = createTestMethodElement();
         List<CodeElement> elementsWithNull = Arrays.asList(validElement, null);
-        ProjectAnalysis analysisWithNulls = new ProjectAnalysis("/test/path", elementsWithNull, System.currentTimeMillis());
+        ProjectAnalysis analysisWithNulls = new ProjectAnalysis(
+            "/test/path", elementsWithNull, System.currentTimeMillis());
 
-        when(llmService.generateUnitTests(validElement)).thenReturn(CompletableFuture.completedFuture(TEST_UNIT_TESTS));
+        when(llmService.generateUnitTests(validElement))
+            .thenReturn(CompletableFuture.completedFuture(TEST_UNIT_TESTS));
 
-        CompletableFuture<Void> result = generator.generateUnitTestDocumentation(analysisWithNulls, tempDir);
+        CompletableFuture<Void> result = generator
+            .generateUnitTestDocumentation(analysisWithNulls, tempDir);
 
         // Should filter out null elements and complete successfully
         assertDoesNotThrow(() -> result.join());
@@ -190,11 +207,14 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
         CodeElement fieldElement = createTestFieldElement();
         CodeElement methodElement = createTestMethodElement();
         List<CodeElement> elements = Arrays.asList(fieldElement, methodElement);
-        ProjectAnalysis analysis = new ProjectAnalysis("/test/path", elements, System.currentTimeMillis());
+        ProjectAnalysis analysis = new ProjectAnalysis(
+            "/test/path", elements, System.currentTimeMillis());
 
-        when(llmService.generateUnitTests(methodElement)).thenReturn(CompletableFuture.completedFuture(TEST_UNIT_TESTS));
+        when(llmService.generateUnitTests(methodElement))
+            .thenReturn(CompletableFuture.completedFuture(TEST_UNIT_TESTS));
 
-        CompletableFuture<Void> result = generator.generateUnitTestDocumentation(analysis, tempDir);
+        CompletableFuture<Void> result = generator
+                .generateUnitTestDocumentation(analysis, tempDir);
 
         // Should filter out field elements and complete successfully
         assertDoesNotThrow(() -> result.join());
@@ -207,7 +227,8 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
         Path testFile = testsDir.resolve("unit-tests.md");
         assertTrue(Files.exists(testFile));
 
-        // Verify field element was not processed (no generateUnitTests call for field)
+        // Verify field element was not processed
+        // (no generateUnitTests call for field)
         verify(llmService, never()).generateUnitTests(fieldElement);
         verify(llmService).generateUnitTests(methodElement);
     }
@@ -217,7 +238,8 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
         when(config.outputSettings()).thenReturn(outputSettings);
         when(outputSettings.includeIcons()).thenReturn(true);
         when(outputSettings.targetCoverage()).thenReturn(0.8);
-        when(llmServiceFix.isThreadLocalConfigAvailable()).thenReturn(true);
+        when(llmServiceFix.isThreadLocalConfigAvailable())
+        .thenReturn(true);
 
         // Create element with null type
         CodeElement elementWithNullType = new CodeElement(
@@ -233,12 +255,16 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
         );
 
         CodeElement validElement = createTestMethodElement();
-        List<CodeElement> elements = Arrays.asList(elementWithNullType, validElement);
-        ProjectAnalysis analysis = new ProjectAnalysis("/test/path", elements, System.currentTimeMillis());
+        List<CodeElement> elements = Arrays.asList(elementWithNullType,
+            validElement);
+        ProjectAnalysis analysis = new ProjectAnalysis(
+            "/test/path", elements, System.currentTimeMillis());
 
-        when(llmService.generateUnitTests(validElement)).thenReturn(CompletableFuture.completedFuture(TEST_UNIT_TESTS));
+        when(llmService.generateUnitTests(validElement))
+            .thenReturn(CompletableFuture.completedFuture(TEST_UNIT_TESTS));
 
-        CompletableFuture<Void> result = generator.generateUnitTestDocumentation(analysis, tempDir);
+        CompletableFuture<Void> result = generator
+            .generateUnitTestDocumentation(analysis, tempDir);
 
         // Should filter out elements with null type and complete successfully
         assertDoesNotThrow(() -> result.join());
@@ -252,7 +278,8 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
     void testGenerateUnitTestDocumentationSuccessful() {
         ProjectAnalysis analysis = createTestProjectAnalysis();
 
-        CompletableFuture<Void> result = generator.generateUnitTestDocumentation(analysis, tempDir);
+        CompletableFuture<Void> result = generator
+            .generateUnitTestDocumentation(analysis, tempDir);
 
         // Should complete successfully
         assertDoesNotThrow(() -> result.join());
@@ -267,12 +294,14 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
     }
 
     @Test
-    void testGenerateUnitTestDocumentationWithFileWriteException() throws IOException {
+    void testGenerateUnitTestDocumentationWithFileWriteException()
+        throws IOException {
         when(config.outputSettings()).thenReturn(outputSettings);
         when(outputSettings.includeIcons()).thenReturn(true);
         when(outputSettings.targetCoverage()).thenReturn(0.8);
         when(llmServiceFix.isThreadLocalConfigAvailable()).thenReturn(true);
-        when(llmService.generateUnitTests(any())).thenReturn(CompletableFuture.completedFuture(TEST_UNIT_TESTS));
+        when(llmService.generateUnitTests(any()))
+            .thenReturn(CompletableFuture.completedFuture(TEST_UNIT_TESTS));
 
         // Create a read-only directory to simulate file write failure
         Path testsDir = tempDir.resolve("tests");
@@ -283,7 +312,8 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
 
         ProjectAnalysis analysis = createTestProjectAnalysis();
 
-        CompletableFuture<Void> result = generator.generateUnitTestDocumentation(analysis, tempDir);
+        CompletableFuture<Void> result = generator
+            .generateUnitTestDocumentation(analysis, tempDir);
 
         // Should handle file write exceptions gracefully
         assertDoesNotThrow(() -> result.join());
@@ -295,11 +325,13 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
         when(outputSettings.includeIcons()).thenReturn(true);
         when(outputSettings.targetCoverage()).thenReturn(0.8);
         when(llmServiceFix.isThreadLocalConfigAvailable()).thenReturn(true);
-        when(llmService.generateUnitTests(any())).thenReturn(CompletableFuture.completedFuture(null));
+        when(llmService.generateUnitTests(any()))
+            .thenReturn(CompletableFuture.completedFuture(null));
 
         ProjectAnalysis analysis = createTestProjectAnalysis();
 
-        CompletableFuture<Void> result = generator.generateUnitTestDocumentation(analysis, tempDir);
+        CompletableFuture<Void> result = generator
+            .generateUnitTestDocumentation(analysis, tempDir);
 
         // Should handle null unit test results gracefully
         assertDoesNotThrow(() -> result.join());
@@ -319,11 +351,13 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
         when(outputSettings.includeIcons()).thenReturn(false); // No icons
         when(outputSettings.targetCoverage()).thenReturn(0.8);
         when(llmServiceFix.isThreadLocalConfigAvailable()).thenReturn(true);
-        when(llmService.generateUnitTests(any())).thenReturn(CompletableFuture.completedFuture(TEST_UNIT_TESTS));
+        when(llmService.generateUnitTests(any()))
+            .thenReturn(CompletableFuture.completedFuture(TEST_UNIT_TESTS));
 
         ProjectAnalysis analysis = createTestProjectAnalysis();
 
-        CompletableFuture<Void> result = generator.generateUnitTestDocumentation(analysis, tempDir);
+        CompletableFuture<Void> result = generator
+            .generateUnitTestDocumentation(analysis, tempDir);
 
         // Should complete successfully without icons
         assertDoesNotThrow(() -> result.join());
@@ -339,13 +373,17 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
 
     @Test
     void testGenerateUnitTestDocumentationWithNullOutputSettings() {
-        when(config.outputSettings()).thenReturn(null); // Null output settings
-        when(llmServiceFix.isThreadLocalConfigAvailable()).thenReturn(true);
-        when(llmService.generateUnitTests(any())).thenReturn(CompletableFuture.completedFuture(TEST_UNIT_TESTS));
+        // Null output settings
+        when(config.outputSettings()).thenReturn(null);
+        when(llmServiceFix.isThreadLocalConfigAvailable())
+            .thenReturn(true);
+        when(llmService.generateUnitTests(any()))
+            .thenReturn(CompletableFuture.completedFuture(TEST_UNIT_TESTS));
 
         ProjectAnalysis analysis = createTestProjectAnalysis();
 
-        CompletableFuture<Void> result = generator.generateUnitTestDocumentation(analysis, tempDir);
+        CompletableFuture<Void> result = generator
+            .generateUnitTestDocumentation(analysis, tempDir);
 
         // Should handle null output settings gracefully
         assertDoesNotThrow(() -> result.join());
@@ -361,19 +399,27 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
 
     @Test
     void testGenerateUnitTestDocumentationWithHeaderCreationException() {
-        // Create a mock config that will throw exception when accessing properties
-        DocumentorConfig faultyConfig = org.mockito.Mockito.mock(DocumentorConfig.class);
-        when(faultyConfig.outputSettings()).thenThrow(new RuntimeException("Config access error"));
+        // Create a mock config that will
+        // throw exception when accessing properties
+        DocumentorConfig faultyConfig =
+            org.mockito.Mockito.mock(DocumentorConfig.class);
+        when(faultyConfig.outputSettings())
+            .thenThrow(new RuntimeException("Config access error"));
 
         UnitTestDocumentationGeneratorEnhanced generatorWithFaultyConfig =
-            new UnitTestDocumentationGeneratorEnhanced(llmService, faultyConfig, llmServiceFix);
+            new UnitTestDocumentationGeneratorEnhanced(
+                llmService, faultyConfig, llmServiceFix);
 
-        when(llmServiceFix.isThreadLocalConfigAvailable()).thenReturn(true);
-        when(llmService.generateUnitTests(any())).thenReturn(CompletableFuture.completedFuture(TEST_UNIT_TESTS));
+        when(llmServiceFix.isThreadLocalConfigAvailable())
+            .thenReturn(true);
+        when(llmService.generateUnitTests(any()))
+            .thenReturn(CompletableFuture.completedFuture(TEST_UNIT_TESTS));
 
         ProjectAnalysis analysis = createTestProjectAnalysis();
 
-        CompletableFuture<Void> result = generatorWithFaultyConfig.generateUnitTestDocumentation(analysis, tempDir);
+        CompletableFuture<Void> result =
+        generatorWithFaultyConfig
+            .generateUnitTestDocumentation(analysis, tempDir);
 
         // Should handle header creation exceptions gracefully
         assertDoesNotThrow(() -> result.join());
@@ -390,11 +436,13 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
     @Test
     void testGenerateUnitTestDocumentationWithTopLevelException() {
         // Override the lenient stub to throw an exception
-        when(llmService.generateUnitTests(any())).thenThrow(new RuntimeException("Top level error"));
+        when(llmService.generateUnitTests(any()))
+            .thenThrow(new RuntimeException("Top level error"));
 
         ProjectAnalysis analysis = createTestProjectAnalysis();
 
-        CompletableFuture<Void> result = generator.generateUnitTestDocumentation(analysis, tempDir);
+        CompletableFuture<Void> result = generator
+            .generateUnitTestDocumentation(analysis, tempDir);
 
         // Should handle top-level exceptions gracefully
         assertDoesNotThrow(() -> result.join());
@@ -406,11 +454,13 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
         when(outputSettings.includeIcons()).thenReturn(true);
         when(outputSettings.targetCoverage()).thenReturn(0.8);
         when(llmServiceFix.isThreadLocalConfigAvailable()).thenReturn(true);
-        when(llmService.generateUnitTests(any())).thenReturn(CompletableFuture.completedFuture(TEST_UNIT_TESTS));
+        when(llmService.generateUnitTests(any()))
+            .thenReturn(CompletableFuture.completedFuture(TEST_UNIT_TESTS));
 
         ProjectAnalysis analysis = createTestProjectAnalysis();
 
-        CompletableFuture<Void> result = generator.generateUnitTestDocumentation(analysis, tempDir);
+        CompletableFuture<Void> result =
+            generator.generateUnitTestDocumentation(analysis, tempDir);
 
         assertDoesNotThrow(() -> result.join());
 
@@ -422,7 +472,8 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
     private ProjectAnalysis createTestProjectAnalysis() {
         CodeElement element = createTestMethodElement();
         List<CodeElement> elements = Collections.singletonList(element);
-        return new ProjectAnalysis("/test/path", elements, System.currentTimeMillis());
+        return new ProjectAnalysis("/test/path", elements,
+            System.currentTimeMillis());
     }
 
     private CodeElement createTestMethodElement() {

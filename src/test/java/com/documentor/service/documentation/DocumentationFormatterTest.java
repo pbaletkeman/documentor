@@ -30,7 +30,8 @@ class DocumentationFormatterTest {
             "", List.of(), List.of()
         );
 
-        testProject = new ProjectAnalysis("/test/path", List.of(testElement), System.currentTimeMillis());
+        testProject = new ProjectAnalysis(
+            "/test/path", List.of(testElement), System.currentTimeMillis());
     }
 
     @Test
@@ -49,7 +50,8 @@ class DocumentationFormatterTest {
         assertNotNull(result);
         assertTrue(result.length() > 0);
         // Should contain project information
-        assertTrue(result.contains("Documentation") || result.contains("Project"));
+        assertTrue(result.contains("Documentation")
+            || result.contains("Project"));
     }
 
     @Test
@@ -62,7 +64,9 @@ class DocumentationFormatterTest {
         assertNotNull(result);
         assertTrue(result.length() > 0);
         // Should contain some statistics
-        assertTrue(result.contains("1") || result.contains("Statistics") || result.contains("Elements"));
+        assertTrue(result.contains("1")
+            || result.contains("Statistics")
+            || result.contains("Elements"));
     }
 
     @Test
@@ -79,7 +83,8 @@ class DocumentationFormatterTest {
 
     @Test
     void testFormatterWithEmptyProject() {
-        ProjectAnalysis emptyProject = new ProjectAnalysis("/empty", List.of(), System.currentTimeMillis());
+        ProjectAnalysis emptyProject = new ProjectAnalysis(
+            "/empty", List.of(), System.currentTimeMillis());
         StringBuilder sb = new StringBuilder();
 
         // Should handle empty project without errors
@@ -107,7 +112,8 @@ class DocumentationFormatterTest {
 
     @Test
     void testAppendApiReferenceWithEmptyProject() {
-        ProjectAnalysis emptyProject = new ProjectAnalysis("/empty", List.of(), System.currentTimeMillis());
+        ProjectAnalysis emptyProject = new ProjectAnalysis(
+            "/empty", List.of(), System.currentTimeMillis());
         StringBuilder sb = new StringBuilder();
 
         formatter.appendApiReference(sb, emptyProject);
@@ -134,7 +140,8 @@ class DocumentationFormatterTest {
 
     @Test
     void testGetProjectNameWithNullPath() {
-        ProjectAnalysis nullPathProject = new ProjectAnalysis(null, List.of(), System.currentTimeMillis());
+        ProjectAnalysis nullPathProject = new ProjectAnalysis(
+            null, List.of(), System.currentTimeMillis());
         StringBuilder sb = new StringBuilder();
 
         formatter.appendHeader(sb, nullPathProject);
@@ -146,7 +153,8 @@ class DocumentationFormatterTest {
 
     @Test
     void testGetProjectNameWithEmptyPath() {
-        ProjectAnalysis emptyPathProject = new ProjectAnalysis("", List.of(), System.currentTimeMillis());
+        ProjectAnalysis emptyPathProject = new ProjectAnalysis("",
+            List.of(), System.currentTimeMillis());
         StringBuilder sb = new StringBuilder();
 
         formatter.appendHeader(sb, emptyPathProject);

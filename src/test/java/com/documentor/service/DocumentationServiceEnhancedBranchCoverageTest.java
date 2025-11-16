@@ -74,15 +74,24 @@ class DocumentationServiceEnhancedBranchCoverageTest {
             mockLlmServiceFix
         );
 
-        // Default setup with lenient stubbing to avoid unnecessary stubbing exceptions
-        lenient().when(mockConfig.outputSettings()).thenReturn(mockOutputSettings);
-        lenient().when(mockOutputSettings.outputPath()).thenReturn(tempDir.toString());
-        lenient().when(mockOutputSettings.generateUnitTests()).thenReturn(true);
-        lenient().when(mockOutputSettings.generateMermaidDiagrams()).thenReturn(true);
-        lenient().when(mockOutputSettings.generatePlantUMLDiagrams()).thenReturn(true);
-        lenient().when(mockOutputSettings.mermaidOutputPath()).thenReturn(tempDir.resolve("mermaid").toString());
-        lenient().when(mockOutputSettings.plantUMLOutputPath()).thenReturn(tempDir.resolve("plantuml").toString());
-        lenient().when(mockAnalysis.projectPath()).thenReturn("test-project");
+        // Default setup with lenient stubbing to avoid unnecessary
+        // stubbing exceptions
+        lenient().when(mockConfig.outputSettings())
+        .thenReturn(mockOutputSettings);
+        lenient().when(mockOutputSettings.outputPath())
+        .thenReturn(tempDir.toString());
+        lenient().when(mockOutputSettings.generateUnitTests())
+        .thenReturn(true);
+        lenient().when(mockOutputSettings.generateMermaidDiagrams())
+        .thenReturn(true);
+        lenient().when(mockOutputSettings.generatePlantUMLDiagrams())
+        .thenReturn(true);
+        lenient().when(mockOutputSettings.mermaidOutputPath())
+        .thenReturn(tempDir.resolve("mermaid").toString());
+        lenient().when(mockOutputSettings.plantUMLOutputPath())
+        .thenReturn(tempDir.resolve("plantuml").toString());
+        lenient().when(mockAnalysis.projectPath())
+        .thenReturn("test-project");
     }
 
     /**
@@ -92,7 +101,8 @@ class DocumentationServiceEnhancedBranchCoverageTest {
     void testMainDocumentationGeneratorTimeout() throws Exception {
         // Arrange
         CompletableFuture<String> timeoutFuture = new CompletableFuture<>();
-        timeoutFuture.completeExceptionally(new TimeoutException("Operation timed out"));
+        timeoutFuture.completeExceptionally(
+            new TimeoutException("Operation timed out"));
 
         when(mockMainDocGenerator.generateMainDocumentation(mockAnalysis))
             .thenReturn(timeoutFuture);
@@ -106,7 +116,8 @@ class DocumentationServiceEnhancedBranchCoverageTest {
             .thenReturn(CompletableFuture.completedFuture(List.of()));
 
         // Act
-        CompletableFuture<String> result = service.generateDocumentation(mockAnalysis);
+        CompletableFuture<String> result =
+            service.generateDocumentation(mockAnalysis);
 
         // Assert
         assertNotNull(result);
@@ -127,11 +138,14 @@ class DocumentationServiceEnhancedBranchCoverageTest {
     void testElementDocumentationTimeout() throws Exception {
         // Arrange
         when(mockMainDocGenerator.generateMainDocumentation(mockAnalysis))
-            .thenReturn(CompletableFuture.completedFuture("# Main Documentation"));
+            .thenReturn(CompletableFuture
+            .completedFuture("# Main Documentation"));
 
         CompletableFuture<Void> timeoutFuture = new CompletableFuture<>();
-        timeoutFuture.completeExceptionally(new TimeoutException("Element timeout"));
-        when(mockElementDocGenerator.generateGroupedDocumentation(any(), any()))
+        timeoutFuture.completeExceptionally(
+            new TimeoutException("Element timeout"));
+        when(mockElementDocGenerator
+            .generateGroupedDocumentation(any(), any()))
             .thenReturn(timeoutFuture);
 
         when(mockTestDocGenerator.generateUnitTestDocumentation(any(), any()))
@@ -142,7 +156,8 @@ class DocumentationServiceEnhancedBranchCoverageTest {
             .thenReturn(CompletableFuture.completedFuture(List.of()));
 
         // Act
-        CompletableFuture<String> result = service.generateDocumentation(mockAnalysis);
+        CompletableFuture<String> result =
+            service.generateDocumentation(mockAnalysis);
 
         // Assert
         assertNotNull(result);
@@ -159,8 +174,10 @@ class DocumentationServiceEnhancedBranchCoverageTest {
         when(mockOutputSettings.generateUnitTests()).thenReturn(false);
 
         when(mockMainDocGenerator.generateMainDocumentation(mockAnalysis))
-            .thenReturn(CompletableFuture.completedFuture("# Main Documentation"));
-        when(mockElementDocGenerator.generateGroupedDocumentation(any(), any()))
+            .thenReturn(CompletableFuture
+            .completedFuture("# Main Documentation"));
+        when(mockElementDocGenerator
+            .generateGroupedDocumentation(any(), any()))
             .thenReturn(CompletableFuture.completedFuture(null));
         when(mockMermaidService.generateClassDiagrams(any(), any()))
             .thenReturn(CompletableFuture.completedFuture(List.of()));
@@ -168,7 +185,8 @@ class DocumentationServiceEnhancedBranchCoverageTest {
             .thenReturn(CompletableFuture.completedFuture(List.of()));
 
         // Act
-        CompletableFuture<String> result = service.generateDocumentation(mockAnalysis);
+        CompletableFuture<String> result =
+            service.generateDocumentation(mockAnalysis);
 
         // Assert
         assertNotNull(result);
@@ -176,7 +194,8 @@ class DocumentationServiceEnhancedBranchCoverageTest {
         assertEquals(tempDir.toString(), outputPath);
 
         // Verify unit test generator was never called
-        verify(mockTestDocGenerator, never()).generateUnitTestDocumentation(any(), any());
+        verify(mockTestDocGenerator, never())
+            .generateUnitTestDocumentation(any(), any());
     }
 
     /**
@@ -186,21 +205,26 @@ class DocumentationServiceEnhancedBranchCoverageTest {
     void testPlantUMLException() throws Exception {
         // Arrange
         when(mockMainDocGenerator.generateMainDocumentation(mockAnalysis))
-            .thenReturn(CompletableFuture.completedFuture("# Main Documentation"));
-        when(mockElementDocGenerator.generateGroupedDocumentation(any(), any()))
+            .thenReturn(CompletableFuture
+            .completedFuture("# Main Documentation"));
+        when(mockElementDocGenerator
+            .generateGroupedDocumentation(any(), any()))
             .thenReturn(CompletableFuture.completedFuture(null));
         when(mockTestDocGenerator.generateUnitTestDocumentation(any(), any()))
             .thenReturn(CompletableFuture.completedFuture(null));
         when(mockMermaidService.generateClassDiagrams(any(), any()))
             .thenReturn(CompletableFuture.completedFuture(List.of()));
 
-        CompletableFuture<List<String>> failedFuture = new CompletableFuture<>();
-        failedFuture.completeExceptionally(new RuntimeException("PlantUML failed"));
+        CompletableFuture<List<String>> failedFuture =
+            new CompletableFuture<>();
+        failedFuture.completeExceptionally(
+            new RuntimeException("PlantUML failed"));
         when(mockPlantUMLService.generateClassDiagrams(any(), any()))
             .thenReturn(failedFuture);
 
         // Act
-        CompletableFuture<String> result = service.generateDocumentation(mockAnalysis);
+        CompletableFuture<String> result =
+            service.generateDocumentation(mockAnalysis);
 
         // Assert
         assertNotNull(result);

@@ -56,7 +56,8 @@ class LlmServiceFixEnhancedBranchCoverageTest {
     }
 
     /**
-     * Test setLlmServiceThreadLocalConfig with null configuration - covers null check branch
+     * Test setLlmServiceThreadLocalConfig with null configuration
+     * - covers null check branch
      */
     @Test
     void testSetLlmServiceThreadLocalConfig_NullConfig() {
@@ -64,12 +65,14 @@ class LlmServiceFixEnhancedBranchCoverageTest {
         llmServiceFixEnhanced.setLlmServiceThreadLocalConfig(null);
 
         // Assert - Should handle null gracefully and not set any config
-        DocumentorConfig retrievedConfig = ThreadLocalContextHolder.getConfig();
+        DocumentorConfig retrievedConfig = ThreadLocalContextHolder
+            .getConfig();
         assertNull(retrievedConfig);
     }
 
     /**
-     * Test setLlmServiceThreadLocalConfig with empty models list - covers empty list branch
+     * Test setLlmServiceThreadLocalConfig with empty models list
+     * - covers empty list branch
      */
     @Test
     void testSetLlmServiceThreadLocalConfig_EmptyModelsList() {
@@ -86,7 +89,8 @@ class LlmServiceFixEnhancedBranchCoverageTest {
     }
 
     /**
-     * Test setLlmServiceThreadLocalConfig with null models list - covers null models branch
+     * Test setLlmServiceThreadLocalConfig with null models list
+     * - covers null models branch
      */
     @Test
     void testSetLlmServiceThreadLocalConfig_NullModelsList() {
@@ -97,13 +101,15 @@ class LlmServiceFixEnhancedBranchCoverageTest {
         llmServiceFixEnhanced.setLlmServiceThreadLocalConfig(mockConfig);
 
         // Assert - Should set config even with null models list
-        DocumentorConfig retrievedConfig = ThreadLocalContextHolder.getConfig();
+        DocumentorConfig retrievedConfig = ThreadLocalContextHolder
+            .getConfig();
         assertNotNull(retrievedConfig);
         assertEquals(mockConfig, retrievedConfig);
     }
 
     /**
-     * Test setLlmServiceThreadLocalConfig with valid models list - covers success branch
+     * Test setLlmServiceThreadLocalConfig with valid models list
+     * - covers success branch
      */
     @Test
     void testSetLlmServiceThreadLocalConfig_ValidModelsList() {
@@ -116,13 +122,15 @@ class LlmServiceFixEnhancedBranchCoverageTest {
         when(mockModelConfig2.provider()).thenReturn("ollama");
         when(mockModelConfig2.baseUrl()).thenReturn("http://localhost:11434");
 
-        when(mockConfig.llmModels()).thenReturn(List.of(mockModelConfig1, mockModelConfig2));
+        when(mockConfig.llmModels()).thenReturn(List.of(mockModelConfig1,
+            mockModelConfig2));
 
         // Act
         llmServiceFixEnhanced.setLlmServiceThreadLocalConfig(mockConfig);
 
         // Assert - Should set config successfully
-        DocumentorConfig retrievedConfig = ThreadLocalContextHolder.getConfig();
+        DocumentorConfig retrievedConfig = ThreadLocalContextHolder
+            .getConfig();
         assertNotNull(retrievedConfig);
         assertEquals(mockConfig, retrievedConfig);
         assertEquals(2, retrievedConfig.llmModels().size());
@@ -135,11 +143,13 @@ class LlmServiceFixEnhancedBranchCoverageTest {
     void testSetLlmServiceThreadLocalConfig_VerificationException() {
         // Arrange - Use a mock that will cause issues during verification
         DocumentorConfig problematicConfig = mock(DocumentorConfig.class);
-        when(problematicConfig.llmModels()).thenThrow(new RuntimeException("Model access error"));
+        when(problematicConfig.llmModels()).thenThrow(
+            new RuntimeException("Model access error"));
 
         // Act - Should handle the exception gracefully
         assertDoesNotThrow(() -> {
-            llmServiceFixEnhanced.setLlmServiceThreadLocalConfig(problematicConfig);
+            llmServiceFixEnhanced
+                .setLlmServiceThreadLocalConfig(problematicConfig);
         });
 
         // The config should still be set despite the verification issue
@@ -147,7 +157,8 @@ class LlmServiceFixEnhancedBranchCoverageTest {
     }
 
     /**
-     * Test isThreadLocalConfigAvailable when config is available - covers true branch
+     * Test isThreadLocalConfigAvailable when config is available
+     * - covers true branch
      */
     @Test
     void testIsThreadLocalConfigAvailable_ConfigAvailable() {
@@ -156,14 +167,16 @@ class LlmServiceFixEnhancedBranchCoverageTest {
         llmServiceFixEnhanced.setLlmServiceThreadLocalConfig(mockConfig);
 
         // Act
-        boolean isAvailable = llmServiceFixEnhanced.isThreadLocalConfigAvailable();
+        boolean isAvailable = llmServiceFixEnhanced
+            .isThreadLocalConfigAvailable();
 
         // Assert
         assertTrue(isAvailable);
     }
 
     /**
-     * Test isThreadLocalConfigAvailable when config is not available - covers false branch
+     * Test isThreadLocalConfigAvailable when config is not available
+     * - covers false branch
      */
     @Test
     void testIsThreadLocalConfigAvailable_ConfigNotAvailable() {
@@ -171,7 +184,8 @@ class LlmServiceFixEnhancedBranchCoverageTest {
         ThreadLocalContextHolder.clearConfig();
 
         // Act
-        boolean isAvailable = llmServiceFixEnhanced.isThreadLocalConfigAvailable();
+        boolean isAvailable = llmServiceFixEnhanced
+            .isThreadLocalConfigAvailable();
 
         // Assert
         assertFalse(isAvailable);
@@ -187,29 +201,34 @@ class LlmServiceFixEnhancedBranchCoverageTest {
         llmServiceFixEnhanced.setLlmServiceThreadLocalConfig(mockConfig);
 
         // Act
-        boolean isAvailable = llmServiceFixEnhanced.isThreadLocalConfigAvailable();
+        boolean isAvailable = llmServiceFixEnhanced
+            .isThreadLocalConfigAvailable();
 
         // Assert - Should still be available even with null models
         assertTrue(isAvailable);
     }
 
     /**
-     * Test isThreadLocalConfigAvailable with exception during check - covers exception branch
+     * Test isThreadLocalConfigAvailable with exception during check
+     *  - covers exception branch
      */
     @Test
     void testIsThreadLocalConfigAvailable_ExceptionDuringCheck() {
-        // This test is tricky since ThreadLocalContextHolder.getConfig() is static
-        // We'll test by setting a config that will cause issues when accessed
+        // This test is tricky since ThreadLocalContextHolder.getConfig()
+        // is static We'll test by setting a config that will cause
+        // issues when accessed
         DocumentorConfig problematicConfig = mock(DocumentorConfig.class);
 
         // Set the config first
         ThreadLocalContextHolder.setConfig(problematicConfig);
 
         // Now make the config throw exception when llmModels() is called
-        when(problematicConfig.llmModels()).thenThrow(new RuntimeException("Access error"));
+        when(problematicConfig.llmModels()).thenThrow(
+            new RuntimeException("Access error"));
 
         // Act - Should handle exception gracefully
-        boolean isAvailable = llmServiceFixEnhanced.isThreadLocalConfigAvailable();
+        boolean isAvailable = llmServiceFixEnhanced
+            .isThreadLocalConfigAvailable();
 
         // Assert - Should return false due to exception handling
         assertFalse(isAvailable);
@@ -247,7 +266,8 @@ class LlmServiceFixEnhancedBranchCoverageTest {
         Runnable testRunnable = () -> {
             runnableExecuted.set(true);
             // Check if config is available during execution
-            DocumentorConfig currentConfig = ThreadLocalContextHolder.getConfig();
+            DocumentorConfig currentConfig = ThreadLocalContextHolder
+                .getConfig();
             configWasAvailable.set(currentConfig != null);
         };
 
@@ -278,13 +298,15 @@ class LlmServiceFixEnhancedBranchCoverageTest {
         when(mockModelConfig3.provider()).thenReturn("llamacpp");
         when(mockModelConfig3.baseUrl()).thenReturn("http://localhost:8080");
 
-        when(mockConfig.llmModels()).thenReturn(List.of(mockModelConfig1, mockModelConfig2, mockModelConfig3));
+        when(mockConfig.llmModels()).thenReturn(
+            List.of(mockModelConfig1, mockModelConfig2, mockModelConfig3));
 
         // Act
         llmServiceFixEnhanced.setLlmServiceThreadLocalConfig(mockConfig);
 
         // Assert
-        DocumentorConfig retrievedConfig = ThreadLocalContextHolder.getConfig();
+        DocumentorConfig retrievedConfig = ThreadLocalContextHolder
+            .getConfig();
         assertNotNull(retrievedConfig);
         assertEquals(3, retrievedConfig.llmModels().size());
     }
@@ -308,7 +330,8 @@ class LlmServiceFixEnhancedBranchCoverageTest {
 
         // Set second config
         llmServiceFixEnhanced.setLlmServiceThreadLocalConfig(secondConfig);
-        DocumentorConfig secondRetrieved = ThreadLocalContextHolder.getConfig();
+        DocumentorConfig secondRetrieved = ThreadLocalContextHolder
+            .getConfig();
 
         // Assert
         assertNotNull(firstRetrieved);
@@ -320,7 +343,8 @@ class LlmServiceFixEnhancedBranchCoverageTest {
     }
 
     /**
-     * Test verification branch when models is null but config is set successfully
+     * Test verification branch when models is null but config
+     * is set successfully
      */
     @Test
     void testVerificationWithNullModels() {
@@ -331,12 +355,14 @@ class LlmServiceFixEnhancedBranchCoverageTest {
         llmServiceFixEnhanced.setLlmServiceThreadLocalConfig(mockConfig);
 
         // Assert
-        DocumentorConfig retrievedConfig = ThreadLocalContextHolder.getConfig();
+        DocumentorConfig retrievedConfig = ThreadLocalContextHolder
+            .getConfig();
         assertNotNull(retrievedConfig);
         assertEquals(mockConfig, retrievedConfig);
 
         // Verify that availability check works with null models
-        boolean isAvailable = llmServiceFixEnhanced.isThreadLocalConfigAvailable();
+        boolean isAvailable = llmServiceFixEnhanced
+            .isThreadLocalConfigAvailable();
         assertTrue(isAvailable);
     }
 }

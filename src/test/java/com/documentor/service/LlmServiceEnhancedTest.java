@@ -24,15 +24,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
@@ -103,7 +97,8 @@ class LlmServiceEnhancedTest {
             mockedStatic.when(() ->
                     ThreadLocalPropagatingExecutorEnhanced.createExecutor(
                             anyInt(), anyString()))
-                    .thenThrow(new RuntimeException("Executor creation failed"));
+                    .thenThrow(new RuntimeException(
+                        "Executor creation failed"));
 
             // Act & Assert - Should handle failure gracefully
             assertDoesNotThrow(() -> new LlmServiceEnhanced(config,
@@ -117,11 +112,13 @@ class LlmServiceEnhancedTest {
         // Arrange
         when(requestBuilder.createDocumentationPrompt(testCodeElement))
                 .thenReturn("test prompt");
-        when(requestBuilder.buildRequestBody(any(LlmModelConfig.class), anyString()))
+        when(requestBuilder.buildRequestBody(any(LlmModelConfig.class),
+                anyString()))
             .thenReturn(Map.of("prompt", "test prompt"));
         when(responseHandler.getModelEndpoint(any(LlmModelConfig.class)))
                 .thenReturn("/api/generate");
-        when(apiClient.callLlmModel(any(LlmModelConfig.class), anyString(), any()))
+        when(apiClient.callLlmModel(any(LlmModelConfig.class),
+                anyString(), any()))
             .thenReturn("LLM response");
         when(responseHandler.extractResponseContent(anyString(),
                 any(LlmModelConfig.class)))
@@ -152,12 +149,14 @@ class LlmServiceEnhancedTest {
 
             // Act
             CompletableFuture<String> result =
-                    serviceWithNullConfig.generateDocumentation(testCodeElement);
+                    serviceWithNullConfig.generateDocumentation(
+                        testCodeElement);
             String documentation = result.get();
 
             // Assert
                         assertTrue(
-                                documentation.contains("Error: LLM configuration is null")
+                                documentation.contains(
+                                        "Error: LLM configuration is null")
                         );
         }
     }
@@ -190,11 +189,13 @@ class LlmServiceEnhancedTest {
         // Arrange
         when(requestBuilder.createUsageExamplePrompt(testCodeElement))
                 .thenReturn("usage prompt");
-        when(requestBuilder.buildRequestBody(any(LlmModelConfig.class), anyString()))
+        when(requestBuilder.buildRequestBody(any(LlmModelConfig.class),
+                anyString()))
             .thenReturn(Map.of("prompt", "usage prompt"));
         when(responseHandler.getModelEndpoint(any(LlmModelConfig.class)))
                 .thenReturn("/api/generate");
-        when(apiClient.callLlmModel(any(LlmModelConfig.class), anyString(), any()))
+        when(apiClient.callLlmModel(any(LlmModelConfig.class),
+                anyString(), any()))
             .thenReturn("LLM response");
         when(responseHandler.extractResponseContent(anyString(),
                 any(LlmModelConfig.class)))
@@ -217,18 +218,21 @@ class LlmServiceEnhancedTest {
         // Arrange
         when(requestBuilder.createUnitTestPrompt(testCodeElement))
                 .thenReturn("test prompt");
-        when(requestBuilder.buildRequestBody(any(LlmModelConfig.class), anyString()))
+        when(requestBuilder.buildRequestBody(any(LlmModelConfig.class),
+                anyString()))
             .thenReturn(Map.of("prompt", "test prompt"));
         when(responseHandler.getModelEndpoint(any(LlmModelConfig.class)))
                 .thenReturn("/api/generate");
-        when(apiClient.callLlmModel(any(LlmModelConfig.class), anyString(), any()))
+        when(apiClient.callLlmModel(any(LlmModelConfig.class),
+                anyString(), any()))
             .thenReturn("LLM response");
         when(responseHandler.extractResponseContent(anyString(),
                 any(LlmModelConfig.class)))
             .thenReturn("Generated unit tests");
 
         // Act
-        CompletableFuture<String> result = llmService.generateUnitTests(testCodeElement);
+        CompletableFuture<String> result = llmService
+                .generateUnitTests(testCodeElement);
         String unitTests = result.get();
 
         // Assert
@@ -242,10 +246,12 @@ class LlmServiceEnhancedTest {
         try (MockedStatic<ThreadLocalContextHolder> mockedStatic =
                 mockStatic(ThreadLocalContextHolder.class)) {
             // Arrange
-            mockedStatic.when(ThreadLocalContextHolder::getConfig).thenReturn(config);
+            mockedStatic.when(ThreadLocalContextHolder::getConfig)
+                .thenReturn(config);
 
             // Act
-            DocumentorConfig result = LlmServiceEnhanced.getThreadLocalConfig();
+            DocumentorConfig result = LlmServiceEnhanced
+                .getThreadLocalConfig();
 
             // Assert
             assertEquals(config, result);
@@ -260,7 +266,8 @@ class LlmServiceEnhancedTest {
             LlmServiceEnhanced.setThreadLocalConfig(config);
 
             // Assert
-            mockedStatic.verify(() -> ThreadLocalContextHolder.setConfig(config));
+            mockedStatic.verify(() -> ThreadLocalContextHolder
+                .setConfig(config));
         }
     }
 
@@ -282,7 +289,8 @@ class LlmServiceEnhancedTest {
         // Arrange
         when(requestBuilder.createDocumentationPrompt(testCodeElement))
                 .thenReturn("test prompt");
-        when(requestBuilder.buildRequestBody(any(LlmModelConfig.class), anyString()))
+        when(requestBuilder.buildRequestBody(any(LlmModelConfig.class),
+                anyString()))
             .thenThrow(new RuntimeException("Request building failed"));
 
         // Act
@@ -308,7 +316,8 @@ class LlmServiceEnhancedTest {
                 .thenReturn(Map.of("prompt", "test prompt"));
             when(responseHandler.getModelEndpoint(any(LlmModelConfig.class)))
                     .thenReturn("/api/generate");
-            when(apiClient.callLlmModel(any(LlmModelConfig.class), anyString(), any()))
+            when(apiClient.callLlmModel(any(
+                        LlmModelConfig.class), anyString(), any()))
                 .thenReturn("LLM response");
             when(responseHandler.extractResponseContent(anyString(),
                     any(LlmModelConfig.class)))
@@ -320,8 +329,8 @@ class LlmServiceEnhancedTest {
             result.get();
 
             // Assert - Verify ThreadLocal operations were called
-            mockedStatic.verify(() -> ThreadLocalContextHolder.setConfig(config),
-                    atLeastOnce());
+            mockedStatic.verify(() -> ThreadLocalContextHolder
+                .setConfig(config), atLeastOnce());
             // Note: logConfigStatus may not be called in all code paths,
             // so just verify setConfig
         }
@@ -336,7 +345,8 @@ class LlmServiceEnhancedTest {
 
         try (MockedStatic<ThreadLocalContextHolder> mockedStatic =
                 mockStatic(ThreadLocalContextHolder.class)) {
-            mockedStatic.when(ThreadLocalContextHolder::getConfig).thenReturn(null);
+            mockedStatic.when(ThreadLocalContextHolder::getConfig)
+                .thenReturn(null);
 
             // Act
             CompletableFuture<String> result =
@@ -345,7 +355,8 @@ class LlmServiceEnhancedTest {
 
             // Assert
             assertEquals(
-                    "Error: LLM configuration is null. Please check the application configuration.",
+                    "Error: LLM configuration is null. "
+                    + "Please check the application configuration.",
                     usageExamples);
         }
     }
@@ -354,7 +365,8 @@ class LlmServiceEnhancedTest {
     void testGenerateUsageExamplesWithEmptyModelList()
             throws ExecutionException, InterruptedException {
         // Arrange - Create config with empty model list
-        DocumentorConfig emptyConfig = new DocumentorConfig(List.of(), null, null);
+        DocumentorConfig emptyConfig = new DocumentorConfig(
+                List.of(), null, null);
         LlmServiceEnhanced emptyConfigService = new LlmServiceEnhanced(
                 emptyConfig, requestBuilder, responseHandler, apiClient);
 
@@ -400,7 +412,8 @@ class LlmServiceEnhancedTest {
 
         try (MockedStatic<ThreadLocalContextHolder> mockedStatic =
                 mockStatic(ThreadLocalContextHolder.class)) {
-            mockedStatic.when(ThreadLocalContextHolder::getConfig).thenReturn(null);
+            mockedStatic.when(ThreadLocalContextHolder::getConfig)
+                .thenReturn(null);
 
             // Act
             CompletableFuture<String> result =
@@ -409,7 +422,8 @@ class LlmServiceEnhancedTest {
 
             // Assert
             assertEquals(
-                    "Error: LLM configuration is null. Please check the application configuration.",
+                    "Error: LLM configuration is null. "
+                    + "Please check the application configuration.",
                     unitTests);
         }
     }
@@ -418,7 +432,8 @@ class LlmServiceEnhancedTest {
     void testGenerateUnitTestsWithEmptyModelList()
             throws ExecutionException, InterruptedException {
         // Arrange - Create config with empty model list
-        DocumentorConfig emptyConfig = new DocumentorConfig(List.of(), null, null);
+        DocumentorConfig emptyConfig = new DocumentorConfig(
+                List.of(), null, null);
         LlmServiceEnhanced emptyConfigService = new LlmServiceEnhanced(
                 emptyConfig, requestBuilder, responseHandler, apiClient);
 
@@ -464,7 +479,8 @@ class LlmServiceEnhancedTest {
         // Use reflection to set threadLocalExecutor to null
         try {
             java.lang.reflect.Field executorField =
-                    LlmServiceEnhanced.class.getDeclaredField("threadLocalExecutor");
+                    LlmServiceEnhanced.class.getDeclaredField(
+                        "threadLocalExecutor");
             executorField.setAccessible(true);
             executorField.set(serviceWithNullExecutor, null);
 
@@ -472,7 +488,8 @@ class LlmServiceEnhancedTest {
             java.lang.reflect.Method getExecutorMethod =
                     LlmServiceEnhanced.class.getDeclaredMethod("getExecutor");
             getExecutorMethod.setAccessible(true);
-            Object executor = getExecutorMethod.invoke(serviceWithNullExecutor);
+            Object executor = getExecutorMethod.invoke(
+                serviceWithNullExecutor);
 
             // Assert - Should return fallback executor (not null)
             assertNotNull(executor);
@@ -484,9 +501,9 @@ class LlmServiceEnhancedTest {
 
     @Test
     void testGetExecutorWithValidThreadLocalExecutor() {
-        // This test verifies the happy path where threadLocalExecutor is not null
-        // The existing tests already cover this scenario, but we'll test
-        // explicitly
+        // This test verifies the happy path where threadLocalExecutor is
+        // not null The existing tests already cover this scenario, but we'll
+        // test explicitly
 
         try {
             // Act - invoke private getExecutor method via reflection
@@ -506,13 +523,13 @@ class LlmServiceEnhancedTest {
     @Test
     void testCreatePromptWithNullCodeElement() {
         try {
-            // Arrange - Mock the request builder to return something when called
-            // with null
+            // Arrange - Mock the request builder to return something when
+            // called with null
             when(requestBuilder.createDocumentationPrompt(null))
                     .thenReturn("documentation prompt for null element");
 
-            // Act - invoke private createPrompt method via reflection with null
-            // CodeElement
+            // Act - invoke private createPrompt method via reflection with
+            // null CodeElement
             java.lang.reflect.Method createPromptMethod =
                     LlmServiceEnhanced.class.getDeclaredMethod("createPrompt",
                             CodeElement.class, String.class);

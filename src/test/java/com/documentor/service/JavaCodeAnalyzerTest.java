@@ -47,7 +47,8 @@ class JavaCodeAnalyzerTest {
     void analyzeFileShouldParseAndVisitCompilationUnit() throws IOException {
         // Arrange
         Path tempFile = Files.createTempFile("test", ".java");
-        String validJavaCode = "public class TestClass { public void testMethod() {} }";
+        String validJavaCode =
+            "public class TestClass { public void testMethod() {} }";
         Files.writeString(tempFile, validJavaCode);
 
         List<CodeElement> expectedElements = new ArrayList<>();
@@ -66,7 +67,8 @@ class JavaCodeAnalyzerTest {
             // Assert
             assertNotNull(result);
             verify(mockElementVisitor).initialize(eq(tempFile), any(), any());
-            verify(mockElementVisitor).visit(any(CompilationUnit.class), eq(null));
+            verify(mockElementVisitor).visit(any(
+                CompilationUnit.class), eq(null));
         } finally {
             Files.deleteIfExists(tempFile);
         }
@@ -78,8 +80,11 @@ class JavaCodeAnalyzerTest {
         Path nonExistentPath = Path.of("non-existent-file.java");
 
         // Act & Assert
-        IOException exception = assertThrows(IOException.class, () -> javaCodeAnalyzer.analyzeFile(nonExistentPath));
-        // Just verify that an IOException is thrown, don't check the specific message since it's wrapped
+        IOException exception = assertThrows(
+            IOException.class, () ->
+            javaCodeAnalyzer.analyzeFile(nonExistentPath));
+        // Just verify that an IOException is thrown,
+        // don't check the specific message since it's wrapped
         assertNotNull(exception);
     }
 
@@ -97,10 +102,10 @@ class JavaCodeAnalyzerTest {
             // Assert
             assertNotNull(result);
             verify(mockElementVisitor).initialize(eq(tempFile), any(), any());
-            verify(mockElementVisitor).visit(any(CompilationUnit.class), eq(null));
+            verify(mockElementVisitor).visit(any(CompilationUnit.class),
+                eq(null));
         } finally {
             Files.deleteIfExists(tempFile);
         }
     }
 }
-

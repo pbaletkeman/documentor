@@ -62,11 +62,16 @@ class DocumentationServiceCoverageTest {
     @BeforeEach
     void setUp() {
         // Setup basic mocks
-        lenient().when(mockConfig.outputSettings()).thenReturn(mockOutputSettings);
-        lenient().when(mockOutputSettings.outputPath()).thenReturn(tempDir.toString());
-        lenient().when(mockOutputSettings.generateMermaidDiagrams()).thenReturn(false);
-        lenient().when(mockOutputSettings.generatePlantUMLDiagrams()).thenReturn(false);
-        lenient().when(mockOutputSettings.generateUnitTests()).thenReturn(false);
+        lenient().when(mockConfig.outputSettings())
+            .thenReturn(mockOutputSettings);
+        lenient().when(mockOutputSettings.outputPath())
+            .thenReturn(tempDir.toString());
+        lenient().when(mockOutputSettings.generateMermaidDiagrams())
+            .thenReturn(false);
+        lenient().when(mockOutputSettings.generatePlantUMLDiagrams())
+            .thenReturn(false);
+        lenient().when(mockOutputSettings.generateUnitTests())
+            .thenReturn(false);
 
         documentationService = new DocumentationService(
             mockMainDocGenerator,
@@ -83,33 +88,40 @@ class DocumentationServiceCoverageTest {
         // Test the branch where generateUnitTests() returns null
         when(mockOutputSettings.generateUnitTests()).thenReturn(null);
         when(mockMainDocGenerator.generateMainDocumentation(any()))
-            .thenReturn(CompletableFuture.completedFuture("# Test Documentation"));
+            .thenReturn(CompletableFuture.completedFuture(
+                "# Test Documentation"));
         when(mockElementDocGenerator.generateGroupedDocumentation(any(), any()))
             .thenReturn(CompletableFuture.completedFuture(null));
 
         ProjectAnalysis analysis = createTestProjectAnalysis();
 
-        CompletableFuture<String> result = documentationService.generateDocumentation(analysis);
+        CompletableFuture<String> result = documentationService
+            .generateDocumentation(analysis);
 
         assertDoesNotThrow(() -> result.join());
-        verify(mockTestDocGenerator, never()).generateUnitTestDocumentation(any(), any());
+        verify(mockTestDocGenerator, never())
+            .generateUnitTestDocumentation(any(), any());
     }
 
     @Test
     void testGenerateDocumentationWithPlantUMLEnabled() {
         // Test the PlantUML generation path that's never executed
         when(mockOutputSettings.generatePlantUMLDiagrams()).thenReturn(true);
-        when(mockOutputSettings.plantUMLOutputPath()).thenReturn(tempDir.resolve("plantuml").toString());
+        when(mockOutputSettings.plantUMLOutputPath()).thenReturn(
+            tempDir.resolve("plantuml").toString());
         when(mockMainDocGenerator.generateMainDocumentation(any()))
-            .thenReturn(CompletableFuture.completedFuture("# Test Documentation"));
+            .thenReturn(CompletableFuture
+            .completedFuture("# Test Documentation"));
         when(mockElementDocGenerator.generateGroupedDocumentation(any(), any()))
             .thenReturn(CompletableFuture.completedFuture(null));
         when(mockPlantUMLDiagramService.generateClassDiagrams(any(), any()))
-            .thenReturn(CompletableFuture.completedFuture(Collections.singletonList("diagram.puml")));
+            .thenReturn(CompletableFuture.completedFuture(
+                Collections.singletonList("diagram.puml")));
 
         ProjectAnalysis analysis = createTestProjectAnalysis();
 
-        CompletableFuture<String> result = documentationService.generateDocumentation(analysis);
+        CompletableFuture<String> result =
+            documentationService.generateDocumentation(analysis);
 
         assertDoesNotThrow(() -> result.join());
         verify(mockPlantUMLDiagramService).generateClassDiagrams(any(), any());
@@ -119,27 +131,34 @@ class DocumentationServiceCoverageTest {
     void testGenerateDocumentationWithMainDocGeneratorException() {
         // Test exception handling path in the main lambda
         when(mockMainDocGenerator.generateMainDocumentation(any()))
-            .thenReturn(CompletableFuture.failedFuture(new RuntimeException("Main doc generation failed")));
+            .thenReturn(CompletableFuture.failedFuture(new RuntimeException(
+                    "Main doc generation failed")));
 
         ProjectAnalysis analysis = createTestProjectAnalysis();
 
-        CompletableFuture<String> result = documentationService.generateDocumentation(analysis);
+        CompletableFuture<String> result =
+            documentationService.generateDocumentation(analysis);
 
         assertThrows(CompletionException.class, () -> result.join());
     }
 
     @Test
-    void testGenerateDetailedDocumentationWithCreateDirectoriesException() throws Exception {
-        // Test exception handling in generateDetailedDocumentation by creating a file where directory should be
+    void testGenerateDetailedDocumentationWithCreateDirectoriesException()
+        throws Exception {
+        // Test exception handling in generateDetailedDocumentation by
+        //  creating a file where directory should be
         Path elementsPath = tempDir.resolve("elements");
-        Files.createFile(elementsPath); // This will cause createDirectories to fail
+        // This will cause createDirectories to fail
+        Files.createFile(elementsPath);
 
         when(mockMainDocGenerator.generateMainDocumentation(any()))
-            .thenReturn(CompletableFuture.completedFuture("# Test Documentation"));
+            .thenReturn(CompletableFuture
+                .completedFuture("# Test Documentation"));
 
         ProjectAnalysis analysis = createTestProjectAnalysis();
 
-        CompletableFuture<String> result = documentationService.generateDocumentation(analysis);
+        CompletableFuture<String> result =
+            documentationService.generateDocumentation(analysis);
 
         // Should complete without throwing due to exception handling
         assertDoesNotThrow(() -> result.join());
@@ -149,7 +168,8 @@ class DocumentationServiceCoverageTest {
     void testGenerateDocumentationWithEmptyCodeElements() {
         // Test the empty code elements branch
         when(mockMainDocGenerator.generateMainDocumentation(any()))
-            .thenReturn(CompletableFuture.completedFuture("# Test Documentation"));
+            .thenReturn(CompletableFuture
+                .completedFuture("# Test Documentation"));
 
         ProjectAnalysis analysis = new ProjectAnalysis(
             "/test/path",
@@ -157,29 +177,37 @@ class DocumentationServiceCoverageTest {
             System.currentTimeMillis()
         );
 
-        CompletableFuture<String> result = documentationService.generateDocumentation(analysis);
+        CompletableFuture<String> result =
+            documentationService.generateDocumentation(analysis);
 
         assertDoesNotThrow(() -> result.join());
-        verify(mockElementDocGenerator, never()).generateGroupedDocumentation(any(), any());
+        verify(mockElementDocGenerator, never())
+            .generateGroupedDocumentation(any(), any());
     }
 
     @Test
     void testGenerateDocumentationWithNullCodeElements() {
-        // Test the null code elements branch - but the service expects to log the size, so we need a non-null analysis
-        // This test should focus on empty elements instead since null causes issues in the lambda
+        // Test the null code elements branch - but the service expects
+        // to log the size, so we need a non-null analysis
+        // This test should focus on empty elements instead since null causes
+        // issues in the lambda
         when(mockMainDocGenerator.generateMainDocumentation(any()))
-            .thenReturn(CompletableFuture.completedFuture("# Test Documentation"));
+            .thenReturn(CompletableFuture
+            .completedFuture("# Test Documentation"));
 
         ProjectAnalysis analysis = new ProjectAnalysis(
             "/test/path",
-            Collections.emptyList(), // Empty list instead of null to avoid NPE in logging
+            // Empty list instead of null to avoid NPE in logging
+            Collections.emptyList(),
             System.currentTimeMillis()
         );
 
-        CompletableFuture<String> result = documentationService.generateDocumentation(analysis);
+        CompletableFuture<String> result =
+            documentationService.generateDocumentation(analysis);
 
         assertDoesNotThrow(() -> result.join());
-        // With empty elements, generateDetailedDocumentation should still be called but return early
+        // With empty elements, generateDetailedDocumentation should still
+        // be called but return early
     }
 
     private ProjectAnalysis createTestProjectAnalysis() {

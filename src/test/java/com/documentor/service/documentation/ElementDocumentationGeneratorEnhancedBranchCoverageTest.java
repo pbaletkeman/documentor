@@ -45,19 +45,22 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
     @TempDir
     private Path tempDir;
 
-    private static final String TEST_DOCUMENTATION = "Test documentation content";
+    private static final String TEST_DOCUMENTATION =
+        "Test documentation content";
     private static final String TEST_EXAMPLES = "Test usage examples";
 
     @BeforeEach
     void setUp() {
-        generator = new ElementDocumentationGeneratorEnhanced(llmService, llmServiceFix);
+        generator = new ElementDocumentationGeneratorEnhanced(
+            llmService, llmServiceFix);
     }
 
     // =========== formatCodeBlock Branch Coverage Tests ===========
 
     @Test
     void testFormatCodeBlockWithNull() {
-        // Test formatCodeBlock with null input - should return "_No content available_"
+        // Test formatCodeBlock with null input
+        // - should return "_No content available_"
         when(llmService.generateDocumentation(any()))
             .thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
         when(llmService.generateUsageExamples(any()))
@@ -65,18 +68,26 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
         when(llmServiceFix.isThreadLocalConfigAvailable()).thenReturn(true);
 
         CodeElement elementWithNullSignature = new CodeElement(
-            CodeElementType.CLASS, "TestClass", "com.example.TestClass",
-            "/test/TestClass.java", 1, null, "A test class",
-            Collections.emptyList(), Collections.emptyList()
+            CodeElementType.CLASS,
+            "TestClass",
+            "com.example.TestClass",
+            "/test/TestClass.java",
+            1,
+            null,
+            "A test class",
+            Collections.emptyList(),
+            Collections.emptyList()
         );
 
         assertDoesNotThrow(() ->
-            generator.generateElementDocumentation(elementWithNullSignature, tempDir).join());
+            generator.generateElementDocumentation(elementWithNullSignature,
+            tempDir).join());
     }
 
     @Test
     void testFormatCodeBlockWithEmpty() {
-        // Test formatCodeBlock with empty input - should return "_No content available_"
+        // Test formatCodeBlock with empty input
+        // - should return "_No content available_"
         when(llmService.generateDocumentation(any()))
             .thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
         when(llmService.generateUsageExamples(any()))
@@ -84,13 +95,20 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
         when(llmServiceFix.isThreadLocalConfigAvailable()).thenReturn(true);
 
         CodeElement elementWithEmptySignature = new CodeElement(
-            CodeElementType.CLASS, "TestClass", "com.example.TestClass",
-            "/test/TestClass.java", 1, "", "A test class",
-            Collections.emptyList(), Collections.emptyList()
+            CodeElementType.CLASS,
+            "TestClass",
+            "com.example.TestClass",
+            "/test/TestClass.java",
+            1,
+            "",
+            "A test class",
+            Collections.emptyList(),
+            Collections.emptyList()
         );
 
         assertDoesNotThrow(() ->
-            generator.generateElementDocumentation(elementWithEmptySignature, tempDir).join());
+            generator.generateElementDocumentation(elementWithEmptySignature,
+            tempDir).join());
     }
 
     @Test
@@ -103,125 +121,185 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
         when(llmServiceFix.isThreadLocalConfigAvailable()).thenReturn(true);
 
         CodeElement elementWithWhitespace = new CodeElement(
-            CodeElementType.CLASS, "TestClass", "com.example.TestClass",
-            "/test/TestClass.java", 1, "   \t\n  ", "A test class",
-            Collections.emptyList(), Collections.emptyList()
+            CodeElementType.CLASS,
+            "TestClass",
+            "com.example.TestClass",
+            "/test/TestClass.java",
+            1,
+            "   \t\n  ",
+            "A test class",
+            Collections.emptyList(),
+            Collections.emptyList()
         );
 
         assertDoesNotThrow(() ->
-            generator.generateElementDocumentation(elementWithWhitespace, tempDir).join());
+            generator.generateElementDocumentation(elementWithWhitespace,
+            tempDir).join());
     }
 
     @Test
     void testFormatCodeBlockShortCode() {
-        // Test formatCodeBlock with short code (≤100 chars) - should not be formatted
+        // Test formatCodeBlock with short code (≤100 chars)
+        // - should not be formatted
         when(llmService.generateDocumentation(any()))
             .thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
         when(llmService.generateUsageExamples(any()))
             .thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
         when(llmServiceFix.isThreadLocalConfigAvailable()).thenReturn(true);
 
-        String shortCode = "public class Test {}"; // Short, should not be formatted
+        // Short, should not be formatted
+        String shortCode = "public class Test {}";
 
         CodeElement elementWithShortCode = new CodeElement(
-            CodeElementType.CLASS, "Test", "com.example.Test",
-            "/test/Test.java", 1, shortCode, "A test class",
-            Collections.emptyList(), Collections.emptyList()
+            CodeElementType.CLASS,
+            "Test",
+            "com.example.Test",
+            "/test/Test.java",
+            1,
+            shortCode,
+            "A test class",
+            Collections.emptyList(),
+            Collections.emptyList()
         );
 
         assertDoesNotThrow(() ->
-            generator.generateElementDocumentation(elementWithShortCode, tempDir).join());
+            generator.generateElementDocumentation(elementWithShortCode,
+            tempDir).join());
     }
 
     @Test
     void testFormatCodeBlockLongCodeWithoutSemicolons() {
-        // Test formatCodeBlock with long code (>100 chars) but no semicolons - should not be formatted
+        // Test formatCodeBlock with long code (>100 chars) but no semicolons
+        // - should not be formatted
         when(llmService.generateDocumentation(any()))
             .thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
         when(llmService.generateUsageExamples(any()))
             .thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
         when(llmServiceFix.isThreadLocalConfigAvailable()).thenReturn(true);
 
-        String longCodeNoSemicolons = "public class VeryLongClassNameThatExceedsOneHundredCharactersButDoesNotContainSemicolonsToTriggerFormatting extends BaseClass implements Interface {}";
+        String longCodeNoSemicolons =
+            "public class VeryLongClassNameThatExceedsOneHundredCharacters"
+            + "ButDoesNotContainSemicolonsToTriggerFormatting extends BaseClass"
+            + " implements Interface {}";
 
         CodeElement elementWithLongCode = new CodeElement(
-            CodeElementType.CLASS, "VeryLongClassName", "com.example.VeryLongClassName",
-            "/test/VeryLongClassName.java", 1, longCodeNoSemicolons, "A test class",
-            Collections.emptyList(), Collections.emptyList()
+            CodeElementType.CLASS,
+            "VeryLongClassName",
+            "com.example.VeryLongClassName",
+            "/test/VeryLongClassName.java",
+            1,
+            longCodeNoSemicolons,
+            "A test class",
+            Collections.emptyList(),
+            Collections.emptyList()
         );
 
         assertDoesNotThrow(() ->
-            generator.generateElementDocumentation(elementWithLongCode, tempDir).join());
+            generator.generateElementDocumentation(elementWithLongCode, tempDir)
+            .join());
     }
 
     @Test
     void testFormatCodeBlockLongCodeWithSemicolons() {
-        // Test formatCodeBlock with long code (>100 chars) with semicolons - should be formatted
+        // Test formatCodeBlock with long code (>100 chars) with semicolons
+        // - should be formatted
         when(llmService.generateDocumentation(any()))
             .thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
         when(llmService.generateUsageExamples(any()))
             .thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
         when(llmServiceFix.isThreadLocalConfigAvailable()).thenReturn(true);
 
-        String longCodeWithSemicolons = "public class TestClass{private String field1;private int field2;public void method1(){System.out.println(\"Hello\");};public String method2(){return \"World\";}}";
+        String longCodeWithSemicolons =
+            "public class TestClass{private String field1;private int field2;"
+            + "public void method1(){System.out.println(\"Hello\");};"
+            + " public String method2(){return \"World\";}}";
 
         CodeElement elementWithFormattableCode = new CodeElement(
-            CodeElementType.CLASS, "TestClass", "com.example.TestClass",
-            "/test/TestClass.java", 1, longCodeWithSemicolons, "A test class",
-            Collections.emptyList(), Collections.emptyList()
+            CodeElementType.CLASS,
+            "TestClass",
+            "com.example.TestClass",
+            "/test/TestClass.java",
+            1,
+            longCodeWithSemicolons,
+            "A test class",
+            Collections.emptyList(),
+            Collections.emptyList()
         );
 
         assertDoesNotThrow(() ->
-            generator.generateElementDocumentation(elementWithFormattableCode, tempDir).join());
+            generator.generateElementDocumentation(
+                elementWithFormattableCode, tempDir).join());
     }
 
     @Test
     void testFormatCodeBlockWithStringLiterals() {
-        // Test formatCodeBlock with string literals containing semicolons - should preserve strings
+        // Test formatCodeBlock with string literals containing semicolons
+        // - should preserve strings
         when(llmService.generateDocumentation(any()))
             .thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
         when(llmService.generateUsageExamples(any()))
             .thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
         when(llmServiceFix.isThreadLocalConfigAvailable()).thenReturn(true);
 
-        String codeWithStrings = "public void test(){String message=\"Hello; World; Test; with semicolons in string\";System.out.println(message);result.append(\"Another; string; with; semicolons\");}";
+        String codeWithStrings = "public void test(){String message=\"Hello; "
+            + "World; Test; with semicolons in string\";"
+            + "System.out.println(message);result.append(\"Another; string; "
+            + "with; semicolons\");}";
 
         CodeElement elementWithStrings = new CodeElement(
-            CodeElementType.CLASS, "TestClass", "com.example.TestClass",
-            "/test/TestClass.java", 1, codeWithStrings, "A test class",
-            Collections.emptyList(), Collections.emptyList()
+            CodeElementType.CLASS,
+            "TestClass",
+            "com.example.TestClass",
+            "/test/TestClass.java",
+            1,
+            codeWithStrings,
+            "A test class",
+            Collections.emptyList(),
+            Collections.emptyList()
         );
 
         assertDoesNotThrow(() ->
-            generator.generateElementDocumentation(elementWithStrings, tempDir).join());
+            generator.generateElementDocumentation(elementWithStrings, tempDir)
+            .join());
     }
 
     @Test
     void testFormatCodeBlockWithComments() {
-        // Test formatCodeBlock with comments containing semicolons - should preserve comments
+        // Test formatCodeBlock with comments containing semicolons
+        // - should preserve comments
         when(llmService.generateDocumentation(any()))
             .thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
         when(llmService.generateUsageExamples(any()))
             .thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
         when(llmServiceFix.isThreadLocalConfigAvailable()).thenReturn(true);
 
-        String codeWithComments = "public void test(){/*Comment with; semicolons; inside*/int x=1;System.out.println(x);//Another comment; with; semicolons}";
+        String codeWithComments =
+            "public void test(){/*Comment with; semicolons; inside*/int x=1;"
+            + "System.out.println(x);//Another comment; with; semicolons}";
 
         CodeElement elementWithComments = new CodeElement(
-            CodeElementType.CLASS, "TestClass", "com.example.TestClass",
-            "/test/TestClass.java", 1, codeWithComments, "A test class",
-            Collections.emptyList(), Collections.emptyList()
+            CodeElementType.CLASS,
+            "TestClass",
+            "com.example.TestClass",
+            "/test/TestClass.java",
+            1,
+            codeWithComments,
+            "A test class",
+            Collections.emptyList(),
+            Collections.emptyList()
         );
 
         assertDoesNotThrow(() ->
-            generator.generateElementDocumentation(elementWithComments, tempDir).join());
+            generator.generateElementDocumentation(
+                elementWithComments, tempDir).join());
     }
 
     // =========== Exception Handling Lambda Coverage Tests ===========
 
     @Test
     void testGenerateElementDocPairDocumentationException() {
-        // Test exception handling in generateElementDocPair for documentation generation
+        // Test exception handling in generateElementDocPair
+        // for documentation generation
         when(llmService.generateDocumentation(any()))
             .thenReturn(CompletableFuture.failedFuture(
                 new RuntimeException("Documentation generation failed")));
@@ -232,12 +310,14 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
         CodeElement element = createTestClassElement();
 
         // Should handle exception gracefully without throwing
-        assertDoesNotThrow(() -> generator.generateElementDocumentation(element, tempDir).join());
+        assertDoesNotThrow(() -> generator
+            .generateElementDocumentation(element, tempDir).join());
     }
 
     @Test
     void testGenerateElementDocPairUsageExamplesException() {
-        // Test exception handling in generateElementDocPair for usage examples generation
+        // Test exception handling in generateElementDocPair
+        // for usage examples generation
         when(llmService.generateDocumentation(any()))
             .thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
         when(llmService.generateUsageExamples(any()))
@@ -248,12 +328,14 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
         CodeElement element = createTestClassElement();
 
         // Should handle exception gracefully without throwing
-        assertDoesNotThrow(() -> generator.generateElementDocumentation(element, tempDir).join());
+        assertDoesNotThrow(() -> generator
+        .generateElementDocumentation(element, tempDir).join());
     }
 
     @Test
     void testGenerateElementDocPairBothExceptions() {
-        // Test exception handling when both documentation and usage examples fail
+        // Test exception handling when both documentation
+        // and usage examples fail
         when(llmService.generateDocumentation(any()))
             .thenReturn(CompletableFuture.failedFuture(
                 new RuntimeException("Documentation failed")));
@@ -265,7 +347,8 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
         CodeElement element = createTestClassElement();
 
         // Should handle exception gracefully without throwing
-        assertDoesNotThrow(() -> generator.generateElementDocumentation(element, tempDir).join());
+        assertDoesNotThrow(() -> generator.generateElementDocumentation(
+            element, tempDir).join());
     }
 
     @Test
@@ -273,14 +356,16 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
         // Test exception handling in generateGroupedDocumentation
         when(llmService.generateDocumentation(any()))
             .thenReturn(CompletableFuture.failedFuture(
-                new RuntimeException("Unexpected error during documentation generation")));
+                new RuntimeException(
+                    "Unexpected error during documentation generation")));
         when(llmService.generateUsageExamples(any()))
             .thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
         when(llmServiceFix.isThreadLocalConfigAvailable()).thenReturn(true);
 
         CodeElement element = createTestClassElement();
         ProjectAnalysis analysis = new ProjectAnalysis(
-            "/test/path", Collections.singletonList(element), System.currentTimeMillis());
+            "/test/path", Collections.singletonList(element),
+            System.currentTimeMillis());
 
         assertDoesNotThrow(() ->
             generator.generateGroupedDocumentation(analysis, tempDir).join());
@@ -290,7 +375,8 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
     void testGenerateClassDocumentationTimeoutException() {
         // Test timeout exception handling
         CompletableFuture<String> timeoutFuture = new CompletableFuture<>();
-        timeoutFuture.completeExceptionally(new TimeoutException("Operation timed out"));
+        timeoutFuture.completeExceptionally(
+            new TimeoutException("Operation timed out"));
 
         when(llmService.generateDocumentation(any())).thenReturn(timeoutFuture);
         when(llmService.generateUsageExamples(any()))
@@ -312,17 +398,21 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
             .thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
         when(llmService.generateUsageExamples(any()))
             .thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
-        when(llmServiceFix.isThreadLocalConfigAvailable()).thenReturn(true);
+        when(llmServiceFix.isThreadLocalConfigAvailable())
+            .thenReturn(true);
 
         CodeElement elementWithNullName = new CodeElement(
-            CodeElementType.METHOD, null, "com.example.TestClass.nullMethod",
-            "/test/TestClass.java", 5, "public void nullMethod() {}",
+            CodeElementType.METHOD, null,
+            "com.example.TestClass.nullMethod",
+            "/test/TestClass.java", 5,
+            "public void nullMethod() {}",
             "A method with null name",
             Collections.emptyList(), Collections.emptyList()
         );
 
         CodeElement classElement = createTestClassElement();
-        List<CodeElement> elements = Arrays.asList(classElement, elementWithNullName);
+        List<CodeElement> elements = Arrays.asList(classElement,
+            elementWithNullName);
         ProjectAnalysis analysis = new ProjectAnalysis(
             "/test/path", elements, System.currentTimeMillis());
 
@@ -347,7 +437,8 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
         );
 
         CodeElement classElement = createTestClassElement();
-        List<CodeElement> elements = Arrays.asList(classElement, elementWithEmptyName);
+        List<CodeElement> elements = Arrays.asList(classElement,
+            elementWithEmptyName);
         ProjectAnalysis analysis = new ProjectAnalysis(
             "/test/path", elements, System.currentTimeMillis());
 
@@ -367,13 +458,15 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
         CodeElement elementWithSpecialChars = new CodeElement(
             CodeElementType.METHOD, "method<T>[]()$test",
             "com.example.TestClass.methodWithSpecialChars",
-            "/test/TestClass.java", 5, "public void methodWithSpecialChars() {}",
+            "/test/TestClass.java", 5,
+            "public void methodWithSpecialChars() {}",
             "A method with special chars",
             Collections.emptyList(), Collections.emptyList()
         );
 
         CodeElement classElement = createTestClassElement();
-        List<CodeElement> elements = Arrays.asList(classElement, elementWithSpecialChars);
+        List<CodeElement> elements = Arrays.asList(classElement,
+            elementWithSpecialChars);
         ProjectAnalysis analysis = new ProjectAnalysis(
             "/test/path", elements, System.currentTimeMillis());
 
@@ -441,13 +534,16 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
 
         // Create standalone method without class element
         CodeElement standaloneMethod = new CodeElement(
-            CodeElementType.METHOD, "standaloneMethod", "standaloneMethod",
-            "/test/Standalone.java", 10, "public static void standaloneMethod() {}",
+            CodeElementType.METHOD, "standaloneMethod",
+            "standaloneMethod",
+            "/test/Standalone.java", 10,
+            "public static void standaloneMethod() {}",
             "A standalone method",
             Collections.emptyList(), Collections.emptyList()
         );
 
-        List<CodeElement> elements = Collections.singletonList(standaloneMethod);
+        List<CodeElement> elements = Collections.singletonList(
+            standaloneMethod);
         ProjectAnalysis analysis = new ProjectAnalysis(
             "/test/path", elements, System.currentTimeMillis());
 
@@ -465,19 +561,23 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
         when(llmServiceFix.isThreadLocalConfigAvailable()).thenReturn(true);
 
         CodeElement classInDefaultPackage = new CodeElement(
-            CodeElementType.CLASS, "TestClass", "TestClass", // No dots = default package
-            "/test/TestClass.java", 1, "public class TestClass {}",
+            CodeElementType.CLASS, "TestClass",
+            "TestClass", // No dots = default package
+            "/test/TestClass.java", 1,
+            "public class TestClass {}",
             "A test class in default package",
             Collections.emptyList(), Collections.emptyList()
         );
 
         assertDoesNotThrow(() ->
-            generator.generateElementDocumentation(classInDefaultPackage, tempDir).join());
+            generator.generateElementDocumentation(
+                classInDefaultPackage, tempDir).join());
     }
 
     @Test
     void testBuildClassDocumentContentLongSignature() {
-        // Test buildClassDocumentContent with long signature (>200 chars) to test collapsible section
+        // Test buildClassDocumentContent with long signature (>200 chars)
+        //to test collapsible section
         when(llmService.generateDocumentation(any()))
             .thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
         when(llmService.generateUsageExamples(any()))
@@ -492,6 +592,7 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
                 + "CompletableFuture<String> parameter6) throws IOException, "
                 + "IllegalArgumentException, RuntimeException, InterruptedException";
 
+
         CodeElement methodWithLongSig = new CodeElement(
             CodeElementType.METHOD, "veryLongMethodName",
             "com.example.TestClass.veryLongMethodName",
@@ -501,7 +602,8 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
         );
 
         CodeElement classElement = createTestClassElement();
-        List<CodeElement> elements = Arrays.asList(classElement, methodWithLongSig);
+        List<CodeElement> elements = Arrays.asList(classElement,
+            methodWithLongSig);
         ProjectAnalysis analysis = new ProjectAnalysis(
             "/test/path", elements, System.currentTimeMillis());
 
@@ -511,7 +613,8 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
 
     @Test
     void testBuildClassDocumentContentShortSignature() {
-        // Test buildClassDocumentContent with short signature (<200 chars) to test regular section
+        // Test buildClassDocumentContent with short signature (<200 chars)
+        // to test regular section
         when(llmService.generateDocumentation(any()))
             .thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
         when(llmService.generateUsageExamples(any()))
@@ -521,8 +624,10 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
         String shortSignature = "public void shortMethod()";
 
         CodeElement methodWithShortSig = new CodeElement(
-            CodeElementType.METHOD, "shortMethod", "com.example.TestClass.shortMethod",
-            "/test/TestClass.java", 10, shortSignature, "A method with a short signature",
+            CodeElementType.METHOD, "shortMethod",
+            "com.example.TestClass.shortMethod",
+            "/test/TestClass.java", 10, shortSignature,
+            "A method with a short signature",
             Collections.emptyList(), Collections.emptyList()
         );
 
@@ -551,7 +656,8 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
         when(llmServiceFix.isThreadLocalConfigAvailable()).thenReturn(true);
 
         CodeElement element = new CodeElement(
-            CodeElementType.CLASS, "TestClass", "com.example.TestClass", filePath, 1,
+            CodeElementType.CLASS, "TestClass",
+            "com.example.TestClass", filePath, 1,
             "class TestClass {}", "A test class",
             Collections.emptyList(), Collections.emptyList()
         );
@@ -564,7 +670,8 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
 
     @Test
     void testGroupElementsByClassWithStandaloneElements() {
-        // Test groupElementsByClass with elements that don't belong to any class
+        // Test groupElementsByClass with elements that
+        // don't belong to any class
         when(llmService.generateDocumentation(any()))
             .thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
         when(llmService.generateUsageExamples(any()))
@@ -574,19 +681,22 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
         // Create standalone elements (no dots in qualified name)
         CodeElement standaloneMethod = new CodeElement(
             CodeElementType.METHOD, "standaloneMethod", "standaloneMethod",
-            "/test/Standalone.java", 10, "public static void standaloneMethod() {}",
+            "/test/Standalone.java", 10,
+            "public static void standaloneMethod() {}",
             "A standalone method",
             Collections.emptyList(), Collections.emptyList()
         );
 
         CodeElement standaloneField = new CodeElement(
             CodeElementType.FIELD, "standaloneField", "standaloneField",
-            "/test/Standalone.java", 3, "public static String standaloneField;",
+            "/test/Standalone.java", 3,
+            "public static String standaloneField;",
             "A standalone field",
             Collections.emptyList(), Collections.emptyList()
         );
 
-        List<CodeElement> elements = Arrays.asList(standaloneMethod, standaloneField);
+        List<CodeElement> elements = Arrays.asList(standaloneMethod,
+            standaloneField);
         ProjectAnalysis analysis = new ProjectAnalysis(
             "/test/path", elements, System.currentTimeMillis());
 
@@ -602,9 +712,11 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
             .thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
         when(llmService.generateUsageExamples(any()))
             .thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
-        when(llmServiceFix.isThreadLocalConfigAvailable()).thenReturn(true);
+        when(llmServiceFix.isThreadLocalConfigAvailable())
+            .thenReturn(true);
 
-        // Create a file where the elements directory should be to cause IOException
+        // Create a file where the elements directory
+        // should be to cause IOException
         Path elementsPath = tempDir.resolve("elements");
         Files.createFile(elementsPath);
 
@@ -623,8 +735,10 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
     // Helper method
     private CodeElement createTestClassElement() {
         return new CodeElement(
-            CodeElementType.CLASS, "TestClass", "com.example.TestClass",
-            "/test/TestClass.java", 1, "public class TestClass {}", "A test class",
+            CodeElementType.CLASS, "TestClass",
+            "com.example.TestClass",
+            "/test/TestClass.java", 1,
+            "public class TestClass {}", "A test class",
             Collections.emptyList(), Collections.emptyList()
         );
     }

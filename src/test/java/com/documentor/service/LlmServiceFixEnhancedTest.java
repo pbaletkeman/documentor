@@ -13,15 +13,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
 /**
@@ -38,7 +32,8 @@ class LlmServiceFixEnhancedTest {
         llmServiceFix = new LlmServiceFixEnhanced();
 
         testConfig = new DocumentorConfig(
-            List.of(new LlmModelConfig("test-model", "ollama", "http://localhost:11434", "test-key", 1000, 30)),
+            List.of(new LlmModelConfig("test-model", "ollama",
+            "http://localhost:11434", "test-key", 1000, 30)),
             new OutputSettings("./test-output", "markdown", true, true, false),
             new AnalysisSettings(null, null, null, null)
         );
@@ -46,12 +41,14 @@ class LlmServiceFixEnhancedTest {
 
     @Test
     void testSetLlmServiceThreadLocalConfigWithValidConfig() {
-        try (MockedStatic<ThreadLocalContextHolder> mockedStatic = mockStatic(ThreadLocalContextHolder.class)) {
+        try (MockedStatic<ThreadLocalContextHolder> mockedStatic =
+            mockStatic(ThreadLocalContextHolder.class)) {
             // Act
             llmServiceFix.setLlmServiceThreadLocalConfig(testConfig);
 
             // Assert - verify ThreadLocal operations were called
-            mockedStatic.verify(() -> ThreadLocalContextHolder.setConfig(testConfig));
+            mockedStatic.verify(() -> ThreadLocalContextHolder
+                .setConfig(testConfig));
             mockedStatic.verify(() -> ThreadLocalContextHolder.getConfig());
         }
     }
@@ -59,14 +56,17 @@ class LlmServiceFixEnhancedTest {
     @Test
     void testSetLlmServiceThreadLocalConfigWithNullConfig() {
         // Act - should return early for null config
-        assertDoesNotThrow(() -> llmServiceFix.setLlmServiceThreadLocalConfig(null));
+        assertDoesNotThrow(() -> llmServiceFix
+            .setLlmServiceThreadLocalConfig(null));
     }
 
     @Test
     void testIsThreadLocalConfigAvailableWhenConfigExists() {
-        try (MockedStatic<ThreadLocalContextHolder> mockedStatic = mockStatic(ThreadLocalContextHolder.class)) {
+        try (MockedStatic<ThreadLocalContextHolder> mockedStatic =
+                mockStatic(ThreadLocalContextHolder.class)) {
             // Arrange
-            mockedStatic.when(ThreadLocalContextHolder::getConfig).thenReturn(testConfig);
+            mockedStatic.when(ThreadLocalContextHolder::getConfig)
+                .thenReturn(testConfig);
 
             // Act
             boolean result = llmServiceFix.isThreadLocalConfigAvailable();
@@ -79,9 +79,11 @@ class LlmServiceFixEnhancedTest {
 
     @Test
     void testIsThreadLocalConfigAvailableWhenConfigNull() {
-        try (MockedStatic<ThreadLocalContextHolder> mockedStatic = mockStatic(ThreadLocalContextHolder.class)) {
+        try (MockedStatic<ThreadLocalContextHolder> mockedStatic =
+            mockStatic(ThreadLocalContextHolder.class)) {
             // Arrange
-            mockedStatic.when(ThreadLocalContextHolder::getConfig).thenReturn(null);
+            mockedStatic.when(ThreadLocalContextHolder::getConfig)
+            .thenReturn(null);
 
             // Act
             boolean result = llmServiceFix.isThreadLocalConfigAvailable();
@@ -93,7 +95,8 @@ class LlmServiceFixEnhancedTest {
 
     @Test
     void testIsThreadLocalConfigAvailableWithException() {
-        try (MockedStatic<ThreadLocalContextHolder> mockedStatic = mockStatic(ThreadLocalContextHolder.class)) {
+        try (MockedStatic<ThreadLocalContextHolder> mockedStatic =
+            mockStatic(ThreadLocalContextHolder.class)) {
             // Arrange
             mockedStatic.when(ThreadLocalContextHolder::getConfig)
                     .thenThrow(new RuntimeException("Test exception"));
@@ -108,7 +111,8 @@ class LlmServiceFixEnhancedTest {
 
     @Test
     void testCleanupThreadLocalConfig() {
-        try (MockedStatic<ThreadLocalContextHolder> mockedStatic = mockStatic(ThreadLocalContextHolder.class)) {
+        try (MockedStatic<ThreadLocalContextHolder> mockedStatic =
+            mockStatic(ThreadLocalContextHolder.class)) {
             // Act
             llmServiceFix.cleanupThreadLocalConfig();
 
@@ -119,7 +123,8 @@ class LlmServiceFixEnhancedTest {
 
     @Test
     void testExecuteWithConfig() {
-        try (MockedStatic<ThreadLocalContextHolder> mockedStatic = mockStatic(ThreadLocalContextHolder.class)) {
+        try (MockedStatic<ThreadLocalContextHolder> mockedStatic =
+            mockStatic(ThreadLocalContextHolder.class)) {
             // Arrange
             Runnable testRunnable = mock(Runnable.class);
 
@@ -127,7 +132,8 @@ class LlmServiceFixEnhancedTest {
             llmServiceFix.executeWithConfig(testConfig, testRunnable);
 
             // Assert
-            mockedStatic.verify(() -> ThreadLocalContextHolder.runWithConfig(testConfig, testRunnable));
+            mockedStatic.verify(() -> ThreadLocalContextHolder.runWithConfig(
+                testConfig, testRunnable));
         }
     }
 
@@ -140,12 +146,14 @@ class LlmServiceFixEnhancedTest {
             new AnalysisSettings(null, null, null, null)
         );
 
-        try (MockedStatic<ThreadLocalContextHolder> mockedStatic = mockStatic(ThreadLocalContextHolder.class)) {
+        try (MockedStatic<ThreadLocalContextHolder> mockedStatic = mockStatic(
+                ThreadLocalContextHolder.class)) {
             // Act
             llmServiceFix.setLlmServiceThreadLocalConfig(emptyModelsConfig);
 
             // Assert
-            mockedStatic.verify(() -> ThreadLocalContextHolder.setConfig(emptyModelsConfig));
+            mockedStatic.verify(() -> ThreadLocalContextHolder
+                .setConfig(emptyModelsConfig));
         }
     }
 
@@ -154,37 +162,44 @@ class LlmServiceFixEnhancedTest {
         // Arrange
         DocumentorConfig multiModelConfig = new DocumentorConfig(
             List.of(
-                new LlmModelConfig("model1", "ollama", "http://localhost:11434", "key1", 1000, 30),
-                new LlmModelConfig("model2", "openai", "https://api.openai.com", "key2", 2000, 60)
+                new LlmModelConfig("model1", "ollama",
+                    "http://localhost:11434", "key1", 1000, 30),
+                new LlmModelConfig("model2", "openai",
+                    "https://api.openai.com", "key2", 2000, 60)
             ),
             new OutputSettings("./test-output", "markdown", true, true, false),
             new AnalysisSettings(null, null, null, null)
         );
 
-        try (MockedStatic<ThreadLocalContextHolder> mockedStatic = mockStatic(ThreadLocalContextHolder.class)) {
+        try (MockedStatic<ThreadLocalContextHolder> mockedStatic =
+            mockStatic(ThreadLocalContextHolder.class)) {
             // Act
             llmServiceFix.setLlmServiceThreadLocalConfig(multiModelConfig);
 
             // Assert
-            mockedStatic.verify(() -> ThreadLocalContextHolder.setConfig(multiModelConfig));
+            mockedStatic.verify(() -> ThreadLocalContextHolder
+            .setConfig(multiModelConfig));
         }
     }
 
     @Test
     void testExceptionHandlingInSetConfig() {
-        try (MockedStatic<ThreadLocalContextHolder> mockedStatic = mockStatic(ThreadLocalContextHolder.class)) {
+        try (MockedStatic<ThreadLocalContextHolder> mockedStatic =
+            mockStatic(ThreadLocalContextHolder.class)) {
             // Arrange
             mockedStatic.when(() -> ThreadLocalContextHolder.setConfig(any()))
                     .thenThrow(new RuntimeException("Set config error"));
 
             // Act & Assert - Should not throw exception, handles gracefully
-            assertDoesNotThrow(() -> llmServiceFix.setLlmServiceThreadLocalConfig(testConfig));
+            assertDoesNotThrow(() -> llmServiceFix
+                .setLlmServiceThreadLocalConfig(testConfig));
         }
     }
 
     @Test
     void testExceptionHandlingInCleanup() {
-        try (MockedStatic<ThreadLocalContextHolder> mockedStatic = mockStatic(ThreadLocalContextHolder.class)) {
+        try (MockedStatic<ThreadLocalContextHolder> mockedStatic =
+            mockStatic(ThreadLocalContextHolder.class)) {
             // Arrange
             mockedStatic.when(ThreadLocalContextHolder::clearConfig)
                     .thenThrow(new RuntimeException("Cleanup error"));

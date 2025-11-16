@@ -21,12 +21,17 @@ class LlmResponseHandlerTest {
 
     @BeforeEach
     void setUp() {
-        LlmModelTypeDetector modelTypeDetector = new LlmModelTypeDetector();
-        LlmResponseParser responseParser = new LlmResponseParser(modelTypeDetector);
-        responseHandler = new LlmResponseHandler(responseParser, modelTypeDetector);
+        LlmModelTypeDetector modelTypeDetector =
+            new LlmModelTypeDetector();
+        LlmResponseParser responseParser =
+            new LlmResponseParser(modelTypeDetector);
+        responseHandler =
+            new LlmResponseHandler(responseParser, modelTypeDetector);
 
         testModel = new LlmModelConfig(
-            "test-model", "openai", "http://test.api", "api-key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
+            "test-model", "openai",
+            "http://test.api", "api-key",
+            DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
         );
     }
 
@@ -38,10 +43,12 @@ class LlmResponseHandlerTest {
 
     @Test
     void testExtractResponseContentBasic() {
-        // Test basic response content extraction - should handle any format gracefully
+        // Test basic response content extraction
+        // - should handle any format gracefully
         String jsonResponse = "{\"response\": \"Test response\"}";
 
-        String result = responseHandler.extractResponseContent(jsonResponse, testModel);
+        String result =
+            responseHandler.extractResponseContent(jsonResponse, testModel);
 
         assertNotNull(result);
         // Should return either parsed content or fallback to original response
@@ -53,10 +60,12 @@ class LlmResponseHandlerTest {
         // Test that invalid JSON is handled gracefully
         String invalidJson = "Not valid JSON";
 
-        String result = responseHandler.extractResponseContent(invalidJson, testModel);
+        String result =
+            responseHandler.extractResponseContent(invalidJson, testModel);
 
         assertNotNull(result);
-        assertEquals("Not valid JSON", result); // Should fallback to original
+        // Should fallback to original
+        assertEquals("Not valid JSON", result);
     }
 
     @Test
@@ -71,11 +80,15 @@ class LlmResponseHandlerTest {
     @Test
     void testResponseHandlerWithDifferentModels() {
         LlmModelConfig ollamaModel = new LlmModelConfig(
-            "llama2", "ollama", "http://localhost:11434/api/generate", "", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
+            "llama2", "ollama",
+            "http://localhost:11434/api/generate", "",
+            DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
         );
 
         LlmModelConfig openaiModel = new LlmModelConfig(
-            "gpt-4", "openai", "https://api.openai.com/v1/completions", "sk-test", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
+            "gpt-4", "openai",
+            "https://api.openai.com/v1/completions", "sk-test",
+            DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
         );
 
         // Test that component can handle different model configurations
