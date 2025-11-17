@@ -4,7 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 
 import static org.mockito.Mockito.mock;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 /**
  * Enhanced tests for BeanUtils class to improve branch coverage.
