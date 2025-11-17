@@ -40,7 +40,8 @@ public class ExternalConfigLoaderEnhancedTest {
         // Create a sample config file
         String configJson = "{"
                 + "\"llmModels\": ["
-                + "  {\"name\": \"TestModel\", \"provider\": \"test\", \"apiKey\": \"key\", \"enabled\": true}"
+                + "  {\"name\": \"TestModel\", \"provider\": \"test\", "
+                + " \"apiKey\": \"key\", \"enabled\": true}"
                 + "],"
                 + "\"analysisSettings\": {"
                 + "  \"defaultModel\": \"TestModel\","
@@ -63,8 +64,10 @@ public class ExternalConfigLoaderEnhancedTest {
         boolean result = loader.loadExternalConfig(args);
 
         // Verify result
-        assertTrue(result, "Config loading should return true when successful");
-        assertNotNull(loader.getLoadedConfig(), "Config should be loaded and accessible");
+        assertTrue(result, "Config loading should return true"
+        + " when successful");
+        assertNotNull(loader.getLoadedConfig(),
+            "Config should be loaded and accessible");
     }
 
     @Test
@@ -81,7 +84,8 @@ public class ExternalConfigLoaderEnhancedTest {
         boolean result = loader.loadExternalConfig(args);
 
         // Verify result
-        assertFalse(result, "Config loading should return false when no config arg provided");
+        assertFalse(result, "Config loading should return"
+        + " false when no config arg provided");
         assertNull(loader.getLoadedConfig(), "Config should not be loaded");
     }
 
@@ -95,24 +99,28 @@ public class ExternalConfigLoaderEnhancedTest {
         loader.setApplicationContext(mockContext);
 
         // Test with nonexistent config file
-        String[] args = new String[]{"--config", "/path/to/nonexistent/file.json"};
+        String[] args = new String[]{"--config",
+        "/path/to/nonexistent/file.json"};
         boolean result = loader.loadExternalConfig(args);
 
         // Verify result
-        assertFalse(result, "Config loading should return false when file doesn't exist");
+        assertFalse(result,
+            "Config loading should return false when file doesn't exist");
         assertNull(loader.getLoadedConfig(), "Config should not be loaded");
     }
 
     @Test
     @Disabled("Temporarily disabled for build fix")
-    public void testBeanFactoryPostProcessorWithLoadedConfig() throws IOException {
+    public void testBeanFactoryPostProcessorWithLoadedConfig()
+        throws IOException {
         // Create a mock ApplicationContext for the loader
         ApplicationContext mockContext = mock(ApplicationContext.class);
 
         // Create a sample config file and load it
         String configJson = "{"
                 + "\"llmModels\": ["
-                + "  {\"name\": \"TestModel\", \"provider\": \"test\", \"apiKey\": \"key\", \"enabled\": true}"
+                + "  {\"name\": \"TestModel\", \"provider\": \"test\", "
+                + "\"apiKey\": \"key\", \"enabled\": true}"
                 + "],"
                 + "\"analysisSettings\": {"
                 + "  \"defaultModel\": \"TestModel\","
@@ -133,20 +141,24 @@ public class ExternalConfigLoaderEnhancedTest {
         loader.loadExternalConfig(args);
 
         // Create mock bean factory
-        ConfigurableListableBeanFactory mockBeanFactory = mock(ConfigurableListableBeanFactory.class, withSettings()
+        ConfigurableListableBeanFactory mockBeanFactory = mock(
+            ConfigurableListableBeanFactory.class, withSettings()
                 .extraInterfaces(BeanDefinitionRegistry.class));
-        BeanDefinitionRegistry mockRegistry = (BeanDefinitionRegistry) mockBeanFactory;
+        BeanDefinitionRegistry mockRegistry = (BeanDefinitionRegistry)
+            mockBeanFactory;
 
         // Get the bean factory post processor
-        BeanFactoryPostProcessor postProcessor = loader.configurationPostProcessor();
+        BeanFactoryPostProcessor postProcessor =
+            loader.configurationPostProcessor();
 
         // Run the post processor
         postProcessor.postProcessBeanFactory(mockBeanFactory);
 
         // Verify that the bean definition was registered
         // We can't directly verify setPrimary(true) is called through mocking
-        // since BeanDefinitionBuilder methods return itself and this is complex to set up
-        // So we just verify the registration happens
-        verify(mockRegistry).registerBeanDefinition(eq("documentorConfig"), any());
+        // since BeanDefinitionBuilder methods return itself and this is
+        // complex to set up. So we just verify the registration happens
+        verify(mockRegistry).registerBeanDefinition(eq(
+            "documentorConfig"), any());
     }
 }

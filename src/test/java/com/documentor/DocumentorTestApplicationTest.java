@@ -3,7 +3,6 @@ package com.documentor;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
@@ -33,9 +32,11 @@ class DocumentorTestApplicationTest {
     @Test
     void testMainMethodSuccess() {
         // Test successful main method execution
-        try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
+        try (MockedStatic<SpringApplication> mockedSpringApp =
+            mockStatic(SpringApplication.class)) {
             // When
-            DocumentorTestApplication.main(new String[]{"--spring.profiles.active=test"});
+            DocumentorTestApplication.main(new String[]
+            {"--spring.profiles.active=test"});
 
             // Then
             mockedSpringApp.verify(() ->
@@ -50,7 +51,8 @@ class DocumentorTestApplicationTest {
     @Test
     void testMainMethodWithEmptyArgs() {
         // Test main method with empty arguments
-        try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
+        try (MockedStatic<SpringApplication> mockedSpringApp =
+            mockStatic(SpringApplication.class)) {
             // When
             DocumentorTestApplication.main(new String[]{});
 
@@ -67,7 +69,8 @@ class DocumentorTestApplicationTest {
     @Test
     void testMainMethodWithNullArgs() {
         // Test main method with null arguments
-        try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
+        try (MockedStatic<SpringApplication> mockedSpringApp =
+            mockStatic(SpringApplication.class)) {
             // When
             DocumentorTestApplication.main(null);
 
@@ -84,10 +87,12 @@ class DocumentorTestApplicationTest {
     @Test
     void testApplicationClassAnnotations() {
         // Verify the application class has all required annotations
-        Class<DocumentorTestApplication> clazz = DocumentorTestApplication.class;
+        Class<DocumentorTestApplication> clazz =
+            DocumentorTestApplication.class;
 
         assertTrue(clazz.isAnnotationPresent(SpringBootApplication.class));
-        assertTrue(clazz.isAnnotationPresent(ConfigurationPropertiesScan.class));
+        assertTrue(clazz.isAnnotationPresent(
+            ConfigurationPropertiesScan.class));
         assertTrue(clazz.isAnnotationPresent(EnableAsync.class));
         assertTrue(clazz.isAnnotationPresent(Import.class));
         assertTrue(clazz.isAnnotationPresent(ComponentScan.class));
@@ -98,39 +103,47 @@ class DocumentorTestApplicationTest {
         // Verify the application class exists and is properly defined
         assertNotNull(DocumentorTestApplication.class);
         assertFalse(DocumentorTestApplication.class.isInterface());
-        assertFalse(java.lang.reflect.Modifier.isAbstract(DocumentorTestApplication.class.getModifiers()));
+        assertFalse(java.lang.reflect.Modifier.isAbstract(
+                DocumentorTestApplication.class.getModifiers()));
     }
 
     @Test
     void testMainMethodExists() throws NoSuchMethodException {
         // Verify main method exists with correct signature
-        java.lang.reflect.Method mainMethod = DocumentorTestApplication.class.getDeclaredMethod("main", String[].class);
+        java.lang.reflect.Method mainMethod = DocumentorTestApplication
+            .class.getDeclaredMethod("main", String[].class);
 
         assertNotNull(mainMethod);
-        assertTrue(java.lang.reflect.Modifier.isStatic(mainMethod.getModifiers()));
-        assertTrue(java.lang.reflect.Modifier.isPublic(mainMethod.getModifiers()));
+        assertTrue(java.lang.reflect.Modifier
+            .isStatic(mainMethod.getModifiers()));
+        assertTrue(java.lang.reflect.Modifier
+          .isPublic(mainMethod.getModifiers()));
         assertEquals(void.class, mainMethod.getReturnType());
     }
 
     @Test
     void testApplicationClassPackage() {
         // Verify the application class is in the correct package
-        assertEquals("com.documentor", DocumentorTestApplication.class.getPackageName());
+        assertEquals("com.documentor",
+            DocumentorTestApplication.class.getPackageName());
     }
 
     @Test
     void testComponentScanExclusions() {
         // Verify the component scan exclusions are properly configured
-        ComponentScan componentScan = DocumentorTestApplication.class.getAnnotation(ComponentScan.class);
+        ComponentScan componentScan = DocumentorTestApplication.class
+            .getAnnotation(ComponentScan.class);
         assertNotNull(componentScan);
-        assertEquals("com.documentor", componentScan.basePackages()[0]);
+        assertEquals("com.documentor",
+            componentScan.basePackages()[0]);
         assertTrue(componentScan.excludeFilters().length > 0);
     }
 
     @Test
     void testImportConfiguration() {
         // Verify the Import annotation is properly configured
-        Import importAnnotation = DocumentorTestApplication.class.getAnnotation(Import.class);
+        Import importAnnotation = DocumentorTestApplication.class
+        .getAnnotation(Import.class);
         assertNotNull(importAnnotation);
         assertTrue(importAnnotation.value().length > 0);
     }
@@ -138,7 +151,8 @@ class DocumentorTestApplicationTest {
     @Test
     void testMainMethodWithVariousArguments() {
         // Test main method with various argument combinations
-        try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
+        try (MockedStatic<SpringApplication> mockedSpringApp =
+            mockStatic(SpringApplication.class)) {
             String[] testArgs = {
                 "--spring.profiles.active=test",
                 "--debug",
@@ -162,8 +176,10 @@ class DocumentorTestApplicationTest {
     @Test
     void testExceptionHandlingBehavior() {
         // Test that exception handling is present in the code structure
-        // This verifies the try-catch block exists without actually triggering it
-        try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
+        // This verifies the try-catch block exists without actually
+        // triggering it
+        try (MockedStatic<SpringApplication> mockedSpringApp =
+            mockStatic(SpringApplication.class)) {
             // Setup successful execution
             mockedSpringApp.when(() ->
                 SpringApplication.run(
@@ -188,28 +204,34 @@ class DocumentorTestApplicationTest {
     @Test
     void testSpringBootApplicationAnnotation() {
         // Verify SpringBootApplication annotation configuration
-        SpringBootApplication annotation = DocumentorTestApplication.class.getAnnotation(SpringBootApplication.class);
+        SpringBootApplication annotation =
+            DocumentorTestApplication.class.getAnnotation(
+                SpringBootApplication.class);
         assertNotNull(annotation);
     }
 
     @Test
     void testConfigurationPropertiesScanAnnotation() {
         // Verify ConfigurationPropertiesScan annotation
-        ConfigurationPropertiesScan annotation = DocumentorTestApplication.class.getAnnotation(ConfigurationPropertiesScan.class);
+        ConfigurationPropertiesScan annotation =
+        DocumentorTestApplication.class.getAnnotation(
+            ConfigurationPropertiesScan.class);
         assertNotNull(annotation);
     }
 
     @Test
     void testEnableAsyncAnnotation() {
         // Verify EnableAsync annotation
-        EnableAsync annotation = DocumentorTestApplication.class.getAnnotation(EnableAsync.class);
+        EnableAsync annotation = DocumentorTestApplication.class
+            .getAnnotation(EnableAsync.class);
         assertNotNull(annotation);
     }
 
     @Test
     void testMainMethodWithComplexArguments() {
         // Test main method with complex argument patterns
-        try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
+        try (MockedStatic<SpringApplication> mockedSpringApp =
+            mockStatic(SpringApplication.class)) {
             String[] complexArgs = {
                 "--spring.profiles.active=test,enhanced",
                 "--logging.level.com.documentor=DEBUG",
@@ -233,7 +255,8 @@ class DocumentorTestApplicationTest {
     @Test
     void testMainMethodWithConfigurationArguments() {
         // Test main method with configuration-specific arguments
-        try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
+        try (MockedStatic<SpringApplication> mockedSpringApp =
+            mockStatic(SpringApplication.class)) {
             String[] configArgs = {
                 "--spring.profiles.active=test",
                 "--documentor.llm.provider=test-provider",
@@ -257,7 +280,8 @@ class DocumentorTestApplicationTest {
     @Test
     void testMainMethodWithSingleArgument() {
         // Test main method with single argument
-        try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
+        try (MockedStatic<SpringApplication> mockedSpringApp =
+            mockStatic(SpringApplication.class)) {
             String[] singleArg = {
                 "--help",
             };
@@ -280,13 +304,15 @@ class DocumentorTestApplicationTest {
         // Test that the logger is properly initialized
         // This covers the static logger field
         assertNotNull(DocumentorTestApplication.class);
-        // The logger field is private static final, so it's initialized when class loads
+        // The logger field is private static final, so it's
+        // initialized when class loads
     }
 
     @Test
     void testMainMethodWithSystemProperties() {
         // Test main method with system property arguments
-        try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
+        try (MockedStatic<SpringApplication> mockedSpringApp =
+            mockStatic(SpringApplication.class)) {
             String[] systemArgs = {
                 "-Dspring.profiles.active=test",
                 "--spring.main.banner-mode=off",
@@ -312,13 +338,15 @@ class DocumentorTestApplicationTest {
         Class<?> clazz = DocumentorTestApplication.class;
         assertNotNull(clazz);
         assertNotNull(clazz.getName());
-        assertEquals("com.documentor.DocumentorTestApplication", clazz.getName());
+        assertEquals("com.documentor.DocumentorTestApplication",
+            clazz.getName());
     }
 
     @Test
     void testMainMethodWithExtensiveArguments() {
         // Test main method with extensive argument combinations
-        try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
+        try (MockedStatic<SpringApplication> mockedSpringApp =
+            mockStatic(SpringApplication.class)) {
             String[] extensiveArgs = {
                 "--spring.profiles.active=test,integration",
                 "--logging.level.com.documentor=TRACE",
@@ -344,7 +372,8 @@ class DocumentorTestApplicationTest {
     @Test
     void testMainMethodWithDocumentorSpecificArgs() {
         // Test main method with documentor-specific arguments
-        try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
+        try (MockedStatic<SpringApplication> mockedSpringApp =
+            mockStatic(SpringApplication.class)) {
             String[] documentorArgs = {
                 "--documentor.analysis.enabled=true",
                 "--documentor.llm.model=gpt-4",
@@ -368,11 +397,13 @@ class DocumentorTestApplicationTest {
     @Test
     void testMainMethodWithProfiling() {
         // Test main method with profiling arguments
-        try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
+        try (MockedStatic<SpringApplication> mockedSpringApp =
+            mockStatic(SpringApplication.class)) {
             String[] profilingArgs = {
                 "--spring.profiles.active=test",
                 "-XX:+PrintGC",
-                "--management.endpoints.web.exposure.include=health,info,metrics",
+                "--management.endpoints.web.exposure.include=health,"
+                + "info,metrics",
             };
 
             // When
@@ -391,7 +422,8 @@ class DocumentorTestApplicationTest {
     @Test
     void testMainMethodReturnType() throws NoSuchMethodException {
         // Additional verification of main method properties
-        java.lang.reflect.Method mainMethod = DocumentorTestApplication.class.getDeclaredMethod("main", String[].class);
+        java.lang.reflect.Method mainMethod = DocumentorTestApplication
+            .class.getDeclaredMethod("main", String[].class);
 
         // Verify it's exactly void, not Void
         assertEquals(void.class, mainMethod.getReturnType());
@@ -403,23 +435,28 @@ class DocumentorTestApplicationTest {
     @Test
     void testClassModifiers() {
         // Test class accessibility and modifiers
-        Class<DocumentorTestApplication> clazz = DocumentorTestApplication.class;
+        Class<DocumentorTestApplication> clazz =
+            DocumentorTestApplication.class;
 
         assertTrue(java.lang.reflect.Modifier.isPublic(clazz.getModifiers()));
-        assertTrue(java.lang.reflect.Modifier.isFinal(clazz.getModifiers())); // Class is final
+        // Class is final
+        assertTrue(java.lang.reflect.Modifier.isFinal(clazz.getModifiers()));
         assertFalse(java.lang.reflect.Modifier.isStatic(clazz.getModifiers()));
     }
 
     @Test
     void testConstructorExists() throws NoSuchMethodException {
-        // Test that private constructor exists and throws exception when called
+        // Test that private constructor exists and throws exception
+        // when called
         java.lang.reflect.Constructor<DocumentorTestApplication> constructor =
             DocumentorTestApplication.class.getDeclaredConstructor();
 
         assertNotNull(constructor);
-        assertTrue(java.lang.reflect.Modifier.isPrivate(constructor.getModifiers())); // Constructor is private
+        assertTrue(java.lang.reflect.Modifier
+            .isPrivate(constructor.getModifiers())); // Constructor is private
 
-        // Test that calling the constructor throws UnsupportedOperationException
+        // Test that calling the constructor throws
+        // UnsupportedOperationException
         constructor.setAccessible(true);
         java.lang.reflect.InvocationTargetException exception = assertThrows(
             java.lang.reflect.InvocationTargetException.class,
@@ -428,7 +465,8 @@ class DocumentorTestApplicationTest {
             }
         );
 
-        // Verify the cause is UnsupportedOperationException with correct message
+        // Verify the cause is UnsupportedOperationException
+        // with correct message
         Throwable cause = exception.getCause();
         assertInstanceOf(UnsupportedOperationException.class, cause);
         assertEquals(
@@ -440,7 +478,8 @@ class DocumentorTestApplicationTest {
     @Test
     void testSuccessfulApplicationExecution() {
         // Test that successful execution doesn't throw exceptions
-        try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
+        try (MockedStatic<SpringApplication> mockedSpringApp =
+            mockStatic(SpringApplication.class)) {
             // Mock successful return
             mockedSpringApp.when(() ->
                 SpringApplication.run(
@@ -448,7 +487,8 @@ class DocumentorTestApplicationTest {
                     any(String[].class)
                 )
             ).thenReturn(
-                mock(org.springframework.context.ConfigurableApplicationContext.class)
+                mock(org.springframework.context
+                .ConfigurableApplicationContext.class)
             );
 
             // This should not throw any exceptions

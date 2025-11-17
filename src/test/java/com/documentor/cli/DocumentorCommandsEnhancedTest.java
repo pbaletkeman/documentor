@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
 
 /**
  * Tests for DocumentorCommands class
@@ -49,16 +48,17 @@ class DocumentorCommandsEnhancedTest {
         boolean generateMermaid = true;
         String mermaidOutput = "/test/diagrams";
 
-        when(projectAnalysisHandler.handleAnalyzeProjectExtended(projectPath, configPath,
-            generateMermaid, mermaidOutput, false, "", true))
+        when(projectAnalysisHandler.handleAnalyzeProjectExtended(projectPath,
+            configPath, generateMermaid, mermaidOutput, false, "", true))
             .thenReturn("Analysis complete");        // When
         String result = commands.analyzeProject(projectPath, configPath, true,
                 generateMermaid, mermaidOutput, false, "");
 
         // Then
         assertEquals("Analysis complete", result);
-        verify(projectAnalysisHandler).handleAnalyzeProjectExtended(projectPath, configPath,
-            generateMermaid, mermaidOutput, false, "", true);
+        verify(projectAnalysisHandler).handleAnalyzeProjectExtended(
+            projectPath, configPath, generateMermaid, mermaidOutput,
+            false, "", true);
     }
 
     @Test
@@ -130,9 +130,11 @@ class DocumentorCommandsEnhancedTest {
     void shouldHandleShowStatus() {
         // Given
         // First set the current project and config path
-        commands.analyzeProject("/test/project", "custom-config.json", true, false, "", false, "");
+        commands.analyzeProject("/test/project", "custom-config.json",
+            true, false, "", false, "");
 
-        when(statusHandler.handleShowStatus("/test/project", "custom-config.json"))
+        when(statusHandler.handleShowStatus(
+            "/test/project", "custom-config.json"))
             .thenReturn("Status displayed");
 
         // When
@@ -140,7 +142,8 @@ class DocumentorCommandsEnhancedTest {
 
         // Then
         assertEquals("Status displayed", result);
-        verify(statusHandler).handleShowStatus("/test/project", "custom-config.json");
+        verify(statusHandler).handleShowStatus("/test/project",
+            "custom-config.json");
     }
 
     @Test
@@ -157,16 +160,19 @@ class DocumentorCommandsEnhancedTest {
         boolean useFix = true;
         String outputDir = "/test/output";
 
-        when(enhancedAnalysisHandler.analyzeProjectWithFix(any(ProjectAnalysisRequest.class)))
+        when(enhancedAnalysisHandler.analyzeProjectWithFix(any(
+                ProjectAnalysisRequest.class)))
             .thenReturn("Analysis with fix complete");
 
         // When
-        String result = commands.analyzeWithFix(projectPath, configPath, includePrivateMembers,
-                generateMermaid, mermaidOutput, generatePlantUML, plantUMLOutput);
+        String result = commands.analyzeWithFix(projectPath, configPath,
+            includePrivateMembers, generateMermaid, mermaidOutput,
+            generatePlantUML, plantUMLOutput);
 
         // Then
         assertEquals("Analysis with fix complete", result);
-        verify(enhancedAnalysisHandler).analyzeProjectWithFix(any(ProjectAnalysisRequest.class));
+        verify(enhancedAnalysisHandler).analyzeProjectWithFix(any(
+            ProjectAnalysisRequest.class));
     }
 
     @Test
@@ -177,27 +183,32 @@ class DocumentorCommandsEnhancedTest {
         boolean includePrivateMembers = true;
         String plantUMLOutput = "/test/plantuml";
 
-        when(projectAnalysisHandler.handleAnalyzeProjectExtended(projectPath, "config.json",
+        when(projectAnalysisHandler.handleAnalyzeProjectExtended(
+            projectPath, "config.json",
                 false, "", true, plantUMLOutput, includePrivateMembers))
             .thenReturn("PlantUML diagrams generated");
 
         // When
-        String result = commands.generatePlantUMLDiagrams(projectPath, includePrivateMembers, plantUMLOutput);
+        String result = commands.generatePlantUMLDiagrams(projectPath,
+            includePrivateMembers, plantUMLOutput);
 
         // Then
         assertEquals("PlantUML diagrams generated", result);
-        verify(projectAnalysisHandler).handleAnalyzeProjectExtended(projectPath, "config.json",
+        verify(projectAnalysisHandler).handleAnalyzeProjectExtended(
+            projectPath, "config.json",
                 false, "", true, plantUMLOutput, includePrivateMembers);
     }
 
     @Test
-    @DisplayName("Should handle analyze with fix command with default parameters")
+    @DisplayName("Should handle analyze with fix command "
+        + " with default parameters")
     void shouldHandleAnalyzeWithFixDefaultParams() {
         // Given
         String projectPath = "/test/project";
         String configPath = "config.json";
 
-        when(enhancedAnalysisHandler.analyzeProjectWithFix(any(ProjectAnalysisRequest.class)))
+        when(enhancedAnalysisHandler.analyzeProjectWithFix(any(
+                ProjectAnalysisRequest.class)))
             .thenReturn("Analysis with fix complete (defaults)");
 
         // When
@@ -206,6 +217,7 @@ class DocumentorCommandsEnhancedTest {
 
         // Then
         assertEquals("Analysis with fix complete (defaults)", result);
-        verify(enhancedAnalysisHandler).analyzeProjectWithFix(any(ProjectAnalysisRequest.class));
+        verify(enhancedAnalysisHandler).analyzeProjectWithFix(any(
+            ProjectAnalysisRequest.class));
     }
 }

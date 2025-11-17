@@ -9,26 +9,31 @@ import java.util.concurrent.RejectedExecutionException;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Targeted tests to force specific edge cases and uncovered lines in config classes.
+ * Targeted tests to force specific edge cases and uncovered lines in
+ * config classes.
  */
 class ConfigPackageEdgeCaseTest {
 
     /**
-     * Test to force fallback executor failure in ThreadLocalPropagatingExecutorEnhanced
+     * Test to force fallback executor failure in
+     * // ThreadLocalPropagatingExecutorEnhanced
      * to cover lines 116-120 (fallback exception handling)
      */
     @Test
     void testFallbackExecutorFailure() {
         try {
-            // Create an executor that will cause both primary and fallback to fail
-            ThreadLocalPropagatingExecutorEnhanced executor = new ThreadLocalPropagatingExecutorEnhanced(
+            // Create an executor that will cause both primary
+            // and fallback to fail
+            ThreadLocalPropagatingExecutorEnhanced executor =
+                new ThreadLocalPropagatingExecutorEnhanced(
                 createFailingExecutor(), "test-failing");
 
             // Store original fallback executor
             Executor originalFallback;
             try {
                 originalFallback = (Executor) ReflectionTestUtils.getField(
-                    ThreadLocalPropagatingExecutorEnhanced.class, "FALLBACK_EXECUTOR");
+                    ThreadLocalPropagatingExecutorEnhanced.class,
+                    "FALLBACK_EXECUTOR");
             } catch (Exception e) {
                 // If we can't get the field, skip this test
                 return;
@@ -36,15 +41,18 @@ class ConfigPackageEdgeCaseTest {
 
             try {
                 // Replace the fallback executor with one that also fails
-                ReflectionTestUtils.setField(ThreadLocalPropagatingExecutorEnhanced.class,
+                ReflectionTestUtils.setField(
+                    ThreadLocalPropagatingExecutorEnhanced.class,
                     "FALLBACK_EXECUTOR", createFailingExecutor());
 
-                // Create a runnable that should trigger the fallback failure path
+                // Create a runnable that should trigger
+                // the fallback failure path
                 Runnable testTask = () -> {
                     // Simple task
                 };
 
-                // This should trigger both executor failure and fallback failure,
+                // This should trigger both executor failure
+                // and fallback failure,
                 // covering lines 116-120 (fallback exception handling)
                 assertDoesNotThrow(() -> {
                     executor.execute(testTask);
@@ -52,7 +60,8 @@ class ConfigPackageEdgeCaseTest {
 
             } finally {
                 // Restore the original fallback executor
-                ReflectionTestUtils.setField(ThreadLocalPropagatingExecutorEnhanced.class,
+                ReflectionTestUtils.setField(
+                    ThreadLocalPropagatingExecutorEnhanced.class,
                     "FALLBACK_EXECUTOR", originalFallback);
             }
         } catch (Exception e) {
@@ -64,19 +73,23 @@ class ConfigPackageEdgeCaseTest {
     @Test
     void testCreateExecutorEdgeCases() {
         // Test with very small thread count
-        Executor executor1 = ThreadLocalPropagatingExecutorEnhanced.createExecutor(1, "test");
+        Executor executor1 = ThreadLocalPropagatingExecutorEnhanced
+            .createExecutor(1, "test");
         assertNotNull(executor1);
 
         // Test with zero threads (should still work)
-        Executor executor2 = ThreadLocalPropagatingExecutorEnhanced.createExecutor(0, "test-zero");
+        Executor executor2 = ThreadLocalPropagatingExecutorEnhanced
+            .createExecutor(0, "test-zero");
         assertNotNull(executor2);
 
         // Test with null name prefix
-        Executor executor3 = ThreadLocalPropagatingExecutorEnhanced.createExecutor(2, null);
+        Executor executor3 = ThreadLocalPropagatingExecutorEnhanced
+            .createExecutor(2, null);
         assertNotNull(executor3);
 
         // Test with empty name prefix
-        Executor executor4 = ThreadLocalPropagatingExecutorEnhanced.createExecutor(2, "");
+        Executor executor4 = ThreadLocalPropagatingExecutorEnhanced
+            .createExecutor(2, "");
         assertNotNull(executor4);
     }
 
@@ -117,19 +130,25 @@ class ConfigPackageEdgeCaseTest {
 
         // Test null bean name - should throw NullPointerException immediately
         assertThrows(NullPointerException.class, () -> {
-            BeanUtils.overrideBean(new org.springframework.context.support.StaticApplicationContext(),
+            BeanUtils.overrideBean(new org.springframework.context.support
+                .StaticApplicationContext(),
                 null, "value");
         });
 
         // Test null new bean - should throw NullPointerException immediately
         assertThrows(NullPointerException.class, () -> {
-            BeanUtils.overrideBean(new org.springframework.context.support.StaticApplicationContext(),
+            BeanUtils.overrideBean(
+                new org.springframework.context.support.
+                    StaticApplicationContext(),
                 "test", null);
         });
 
-        // Test with valid parameters but non-configurable context (should not throw)
+        // Test with valid parameters but non-configurable context
+           //  (should not throw)
         assertDoesNotThrow(() -> {
-            BeanUtils.overrideBean(new org.springframework.context.support.StaticApplicationContext(),
+            BeanUtils.overrideBean(
+                new org.springframework.context.support
+                    .StaticApplicationContext(),
                 "nonexistent-bean", "value");
         });
     }
@@ -139,7 +158,8 @@ class ConfigPackageEdgeCaseTest {
      */
     @Test
     void testThreadLocalTaskDecoratorExceptions() {
-        ThreadLocalTaskDecoratorEnhanced decorator = new ThreadLocalTaskDecoratorEnhanced();
+        ThreadLocalTaskDecoratorEnhanced decorator =
+            new ThreadLocalTaskDecoratorEnhanced();
 
         // Create a runnable that throws an exception
         Runnable throwingTask = () -> {

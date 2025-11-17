@@ -34,13 +34,21 @@ class DirectCommandProcessorTest {
 
     @BeforeEach
     void setUp() {
-        processor = new DirectCommandProcessor(documentorCommands, documentorConfig, llmServiceFix);
+        processor = new DirectCommandProcessor(
+            documentorCommands,
+            documentorConfig,
+            llmServiceFix
+        );
     }
 
     @Test
     void testRunWithNullConfig() throws Exception {
         // Test with null config
-        processor = new DirectCommandProcessor(documentorCommands, null, llmServiceFix);
+        processor = new DirectCommandProcessor(
+            documentorCommands,
+            null,
+            llmServiceFix
+        );
 
         when(applicationArguments.getSourceArgs()).thenReturn(new String[]{});
 
@@ -86,7 +94,8 @@ class DirectCommandProcessorTest {
 
     @Test
     void testRunWithNonAnalyzeCommand() throws Exception {
-        when(applicationArguments.getSourceArgs()).thenReturn(new String[]{"help"});
+        when(applicationArguments.getSourceArgs())
+            .thenReturn(new String[]{"help"});
 
         processor.run(applicationArguments);
 
@@ -96,7 +105,8 @@ class DirectCommandProcessorTest {
 
     @Test
     void testAnalyzeCommandWithDefaultParameters() throws Exception {
-        when(applicationArguments.getSourceArgs()).thenReturn(new String[]{"analyze"});
+        when(applicationArguments.getSourceArgs()).thenReturn(new String[]
+            {"analyze"});
         when(
             documentorCommands.analyzeProject(
                 anyString(),
@@ -112,7 +122,15 @@ class DirectCommandProcessorTest {
         processor.run(applicationArguments);
 
         // Verify analyze is called with default parameters
-        verify(documentorCommands).analyzeProject(".", "config.json", true, false, "", false, "");
+        verify(documentorCommands).analyzeProject(
+            ".",
+            "config.json",
+            true,
+            false,
+            "",
+            false,
+            ""
+        );
     }
 
     @Test
@@ -134,7 +152,8 @@ class DirectCommandProcessorTest {
 
         processor.run(applicationArguments);
 
-        verify(documentorCommands).analyzeProject("/custom/path", "config.json", true, false, "", false, "");
+        verify(documentorCommands).analyzeProject("/custom/path",
+            "config.json", true, false, "", false, "");
     }
 
     @Test
@@ -156,7 +175,8 @@ class DirectCommandProcessorTest {
 
         processor.run(applicationArguments);
 
-        verify(documentorCommands).analyzeProject(".", "custom-config.json", true, false, "", false, "");
+        verify(documentorCommands).analyzeProject(".",
+            "custom-config.json", true, false, "", false, "");
     }
 
     @Test
@@ -178,37 +198,43 @@ class DirectCommandProcessorTest {
 
         processor.run(applicationArguments);
 
-        verify(documentorCommands).analyzeProject(".", "config.json", false, false, "", false, "");
+        verify(documentorCommands).analyzeProject(".",
+            "config.json", false, false, "", false, "");
     }
 
     @Test
     void testAnalyzeCommandWithMermaidGeneration() throws Exception {
         when(applicationArguments.getSourceArgs()).thenReturn(new String[]{
-            "analyze", "--generate-mermaid", "true", "--mermaid-output", "diagram.mmd"
+            "analyze", "--generate-mermaid", "true", "--mermaid-output",
+            "diagram.mmd"
         });
         when(
-            documentorCommands.analyzeProject(anyString(), anyString(), anyBoolean(),
-                anyBoolean(), anyString(), anyBoolean(), anyString())
+            documentorCommands.analyzeProject(anyString(), anyString(),
+                anyBoolean(),anyBoolean(), anyString(), anyBoolean(),
+                anyString())
         ).thenReturn("Analysis complete");
 
         processor.run(applicationArguments);
 
-        verify(documentorCommands).analyzeProject(".", "config.json", true, true, "diagram.mmd", false, "");
+        verify(documentorCommands).analyzeProject(".",
+            "config.json", true, true, "diagram.mmd", false, "");
     }
 
     @Test
     void testAnalyzeCommandWithPlantUMLGeneration() throws Exception {
         when(applicationArguments.getSourceArgs()).thenReturn(new String[]{
-            "analyze", "--generate-plantuml", "true", "--plantuml-output", "diagram.puml"
+            "analyze", "--generate-plantuml", "true", "--plantuml-output",
+            "diagram.puml"
         });
         when(
-            documentorCommands.analyzeProject(anyString(), anyString(), anyBoolean(),
-                anyBoolean(), anyString(), anyBoolean(), anyString())
+            documentorCommands.analyzeProject(anyString(), anyString(),
+            anyBoolean(), anyBoolean(), anyString(), anyBoolean(), anyString())
         ).thenReturn("Analysis complete");
 
         processor.run(applicationArguments);
 
-        verify(documentorCommands).analyzeProject(".", "config.json", true, false, "", true, "diagram.puml");
+        verify(documentorCommands).analyzeProject(".",
+            "config.json", true, false, "", true, "diagram.puml");
     }
 
     @Test
@@ -271,25 +297,30 @@ class DirectCommandProcessorTest {
         processor.run(applicationArguments);
 
         // Should use default values when parameter values are missing
-        verify(documentorCommands).analyzeProject(".", "config.json", true, false, "", false, "");
+        verify(documentorCommands).analyzeProject(".",
+            "config.json", true, false, "", false, "");
     }
 
     @Test
     void testAnalyzeCommandExceptionHandling() throws Exception {
-        when(applicationArguments.getSourceArgs()).thenReturn(new String[]{"analyze"});
-        when(documentorCommands.analyzeProject(anyString(), anyString(), anyBoolean(),
-                                             anyBoolean(), anyString(), anyBoolean(), anyString()))
+        when(applicationArguments.getSourceArgs()).thenReturn(new String[]
+            {"analyze"});
+        when(documentorCommands.analyzeProject(anyString(), anyString(),
+            anyBoolean(), anyBoolean(), anyString(), anyBoolean(),
+            anyString()))
             .thenThrow(new RuntimeException("Test exception"));
 
         // Should not throw exception, just log it
         assertDoesNotThrow(() -> processor.run(applicationArguments));
 
-        verify(documentorCommands).analyzeProject(".", "config.json", true, false, "", false, "");
+        verify(documentorCommands).analyzeProject(".",
+            "config.json", true, false, "", false, "");
     }
 
     @Test
     void testAnalyzeCommandWithDoubleConfigSet() throws Exception {
-        when(applicationArguments.getSourceArgs()).thenReturn(new String[]{"analyze"});
+        when(applicationArguments.getSourceArgs())
+            .thenReturn(new String[]{"analyze"});
         when(
             documentorCommands.analyzeProject(
                 anyString(),
@@ -305,23 +336,27 @@ class DirectCommandProcessorTest {
         processor.run(applicationArguments);
 
         // Verify config is set twice - once at start and once before analyze
-        verify(llmServiceFix, times(2)).setLlmServiceThreadLocalConfig(documentorConfig);
+        verify(llmServiceFix, times(2))
+            .setLlmServiceThreadLocalConfig(documentorConfig);
     }
 
     @Test
     void testAnalyzeCommandWithNullConfigDoubleSet() throws Exception {
-        processor = new DirectCommandProcessor(documentorCommands, null, llmServiceFix);
+        processor = new DirectCommandProcessor(documentorCommands, null,
+        llmServiceFix);
 
-        when(applicationArguments.getSourceArgs()).thenReturn(new String[]{"analyze"});
-        when(documentorCommands.analyzeProject(anyString(), anyString(), anyBoolean(),
-                                             anyBoolean(), anyString(), anyBoolean(), anyString()))
+        when(applicationArguments.getSourceArgs()).thenReturn(new String[]
+            {"analyze"});
+        when(documentorCommands.analyzeProject(anyString(), anyString(),
+            anyBoolean(),anyBoolean(), anyString(), anyBoolean(), anyString()))
             .thenReturn("Analysis complete");
 
         processor.run(applicationArguments);
 
         // Should not call llmServiceFix when config is null
         verifyNoInteractions(llmServiceFix);
-        verify(documentorCommands).analyzeProject(".", "config.json", true, false, "", false, "");
+        verify(documentorCommands).analyzeProject(".",
+            "config.json", true, false, "", false, "");
     }
 
     @Test
@@ -333,13 +368,14 @@ class DirectCommandProcessorTest {
             "--generate-mermaid", "FALSE",
             "--generate-plantuml", "true"
         });
-        when(documentorCommands.analyzeProject(anyString(), anyString(), anyBoolean(),
-                                             anyBoolean(), anyString(), anyBoolean(), anyString()))
+        when(documentorCommands.analyzeProject(anyString(), anyString(),
+            anyBoolean(), anyBoolean(), anyString(), anyBoolean(), anyString()))
             .thenReturn("Analysis complete");
 
         processor.run(applicationArguments);
 
-        verify(documentorCommands).analyzeProject(".", "config.json", true, false, "", true, "");
+        verify(documentorCommands).analyzeProject(".",
+            "config.json", true, false, "", true, "");
     }
 
     @Test
@@ -349,13 +385,14 @@ class DirectCommandProcessorTest {
             "--include-private-members", "invalid-boolean",
             "--generate-mermaid", "not-a-boolean"
         });
-        when(documentorCommands.analyzeProject(anyString(), anyString(), anyBoolean(),
-                                             anyBoolean(), anyString(), anyBoolean(), anyString()))
+        when(documentorCommands.analyzeProject(anyString(), anyString(),
+            anyBoolean(),anyBoolean(), anyString(), anyBoolean(), anyString()))
             .thenReturn("Analysis complete");
 
         processor.run(applicationArguments);
 
         // Invalid boolean strings should parse as false
-        verify(documentorCommands).analyzeProject(".", "config.json", false, false, "", false, "");
+        verify(documentorCommands).analyzeProject(".",
+            "config.json", false, false, "", false, "");
     }
 }

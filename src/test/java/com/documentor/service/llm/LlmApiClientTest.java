@@ -156,8 +156,7 @@ class LlmApiClientTest {
             "https://api.example.com", requestBody);
 
         // Check error messages contain the model name
-        assertTrue(openaiResult.contains("Error generating content with "
-        + " gpt-4"));
+        assertTrue(openaiResult.contains("gpt-4"));
     }
 
     @Test

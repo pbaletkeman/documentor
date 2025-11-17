@@ -16,8 +16,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Additional coverage tests for config package to reach 94% instruction coverage.
- * Focuses on exception scenarios and edge cases without complex mocking.
+ * Additional coverage tests for config package to reach 94% instruction
+ * coverage. Focuses on exception scenarios and edge cases without complex
+ * mocking.
  */
 class ConfigPackageAdditionalCoverageTest {
 
@@ -28,11 +29,15 @@ class ConfigPackageAdditionalCoverageTest {
         ThreadLocalContextHolder.clearConfig();
 
         // Create test config
-        LlmModelConfig model = new LlmModelConfig("test-model", "provider", "url", "key", 4000, 30);
-        OutputSettings outputSettings = new OutputSettings("output", "markdown", false, false, false);
-        AnalysisSettings analysisSettings = new AnalysisSettings(true, 5, null, null);
+        LlmModelConfig model = new LlmModelConfig(
+            "test-model", "provider", "url", "key", 4000, 30);
+        OutputSettings outputSettings = new OutputSettings(
+            "output", "markdown", false, false, false);
+        AnalysisSettings analysisSettings = new AnalysisSettings(
+            true, 5, null, null);
 
-        testConfig = new DocumentorConfig(Collections.singletonList(model), outputSettings, analysisSettings);
+        testConfig = new DocumentorConfig(Collections.singletonList(model),
+            outputSettings, analysisSettings);
     }
 
     @AfterEach
@@ -41,12 +46,14 @@ class ConfigPackageAdditionalCoverageTest {
     }
 
     /**
-     * Test ThreadLocalPropagatingExecutorEnhanced with simulated rejection handler scenario
+     * Test ThreadLocalPropagatingExecutorEnhanced with
+     * simulated rejection handler scenario
      */
     @Test
     void testExecutorRejectionHandlerExecution() throws InterruptedException {
         // Create executor with very small queue to trigger rejection
-        Executor executor = ThreadLocalPropagatingExecutorEnhanced.createExecutor(1, "rejection-test");
+        Executor executor = ThreadLocalPropagatingExecutorEnhanced
+            .createExecutor(1, "rejection-test");
 
         assertNotNull(executor);
 
@@ -88,7 +95,8 @@ class ConfigPackageAdditionalCoverageTest {
      */
     @Test
     void testTaskDecoratorWithRuntimeException() throws InterruptedException {
-        ThreadLocalTaskDecoratorEnhanced decorator = new ThreadLocalTaskDecoratorEnhanced();
+        ThreadLocalTaskDecoratorEnhanced decorator =
+            new ThreadLocalTaskDecoratorEnhanced();
 
         // Set up config with complex model list
         ThreadLocalContextHolder.setConfig(testConfig);
@@ -110,8 +118,10 @@ class ConfigPackageAdditionalCoverageTest {
                 decoratedTask.run();
                 exceptionHandled.set(true);
             } catch (Exception e) {
-                // Should not reach here if decorator handles exceptions properly
-                fail("Exception should be handled by decorator: " + e.getMessage());
+                // Should not reach here if decorator handles
+                // exceptions properly
+                fail("Exception should be handled by decorator: "
+                + e.getMessage());
             }
         });
 
@@ -133,12 +143,16 @@ class ConfigPackageAdditionalCoverageTest {
 
         // Test null bean name
         assertThrows(NullPointerException.class, () ->
-            BeanUtils.overrideBean(mock(org.springframework.context.ApplicationContext.class), null, testConfig)
+            BeanUtils.overrideBean(mock(
+                org.springframework.context.ApplicationContext.class),
+                null, testConfig)
         );
 
         // Test null new bean
         assertThrows(NullPointerException.class, () ->
-            BeanUtils.overrideBean(mock(org.springframework.context.ApplicationContext.class), "testBean", null)
+            BeanUtils.overrideBean(mock(
+                org.springframework.context.ApplicationContext.class),
+                "testBean", null)
         );
     }
 
@@ -148,15 +162,18 @@ class ConfigPackageAdditionalCoverageTest {
     @Test
     void testExecutorCreationEdgeCases() {
         // Test with zero threads - should still create executor
-        Executor executor1 = ThreadLocalPropagatingExecutorEnhanced.createExecutor(0, "zero-threads");
+        Executor executor1 = ThreadLocalPropagatingExecutorEnhanced
+            .createExecutor(0, "zero-threads");
         assertNotNull(executor1);
 
         // Test with negative threads - should still create executor
-        Executor executor2 = ThreadLocalPropagatingExecutorEnhanced.createExecutor(-1, "negative-threads");
+        Executor executor2 = ThreadLocalPropagatingExecutorEnhanced
+            .createExecutor(-1, "negative-threads");
         assertNotNull(executor2);
 
         // Test with null name prefix
-        Executor executor3 = ThreadLocalPropagatingExecutorEnhanced.createExecutor(2, null);
+        Executor executor3 = ThreadLocalPropagatingExecutorEnhanced
+            .createExecutor(2, null);
         assertNotNull(executor3);
 
         // Test execution still works with edge case executor
@@ -173,21 +190,27 @@ class ConfigPackageAdditionalCoverageTest {
      */
     @Test
     void testTaskDecoratorWithNullModelsInConfig() throws InterruptedException {
-        ThreadLocalTaskDecoratorEnhanced decorator = new ThreadLocalTaskDecoratorEnhanced();
+        ThreadLocalTaskDecoratorEnhanced decorator =
+            new ThreadLocalTaskDecoratorEnhanced();
 
         // Create config with potential null model list
-        OutputSettings outputSettings = new OutputSettings("output", "markdown", false, false, false);
-        AnalysisSettings analysisSettings = new AnalysisSettings(true, 5, null, null);
+        OutputSettings outputSettings =
+            new OutputSettings("output", "markdown", false, false, false);
+        AnalysisSettings analysisSettings =
+            new AnalysisSettings(true, 5, null, null);
 
         // Use empty list instead of null (as null would fail validation)
-        DocumentorConfig emptyModelsConfig = new DocumentorConfig(Collections.emptyList(), outputSettings, analysisSettings);
+        DocumentorConfig emptyModelsConfig =
+            new DocumentorConfig(Collections.emptyList(), outputSettings,
+            analysisSettings);
 
         ThreadLocalContextHolder.setConfig(emptyModelsConfig);
 
         CountDownLatch latch = new CountDownLatch(1);
 
         Runnable task = () -> {
-            DocumentorConfig threadConfig = ThreadLocalContextHolder.getConfig();
+            DocumentorConfig threadConfig =
+                ThreadLocalContextHolder.getConfig();
             assertNotNull(threadConfig);
             assertEquals(0, threadConfig.llmModels().size());
             latch.countDown();
@@ -207,16 +230,20 @@ class ConfigPackageAdditionalCoverageTest {
      */
     @Test
     void testExecutorConstants() {
-        assertEquals(5, ThreadLocalPropagatingExecutorEnhanced.DEFAULT_THREAD_COUNT);
-        assertEquals(30, ThreadLocalPropagatingExecutorEnhanced.DEFAULT_TIMEOUT_SECONDS);
+        assertEquals(5,
+            ThreadLocalPropagatingExecutorEnhanced.DEFAULT_THREAD_COUNT);
+        assertEquals(30,
+            ThreadLocalPropagatingExecutorEnhanced.DEFAULT_TIMEOUT_SECONDS);
     }
 
     /**
      * Test ThreadLocal propagation with explicitly set config
      */
     @Test
-    void testThreadLocalPropagationWithExplicitlySetConfig() throws InterruptedException {
-        ThreadLocalTaskDecoratorEnhanced decorator = new ThreadLocalTaskDecoratorEnhanced();
+    void testThreadLocalPropagationWithExplicitlySetConfig()
+        throws InterruptedException {
+        ThreadLocalTaskDecoratorEnhanced decorator =
+            new ThreadLocalTaskDecoratorEnhanced();
 
         // Set config explicitly
         ThreadLocalContextHolder.setConfig(testConfig);
@@ -226,7 +253,8 @@ class ConfigPackageAdditionalCoverageTest {
 
         Runnable task = () -> {
             // Verify config is propagated
-            DocumentorConfig threadConfig = ThreadLocalContextHolder.getConfig();
+            DocumentorConfig threadConfig =
+                ThreadLocalContextHolder.getConfig();
             assertNotNull(threadConfig);
             assertEquals(testConfig, threadConfig);
             latch.countDown();
@@ -246,8 +274,11 @@ class ConfigPackageAdditionalCoverageTest {
      */
     @Test
     void testComplexMultiThreadedExecution() throws InterruptedException {
-        Executor executor = ThreadLocalPropagatingExecutorEnhanced.createExecutor(3, "multi-test");
-        ThreadLocalTaskDecoratorEnhanced decorator = new ThreadLocalTaskDecoratorEnhanced();
+        Executor executor =
+            ThreadLocalPropagatingExecutorEnhanced.createExecutor(
+                3, "multi-test");
+        ThreadLocalTaskDecoratorEnhanced decorator =
+            new ThreadLocalTaskDecoratorEnhanced();
 
         // Set up parent thread config
         ThreadLocalContextHolder.setConfig(testConfig);
@@ -258,7 +289,8 @@ class ConfigPackageAdditionalCoverageTest {
         for (int i = 0; i < taskCount; i++) {
             Runnable task = () -> {
                 // Verify config is available in each thread
-                DocumentorConfig threadConfig = ThreadLocalContextHolder.getConfig();
+                DocumentorConfig threadConfig =
+                    ThreadLocalContextHolder.getConfig();
                 assertNotNull(threadConfig);
                 latch.countDown();
             };
@@ -283,7 +315,8 @@ class ConfigPackageAdditionalCoverageTest {
                 (proxy, method, args) -> {
                     // Return appropriate defaults based on method name
                     if (method.getName().equals("getBeanFactory")) {
-                        return mock(org.springframework.beans.factory.config.ConfigurableListableBeanFactory.class);
+                        return mock(org.springframework.beans.factory
+                            .config.ConfigurableListableBeanFactory.class);
                     }
                     if (method.getName().equals("containsBean")) {
                         return false;

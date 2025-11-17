@@ -43,8 +43,23 @@ class EnhancedProjectAnalysisHandlerTest {
     void setUp() {
         // Create a test configuration with correct constructor parameters
         testConfig = new DocumentorConfig(
-            List.of(new LlmModelConfig("test-model", "openai", "http://test-url", "test-key", 1000, 60)),
-            new OutputSettings("/test/output", "markdown", true, true, false),
+            List.of(
+                new LlmModelConfig(
+                    "test-model",
+                    "openai",
+                    "http://test-url",
+                    "test-key",
+                    1000,
+                    60
+                )
+            ),
+            new OutputSettings(
+                "/test/output",
+                "markdown",
+                true,
+                true,
+                false
+            ),
             null
         );
     }
@@ -52,12 +67,28 @@ class EnhancedProjectAnalysisHandlerTest {
     /**
      * Helper method to create a ProjectAnalysisRequest
      */
-    private ProjectAnalysisRequest createRequest(String projectPath, String configPath,
-            boolean generateMermaid, String mermaidOutput, boolean generatePlantUML,
-            String plantUMLOutput, Boolean includePrivateMembers, boolean useFix, String outputDir) {
-        return new ProjectAnalysisRequest(projectPath, configPath, generateMermaid, mermaidOutput,
-                generatePlantUML, plantUMLOutput, includePrivateMembers, useFix, outputDir);
-    }
+        private ProjectAnalysisRequest createRequest(
+            String projectPath,
+            String configPath,
+            boolean generateMermaid,
+            String mermaidOutput,
+            boolean generatePlantUML,
+            String plantUMLOutput,
+            Boolean includePrivateMembers,
+            boolean useFix,
+            String outputDir) {
+        return new ProjectAnalysisRequest(
+            projectPath,
+            configPath,
+            generateMermaid,
+            mermaidOutput,
+            generatePlantUML,
+            plantUMLOutput,
+            includePrivateMembers,
+            useFix,
+            outputDir
+        );
+        }
 
     @Test
     @DisplayName("Should handle analyze with fix when useFix is false")
@@ -79,8 +110,17 @@ class EnhancedProjectAnalysisHandlerTest {
             .thenReturn("Analysis complete without fix");
 
         // When
-        ProjectAnalysisRequest request = createRequest(projectPath, configPath, generateMermaid,
-                mermaidOutput, generatePlantUML, plantUMLOutput, includePrivateMembers, useFix, outputDir);
+        ProjectAnalysisRequest request = createRequest(
+            projectPath,
+            configPath,
+            generateMermaid,
+            mermaidOutput,
+            generatePlantUML,
+            plantUMLOutput,
+            includePrivateMembers,
+            useFix,
+            outputDir
+        );
         String result = handler.analyzeProjectWithFix(request);
 
         // Then
@@ -115,8 +155,16 @@ class EnhancedProjectAnalysisHandlerTest {
 
         // When
         ProjectAnalysisRequest request = new ProjectAnalysisRequest(
-            projectPath, configPath, generateMermaid, mermaidOutput,
-            generatePlantUML, plantUMLOutput, includePrivateMembers, useFix, outputDir);
+            projectPath,
+            configPath,
+            generateMermaid,
+            mermaidOutput,
+            generatePlantUML,
+            plantUMLOutput,
+            includePrivateMembers,
+            useFix,
+            outputDir
+        );
         String result = handler.analyzeProjectWithFix(request);
 
         // Then
@@ -130,7 +178,10 @@ class EnhancedProjectAnalysisHandlerTest {
         verify(configLoader, never()).getLoadedConfig();
 
         // Output directory should be set
-        assertEquals("/test/output", System.getProperty("documentor.output.directory"));
+        assertEquals(
+            "/test/output",
+            System.getProperty("documentor.output.directory")
+        );
     }
 
     @Test
@@ -154,8 +205,17 @@ class EnhancedProjectAnalysisHandlerTest {
             .thenReturn("Analysis complete with loaded config");
 
         // When
-        ProjectAnalysisRequest request = createRequest(projectPath, configPath, generateMermaid,
-                mermaidOutput, generatePlantUML, plantUMLOutput, includePrivateMembers, useFix, outputDir);
+        ProjectAnalysisRequest request = createRequest(
+            projectPath,
+            configPath,
+            generateMermaid,
+            mermaidOutput,
+            generatePlantUML,
+            plantUMLOutput,
+            includePrivateMembers,
+            useFix,
+            outputDir
+        );
         String result = handler.analyzeProjectWithFix(request);
 
         // Then
@@ -171,7 +231,10 @@ class EnhancedProjectAnalysisHandlerTest {
     }
 
     @Test
-    @DisplayName("Should handle analyze with fix when config needs to be loaded successfully")
+    @DisplayName(
+        "Should handle analyze with fix when config needs to be "
+        + "loaded successfully"
+    )
     void shouldHandleAnalyzeWithFixConfigLoadedSuccessfully() {
         // Given
         String projectPath = "/test/project";
@@ -194,21 +257,37 @@ class EnhancedProjectAnalysisHandlerTest {
             .thenReturn("Analysis complete with newly loaded config");
 
         // When
-        ProjectAnalysisRequest request = createRequest(projectPath, configPath, generateMermaid,
-                mermaidOutput, generatePlantUML, plantUMLOutput, includePrivateMembers, useFix, outputDir);
+        ProjectAnalysisRequest request = createRequest(
+            projectPath,
+            configPath,
+            generateMermaid,
+            mermaidOutput,
+            generatePlantUML,
+            plantUMLOutput,
+            includePrivateMembers,
+            useFix,
+            outputDir
+        );
         String result = handler.analyzeProjectWithFix(request);
 
         // Then
         assertEquals("Analysis complete with newly loaded config", result);
         verify(configLoader, times(2)).getLoadedConfig();
-        verify(configLoader).loadExternalConfig(new String[]{"analyze", "--config", configPath});
+            verify(configLoader).loadExternalConfig(new String[] {
+                "analyze",
+                "--config",
+                configPath
+            });
         verify(llmServiceFix).setLlmServiceThreadLocalConfig(testConfig);
         verify(baseHandler).handleAnalyzeProjectExtended(
             projectPath, configPath, generateMermaid, mermaidOutput,
             generatePlantUML, plantUMLOutput, includePrivateMembers);
 
         // Output directory should be set
-        assertEquals("/test/output", System.getProperty("documentor.output.directory"));
+        assertEquals(
+            "/test/output",
+            System.getProperty("documentor.output.directory")
+        );
     }
 
     @Test
@@ -233,14 +312,25 @@ class EnhancedProjectAnalysisHandlerTest {
             .thenReturn("Analysis complete with failed config loading");
 
         // When
-        ProjectAnalysisRequest request = createRequest(projectPath, configPath, generateMermaid,
-                mermaidOutput, generatePlantUML, plantUMLOutput, includePrivateMembers, useFix, outputDir);
+        ProjectAnalysisRequest request = createRequest(
+            projectPath,
+            configPath,
+            generateMermaid,
+            mermaidOutput,
+            generatePlantUML,
+            plantUMLOutput,
+            includePrivateMembers,
+            useFix,
+            outputDir
+        );
         String result = handler.analyzeProjectWithFix(request);
 
         // Then
         assertEquals("Analysis complete with failed config loading", result);
         verify(configLoader).getLoadedConfig();
-        verify(configLoader).loadExternalConfig(new String[]{"analyze", "--config", configPath});
+        verify(configLoader).loadExternalConfig(new String[] {
+            "analyze", "--config", configPath
+        });
         verify(llmServiceFix, never()).setLlmServiceThreadLocalConfig(any());
         verify(baseHandler).handleAnalyzeProjectExtended(
             projectPath, configPath, generateMermaid, mermaidOutput,
@@ -248,7 +338,10 @@ class EnhancedProjectAnalysisHandlerTest {
     }
 
     @Test
-    @DisplayName("Should handle analyze with fix when loaded config is null after loading")
+    @DisplayName(
+        "Should handle analyze with fix when loaded config is null "
+        + "after loading"
+    )
     void shouldHandleAnalyzeWithFixLoadedConfigIsNull() {
         // Given
         String projectPath = "/test/project";
@@ -266,20 +359,34 @@ class EnhancedProjectAnalysisHandlerTest {
 
 
         // When & Then - This should throw NPE due to a bug in production code
-        // The production code tries to access config.llmModels() without null check
+        // Production code accesses config.llmModels() without null check
         assertThrows(NullPointerException.class, () -> {
-            ProjectAnalysisRequest request = createRequest(projectPath, configPath, generateMermaid,
-                    mermaidOutput, generatePlantUML, plantUMLOutput, includePrivateMembers, useFix, outputDir);
+                ProjectAnalysisRequest request = createRequest(
+                    projectPath,
+                    configPath,
+                    generateMermaid,
+                    mermaidOutput,
+                    generatePlantUML,
+                    plantUMLOutput,
+                    includePrivateMembers,
+                    useFix,
+                    outputDir
+                );
             handler.analyzeProjectWithFix(request);
         });
 
         verify(configLoader, times(2)).getLoadedConfig();
-        verify(configLoader).loadExternalConfig(new String[]{"analyze", "--config", configPath});
+        verify(configLoader).loadExternalConfig(new String[] {
+            "analyze", "--config", configPath
+        });
         verify(llmServiceFix, never()).setLlmServiceThreadLocalConfig(any());
     }
 
     @Test
-    @DisplayName("Should handle analyze with fix and set output directory when specified")
+    @DisplayName(
+        "Should handle analyze with fix and set output directory "
+        + "when specified"
+    )
     void shouldHandleAnalyzeWithFixAndSetOutputDirectory() {
         // Given
         String projectPath = "/test/project";
@@ -299,8 +406,17 @@ class EnhancedProjectAnalysisHandlerTest {
             .thenReturn("Analysis complete with custom output directory");
 
         // When
-        ProjectAnalysisRequest request = createRequest(projectPath, configPath, generateMermaid,
-                mermaidOutput, generatePlantUML, plantUMLOutput, includePrivateMembers, useFix, outputDir);
+        ProjectAnalysisRequest request = createRequest(
+            projectPath,
+            configPath,
+            generateMermaid,
+            mermaidOutput,
+            generatePlantUML,
+            plantUMLOutput,
+            includePrivateMembers,
+            useFix,
+            outputDir
+        );
         String result = handler.analyzeProjectWithFix(request);
 
         // Then
@@ -312,7 +428,10 @@ class EnhancedProjectAnalysisHandlerTest {
             generatePlantUML, plantUMLOutput, includePrivateMembers);
 
         // Verify output directory system property was set
-        assertEquals("/custom/output/directory", System.getProperty("documentor.output.directory"));
+        assertEquals(
+            "/custom/output/directory",
+            System.getProperty("documentor.output.directory")
+        );
     }
 
     @Test
@@ -339,8 +458,17 @@ class EnhancedProjectAnalysisHandlerTest {
             .thenReturn("Analysis complete without output directory");
 
         // When
-        ProjectAnalysisRequest request = createRequest(projectPath, configPath, generateMermaid,
-                mermaidOutput, generatePlantUML, plantUMLOutput, includePrivateMembers, useFix, outputDir);
+        ProjectAnalysisRequest request = createRequest(
+            projectPath,
+            configPath,
+            generateMermaid,
+            mermaidOutput,
+            generatePlantUML,
+            plantUMLOutput,
+            includePrivateMembers,
+            useFix,
+            outputDir
+        );
         String result = handler.analyzeProjectWithFix(request);
 
         // Then
@@ -356,7 +484,9 @@ class EnhancedProjectAnalysisHandlerTest {
     }
 
     @Test
-    @DisplayName("Should handle analyze with fix when config has null llmModels")
+    @DisplayName(
+        "Should handle analyze with fix when config has null llmModels"
+    )
     void shouldHandleAnalyzeWithFixConfigWithNullLlmModels() {
         // Given
         String projectPath = "/test/project";
@@ -378,7 +508,8 @@ class EnhancedProjectAnalysisHandlerTest {
 
         when(configLoader.getLoadedConfig())
             .thenReturn(null)  // First call returns null
-            .thenReturn(configWithNullModels);  // Second call returns config with null models
+            .thenReturn(configWithNullModels);
+        // Second call returns config with null models
         when(configLoader.loadExternalConfig(any())).thenReturn(true);
         when(baseHandler.handleAnalyzeProjectExtended(
             projectPath, configPath, generateMermaid, mermaidOutput,
@@ -386,15 +517,29 @@ class EnhancedProjectAnalysisHandlerTest {
             .thenReturn("Analysis complete with null llmModels");
 
         // When
-        ProjectAnalysisRequest request = createRequest(projectPath, configPath, generateMermaid,
-                mermaidOutput, generatePlantUML, plantUMLOutput, includePrivateMembers, useFix, outputDir);
+        ProjectAnalysisRequest request = createRequest(
+            projectPath,
+            configPath,
+            generateMermaid,
+            mermaidOutput,
+            generatePlantUML,
+            plantUMLOutput,
+            includePrivateMembers,
+            useFix,
+            outputDir
+        );
         String result = handler.analyzeProjectWithFix(request);
 
         // Then
         assertEquals("Analysis complete with null llmModels", result);
         verify(configLoader, times(2)).getLoadedConfig();
-        verify(configLoader).loadExternalConfig(new String[]{"analyze", "--config", configPath});
-        verify(llmServiceFix).setLlmServiceThreadLocalConfig(configWithNullModels);
+        verify(configLoader).loadExternalConfig(new String[]{
+            "analyze",
+            "--config",
+            configPath
+        });
+        verify(llmServiceFix)
+            .setLlmServiceThreadLocalConfig(configWithNullModels);
         verify(baseHandler).handleAnalyzeProjectExtended(
             projectPath, configPath, generateMermaid, mermaidOutput,
             generatePlantUML, plantUMLOutput, includePrivateMembers);

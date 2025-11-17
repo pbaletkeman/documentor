@@ -42,7 +42,8 @@ class LlmServiceConfigurationTest {
     @Test
     void testDocumentorConfigWithValidConfig() {
         // Create a valid config
-        LlmModelConfig model = new LlmModelConfig("test-model", "ollama", "http://localhost:11434", "key", 1000, 30);
+        LlmModelConfig model = new LlmModelConfig("test-model",
+            "ollama", "http://localhost:11434", "key", 1000, 30);
         DocumentorConfig validConfig = new DocumentorConfig(
             List.of(model),
             null,
@@ -65,7 +66,8 @@ class LlmServiceConfigurationTest {
         assertEquals(1, result.llmModels().size());
         assertEquals("default-model", result.llmModels().get(0).name());
         assertEquals("ollama", result.llmModels().get(0).provider());
-        assertEquals("http://localhost:11434", result.llmModels().get(0).baseUrl());
+        assertEquals("http://localhost:11434",
+            result.llmModels().get(0).baseUrl());
     }
 
     @Test
@@ -95,7 +97,8 @@ class LlmServiceConfigurationTest {
         );
 
         // Should add a default model
-        DocumentorConfig result = configuration.documentorConfig(nullModelsConfig);
+        DocumentorConfig result =
+            configuration.documentorConfig(nullModelsConfig);
         assertNotNull(result);
         assertNotNull(result.llmModels());
         assertEquals(1, result.llmModels().size());
@@ -105,7 +108,8 @@ class LlmServiceConfigurationTest {
     @Test
     void testLlmServiceWithValidConfig() {
         // Create a valid config
-        LlmModelConfig model = new LlmModelConfig("test-model", "ollama", "http://localhost:11434", "key", 1000, 30);
+        LlmModelConfig model = new LlmModelConfig("test-model",
+            "ollama", "http://localhost:11434", "key", 1000, 30);
         DocumentorConfig validConfig = new DocumentorConfig(
             List.of(model),
             null,
@@ -113,14 +117,16 @@ class LlmServiceConfigurationTest {
         );
 
         // Should create LlmService with the provided config
-        LlmService result = configuration.llmService(validConfig, requestBuilder, responseHandler, apiClient);
+        LlmService result = configuration.llmService(
+            validConfig, requestBuilder, responseHandler, apiClient);
         assertNotNull(result);
     }
 
     @Test
     void testLlmServiceWithNullConfig() {
         // Should create LlmService with a default config
-        LlmService result = configuration.llmService(null, requestBuilder, responseHandler, apiClient);
+        LlmService result = configuration.llmService(
+            null, requestBuilder, responseHandler, apiClient);
         assertNotNull(result);
     }
 
@@ -134,7 +140,8 @@ class LlmServiceConfigurationTest {
         );
 
         // Should create LlmService with a default model added
-        LlmService result = configuration.llmService(emptyConfig, requestBuilder, responseHandler, apiClient);
+        LlmService result = configuration.llmService(
+            emptyConfig, requestBuilder, responseHandler, apiClient);
         assertNotNull(result);
     }
 
@@ -148,7 +155,8 @@ class LlmServiceConfigurationTest {
         );
 
         // Should create LlmService with a default model added
-        LlmService result = configuration.llmService(nullModelsConfig, requestBuilder, responseHandler, apiClient);
+        LlmService result = configuration.llmService(
+            nullModelsConfig, requestBuilder, responseHandler, apiClient);
         assertNotNull(result);
     }
 
@@ -156,7 +164,8 @@ class LlmServiceConfigurationTest {
     void testElementDocumentationGenerator() {
         LlmService mockLlmService = mock(LlmService.class);
 
-        ElementDocumentationGenerator result = configuration.elementDocumentationGenerator(mockLlmService);
+        ElementDocumentationGenerator result =
+            configuration.elementDocumentationGenerator(mockLlmService);
         assertNotNull(result);
     }
 }

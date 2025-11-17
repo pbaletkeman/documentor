@@ -41,7 +41,8 @@ class BeanUtilsSimpleEnhancedTest {
     void testOverrideBeanWithNonConfigurableContext() {
         ApplicationContext context = mock(ApplicationContext.class);
 
-        // Test with non-configurable application context (should log error and return)
+        // Test with non-configurable application context
+        // (should log error and return)
         assertDoesNotThrow(() ->
             BeanUtils.overrideBean(context, "testBean", "newValue"));
     }
@@ -96,7 +97,8 @@ class BeanUtilsSimpleEnhancedTest {
         assertDoesNotThrow(() -> {
             BeanUtils.overrideBean(context, "stringBean", "stringValue");
             BeanUtils.overrideBean(context, "integerBean", 42);
-            BeanUtils.overrideBean(context, "listBean", java.util.List.of("item1", "item2"));
+            BeanUtils.overrideBean(context, "listBean",
+                java.util.List.of("item1", "item2"));
         });
     }
 }

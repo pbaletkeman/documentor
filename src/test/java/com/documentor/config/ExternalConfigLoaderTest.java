@@ -4,9 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.ApplicationContext;
 
 import java.nio.file.Files;
@@ -33,14 +31,19 @@ class ExternalConfigLoaderTest {
 
         // Create test configuration using the correct model classes
         testConfig = new DocumentorConfig(
-            List.of(new com.documentor.config.model.LlmModelConfig("test-model", "ollama", "http://localhost:11434", "test-key", 1000, 30)),
-            new com.documentor.config.model.OutputSettings("output", "markdown", false, false, false),
-            new com.documentor.config.model.AnalysisSettings(true, 5, List.of("*.java"), null)
+            List.of(new com.documentor.config.model.LlmModelConfig(
+                "test-model", "ollama", "http://localhost:11434",
+                "test-key", 1000, 30)),
+            new com.documentor.config.model.OutputSettings("output",
+                "markdown", false, false, false),
+            new com.documentor.config.model.AnalysisSettings(true,
+                5, List.of("*.java"), null)
         );
     }    @Test
     void testSetApplicationContext() {
         ApplicationContext context = mock(ApplicationContext.class);
-        assertDoesNotThrow(() -> externalConfigLoader.setApplicationContext(context));
+        assertDoesNotThrow(() -> externalConfigLoader
+            .setApplicationContext(context));
     }
 
     @Test
@@ -85,8 +88,12 @@ class ExternalConfigLoaderTest {
 
         assertTrue(result);
         assertNotNull(externalConfigLoader.getLoadedConfig());
-        assertEquals(1, externalConfigLoader.getLoadedConfig().llmModels().size());
-        assertEquals("test-model", externalConfigLoader.getLoadedConfig().llmModels().get(0).name());
+        assertEquals(1,
+            externalConfigLoader.getLoadedConfig()
+                .llmModels().size());
+        assertEquals("test-model",
+            externalConfigLoader.getLoadedConfig()
+                .llmModels().get(0).name());
     }
 
     @Test
@@ -155,7 +162,8 @@ class ExternalConfigLoaderTest {
         mapper.writeValue(configFile.toFile(), testConfig);
 
         // Test comma-separated in middle of args
-        String[] args = {"start", "analyze,--config," + configFile.toString(), "end"};
+        String[] args = {"start", "analyze,--config,"
+            + configFile.toString(), "end"};
         boolean result = externalConfigLoader.loadExternalConfig(args);
 
         assertTrue(result);
@@ -164,7 +172,8 @@ class ExternalConfigLoaderTest {
 
     @Test
     void testConfigurationPostProcessorCreation() {
-        // Test that the configuration post processor can be created without errors
+        // Test that the configuration post processor can be
+        // created without errors
         var postProcessor = externalConfigLoader.configurationPostProcessor();
         assertNotNull(postProcessor);
     }
@@ -202,7 +211,8 @@ class ExternalConfigLoaderTest {
     void testLoadExternalConfigWithMalformedJson() throws Exception {
         // Create a malformed JSON file
         Path configFile = tempDir.resolve("malformed-config.json");
-        Files.writeString(configFile, "{ \"llm_models\": [ }"); // Missing closing bracket
+        // Missing closing bracket
+        Files.writeString(configFile, "{ \"llm_models\": [ }");
 
         String[] args = {"analyze", "--config", configFile.toString()};
         boolean result = externalConfigLoader.loadExternalConfig(args);
@@ -216,11 +226,17 @@ class ExternalConfigLoaderTest {
         // Create a more complex config file
         DocumentorConfig complexConfig = new DocumentorConfig(
             List.of(
-                new com.documentor.config.model.LlmModelConfig("model1", "ollama", "http://localhost:11434", null, 2000, 60),
-                new com.documentor.config.model.LlmModelConfig("model2", "openai", "https://api.openai.com", "sk-key", 4000, 30)
+                new com.documentor.config.model.LlmModelConfig(
+                    "model1", "ollama", "http://localhost:11434", null,
+                    2000, 60),
+                new com.documentor.config.model.LlmModelConfig(
+                    "model2", "openai", "https://api.openai.com", "sk-key",
+                    4000, 30)
             ),
-            new com.documentor.config.model.OutputSettings("complex-output", "html", true, true, true),
-            new com.documentor.config.model.AnalysisSettings(false, 10, List.of("*.java", "*.py"), List.of("test/**"))
+            new com.documentor.config.model.OutputSettings(
+                "complex-output", "html", true, true, true),
+            new com.documentor.config.model.AnalysisSettings(
+                false, 10, List.of("*.java", "*.py"), List.of("test/**"))
         );
 
         Path configFile = tempDir.resolve("complex-config.json");
@@ -232,9 +248,12 @@ class ExternalConfigLoaderTest {
 
         assertTrue(result);
         assertNotNull(externalConfigLoader.getLoadedConfig());
-        assertEquals(2, externalConfigLoader.getLoadedConfig().llmModels().size());
-        assertEquals("model1", externalConfigLoader.getLoadedConfig().llmModels().get(0).name());
-        assertEquals("model2", externalConfigLoader.getLoadedConfig().llmModels().get(1).name());
+        assertEquals(2,
+            externalConfigLoader.getLoadedConfig().llmModels().size());
+        assertEquals("model1", externalConfigLoader
+            .getLoadedConfig().llmModels().get(0).name());
+        assertEquals("model2", externalConfigLoader
+            .getLoadedConfig().llmModels().get(1).name());
     }
 
     @Test
@@ -246,20 +265,27 @@ class ExternalConfigLoaderTest {
 
         // Test config arg in different positions
         String[][] testCases = {
-            {"--config", configFile.toString(), "analyze"}, // Config first
-            {"analyze", "--config", configFile.toString()}, // Config middle
-            {"analyze", "--verbose", "--config", configFile.toString()}, // Config last
+            // Config first
+            {"--config", configFile.toString(), "analyze"},
+            // Config middle
+            {"analyze", "--config", configFile.toString()},
+            // Config last
+            {"analyze", "--verbose", "--config", configFile.toString()},
         };
 
         for (String[] args : testCases) {
             ExternalConfigLoader loader = new ExternalConfigLoader();
             boolean result = loader.loadExternalConfig(args);
-            assertTrue(result, "Failed for args: " + String.join(" ", args));
+            assertTrue(
+                result,
+                "Failed for args: " + String.join(" ", args)
+            );
             assertNotNull(loader.getLoadedConfig());
         }
     }    @Test
     @org.junit.jupiter.api.Disabled("Temporarily disabled for coverage report")
-    void testConfigurationPostProcessorWithSystemPropertyArgs() throws Exception {
+    void testConfigurationPostProcessorWithSystemPropertyArgs()
+        throws Exception {
         // Create a valid config file
         Path configFile = tempDir.resolve("test-config.json");
         ObjectMapper mapper = new ObjectMapper();
@@ -267,16 +293,21 @@ class ExternalConfigLoaderTest {
 
         // Set system property to simulate command line args
         String originalCommand = System.getProperty("sun.java.command", "");
-        try {
-            System.setProperty("sun.java.command", "com.documentor.Application analyze --config " + configFile.toString());
+            try {
+                String cmd = "com.documentor.Application analyze --config "
+                    + configFile.toString();
+                System.setProperty("sun.java.command", cmd);
 
             // Setup mocks
-            ConfigurableListableBeanFactory registry = mock(ConfigurableListableBeanFactory.class);
+            ConfigurableListableBeanFactory registry = mock(
+                ConfigurableListableBeanFactory.class);
             when(registry.getBeanDefinitionNames()).thenReturn(new String[0]);
 
             // Get the post processor and invoke it
-            var postProcessor = externalConfigLoader.configurationPostProcessor();
-            assertDoesNotThrow(() -> postProcessor.postProcessBeanFactory(registry));
+            var postProcessor = externalConfigLoader
+                .configurationPostProcessor();
+            assertDoesNotThrow(() -> postProcessor
+                .postProcessBeanFactory(registry));
 
             // Verify that the post processor was executed successfully
             verify(registry).getBeanDefinitionNames();
@@ -292,7 +323,8 @@ class ExternalConfigLoaderTest {
 
     @Test
     @org.junit.jupiter.api.Disabled("Temporarily disabled for coverage report")
-    void testConfigurationPostProcessorWithGradleSystemProperty() throws Exception {
+    void testConfigurationPostProcessorWithGradleSystemProperty()
+        throws Exception {
         // Create a valid config file
         Path configFile = tempDir.resolve("test-config.json");
         ObjectMapper mapper = new ObjectMapper();
@@ -301,15 +333,19 @@ class ExternalConfigLoaderTest {
         // Set Gradle args system property
         String originalArgs = System.getProperty("args", "");
         try {
-            System.setProperty("args", "analyze,--config," + configFile.toString());
+            System.setProperty("args", "analyze,--config,"
+            + configFile.toString());
 
             // Setup mocks
-            ConfigurableListableBeanFactory registry = mock(ConfigurableListableBeanFactory.class);
+            ConfigurableListableBeanFactory registry = mock(
+                ConfigurableListableBeanFactory.class);
             when(registry.getBeanDefinitionNames()).thenReturn(new String[0]);
 
             // Get the post processor and invoke it
-            var postProcessor = externalConfigLoader.configurationPostProcessor();
-            assertDoesNotThrow(() -> postProcessor.postProcessBeanFactory(registry));
+            var postProcessor = externalConfigLoader
+            .configurationPostProcessor();
+            assertDoesNotThrow(() -> postProcessor
+            .postProcessBeanFactory(registry));
 
             // Verify that the post processor was executed successfully
             verify(registry).getBeanDefinitionNames();
@@ -335,12 +371,15 @@ class ExternalConfigLoaderTest {
             System.clearProperty("args");
 
             // Setup mocks
-            ConfigurableListableBeanFactory registry = mock(ConfigurableListableBeanFactory.class);
+            ConfigurableListableBeanFactory registry = mock(
+                ConfigurableListableBeanFactory.class);
             when(registry.getBeanDefinitionNames()).thenReturn(new String[0]);
 
             // Get the post processor and invoke it
-            var postProcessor = externalConfigLoader.configurationPostProcessor();
-            assertDoesNotThrow(() -> postProcessor.postProcessBeanFactory(registry));
+            var postProcessor = externalConfigLoader
+            .configurationPostProcessor();
+            assertDoesNotThrow(() -> postProcessor
+            .postProcessBeanFactory(registry));
 
             // Verify that the registry was accessed (but no config was loaded)
             verify(registry).getBeanDefinitionNames();
@@ -361,17 +400,22 @@ class ExternalConfigLoaderTest {
         // Set system property with non-existent file
         String originalCommand = System.getProperty("sun.java.command", "");
         try {
-            System.setProperty("sun.java.command", "com.documentor.Application analyze --config non-existent.json");
+            System.setProperty("sun.java.command",
+            "com.documentor.Application analyze --config non-existent.json");
 
             // Setup mocks
-            ConfigurableListableBeanFactory registry = mock(ConfigurableListableBeanFactory.class);
+            ConfigurableListableBeanFactory registry =
+            mock(ConfigurableListableBeanFactory.class);
             when(registry.getBeanDefinitionNames()).thenReturn(new String[0]);
 
             // Get the post processor and invoke it
-            var postProcessor = externalConfigLoader.configurationPostProcessor();
-            assertDoesNotThrow(() -> postProcessor.postProcessBeanFactory(registry));
+            var postProcessor = externalConfigLoader
+                .configurationPostProcessor();
+            assertDoesNotThrow(() -> postProcessor
+            .postProcessBeanFactory(registry));
 
-            // Verify that the registry was accessed (but no config was loaded due to non-existent file)
+            // Verify that the registry was accessed
+            // (but no config was loaded due to non-existent file)
             verify(registry).getBeanDefinitionNames();
         } finally {
             // Restore original system property
@@ -385,7 +429,8 @@ class ExternalConfigLoaderTest {
 
     @Test
     @org.junit.jupiter.api.Disabled("Temporarily disabled for coverage report")
-    void testConfigurationPostProcessorWithExceptionDuringFileRead() throws Exception {
+    void testConfigurationPostProcessorWithExceptionDuringFileRead()
+        throws Exception {
         // Create a file that will cause JSON parsing to fail
         Path configFile = tempDir.resolve("bad-config.json");
         Files.writeString(configFile, "{ invalid json }");
@@ -393,17 +438,24 @@ class ExternalConfigLoaderTest {
         // Set system property
         String originalCommand = System.getProperty("sun.java.command", "");
         try {
-            System.setProperty("sun.java.command", "com.documentor.Application analyze --config " + configFile.toString());
+            String cmd = "com.documentor.Application analyze --config "
+                + configFile.toString();
+            System.setProperty("sun.java.command", cmd);
 
             // Setup mocks
-            ConfigurableListableBeanFactory registry = mock(ConfigurableListableBeanFactory.class);
+            ConfigurableListableBeanFactory registry =
+            mock(ConfigurableListableBeanFactory.class);
             when(registry.getBeanDefinitionNames()).thenReturn(new String[0]);
 
-            // Get the post processor and invoke it - should handle exception gracefully
-            var postProcessor = externalConfigLoader.configurationPostProcessor();
-            assertDoesNotThrow(() -> postProcessor.postProcessBeanFactory(registry));
+            // Get the post processor and invoke it
+            // - should handle exception gracefully
+            var postProcessor = externalConfigLoader
+                .configurationPostProcessor();
+            assertDoesNotThrow(() -> postProcessor
+            .postProcessBeanFactory(registry));
 
-            // Verify that the registry was accessed (but no valid config was loaded due to JSON parsing failure)
+            // Verify that the registry was accessed
+            // (but no valid config was loaded due to JSON parsing failure)
             verify(registry).getBeanDefinitionNames();
         } finally {
             // Restore original system property
@@ -424,11 +476,16 @@ class ExternalConfigLoaderTest {
 
         // Test different argument formats
         String[][] testCases = {
-            {"analyze", "--config", configFile.toString()}, // Standard format
-            {"analyze", "--config=" + configFile.toString()}, // Equals format
-            {"analyze,--config," + configFile.toString()}, // Comma-separated
-            {"-Pargs=analyze,--config," + configFile.toString()}, // Gradle format
-            {"-Pargs:analyze,--config," + configFile.toString()}, // Gradle format with colon
+            // Standard format
+            {"analyze", "--config", configFile.toString()},
+
+            {"analyze", "--config=" + configFile.toString()},
+            // Comma-separated
+            {"analyze,--config," + configFile.toString()},
+            // Gradle format
+            {"-Pargs=analyze,--config," + configFile.toString()},
+            // Gradle format with colon
+            {"-Pargs:analyze,--config," + configFile.toString()},
         };
 
         for (String[] args : testCases) {
@@ -454,7 +511,8 @@ class ExternalConfigLoaderTest {
 
         for (String[] args : testCases) {
             boolean result = externalConfigLoader.loadExternalConfig(args);
-            assertFalse(result, "Should return false for args: " + String.join(" ", args));
+            assertFalse(result, "Should return false for args: "
+            + String.join(" ", args));
         }
     }
 }

@@ -41,15 +41,19 @@ class ProjectAnalysisCommandHandlerTest {
         analysisService = mock(CodeAnalysisService.class);
         documentationService = mock(DocumentationService.class);
         mermaidService = mock(MermaidDiagramService.class);
-        PlantUMLDiagramService plantUMLService = mock(PlantUMLDiagramService.class);
+        PlantUMLDiagramService plantUMLService = mock(
+            PlantUMLDiagramService.class);
         commonHandler = mock(CommonCommandHandler.class);
 
-        handler = new ProjectAnalysisCommandHandler(analysisService, documentationService,
-                mermaidService, plantUMLService, commonHandler);
+        handler = new ProjectAnalysisCommandHandler(analysisService,
+            documentationService, mermaidService, plantUMLService,
+            commonHandler);
 
         // Setup default behavior for commonHandler
-        when(commonHandler.createResultBuilder()).thenReturn(new StringBuilder());
-        when(commonHandler.formatStatistics(anyString(), anyMap())).thenAnswer(invocation -> {
+        when(commonHandler.createResultBuilder())
+            .thenReturn(new StringBuilder());
+        when(commonHandler.formatStatistics(anyString(), anyMap()))
+            .thenAnswer(invocation -> {
             String title = invocation.getArgument(0);
             return "📊 " + title
                     + "\n─────────────────────────────────────\n\n";
@@ -60,9 +64,12 @@ class ProjectAnalysisCommandHandlerTest {
     void handleScanProjectReturnsFormattedStats(@TempDir final Path tmp) {
         // Arrange
         ProjectAnalysis pa = new ProjectAnalysis(tmp.toString(),
-            List.of(new CodeElement(CodeElementType.CLASS, "A", "A", "A.java", 1, "sig", "", List.of(), List.of())),
+            List.of(new CodeElement(CodeElementType.CLASS, "A",
+            "A", "A.java", 1,
+            "sig", "", List.of(), List.of())),
             System.currentTimeMillis());
-        when(analysisService.analyzeProject(tmp)).thenReturn(CompletableFuture.completedFuture(pa));
+        when(analysisService.analyzeProject(tmp))
+            .thenReturn(CompletableFuture.completedFuture(pa));
         when(commonHandler.directoryExists(tmp.toString())).thenReturn(true);
 
         // Act
@@ -70,23 +77,28 @@ class ProjectAnalysisCommandHandlerTest {
 
         // Assert
         verify(commonHandler).directoryExists(tmp.toString());
-        verify(commonHandler).formatStatistics(eq("Project Analysis Statistics"), anyMap());
+        verify(commonHandler).formatStatistics(eq(
+            "Project Analysis Statistics"), anyMap());
         assertTrue(out.contains("Project Analysis Statistics"));
     }
 
     @Test
     void handleAnalyzeProjectGeneratesDocsAndMermaid(@TempDir final Path tmp) {
         // Arrange
-        ProjectAnalysis pa = new ProjectAnalysis(tmp.toString(), List.of(), System.currentTimeMillis());
-        when(analysisService.analyzeProject(tmp)).thenReturn(CompletableFuture.completedFuture(pa));
+        ProjectAnalysis pa = new ProjectAnalysis(tmp.toString(), List.of(),
+            System.currentTimeMillis());
+        when(analysisService.analyzeProject(tmp)).thenReturn(
+            CompletableFuture.completedFuture(pa));
         when(documentationService.generateDocumentation(pa))
                 .thenReturn(CompletableFuture.completedFuture(tmp.toString()));
         when(mermaidService.generateClassDiagrams(pa, "out"))
-                .thenReturn(CompletableFuture.completedFuture(List.of("d1", "d2")));
+                .thenReturn(CompletableFuture.completedFuture(
+                    List.of("d1", "d2")));
         when(commonHandler.directoryExists(tmp.toString())).thenReturn(true);
 
         // Act
-        String res = handler.handleAnalyzeProject(tmp.toString(), "", true, "out");
+        String res = handler.handleAnalyzeProject(
+            tmp.toString(), "", true, "out");
 
         // Assert
         verify(commonHandler).directoryExists(tmp.toString());
@@ -99,7 +111,8 @@ class ProjectAnalysisCommandHandlerTest {
     void handleScanProjectHandlesNonExistentDirectory(@TempDir final Path tmp) {
         // Arrange
         String nonExistentPath = tmp.toString() + "/nonexistent";
-        when(commonHandler.directoryExists(nonExistentPath)).thenReturn(false);
+        when(commonHandler.directoryExists(nonExistentPath))
+            .thenReturn(false);
 
         // Act
         String result = handler.handleScanProject(nonExistentPath);
@@ -107,7 +120,8 @@ class ProjectAnalysisCommandHandlerTest {
         // Assert
         verify(commonHandler).directoryExists(nonExistentPath);
         verify(analysisService, never()).analyzeProject(any(Path.class));
-        assertTrue(result.contains("❌ Error"), "Should return error for non-existent directory");
+        assertTrue(result.contains("❌ Error"),
+        "Should return error for non-existent directory");
     }
 
     @Test
@@ -120,11 +134,12 @@ class ProjectAnalysisCommandHandlerTest {
             .thenReturn("❌ Error during analysis: Test exception");
 
         // Act
-        String result = handler.handleAnalyzeProject(tmp.toString(), "", false, "");
+        String result = handler.handleAnalyzeProject(
+            tmp.toString(), "", false, "");
 
         // Assert
         verify(commonHandler).formatErrorMessage(anyString(), eq(exception));
-        assertTrue(result.contains("❌ Error during analysis"), "Should format exception message");
+        assertTrue(result.contains("❌ Error during analysis"),
+        "Should format exception message");
     }
 }
-

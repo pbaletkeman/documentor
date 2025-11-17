@@ -6,13 +6,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -24,7 +21,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
- * Tests for ThreadLocalContextHolder ensuring proper thread-local value management
+ * Tests for ThreadLocalContextHolder ensuring proper
+ * thread-local value management
  */
 @ExtendWith(MockitoExtension.class)
 public class ThreadLocalContextHolderTest {
@@ -50,7 +48,8 @@ public class ThreadLocalContextHolderTest {
         ThreadLocalContextHolder.setConfig(mockConfig);
 
         // Verify it was set correctly
-        DocumentorConfig retrievedConfig = ThreadLocalContextHolder.getConfig();
+        DocumentorConfig retrievedConfig = ThreadLocalContextHolder
+        .getConfig();
         assertSame(mockConfig, retrievedConfig);
 
         // Verify explicitly set status
@@ -94,7 +93,8 @@ public class ThreadLocalContextHolderTest {
         // Run with different config
         ThreadLocalContextHolder.runWithConfig(mockConfig2, () -> {
             // Inside runnable, should have mockConfig2
-            DocumentorConfig configInRunnable = ThreadLocalContextHolder.getConfig();
+            DocumentorConfig configInRunnable =
+                ThreadLocalContextHolder.getConfig();
             assertEquals(mockConfig2, configInRunnable);
 
             runnableExecuted.set(true);
@@ -115,7 +115,8 @@ public class ThreadLocalContextHolderTest {
 
         // Verify exception is propagated but config is restored
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            ThreadLocalContextHolder.runWithConfig(mock(DocumentorConfig.class), () -> {
+            ThreadLocalContextHolder.runWithConfig(mock(
+                DocumentorConfig.class), () -> {
                 throw new RuntimeException("Test exception");
             });
         });
@@ -143,14 +144,17 @@ public class ThreadLocalContextHolderTest {
         // Create and start worker thread with its own config
         Thread workerThread = new Thread(() -> {
             // Worker thread should start with null config
-            DocumentorConfig initialConfig = ThreadLocalContextHolder.getConfig();
+            DocumentorConfig initialConfig =
+                ThreadLocalContextHolder.getConfig();
             if (initialConfig == null) {
                 // Set worker's own config
                 ThreadLocalContextHolder.setConfig(workerThreadConfig);
 
                 // Verify worker has its own config
-                DocumentorConfig currentConfig = ThreadLocalContextHolder.getConfig();
-                workerHasCorrectConfig.set(currentConfig == workerThreadConfig);
+                DocumentorConfig currentConfig =
+                    ThreadLocalContextHolder.getConfig();
+                workerHasCorrectConfig.set(currentConfig
+                    == workerThreadConfig);
             }
 
             // Signal completion
@@ -168,15 +172,18 @@ public class ThreadLocalContextHolderTest {
     }
 
     @Test
-    public void testThreadLocalPropagationWithExecutorService() throws Exception {
-        // Test ThreadLocal propagation using ThreadLocalPropagatingExecutorEnhanced
+    public void testThreadLocalPropagationWithExecutorService()
+        throws Exception {
+        // Test ThreadLocal propagation using
+        // ThreadLocalPropagatingExecutorEnhanced
         DocumentorConfig mainThreadConfig = mock(DocumentorConfig.class);
 
         // Set config in main thread
         ThreadLocalContextHolder.setConfig(mainThreadConfig);
 
         // Create executor and tasks
-        Executor executor = ThreadLocalPropagatingExecutorEnhanced.createExecutor(2, "test-executor");
+        Executor executor = ThreadLocalPropagatingExecutorEnhanced
+            .createExecutor(2, "test-executor");
         CountDownLatch latch = new CountDownLatch(5);
         AtomicInteger correctConfigCount = new AtomicInteger(0);
 
@@ -185,7 +192,8 @@ public class ThreadLocalContextHolderTest {
             CompletableFuture.runAsync(() -> {
                 try {
                     // Check if config propagated correctly
-                    DocumentorConfig workerConfig = ThreadLocalContextHolder.getConfig();
+                    DocumentorConfig workerConfig =
+                        ThreadLocalContextHolder.getConfig();
                     if (workerConfig == mainThreadConfig) {
                         correctConfigCount.incrementAndGet();
                     }

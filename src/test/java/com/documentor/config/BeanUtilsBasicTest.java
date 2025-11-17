@@ -14,7 +14,8 @@ class BeanUtilsBasicTest {
 
     @Test
     void testOverrideBeanWithNullApplicationContext() {
-        // Test null application context - should throw NPE (covers null check branch)
+        // Test null application context - should throw NPE
+        // (covers null check branch)
         assertThrows(NullPointerException.class, () ->
             BeanUtils.overrideBean(null, "testBean", "newValue"));
     }
@@ -45,7 +46,8 @@ class BeanUtilsBasicTest {
         assertDoesNotThrow(() ->
             BeanUtils.overrideBean(context, "testBean", "newValue"));
 
-        // Verify no further operations were attempted since context is not configurable
+        // Verify no further operations were attempted since
+        // context is not configurable
         verifyNoMoreInteractions(context);
     }
 
@@ -55,6 +57,7 @@ class BeanUtilsBasicTest {
 
         // Test basic operation (covers exception handling branch)
         assertDoesNotThrow(() ->
-            BeanUtils.overrideBean(mockContext, "testBean", "newBeanInstance"));
+            BeanUtils.overrideBean(mockContext, "testBean",
+            "newBeanInstance"));
     }
 }

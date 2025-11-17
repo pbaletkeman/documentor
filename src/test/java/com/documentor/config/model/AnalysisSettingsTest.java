@@ -53,13 +53,17 @@ class AnalysisSettingsTest {
     @DisplayName("Should apply defaults for null values")
     void shouldApplyDefaultsForNullValues() {
         // When
-        AnalysisSettings settings = new AnalysisSettings(null, null, null, null);
+        AnalysisSettings settings =
+            new AnalysisSettings(null, null, null, null);
 
         // Then
         assertTrue(settings.includePrivateMembers());
-        assertEquals(ApplicationConstants.DEFAULT_MAX_DEPTH, settings.maxDepth());
-        assertEquals(List.of("**/*.java", "**/*.py"), settings.includedPatterns());
-        assertEquals(List.of("**/test/**", "**/target/**"), settings.excludePatterns());
+        assertEquals(ApplicationConstants.DEFAULT_MAX_DEPTH,
+            settings.maxDepth());
+        assertEquals(List.of("**/*.java", "**/*.py"),
+            settings.includedPatterns());
+        assertEquals(List.of("**/test/**", "**/target/**"),
+            settings.excludePatterns());
     }
 
     @Test
@@ -67,26 +71,32 @@ class AnalysisSettingsTest {
     void shouldReturnCorrectMaxThreadsWhenMaxDepthIsProvided() {
         // Given
         Integer customMaxDepth = MAX_DEPTH_EIGHT;
-        AnalysisSettings settings = new AnalysisSettings(false, customMaxDepth, null, null);
+        AnalysisSettings settings = new AnalysisSettings(false,
+            customMaxDepth, null, null);
 
         // When & Then
         assertEquals(customMaxDepth, settings.maxThreads());
     }
 
     @Test
-    @DisplayName("Should return at least one thread when maxDepth is provided but is zero or negative")
+    @DisplayName("Should return at least one thread when maxDepth is"
+    + " provided but is zero or negative")
     void shouldReturnAtLeastOneThreadWhenMaxDepthIsZeroOrNegative() {
         // Given
-        AnalysisSettings settingsWithZero = new AnalysisSettings(false, 0, null, null);
-        AnalysisSettings settingsWithNegative = new AnalysisSettings(false, MAX_DEPTH_NEGATIVE, null, null);
+        AnalysisSettings settingsWithZero = new AnalysisSettings(false,
+        0, null, null);
+        AnalysisSettings settingsWithNegative = new AnalysisSettings(false,
+        MAX_DEPTH_NEGATIVE, null, null);
 
         // When
         int threadsWithZero = settingsWithZero.maxThreads();
         int threadsWithNegative = settingsWithNegative.maxThreads();
 
         // Then
-        assertTrue(threadsWithZero > 0, "Should return a positive number of threads with zero maxDepth");
-        assertTrue(threadsWithNegative > 0, "Should return a positive number of threads with negative maxDepth");
+        assertTrue(threadsWithZero > 0, "Should return a positive number"
+        + " of threads with zero maxDepth");
+        assertTrue(threadsWithNegative > 0, "Should return a positive number"
+        + " of threads with negative maxDepth");
         // Zero and negative values should result in the same behavior
         assertEquals(threadsWithZero, threadsWithNegative);
     }
@@ -95,30 +105,37 @@ class AnalysisSettingsTest {
     @DisplayName("Should return available processors when maxDepth is null")
     void shouldReturnAvailableProcessorsWhenMaxDepthIsNull() {
         // Given
-        AnalysisSettings settings = new AnalysisSettings(false, null, null, null);
+        AnalysisSettings settings = new AnalysisSettings(false,
+            null, null, null);
 
-        // When - Force a specific implementation test - maxThreads should just return processors
+        // When - Force a specific implementation test
+        // - maxThreads should just return processors
         int maxThreads = settings.maxThreads();
 
         // Then
-        // We only check that maxThreads is positive as the available processors can vary
-        // between environments - don't make assumptions about the exact number
+        // We only check that maxThreads is positive as the available
+        // processors can vary between environments - don't make assumptions
+        // about the exact number
         assertTrue(maxThreads > 0, "Max threads should be a positive number");
 
-        // Instead of comparing with Runtime.getRuntime().availableProcessors(), we'll just verify
-        // that the actual implementation is being used by mocking the AnalysisSettings class
+        // Instead of comparing with Runtime.getRuntime().
+        // availableProcessors(), we'll just verify that the actual
+        // implementation is being used by mocking the AnalysisSettings class
         // and verifying our test logic
         AnalysisSettings mockSettings = mock(AnalysisSettings.class);
-        when(mockSettings.maxThreads()).thenReturn(TEST_VALUE_FORTY_TWO); // arbitrary value
+        // arbitrary value
+        when(mockSettings.maxThreads()).thenReturn(TEST_VALUE_FORTY_TWO);
         assertEquals(TEST_VALUE_FORTY_TWO, mockSettings.maxThreads(),
-            "Mock verification: maxThreads() should return the configured value");
+            "Mock verification: maxThreads() should return the"
+            + " configured value");
     }
 
     @Test
     @DisplayName("Should return list of supported languages")
     void shouldReturnListOfSupportedLanguages() {
         // Given
-        AnalysisSettings settings = new AnalysisSettings(false, MAX_DEPTH_FIVE, null, null);
+        AnalysisSettings settings = new AnalysisSettings(
+            false, MAX_DEPTH_FIVE, null, null);
         List<String> expectedLanguages = List.of("java", "python");
 
         // When
@@ -134,9 +151,12 @@ class AnalysisSettingsTest {
     @ParameterizedTest
     @MethodSource("partialDefaultsProvider")
     @DisplayName("Should apply defaults for partial null values")
-    void shouldApplyDefaultsForPartialNullValues(final Boolean includePrivateMembers, final Integer maxDepth,
-                                               final List<String> includedPatterns, final List<String> excludedPatterns,
-                                               final AnalysisSettings expectedSettings) {
+    void shouldApplyDefaultsForPartialNullValues(
+        final Boolean includePrivateMembers,
+        final Integer maxDepth,
+        final List<String> includedPatterns,
+        final List<String> excludedPatterns,
+        final AnalysisSettings expectedSettings) {
         // When
         AnalysisSettings settings = new AnalysisSettings(
                 includePrivateMembers,
@@ -146,10 +166,14 @@ class AnalysisSettingsTest {
         );
 
         // Then
-        assertEquals(expectedSettings.includePrivateMembers(), settings.includePrivateMembers());
-        assertEquals(expectedSettings.maxDepth(), settings.maxDepth());
-        assertEquals(expectedSettings.includedPatterns(), settings.includedPatterns());
-        assertEquals(expectedSettings.excludePatterns(), settings.excludePatterns());
+        assertEquals(expectedSettings.includePrivateMembers(),
+            settings.includePrivateMembers());
+        assertEquals(expectedSettings.maxDepth(),
+            settings.maxDepth());
+        assertEquals(expectedSettings.includedPatterns(),
+            settings.includedPatterns());
+        assertEquals(expectedSettings.excludePatterns(),
+            settings.excludePatterns());
     }
 
     private static Stream<Arguments> partialDefaultsProvider() {
@@ -157,32 +181,35 @@ class AnalysisSettingsTest {
                 // Test with only includePrivateMembers set
                 Arguments.of(
                         true, null, null, null,
-                        new AnalysisSettings(true, ApplicationConstants.DEFAULT_MAX_DEPTH,
+                        new AnalysisSettings(true,
+                            ApplicationConstants.DEFAULT_MAX_DEPTH,
                                 List.of("**/*.java", "**/*.py"),
                                 List.of("**/test/**", "**/target/**"))
                 ),
                 // Test with only maxDepth set
                 Arguments.of(
                         null, MAX_DEPTH_FIFTEEN, null, null,
-                        new AnalysisSettings(true, MAX_DEPTH_FIFTEEN,
+                        new AnalysisSettings(true,
+                            MAX_DEPTH_FIFTEEN,
                                 List.of("**/*.java", "**/*.py"),
                                 List.of("**/test/**", "**/target/**"))
                 ),
                 // Test with only includedPatterns set
                 Arguments.of(
                         null, null, List.of("**/*.txt"), null,
-                        new AnalysisSettings(true, ApplicationConstants.DEFAULT_MAX_DEPTH,
+                        new AnalysisSettings(true,
+                            ApplicationConstants.DEFAULT_MAX_DEPTH,
                                 List.of("**/*.txt"),
                                 List.of("**/test/**", "**/target/**"))
                 ),
                 // Test with only excludePatterns set
                 Arguments.of(
                         null, null, null, List.of("**/logs/**"),
-                        new AnalysisSettings(true, ApplicationConstants.DEFAULT_MAX_DEPTH,
+                        new AnalysisSettings(true,
+                        ApplicationConstants.DEFAULT_MAX_DEPTH,
                                 List.of("**/*.java", "**/*.py"),
                                 List.of("**/logs/**"))
                 )
         );
     }
 }
-

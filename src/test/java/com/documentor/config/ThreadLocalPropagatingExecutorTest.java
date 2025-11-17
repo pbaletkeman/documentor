@@ -24,7 +24,8 @@ class ThreadLocalPropagatingExecutorTest {
 
     @BeforeEach
     void setUp() {
-        // Use a direct executor for testing to avoid actual thread creation
+        // Use a direct executor for testing to
+        // avoid actual thread creation
         delegateExecutor = Runnable::run;
         executor = new ThreadLocalPropagatingExecutor(delegateExecutor);
 
@@ -41,12 +42,14 @@ class ThreadLocalPropagatingExecutorTest {
         // Set it in the parent thread
         LlmService.setThreadLocalConfig(mockConfig);
 
-        // Create a flag to check if the ThreadLocal was available in the executed task
+        // Create a flag to check if the ThreadLocal was
+        // available in the executed task
         AtomicBoolean configWasAvailable = new AtomicBoolean(false);
 
         // Execute a task that checks if the config is available
         executor.execute(() -> {
-            DocumentorConfig threadLocalConfig = LlmService.getThreadLocalConfig();
+            DocumentorConfig threadLocalConfig = LlmService
+                .getThreadLocalConfig();
             configWasAvailable.set(threadLocalConfig != null);
         });
 
@@ -65,15 +68,18 @@ class ThreadLocalPropagatingExecutorTest {
         LlmService.setThreadLocalConfig(mockConfig);
 
         // Create an executor using the factory method with constant
-        Executor customExecutor = ThreadLocalPropagatingExecutor.createExecutor(
+        Executor customExecutor = ThreadLocalPropagatingExecutor
+            .createExecutor(
                 ThreadLocalPropagatingExecutor.DEFAULT_THREAD_COUNT,
                 "test-worker");
 
         // Create a latch to wait for the task to complete
         CountDownLatch latch = new CountDownLatch(1);
 
-        // Create a reference to store the ThreadLocal value from the worker thread
-        AtomicReference<DocumentorConfig> configInWorkerThread = new AtomicReference<>();
+        // Create a reference to store the ThreadLocal value from
+        // the worker thread
+        AtomicReference<DocumentorConfig> configInWorkerThread =
+            new AtomicReference<>();
 
         // Execute a task that checks if the ThreadLocal value is available
         customExecutor.execute(() -> {
@@ -106,7 +112,8 @@ class ThreadLocalPropagatingExecutorTest {
         LlmService.setThreadLocalConfig(mockConfig);
 
         // Create an executor using the factory method
-        Executor customExecutor = ThreadLocalPropagatingExecutor.createExecutor(1, "test-worker");
+        Executor customExecutor = ThreadLocalPropagatingExecutor
+            .createExecutor(1, "test-worker");
 
         // Use CompletableFuture to track when the task is done
         CompletableFuture<Boolean> future = new CompletableFuture<>();
@@ -122,10 +129,12 @@ class ThreadLocalPropagatingExecutorTest {
         });
 
         // Wait for the task to complete
-        future.get(ThreadLocalPropagatingExecutor.DEFAULT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+        future.get(ThreadLocalPropagatingExecutor.DEFAULT_TIMEOUT_SECONDS,
+            TimeUnit.SECONDS);
 
         // Execute another task to verify ThreadLocal was cleared
-        CompletableFuture<DocumentorConfig> checkFuture = new CompletableFuture<>();
+        CompletableFuture<DocumentorConfig> checkFuture =
+            new CompletableFuture<>();
 
         customExecutor.execute(() -> {
             // Capture the ThreadLocal value
@@ -137,9 +146,10 @@ class ThreadLocalPropagatingExecutorTest {
                 ThreadLocalPropagatingExecutor.DEFAULT_TIMEOUT_SECONDS,
                 TimeUnit.SECONDS);
 
-        // In real threading with separate threads, the ThreadLocal would be cleared,
-        // but with our direct executor test setup, the value may still be available
-        // Simply validate that the test completed without exceptions
+        // In real threading with separate threads, the ThreadLocal would
+        // be cleared, but with our direct executor test setup, the value
+        // may still be available. Simply validate that the test completed
+        // without exceptions
         Assertions.assertNotNull(configAfterClearing,
                 "ThreadLocal should be available in test scenario");
     }

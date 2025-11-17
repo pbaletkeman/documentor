@@ -149,11 +149,16 @@ class UnitTestDocumentationGeneratorBranchTest {
 
         when(
             llmService.generateUnitTests(methodElement)
-        ).thenReturn(CompletableFuture.completedFuture(TEST_UNIT_TESTS));
+        ).thenReturn(
+            CompletableFuture.completedFuture(TEST_UNIT_TESTS)
+        );
         when(
             llmService.generateUnitTests(classElement)
         ).thenReturn(
-            CompletableFuture.completedFuture("// Tests for TestClass"));
+            CompletableFuture.completedFuture(
+                "// Tests for TestClass"
+            )
+        );
 
         List<CodeElement> elements =
         Arrays.asList(fieldElement, methodElement, classElement);

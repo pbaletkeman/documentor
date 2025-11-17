@@ -25,13 +25,15 @@ class DiagramGeneratorFactoryTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        factory = new DiagramGeneratorFactory(mermaidGenerator, plantUMLGenerator);
+        factory =
+            new DiagramGeneratorFactory(mermaidGenerator, plantUMLGenerator);
     }
 
     @Test
     void shouldReturnMermaidGenerator() {
         // When
-        MermaidClassDiagramGenerator result = factory.getMermaidClassDiagramGenerator();
+        MermaidClassDiagramGenerator result =
+            factory.getMermaidClassDiagramGenerator();
 
         // Then
         assertNotNull(result);
@@ -41,7 +43,8 @@ class DiagramGeneratorFactoryTest {
     @Test
     void shouldReturnMermaidGeneratorViaGetClassDiagramGenerator() {
         // When
-        MermaidClassDiagramGenerator result = factory.getClassDiagramGenerator();
+        MermaidClassDiagramGenerator result =
+            factory.getClassDiagramGenerator();
 
         // Then
         assertNotNull(result);
@@ -51,7 +54,8 @@ class DiagramGeneratorFactoryTest {
     @Test
     void shouldReturnPlantUMLGenerator() {
         // When
-        PlantUMLClassDiagramGenerator result = factory.getPlantUMLClassDiagramGenerator();
+        PlantUMLClassDiagramGenerator result =
+            factory.getPlantUMLClassDiagramGenerator();
 
         // Then
         assertNotNull(result);
@@ -71,7 +75,8 @@ class DiagramGeneratorFactoryTest {
     @Test
     void shouldHandleNullMermaidGenerator() {
         // Given
-        DiagramGeneratorFactory factoryWithNull = new DiagramGeneratorFactory(null, plantUMLGenerator);
+        DiagramGeneratorFactory factoryWithNull =
+            new DiagramGeneratorFactory(null, plantUMLGenerator);
 
         // When & Then
         assertNull(factoryWithNull.getMermaidClassDiagramGenerator());
@@ -81,7 +86,8 @@ class DiagramGeneratorFactoryTest {
     @Test
     void shouldHandleNullPlantUMLGenerator() {
         // Given
-        DiagramGeneratorFactory factoryWithNull = new DiagramGeneratorFactory(mermaidGenerator, null);
+        DiagramGeneratorFactory factoryWithNull =
+            new DiagramGeneratorFactory(mermaidGenerator, null);
 
         // When & Then
         assertNotNull(factoryWithNull.getMermaidClassDiagramGenerator());
@@ -91,7 +97,8 @@ class DiagramGeneratorFactoryTest {
     @Test
     void shouldHandleBothGeneratorsNull() {
         // Given
-        DiagramGeneratorFactory factoryWithBothNull = new DiagramGeneratorFactory(null, null);
+        DiagramGeneratorFactory factoryWithBothNull =
+            new DiagramGeneratorFactory(null, null);
 
         // When & Then
         assertNull(factoryWithBothNull.getMermaidClassDiagramGenerator());

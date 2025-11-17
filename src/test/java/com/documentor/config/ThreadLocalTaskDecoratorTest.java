@@ -32,7 +32,8 @@ class ThreadLocalTaskDecoratorTest {
 
         // Create test configuration
         testConfig = new DocumentorConfig(
-            List.of(new LlmModelConfig("test-model", "ollama", "test-endpoint", "test-key", 1000, 30)),
+            List.of(new LlmModelConfig("test-model", "ollama", "test-endpoint",
+                "test-key", 1000, 30)),
             new OutputSettings("test/output", "markdown", false, false, false),
             new AnalysisSettings(null, null, null, null)
         );
@@ -51,7 +52,8 @@ class ThreadLocalTaskDecoratorTest {
     @Test
     void testDecorateWithAvailableThreadLocalConfig() {
         // Setup: Mock that config is available in parent thread
-        mockedLlmService.when(LlmService::getThreadLocalConfig).thenReturn(testConfig);
+        mockedLlmService.when(LlmService::getThreadLocalConfig)
+            .thenReturn(testConfig);
 
         // Create a test runnable
         Runnable originalRunnable = mock(Runnable.class);
@@ -66,16 +68,22 @@ class ThreadLocalTaskDecoratorTest {
         decoratedRunnable.run();
 
         // Verify interactions
-        mockedLlmService.verify(LlmService::getThreadLocalConfig); // Captured config from parent thread
-        mockedLlmService.verify(() -> LlmService.setThreadLocalConfig(testConfig)); // Set config in child thread
-        verify(originalRunnable).run(); // Original runnable was executed
-        mockedLlmService.verify(LlmService::clearThreadLocalConfig); // Cleanup was called
+        // Captured config from parent thread
+        mockedLlmService.verify(LlmService::getThreadLocalConfig);
+        // Set config in child thread
+        mockedLlmService.verify(() -> LlmService
+        .setThreadLocalConfig(testConfig));
+        // Original runnable was executed
+        verify(originalRunnable).run();
+        // Cleanup was called
+        mockedLlmService.verify(LlmService::clearThreadLocalConfig);
     }
 
     @Test
     void testDecorateWithNullThreadLocalConfig() {
         // Setup: Mock that no config is available in parent thread
-        mockedLlmService.when(LlmService::getThreadLocalConfig).thenReturn(null);
+        mockedLlmService.when(LlmService::getThreadLocalConfig)
+            .thenReturn(null);
 
         // Create a test runnable
         Runnable originalRunnable = mock(Runnable.class);
@@ -90,50 +98,71 @@ class ThreadLocalTaskDecoratorTest {
         decoratedRunnable.run();
 
         // Verify interactions
-        mockedLlmService.verify(LlmService::getThreadLocalConfig); // Attempted to get config from parent thread
-        mockedLlmService.verify(() -> LlmService.setThreadLocalConfig(any()), never()); // Should not set null config
-        verify(originalRunnable).run(); // Original runnable was still executed
-        mockedLlmService.verify(LlmService::clearThreadLocalConfig); // Cleanup was still called
+        // Attempted to get config from parent thread
+        mockedLlmService.verify(LlmService::getThreadLocalConfig);
+        // Should not set null config
+        mockedLlmService.verify(() ->
+            LlmService.setThreadLocalConfig(any()), never());
+        // Original runnable was still executed
+        verify(originalRunnable).run();
+        // Cleanup was still called
+        mockedLlmService.verify(LlmService::clearThreadLocalConfig);
     }
 
     @Test
     void testDecorateWithExceptionInOriginalRunnable() {
         // Setup: Mock that config is available in parent thread
-        mockedLlmService.when(LlmService::getThreadLocalConfig).thenReturn(testConfig);
+        mockedLlmService.when(LlmService::getThreadLocalConfig)
+            .thenReturn(testConfig);
 
         // Create a test runnable that throws an exception
         Runnable originalRunnable = mock(Runnable.class);
-        RuntimeException testException = new RuntimeException("Test exception");
+        RuntimeException testException =
+            new RuntimeException("Test exception");
         doThrow(testException).when(originalRunnable).run();
 
         // Decorate the runnable
         Runnable decoratedRunnable = decorator.decorate(originalRunnable);
 
-        // Execute the decorated runnable - should throw the exception but still cleanup
-        RuntimeException thrown = assertThrows(RuntimeException.class, decoratedRunnable::run);
+        // Execute the decorated runnable
+        // - should throw the exception but still cleanup
+        RuntimeException thrown = assertThrows(
+            RuntimeException.class, decoratedRunnable::run);
         assertEquals("Test exception", thrown.getMessage());
 
-        // Verify interactions - cleanup should still happen even with exception
-        mockedLlmService.verify(LlmService::getThreadLocalConfig); // Captured config from parent thread
-        mockedLlmService.verify(() -> LlmService.setThreadLocalConfig(testConfig)); // Set config in child thread
-        verify(originalRunnable).run(); // Original runnable was executed (and threw exception)
-        mockedLlmService.verify(LlmService::clearThreadLocalConfig); // Cleanup was still called despite exception
+        // Verify interactions - cleanup should still
+        // happen even with exception
+        // Captured config from parent thread
+        mockedLlmService.verify(LlmService::getThreadLocalConfig);
+        // Set config in child thread
+        mockedLlmService.verify(() ->
+            LlmService.setThreadLocalConfig(testConfig));
+        // Original runnable was executed (and threw exception)
+        verify(originalRunnable).run();
+        // Cleanup was still called despite exception
+        mockedLlmService.verify(LlmService::clearThreadLocalConfig);
     }
 
     @Test
     void testDecorateWithExceptionInConfigSetup() {
         // Setup: Mock that getting config throws an exception
-        RuntimeException configException = new RuntimeException("Config retrieval failed");
-        mockedLlmService.when(LlmService::getThreadLocalConfig).thenThrow(configException);
+        RuntimeException configException =
+            new RuntimeException("Config retrieval failed");
+        mockedLlmService.when(LlmService::getThreadLocalConfig)
+            .thenThrow(configException);
 
         // Create a test runnable
         Runnable originalRunnable = mock(Runnable.class);
 
-        // Decorate the runnable - should throw exception during decoration since config retrieval fails
-        RuntimeException thrown = assertThrows(RuntimeException.class, () -> decorator.decorate(originalRunnable));
+        // Decorate the runnable - should throw exception during
+        // decoration since config retrieval fails
+        RuntimeException thrown = assertThrows(
+            RuntimeException.class, () -> decorator
+            .decorate(originalRunnable));
         assertEquals("Config retrieval failed", thrown.getMessage());
 
-        // Verify that getThreadLocalConfig was called and exception was thrown during decoration
+        // Verify that getThreadLocalConfig was called and exception
+        // was thrown during decoration
         mockedLlmService.verify(LlmService::getThreadLocalConfig);
         // Original runnable should NOT be executed since decoration failed
         verify(originalRunnable, never()).run();
@@ -142,7 +171,8 @@ class ThreadLocalTaskDecoratorTest {
     @Test
     void testDecorateMultipleTimes() {
         // Setup: Mock that config is available in parent thread
-        mockedLlmService.when(LlmService::getThreadLocalConfig).thenReturn(testConfig);
+        mockedLlmService.when(LlmService::getThreadLocalConfig)
+            .thenReturn(testConfig);
 
         // Create multiple test runnables
         Runnable runnable1 = mock(Runnable.class);
@@ -163,9 +193,13 @@ class ThreadLocalTaskDecoratorTest {
         // Verify interactions for both
         verify(runnable1).run();
         verify(runnable2).run();
-        mockedLlmService.verify(LlmService::getThreadLocalConfig, times(2)); // Called twice for decoration
-        mockedLlmService.verify(() -> LlmService.setThreadLocalConfig(testConfig), times(2)); // Set twice for execution
-        mockedLlmService.verify(LlmService::clearThreadLocalConfig, times(2)); // Cleanup called twice
+        mockedLlmService.verify(LlmService::getThreadLocalConfig,
+            times(2)); // Called twice for decoration
+        mockedLlmService.verify(() -> LlmService.
+            setThreadLocalConfig(testConfig),
+            times(2)); // Set twice for execution
+        mockedLlmService.verify(LlmService::clearThreadLocalConfig,
+            times(2)); // Cleanup called twice
     }
 
     @Test
@@ -173,15 +207,19 @@ class ThreadLocalTaskDecoratorTest {
         // Setup: Create config with multiple models
         DocumentorConfig multiModelConfig = new DocumentorConfig(
             List.of(
-                new LlmModelConfig("model1", "ollama", "endpoint1", "key1", 1000, 30),
-                new LlmModelConfig("model2", "ollama", "endpoint2", "key2", 1000, 30),
-                new LlmModelConfig("model3", "ollama", "endpoint3", "key3", 1000, 30)
+                new LlmModelConfig(
+                    "model1", "ollama", "endpoint1", "key1", 1000, 30),
+                new LlmModelConfig(
+                    "model2", "ollama", "endpoint2", "key2", 1000, 30),
+                new LlmModelConfig(
+                    "model3", "ollama", "endpoint3", "key3", 1000, 30)
             ),
             new OutputSettings("test/output", "markdown", false, false, false),
             new AnalysisSettings(null, null, null, null)
         );
 
-        mockedLlmService.when(LlmService::getThreadLocalConfig).thenReturn(multiModelConfig);
+        mockedLlmService.when(LlmService::getThreadLocalConfig)
+            .thenReturn(multiModelConfig);
 
         // Create a test runnable
         Runnable originalRunnable = mock(Runnable.class);
@@ -194,7 +232,8 @@ class ThreadLocalTaskDecoratorTest {
 
         // Verify interactions
         mockedLlmService.verify(LlmService::getThreadLocalConfig);
-        mockedLlmService.verify(() -> LlmService.setThreadLocalConfig(multiModelConfig));
+        mockedLlmService.verify(() ->
+            LlmService.setThreadLocalConfig(multiModelConfig));
         verify(originalRunnable).run();
         mockedLlmService.verify(LlmService::clearThreadLocalConfig);
     }
@@ -208,7 +247,8 @@ class ThreadLocalTaskDecoratorTest {
             new AnalysisSettings(null, null, null, null)
         );
 
-        mockedLlmService.when(LlmService::getThreadLocalConfig).thenReturn(emptyModelsConfig);
+        mockedLlmService.when(LlmService::getThreadLocalConfig)
+            .thenReturn(emptyModelsConfig);
 
         // Create a test runnable
         Runnable originalRunnable = mock(Runnable.class);
@@ -221,7 +261,8 @@ class ThreadLocalTaskDecoratorTest {
 
         // Verify interactions - should still work with empty models
         mockedLlmService.verify(LlmService::getThreadLocalConfig);
-        mockedLlmService.verify(() -> LlmService.setThreadLocalConfig(emptyModelsConfig));
+        mockedLlmService.verify(() ->
+            LlmService.setThreadLocalConfig(emptyModelsConfig));
         verify(originalRunnable).run();
         mockedLlmService.verify(LlmService::clearThreadLocalConfig);
     }
@@ -229,7 +270,8 @@ class ThreadLocalTaskDecoratorTest {
     @Test
     void testDecoratePreservesRunnableIdentity() {
         // Setup
-        mockedLlmService.when(LlmService::getThreadLocalConfig).thenReturn(testConfig);
+        mockedLlmService.when(LlmService::getThreadLocalConfig)
+            .thenReturn(testConfig);
 
         // Create a specific runnable implementation
         final boolean[] executed = {false};
@@ -245,7 +287,8 @@ class ThreadLocalTaskDecoratorTest {
 
         // Verify ThreadLocal operations occurred
         mockedLlmService.verify(LlmService::getThreadLocalConfig);
-        mockedLlmService.verify(() -> LlmService.setThreadLocalConfig(testConfig));
+        mockedLlmService.verify(() ->
+            LlmService.setThreadLocalConfig(testConfig));
         mockedLlmService.verify(LlmService::clearThreadLocalConfig);
     }
 }

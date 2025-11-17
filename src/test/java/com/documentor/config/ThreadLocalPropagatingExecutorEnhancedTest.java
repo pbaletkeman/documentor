@@ -18,8 +18,8 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Enhanced comprehensive tests for ThreadLocalPropagatingExecutorEnhanced class to improve branch coverage.
- * Tests all execution paths, error scenarios, and ThreadLocal propagation logic.
+ * Tests all execution paths, error scenarios, and
+ * ThreadLocal propagation logic.
  */
 @ExtendWith(MockitoExtension.class)
 class ThreadLocalPropagatingExecutorEnhancedTest {
@@ -45,14 +45,16 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
 
     @Test
     void testConstructorWithValidDelegate() {
-        executor = new ThreadLocalPropagatingExecutorEnhanced(mockDelegate, "test-executor");
+        executor = new ThreadLocalPropagatingExecutorEnhanced(
+            mockDelegate, "test-executor");
 
         assertNotNull(executor);
     }
 
     @Test
     void testConstructorWithNullDelegate() {
-        executor = new ThreadLocalPropagatingExecutorEnhanced(null, "test-executor");
+        executor = new ThreadLocalPropagatingExecutorEnhanced(
+            null, "test-executor");
 
         assertNotNull(executor);
         // Should use fallback executor (ForkJoinPool.commonPool())
@@ -60,7 +62,8 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
 
     @Test
     void testConstructorWithNullName() {
-        executor = new ThreadLocalPropagatingExecutorEnhanced(mockDelegate, null);
+        executor = new ThreadLocalPropagatingExecutorEnhanced(
+            mockDelegate, null);
 
         assertNotNull(executor);
         // Should use default name "unnamed"
@@ -68,14 +71,16 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
 
     @Test
     void testConstructorWithBothNull() {
-        executor = new ThreadLocalPropagatingExecutorEnhanced(null, null);
+        executor = new ThreadLocalPropagatingExecutorEnhanced(
+            null, null);
 
         assertNotNull(executor);
     }
 
     @Test
     void testExecuteWithNullCommand() {
-        executor = new ThreadLocalPropagatingExecutorEnhanced(mockDelegate, "test-executor");
+        executor = new ThreadLocalPropagatingExecutorEnhanced(
+            mockDelegate, "test-executor");
 
         // Should handle null command gracefully
         assertDoesNotThrow(() -> executor.execute(null));
@@ -85,14 +90,17 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
     }
 
     @Test
-    void testExecuteWithValidCommandAndThreadLocalConfig() throws InterruptedException {
-        executor = new ThreadLocalPropagatingExecutorEnhanced(mockDelegate, "test-executor");
+    void testExecuteWithValidCommandAndThreadLocalConfig()
+        throws InterruptedException {
+        executor = new ThreadLocalPropagatingExecutorEnhanced(mockDelegate,
+            "test-executor");
 
         // Setup ThreadLocal config
         ThreadLocalContextHolder.setConfig(mockConfig);
 
         CountDownLatch latch = new CountDownLatch(1);
-        AtomicReference<DocumentorConfig> capturedConfig = new AtomicReference<>();
+        AtomicReference<DocumentorConfig> capturedConfig =
+            new AtomicReference<>();
 
         Runnable testCommand = () -> {
             capturedConfig.set(ThreadLocalContextHolder.getConfig());
@@ -115,13 +123,15 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
 
     @Test
     void testExecuteWithNoThreadLocalConfig() throws InterruptedException {
-        executor = new ThreadLocalPropagatingExecutorEnhanced(mockDelegate, "test-executor");
+        executor = new ThreadLocalPropagatingExecutorEnhanced(mockDelegate,
+            "test-executor");
 
         // Ensure no ThreadLocal config
         ThreadLocalContextHolder.clearConfig();
 
         CountDownLatch latch = new CountDownLatch(1);
-        AtomicReference<DocumentorConfig> capturedConfig = new AtomicReference<>();
+        AtomicReference<DocumentorConfig> capturedConfig =
+            new AtomicReference<>();
 
         Runnable testCommand = () -> {
             capturedConfig.set(ThreadLocalContextHolder.getConfig());
@@ -144,7 +154,8 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
 
     @Test
     void testExecuteTaskExceptionHandling() {
-        executor = new ThreadLocalPropagatingExecutorEnhanced(mockDelegate, "test-executor");
+        executor = new ThreadLocalPropagatingExecutorEnhanced(
+            mockDelegate, "test-executor");
 
         Runnable throwingCommand = () -> {
             throw new RuntimeException("Test exception in task");
@@ -164,12 +175,14 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
 
     @Test
     void testExecuteDelegateExecutorThrowsException() {
-        executor = new ThreadLocalPropagatingExecutorEnhanced(mockDelegate, "test-executor");
+        executor = new ThreadLocalPropagatingExecutorEnhanced(
+            mockDelegate, "test-executor");
 
         Runnable testCommand = () -> {};
 
         // Mock delegate to throw exception
-        doThrow(new RuntimeException("Delegate executor failed")).when(mockDelegate).execute(any());
+        doThrow(new RuntimeException("Delegate executor failed"))
+            .when(mockDelegate).execute(any());
 
         // Should handle delegate exception and fall back to ForkJoinPool
         assertDoesNotThrow(() -> executor.execute(testCommand));
@@ -179,18 +192,21 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
     @Test
     void testExecuteFallbackExecutorAlsoFails() {
         // Create executor with null delegate to force fallback
-        executor = new ThreadLocalPropagatingExecutorEnhanced(null, "test-executor");
+        executor = new ThreadLocalPropagatingExecutorEnhanced(
+            null, "test-executor");
 
         Runnable testCommand = () -> {};
 
-        // The fallback is ForkJoinPool.commonPool() which should work, but we can't easily mock it
+        // The fallback is ForkJoinPool.commonPool() which should
+        // work, but we can't easily mock it
         // So we test that execution doesn't throw exception
         assertDoesNotThrow(() -> executor.execute(testCommand));
     }
 
     @Test
     void testThreadLocalCleanupInFinally() throws InterruptedException {
-        executor = new ThreadLocalPropagatingExecutorEnhanced(mockDelegate, "test-executor");
+        executor = new ThreadLocalPropagatingExecutorEnhanced(
+            mockDelegate, "test-executor");
 
         // Setup ThreadLocal config
         ThreadLocalContextHolder.setConfig(mockConfig);
@@ -210,53 +226,65 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
             Runnable wrapped = invocation.getArgument(0);
             wrapped.run();
             // After wrapped task execution, verify config was cleared
-            wasConfigClearedInFinally.set(ThreadLocalContextHolder.getConfig() == null);
+            wasConfigClearedInFinally.set(ThreadLocalContextHolder
+                .getConfig() == null);
             return null;
         }).when(mockDelegate).execute(any());
 
         executor.execute(testCommand);
 
         assertTrue(latch.await(1, TimeUnit.SECONDS));
-        // Note: We can't directly verify the cleanup from outside since it happens in the wrapped task
+        // Note: We can't directly verify the cleanup from
+        // outside since it happens in the wrapped task
         verify(mockDelegate).execute(any());
     }
 
     @Test
     void testCreateExecutorWithValidParameters() {
-        Executor createdExecutor = ThreadLocalPropagatingExecutorEnhanced.createExecutor(5, "test-pool");
+        Executor createdExecutor =
+            ThreadLocalPropagatingExecutorEnhanced.createExecutor(
+                5, "test-pool");
 
         assertNotNull(createdExecutor);
-        assertTrue(createdExecutor instanceof ThreadLocalPropagatingExecutorEnhanced);
+        assertTrue(createdExecutor instanceof
+            ThreadLocalPropagatingExecutorEnhanced);
     }
 
     @Test
     void testCreateExecutorWithMinimalThreads() {
-        Executor createdExecutor = ThreadLocalPropagatingExecutorEnhanced.createExecutor(1, "minimal-pool");
+        Executor createdExecutor = ThreadLocalPropagatingExecutorEnhanced
+            .createExecutor(1, "minimal-pool");
 
         assertNotNull(createdExecutor);
-        assertTrue(createdExecutor instanceof ThreadLocalPropagatingExecutorEnhanced);
+        assertTrue(createdExecutor instanceof
+            ThreadLocalPropagatingExecutorEnhanced);
     }
 
     @Test
     void testCreateExecutorWithHighThreadCount() {
-        Executor createdExecutor = ThreadLocalPropagatingExecutorEnhanced.createExecutor(20, "large-pool");
+        Executor createdExecutor = ThreadLocalPropagatingExecutorEnhanced
+            .createExecutor(20, "large-pool");
 
         assertNotNull(createdExecutor);
-        assertTrue(createdExecutor instanceof ThreadLocalPropagatingExecutorEnhanced);
+        assertTrue(createdExecutor instanceof
+            ThreadLocalPropagatingExecutorEnhanced);
     }
 
     @Test
     void testCreateExecutorWithNullPrefix() {
-        Executor createdExecutor = ThreadLocalPropagatingExecutorEnhanced.createExecutor(5, null);
+        Executor createdExecutor =
+            ThreadLocalPropagatingExecutorEnhanced.createExecutor(5, null);
 
         assertNotNull(createdExecutor);
-        assertTrue(createdExecutor instanceof ThreadLocalPropagatingExecutorEnhanced);
+        assertTrue(createdExecutor instanceof
+            ThreadLocalPropagatingExecutorEnhanced);
     }
 
     @Test
     void testCreateExecutorThreadFactoryExceptionHandling() {
         // Test that thread creation works and handles exceptions properly
-        Executor createdExecutor = ThreadLocalPropagatingExecutorEnhanced.createExecutor(2, "exception-test");
+        Executor createdExecutor = ThreadLocalPropagatingExecutorEnhanced
+            .createExecutor(2, "exception-test");
 
         assertNotNull(createdExecutor);
 
@@ -274,7 +302,8 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
 
     @Test
     void testCreateExecutorRejectionHandler() {
-        Executor createdExecutor = ThreadLocalPropagatingExecutorEnhanced.createExecutor(1, "rejection-test");
+        Executor createdExecutor = ThreadLocalPropagatingExecutorEnhanced
+            .createExecutor(1, "rejection-test");
 
         assertNotNull(createdExecutor);
 
@@ -291,8 +320,10 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
             latch.countDown();
         });
 
-        // Submit many more tasks to potentially trigger queue overflow and rejection
-        for (int i = 0; i < 150; i++) { // More than default queue capacity of 100
+        // Submit many more tasks to potentially trigger
+        // queue overflow and rejection
+        for (int i = 0; i < 150; i++) {
+            // More than default queue capacity of 100
             createdExecutor.execute(() -> {
                 // Simple task
             });
@@ -305,13 +336,16 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
     }
 
     @Test
-    void testExecuteWithExplicitlySetThreadLocalConfig() throws InterruptedException {
-        executor = new ThreadLocalPropagatingExecutorEnhanced(mockDelegate, "test-executor");
+    void testExecuteWithExplicitlySetThreadLocalConfig()
+        throws InterruptedException {
+        executor = new ThreadLocalPropagatingExecutorEnhanced(mockDelegate,
+            "test-executor");
 
         // Setup ThreadLocal config as explicitly set
         ThreadLocalContextHolder.setConfig(mockConfig);
-        // Simulate explicit setting by calling setConfig again or through other means
-        // The isConfigExplicitlySet() method behavior depends on implementation
+        // Simulate explicit setting by calling setConfig again
+        // or through other means. The isConfigExplicitlySet()
+        // method behavior depends on implementation
 
         CountDownLatch latch = new CountDownLatch(1);
 
@@ -336,27 +370,35 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
 
     @Test
     void testCreateExecutorInternalExceptionHandling() {
-        // Test error path in createExecutor by simulating thread pool creation failure
-        // This is difficult to test directly, but we can verify the fallback behavior
+        // Test error path in createExecutor by simulating thread pool
+        // creation failure. This is difficult to test directly,
+        // but we can verify the fallback behavior
 
-        Executor executor1 = ThreadLocalPropagatingExecutorEnhanced.createExecutor(0, "zero-threads");
-        assertNotNull(executor1); // Should still return an executor (with fallback)
+        Executor executor1 = ThreadLocalPropagatingExecutorEnhanced
+            .createExecutor(0, "zero-threads");
+             // Should still return an executor (with fallback)
+        assertNotNull(executor1);
 
-        Executor executor2 = ThreadLocalPropagatingExecutorEnhanced.createExecutor(-1, "negative-threads");
-        assertNotNull(executor2); // Should still return an executor (with fallback)
+        Executor executor2 = ThreadLocalPropagatingExecutorEnhanced
+            .createExecutor(-1, "negative-threads");
+            // Should still return an executor (with fallback)
+        assertNotNull(executor2);
     }
 
     @Test
     void testConstantsValues() {
         // Test that constants have expected values
-        assertEquals(5, ThreadLocalPropagatingExecutorEnhanced.DEFAULT_THREAD_COUNT);
-        assertEquals(30, ThreadLocalPropagatingExecutorEnhanced.DEFAULT_TIMEOUT_SECONDS);
+        assertEquals(5,
+            ThreadLocalPropagatingExecutorEnhanced.DEFAULT_THREAD_COUNT);
+        assertEquals(30,
+            ThreadLocalPropagatingExecutorEnhanced.DEFAULT_TIMEOUT_SECONDS);
     }
 
     @Test
     void testExecuteMultipleTasksConcurrently() throws InterruptedException {
         // Test with real thread pool to verify concurrent execution
-        Executor realExecutor = ThreadLocalPropagatingExecutorEnhanced.createExecutor(3, "concurrent-test");
+        Executor realExecutor = ThreadLocalPropagatingExecutorEnhanced
+            .createExecutor(3, "concurrent-test");
 
         int taskCount = 10;
         CountDownLatch latch = new CountDownLatch(taskCount);

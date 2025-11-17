@@ -1,10 +1,5 @@
 package com.documentor;
 
-import com.documentor.config.DocumentorConfig;
-import com.documentor.config.TestConfig;
-import com.documentor.config.model.AnalysisSettings;
-import com.documentor.config.model.LlmModelConfig;
-import com.documentor.config.model.OutputSettings;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
@@ -12,13 +7,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Primary;
-import org.springframework.test.context.ActiveProfiles;
 
-import java.util.List;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -43,50 +33,60 @@ class DocumentorApplicationTests {
     @Test
     void testMainMethod() {
         // Test main method using mocked static SpringApplication.run
-        try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
+        try (MockedStatic<SpringApplication> mockedSpringApp =
+            mockStatic(SpringApplication.class)) {
             // When
             DocumentorApplication.main(new String[]{"--help"});
 
             // Then
-            mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorApplication.class), any(String[].class)));
+            mockedSpringApp.verify(() -> SpringApplication.run(eq(
+                DocumentorApplication.class), any(String[].class)));
         }
     }
 
     @Test
     void testMainMethodWithEmptyArgs() {
         // Test main method with empty arguments
-        try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
+        try (MockedStatic<SpringApplication> mockedSpringApp =
+            mockStatic(SpringApplication.class)) {
             // When
             DocumentorApplication.main(new String[]{});
 
             // Then
-            mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorApplication.class), any(String[].class)));
+            mockedSpringApp.verify(() -> SpringApplication.run(eq(
+                DocumentorApplication.class), any(String[].class)));
         }
     }
 
     @Test
     void testMainMethodWithNullArgs() {
         // Test main method with null arguments
-        try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
+        try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(
+            SpringApplication.class)) {
             // When
             DocumentorApplication.main(null);
 
             // Then
-            mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorApplication.class), any()));
+            mockedSpringApp.verify(() -> SpringApplication.run(eq(
+                DocumentorApplication.class), any()));
         }
     }
 
     @Test
     void testMainMethodWithMultipleArgs() {
         // Test main method with multiple arguments
-        try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
-            String[] args = {"--spring.profiles.active=test", "--debug", "--project-path=/test"};
+        try (MockedStatic<SpringApplication> mockedSpringApp =
+            mockStatic(SpringApplication.class)) {
+            String[] args =
+                {"--spring.profiles.active=test", "--debug",
+                "--project-path=/test"};
 
             // When
             DocumentorApplication.main(args);
 
             // Then
-            mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorApplication.class), eq(args)));
+            mockedSpringApp.verify(() -> SpringApplication.run(eq(
+                DocumentorApplication.class), eq(args)));
         }
     }
 
@@ -103,30 +103,36 @@ class DocumentorApplicationTests {
         // Verify the application class exists and is properly defined
         assertNotNull(DocumentorApplication.class);
         assertFalse(DocumentorApplication.class.isInterface());
-        assertFalse(java.lang.reflect.Modifier.isAbstract(DocumentorApplication.class.getModifiers()));
+        assertFalse(java.lang.reflect.Modifier
+            .isAbstract(DocumentorApplication.class.getModifiers()));
     }
 
     @Test
     void testMainMethodExists() throws NoSuchMethodException {
         // Verify main method exists with correct signature
-        java.lang.reflect.Method mainMethod = DocumentorApplication.class.getDeclaredMethod("main", String[].class);
+        java.lang.reflect.Method mainMethod = DocumentorApplication.class
+            .getDeclaredMethod("main", String[].class);
 
         assertNotNull(mainMethod);
-        assertTrue(java.lang.reflect.Modifier.isStatic(mainMethod.getModifiers()));
-        assertTrue(java.lang.reflect.Modifier.isPublic(mainMethod.getModifiers()));
+        assertTrue(java.lang.reflect.Modifier
+            .isStatic(mainMethod.getModifiers()));
+        assertTrue(java.lang.reflect.Modifier
+            .isPublic(mainMethod.getModifiers()));
         assertEquals(void.class, mainMethod.getReturnType());
     }
 
     @Test
     void testApplicationClassPackage() {
         // Verify the application class is in the correct package
-        assertEquals("com.documentor", DocumentorApplication.class.getPackageName());
+        assertEquals("com.documentor",
+            DocumentorApplication.class.getPackageName());
     }
 
     @Test
     void testMainMethodWithComplexArguments() {
         // Test main method with complex argument patterns
-        try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
+        try (MockedStatic<SpringApplication> mockedSpringApp =
+            mockStatic(SpringApplication.class)) {
             String[] complexArgs = {
                 "--spring.profiles.active=production",
                 "--logging.level.com.documentor=INFO",
@@ -138,35 +144,41 @@ class DocumentorApplicationTests {
             DocumentorApplication.main(complexArgs);
 
             // Then
-            mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorApplication.class), eq(complexArgs)));
+            mockedSpringApp.verify(() -> SpringApplication.run(eq(
+                DocumentorApplication.class), eq(complexArgs)));
         }
     }
 
     @Test
     void testSpringBootApplicationAnnotation() {
         // Verify SpringBootApplication annotation configuration
-        SpringBootApplication annotation = DocumentorApplication.class.getAnnotation(SpringBootApplication.class);
+        SpringBootApplication annotation = DocumentorApplication.class.
+            getAnnotation(SpringBootApplication.class);
         assertNotNull(annotation);
     }
 
     @Test
+
     void testMainMethodWithProductionProfile() {
         // Test main method with production profile
-        try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
+        try (MockedStatic<SpringApplication> mockedSpringApp =
+            mockStatic(SpringApplication.class)) {
             String[] prodArgs = {"--spring.profiles.active=production"};
 
             // When
             DocumentorApplication.main(prodArgs);
 
             // Then
-            mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorApplication.class), eq(prodArgs)));
+            mockedSpringApp.verify(() -> SpringApplication.run(eq(
+                DocumentorApplication.class), eq(prodArgs)));
         }
     }
 
     @Test
     void testMainMethodWithLoggingConfiguration() {
         // Test main method with logging configuration
-        try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
+        try (MockedStatic<SpringApplication> mockedSpringApp =
+            mockStatic(SpringApplication.class)) {
             String[] loggingArgs = {
                 "--logging.level.com.documentor=INFO",
                 "--logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
@@ -176,14 +188,16 @@ class DocumentorApplicationTests {
             DocumentorApplication.main(loggingArgs);
 
             // Then
-            mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorApplication.class), eq(loggingArgs)));
+            mockedSpringApp.verify(() -> SpringApplication.run(eq(
+                DocumentorApplication.class), eq(loggingArgs)));
         }
     }
 
     @Test
     void testMainMethodWithJvmArguments() {
         // Test main method with JVM-like arguments
-        try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
+        try (MockedStatic<SpringApplication> mockedSpringApp =
+            mockStatic(SpringApplication.class)) {
             String[] jvmArgs = {
                 "-Dfile.encoding=UTF-8",
                 "--spring.application.name=documentor"
@@ -193,7 +207,9 @@ class DocumentorApplicationTests {
             DocumentorApplication.main(jvmArgs);
 
             // Then
-            mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorApplication.class), eq(jvmArgs)));
+            mockedSpringApp.verify(() ->
+                SpringApplication.run(eq(
+                    DocumentorApplication.class), eq(jvmArgs)));
         }
     }
 

@@ -21,7 +21,8 @@ class MermaidClassDiagramGeneratorTest {
     // Test constants for magic number violations
     private static final int LINE_NUMBER_THREE = 3;
 
-    private final MermaidClassDiagramGenerator generator = new MermaidClassDiagramGenerator();
+    private final MermaidClassDiagramGenerator generator =
+        new MermaidClassDiagramGenerator();
 
     @Test
     @DisplayName("Should generate class diagram with fields and methods")
@@ -63,10 +64,12 @@ class MermaidClassDiagramGeneratorTest {
             List.of("@Test")
         );
 
-        List<CodeElement> elements = Arrays.asList(classElement, fieldElement, methodElement);
+        List<CodeElement> elements =
+            Arrays.asList(classElement, fieldElement, methodElement);
 
         // When
-        String result = generator.generateClassDiagram(classElement, elements, tempDir);
+        String result =
+            generator.generateClassDiagram(classElement, elements, tempDir);
 
         // Then
         assertNotNull(result);

@@ -27,10 +27,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-/**
- * Targeted branch coverage tests for ElementDocumentationGeneratorEnhanced.
- * Focuses specifically on improving branch coverage for low-coverage methods.
- */
 @ExtendWith(MockitoExtension.class)
 class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
 
@@ -179,8 +175,8 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
 
         String longCodeNoSemicolons =
             "public class VeryLongClassNameThatExceedsOneHundredCharacters"
-            + "ButDoesNotContainSemicolonsToTriggerFormatting extends BaseClass"
-            + " implements Interface {}";
+            + "ButDoesNotContainSemicolonsToTriggerFormatting extends "
+            + "BaseClass implements Interface {}";
 
         CodeElement elementWithLongCode = new CodeElement(
             CodeElementType.CLASS,
@@ -195,8 +191,8 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
         );
 
         assertDoesNotThrow(() ->
-            generator.generateElementDocumentation(elementWithLongCode, tempDir)
-            .join());
+            generator.generateElementDocumentation(elementWithLongCode,
+            tempDir).join());
     }
 
     @Test
@@ -378,7 +374,8 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
         timeoutFuture.completeExceptionally(
             new TimeoutException("Operation timed out"));
 
-        when(llmService.generateDocumentation(any())).thenReturn(timeoutFuture);
+        when(llmService.generateDocumentation(any()))
+            .thenReturn(timeoutFuture);
         when(llmService.generateUsageExamples(any()))
             .thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
         when(llmServiceFix.isThreadLocalConfigAvailable()).thenReturn(true);
@@ -584,13 +581,15 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
             .thenReturn(CompletableFuture.completedFuture(TEST_EXAMPLES));
         when(llmServiceFix.isThreadLocalConfigAvailable()).thenReturn(true);
 
-        String longSignature = "public synchronized final Optional<List<Map<String, "
-                + "ComplexGenericType<? extends SomeInterface>>>> "
-                + "veryLongMethodNameWithManyParametersAndComplexGenerics("
-                + "String parameter1, Integer parameter2, List<String> parameter3, "
-                + "Map<String, Object> parameter4, Optional<Boolean> parameter5, "
-                + "CompletableFuture<String> parameter6) throws IOException, "
-                + "IllegalArgumentException, RuntimeException, InterruptedException";
+        String longSignature =
+            "public synchronized final Optional<List<Map<String, "
+            + "ComplexGenericType<? extends SomeInterface>>>> "
+            + "veryLongMethodNameWithManyParametersAndComplexGenerics("
+            + "String parameter1, Integer parameter2, "
+            + "List<String> parameter3, Map<String, Object> parameter4,"
+            + " Optional<Boolean> parameter5, CompletableFuture<String>"
+            + " parameter6) throws IOException, IllegalArgumentException,"
+            + " RuntimeException, InterruptedException";
 
 
         CodeElement methodWithLongSig = new CodeElement(
@@ -632,7 +631,8 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
         );
 
         CodeElement classElement = createTestClassElement();
-        List<CodeElement> elements = Arrays.asList(classElement, methodWithShortSig);
+        List<CodeElement> elements =
+            Arrays.asList(classElement, methodWithShortSig);
         ProjectAnalysis analysis = new ProjectAnalysis(
             "/test/path", elements, System.currentTimeMillis());
 
@@ -644,8 +644,9 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
-        "/test/script.js", "/test/app.ts", "/test/script.py", "/test/config.xml",
-        "/test/style.css", "/test/README.md", "/test/config.json", "/test/script.rb",
+        "/test/script.js", "/test/app.ts", "/test/script.py",
+        "/test/config.xml", "/test/style.css", "/test/README.md",
+        "/test/config.json", "/test/script.rb",
         "/test/file.unknown", "noextension"
     })
     void testGetLanguageFromFileWithVariousExtensions(String filePath) {

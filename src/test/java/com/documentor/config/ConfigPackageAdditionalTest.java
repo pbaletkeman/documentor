@@ -15,7 +15,8 @@ class ConfigPackageAdditionalTest {
 
     @Test
     void testThreadLocalContextHolderBoundaryConditions() {
-        // Test clear when already clear (covers branch for when threadLocal is already null)
+        // Test clear when already clear
+        // (covers branch for when threadLocal is already null)
         ThreadLocalContextHolder.clearConfig();
         assertNull(ThreadLocalContextHolder.getConfig());
         assertFalse(ThreadLocalContextHolder.isConfigExplicitlySet());
@@ -27,7 +28,8 @@ class ConfigPackageAdditionalTest {
         // Test setting actual config
         DocumentorConfig config = new DocumentorConfig(
             java.util.List.of(),
-            new com.documentor.config.model.OutputSettings("/test", "MARKDOWN", false, false, false),
+            new com.documentor.config.model.OutputSettings(
+                "/test", "MARKDOWN", false, false, false),
             null
         );
         ThreadLocalContextHolder.setConfig(config);
@@ -42,28 +44,36 @@ class ConfigPackageAdditionalTest {
     @Test
     void testThreadLocalPropagatingExecutorBoundaryConditions() {
         // Test createExecutor with zero threads
-        var executor1 = ThreadLocalPropagatingExecutorEnhanced.createExecutor(0, "zero-threads");
+        var executor1 = ThreadLocalPropagatingExecutorEnhanced
+            .createExecutor(0, "zero-threads");
         assertNotNull(executor1);
 
         // Test createExecutor with negative threads
-        var executor2 = ThreadLocalPropagatingExecutorEnhanced.createExecutor(-5, "negative-threads");
+        var executor2 = ThreadLocalPropagatingExecutorEnhanced
+            .createExecutor(-5, "negative-threads");
         assertNotNull(executor2);
 
         // Test createExecutor with very high thread count
-        var executor3 = ThreadLocalPropagatingExecutorEnhanced.createExecutor(1000, "high-threads");
+        var executor3 = ThreadLocalPropagatingExecutorEnhanced
+            .createExecutor(1000, "high-threads");
         assertNotNull(executor3);
     }
 
     @Test
     void testEarlyConfigurationLoaderEdgeCases() {
         // Test constructor with non-null config loader
-        ExternalConfigLoader mockLoader = org.mockito.Mockito.mock(ExternalConfigLoader.class);
-        EarlyConfigurationLoader loader = new EarlyConfigurationLoader(mockLoader);
+        ExternalConfigLoader mockLoader =
+            org.mockito.Mockito.mock(ExternalConfigLoader.class);
+        EarlyConfigurationLoader loader =
+            new EarlyConfigurationLoader(mockLoader);
         assertNotNull(loader);
 
         // Test run method with mock arguments
-        org.springframework.boot.ApplicationArguments mockArgs = org.mockito.Mockito.mock(org.springframework.boot.ApplicationArguments.class);
-        org.mockito.Mockito.when(mockArgs.getSourceArgs()).thenReturn(new String[]{"analyze"});
+        org.springframework.boot.ApplicationArguments mockArgs =
+            org.mockito.Mockito.mock(org.springframework.boot
+            .ApplicationArguments.class);
+        org.mockito.Mockito.when(mockArgs.getSourceArgs())
+            .thenReturn(new String[]{"analyze"});
 
         assertDoesNotThrow(() -> loader.run(mockArgs));
     }
@@ -91,21 +101,28 @@ class ConfigPackageAdditionalTest {
 
     @Test
     void testLlmServiceConfigurationBasic() {
-        // These configuration classes are Spring @Configuration classes, test reflection access
+        // These configuration classes are Spring @Configuration classes,
+        // test reflection access
         Class<?> llmServiceConfig = LlmServiceConfiguration.class;
         assertNotNull(llmServiceConfig);
-        assertTrue(llmServiceConfig.isAnnotationPresent(org.springframework.context.annotation.Configuration.class));
+        assertTrue(llmServiceConfig.isAnnotationPresent(
+            org.springframework.context
+            .annotation.Configuration.class));
 
-        Class<?> llmServiceConfigEnhanced = LlmServiceConfigurationEnhanced.class;
+        Class<?> llmServiceConfigEnhanced =
+            LlmServiceConfigurationEnhanced.class;
         assertNotNull(llmServiceConfigEnhanced);
-        assertTrue(llmServiceConfigEnhanced.isAnnotationPresent(org.springframework.context.annotation.Configuration.class));
+        assertTrue(llmServiceConfigEnhanced.isAnnotationPresent(
+            org.springframework.context
+                .annotation.Configuration.class));
     }
 
     @Test
     void testDiagramServiceConfigurationBranches() {
         // Test DiagramServiceConfiguration constructor
         assertDoesNotThrow(() -> {
-            DiagramServiceConfiguration config = new DiagramServiceConfiguration();
+            DiagramServiceConfiguration config =
+                new DiagramServiceConfiguration();
             assertNotNull(config);
         });
     }
@@ -114,7 +131,8 @@ class ConfigPackageAdditionalTest {
     void testDocumentationServiceConfigurationBranches() {
         // Test DocumentationServiceConfiguration constructor
         assertDoesNotThrow(() -> {
-            DocumentationServiceConfiguration config = new DocumentationServiceConfiguration();
+            DocumentationServiceConfiguration config =
+                new DocumentationServiceConfiguration();
             assertNotNull(config);
         });
     }

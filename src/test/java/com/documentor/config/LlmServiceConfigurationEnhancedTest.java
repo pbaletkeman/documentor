@@ -115,16 +115,21 @@ class LlmServiceConfigurationEnhancedTest {
         assertThat(defaultModel.provider()).isEqualTo("ollama");
         assertThat(defaultModel.baseUrl()).isEqualTo("http://localhost:11434");
         assertThat(defaultModel.apiKey()).isEmpty();
-        assertThat(defaultModel.maxTokens()).isEqualTo(ApplicationConstants.DEFAULT_MAX_TOKENS);
-        assertThat(defaultModel.timeoutSeconds()).isEqualTo(ApplicationConstants.DEFAULT_TIMEOUT_SECONDS);
+        assertThat(defaultModel.maxTokens())
+            .isEqualTo(ApplicationConstants.DEFAULT_MAX_TOKENS);
+        assertThat(defaultModel.timeoutSeconds())
+            .isEqualTo(ApplicationConstants.DEFAULT_TIMEOUT_SECONDS);
     }
 
     @Test
     void testLlmServiceEnhanced_WithEmptyModelList() {
         // Given
-        when(mockDocumentorConfig.llmModels()).thenReturn(Collections.emptyList());
-        when(mockDocumentorConfig.outputSettings()).thenReturn(mockOutputSettings);
-        when(mockDocumentorConfig.analysisSettings()).thenReturn(mockAnalysisSettings);
+        when(mockDocumentorConfig.llmModels())
+            .thenReturn(Collections.emptyList());
+        when(mockDocumentorConfig.outputSettings())
+            .thenReturn(mockOutputSettings);
+        when(mockDocumentorConfig.analysisSettings())
+            .thenReturn(mockAnalysisSettings);
 
         // When
         LlmServiceEnhanced result = configuration.llmServiceEnhanced(
@@ -142,7 +147,8 @@ class LlmServiceConfigurationEnhancedTest {
         assertThat(storedConfig).isNotNull();
         assertThat(storedConfig.llmModels()).hasSize(1);
         assertThat(storedConfig.outputSettings()).isEqualTo(mockOutputSettings);
-        assertThat(storedConfig.analysisSettings()).isEqualTo(mockAnalysisSettings);
+        assertThat(storedConfig.analysisSettings())
+            .isEqualTo(mockAnalysisSettings);
 
         LlmModelConfig addedModel = storedConfig.llmModels().get(0);
         assertThat(addedModel.name()).isEqualTo("default-model");
@@ -153,8 +159,10 @@ class LlmServiceConfigurationEnhancedTest {
     void testLlmServiceEnhanced_WithNullModelList() {
         // Given
         when(mockDocumentorConfig.llmModels()).thenReturn(null);
-        when(mockDocumentorConfig.outputSettings()).thenReturn(mockOutputSettings);
-        when(mockDocumentorConfig.analysisSettings()).thenReturn(mockAnalysisSettings);
+        when(mockDocumentorConfig.outputSettings())
+            .thenReturn(mockOutputSettings);
+        when(mockDocumentorConfig.analysisSettings())
+            .thenReturn(mockAnalysisSettings);
 
         // When
         LlmServiceEnhanced result = configuration.llmServiceEnhanced(
@@ -172,7 +180,8 @@ class LlmServiceConfigurationEnhancedTest {
         assertThat(storedConfig).isNotNull();
         assertThat(storedConfig.llmModels()).hasSize(1);
         assertThat(storedConfig.outputSettings()).isEqualTo(mockOutputSettings);
-        assertThat(storedConfig.analysisSettings()).isEqualTo(mockAnalysisSettings);
+        assertThat(storedConfig.analysisSettings())
+            .isEqualTo(mockAnalysisSettings);
 
         LlmModelConfig addedModel = storedConfig.llmModels().get(0);
         assertThat(addedModel.name()).isEqualTo("default-model");
@@ -191,17 +200,17 @@ class LlmServiceConfigurationEnhancedTest {
     void testElementDocumentationGeneratorEnhanced_Creation() {
         // Given
         LlmServiceEnhanced mockLlmService = new LlmServiceEnhanced(
-                createTestConfig(),
-                mockRequestBuilder,
-                mockResponseHandler,
-                mockApiClient
+            createTestConfig(),
+            mockRequestBuilder,
+            mockResponseHandler,
+            mockApiClient
         );
         LlmServiceFixEnhanced mockLlmFixService = new LlmServiceFixEnhanced();
 
         // When
-        ElementDocumentationGeneratorEnhanced result = configuration.elementDocumentationGeneratorEnhanced(
-                mockLlmService,
-                mockLlmFixService
+        var result = configuration.elementDocumentationGeneratorEnhanced(
+            mockLlmService,
+            mockLlmFixService
         );
 
         // Then
@@ -210,7 +219,8 @@ class LlmServiceConfigurationEnhancedTest {
 
     @Test
     void testCreateDefaultConfig_DefaultValues() {
-        // This tests the private createDefaultConfig method indirectly through null config path
+        // This tests the private createDefaultConfig method indirectly
+        // through null config path
         // When
         LlmServiceEnhanced result = configuration.llmServiceEnhanced(
                 null,
@@ -230,16 +240,21 @@ class LlmServiceConfigurationEnhancedTest {
         // analysisSettings may have defaults, don't assert on exact null value
 
         LlmModelConfig model = storedConfig.llmModels().get(0);
-        assertThat(model.maxTokens()).isEqualTo(ApplicationConstants.DEFAULT_MAX_TOKENS);
-        assertThat(model.timeoutSeconds()).isEqualTo(ApplicationConstants.DEFAULT_TIMEOUT_SECONDS);
+        assertThat(model.maxTokens())
+            .isEqualTo(ApplicationConstants.DEFAULT_MAX_TOKENS);
+        assertThat(model.timeoutSeconds())
+            .isEqualTo(ApplicationConstants.DEFAULT_TIMEOUT_SECONDS);
     }
 
     @Test
     void testAddDefaultModel_PreservesExistingSettings() {
         // Given - config with no models but with other settings
-        when(mockDocumentorConfig.llmModels()).thenReturn(Collections.emptyList());
-        when(mockDocumentorConfig.outputSettings()).thenReturn(mockOutputSettings);
-        when(mockDocumentorConfig.analysisSettings()).thenReturn(mockAnalysisSettings);
+        when(mockDocumentorConfig.llmModels())
+            .thenReturn(Collections.emptyList());
+        when(mockDocumentorConfig.outputSettings())
+            .thenReturn(mockOutputSettings);
+        when(mockDocumentorConfig.analysisSettings())
+            .thenReturn(mockAnalysisSettings);
 
         // When
         LlmServiceEnhanced result = configuration.llmServiceEnhanced(
@@ -256,15 +271,31 @@ class LlmServiceConfigurationEnhancedTest {
         DocumentorConfig storedConfig = ThreadLocalContextHolder.getConfig();
         assertThat(storedConfig.llmModels()).hasSize(1);
         assertThat(storedConfig.outputSettings()).isEqualTo(mockOutputSettings);
-        assertThat(storedConfig.analysisSettings()).isEqualTo(mockAnalysisSettings);
+        assertThat(storedConfig.analysisSettings())
+            .isEqualTo(mockAnalysisSettings);
     }
 
     @Test
     void testLlmServiceEnhanced_LogsConfigurationDetails() {
         // Given
-        LlmModelConfig modelConfig1 = new LlmModelConfig("model1", "ollama", "endpoint1", "key1", 1000, 10);
-        LlmModelConfig modelConfig2 = new LlmModelConfig("model2", "openai", "endpoint2", "key2", 2000, 20);
-        when(mockDocumentorConfig.llmModels()).thenReturn(List.of(modelConfig1, modelConfig2));
+        LlmModelConfig modelConfig1 = new LlmModelConfig(
+            "model1",
+            "ollama",
+            "endpoint1",
+            "key1",
+            1000,
+            10
+        );
+        LlmModelConfig modelConfig2 = new LlmModelConfig(
+            "model2",
+            "openai",
+            "endpoint2",
+            "key2",
+            2000,
+            20
+        );
+        when(mockDocumentorConfig.llmModels())
+            .thenReturn(List.of(modelConfig1, modelConfig2));
 
         // When
         LlmServiceEnhanced result = configuration.llmServiceEnhanced(
@@ -286,7 +317,7 @@ class LlmServiceConfigurationEnhancedTest {
     @Test
     void testConfigurationConstructor() {
         // When
-        LlmServiceConfigurationEnhanced newConfig = new LlmServiceConfigurationEnhanced();
+        var newConfig = new LlmServiceConfigurationEnhanced();
 
         // Then
         assertThat(newConfig).isNotNull();
@@ -303,7 +334,11 @@ class LlmServiceConfigurationEnhancedTest {
                 4096,
                 30
         );
-        DocumentorConfig testConfig = new DocumentorConfig(List.of(modelConfig), null, null);
+        DocumentorConfig testConfig = new DocumentorConfig(
+            List.of(modelConfig),
+            null,
+            null
+        );
 
         // When
         LlmServiceEnhanced result = configuration.llmServiceEnhanced(
@@ -347,16 +382,21 @@ class LlmServiceConfigurationEnhancedTest {
         assertThat(defaultModel.provider()).isEqualTo("ollama");
         assertThat(defaultModel.baseUrl()).isEqualTo("http://localhost:11434");
         assertThat(defaultModel.apiKey()).isEmpty();
-        assertThat(defaultModel.maxTokens()).isEqualTo(ApplicationConstants.DEFAULT_MAX_TOKENS);
-        assertThat(defaultModel.timeoutSeconds()).isEqualTo(ApplicationConstants.DEFAULT_TIMEOUT_SECONDS);
+        assertThat(defaultModel.maxTokens())
+            .isEqualTo(ApplicationConstants.DEFAULT_MAX_TOKENS);
+        assertThat(defaultModel.timeoutSeconds())
+            .isEqualTo(ApplicationConstants.DEFAULT_TIMEOUT_SECONDS);
     }
 
     @Test
     void testAddDefaultModel_CreatesNewConfigWithDefaultModel() {
         // Given - empty model list to trigger addDefaultModel path
-        when(mockDocumentorConfig.llmModels()).thenReturn(Collections.emptyList());
-        when(mockDocumentorConfig.outputSettings()).thenReturn(mockOutputSettings);
-        when(mockDocumentorConfig.analysisSettings()).thenReturn(mockAnalysisSettings);
+        when(mockDocumentorConfig.llmModels())
+            .thenReturn(Collections.emptyList());
+        when(mockDocumentorConfig.outputSettings())
+            .thenReturn(mockOutputSettings);
+        when(mockDocumentorConfig.analysisSettings())
+            .thenReturn(mockAnalysisSettings);
 
         // When
         LlmServiceEnhanced result = configuration.llmServiceEnhanced(
@@ -373,8 +413,10 @@ class LlmServiceConfigurationEnhancedTest {
         DocumentorConfig storedConfig = ThreadLocalContextHolder.getConfig();
         assertThat(storedConfig).isNotNull();
         assertThat(storedConfig.llmModels()).hasSize(1);
-        assertThat(storedConfig.outputSettings()).isEqualTo(mockOutputSettings);
-        assertThat(storedConfig.analysisSettings()).isEqualTo(mockAnalysisSettings);
+        assertThat(storedConfig.outputSettings())
+            .isEqualTo(mockOutputSettings);
+        assertThat(storedConfig.analysisSettings())
+            .isEqualTo(mockAnalysisSettings);
 
         LlmModelConfig addedModel = storedConfig.llmModels().get(0);
         assertThat(addedModel.name()).isEqualTo("default-model");

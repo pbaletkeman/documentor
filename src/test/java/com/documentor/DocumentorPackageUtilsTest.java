@@ -6,10 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
-/**
- * Comprehensive test coverage for DocumentorPackageUtils.
- * This test class ensures 100% coverage of all utility methods.
- */
 class DocumentorPackageUtilsTest {
 
     private String originalSpringProfile;
@@ -24,7 +20,8 @@ class DocumentorPackageUtilsTest {
     void tearDown() {
         // Restore original system property
         if (originalSpringProfile != null) {
-            System.setProperty("spring.profiles.active", originalSpringProfile);
+            System.setProperty("spring.profiles.active",
+                originalSpringProfile);
         } else {
             System.clearProperty("spring.profiles.active");
         }
@@ -33,28 +30,37 @@ class DocumentorPackageUtilsTest {
     @Test
     void testConstants() {
         // Test all public constants
-        assertEquals("Documentor", DocumentorPackageUtils.APPLICATION_NAME);
-        assertEquals("1.0.0", DocumentorPackageUtils.VERSION);
-        assertEquals("com.documentor", DocumentorPackageUtils.PACKAGE_NAME);
-        assertEquals("config.json", DocumentorPackageUtils.DEFAULT_CONFIG_FILE);
-        assertEquals("config-test.json", DocumentorPackageUtils.TEST_CONFIG_FILE);
+        assertEquals("Documentor",
+            DocumentorPackageUtils.APPLICATION_NAME);
+        assertEquals("1.0.0",
+            DocumentorPackageUtils.VERSION);
+        assertEquals("com.documentor",
+            DocumentorPackageUtils.PACKAGE_NAME);
+        assertEquals("config.json",
+            DocumentorPackageUtils.DEFAULT_CONFIG_FILE);
+        assertEquals("config-test.json",
+            DocumentorPackageUtils.TEST_CONFIG_FILE);
     }
 
     @Test
     void testConstructorThrowsException() {
-        // Test that the private constructor throws UnsupportedOperationException
+        // Test that the private constructor throws
+        // UnsupportedOperationException
         Exception exception = assertThrows(Exception.class, () -> {
             // Use reflection to access private constructor
-            var constructor = DocumentorPackageUtils.class.getDeclaredConstructor();
+            var constructor =
+                DocumentorPackageUtils.class.getDeclaredConstructor();
             constructor.setAccessible(true);
             constructor.newInstance();
         });
 
-        // The exception should be either UnsupportedOperationException directly
-        // or wrapped in InvocationTargetException
+        // The exception should be either UnsupportedOperationException
+        // directly or wrapped in InvocationTargetException
         assertTrue(exception instanceof UnsupportedOperationException ||
-                   (exception.getCause() instanceof UnsupportedOperationException),
-                   "Expected UnsupportedOperationException but got: " + exception.getClass());
+                   (exception.getCause() instanceof
+                   UnsupportedOperationException),
+                   "Expected UnsupportedOperationException but got: "
+                   + exception.getClass());
     }
 
     @Test
@@ -63,51 +69,78 @@ class DocumentorPackageUtilsTest {
         assertEquals("Documentor-1.0.0", identifier);
 
         // Verify it's consistent
-        assertEquals(identifier, DocumentorPackageUtils.getApplicationIdentifier());
+        assertEquals(identifier, DocumentorPackageUtils
+            .getApplicationIdentifier());
     }
 
     @Test
     void testIsValidConfigFileName() {
         // Test valid file names
-        assertTrue(DocumentorPackageUtils.isValidConfigFileName("config.json"));
-        assertTrue(DocumentorPackageUtils.isValidConfigFileName("app.yml"));
-        assertTrue(DocumentorPackageUtils.isValidConfigFileName("settings.yaml"));
-        assertTrue(DocumentorPackageUtils.isValidConfigFileName("test-config.json"));
-        assertTrue(DocumentorPackageUtils.isValidConfigFileName("application.yml"));
-        assertTrue(DocumentorPackageUtils.isValidConfigFileName("bootstrap.yaml"));
+        assertTrue(DocumentorPackageUtils
+            .isValidConfigFileName("config.json"));
+        assertTrue(DocumentorPackageUtils
+            .isValidConfigFileName("app.yml"));
+        assertTrue(DocumentorPackageUtils
+            .isValidConfigFileName("settings.yaml"));
+        assertTrue(DocumentorPackageUtils
+            .isValidConfigFileName("test-config.json"));
+        assertTrue(DocumentorPackageUtils
+            .isValidConfigFileName("application.yml"));
+        assertTrue(DocumentorPackageUtils
+            .isValidConfigFileName("bootstrap.yaml"));
 
         // Test invalid file names
-        assertFalse(DocumentorPackageUtils.isValidConfigFileName(null));
-        assertFalse(DocumentorPackageUtils.isValidConfigFileName(""));
-        assertFalse(DocumentorPackageUtils.isValidConfigFileName("   "));
-        assertFalse(DocumentorPackageUtils.isValidConfigFileName("config.txt"));
-        assertFalse(DocumentorPackageUtils.isValidConfigFileName("config.xml"));
-        assertFalse(DocumentorPackageUtils.isValidConfigFileName("config"));
-        assertFalse(DocumentorPackageUtils.isValidConfigFileName("config.properties"));
+        assertFalse(DocumentorPackageUtils
+            .isValidConfigFileName(null));
+        assertFalse(DocumentorPackageUtils
+            .isValidConfigFileName(""));
+        assertFalse(DocumentorPackageUtils
+            .isValidConfigFileName("   "));
+        assertFalse(DocumentorPackageUtils
+            .isValidConfigFileName("config.txt"));
+        assertFalse(DocumentorPackageUtils
+            .isValidConfigFileName("config.xml"));
+        assertFalse(DocumentorPackageUtils
+            .isValidConfigFileName("config"));
+        assertFalse(DocumentorPackageUtils
+            .isValidConfigFileName("config.properties"));
     }
 
     @Test
     void testNormalizePackageName() {
         // Test null input
-        assertEquals("com.documentor", DocumentorPackageUtils.normalizePackageName(null));
+        assertEquals("com.documentor",
+            DocumentorPackageUtils.normalizePackageName(null));
 
         // Test empty inputs
-        assertEquals("com.documentor", DocumentorPackageUtils.normalizePackageName(""));
-        assertEquals("com.documentor", DocumentorPackageUtils.normalizePackageName("   "));
+        assertEquals("com.documentor",
+            DocumentorPackageUtils.normalizePackageName(""));
+        assertEquals("com.documentor",
+            DocumentorPackageUtils.normalizePackageName("   "));
 
         // Test package names that already start with base package
-        assertEquals("com.documentor.service", DocumentorPackageUtils.normalizePackageName("com.documentor.service"));
-        assertEquals("com.documentor.cli", DocumentorPackageUtils.normalizePackageName("com.documentor.cli"));
-        assertEquals("com.documentor", DocumentorPackageUtils.normalizePackageName("com.documentor"));
+        assertEquals("com.documentor.service",
+            DocumentorPackageUtils.normalizePackageName(
+                "com.documentor.service"));
+        assertEquals("com.documentor.cli",
+            DocumentorPackageUtils.normalizePackageName("com.documentor.cli"));
+        assertEquals("com.documentor",
+            DocumentorPackageUtils.normalizePackageName("com.documentor"));
 
         // Test package names that need to be prefixed
-        assertEquals("com.documentor.service", DocumentorPackageUtils.normalizePackageName("service"));
-        assertEquals("com.documentor.cli.commands", DocumentorPackageUtils.normalizePackageName("cli.commands"));
-        assertEquals("com.documentor.util", DocumentorPackageUtils.normalizePackageName("util"));
+        assertEquals("com.documentor.service",
+            DocumentorPackageUtils.normalizePackageName("service"));
+        assertEquals("com.documentor.cli.commands",
+            DocumentorPackageUtils.normalizePackageName("cli.commands"));
+        assertEquals("com.documentor.util",
+            DocumentorPackageUtils.normalizePackageName("util"));
 
         // Test with leading/trailing whitespace
-        assertEquals("com.documentor.service", DocumentorPackageUtils.normalizePackageName("  service  "));
-        assertEquals("com.documentor.cli", DocumentorPackageUtils.normalizePackageName(" com.documentor.cli "));
+        assertEquals("com.documentor.service",
+            DocumentorPackageUtils.normalizePackageName("  service  "));
+        assertEquals("com.documentor.cli",
+            DocumentorPackageUtils.normalizePackageName(
+                " com.documentor.cli "));
     }
 
     @Test
@@ -115,15 +148,18 @@ class DocumentorPackageUtilsTest {
         assertEquals("1.0.0", DocumentorPackageUtils.getVersion());
 
         // Verify consistency
-        assertEquals(DocumentorPackageUtils.VERSION, DocumentorPackageUtils.getVersion());
+        assertEquals(DocumentorPackageUtils.VERSION,
+            DocumentorPackageUtils.getVersion());
     }
 
     @Test
     void testGetApplicationName() {
-        assertEquals("Documentor", DocumentorPackageUtils.getApplicationName());
+        assertEquals("Documentor",
+            DocumentorPackageUtils.getApplicationName());
 
         // Verify consistency
-        assertEquals(DocumentorPackageUtils.APPLICATION_NAME, DocumentorPackageUtils.getApplicationName());
+        assertEquals(DocumentorPackageUtils.APPLICATION_NAME,
+            DocumentorPackageUtils.getApplicationName());
     }
 
     @Test
@@ -159,17 +195,21 @@ class DocumentorPackageUtilsTest {
     void testGetDefaultConfigPath() {
         // Test in non-test mode
         System.clearProperty("spring.profiles.active");
-        assertEquals("config.json", DocumentorPackageUtils.getDefaultConfigPath());
+        assertEquals("config.json",
+        DocumentorPackageUtils.getDefaultConfigPath());
 
-        System.setProperty("spring.profiles.active", "dev");
-        assertEquals("config.json", DocumentorPackageUtils.getDefaultConfigPath());
+        System.setProperty("spring.profiles.activ   e", "dev");
+        assertEquals("config.json",
+        DocumentorPackageUtils.getDefaultConfigPath());
 
         // Test in test mode
         System.setProperty("spring.profiles.active", "test");
-        assertEquals("config-test.json", DocumentorPackageUtils.getDefaultConfigPath());
+        assertEquals("config-test.json",
+            DocumentorPackageUtils.getDefaultConfigPath());
 
         System.setProperty("spring.profiles.active", "testing");
-        assertEquals("config-test.json", DocumentorPackageUtils.getDefaultConfigPath());
+        assertEquals("config-test.json",
+            DocumentorPackageUtils.getDefaultConfigPath());
     }
 
     @Test
@@ -213,7 +253,8 @@ class DocumentorPackageUtilsTest {
         assertTrue(DocumentorPackageUtils.isValidConfigFileName("c.yaml"));
 
         // Test names that almost match but don't
-        assertFalse(DocumentorPackageUtils.isValidConfigFileName("config.json.txt"));
+        assertFalse(DocumentorPackageUtils.isValidConfigFileName(
+            "config.json.txt"));
         assertFalse(DocumentorPackageUtils.isValidConfigFileName("json"));
 
         // Test edge cases - these should be false since they start with dot
@@ -226,14 +267,18 @@ class DocumentorPackageUtilsTest {
     void testComplexPackageNameScenarios() {
         // Test deeply nested packages
         assertEquals("com.documentor.service.impl.advanced",
-            DocumentorPackageUtils.normalizePackageName("service.impl.advanced"));
+            DocumentorPackageUtils.normalizePackageName(
+                "service.impl.advanced"));
 
         // Test packages that contain the base package in the middle
         assertEquals("com.documentor.other.com.documentor.service",
-            DocumentorPackageUtils.normalizePackageName("other.com.documentor.service"));
+            DocumentorPackageUtils.normalizePackageName(
+                "other.com.documentor.service"));
 
         // Test single character package names
-        assertEquals("com.documentor.a", DocumentorPackageUtils.normalizePackageName("a"));
-        assertEquals("com.documentor.a.b.c", DocumentorPackageUtils.normalizePackageName("a.b.c"));
+        assertEquals("com.documentor.a",
+            DocumentorPackageUtils.normalizePackageName("a"));
+        assertEquals("com.documentor.a.b.c",
+            DocumentorPackageUtils.normalizePackageName("a.b.c"));
     }
 }

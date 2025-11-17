@@ -57,13 +57,17 @@ class CodeAnalysisServiceTest {
     void setUp() {
         // Use lenient mode to avoid UnnecessaryStubbingException
         lenient().when(config.analysisSettings()).thenReturn(analysisSettings);
-        lenient().when(analysisSettings.maxThreads()).thenReturn(DEFAULT_MAX_THREADS);
-        codeAnalysisService = new CodeAnalysisService(javaCodeAnalyzer, pythonCodeAnalyzer, config);
+        lenient().when(analysisSettings.maxThreads())
+            .thenReturn(DEFAULT_MAX_THREADS);
+        codeAnalysisService =
+            new CodeAnalysisService(javaCodeAnalyzer, pythonCodeAnalyzer,
+            config);
     }
 
     @Test
     void testAnalyzeProjectEmptyDirectory() throws Exception {
-        CompletableFuture<ProjectAnalysis> future = codeAnalysisService.analyzeProject(tempDir);
+        CompletableFuture<ProjectAnalysis> future =
+            codeAnalysisService.analyzeProject(tempDir);
         ProjectAnalysis analysis = future.get();
 
         assertNotNull(analysis);
@@ -88,13 +92,15 @@ class CodeAnalysisServiceTest {
             "public class Test", "", List.of(), List.of()
         );
         CodeElement methodElement = new CodeElement(
-            CodeElementType.METHOD, "method", "Test.method", javaFile.toString(), 2,
+            CodeElementType.METHOD, "method", "Test.method",
+                javaFile.toString(), 2,
             "public void method()", "", List.of(), List.of()
         );
         when(javaCodeAnalyzer.analyzeFile(any(Path.class), any()))
             .thenReturn(List.of(classElement, methodElement));
 
-        CompletableFuture<ProjectAnalysis> future = codeAnalysisService.analyzeProject(tempDir);
+        CompletableFuture<ProjectAnalysis> future =
+            codeAnalysisService.analyzeProject(tempDir);
         ProjectAnalysis analysis = future.get();
 
         assertNotNull(analysis);
@@ -116,13 +122,15 @@ class CodeAnalysisServiceTest {
 
         // Mock Python analyzer response
         CodeElement classElement = new CodeElement(
-            CodeElementType.CLASS, "TestClass", "TestClass", pythonFile.toString(), 1,
+            CodeElementType.CLASS, "TestClass", "TestClass",
+            pythonFile.toString(), 1,
             "class TestClass:", "", List.of(), List.of()
         );
         when(pythonCodeAnalyzer.analyzeFile(any(Path.class), any()))
             .thenReturn(List.of(classElement));
 
-        CompletableFuture<ProjectAnalysis> future = codeAnalysisService.analyzeProject(tempDir);
+        CompletableFuture<ProjectAnalysis> future =
+            codeAnalysisService.analyzeProject(tempDir);
         ProjectAnalysis analysis = future.get();
 
         assertNotNull(analysis);
@@ -146,14 +154,18 @@ class CodeAnalysisServiceTest {
             "public class Test", "", List.of(), List.of()
         );
         CodeElement pythonElement = new CodeElement(
-            CodeElementType.CLASS, "TestClass", "TestClass", pythonFile.toString(), 1,
+            CodeElementType.CLASS, "TestClass", "TestClass",
+                pythonFile.toString(), 1,
             "class TestClass:", "", List.of(), List.of()
         );
 
-        when(javaCodeAnalyzer.analyzeFile(eq(javaFile), any())).thenReturn(List.of(javaElement));
-        when(pythonCodeAnalyzer.analyzeFile(eq(pythonFile), any())).thenReturn(List.of(pythonElement));
+        when(javaCodeAnalyzer.analyzeFile(eq(javaFile), any()))
+            .thenReturn(List.of(javaElement));
+        when(pythonCodeAnalyzer.analyzeFile(eq(pythonFile), any()))
+            .thenReturn(List.of(pythonElement));
 
-        CompletableFuture<ProjectAnalysis> future = codeAnalysisService.analyzeProject(tempDir);
+        CompletableFuture<ProjectAnalysis> future =
+            codeAnalysisService.analyzeProject(tempDir);
         ProjectAnalysis analysis = future.get();
 
         assertNotNull(analysis);
@@ -171,7 +183,8 @@ class CodeAnalysisServiceTest {
         Files.writeString(tempDir.resolve("image.png"), "fake image data");
         Files.writeString(tempDir.resolve("script.sh"), "#!/bin/bash");
 
-        CompletableFuture<ProjectAnalysis> future = codeAnalysisService.analyzeProject(tempDir);
+        CompletableFuture<ProjectAnalysis> future =
+            codeAnalysisService.analyzeProject(tempDir);
         ProjectAnalysis analysis = future.get();
 
         assertNotNull(analysis);
@@ -192,9 +205,11 @@ class CodeAnalysisServiceTest {
             CodeElementType.CLASS, "Test", "Test", javaFile.toString(), 1,
             "public class Test", "", List.of(), List.of()
         );
-        when(javaCodeAnalyzer.analyzeFile(eq(javaFile), any())).thenReturn(List.of(element));
+        when(javaCodeAnalyzer.analyzeFile(eq(javaFile), any()))
+            .thenReturn(List.of(element));
 
-        CompletableFuture<ProjectAnalysis> future = codeAnalysisService.analyzeProject(tempDir);
+        CompletableFuture<ProjectAnalysis> future =
+            codeAnalysisService.analyzeProject(tempDir);
         ProjectAnalysis analysis = future.get();
 
         assertNotNull(analysis);
@@ -211,7 +226,8 @@ class CodeAnalysisServiceTest {
         when(javaCodeAnalyzer.analyzeFile(eq(javaFile), any()))
             .thenThrow(new IOException("Analysis failed"));
 
-        CompletableFuture<ProjectAnalysis> future = codeAnalysisService.analyzeProject(tempDir);
+        CompletableFuture<ProjectAnalysis> future =
+            codeAnalysisService.analyzeProject(tempDir);
         ProjectAnalysis analysis = future.get();
 
         assertNotNull(analysis);
@@ -224,7 +240,8 @@ class CodeAnalysisServiceTest {
         Path nonExistent = tempDir.resolve("does-not-exist");
 
         assertThrows(Exception.class, () -> {
-            CompletableFuture<ProjectAnalysis> future = codeAnalysisService.analyzeProject(nonExistent);
+            CompletableFuture<ProjectAnalysis> future =
+                codeAnalysisService.analyzeProject(nonExistent);
             future.get();
         });
     }

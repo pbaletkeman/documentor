@@ -21,46 +21,59 @@ import java.lang.reflect.Field;
 class DocumentorTestApplicationCoverageBoostTest {
 
     @Test
-    void testLoggerField() throws NoSuchFieldException, IllegalAccessException {
+    void testLoggerField() throws NoSuchFieldException,
+        IllegalAccessException {
         // Test that the LOGGER field exists and is properly initialized
-        Field loggerField = DocumentorTestApplication.class.getDeclaredField("LOGGER");
+        Field loggerField = DocumentorTestApplication.class
+        .getDeclaredField("LOGGER");
         assertNotNull(loggerField);
 
         // Verify field properties
-        assertTrue(java.lang.reflect.Modifier.isStatic(loggerField.getModifiers()));
-        assertTrue(java.lang.reflect.Modifier.isFinal(loggerField.getModifiers()));
-        assertTrue(java.lang.reflect.Modifier.isPrivate(loggerField.getModifiers()));
+        assertTrue(java.lang.reflect.Modifier
+            .isStatic(loggerField.getModifiers()));
+        assertTrue(java.lang.reflect.Modifier
+            .isFinal(loggerField.getModifiers()));
+        assertTrue(java.lang.reflect.Modifier
+            .isPrivate(loggerField.getModifiers()));
 
         // Make accessible and verify it's not null
         loggerField.setAccessible(true);
         Object logger = loggerField.get(null);
         assertNotNull(logger);
-        assertEquals("org.slf4j.Logger", logger.getClass().getInterfaces()[0].getName());
+        assertEquals("org.slf4j.Logger", logger.getClass()
+            .getInterfaces()[0].getName());
     }
 
     @Test
     void testApplicationContextReturn() {
         // Test that SpringApplication.run returns a context that can be used
-        try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
-            org.springframework.context.ConfigurableApplicationContext mockContext =
-                mock(org.springframework.context.ConfigurableApplicationContext.class);
+        try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(
+            SpringApplication.class)) {
+            org.springframework.context.ConfigurableApplicationContext
+                mockContext =
+                mock(org.springframework.context
+                    .ConfigurableApplicationContext.class);
 
-            mockedSpringApp.when(() -> SpringApplication.run(eq(DocumentorTestApplication.class), any(String[].class)))
+            mockedSpringApp.when(() -> SpringApplication.run(eq(
+                DocumentorTestApplication.class), any(String[].class)))
                 .thenReturn(mockContext);
 
             // This should complete successfully without exceptions
             assertDoesNotThrow(() -> {
-                DocumentorTestApplication.main(new String[]{"--context-return-test"});
+                DocumentorTestApplication.main(
+                    new String[]{"--context-return-test"});
             });
 
-            mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorTestApplication.class), any(String[].class)));
+            mockedSpringApp.verify(() -> SpringApplication.run(eq(
+                DocumentorTestApplication.class), any(String[].class)));
         }
     }
 
     @Test
     void testMainMethodParameterValidation() throws NoSuchMethodException {
         // Detailed validation of the main method
-        Method mainMethod = DocumentorTestApplication.class.getDeclaredMethod("main", String[].class);
+        Method mainMethod = DocumentorTestApplication.class
+            .getDeclaredMethod("main", String[].class);
 
         // Verify parameter types
         Class<?>[] parameterTypes = mainMethod.getParameterTypes();
@@ -75,12 +88,14 @@ class DocumentorTestApplicationCoverageBoostTest {
     @Test
     void testClassLoader() {
         // Test class loading behavior
-        ClassLoader classLoader = DocumentorTestApplication.class.getClassLoader();
+        ClassLoader classLoader = DocumentorTestApplication.class
+            .getClassLoader();
         assertNotNull(classLoader);
 
         // Verify the class can be loaded by name
         assertDoesNotThrow(() -> {
-            Class<?> loadedClass = classLoader.loadClass("com.documentor.DocumentorTestApplication");
+            Class<?> loadedClass = classLoader.loadClass(
+                    "com.documentor.DocumentorTestApplication");
             assertEquals(DocumentorTestApplication.class, loadedClass);
         });
     }
@@ -88,7 +103,8 @@ class DocumentorTestApplicationCoverageBoostTest {
     @Test
     void testMainMethodWithVeryLongArguments() {
         // Test with extremely long argument list
-        try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
+        try (MockedStatic<SpringApplication> mockedSpringApp =
+            mockStatic(SpringApplication.class)) {
             String[] longArgs = new String[100];
             for (int i = 0; i < 100; i++) {
                 longArgs[i] = "--test.property" + i + "=value" + i;
@@ -96,14 +112,16 @@ class DocumentorTestApplicationCoverageBoostTest {
 
             DocumentorTestApplication.main(longArgs);
 
-            mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorTestApplication.class), eq(longArgs)));
+            mockedSpringApp.verify(() -> SpringApplication.run(eq(
+                DocumentorTestApplication.class), eq(longArgs)));
         }
     }
 
     @Test
     void testMainMethodWithSpecialCharacters() {
         // Test with special characters in arguments
-        try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
+        try (MockedStatic<SpringApplication> mockedSpringApp =
+            mockStatic(SpringApplication.class)) {
             String[] specialArgs = {
                 "--test.unicode=测试",
                 "--test.special=!@#$%^&*()",
@@ -113,27 +131,33 @@ class DocumentorTestApplicationCoverageBoostTest {
 
             DocumentorTestApplication.main(specialArgs);
 
-            mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorTestApplication.class), eq(specialArgs)));
+            mockedSpringApp.verify(() -> SpringApplication.run(eq(
+                DocumentorTestApplication.class), eq(specialArgs)));
         }
     }
 
     @Test
     void testMethodInvocation() throws Exception {
         // Test direct method invocation via reflection
-        Method mainMethod = DocumentorTestApplication.class.getDeclaredMethod("main", String[].class);
+        Method mainMethod = DocumentorTestApplication.class
+            .getDeclaredMethod("main", String[].class);
 
-        try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
+        try (MockedStatic<SpringApplication> mockedSpringApp =
+            mockStatic(SpringApplication.class)) {
             // Use reflection to invoke the method
             assertDoesNotThrow(() -> {
                 try {
-                    mainMethod.invoke(null, (Object) new String[]{"--reflection-test"});
+                    mainMethod.invoke(null, (Object)
+                    new String[]{"--reflection-test"});
                 } catch (Exception e) {
                     // Handle any reflection exceptions
-                    fail("Method invocation should not throw exceptions: " + e.getMessage());
+                    fail("Method invocation should not throw exceptions: "
+                    + e.getMessage());
                 }
             });
 
-            mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorTestApplication.class), any(String[].class)));
+            mockedSpringApp.verify(() -> SpringApplication.run(eq(
+                DocumentorTestApplication.class), any(String[].class)));
         }
     }
 
@@ -144,39 +168,48 @@ class DocumentorTestApplicationCoverageBoostTest {
         for (int i = 0; i < 5; i++) {
             Class<?> clazz = DocumentorTestApplication.class;
             assertNotNull(clazz);
-            assertEquals("com.documentor.DocumentorTestApplication", clazz.getName());
+            assertEquals("com.documentor.DocumentorTestApplication",
+                clazz.getName());
         }
     }
 
     @Test
     void testMainMethodWithEmptyStringArgs() {
         // Test with empty string arguments (different from empty array)
-        try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
+        try (MockedStatic<SpringApplication> mockedSpringApp =
+            mockStatic(SpringApplication.class)) {
             String[] emptyStringArgs = {"", "", ""};
 
             DocumentorTestApplication.main(emptyStringArgs);
 
-            mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorTestApplication.class), eq(emptyStringArgs)));
+            mockedSpringApp.verify(() -> SpringApplication.run(eq(
+                DocumentorTestApplication.class), eq(emptyStringArgs)));
         }
     }
 
     @Test
     void testClassAnnotationsDetailed() {
         // Comprehensive annotation testing
-        Class<DocumentorTestApplication> clazz = DocumentorTestApplication.class;
+        Class<DocumentorTestApplication> clazz =
+            DocumentorTestApplication.class;
 
         // Test specific annotation properties
-        org.springframework.boot.autoconfigure.SpringBootApplication springBootApp =
-            clazz.getAnnotation(org.springframework.boot.autoconfigure.SpringBootApplication.class);
+        org.springframework.boot.autoconfigure.SpringBootApplication
+            springBootApp = clazz.getAnnotation(
+                org.springframework.boot.autoconfigure
+                .SpringBootApplication.class);
         assertNotNull(springBootApp);
 
         org.springframework.context.annotation.ComponentScan componentScan =
-            clazz.getAnnotation(org.springframework.context.annotation.ComponentScan.class);
+            clazz.getAnnotation(
+                org.springframework.context.annotation.ComponentScan.class);
         assertNotNull(componentScan);
-        assertArrayEquals(new String[]{"com.documentor"}, componentScan.basePackages());
+        assertArrayEquals(new String[]{"com.documentor"},
+            componentScan.basePackages());
 
         org.springframework.context.annotation.Import importAnnotation =
-            clazz.getAnnotation(org.springframework.context.annotation.Import.class);
+            clazz.getAnnotation(
+                org.springframework.context.annotation.Import.class);
         assertNotNull(importAnnotation);
         assertTrue(importAnnotation.value().length > 0);
     }
@@ -184,18 +217,23 @@ class DocumentorTestApplicationCoverageBoostTest {
     @Test
     void testApplicationStartupWithMockContext() {
         // Test successful startup scenario with detailed context verification
-        try (MockedStatic<SpringApplication> mockedSpringApp = mockStatic(SpringApplication.class)) {
-            org.springframework.context.ConfigurableApplicationContext mockContext =
-                mock(org.springframework.context.ConfigurableApplicationContext.class);
+        try (MockedStatic<SpringApplication> mockedSpringApp =
+            mockStatic(SpringApplication.class)) {
+            org.springframework.context
+                .ConfigurableApplicationContext mockContext =
+                mock(org.springframework.context
+                    .ConfigurableApplicationContext.class);
 
-            mockedSpringApp.when(() -> SpringApplication.run(eq(DocumentorTestApplication.class), any(String[].class)))
+            mockedSpringApp.when(() -> SpringApplication.run(eq(
+                DocumentorTestApplication.class), any(String[].class)))
                 .thenReturn(mockContext);
 
             // Simulate successful startup
             DocumentorTestApplication.main(new String[]{"--startup-test"});
 
             // Verify the interaction
-            mockedSpringApp.verify(() -> SpringApplication.run(eq(DocumentorTestApplication.class), any(String[].class)));
+            mockedSpringApp.verify(() -> SpringApplication.run(eq(
+                DocumentorTestApplication.class), any(String[].class)));
         }
     }
 }

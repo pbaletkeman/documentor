@@ -15,7 +15,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
- * Additional tests for ExternalConfigLoader to specifically target uncovered branches.
+ * Additional tests for ExternalConfigLoader to specifically
+ * target uncovered branches.
  */
 class ExternalConfigLoaderAdditionalTest {
 
@@ -31,9 +32,13 @@ class ExternalConfigLoaderAdditionalTest {
 
         // Create test configuration
         testConfig = new DocumentorConfig(
-            List.of(new com.documentor.config.model.LlmModelConfig("test-model", "ollama", "http://localhost:11434", "test-key", 1000, 30)),
-            new com.documentor.config.model.OutputSettings("output", "markdown", false, false, false),
-            new com.documentor.config.model.AnalysisSettings(true, 5, List.of("*.java"), null)
+            List.of(new com.documentor.config.model.LlmModelConfig(
+                "test-model", "ollama", "http://localhost:11434",
+                "test-key", 1000, 30)),
+            new com.documentor.config.model.OutputSettings("output",
+               "markdown", false, false, false),
+            new com.documentor.config.model.AnalysisSettings(true,
+                5, List.of("*.java"), null)
         );
     }
 
@@ -51,15 +56,18 @@ class ExternalConfigLoaderAdditionalTest {
         assertTrue(externalConfigLoader.loadExternalConfig(args));
 
         // Now test the post processor with the already loaded config
-        ConfigurableListableBeanFactory beanFactory = mock(ConfigurableListableBeanFactory.class,
+        ConfigurableListableBeanFactory beanFactory = mock(
+            ConfigurableListableBeanFactory.class,
             withSettings().extraInterfaces(BeanDefinitionRegistry.class));
         when(beanFactory.getBeanDefinitionNames()).thenReturn(new String[0]);
 
         var postProcessor = externalConfigLoader.configurationPostProcessor();
-        assertDoesNotThrow(() -> postProcessor.postProcessBeanFactory(beanFactory));
+        assertDoesNotThrow(() -> postProcessor
+            .postProcessBeanFactory(beanFactory));
 
         // Verify the registry was used to register the bean
-        verify((BeanDefinitionRegistry) beanFactory).registerBeanDefinition(eq("documentorConfig"), any());
+        verify((BeanDefinitionRegistry) beanFactory).registerBeanDefinition(eq(
+            "documentorConfig"), any());
     }
 
     /**
@@ -75,16 +83,23 @@ class ExternalConfigLoaderAdditionalTest {
         // Set system property to simulate command line
         String originalCommand = System.getProperty("sun.java.command", "");
         try {
-            System.setProperty("sun.java.command", "com.documentor.Application analyze --config " + configFile.toString());
+            System.setProperty("sun.java.command",
+                "com.documentor.Application analyze --config "
+                + configFile.toString());
 
-            ConfigurableListableBeanFactory beanFactory = mock(ConfigurableListableBeanFactory.class,
-                withSettings().extraInterfaces(BeanDefinitionRegistry.class));
+            ConfigurableListableBeanFactory beanFactory = mock(
+                ConfigurableListableBeanFactory.class,
+                withSettings().extraInterfaces(
+                    BeanDefinitionRegistry.class));
 
-            var postProcessor = externalConfigLoader.configurationPostProcessor();
-            assertDoesNotThrow(() -> postProcessor.postProcessBeanFactory(beanFactory));
+            var postProcessor = externalConfigLoader
+                .configurationPostProcessor();
+            assertDoesNotThrow(() ->
+                postProcessor.postProcessBeanFactory(beanFactory));
 
             // Verify that the system property path was used
-            verify((BeanDefinitionRegistry) beanFactory).registerBeanDefinition(eq("documentorConfig"), any());
+            verify((BeanDefinitionRegistry) beanFactory)
+                .registerBeanDefinition(eq("documentorConfig"), any());
         } finally {
             if (originalCommand.isEmpty()) {
                 System.clearProperty("sun.java.command");
@@ -107,15 +122,20 @@ class ExternalConfigLoaderAdditionalTest {
         // Set Gradle args system property
         String originalArgs = System.getProperty("args", "");
         try {
-            System.setProperty("args", "analyze,--config," + configFile.toString());
+            System.setProperty("args", "analyze,--config,"
+            + configFile.toString());
 
-            ConfigurableListableBeanFactory beanFactory = mock(ConfigurableListableBeanFactory.class,
+            ConfigurableListableBeanFactory beanFactory =
+                mock(ConfigurableListableBeanFactory.class,
                 withSettings().extraInterfaces(BeanDefinitionRegistry.class));
 
-            var postProcessor = externalConfigLoader.configurationPostProcessor();
-            assertDoesNotThrow(() -> postProcessor.postProcessBeanFactory(beanFactory));
+            var postProcessor = externalConfigLoader
+                .configurationPostProcessor();
+            assertDoesNotThrow(() -> postProcessor
+                .postProcessBeanFactory(beanFactory));
 
-            // The post processor should complete successfully (verification may not be reliable)
+            // The post processor should complete successfully
+            // (verification may not be reliable)
         } finally {
             if (originalArgs.isEmpty()) {
                 System.clearProperty("args");
@@ -137,10 +157,13 @@ class ExternalConfigLoaderAdditionalTest {
             System.clearProperty("sun.java.command");
             System.clearProperty("args");
 
-            ConfigurableListableBeanFactory beanFactory = mock(ConfigurableListableBeanFactory.class);
+            ConfigurableListableBeanFactory beanFactory = mock(
+                ConfigurableListableBeanFactory.class);
 
-            var postProcessor = externalConfigLoader.configurationPostProcessor();
-            assertDoesNotThrow(() -> postProcessor.postProcessBeanFactory(beanFactory));
+            var postProcessor = externalConfigLoader
+                .configurationPostProcessor();
+            assertDoesNotThrow(() ->
+                postProcessor.postProcessBeanFactory(beanFactory));
 
             // Should complete without error when no args are available
         } finally {
@@ -160,12 +183,16 @@ class ExternalConfigLoaderAdditionalTest {
     void testConfigurationPostProcessorWithNonExistentFile() {
         String originalCommand = System.getProperty("sun.java.command", "");
         try {
-            System.setProperty("sun.java.command", "com.documentor.Application analyze --config non-existent.json");
+            System.setProperty("sun.java.command",
+            "com.documentor.Application analyze --config non-existent.json");
 
-            ConfigurableListableBeanFactory beanFactory = mock(ConfigurableListableBeanFactory.class);
+            ConfigurableListableBeanFactory beanFactory =
+                mock(ConfigurableListableBeanFactory.class);
 
-            var postProcessor = externalConfigLoader.configurationPostProcessor();
-            assertDoesNotThrow(() -> postProcessor.postProcessBeanFactory(beanFactory));
+            var postProcessor =
+                externalConfigLoader.configurationPostProcessor();
+            assertDoesNotThrow(() ->
+                postProcessor.postProcessBeanFactory(beanFactory));
 
             // Should handle non-existent file gracefully
         } finally {
@@ -188,12 +215,17 @@ class ExternalConfigLoaderAdditionalTest {
 
         String originalCommand = System.getProperty("sun.java.command", "");
         try {
-            System.setProperty("sun.java.command", "com.documentor.Application analyze --config " + configFile.toString());
+            System.setProperty("sun.java.command",
+            "com.documentor.Application analyze --config "
+            + configFile.toString());
 
-            ConfigurableListableBeanFactory beanFactory = mock(ConfigurableListableBeanFactory.class);
+            ConfigurableListableBeanFactory beanFactory =
+                mock(ConfigurableListableBeanFactory.class);
 
-            var postProcessor = externalConfigLoader.configurationPostProcessor();
-            assertDoesNotThrow(() -> postProcessor.postProcessBeanFactory(beanFactory));
+            var postProcessor = externalConfigLoader
+                .configurationPostProcessor();
+            assertDoesNotThrow(() ->
+                postProcessor.postProcessBeanFactory(beanFactory));
 
             // Should handle JSON parsing errors gracefully
         } finally {
@@ -216,10 +248,13 @@ class ExternalConfigLoaderAdditionalTest {
             // Set an invalid command that might cause parsing issues
             System.setProperty("sun.java.command", "");
 
-            ConfigurableListableBeanFactory beanFactory = mock(ConfigurableListableBeanFactory.class);
+            ConfigurableListableBeanFactory beanFactory = mock(
+                ConfigurableListableBeanFactory.class);
 
-            var postProcessor = externalConfigLoader.configurationPostProcessor();
-            assertDoesNotThrow(() -> postProcessor.postProcessBeanFactory(beanFactory));
+            var postProcessor = externalConfigLoader
+                .configurationPostProcessor();
+            assertDoesNotThrow(() ->
+                postProcessor.postProcessBeanFactory(beanFactory));
 
             // Should handle exceptions during command extraction gracefully
         } finally {
@@ -280,12 +315,16 @@ class ExternalConfigLoaderAdditionalTest {
         String originalCommand = System.getProperty("sun.java.command", "");
         try {
             // Set command with main class only (no space after)
-            System.setProperty("sun.java.command", "com.documentor.Application");
+            System.setProperty("sun.java.command",
+            "com.documentor.Application");
 
-            ConfigurableListableBeanFactory beanFactory = mock(ConfigurableListableBeanFactory.class);
+            ConfigurableListableBeanFactory beanFactory = mock(
+                ConfigurableListableBeanFactory.class);
 
-            var postProcessor = externalConfigLoader.configurationPostProcessor();
-            assertDoesNotThrow(() -> postProcessor.postProcessBeanFactory(beanFactory));
+            var postProcessor =
+                externalConfigLoader.configurationPostProcessor();
+            assertDoesNotThrow(() ->
+                postProcessor.postProcessBeanFactory(beanFactory));
 
             // Should handle case where no args follow the main class
         } finally {

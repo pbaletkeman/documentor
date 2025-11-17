@@ -36,7 +36,8 @@ class LlmModelConfigTest {
         Integer timeoutSeconds = DEFAULT_TIMEOUT_SECONDS;
 
         // When
-        LlmModelConfig config = new LlmModelConfig(name, provider, baseUrl, apiKey, maxTokens, timeoutSeconds);
+        LlmModelConfig config = new LlmModelConfig(name, provider, baseUrl,
+            apiKey, maxTokens, timeoutSeconds);
 
         // Then
         assertEquals(name, config.name());
@@ -51,7 +52,8 @@ class LlmModelConfigTest {
     @DisplayName("Should apply defaults to null fields")
     void shouldApplyDefaultsToNullFields() {
         // Given
-        LlmModelConfig config = new LlmModelConfig(null, null, null, "api-key", null, null);
+        LlmModelConfig config = new LlmModelConfig(null, null, null,
+            "api-key", null, null);
 
         // When
         LlmModelConfig withDefaults = config.withDefaults();
@@ -59,10 +61,13 @@ class LlmModelConfigTest {
         // Then
         assertEquals("default", withDefaults.name());
         assertEquals("ollama", withDefaults.provider());
-        assertEquals("http://localhost:" + ApplicationConstants.DEFAULT_OLLAMA_PORT, withDefaults.baseUrl());
+        assertEquals("http://localhost:"
+            + ApplicationConstants.DEFAULT_OLLAMA_PORT, withDefaults.baseUrl());
         assertEquals("api-key", withDefaults.apiKey());
-        assertEquals(ApplicationConstants.DEFAULT_MAX_TOKENS, withDefaults.maxTokens());
-        assertEquals(ApplicationConstants.DEFAULT_TIMEOUT_SECONDS, withDefaults.timeoutSeconds());
+        assertEquals(ApplicationConstants.DEFAULT_MAX_TOKENS,
+            withDefaults.maxTokens());
+        assertEquals(ApplicationConstants.DEFAULT_TIMEOUT_SECONDS,
+            withDefaults.timeoutSeconds());
     }
 
     @Test
@@ -76,7 +81,8 @@ class LlmModelConfigTest {
         Integer maxTokens = ALTERNATIVE_MAX_TOKENS;
         Integer timeoutSeconds = ALTERNATIVE_TIMEOUT_SECONDS;
 
-        LlmModelConfig config = new LlmModelConfig(name, provider, baseUrl, apiKey, maxTokens, timeoutSeconds);
+        LlmModelConfig config = new LlmModelConfig(name, provider, baseUrl,
+            apiKey, maxTokens, timeoutSeconds);
 
         // When
         LlmModelConfig withDefaults = config.withDefaults();
@@ -94,7 +100,8 @@ class LlmModelConfigTest {
     @DisplayName("Should apply defaults using legacy method")
     void shouldApplyDefaultsUsingLegacyMethod() {
         // Given
-        LlmModelConfig config = new LlmModelConfig(null, null, null, "api-key", null, null);
+        LlmModelConfig config = new LlmModelConfig(null, null,
+            null, "api-key", null, null);
 
         // When
         LlmModelConfig withDefaults = config.applyDefaults();
@@ -102,17 +109,21 @@ class LlmModelConfigTest {
         // Then
         assertEquals("default", withDefaults.name());
         assertEquals("ollama", withDefaults.provider());
-        assertEquals("http://localhost:" + ApplicationConstants.DEFAULT_OLLAMA_PORT, withDefaults.baseUrl());
+        assertEquals("http://localhost:"
+            + ApplicationConstants.DEFAULT_OLLAMA_PORT, withDefaults.baseUrl());
         assertEquals("api-key", withDefaults.apiKey());
-        assertEquals(ApplicationConstants.DEFAULT_MAX_TOKENS, withDefaults.maxTokens());
-        assertEquals(ApplicationConstants.DEFAULT_TIMEOUT_SECONDS, withDefaults.timeoutSeconds());
+        assertEquals(ApplicationConstants.DEFAULT_MAX_TOKENS,
+            withDefaults.maxTokens());
+        assertEquals(ApplicationConstants.DEFAULT_TIMEOUT_SECONDS,
+            withDefaults.timeoutSeconds());
     }
 
     @Test
     @DisplayName("Should validate successfully with valid config")
     void shouldValidateSuccessfullyWithValidConfig() {
         // Given
-        LlmModelConfig config = new LlmModelConfig("model", "provider", "url", "key",
+        LlmModelConfig config = new LlmModelConfig("model",
+            "provider", "url", "key",
                 DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS);
 
         // When & Then
@@ -122,11 +133,17 @@ class LlmModelConfigTest {
     @ParameterizedTest
     @MethodSource("provideInvalidConfigs")
     @DisplayName("Should throw exception for invalid config")
-    void shouldThrowExceptionForInvalidConfig(final LlmModelConfig config, final String expectedMessage) {
+    void shouldThrowExceptionForInvalidConfig(final LlmModelConfig config,
+        final String expectedMessage) {
         // When & Then
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, config::validate);
+        IllegalArgumentException exception = assertThrows(
+            IllegalArgumentException.class, config::validate);
         assertTrue(exception.getMessage().contains(expectedMessage),
-            "Expected message to contain '" + expectedMessage + "' but was '" + exception.getMessage() + "'");
+            "Expected message to contain '"
+            + expectedMessage
+            + "' but was '"
+            + exception.getMessage()
+            + "'");
     }
 
     private static Stream<Arguments> provideInvalidConfigs() {
@@ -146,9 +163,9 @@ class LlmModelConfigTest {
             Arguments.of(new LlmModelConfig("model", "", "url", "key",
                     DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS),
                 "provider cannot be null or empty"),
-            Arguments.of(new LlmModelConfig("model", "  ", "url", "key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS),
+            Arguments.of(new LlmModelConfig("model", "  ", "url", "key",
+                DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS),
                 "provider cannot be null or empty")
         );
     }
 }
-

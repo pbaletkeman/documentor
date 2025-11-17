@@ -25,7 +25,9 @@ class DocumentorConfigTest {
         Integer maxTokens = MAX_TOKENS;
         Integer timeoutSeconds = TIMEOUT_SECONDS;
 
-        LlmModelConfig config = new LlmModelConfig(name, provider, baseUrl, apiKey, maxTokens, timeoutSeconds);
+        LlmModelConfig config =
+            new LlmModelConfig(name, provider, baseUrl, apiKey,
+            maxTokens, timeoutSeconds);
 
         assertEquals(name, config.name());
         assertEquals(provider, config.provider());
@@ -42,7 +44,9 @@ class DocumentorConfigTest {
         boolean generateMermaid = true;
         boolean verboseOutput = false;
 
-        OutputSettings settings = new OutputSettings(outputDirectory, format, generateMermaid, false, verboseOutput);
+        OutputSettings settings =
+            new OutputSettings(outputDirectory, format, generateMermaid,
+            false, verboseOutput);
 
         assertEquals(outputDirectory, settings.outputDirectory());
         assertEquals(format, settings.format());
@@ -57,7 +61,8 @@ class DocumentorConfigTest {
         List<String> includedPatterns = List.of("**/*.java");
         List<String> excludePatterns = List.of("**/test/**");
 
-        AnalysisSettings settings = new AnalysisSettings(includePrivateMembers, maxDepth,
+        AnalysisSettings settings =
+            new AnalysisSettings(includePrivateMembers, maxDepth,
                 includedPatterns, excludePatterns);
 
         assertEquals(includePrivateMembers, settings.includePrivateMembers());
@@ -66,4 +71,3 @@ class DocumentorConfigTest {
         assertEquals(excludePatterns, settings.excludePatterns());
     }
 }
-

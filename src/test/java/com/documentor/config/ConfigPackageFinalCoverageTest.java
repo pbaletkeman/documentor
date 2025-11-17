@@ -16,7 +16,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Final targeted coverage test to reach 94% instruction coverage for config package.
+ * Final targeted coverage test to reach 94% instruction coverage for
+ * config package.
  * Focuses on specific uncovered lines identified in the coverage report.
  */
 class ConfigPackageFinalCoverageTest {
@@ -28,11 +29,15 @@ class ConfigPackageFinalCoverageTest {
         ThreadLocalContextHolder.clearConfig();
 
         // Create test config with non-null models
-        LlmModelConfig model = new LlmModelConfig("test-model", "provider", "url", "key", 4000, 30);
-        OutputSettings outputSettings = new OutputSettings("output", "markdown", false, false, false);
-        AnalysisSettings analysisSettings = new AnalysisSettings(true, 5, null, null);
+        LlmModelConfig model = new LlmModelConfig("test-model",
+        "provider", "url", "key", 4000, 30);
+        OutputSettings outputSettings = new OutputSettings(
+            "output", "markdown", false, false, false);
+        AnalysisSettings analysisSettings =
+        new AnalysisSettings(true, 5, null, null);
 
-        testConfig = new DocumentorConfig(Collections.singletonList(model), outputSettings, analysisSettings);
+        testConfig = new DocumentorConfig(
+            Collections.singletonList(model), outputSettings, analysisSettings);
     }
 
     @AfterEach
@@ -41,19 +46,22 @@ class ConfigPackageFinalCoverageTest {
     }
 
     /**
-     * Test ThreadLocalPropagatingExecutorEnhanced with config having null models
+     * Test ThreadLocalPropagatingExecutorEnhanced with config having null
+     * models
      * This targets line 75 and 91 branch coverage for null model checks.
      */
     @Test
     void testExecutorWithConfigHavingNullModels() throws InterruptedException {
         // Create a mock config with null models to hit the null branch
-        DocumentorConfig mockConfig = org.mockito.Mockito.mock(DocumentorConfig.class);
+        DocumentorConfig mockConfig = org.mockito.Mockito.mock(
+            DocumentorConfig.class);
         org.mockito.Mockito.when(mockConfig.llmModels()).thenReturn(null);
 
         ThreadLocalContextHolder.setConfig(mockConfig);
 
         ThreadLocalPropagatingExecutorEnhanced executor =
-            new ThreadLocalPropagatingExecutorEnhanced(Runnable::run, "test-executor");
+            new ThreadLocalPropagatingExecutorEnhanced(Runnable::run,
+            "test-executor");
 
         CountDownLatch latch = new CountDownLatch(1);
 
@@ -67,19 +75,22 @@ class ConfigPackageFinalCoverageTest {
     }
 
     /**
-     * Test ThreadLocalPropagatingExecutorEnhanced with explicitly set config scenario
+     * Test ThreadLocalPropagatingExecutorEnhanced with explicitly set
+     * config scenario
      * This targets line 88 branch for wasExplicitlySet condition.
      */
     @Test
     void testExecutorWithExplicitlySetConfig() throws InterruptedException {
         // Set config multiple times to ensure it's explicitly set
         ThreadLocalContextHolder.setConfig(testConfig);
-        ThreadLocalContextHolder.setConfig(testConfig); // Set again to ensure explicitly set
+        // Set again to ensure explicitly set
+        ThreadLocalContextHolder.setConfig(testConfig);
 
         assertTrue(ThreadLocalContextHolder.isConfigExplicitlySet());
 
         ThreadLocalPropagatingExecutorEnhanced executor =
-            new ThreadLocalPropagatingExecutorEnhanced(Runnable::run, "test-executor");
+            new ThreadLocalPropagatingExecutorEnhanced(Runnable::run,
+            "test-executor");
 
         CountDownLatch latch = new CountDownLatch(1);
 
@@ -93,7 +104,8 @@ class ConfigPackageFinalCoverageTest {
     }
 
     /**
-     * Test ThreadLocalPropagatingExecutorEnhanced fallback executor failure scenario
+     * Test ThreadLocalPropagatingExecutorEnhanced fallback executor
+     * failure scenario
      * This targets lines 116-120 which are currently not covered.
      */
     @Test
@@ -104,13 +116,16 @@ class ConfigPackageFinalCoverageTest {
         };
 
         ThreadLocalPropagatingExecutorEnhanced executor =
-            new ThreadLocalPropagatingExecutorEnhanced(failingDelegate, "test-executor");
+            new ThreadLocalPropagatingExecutorEnhanced(failingDelegate,
+            "test-executor");
 
         CountDownLatch latch = new CountDownLatch(1);
         AtomicReference<Boolean> taskExecuted = new AtomicReference<>(false);
 
-        // This should trigger delegate failure, then fallback to ForkJoinPool.commonPool()
-        // Since we can't easily make ForkJoinPool.commonPool() fail, we test the primary failure path
+        // This should trigger delegate failure, then fallback to
+        // ForkJoinPool.commonPool()
+        // Since we can't easily make ForkJoinPool.commonPool() fail,
+        // we test the primary failure path
         executor.execute(() -> {
             taskExecuted.set(true);
             latch.countDown();
@@ -127,7 +142,8 @@ class ConfigPackageFinalCoverageTest {
      */
     @Test
     void testExecutorUncaughtExceptionHandler() throws InterruptedException {
-        Executor executor = ThreadLocalPropagatingExecutorEnhanced.createExecutor(1, "exception-test");
+        Executor executor = ThreadLocalPropagatingExecutorEnhanced
+        .createExecutor(1, "exception-test");
 
         CountDownLatch latch = new CountDownLatch(1);
         CountDownLatch exceptionLatch = new CountDownLatch(1);
@@ -161,11 +177,14 @@ class ConfigPackageFinalCoverageTest {
      */
     @Test
     void testBeanUtilsNonConfigurableContext() {
-        // Create a simple ApplicationContext that's not ConfigurableApplicationContext
+        // Create a simple ApplicationContext that's not
+        // ConfigurableApplicationContext
         org.springframework.context.ApplicationContext simpleContext =
-            org.mockito.Mockito.mock(org.springframework.context.ApplicationContext.class);
+            org.mockito.Mockito.mock(
+                org.springframework.context.ApplicationContext.class);
 
-        // This should trigger the "ApplicationContext is not configurable" branch
+        // This should trigger the "ApplicationContext is
+        // not configurable" branch
         assertDoesNotThrow(() ->
             BeanUtils.overrideBean(simpleContext, "testBean", testConfig)
         );
@@ -178,8 +197,11 @@ class ConfigPackageFinalCoverageTest {
     @Test
     void testBeanUtilsExceptionHandling() {
         // Create a ConfigurableApplicationContext that throws exceptions
-        org.springframework.context.ConfigurableApplicationContext faultyContext =
-            org.mockito.Mockito.mock(org.springframework.context.ConfigurableApplicationContext.class);
+        org.springframework.context.ConfigurableApplicationContext
+        faultyContext =
+            org.mockito.Mockito.mock(
+                org.springframework.context
+                .ConfigurableApplicationContext.class);
 
         // Make getBeanFactory throw an exception
         org.mockito.Mockito.when(faultyContext.getBeanFactory())
@@ -214,7 +236,8 @@ class ConfigPackageFinalCoverageTest {
         // Test reflection access to AppConfig methods to improve coverage
         assertDoesNotThrow(() -> {
             Class<?> appConfigClass = AppConfig.class;
-            java.lang.reflect.Method[] methods = appConfigClass.getDeclaredMethods();
+            java.lang.reflect.Method[] methods =
+                appConfigClass.getDeclaredMethods();
 
             // Try to access method names to potentially trigger method loading
             for (java.lang.reflect.Method method : methods) {
@@ -229,21 +252,27 @@ class ConfigPackageFinalCoverageTest {
      */
     @Test
     void testTaskDecoratorEdgeCases() throws InterruptedException {
-        ThreadLocalTaskDecoratorEnhanced decorator = new ThreadLocalTaskDecoratorEnhanced();
+        ThreadLocalTaskDecoratorEnhanced decorator =
+            new ThreadLocalTaskDecoratorEnhanced();
 
         // Test with config having empty models (size = 0)
         LlmModelConfig[] emptyModels = {};
-        OutputSettings outputSettings = new OutputSettings("output", "format", false, false, false);
-        AnalysisSettings analysisSettings = new AnalysisSettings(true, 1, null, null);
+        OutputSettings outputSettings = new OutputSettings(
+            "output", "format", false, false, false);
+        AnalysisSettings analysisSettings = new AnalysisSettings(
+            true, 1, null, null);
 
-        DocumentorConfig emptyConfig = new DocumentorConfig(java.util.Arrays.asList(emptyModels), outputSettings, analysisSettings);
+        DocumentorConfig emptyConfig = new DocumentorConfig(
+            java.util.Arrays.asList(emptyModels), outputSettings,
+            analysisSettings);
         ThreadLocalContextHolder.setConfig(emptyConfig);
 
         CountDownLatch latch = new CountDownLatch(1);
 
         Runnable task = () -> {
             // Access the config to ensure it's propagated
-            DocumentorConfig threadConfig = ThreadLocalContextHolder.getConfig();
+            DocumentorConfig threadConfig = ThreadLocalContextHolder
+            .getConfig();
             assertNotNull(threadConfig);
             assertEquals(0, threadConfig.llmModels().size());
             latch.countDown();

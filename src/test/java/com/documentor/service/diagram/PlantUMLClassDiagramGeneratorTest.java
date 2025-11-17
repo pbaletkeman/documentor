@@ -34,7 +34,8 @@ class PlantUMLClassDiagramGeneratorTest {
 
     @Test
     @DisplayName("Should generate basic class diagram")
-    void shouldGenerateBasicClassDiagram(@TempDir final Path tempDir) throws IOException {
+    void shouldGenerateBasicClassDiagram(@TempDir final Path tempDir)
+        throws IOException {
         // Given
         CodeElement classElement = new CodeElement(
             CodeElementType.CLASS,
@@ -51,7 +52,8 @@ class PlantUMLClassDiagramGeneratorTest {
         List<CodeElement> allElements = List.of(classElement);
 
         // When
-        String filePath = generator.generateClassDiagram(classElement, allElements, tempDir);
+        String filePath =
+            generator.generateClassDiagram(classElement, allElements, tempDir);
 
         // Then
         Path diagramPath = Path.of(filePath);
@@ -64,7 +66,8 @@ class PlantUMLClassDiagramGeneratorTest {
 
     @Test
     @DisplayName("Should generate class with fields")
-    void shouldGenerateClassWithFields(@TempDir final Path tempDir) throws IOException {
+    void shouldGenerateClassWithFields(@TempDir final Path tempDir)
+        throws IOException {
         // Given
         CodeElement fieldElement = new CodeElement(
             CodeElementType.FIELD,
@@ -93,7 +96,8 @@ class PlantUMLClassDiagramGeneratorTest {
         List<CodeElement> allElements = List.of(classElement, fieldElement);
 
         // When
-        String filePath = generator.generateClassDiagram(classElement, allElements, tempDir);
+        String filePath =
+            generator.generateClassDiagram(classElement, allElements, tempDir);
 
         // Then
         Path diagramPath = Path.of(filePath);
@@ -103,7 +107,8 @@ class PlantUMLClassDiagramGeneratorTest {
 
     @Test
     @DisplayName("Should generate class with methods")
-    void shouldGenerateClassWithMethods(@TempDir final Path tempDir) throws IOException {
+    void shouldGenerateClassWithMethods(@TempDir final Path tempDir)
+        throws IOException {
         // Given
         CodeElement methodElement = new CodeElement(
             CodeElementType.METHOD,
@@ -132,7 +137,8 @@ class PlantUMLClassDiagramGeneratorTest {
         List<CodeElement> allElements = List.of(classElement, methodElement);
 
         // When
-        String filePath = generator.generateClassDiagram(classElement, allElements, tempDir);
+        String filePath =
+            generator.generateClassDiagram(classElement, allElements, tempDir);
 
         // Then
         Path diagramPath = Path.of(filePath);
@@ -142,7 +148,8 @@ class PlantUMLClassDiagramGeneratorTest {
 
     @Test
     @DisplayName("Should handle interface type")
-    void shouldHandleInterfaceType(@TempDir final Path tempDir) throws IOException {
+    void shouldHandleInterfaceType(@TempDir final Path tempDir)
+        throws IOException {
         // Given
         CodeElement interfaceElement = new CodeElement(
             CodeElementType.CLASS,
@@ -159,7 +166,9 @@ class PlantUMLClassDiagramGeneratorTest {
         List<CodeElement> allElements = List.of(interfaceElement);
 
         // When
-        String filePath = generator.generateClassDiagram(interfaceElement, allElements, tempDir);
+        String filePath =
+            generator.generateClassDiagram(
+                interfaceElement, allElements, tempDir);
 
         // Then
         Path diagramPath = Path.of(filePath);
@@ -169,7 +178,8 @@ class PlantUMLClassDiagramGeneratorTest {
 
     @Test
     @DisplayName("Should handle abstract class")
-    void shouldHandleAbstractClass(@TempDir final Path tempDir) throws IOException {
+    void shouldHandleAbstractClass(@TempDir final Path tempDir)
+        throws IOException {
         // Given
         CodeElement abstractElement = new CodeElement(
             CodeElementType.CLASS,
@@ -186,7 +196,9 @@ class PlantUMLClassDiagramGeneratorTest {
         List<CodeElement> allElements = List.of(abstractElement);
 
         // When
-        String filePath = generator.generateClassDiagram(abstractElement, allElements, tempDir);
+        String filePath =
+            generator.generateClassDiagram(
+                abstractElement, allElements, tempDir);
 
         // Then
         Path diagramPath = Path.of(filePath);
@@ -213,7 +225,8 @@ class PlantUMLClassDiagramGeneratorTest {
         List<CodeElement> allElements = List.of(enumElement);
 
         // When
-        String filePath = generator.generateClassDiagram(enumElement, allElements, tempDir);
+        String filePath =
+            generator.generateClassDiagram(enumElement, allElements, tempDir);
 
         // Then
         Path diagramPath = Path.of(filePath);
@@ -223,7 +236,8 @@ class PlantUMLClassDiagramGeneratorTest {
 
     @Test
     @DisplayName("Should map visibility symbols correctly")
-    void shouldMapVisibilitySymbols(@TempDir final Path tempDir) throws IOException {
+    void shouldMapVisibilitySymbols(@TempDir final Path tempDir)
+        throws IOException {
         // Given
         CodeElement publicMethod = new CodeElement(
             CodeElementType.METHOD,
@@ -261,10 +275,12 @@ class PlantUMLClassDiagramGeneratorTest {
             List.of()
         );
 
-        List<CodeElement> allElements = List.of(classElement, publicMethod, publicField);
+        List<CodeElement> allElements =
+            List.of(classElement, publicMethod, publicField);
 
         // When
-        String filePath = generator.generateClassDiagram(classElement, allElements, tempDir);
+        String filePath =
+            generator.generateClassDiagram(classElement, allElements, tempDir);
 
         // Then
         Path diagramPath = Path.of(filePath);
@@ -275,7 +291,8 @@ class PlantUMLClassDiagramGeneratorTest {
 
     @Test
     @DisplayName("Should include all accessibility levels")
-    void shouldIncludeAllMembers(@TempDir final Path tempDir) throws IOException {
+    void shouldIncludeAllMembers(@TempDir final Path tempDir)
+        throws IOException {
         // Given
         CodeElement helperMethod = new CodeElement(
             CodeElementType.METHOD,
@@ -313,10 +330,12 @@ class PlantUMLClassDiagramGeneratorTest {
             List.of()
         );
 
-        List<CodeElement> allElements = List.of(classElement, helperMethod, publicMethod);
+        List<CodeElement> allElements =
+            List.of(classElement, helperMethod, publicMethod);
 
         // When
-        String filePath = generator.generateClassDiagram(classElement, allElements, tempDir);
+        String filePath =
+            generator.generateClassDiagram(classElement, allElements, tempDir);
 
         // Then
         Path diagramPath = Path.of(filePath);
@@ -327,7 +346,8 @@ class PlantUMLClassDiagramGeneratorTest {
 
     @Test
     @DisplayName("Should exclude private members")
-    void shouldExcludePrivateMembers(@TempDir final Path tempDir) throws IOException {
+    void shouldExcludePrivateMembers(@TempDir final Path tempDir)
+        throws IOException {
         // Given
         CodeElement privateMethod = new CodeElement(
             CodeElementType.METHOD,
@@ -365,15 +385,18 @@ class PlantUMLClassDiagramGeneratorTest {
             List.of()
         );
 
-        List<CodeElement> allElements = List.of(classElement, privateMethod, publicMethod);
+        List<CodeElement> allElements =
+            List.of(classElement, privateMethod, publicMethod);
 
         // When
-        String filePath = generator.generateClassDiagram(classElement, allElements, tempDir);
+        String filePath =
+            generator.generateClassDiagram(classElement, allElements, tempDir);
 
         // Then
         Path diagramPath = Path.of(filePath);
         String content = Files.readString(diagramPath);
         assertTrue(content.contains("+ void publicMethod()"));
-        assertFalse(content.contains("privateHelper")); // Private method should be excluded
+        // Private method should be excluded
+        assertFalse(content.contains("privateHelper"));
     }
 }

@@ -311,9 +311,10 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
 
         // Also need a class element for proper grouping
         CodeElement classElement = createTestClassElement();
-        List<CodeElement> elements = Arrays.asList(classElement, elementWithStrings);
+        List<CodeElement> elements = Arrays.asList(classElement,
+                elementWithStrings);
         ProjectAnalysis analysis = new ProjectAnalysis(
-                "/test/path", elements,System.currentTimeMillis());
+                "/test/path", elements, System.currentTimeMillis());
 
         generator.generateGroupedDocumentation(analysis, tempDir).join();
 

@@ -21,7 +21,8 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Enhanced comprehensive tests for AppConfigEnhanced class to improve branch coverage.
+ * Enhanced comprehensive tests for AppConfigEnhanced class to
+ * improve branch coverage.
  * Tests all configuration paths, null handling, and bean creation scenarios.
  */
 @ExtendWith(MockitoExtension.class)
@@ -49,7 +50,8 @@ class AppConfigEnhancedTest {
 
     @BeforeEach
     void setUp() {
-        reset(documentorConfig, analysisSettings, requestBuilder, responseHandler, apiClient, llmServiceFixEnhanced);
+        reset(documentorConfig, analysisSettings, requestBuilder,
+        responseHandler, apiClient, llmServiceFixEnhanced);
     }
 
     @Test
@@ -85,15 +87,17 @@ class AppConfigEnhancedTest {
 
         appConfigEnhanced = new AppConfigEnhanced(documentorConfig);
 
-        ThreadPoolTaskExecutor executor = appConfigEnhanced.llmExecutorEnhanced();
+        ThreadPoolTaskExecutor executor =
+            appConfigEnhanced.llmExecutorEnhanced();
 
         assertNotNull(executor);
         assertEquals(8, executor.getCorePoolSize());
         assertEquals(16, executor.getMaxPoolSize()); // 8 * 2
         assertEquals(100, executor.getQueueCapacity());
         assertTrue(executor.getThreadNamePrefix().startsWith("LLM-Enhanced-"));
-        // Note: These methods are not publicly available in ThreadPoolTaskExecutor,
-        // so we verify the setup indirectly by checking that executor is properly initialized
+        // Note: These methods are not publicly available in
+        // ThreadPoolTaskExecutor, so we verify the setup indirectly by
+        // checking that executor is properly initialized
         assertNotNull(executor.getThreadNamePrefix());
     }
 
@@ -101,7 +105,8 @@ class AppConfigEnhancedTest {
     void testLlmExecutorEnhancedWithNullDocumentorConfig() {
         appConfigEnhanced = new AppConfigEnhanced(null);
 
-        ThreadPoolTaskExecutor executor = appConfigEnhanced.llmExecutorEnhanced();
+        ThreadPoolTaskExecutor executor = appConfigEnhanced
+            .llmExecutorEnhanced();
 
         assertNotNull(executor);
         assertEquals(5, executor.getCorePoolSize()); // Default value
@@ -114,7 +119,8 @@ class AppConfigEnhancedTest {
 
         appConfigEnhanced = new AppConfigEnhanced(documentorConfig);
 
-        ThreadPoolTaskExecutor executor = appConfigEnhanced.llmExecutorEnhanced();
+        ThreadPoolTaskExecutor executor = appConfigEnhanced
+            .llmExecutorEnhanced();
 
         assertNotNull(executor);
         assertEquals(5, executor.getCorePoolSize()); // Default value
@@ -128,7 +134,8 @@ class AppConfigEnhancedTest {
         when(analysisSettings.maxThreads()).thenReturn(4);
 
         appConfigEnhanced = new AppConfigEnhanced(documentorConfig);
-        ThreadPoolTaskExecutor executor = appConfigEnhanced.llmExecutorEnhanced();
+        ThreadPoolTaskExecutor executor = appConfigEnhanced
+            .llmExecutorEnhanced();
 
         // Setup ThreadLocal context for testing
         ThreadLocalContextHolder.setConfig(documentorConfig);
@@ -160,7 +167,8 @@ class AppConfigEnhancedTest {
     @Test
     void testLlmExecutorEnhancedTaskDecoratorWithNullConfig() {
         appConfigEnhanced = new AppConfigEnhanced(documentorConfig);
-        ThreadPoolTaskExecutor executor = appConfigEnhanced.llmExecutorEnhanced();
+        ThreadPoolTaskExecutor executor = appConfigEnhanced
+            .llmExecutorEnhanced();
 
         // Clear ThreadLocal context
         ThreadLocalContextHolder.clearConfig();
@@ -187,7 +195,8 @@ class AppConfigEnhancedTest {
     @Test
     void testLlmExecutorEnhancedTaskDecoratorExceptionHandling() {
         appConfigEnhanced = new AppConfigEnhanced(documentorConfig);
-        ThreadPoolTaskExecutor executor = appConfigEnhanced.llmExecutorEnhanced();
+        ThreadPoolTaskExecutor executor = appConfigEnhanced
+            .llmExecutorEnhanced();
 
         // Create a task that throws exception
         Runnable throwingTask = () -> {
@@ -220,7 +229,8 @@ class AppConfigEnhancedTest {
         appConfigEnhanced = new AppConfigEnhanced(null);
 
         LlmServiceEnhanced llmService = appConfigEnhanced.llmServiceEnhanced(
-            null, requestBuilder, responseHandler, apiClient);
+            null, requestBuilder, responseHandler,
+            apiClient);
 
         assertNotNull(llmService);
     }
@@ -229,7 +239,8 @@ class AppConfigEnhancedTest {
     void testLlmServiceEnhancedForAutowiring() {
         appConfigEnhanced = new AppConfigEnhanced(documentorConfig);
 
-        LlmServiceEnhanced llmService = appConfigEnhanced.llmServiceEnhancedForAutowiring(
+        LlmServiceEnhanced llmService = appConfigEnhanced
+            .llmServiceEnhancedForAutowiring(
             requestBuilder, responseHandler, apiClient);
 
         assertNotNull(llmService);
@@ -239,7 +250,8 @@ class AppConfigEnhancedTest {
     void testLlmServiceFixEnhanced() {
         appConfigEnhanced = new AppConfigEnhanced(documentorConfig);
 
-        LlmServiceFixEnhanced llmServiceFix = appConfigEnhanced.llmServiceFixEnhanced();
+        LlmServiceFixEnhanced llmServiceFix = appConfigEnhanced
+            .llmServiceFixEnhanced();
 
         assertNotNull(llmServiceFix);
     }
@@ -250,7 +262,8 @@ class AppConfigEnhancedTest {
 
         UnitTestDocumentationGeneratorEnhanced generator =
             appConfigEnhanced.unitTestDocumentationGeneratorEnhanced(
-                documentorConfig, llmServiceFixEnhanced, requestBuilder, responseHandler, apiClient);
+                documentorConfig, llmServiceFixEnhanced, requestBuilder,
+                    responseHandler, apiClient);
 
         assertNotNull(generator);
     }
@@ -261,7 +274,8 @@ class AppConfigEnhancedTest {
 
         UnitTestDocumentationGeneratorEnhanced generator =
             appConfigEnhanced.unitTestDocumentationGeneratorEnhanced(
-                null, llmServiceFixEnhanced, requestBuilder, responseHandler, apiClient);
+                null, llmServiceFixEnhanced,
+                requestBuilder, responseHandler, apiClient);
 
         assertNotNull(generator);
     }
@@ -286,7 +300,8 @@ class AppConfigEnhancedTest {
 
         assertNotNull(webClient1);
         assertNotNull(webClient2);
-        // They should be different instances since @Scope is not singleton by default for @Bean methods
+        // They should be different instances since @Scope is not
+        // singleton by default for @Bean methods
         assertNotSame(webClient1, webClient2);
     }
 
@@ -296,14 +311,16 @@ class AppConfigEnhancedTest {
         when(analysisSettings.maxThreads()).thenReturn(3);
 
         appConfigEnhanced = new AppConfigEnhanced(documentorConfig);
-        ThreadPoolTaskExecutor executor = appConfigEnhanced.llmExecutorEnhanced();
+        ThreadPoolTaskExecutor executor = appConfigEnhanced
+        .llmExecutorEnhanced();
 
         assertNotNull(executor);
         assertEquals(3, executor.getCorePoolSize());
         assertEquals(6, executor.getMaxPoolSize()); // 3 * 2
         assertEquals(100, executor.getQueueCapacity());
         assertEquals("LLM-Enhanced-", executor.getThreadNamePrefix());
-        // Note: Configuration verification - executor internals are not publicly accessible
+        // Note: Configuration verification
+        // - executor internals are not publicly accessible
     }
 
     @Test
@@ -312,7 +329,8 @@ class AppConfigEnhancedTest {
         when(analysisSettings.maxThreads()).thenReturn(1); // Minimum
 
         appConfigEnhanced = new AppConfigEnhanced(documentorConfig);
-        ThreadPoolTaskExecutor executor = appConfigEnhanced.llmExecutorEnhanced();
+        ThreadPoolTaskExecutor executor = appConfigEnhanced
+            .llmExecutorEnhanced();
 
         assertNotNull(executor);
         assertEquals(1, executor.getCorePoolSize());
@@ -325,7 +343,8 @@ class AppConfigEnhancedTest {
         when(analysisSettings.maxThreads()).thenReturn(20); // High value
 
         appConfigEnhanced = new AppConfigEnhanced(documentorConfig);
-        ThreadPoolTaskExecutor executor = appConfigEnhanced.llmExecutorEnhanced();
+        ThreadPoolTaskExecutor executor = appConfigEnhanced
+            .llmExecutorEnhanced();
 
         assertNotNull(executor);
         assertEquals(20, executor.getCorePoolSize());

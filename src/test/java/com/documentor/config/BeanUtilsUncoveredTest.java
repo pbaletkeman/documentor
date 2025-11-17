@@ -18,25 +18,31 @@ class BeanUtilsUncoveredTest {
     void testUpdateBeanFieldsNullParameters() {
         try {
             // Access private method updateBeanFields
-            java.lang.reflect.Method updateMethod = BeanUtils.class.getDeclaredMethod(
-                "updateBeanFields", Object.class, String.class, Object.class);
+            java.lang.reflect.Method updateMethod = BeanUtils.class
+                .getDeclaredMethod(
+                "updateBeanFields",
+                Object.class, String.class, Object.class);
             updateMethod.setAccessible(true);
 
             // Test null bean parameter - should return false (line 236-237)
-            Boolean result1 = (Boolean) updateMethod.invoke(null, null, "fieldName", "newValue");
+            Boolean result1 = (Boolean) updateMethod.invoke(
+                null, null, "fieldName", "newValue");
             assertFalse(result1);
 
             // Test null newValue parameter - should return false (line 236-237)
             TestBean testBean = new TestBean();
-            Boolean result2 = (Boolean) updateMethod.invoke(null, testBean, "fieldName", null);
+            Boolean result2 = (Boolean) updateMethod.invoke(
+                null, testBean, "fieldName", null);
             assertFalse(result2);
 
             // Test both null - should return false (line 236-237)
-            Boolean result3 = (Boolean) updateMethod.invoke(null, null, "fieldName", null);
+            Boolean result3 = (Boolean) updateMethod.invoke(
+                null, null, "fieldName", null);
             assertFalse(result3);
 
         } catch (Exception e) {
-            fail("Failed to test updateBeanFields null parameters: " + e.getMessage());
+            fail("Failed to test updateBeanFields null parameters: "
+            + e.getMessage());
         }
     }
 
@@ -45,12 +51,16 @@ class BeanUtilsUncoveredTest {
      */
     @Test
     void testNonConfigurableApplicationContext() {
-        // StaticApplicationContext is ApplicationContext but not ConfigurableApplicationContext
-        StaticApplicationContext nonConfigurableContext = new StaticApplicationContext();
+        // StaticApplicationContext is ApplicationContext but
+        // not ConfigurableApplicationContext
+        StaticApplicationContext nonConfigurableContext =
+            new StaticApplicationContext();
 
-        // This should hit line 105: "ApplicationContext is not configurable, cannot override bean"
+        // This should hit line 105: "ApplicationContext is not configurable,
+        // cannot override bean"
         assertDoesNotThrow(() -> {
-            BeanUtils.overrideBean(nonConfigurableContext, "anyBean", "newValue");
+            BeanUtils.overrideBean(nonConfigurableContext,
+            "anyBean", "newValue");
         });
     }
 
@@ -61,19 +71,23 @@ class BeanUtilsUncoveredTest {
     void testUpdateBeanFieldsReflectionException() {
         try {
             java.lang.reflect.Method updateMethod = BeanUtils.class.getDeclaredMethod(
-                "updateBeanFields", Object.class, String.class, Object.class);
+                "updateBeanFields", Object.class, String.class,
+                Object.class);
             updateMethod.setAccessible(true);
 
             // Create a bean that will cause reflection exceptions
             ExceptionThrowingBean badBean = new ExceptionThrowingBean();
 
             // This should trigger the catch block on lines 269-271
-            Boolean result = (Boolean) updateMethod.invoke(null, badBean, "config", "newValue");
-            // Should return false since no fields were successfully updated due to exceptions
+            Boolean result = (Boolean) updateMethod.invoke(null,
+                badBean, "config", "newValue");
+            // Should return false since no fields were successfully
+            // updated due to exceptions
             assertFalse(result);
 
         } catch (Exception e) {
-            // Expected - reflection might fail, but we're testing the exception handling
+            // Expected - reflection might fail, but we're testing
+            // the exception handling
         }
     }
 
@@ -84,15 +98,19 @@ class BeanUtilsUncoveredTest {
     void testDestroyAndRegisterReflectionMethod() {
         try {
             // Access the private reflection method
-            java.lang.reflect.Method reflectionMethod = BeanUtils.class.getDeclaredMethod(
+            java.lang.reflect.Method reflectionMethod =
+                BeanUtils.class.getDeclaredMethod(
                 "destroyAndRegisterSingletonViaReflection",
-                org.springframework.beans.factory.config.ConfigurableListableBeanFactory.class,
+                org.springframework.beans.factory.config
+                .ConfigurableListableBeanFactory.class,
                 String.class, Object.class);
             reflectionMethod.setAccessible(true);
 
             // Create a minimal bean factory to test with
-            org.springframework.beans.factory.support.DefaultListableBeanFactory factory =
-                new org.springframework.beans.factory.support.DefaultListableBeanFactory();
+            org.springframework.beans.factory.support
+                .DefaultListableBeanFactory factory =
+                new org.springframework.beans.factory.support
+                .DefaultListableBeanFactory();
 
             // This should trigger the reflection code paths
             try {

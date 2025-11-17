@@ -32,12 +32,16 @@ class ThreadLocalTaskDecoratorEnhancedTest {
 
         // Create test config
         List<LlmModelConfig> models = Collections.singletonList(
-            new LlmModelConfig("test-model", "ollama", "http://localhost:11434", null, 4000, 30)
+            new LlmModelConfig("test-model", "ollama",
+            "http://localhost:11434", null, 4000, 30)
         );
-        OutputSettings outputSettings = new OutputSettings("output", "markdown", false, false, false);
-        AnalysisSettings analysisSettings = new AnalysisSettings(true, 5, null, null);
+        OutputSettings outputSettings = new OutputSettings(
+            "output", "markdown", false, false, false);
+        AnalysisSettings analysisSettings = new AnalysisSettings(
+            true, 5, null, null);
 
-        testConfig = new DocumentorConfig(models, outputSettings, analysisSettings);
+        testConfig = new DocumentorConfig(models, outputSettings,
+            analysisSettings);
     }    @Test
     void testDecorateWithNullRunnable() {
         Runnable decoratedRunnable = decorator.decorate(null);
@@ -101,13 +105,19 @@ class ThreadLocalTaskDecoratorEnhancedTest {
 
     @Test
     void testDecorateWithConfigWithNullModels() throws InterruptedException {
-        // Create config with null models (this will fail validation, but test the branch)
-        OutputSettings outputSettings = new OutputSettings("output", "markdown", false, false, false);
-        AnalysisSettings analysisSettings = new AnalysisSettings(true, 5, null, null);
+        // Create config with null models (this will fail validation,
+        // but test the branch)
+        OutputSettings outputSettings = new OutputSettings(
+            "output", "markdown", false, false, false);
+        AnalysisSettings analysisSettings = new AnalysisSettings(
+            true, 5, null, null);
 
-        // We'll test with empty models instead since null models would fail validation
+        // We'll test with empty models instead since null models
+        // would fail validation
         List<LlmModelConfig> emptyModels = Collections.emptyList();
-        DocumentorConfig configWithEmptyModels = new DocumentorConfig(emptyModels, outputSettings, analysisSettings);
+        DocumentorConfig configWithEmptyModels =
+            new DocumentorConfig(emptyModels, outputSettings,
+                analysisSettings);
 
         ThreadLocalContextHolder.setConfig(configWithEmptyModels);
 
@@ -132,7 +142,8 @@ class ThreadLocalTaskDecoratorEnhancedTest {
         assertEquals(1, capturedConfigs.size());
         assertEquals(configWithEmptyModels, capturedConfigs.get(0));
     }    @Test
-    void testDecorateWithRunnableThrowingException() throws InterruptedException {
+    void testDecorateWithRunnableThrowingException()
+        throws InterruptedException {
         ThreadLocalContextHolder.setConfig(testConfig);
 
         CountDownLatch latch = new CountDownLatch(1);
@@ -162,10 +173,13 @@ class ThreadLocalTaskDecoratorEnhancedTest {
     void testDecorateWithEmptyModelsList() throws InterruptedException {
         // Create config with empty models list
         List<LlmModelConfig> emptyModels = Collections.emptyList();
-        OutputSettings outputSettings = new OutputSettings("output", "markdown", false, false, false);
-        AnalysisSettings analysisSettings = new AnalysisSettings(true, 5, null, null);
+        OutputSettings outputSettings = new OutputSettings(
+            "output", "markdown", false, false, false);
+        AnalysisSettings analysisSettings = new AnalysisSettings(
+            true, 5, null, null);
 
-        DocumentorConfig configWithEmptyModels = new DocumentorConfig(emptyModels, outputSettings, analysisSettings);
+        DocumentorConfig configWithEmptyModels =
+            new DocumentorConfig(emptyModels, outputSettings, analysisSettings);
 
         ThreadLocalContextHolder.setConfig(configWithEmptyModels);
 
@@ -195,15 +209,21 @@ class ThreadLocalTaskDecoratorEnhancedTest {
     void testDecorateWithMultipleModels() throws InterruptedException {
         // Create config with multiple models
         List<LlmModelConfig> models = List.of(
-            new LlmModelConfig("model1", "provider1", "url1", "key1", 4000, 30),
-            new LlmModelConfig("model2", "provider2", "url2", "key2", 4000, 30),
-            new LlmModelConfig("model3", "provider3", "url3", "key3", 4000, 30)
+            new LlmModelConfig(
+                "model1", "provider1", "url1", "key1", 4000, 30),
+            new LlmModelConfig(
+                "model2", "provider2", "url2", "key2", 4000, 30),
+            new LlmModelConfig(
+                "model3", "provider3", "url3", "key3", 4000, 30)
         );
 
-        OutputSettings outputSettings = new OutputSettings("output", "markdown", false, false, false);
-        AnalysisSettings analysisSettings = new AnalysisSettings(true, 5, null, null);
+        OutputSettings outputSettings =
+            new OutputSettings("output", "markdown", false, false, false);
+        AnalysisSettings analysisSettings =
+            new AnalysisSettings(true, 5, null, null);
 
-        DocumentorConfig configWithMultipleModels = new DocumentorConfig(models, outputSettings, analysisSettings);
+        DocumentorConfig configWithMultipleModels =
+            new DocumentorConfig(models, outputSettings, analysisSettings);
 
         ThreadLocalContextHolder.setConfig(configWithMultipleModels);
 
@@ -283,7 +303,8 @@ class ThreadLocalTaskDecoratorEnhancedTest {
         ThreadLocalContextHolder.setConfig(testConfig);
 
         CountDownLatch latch = new CountDownLatch(3);
-        List<DocumentorConfig> capturedConfigs = Collections.synchronizedList(new ArrayList<>());
+        List<DocumentorConfig> capturedConfigs = Collections
+            .synchronizedList(new ArrayList<>());
 
         Runnable originalRunnable = () -> {
             capturedConfigs.add(ThreadLocalContextHolder.getConfig());
