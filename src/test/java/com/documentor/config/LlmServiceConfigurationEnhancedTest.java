@@ -6,7 +6,6 @@ import com.documentor.config.model.OutputSettings;
 import com.documentor.constants.ApplicationConstants;
 import com.documentor.service.LlmServiceEnhanced;
 import com.documentor.service.LlmServiceFixEnhanced;
-import com.documentor.service.documentation.ElementDocumentationGeneratorEnhanced;
 import com.documentor.service.llm.LlmApiClient;
 import com.documentor.service.llm.LlmRequestBuilder;
 import com.documentor.service.llm.LlmResponseHandler;
