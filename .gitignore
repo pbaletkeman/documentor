@@ -104,10 +104,4 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
-.gradle/8.5/executionHistory/executionHistory.bin
-.gradle/8.5/executionHistory/executionHistory.bin
-.gradle/8.5/executionHistory/executionHistory.lock
-.gradle/8.5/executionHistory/executionHistory.bin
-.gradle/8.5/executionHistory/executionHistory.lock
-.gradle/8.5/fileHashes/fileHashes.bin
-.gradle/8.5/fileHashes/fileHashes.lock
+.gradle/
