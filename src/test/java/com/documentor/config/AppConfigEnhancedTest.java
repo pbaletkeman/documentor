@@ -17,7 +17,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.concurrent.Executor;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**

@@ -59,6 +59,16 @@ public final class LlmServiceFixIntegrationTest {
     private LlmService llmService;
     private DocumentorConfig testConfig;
 
+    // Test constants for magic numbers
+    private static final int TEST_MAX_TOKENS = 2048;
+    private static final int TEST_TIMEOUT_SECONDS = 60;
+    private static final int TEST_MAX_DEPTH = 3;
+    private static final int TEST_CLASS_LINE_NUMBER = 1;
+    private static final int TEST_METHOD_LINE_NUMBER_1 = 10;
+    private static final int TEST_METHOD_LINE_NUMBER_2 = 15;
+    private static final int TEST_CLASS_LINE_NUMBER_2 = 1;
+    private static final int TEST_METHOD_LINE_NUMBER_3 = 10;
+
     @BeforeEach
     public void setUp() {
         // Create a test configuration
@@ -67,8 +77,8 @@ public final class LlmServiceFixIntegrationTest {
                 "test-provider",
                 "http://localhost:8080",
                 "test-api-key",
-                2048,
-                60);
+                TEST_MAX_TOKENS,
+                TEST_TIMEOUT_SECONDS);
 
         OutputSettings outputSettings = new OutputSettings(
                 "./output",

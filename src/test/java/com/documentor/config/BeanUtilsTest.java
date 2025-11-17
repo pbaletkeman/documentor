@@ -8,7 +8,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.withSettings;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 
 /**
  * Enhanced tests for BeanUtils class to improve branch coverage.
