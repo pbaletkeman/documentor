@@ -14,6 +14,7 @@ import static org.mockito.Mockito.verify;
 
 class LlmResponseParserEnhancedTest {
 
+    // Test constants for magic number violations
     private static final int DEFAULT_MAX_TOKENS = 1000;
     private static final int DEFAULT_TIMEOUT_SECONDS = 30;
 

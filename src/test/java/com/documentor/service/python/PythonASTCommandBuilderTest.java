@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
  */
 class PythonASTCommandBuilderTest {
 
+    // Test constants for magic number violations
     private static final int LINE_NUMBER_THREE = 3;
     private static final int LINE_NUMBER_TEN = 10;
     private static final int LINE_NUMBER_FIFTEEN = 15;

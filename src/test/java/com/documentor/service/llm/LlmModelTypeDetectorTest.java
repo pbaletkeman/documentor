@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class LlmModelTypeDetectorTest {
 
+    // Test constants for magic number violations
     private static final int MAX_TOKENS_2000 = 2000;
     private static final int TIMEOUT_30 = 30;
 

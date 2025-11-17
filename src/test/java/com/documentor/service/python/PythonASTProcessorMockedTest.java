@@ -34,6 +34,7 @@ import static org.mockito.Mockito.atLeast;
 @ExtendWith(MockitoExtension.class)
 public class PythonASTProcessorMockedTest {
 
+    // Test constants for magic number violations
     private static final int CLASS_LINE_NUMBER = 10;
     private static final int METHOD_LINE_NUMBER = 15;
     private static final int EXPECTED_PARAM_COUNT = 3;

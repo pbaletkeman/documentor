@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class LlmResponseParserTest {
 
+    // Test constants for magic number violations
     private static final int TEST_MAX_TOKENS = 100;
     private static final int TEST_TIMEOUT_SECONDS = 10;
 
