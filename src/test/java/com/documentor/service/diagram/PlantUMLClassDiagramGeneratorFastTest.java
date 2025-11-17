@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class PlantUMLClassDiagramGeneratorFastTest {
 
-    // Constants for test data line numbers
+    // Test constants for magic number violations
     private static final int TEST_METHOD_LINE = 10;
     private static final int TEST_FIELD_LINE = 5;
     private static final int PRIVATE_FIELD_LINE = 6;

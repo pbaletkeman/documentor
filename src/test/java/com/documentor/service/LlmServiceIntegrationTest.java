@@ -37,6 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ExtendWith(MockitoExtension.class)
 class LlmServiceIntegrationTest {
 
+    // Test constants for magic number violations
     private static final int DEFAULT_MAX_TOKENS = 1000;
     private static final int DEFAULT_TIMEOUT_SECONDS = 30;
     private static final int ALTERNATIVE_MAX_TOKENS = 2000;

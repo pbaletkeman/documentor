@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class LlmModelConfigTest {
 
+    // Test constants for magic number violations
     private static final int DEFAULT_MAX_TOKENS = 1000;
     private static final int DEFAULT_TIMEOUT_SECONDS = 60;
     private static final int ALTERNATIVE_MAX_TOKENS = 2000;

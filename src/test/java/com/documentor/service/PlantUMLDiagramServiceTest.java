@@ -24,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(MockitoExtension.class)
 class PlantUMLDiagramServiceTest {
 
+    // Test constants for magic number violations
     private static final String TEST_CLASS_NAME = "TestClass";
     private static final String TEST_PROJECT_PATH = "/test/project";
     private static final int CLASS_LINE_NUMBER = 1;

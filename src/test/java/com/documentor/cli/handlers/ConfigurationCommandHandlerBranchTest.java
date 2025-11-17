@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class ConfigurationCommandHandlerBranchTest {
 
+    // Test constants for magic number violations
     private static final int DEFAULT_TIMEOUT = 1000;
     private static final int DEFAULT_MAX_TOKENS = 1000;
     private static final int DEFAULT_MAX_DEPTH = 5;

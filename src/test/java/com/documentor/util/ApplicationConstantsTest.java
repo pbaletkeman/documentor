@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  */
 class ApplicationConstantsTest {
 
+    // Test constants for magic number violations
     private static final int EXPECTED_MIN_PARTS = 3;
     private static final int EXPECTED_FUNCTION_PREFIX_LENGTH = 1;
     private static final int EXPECTED_PARAMS_ARRAY_INDEX = 2;

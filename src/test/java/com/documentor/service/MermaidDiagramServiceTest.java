@@ -23,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(MockitoExtension.class)
 class MermaidDiagramServiceTest {
 
+    // Test constants for magic number violations
     private static final int ELEMENT_COUNT_SMALL = 3;
     private static final int ELEMENT_COUNT_MEDIUM = 4;
     private static final int ELEMENT_COUNT_LARGE = 5;

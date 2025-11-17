@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class LlmRequestFormatterTest {
 
+    // Test constants for magic number violations
     private static final int MAX_TOKENS_LARGE = 2000;
     private static final int TIMEOUT_SECONDS = 60;
     private static final double TEMPERATURE_HALF = 0.5;

@@ -25,7 +25,7 @@ class PlantUMLClassDiagramGeneratorBranchTest {
     @TempDir
     private Path tempDir;
 
-    // Constants for test data
+    // Test constants for magic number violations
     private static final int FIELD_LINE_NUMBER = 5;
     private static final int METHOD_LINE_NUMBER = 10;
     private static final int CLASS_LINE_NUMBER = 1;
