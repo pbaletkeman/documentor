@@ -58,7 +58,8 @@ class PythonPatternMatcherTest {
                 assertEquals("IndentedClass", className);
             }
         }
-        assertEquals(EXPECTED_CLASS_COUNT, count, "Should find exactly 3 class declarations");
+        assertEquals(EXPECTED_CLASS_COUNT, count,
+            "Should find exactly 3 class declarations");
     }
 
     @Test
@@ -100,7 +101,8 @@ class PythonPatternMatcherTest {
                 assertEquals("x", params);
             }
         }
-        assertEquals(EXPECTED_FUNCTION_COUNT, count, "Should find exactly 3 function declarations");
+        assertEquals(EXPECTED_FUNCTION_COUNT, count,
+            "Should find exactly 3 function declarations");
     }
 
     @Test
@@ -139,7 +141,8 @@ class PythonPatternMatcherTest {
                 assertEquals("{\"key\": \"value\"}", value);
             }
         }
-        assertEquals(EXPECTED_VARIABLE_COUNT, count, "Should find exactly 4 variable assignments");
+        assertEquals(EXPECTED_VARIABLE_COUNT, count,
+            "Should find exactly 4 variable assignments");
     }
 
     @Test
@@ -173,10 +176,14 @@ class PythonPatternMatcherTest {
         String docstring3 = matcher.findDocstring(withNoDocstring);
 
         // Then
-        // Just check if docstrings were found or not, the exact format might vary
-        assertTrue(docstring1.contains("This is a docstring with triple single quotes"));
-        assertTrue(docstring1.contains("Multiple lines"));
-        assertTrue(docstring2.contains("This is a docstring with triple double quotes"));
+        // Just check if docstrings were found or not,
+        // the exact format might vary
+        assertTrue(docstring1
+            .contains("This is a docstring with triple single quotes"));
+        assertTrue(docstring1
+            .contains("Multiple lines"));
+        assertTrue(docstring2
+            .contains("This is a docstring with triple double quotes"));
         assertEquals("", docstring3);
     }
 
@@ -217,4 +224,3 @@ class PythonPatternMatcherTest {
         assertEquals(0, result5.length);
     }
 }
-

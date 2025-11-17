@@ -18,14 +18,15 @@ import java.util.concurrent.CompletableFuture;
 /**
  * 📄 Documentation Generation Service - Enhanced with PlantUML Support
  *
- * Orchestrates the generation of markdown documentation from code analysis results.
- * Delegates to specialized generators for different types of documentation.
- * Now supports both Mermaid and PlantUML diagram generation.
+ * Orchestrates the generation of markdown documentation from code analysis
+ * results. Delegates to specialized generators for different types of
+ * documentation. Now supports both Mermaid and PlantUML diagram generation.
  */
 @Service
 public class DocumentationService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DocumentationService.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(DocumentationService.class);
 
     private final MainDocumentationGenerator mainDocGenerator;
     private final ElementDocumentationGenerator elementDocGenerator;
@@ -53,50 +54,72 @@ public class DocumentationService {
      * 📚 Generates complete project documentation
      *
      * @param analysis The project analysis results
-     * @return CompletableFuture containing the path to generated documentation
+     * @return CompletableFuture containing the path to generated
+     *         documentation
      */
-    public CompletableFuture<String> generateDocumentation(final ProjectAnalysis analysis) {
-        LOGGER.info("📄 Starting documentation generation for project: {}", analysis.projectPath());
+    public CompletableFuture<String> generateDocumentation(
+            final ProjectAnalysis analysis) {
+        LOGGER.info("📄 Starting documentation generation for project: {}",
+                analysis.projectPath());
 
         return CompletableFuture.supplyAsync(() -> {
             try {
                 // Create output directory
-                Path outputPath = Paths.get(config.outputSettings().outputPath());
+                Path outputPath = Paths.get(
+                        config.outputSettings().outputPath());
                 Files.createDirectories(outputPath);
 
                 // Generate main documentation
-                String mainDoc = mainDocGenerator.generateMainDocumentation(analysis).join();
+                String mainDoc = mainDocGenerator
+                        .generateMainDocumentation(analysis).join();
                 Path mainDocPath = outputPath.resolve("README.md");
                 Files.write(mainDocPath, mainDoc.getBytes());
 
                 // Generate detailed documentation for each element
-                generateDetailedDocumentation(analysis, outputPath).join();
+                generateDetailedDocumentation(analysis, outputPath)
+                        .join();
 
                 // Generate unit tests if enabled
-                if (config.outputSettings().generateUnitTests()) {
-                    testDocGenerator.generateUnitTestDocumentation(analysis, outputPath).join();
+                if (config.outputSettings().generateUnitTests() != null
+                    && config.outputSettings().generateUnitTests()) {
+                    LOGGER.info("Generating unit tests as specified "
+                            + "in configuration");
+                    testDocGenerator.generateUnitTestDocumentation(
+                            analysis, outputPath).join();
+                } else {
+                    LOGGER.info("Unit test generation is disabled "
+                            + "in configuration - skipping");
                 }
 
                 // Generate Mermaid diagrams if enabled
                 if (config.outputSettings().generateMermaidDiagrams()) {
-                    List<String> diagramPaths = mermaidDiagramService.generateClassDiagrams(
-                        analysis, config.outputSettings().mermaidOutputPath()).join();
-                    LOGGER.info("✅ Generated {} Mermaid diagrams", diagramPaths.size());
+                    List<String> diagramPaths = mermaidDiagramService
+                            .generateClassDiagrams(analysis,
+                                    config.outputSettings()
+                                            .mermaidOutputPath()).join();
+                    LOGGER.info("✅ Generated {} Mermaid diagrams",
+                            diagramPaths.size());
                 }
 
                 // Generate PlantUML diagrams if enabled
                 if (config.outputSettings().generatePlantUMLDiagrams()) {
-                    List<String> plantUMLPaths = plantUMLDiagramService.generateClassDiagrams(
-                        analysis, config.outputSettings().plantUMLOutputPath()).join();
-                    LOGGER.info("✅ Generated {} PlantUML diagrams", plantUMLPaths.size());
+                    List<String> plantUMLPaths = plantUMLDiagramService
+                            .generateClassDiagrams(analysis,
+                                    config.outputSettings()
+                                            .plantUMLOutputPath()).join();
+                    LOGGER.info("✅ Generated {} PlantUML diagrams",
+                            plantUMLPaths.size());
                 }
 
-                LOGGER.info("✅ Documentation generated successfully at: {}", outputPath);
+                LOGGER.info("✅ Documentation generated successfully at: {}",
+                        outputPath);
                 return outputPath.toString();
 
             } catch (Exception e) {
-                LOGGER.error("❌ Error generating documentation: {}", e.getMessage(), e);
-                throw new RuntimeException("Failed to generate documentation", e);
+                LOGGER.error("❌ Error generating documentation: {}",
+                        e.getMessage(), e);
+                throw new RuntimeException(
+                        "Failed to generate documentation", e);
             }
         });
     }
@@ -104,12 +127,15 @@ public class DocumentationService {
     /**
      * 📝 Generates detailed documentation for each code element
      */
-    private CompletableFuture<Void> generateDetailedDocumentation(final ProjectAnalysis analysis,
+    private CompletableFuture<Void> generateDetailedDocumentation(
+            final ProjectAnalysis analysis,
             final Path outputPath) {
-        LOGGER.info("Generating grouped documentation for {} elements...", analysis.codeElements().size());
+        LOGGER.info("Generating grouped documentation for {} elements...",
+                analysis.codeElements().size());
 
         // Make sure we have a valid list of elements to process
-        if (analysis.codeElements() == null || analysis.codeElements().isEmpty()) {
+        if (analysis.codeElements() == null
+                || analysis.codeElements().isEmpty()) {
             LOGGER.info("No code elements to document");
             return CompletableFuture.completedFuture(null);
         }
@@ -119,11 +145,13 @@ public class DocumentationService {
             Path elementsDir = outputPath.resolve("elements");
             Files.createDirectories(elementsDir);
         } catch (Exception e) {
-            LOGGER.error("Failed to create elements directory: {}", e.getMessage());
+            LOGGER.error("Failed to create elements directory: {}",
+                    e.getMessage());
             return CompletableFuture.completedFuture(null);
         }
 
         // Use the new grouped documentation generation approach
-        return elementDocGenerator.generateGroupedDocumentation(analysis, outputPath);
+        return elementDocGenerator.generateGroupedDocumentation(
+                analysis, outputPath);
     }
 }

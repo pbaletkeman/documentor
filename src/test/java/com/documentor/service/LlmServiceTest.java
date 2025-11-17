@@ -6,7 +6,7 @@ class LlmServiceTest {
 
     @Test
     void minimalSmokeTest() {
-        // minimal compilation-only test to unblock suite; detailed tests exist elsewhere
+        // minimal compilation-only test to unblock suite;
+        //detailed tests exist elsewhere
     }
 }
-

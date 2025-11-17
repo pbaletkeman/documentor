@@ -26,17 +26,21 @@ class DiagramPathManagerEnhancedTest {
     @DisplayName("Should handle empty custom output path")
     void determineOutputPathWithEmptyCustomPath() {
         // When
-        String outputPath = pathManager.determineOutputPath("/some/source/path.java", "   ");
+        String outputPath =
+            pathManager.determineOutputPath("/some/source/path.java", "   ");
 
         // Then
-        // When customPath is empty, it falls back to the parent directory of the source file path
+        // When customPath is empty, it falls back to the parent
+        // directory of the source file path
         assertEquals(Paths.get("/some/source").toString(), outputPath);
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"Class$Name", "Class@Name", "Class#Name", "Class&Name", "Class%Name"})
+    @ValueSource(strings = {"Class$Name", "Class@Name", "Class#Name",
+        "Class&Name", "Class%Name"})
     @DisplayName("Should sanitize various special characters in file names")
-    void generateDiagramFileNameWithVariousSpecialChars(final String className) {
+    void generateDiagramFileNameWithVariousSpecialChars(
+        final String className) {
         // When
         String fileName = pathManager.generateDiagramFileName(className);
 
@@ -46,12 +50,13 @@ class DiagramPathManagerEnhancedTest {
         assertFalse(fileName.contains("#"));
         assertFalse(fileName.contains("&"));
         assertFalse(fileName.contains("%"));
-        assertTrue(fileName.endsWith("_diagram.md"));
+        assertTrue(fileName.endsWith("_diagram.mmd"));
     }
 
     @Test
     @DisplayName("Should create output directory that exists on filesystem")
-    void createOutputDirectoryThatExists(@TempDir final Path tempDir) throws IOException {
+    void createOutputDirectoryThatExists(@TempDir final Path tempDir)
+        throws IOException {
         // Given
         String dirPath = tempDir.toString();
 
@@ -77,10 +82,10 @@ class DiagramPathManagerEnhancedTest {
     @DisplayName("Should create output directory with multi-level paths")
     void createOutputDirectoryWithNestedPath() {
         // When
-        Path outputPath = pathManager.createOutputDirectory("/tmp/diagrams/class/samples");
+        Path outputPath =
+            pathManager.createOutputDirectory("/tmp/diagrams/class/samples");
 
         // Then
         assertEquals(Paths.get("/tmp/diagrams/class/samples"), outputPath);
     }
 }
-

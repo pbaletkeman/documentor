@@ -14,10 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * Additional tests for PlantUMLClassDiagramGenerator focusing on branch coverage improvement.
- * These tests target specific edge cases and conditional branches to reach 85%+ branch coverage.
- */
 class PlantUMLClassDiagramGeneratorBranchTest {
 
     private PlantUMLClassDiagramGenerator generator;
@@ -53,7 +49,8 @@ class PlantUMLClassDiagramGeneratorBranchTest {
         CodeElement classElement = createTestClass();
         List<CodeElement> elements = List.of(classElement, protectedMethod);
 
-        String result = generator.generateClassDiagram(classElement, elements, tempDir);
+        String result =
+            generator.generateClassDiagram(classElement, elements, tempDir);
 
         assertNotNull(result);
         String content = java.nio.file.Files.readString(Path.of(result));
@@ -76,9 +73,11 @@ class PlantUMLClassDiagramGeneratorBranchTest {
         );
 
         CodeElement classElement = createTestClass();
-        List<CodeElement> elements = List.of(classElement, packagePrivateMethod);
+        List<CodeElement> elements =
+            List.of(classElement, packagePrivateMethod);
 
-        String result = generator.generateClassDiagram(classElement, elements, tempDir);
+        String result =
+            generator.generateClassDiagram(classElement, elements, tempDir);
 
         assertNotNull(result);
         String content = java.nio.file.Files.readString(Path.of(result));
@@ -102,7 +101,9 @@ class PlantUMLClassDiagramGeneratorBranchTest {
 
         List<CodeElement> elements = List.of(interfaceElement);
 
-        String result = generator.generateClassDiagram(interfaceElement, elements, tempDir);
+        String result =
+            generator.generateClassDiagram(
+                interfaceElement, elements, tempDir);
 
         assertNotNull(result);
         String content = java.nio.file.Files.readString(Path.of(result));
@@ -126,7 +127,8 @@ class PlantUMLClassDiagramGeneratorBranchTest {
 
         List<CodeElement> elements = List.of(abstractElement);
 
-        String result = generator.generateClassDiagram(abstractElement, elements, tempDir);
+        String result =
+            generator.generateClassDiagram(abstractElement, elements, tempDir);
 
         assertNotNull(result);
         String content = java.nio.file.Files.readString(Path.of(result));
@@ -150,7 +152,8 @@ class PlantUMLClassDiagramGeneratorBranchTest {
 
         List<CodeElement> elements = List.of(enumElement);
 
-        String result = generator.generateClassDiagram(enumElement, elements, tempDir);
+        String result =
+            generator.generateClassDiagram(enumElement, elements, tempDir);
 
         assertNotNull(result);
         String content = java.nio.file.Files.readString(Path.of(result));
@@ -175,9 +178,11 @@ class PlantUMLClassDiagramGeneratorBranchTest {
         );
 
         CodeElement classElement = createTestClass();
-        List<CodeElement> elements = List.of(classElement, emptySignatureMethod);
+        List<CodeElement> elements =
+            List.of(classElement, emptySignatureMethod);
 
-        String result = generator.generateClassDiagram(classElement, elements, tempDir);
+        String result =
+            generator.generateClassDiagram(classElement, elements, tempDir);
 
         assertNotNull(result);
         String content = java.nio.file.Files.readString(Path.of(result));
@@ -193,7 +198,8 @@ class PlantUMLClassDiagramGeneratorBranchTest {
             "com.test.TestClass.complexMethod",
             "/test/TestClass.java",
             METHOD_LINE_NUMBER,
-            "public static final String complexMethod(int param1, String param2)",
+            "public static final String"
+                + " complexMethod(int param1, String param2)",
             "Complex method documentation",
             List.of("param1", "param2"),
             List.of()
@@ -202,7 +208,8 @@ class PlantUMLClassDiagramGeneratorBranchTest {
         CodeElement classElement = createTestClass();
         List<CodeElement> elements = List.of(classElement, complexMethod);
 
-        String result = generator.generateClassDiagram(classElement, elements, tempDir);
+        String result =
+            generator.generateClassDiagram(classElement, elements, tempDir);
 
         assertNotNull(result);
         String content = java.nio.file.Files.readString(Path.of(result));
@@ -228,7 +235,8 @@ class PlantUMLClassDiagramGeneratorBranchTest {
         CodeElement classElement = createTestClass();
         List<CodeElement> elements = List.of(classElement, noParensMethod);
 
-        String result = generator.generateClassDiagram(classElement, elements, tempDir);
+        String result =
+            generator.generateClassDiagram(classElement, elements, tempDir);
 
         assertNotNull(result);
         String content = java.nio.file.Files.readString(Path.of(result));
@@ -238,7 +246,8 @@ class PlantUMLClassDiagramGeneratorBranchTest {
     @Test
     @DisplayName("Should handle null class name in sanitization")
     void shouldHandleNullClassName() throws Exception {
-        // Cannot test with null name directly as record constructor doesn't allow it
+        // Cannot test with null name directly
+        // as record constructor doesn't allow it
         // Instead test the sanitization through the relationship functionality
         CodeElement nullNameClass = new CodeElement(
             CodeElementType.CLASS,
@@ -254,7 +263,8 @@ class PlantUMLClassDiagramGeneratorBranchTest {
 
         List<CodeElement> elements = List.of(nullNameClass);
 
-        String result = generator.generateClassDiagram(nullNameClass, elements, tempDir);
+        String result =
+            generator.generateClassDiagram(nullNameClass, elements, tempDir);
 
         assertNotNull(result);
         String content = java.nio.file.Files.readString(Path.of(result));
@@ -280,7 +290,8 @@ class PlantUMLClassDiagramGeneratorBranchTest {
         CodeElement classElement = createTestClass();
         List<CodeElement> elements = List.of(classElement, genericField);
 
-        String result = generator.generateClassDiagram(classElement, elements, tempDir);
+        String result =
+            generator.generateClassDiagram(classElement, elements, tempDir);
 
         assertNotNull(result);
         String content = java.nio.file.Files.readString(Path.of(result));
@@ -291,7 +302,8 @@ class PlantUMLClassDiagramGeneratorBranchTest {
     @Test
     @DisplayName("Should handle private elements exclusion")
     void shouldHandlePrivateElementsExclusion() throws Exception {
-        // Use signature with "private" keyword to trigger isPublic() to return false
+        // Use signature with "private" keyword to
+        // trigger isPublic() to return false
         CodeElement privateField = new CodeElement(
             CodeElementType.FIELD,
             "privateField",
@@ -307,7 +319,8 @@ class PlantUMLClassDiagramGeneratorBranchTest {
         CodeElement classElement = createTestClass();
         List<CodeElement> elements = List.of(classElement, privateField);
 
-        String result = generator.generateClassDiagram(classElement, elements, tempDir);
+        String result =
+            generator.generateClassDiagram(classElement, elements, tempDir);
 
         assertNotNull(result);
         String content = java.nio.file.Files.readString(Path.of(result));
@@ -344,9 +357,11 @@ class PlantUMLClassDiagramGeneratorBranchTest {
             List.of()
         );
 
-        List<CodeElement> elements = List.of(classA, classB, methodWithDependency);
+        List<CodeElement> elements =
+            List.of(classA, classB, methodWithDependency);
 
-        String result = generator.generateClassDiagram(classA, elements, tempDir);
+        String result = generator.generateClassDiagram(
+            classA, elements, tempDir);
 
         assertNotNull(result);
         String content = java.nio.file.Files.readString(Path.of(result));

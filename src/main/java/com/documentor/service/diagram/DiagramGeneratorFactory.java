@@ -15,8 +15,10 @@ public class DiagramGeneratorFactory {
     private final PlantUMLClassDiagramGenerator plantUMLClassDiagramGenerator;
 
     public DiagramGeneratorFactory(
-            final MermaidClassDiagramGenerator mermaidClassDiagramGeneratorParam,
-            final PlantUMLClassDiagramGenerator plantUMLClassDiagramGeneratorParam) {
+            final MermaidClassDiagramGenerator
+                    mermaidClassDiagramGeneratorParam,
+            final PlantUMLClassDiagramGenerator
+                    plantUMLClassDiagramGeneratorParam) {
         this.mermaidClassDiagramGenerator = mermaidClassDiagramGeneratorParam;
         this.plantUMLClassDiagramGenerator = plantUMLClassDiagramGeneratorParam;
     }
@@ -42,4 +44,3 @@ public class DiagramGeneratorFactory {
         return plantUMLClassDiagramGenerator;
     }
 }
-

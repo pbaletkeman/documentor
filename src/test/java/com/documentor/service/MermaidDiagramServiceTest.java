@@ -43,7 +43,8 @@ class MermaidDiagramServiceTest {
         diagramElementFilter = new DiagramElementFilter();
         diagramPathManager = new DiagramPathManager();
         mermaidClassDiagramGenerator = new MermaidClassDiagramGenerator();
-        TestDiagramGeneratorFactory generatorFactory = new TestDiagramGeneratorFactory(mermaidClassDiagramGenerator);
+        TestDiagramGeneratorFactory generatorFactory =
+                new TestDiagramGeneratorFactory(mermaidClassDiagramGenerator);
         mermaidDiagramService = new MermaidDiagramService(
             diagramElementFilter,
             diagramPathManager,
@@ -52,13 +53,15 @@ class MermaidDiagramServiceTest {
     }
 
     @Test
-    void generateClassDiagramsWithValidProjectShouldCreateDiagrams() throws Exception {
+    void generateClassDiagramsWithValidProjectShouldCreateDiagrams()
+            throws Exception {
         // Given
         ProjectAnalysis analysis = createSampleProjectAnalysis();
         String outputPath = tempDir.toString();
 
         // When
-        CompletableFuture<List<String>> future = mermaidDiagramService.generateClassDiagrams(analysis, outputPath);
+        CompletableFuture<List<String>> future = mermaidDiagramService
+                .generateClassDiagrams(analysis, outputPath);
         List<String> generatedFiles = future.join();
 
         // Then
@@ -66,7 +69,7 @@ class MermaidDiagramServiceTest {
         assertThat(generatedFiles).hasSize(1); // One public class
 
         String diagramFile = generatedFiles.get(0);
-        assertThat(diagramFile).contains("TestClass_diagram.md");
+        assertThat(diagramFile).contains("TestClass_diagram.mmd");
 
         Path diagramPath = Path.of(diagramFile);
         assertThat(Files.exists(diagramPath)).isTrue();
@@ -79,12 +82,14 @@ class MermaidDiagramServiceTest {
     }
 
     @Test
-    void generateClassDiagramsWithPrivateClassShouldSkipPrivateClasses() throws Exception {
+    void generateClassDiagramsWithPrivateClassShouldSkipPrivateClasses()
+            throws Exception {
         // Given
         ProjectAnalysis analysis = createProjectWithPrivateClass();
 
         // When
-        CompletableFuture<List<String>> future = mermaidDiagramService.generateClassDiagrams(analysis, null);
+        CompletableFuture<List<String>> future = mermaidDiagramService
+                .generateClassDiagrams(analysis, null);
         List<String> generatedFiles = future.join();
 
         // Then
@@ -92,27 +97,31 @@ class MermaidDiagramServiceTest {
     }
 
     @Test
-    void generateClassDiagramsWithNullOutputPathShouldUseDefaultPath() throws Exception {
+    void generateClassDiagramsWithNullOutputPathShouldUseDefaultPath()
+            throws Exception {
         // Given
         ProjectAnalysis analysis = createSampleProjectAnalysis();
 
         // When
-        CompletableFuture<List<String>> future = mermaidDiagramService.generateClassDiagrams(analysis, null);
+        CompletableFuture<List<String>> future = mermaidDiagramService
+                .generateClassDiagrams(analysis, null);
         List<String> generatedFiles = future.join();
 
         // Then
         assertThat(generatedFiles).isNotEmpty();
         String diagramFile = generatedFiles.get(0);
-        assertThat(diagramFile).contains("TestClass_diagram.md");
+        assertThat(diagramFile).contains("TestClass_diagram.mmd");
     }
 
     @Test
-    void generateClassDiagramsWithEmptyOutputPathShouldUseDefaultPath() throws Exception {
+    void generateClassDiagramsWithEmptyOutputPathShouldUseDefaultPath()
+            throws Exception {
         // Given
         ProjectAnalysis analysis = createSampleProjectAnalysis();
 
         // When
-        CompletableFuture<List<String>> future = mermaidDiagramService.generateClassDiagrams(analysis, "   ");
+        CompletableFuture<List<String>> future = mermaidDiagramService
+                .generateClassDiagrams(analysis, "   ");
         List<String> generatedFiles = future.join();
 
         // Then
@@ -120,13 +129,15 @@ class MermaidDiagramServiceTest {
     }
 
     @Test
-    void generateClassDiagramsWithComplexClassShouldIncludeMethodsAndFields() throws Exception {
+    void generateClassDiagramsWithComplexClassShouldIncludeMethodsAndFields()
+            throws Exception {
         // Given
         ProjectAnalysis analysis = createComplexProjectAnalysis();
         String outputPath = tempDir.toString();
 
         // When
-        CompletableFuture<List<String>> future = mermaidDiagramService.generateClassDiagrams(analysis, outputPath);
+        CompletableFuture<List<String>> future = mermaidDiagramService
+                .generateClassDiagrams(analysis, outputPath);
         List<String> generatedFiles = future.join();
 
         // Then
@@ -137,20 +148,26 @@ class MermaidDiagramServiceTest {
 
         // Should contain class definition with methods and fields
         assertThat(content).contains("class ComplexClass");
-        assertThat(content).contains("publicField"); // Public field should be included
-        assertThat(content).contains("publicMethod"); // Public method should be included
-        assertThat(content).doesNotContain("privateField"); // Private field should be excluded
-        assertThat(content).doesNotContain("privateMethod"); // Private method should be excluded
+        // Public field should be included
+        assertThat(content).contains("publicField");
+        // Public method should be included
+        assertThat(content).contains("publicMethod");
+        // Private field should be excluded
+        assertThat(content).doesNotContain("privateField");
+        // Private method should be excluded
+        assertThat(content).doesNotContain("privateMethod");
     }
 
     @Test
-    void generateClassDiagramsWithSpecialCharactersShouldSanitizeNames() throws Exception {
+    void generateClassDiagramsWithSpecialCharactersShouldSanitizeNames()
+            throws Exception {
         // Given
         ProjectAnalysis analysis = createProjectWithSpecialCharacters();
         String outputPath = tempDir.toString();
 
         // When
-        CompletableFuture<List<String>> future = mermaidDiagramService.generateClassDiagrams(analysis, outputPath);
+        CompletableFuture<List<String>> future = mermaidDiagramService
+                .generateClassDiagrams(analysis, outputPath);
         List<String> generatedFiles = future.join();
 
         // Then
@@ -160,18 +177,22 @@ class MermaidDiagramServiceTest {
         String content = Files.readString(Path.of(diagramFile));
 
         // Class name with special characters should be sanitized
-        assertThat(content).contains("Special"); // Just verify the class is present
-        // Note: Mermaid diagram sanitization needs improvement for special characters
+        // Just verify the class is present
+        assertThat(content).contains("Special");
+        // Note: Mermaid diagram sanitization needs improvement for special
+        // characters
     }
 
     @Test
-    void generateClassDiagramsWithLongSignaturesShouldTruncate() throws Exception {
+    void generateClassDiagramsWithLongSignaturesShouldTruncate()
+            throws Exception {
         // Given
         ProjectAnalysis analysis = createProjectWithLongSignatures();
         String outputPath = tempDir.toString();
 
         // When
-        CompletableFuture<List<String>> future = mermaidDiagramService.generateClassDiagrams(analysis, outputPath);
+        CompletableFuture<List<String>> future = mermaidDiagramService
+                .generateClassDiagrams(analysis, outputPath);
         List<String> generatedFiles = future.join();
 
         // Then
@@ -185,29 +206,35 @@ class MermaidDiagramServiceTest {
     }
 
     @Test
-    void generateClassDiagramsWithMultipleClassesShouldCreateMultipleDiagrams() throws Exception {
+    void generateClassDiagramsWithMultipleClassesShouldCreateMultipleDiagrams()
+            throws Exception {
         // Given
         ProjectAnalysis analysis = createMultiClassProjectAnalysis();
         String outputPath = tempDir.toString();
 
         // When
-        CompletableFuture<List<String>> future = mermaidDiagramService.generateClassDiagrams(analysis, outputPath);
+        CompletableFuture<List<String>> future = mermaidDiagramService
+                .generateClassDiagrams(analysis, outputPath);
         List<String> generatedFiles = future.join();
 
         // Then
         assertThat(generatedFiles).hasSize(2); // Two public classes
-        assertThat(generatedFiles).anyMatch(file -> file.contains("FirstClass_diagram.md"));
-        assertThat(generatedFiles).anyMatch(file -> file.contains("SecondClass_diagram.md"));
+        assertThat(generatedFiles).anyMatch(file ->
+                file.contains("FirstClass_diagram.mmd"));
+        assertThat(generatedFiles).anyMatch(file ->
+                file.contains("SecondClass_diagram.mmd"));
     }
 
     @Test
-    void generateClassDiagramsWithRelationshipsShouldShowRelationships() throws Exception {
+    void generateClassDiagramsWithRelationshipsShouldShowRelationships()
+            throws Exception {
         // Given
         ProjectAnalysis analysis = createProjectWithRelationships();
         String outputPath = tempDir.toString();
 
         // When
-        CompletableFuture<List<String>> future = mermaidDiagramService.generateClassDiagrams(analysis, outputPath);
+        CompletableFuture<List<String>> future = mermaidDiagramService
+                .generateClassDiagrams(analysis, outputPath);
         List<String> generatedFiles = future.join();
 
         // Then
@@ -218,7 +245,8 @@ class MermaidDiagramServiceTest {
 
         // Should show relationships - check for either format
         boolean hasRelationships = content.contains("-->")
-                || (content.contains("MainClass") && content.contains("OtherClass"));
+                || (content.contains("MainClass")
+                        && content.contains("OtherClass"));
         assertThat(hasRelationships).isTrue();
     }
 
@@ -337,8 +365,10 @@ class MermaidDiagramServiceTest {
             List.of()
         );
 
-        List<CodeElement> elements = List.of(classElement, publicField, privateField, publicMethod, privateMethod);
-        return new ProjectAnalysis("/src/main/java", elements, System.currentTimeMillis());
+        List<CodeElement> elements = List.of(classElement, publicField,
+                privateField, publicMethod, privateMethod);
+        return new ProjectAnalysis("/src/main/java", elements,
+                System.currentTimeMillis());
     }
 
     private ProjectAnalysis createProjectWithSpecialCharacters() {
@@ -354,7 +384,8 @@ class MermaidDiagramServiceTest {
             List.of()
         );
 
-        return new ProjectAnalysis("/src/main/java", List.of(classElement), System.currentTimeMillis());
+        return new ProjectAnalysis("/src/main/java", List.of(classElement),
+                System.currentTimeMillis());
     }
 
     private ProjectAnalysis createProjectWithLongSignatures() {
@@ -373,18 +404,21 @@ class MermaidDiagramServiceTest {
         CodeElement longMethod = new CodeElement(
             CodeElementType.METHOD,
             "verylongmethodnamethatexceedsfiftycharacterslimitforreadability",
-            "com.example.LongClass.verylongmethodnamethatexceedsfiftycharacterslimitforreadability",
+            "com.example.LongClass."
+                    + "verylongmethodnamethatexceedsfiftycharacters"
+                    + "limitforreadability",
             "/src/main/java/LongClass.java",
             ELEMENT_COUNT_SMALL,
-            "public void verylongmethodnamethatexceedsfiftycharacterslimitforreadability("
-                    + "VeryLongParameterTypeName parameter)",
+            "public void verylongmethodnamethatexceedsfiftycharacterslimit"
+                    + "forreadability(VeryLongParameterTypeName parameter)",
             "A method with very long signature",
             List.of("VeryLongParameterTypeName parameter"),
             List.of()
         );
 
         List<CodeElement> elements = List.of(classElement, longMethod);
-        return new ProjectAnalysis("/src/main/java", elements, System.currentTimeMillis());
+        return new ProjectAnalysis("/src/main/java", elements,
+                System.currentTimeMillis());
     }
 
     private ProjectAnalysis createMultiClassProjectAnalysis() {
@@ -413,7 +447,8 @@ class MermaidDiagramServiceTest {
         );
 
         List<CodeElement> elements = List.of(firstClass, secondClass);
-        return new ProjectAnalysis("/src/main/java", elements, System.currentTimeMillis());
+        return new ProjectAnalysis("/src/main/java", elements,
+                System.currentTimeMillis());
     }
 
     private ProjectAnalysis createProjectWithRelationships() {
@@ -453,8 +488,9 @@ class MermaidDiagramServiceTest {
             List.of()
         );
 
-        List<CodeElement> elements = List.of(mainClass, otherClass, methodWithDependency);
-        return new ProjectAnalysis("/src/main/java", elements, System.currentTimeMillis());
+        List<CodeElement> elements = List.of(mainClass, otherClass,
+                methodWithDependency);
+        return new ProjectAnalysis("/src/main/java", elements,
+                System.currentTimeMillis());
     }
 }
-

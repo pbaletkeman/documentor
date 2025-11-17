@@ -8,22 +8,25 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 /**
- * Early configuration loader that runs before Spring Shell starts processing commands.
- * This component loads the external configuration as early as possible in the application
- * startup process by using ApplicationRunner with a high priority order.
+ * Early configuration loader that runs before Spring Shell starts processing
+ * commands. This component loads the external configuration as early as
+ * possible in the application startup process by using ApplicationRunner
+ * with a high priority order.
  */
 @Component
 @Order(0) // Highest priority to run before other components
 public class EarlyConfigurationLoader implements ApplicationRunner {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(EarlyConfigurationLoader.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(EarlyConfigurationLoader.class);
     private final ExternalConfigLoader configLoader;
 
     /**
      * Constructor that takes the external configuration loader.
      * @param externalConfigLoader the external configuration loader
      */
-    public EarlyConfigurationLoader(final ExternalConfigLoader externalConfigLoader) {
+    public EarlyConfigurationLoader(
+            final ExternalConfigLoader externalConfigLoader) {
         this.configLoader = externalConfigLoader;
     }
 
@@ -36,7 +39,8 @@ public class EarlyConfigurationLoader implements ApplicationRunner {
     public void run(final ApplicationArguments args) {
         LOGGER.info("Early configuration loading started");
 
-        // Convert Spring's ApplicationArguments to String[] for compatibility with existing code
+        // Convert Spring's ApplicationArguments to String[] for compatibility
+        // with existing code
         String[] rawArgs = args.getSourceArgs();
 
         // Trigger configuration loading
@@ -45,7 +49,8 @@ public class EarlyConfigurationLoader implements ApplicationRunner {
         if (loaded) {
             LOGGER.info("Early configuration loading completed successfully");
         } else {
-            LOGGER.info("Early configuration loading completed without finding a config file");
+            LOGGER.info("Early configuration loading completed without "
+                    + "finding a config file");
         }
     }
 }

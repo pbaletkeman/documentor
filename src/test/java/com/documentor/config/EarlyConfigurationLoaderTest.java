@@ -21,7 +21,8 @@ public class EarlyConfigurationLoaderTest {
     @Test
     public void testEarlyConfigurationLoading() throws IOException {
         // Create a mock ExternalConfigLoader
-        ExternalConfigLoader mockConfigLoader = Mockito.mock(ExternalConfigLoader.class);
+        ExternalConfigLoader mockConfigLoader =
+            Mockito.mock(ExternalConfigLoader.class);
 
         // Create test arguments with config parameter
         String configPath = tempDir.resolve("test-config.json").toString();
@@ -32,7 +33,8 @@ public class EarlyConfigurationLoaderTest {
         ApplicationArguments appArgs = new DefaultApplicationArguments(args);
 
         // Create the early loader
-        EarlyConfigurationLoader earlyLoader = new EarlyConfigurationLoader(mockConfigLoader);
+        EarlyConfigurationLoader earlyLoader =
+            new EarlyConfigurationLoader(mockConfigLoader);
 
         // Run the loader
         earlyLoader.run(appArgs);
@@ -42,20 +44,24 @@ public class EarlyConfigurationLoaderTest {
     }
 
     @Test
-    public void testEarlyConfigurationLoadingWithMultipleArgs() throws IOException {
+    public void testEarlyConfigurationLoadingWithMultipleArgs()
+        throws IOException {
         // Create a mock ExternalConfigLoader
-        ExternalConfigLoader mockConfigLoader = Mockito.mock(ExternalConfigLoader.class);
+        ExternalConfigLoader mockConfigLoader =
+            Mockito.mock(ExternalConfigLoader.class);
 
         // Create test arguments with config parameter among other args
         String configPath = tempDir.resolve("test-config.json").toString();
         Files.writeString(tempDir.resolve("test-config.json"), "{}");
-        String[] args = new String[]{"analyze", "--config", configPath, "--verbose"};
+        String[] args = new String[]
+            {"analyze", "--config", configPath, "--verbose"};
 
         // Create ApplicationArguments object with our test args
         ApplicationArguments appArgs = new DefaultApplicationArguments(args);
 
         // Create the early loader
-        EarlyConfigurationLoader earlyLoader = new EarlyConfigurationLoader(mockConfigLoader);
+        EarlyConfigurationLoader earlyLoader =
+            new EarlyConfigurationLoader(mockConfigLoader);
 
         // Run the loader
         earlyLoader.run(appArgs);

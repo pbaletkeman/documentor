@@ -22,10 +22,13 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @SpringBootApplication
 @ConfigurationPropertiesScan
 @EnableAsync
-public class DocumentorApplication {
+public final class DocumentorApplication {
+
+    private DocumentorApplication() {
+        // Utility class should not be instantiated
+    }
 
     public static void main(final String[] args) {
         SpringApplication.run(DocumentorApplication.class, args);
     }
 }
-

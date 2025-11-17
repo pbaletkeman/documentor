@@ -42,7 +42,8 @@ public class TestConfig {
      * Mock LLM Response Parser for tests
      */
     @Bean
-    public LlmResponseParser llmResponseParser(final LlmModelTypeDetector modelTypeDetector) {
+    public LlmResponseParser llmResponseParser(
+            final LlmModelTypeDetector modelTypeDetector) {
         return new LlmResponseParser(modelTypeDetector);
     }
 
@@ -50,7 +51,8 @@ public class TestConfig {
      * Mock LLM Request Formatter for tests
      */
     @Bean
-    public LlmRequestFormatter llmRequestFormatter(final LlmModelTypeDetector modelTypeDetector) {
+    public LlmRequestFormatter llmRequestFormatter(final
+        LlmModelTypeDetector modelTypeDetector) {
         return new LlmRequestFormatter(modelTypeDetector);
     }
 
@@ -59,7 +61,8 @@ public class TestConfig {
      */
     @Bean
     public LlmApiClient llmApiClient(final WebClient webClient,
-                                     final LlmModelTypeDetector modelTypeDetector) {
+                                     final LlmModelTypeDetector
+                                     modelTypeDetector) {
         return new LlmApiClient(webClient, modelTypeDetector);
     }
 
@@ -67,8 +70,9 @@ public class TestConfig {
      * Mock LLM Request Builder for tests
      */
     @Bean
-    public LlmRequestBuilder llmRequestBuilder(final LlmPromptTemplates templates,
-                                      final LlmRequestFormatter formatter) {
+    public LlmRequestBuilder llmRequestBuilder(
+            final LlmPromptTemplates templates,
+            final LlmRequestFormatter formatter) {
         return new LlmRequestBuilder(templates, formatter);
     }
 
@@ -76,7 +80,8 @@ public class TestConfig {
      * Mock LLM Response Handler for tests
      */
     @Bean
-    public LlmResponseHandler llmResponseHandler(final LlmResponseParser parser, final LlmModelTypeDetector detector) {
+    public LlmResponseHandler llmResponseHandler(final
+        LlmResponseParser parser, final LlmModelTypeDetector detector) {
         return new LlmResponseHandler(parser, detector);
     }
 

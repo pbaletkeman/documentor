@@ -32,8 +32,10 @@ class CommonCommandHandlerTest {
                 "Should return true for an existing directory");
         assertFalse(handler.directoryExists("/path/that/does/not/exist"),
                 "Should return false for non-existent directory");
-        assertFalse(handler.directoryExists(null), "Should return false for null path");
-        assertFalse(handler.directoryExists(""), "Should return false for empty path");
+        assertFalse(handler.directoryExists(null),
+        "Should return false for null path");
+        assertFalse(handler.directoryExists(""),
+        "Should return false for empty path");
     }
 
     @Test
@@ -43,10 +45,14 @@ class CommonCommandHandlerTest {
         Path tempFile = Files.createFile(tempDir.resolve("test.txt"));
 
         // Act & Assert
-        assertTrue(handler.fileExists(tempFile.toString()), "Should return true for an existing file");
-        assertFalse(handler.fileExists("/path/that/does/not/exist.txt"), "Should return false for non-existent file");
-        assertFalse(handler.fileExists(null), "Should return false for null path");
-        assertFalse(handler.fileExists(""), "Should return false for empty path");
+        assertTrue(handler.fileExists(tempFile.toString()),
+        "Should return true for an existing file");
+        assertFalse(handler.fileExists("/path/that/does/not/exist.txt"),
+        "Should return false for non-existent file");
+        assertFalse(handler.fileExists(null),
+        "Should return false for null path");
+        assertFalse(handler.fileExists(""),
+        "Should return false for empty path");
     }
 
     @Test
@@ -69,10 +75,12 @@ class CommonCommandHandlerTest {
         Exception exception = new RuntimeException("Test error");
 
         // Act
-        String errorMessage = handler.formatErrorMessage("Error occurred", exception);
+        String errorMessage = handler.formatErrorMessage(
+            "Error occurred", exception);
 
         // Assert
-        assertEquals("❌ Error occurred: Test error", errorMessage, "Error message should be correctly formatted");
+        assertEquals("❌ Error occurred: Test error", errorMessage,
+        "Error message should be correctly formatted");
     }
 
     @Test
@@ -88,8 +96,11 @@ class CommonCommandHandlerTest {
         String formattedStats = handler.formatStatistics("Test Stats", stats);
 
         // Assert
-        assertTrue(formattedStats.contains("📊 Test Stats"), "Formatted stats should contain the title");
-        assertTrue(formattedStats.contains("Key1: Value1"), "Formatted stats should contain key-value pairs");
-        assertTrue(formattedStats.contains("Key2: " + testValue), "Formatted stats should contain numeric values");
+        assertTrue(formattedStats.contains("📊 Test Stats"),
+        "Formatted stats should contain the title");
+        assertTrue(formattedStats.contains("Key1: Value1"),
+        "Formatted stats should contain key-value pairs");
+        assertTrue(formattedStats.contains("Key2: " + testValue),
+        "Formatted stats should contain numeric values");
     }
 }

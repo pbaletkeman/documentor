@@ -48,8 +48,10 @@ class AppConfigTest {
 
     @BeforeEach
     void setUp() {
-        lenient().when(documentorConfig.analysisSettings()).thenReturn(analysisSettings);
-        lenient().when(analysisSettings.maxThreads()).thenReturn(TEST_THREAD_COUNT);
+        lenient().when(documentorConfig.analysisSettings())
+            .thenReturn(analysisSettings);
+        lenient().when(analysisSettings.maxThreads())
+            .thenReturn(TEST_THREAD_COUNT);
 
         appConfig = new AppConfig(documentorConfig);
     }
@@ -81,17 +83,21 @@ class AppConfigTest {
         // Then
         assertNotNull(executor);
         assertEquals(TEST_THREAD_COUNT, executor.getCorePoolSize());
-        assertEquals(TEST_THREAD_COUNT_DOUBLE, executor.getMaxPoolSize()); // 4 * 2 (DEFAULT_THREAD_MULTIPLIER)
-        assertEquals(TEST_QUEUE_CAPACITY, executor.getQueueCapacity()); // DEFAULT_QUEUE_CAPACITY
+         // 4 * 2 (DEFAULT_THREAD_MULTIPLIER)
+        assertEquals(TEST_THREAD_COUNT_DOUBLE, executor.getMaxPoolSize());
+        // DEFAULT_QUEUE_CAPACITY
+        assertEquals(TEST_QUEUE_CAPACITY, executor.getQueueCapacity());
         assertEquals("LLM-", executor.getThreadNamePrefix());
-        // Note: Cannot directly test these private fields, but we can verify the executor is properly configured
+        // Note: Cannot directly test these private fields,
+        // but we can verify the executor is properly configured
         assertNotNull(executor.getThreadPoolExecutor());
     }
 
     @Test
     void testLlmExecutorWithDifferentMaxThreads() {
         // Given
-        when(analysisSettings.maxThreads()).thenReturn(TEST_THREAD_COUNT_DOUBLE);
+        when(analysisSettings.maxThreads()).thenReturn(
+            TEST_THREAD_COUNT_DOUBLE);
 
         // When
         ThreadPoolTaskExecutor executor = appConfig.llmExecutor();
@@ -99,7 +105,8 @@ class AppConfigTest {
         // Then
         assertNotNull(executor);
         assertEquals(TEST_THREAD_COUNT_DOUBLE, executor.getCorePoolSize());
-        assertEquals(TEST_THREAD_COUNT_SIXTEEN, executor.getMaxPoolSize()); // 8 * 2
+         // 8 * 2
+        assertEquals(TEST_THREAD_COUNT_SIXTEEN, executor.getMaxPoolSize());
         assertEquals(TEST_QUEUE_CAPACITY, executor.getQueueCapacity());
         assertEquals("LLM-", executor.getThreadNamePrefix());
     }
@@ -128,7 +135,8 @@ class AppConfigTest {
         assertNotNull(asyncExecutor);
         assertTrue(asyncExecutor instanceof ThreadPoolTaskExecutor);
 
-        ThreadPoolTaskExecutor taskExecutor = (ThreadPoolTaskExecutor) asyncExecutor;
+        ThreadPoolTaskExecutor taskExecutor = (ThreadPoolTaskExecutor)
+            asyncExecutor;
         assertEquals(TEST_THREAD_COUNT, taskExecutor.getCorePoolSize());
         assertEquals("LLM-", taskExecutor.getThreadNamePrefix());
     }
@@ -172,7 +180,8 @@ class AppConfigTest {
         AnalysisSettings configAnalysisSettings = new AnalysisSettings(
             false, TEST_THREAD_COUNT_SIX, List.of("**/*.java"), List.of()
         );
-        DocumentorConfig realConfig = new DocumentorConfig(llmModels, outputSettings, configAnalysisSettings);
+        DocumentorConfig realConfig = new DocumentorConfig(llmModels,
+            outputSettings, configAnalysisSettings);
 
         // When
         AppConfig config = new AppConfig(realConfig);
@@ -182,7 +191,8 @@ class AppConfigTest {
         assertNotNull(config);
         assertNotNull(executor);
         assertEquals(TEST_THREAD_COUNT_SIX, executor.getCorePoolSize());
-        assertEquals(TEST_THREAD_COUNT_TWELVE, executor.getMaxPoolSize()); // 6 * 2
+        // 6 * 2
+        assertEquals(TEST_THREAD_COUNT_TWELVE, executor.getMaxPoolSize());
     }
 
     @Test
@@ -235,7 +245,8 @@ class AppConfigTest {
         // DEFAULT_QUEUE_CAPACITY = 100
         assertEquals(TEST_QUEUE_CAPACITY, executor.getQueueCapacity());
 
-        // DEFAULT_TERMINATION_TIMEOUT_SECONDS = 60 (cannot be tested directly via getter)
+        // DEFAULT_TERMINATION_TIMEOUT_SECONDS = 60
+        // (cannot be tested directly via getter)
 
         // Thread name prefix
         assertEquals("LLM-", executor.getThreadNamePrefix());
@@ -244,14 +255,16 @@ class AppConfigTest {
     @Test
     void testWithHighThreadCount() {
         // Given
-        when(analysisSettings.maxThreads()).thenReturn(TEST_THREAD_COUNT_SIXTEEN);
+        when(analysisSettings.maxThreads())
+            .thenReturn(TEST_THREAD_COUNT_SIXTEEN);
 
         // When
         ThreadPoolTaskExecutor executor = appConfig.llmExecutor();
 
         // Then
         assertEquals(TEST_THREAD_COUNT_SIXTEEN, executor.getCorePoolSize());
-        assertEquals(TEST_THREAD_COUNT_THIRTY_TWO, executor.getMaxPoolSize()); // 16 * 2
+        // 16 * 2
+        assertEquals(TEST_THREAD_COUNT_THIRTY_TWO, executor.getMaxPoolSize());
         assertEquals(TEST_QUEUE_CAPACITY, executor.getQueueCapacity());
     }
 

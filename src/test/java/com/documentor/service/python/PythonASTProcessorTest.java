@@ -59,7 +59,8 @@ class PythonASTProcessorTest {
         Path filePath = tempDir.resolve("test.py");
         String line = "CLASS|TestClass|10|This is a test class";
 
-        CodeElement element = commandBuilder.parseASTOutputLine(line, filePath);
+        CodeElement element = commandBuilder.parseASTOutputLine(
+            line, filePath);
 
         assertNotNull(element);
         assertEquals(CodeElementType.CLASS, element.type());
@@ -76,17 +77,20 @@ class PythonASTProcessorTest {
         PythonASTCommandBuilder commandBuilder = new PythonASTCommandBuilder();
 
         Path filePath = tempDir.resolve("test.py");
-        String line = "FUNCTION|test_function|15|This is a test function|param1,param2";
+        String line = "FUNCTION|test_function|15|This is a test"
+            + " function|param1,param2";
 
-        CodeElement element = commandBuilder.parseASTOutputLine(line, filePath);
-
+        CodeElement element = commandBuilder.parseASTOutputLine(
+            line, filePath);
         assertNotNull(element);
         assertEquals(CodeElementType.METHOD, element.type());
         assertEquals("test_function", element.name());
-        assertEquals("def test_function(param1, param2):", element.signature());
+        assertEquals("def test_function(param1, param2):",
+            element.signature());
         assertEquals(filePath.toString(), element.filePath());
         assertEquals(LINE_NUMBER_FIFTEEN, element.lineNumber());
-        assertEquals("This is a test function", element.documentation());
+        assertEquals("This is a test function",
+            element.documentation());
         assertEquals(List.of("param1", "param2"), element.parameters());
     }
 
@@ -98,7 +102,8 @@ class PythonASTProcessorTest {
         Path filePath = tempDir.resolve("test.py");
         String line = "VARIABLE|test_var|20||";
 
-        CodeElement element = commandBuilder.parseASTOutputLine(line, filePath);
+        CodeElement element = commandBuilder.parseASTOutputLine(
+            line, filePath);
 
         assertNotNull(element);
         assertEquals(CodeElementType.FIELD, element.type());
@@ -117,7 +122,8 @@ class PythonASTProcessorTest {
         Path filePath = tempDir.resolve("test.py");
         String line = "INVALID|Format";
 
-        CodeElement element = commandBuilder.parseASTOutputLine(line, filePath);
+        CodeElement element = commandBuilder.parseASTOutputLine(
+            line, filePath);
 
         assertNull(element);
     }
@@ -130,16 +136,21 @@ class PythonASTProcessorTest {
         Path filePath = tempDir.resolve("test.py");
         String line = "UNKNOWN|name|30||";
 
-        CodeElement element = commandBuilder.parseASTOutputLine(line, filePath);
+        CodeElement element = commandBuilder.parseASTOutputLine(
+            line, filePath);
 
         assertNull(element);
     }
 
     @Test
-    void analyzeWithASTIntegrationMocked() throws IOException, InterruptedException {
-        // Create a mocked version of PythonASTProcessor with a mocked command builder
-        PythonASTCommandBuilder mockedCommandBuilder = mock(PythonASTCommandBuilder.class);
-        PythonASTProcessor mockedProcessor = new PythonASTProcessor(mockedCommandBuilder);
+    void analyzeWithASTIntegrationMocked()
+        throws IOException, InterruptedException {
+        // Create a mocked version of PythonASTProcessor with a
+        // mocked command builder
+        PythonASTCommandBuilder mockedCommandBuilder =
+            mock(PythonASTCommandBuilder.class);
+        PythonASTProcessor mockedProcessor =
+            new PythonASTProcessor(mockedCommandBuilder);
 
         // Create test file
         Path filePath = Files.createTempFile(tempDir, "test", ".py");
@@ -159,16 +170,19 @@ class PythonASTProcessorTest {
         Process mockedProcess = mock(Process.class);
         String testOutput =
             "CLASS|TestClass|1|This is a test class\n"
-            + "FUNCTION|test_method|3|This is a test method|self,param1,param2\n"
+            + "FUNCTION|test_method|3|This is a test method"
+            + "|self,param1,param2\n"
             + "VARIABLE|test_var|5||\n";
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(testOutput.getBytes());
+        ByteArrayInputStream inputStream =
+            new ByteArrayInputStream(testOutput.getBytes());
         when(mockedProcess.getInputStream()).thenReturn(inputStream);
         when(mockedProcess.waitFor()).thenReturn(0);
 
         // Mock the process builder
         ProcessBuilder mockedProcessBuilder = mock(ProcessBuilder.class);
         when(mockedProcessBuilder.start()).thenReturn(mockedProcess);
-        when(mockedCommandBuilder.createProcessBuilder(any(), eq(filePath))).thenReturn(mockedProcessBuilder);
+        when(mockedCommandBuilder.createProcessBuilder(any(), eq(filePath)))
+            .thenReturn(mockedProcessBuilder);
 
         // Create mock code elements that will be returned by parseASTOutputLine
         CodeElement classElement = new CodeElement(
@@ -178,8 +192,10 @@ class PythonASTProcessorTest {
         );
 
         CodeElement methodElement = new CodeElement(
-            CodeElementType.METHOD, "test_method", "def test_method(self, param1, param2)",
-            filePath.toString(), LINE_NUMBER_THREE, "def test_method(self, param1, param2):", "This is a test method",
+            CodeElementType.METHOD, "test_method",
+            "def test_method(self, param1, param2)",
+            filePath.toString(), LINE_NUMBER_THREE,
+            "def test_method(self, param1, param2):", "This is a test method",
             List.of("self", "param1", "param2"), List.of()
         );
 
@@ -189,15 +205,19 @@ class PythonASTProcessorTest {
             List.of(), List.of()
         );
 
-        // Mock the command builder to parse the lines - use argThat for better matching
+        // Mock the command builder to parse the lines
+        // - use argThat for better matching
         when(mockedCommandBuilder.parseASTOutputLine(
-                argThat(arg -> arg != null && arg.contains("CLASS|TestClass")), eq(filePath)))
+                argThat(arg -> arg != null
+                && arg.contains("CLASS|TestClass")), eq(filePath)))
             .thenReturn(classElement);
         when(mockedCommandBuilder.parseASTOutputLine(
-                argThat(arg -> arg != null && arg.contains("FUNCTION|test_method")), eq(filePath)))
+                argThat(arg -> arg != null
+                && arg.contains("FUNCTION|test_method")), eq(filePath)))
             .thenReturn(methodElement);
         when(mockedCommandBuilder.parseASTOutputLine(
-                argThat(arg -> arg != null && arg.contains("VARIABLE|test_var")), eq(filePath)))
+                argThat(arg -> arg != null
+                && arg.contains("VARIABLE|test_var")), eq(filePath)))
             .thenReturn(fieldElement);
 
         // Execute and verify
@@ -207,12 +227,14 @@ class PythonASTProcessorTest {
         assertEquals(LINE_NUMBER_THREE, elements.size());
 
         // Verify we have the expected elements
-        assertTrue(elements.stream().anyMatch(e -> e.type() == CodeElementType.CLASS
-                && "TestClass".equals(e.name())));
-        assertTrue(elements.stream().anyMatch(e -> e.type() == CodeElementType.METHOD
-                && "test_method".equals(e.name())));
-        assertTrue(elements.stream().anyMatch(e -> e.type() == CodeElementType.FIELD
-                && "test_var".equals(e.name())));
+        assertTrue(elements.stream().anyMatch(e -> e.type()
+            == CodeElementType.CLASS
+            && "TestClass".equals(e.name())));
+        assertTrue(elements.stream().anyMatch(e -> e.type()
+            == CodeElementType.METHOD
+            && "test_method".equals(e.name())));
+        assertTrue(elements.stream().anyMatch(e -> e.type()
+            == CodeElementType.FIELD
+            && "test_var".equals(e.name())));
     }
 }
-

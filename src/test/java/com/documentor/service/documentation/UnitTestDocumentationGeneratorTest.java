@@ -6,6 +6,7 @@ import com.documentor.model.CodeElement;
 import com.documentor.model.CodeElementType;
 import com.documentor.model.ProjectAnalysis;
 import com.documentor.service.LlmService;
+import com.documentor.service.LlmServiceFix;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -33,7 +34,8 @@ class UnitTestDocumentationGeneratorTest {
     private static final int LINE_NUMBER_FIFTEEN = 15;
 
     @Test
-    void generateUnitTestDocumentationWritesFileAndIncludesHeader(@TempDir final Path tempDir) throws Exception {
+    void generateUnitTestDocumentationWritesFileAndIncludesHeader(
+        @TempDir final Path tempDir) throws Exception {
         LlmService llm = mock(LlmService.class);
 
         DocumentorConfig config = mock(DocumentorConfig.class);
@@ -55,35 +57,50 @@ class UnitTestDocumentationGeneratorTest {
             empty
         );
 
-        when(llm.generateUnitTests(element)).thenReturn(CompletableFuture.completedFuture("// test for TestClass"));
+        when(llm.generateUnitTests(element)).thenReturn(CompletableFuture
+            .completedFuture("// test for TestClass"));
 
-        UnitTestDocumentationGenerator generator = new UnitTestDocumentationGenerator(llm, config);
+        // Add mock for LlmServiceFix
+        LlmServiceFix llmServiceFix = mock(LlmServiceFix.class);
+        UnitTestDocumentationGenerator generator =
+            new UnitTestDocumentationGenerator(llm, config, llmServiceFix);
 
-        ProjectAnalysis analysis = new ProjectAnalysis("/tmp/project", List.of(element), System.currentTimeMillis());
+        ProjectAnalysis analysis = new ProjectAnalysis(
+            "/tmp/project", List.of(element),
+            System.currentTimeMillis());
 
         generator.generateUnitTestDocumentation(analysis, tempDir).join();
 
-        Path testsFile = tempDir.resolve("tests").resolve("unit-tests.md");
-        assertTrue(Files.exists(testsFile), "unit-tests.md should be created");
+        Path testsFile = tempDir.resolve("tests")
+        .resolve("unit-tests.md");
+        assertTrue(Files.exists(testsFile),
+        "unit-tests.md should be created");
 
         String content = Files.readString(testsFile);
-        assertTrue(content.contains("🧪"), "header should include icon when enabled");
+        assertTrue(content.contains("🧪"),
+        "header should include icon when enabled");
         assertTrue(content.contains("test for TestClass"));
     }
 
     @Test
-    void appendHeaderHandlesIconsDisabled(@TempDir final Path tempDir) throws Exception {
+    void appendHeaderHandlesIconsDisabled(@TempDir final Path tempDir)
+        throws Exception {
         LlmService llm = mock(LlmService.class);
 
         DocumentorConfig config = mock(DocumentorConfig.class);
         OutputSettings outputSettings = mock(OutputSettings.class);
         when(config.outputSettings()).thenReturn(outputSettings);
         when(outputSettings.includeIcons()).thenReturn(false);
-        when(outputSettings.targetCoverage()).thenReturn(TARGET_COVERAGE_MEDIUM);
+        when(outputSettings.targetCoverage())
+            .thenReturn(TARGET_COVERAGE_MEDIUM);
 
-        UnitTestDocumentationGenerator generator = new UnitTestDocumentationGenerator(llm, config);
+        // Add mock for LlmServiceFix
+        LlmServiceFix llmServiceFix = mock(LlmServiceFix.class);
+        UnitTestDocumentationGenerator generator =
+            new UnitTestDocumentationGenerator(llm, config, llmServiceFix);
 
-    ProjectAnalysis analysis = new ProjectAnalysis("/tmp/project", List.of(), System.currentTimeMillis());
+    ProjectAnalysis analysis = new ProjectAnalysis(
+            "/tmp/project", List.of(), System.currentTimeMillis());
 
         // Should not throw and will write an (empty) tests file
         generator.generateUnitTestDocumentation(analysis, tempDir).join();
@@ -97,7 +114,8 @@ class UnitTestDocumentationGeneratorTest {
     }
 
     @Test
-    void generateUnitTestDocumentationFiltersOutFieldElements(@TempDir final Path tempDir) throws Exception {
+    void generateUnitTestDocumentationFiltersOutFieldElements(
+        @TempDir final Path tempDir) throws Exception {
         LlmService llm = mock(LlmService.class);
 
         DocumentorConfig config = mock(DocumentorConfig.class);
@@ -135,18 +153,26 @@ class UnitTestDocumentationGeneratorTest {
 
         // Only non-FIELD elements should get test generation calls
         when(llm.generateUnitTests(methodElement))
-                .thenReturn(CompletableFuture.completedFuture("// test for testMethod"));
-        // The field element should never be passed to generateUnitTests due to filtering
+                .thenReturn(CompletableFuture.completedFuture(
+                    "// test for testMethod"));
+        // The field element should never be passed to
+        // generateUnitTests due to filtering
 
-        UnitTestDocumentationGenerator generator = new UnitTestDocumentationGenerator(llm, config);
+        // Add mock for LlmServiceFix
+        LlmServiceFix llmServiceFix = mock(LlmServiceFix.class);
+        UnitTestDocumentationGenerator generator =
+            new UnitTestDocumentationGenerator(llm, config, llmServiceFix);
 
-        ProjectAnalysis analysis = new ProjectAnalysis("/tmp/project",
-                List.of(fieldElement, methodElement), System.currentTimeMillis());
+        ProjectAnalysis analysis = new ProjectAnalysis(
+            "/tmp/project",
+                List.of(fieldElement, methodElement),
+                System.currentTimeMillis());
 
         generator.generateUnitTestDocumentation(analysis, tempDir).join();
 
         // Verify the LLM service was only called for the method, not the field
-        verify(llm, times(1)).generateUnitTests(methodElement);
+        verify(llm, times(1))
+            .generateUnitTests(methodElement);
         verify(llm, never()).generateUnitTests(fieldElement);
 
         Path testsFile = tempDir.resolve("tests").resolve("unit-tests.md");
@@ -155,4 +181,3 @@ class UnitTestDocumentationGeneratorTest {
         assertTrue(content.contains("Target Coverage: 80%"));
     }
 }
-

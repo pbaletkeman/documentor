@@ -38,7 +38,8 @@ public class AppConfig implements AsyncConfigurer {
     public WebClient webClient() {
         return WebClient.builder()
                 .codecs(configurer -> configurer.defaultCodecs()
-                        .maxInMemorySize(DEFAULT_MAX_MEMORY_SIZE_MB * BYTES_PER_MB))
+                        .maxInMemorySize(DEFAULT_MAX_MEMORY_SIZE_MB
+                                * BYTES_PER_MB))
                 .build();
     }
 
@@ -48,14 +49,18 @@ public class AppConfig implements AsyncConfigurer {
     @Bean("llmExecutor")
     public ThreadPoolTaskExecutor llmExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(documentorConfig.analysisSettings().maxThreads());
-        executor.setMaxPoolSize(documentorConfig.analysisSettings().maxThreads()
-                * DEFAULT_THREAD_MULTIPLIER);
+        executor.setCorePoolSize(
+                documentorConfig.analysisSettings().maxThreads());
+        executor.setMaxPoolSize(
+                documentorConfig.analysisSettings().maxThreads()
+                        * DEFAULT_THREAD_MULTIPLIER);
         executor.setQueueCapacity(DEFAULT_QUEUE_CAPACITY);
         executor.setThreadNamePrefix("LLM-");
         executor.setWaitForTasksToCompleteOnShutdown(true);
-        executor.setAwaitTerminationSeconds(DEFAULT_TERMINATION_TIMEOUT_SECONDS);
-        executor.setTaskDecorator(new ThreadLocalTaskDecorator()); // Added decorator to propagate ThreadLocal values
+        executor.setAwaitTerminationSeconds(
+                DEFAULT_TERMINATION_TIMEOUT_SECONDS);
+        executor.setTaskDecorator(new ThreadLocalTaskDecorator());
+        // Added decorator to propagate ThreadLocal values
         executor.initialize();
         return executor;
     }
@@ -69,7 +74,8 @@ public class AppConfig implements AsyncConfigurer {
             final com.documentor.service.llm.LlmRequestBuilder requestBuilder,
             final com.documentor.service.llm.LlmResponseHandler responseHandler,
             final com.documentor.service.llm.LlmApiClient apiClient) {
-        return new com.documentor.service.LlmService(documentorConfigParam, requestBuilder, responseHandler, apiClient);
+        return new com.documentor.service.LlmService(documentorConfigParam,
+                requestBuilder, responseHandler, apiClient);
     }
 
     /**
@@ -77,15 +83,21 @@ public class AppConfig implements AsyncConfigurer {
      */
     @Bean
     public com.documentor.service.DocumentationService documentationService(
-            final com.documentor.service.documentation.MainDocumentationGenerator mainDocGenerator,
-            final com.documentor.service.documentation.ElementDocumentationGenerator elementDocGenerator,
-            final com.documentor.service.documentation.UnitTestDocumentationGenerator testDocGenerator,
-            final com.documentor.service.MermaidDiagramService mermaidDiagramService,
-            final com.documentor.service.PlantUMLDiagramService plantUMLDiagramService,
+            final com.documentor.service.documentation
+                    .MainDocumentationGenerator mainDocGenerator,
+            final com.documentor.service.documentation
+                    .ElementDocumentationGenerator elementDocGenerator,
+            final com.documentor.service.documentation
+                    .UnitTestDocumentationGenerator testDocGenerator,
+            final com.documentor.service.MermaidDiagramService
+                    mermaidDiagramService,
+            final com.documentor.service.PlantUMLDiagramService
+                    plantUMLDiagramService,
             final DocumentorConfig documentorConfigParam) {
         return new com.documentor.service.DocumentationService(
                 mainDocGenerator, elementDocGenerator, testDocGenerator,
-                mermaidDiagramService, plantUMLDiagramService, documentorConfigParam);
+                mermaidDiagramService, plantUMLDiagramService,
+                documentorConfigParam);
     }
 
     /**

@@ -2,7 +2,6 @@
   "llm_models": [
     {
       "name": "llamacpp",
-      "provider": "llamacpp",
       "baseUrl": "http://localhost:8080/completion",
       "maxTokens": 2048,
       "timeoutSeconds": 90
@@ -12,8 +11,8 @@
     "output_directory": "./docs",
     "format": "markdown",
     "generate_mermaid": true,
-    "generate_plantuml": true,
-    "verbose_output": true
+    "generate_plantuml": false,
+    "verbose_output": false
   },
   "analysis_settings": {
     "include_private_members": false,

@@ -33,7 +33,9 @@ class LlmRequestFormatterTest {
 
     @Test
     void createOllamaRequestContainsStreamAndModel() {
-        LlmModelConfig model = new LlmModelConfig("llama2", "ollama", "http://localhost:11434/api/generate", "", MAX_TOKENS_STANDARD, TIMEOUT_SECONDS_30);
+        LlmModelConfig model = new LlmModelConfig("llama2", "ollama",
+                "http://localhost:11434/api/generate", "",
+            MAX_TOKENS_STANDARD, TIMEOUT_SECONDS_30);
         Map<String, Object> body = formatter.createRequest(model, "hello");
 
         assertNotNull(body);
@@ -45,7 +47,9 @@ class LlmRequestFormatterTest {
 
     @Test
     void createOpenAIRequestIncludesTemperatureAndMessages() {
-        LlmModelConfig model = new LlmModelConfig("gpt-4", "openai", "https://api.openai.com/v1/completions", "sk", MAX_TOKENS_MEDIUM, TIMEOUT_SECONDS_10);
+        LlmModelConfig model = new LlmModelConfig("gpt-4", "openai",
+            "https://api.openai.com/v1/completions", "sk",
+            MAX_TOKENS_MEDIUM, TIMEOUT_SECONDS_10);
         Map<String, Object> body = formatter.createRequest(model, "what's up");
 
         assertNotNull(body);
@@ -57,8 +61,11 @@ class LlmRequestFormatterTest {
 
     @Test
     void createGenericRequestExposesPromptAndTemperature() {
-        LlmModelConfig model = new LlmModelConfig("claude-3", "anthropic", "https://api.anthropic.com", "key", MAX_TOKENS_LARGE, TIMEOUT_SECONDS);
-        Map<String, Object> body = formatter.createRequest(model, "generate something");
+        LlmModelConfig model = new LlmModelConfig("claude-3",
+        "anthropic", "https://api.anthropic.com", "key",
+            MAX_TOKENS_LARGE, TIMEOUT_SECONDS);
+        Map<String, Object> body = formatter.createRequest(
+            model, "generate something");
 
         assertNotNull(body);
         assertEquals("generate something", body.get("prompt"));
@@ -66,4 +73,3 @@ class LlmRequestFormatterTest {
         assertEquals(TEMPERATURE_HALF, body.get("temperature"));
     }
 }
-

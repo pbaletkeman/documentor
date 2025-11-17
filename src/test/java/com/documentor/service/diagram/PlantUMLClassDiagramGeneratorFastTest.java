@@ -12,10 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * Fast tests for PlantUMLClassDiagramGenerator focusing on logic validation without I/O operations.
- * These tests improve performance by avoiding file system operations and temporary directories.
- */
 class PlantUMLClassDiagramGeneratorFastTest {
 
     // Test constants for magic number violations
@@ -140,19 +136,24 @@ class PlantUMLClassDiagramGeneratorFastTest {
         };
     }
 
-    private boolean belongsToClass(final CodeElement element, final CodeElement classElement) {
-        return element.qualifiedName().startsWith(classElement.qualifiedName());
+    private boolean belongsToClass(final CodeElement element,
+        final CodeElement classElement) {
+        return element.qualifiedName()
+            .startsWith(classElement.qualifiedName());
     }
 
-    private String generateDiagramContent(final CodeElement classElement, final List<CodeElement> elements) {
+    private String generateDiagramContent(final CodeElement classElement,
+        final List<CodeElement> elements) {
         StringBuilder content = new StringBuilder();
         content.append(generateClassHeader(classElement));
 
         for (CodeElement element : elements) {
             if (element.type() == CodeElementType.FIELD) {
-                content.append("  ").append(formatMethodSignature(element)).append("\n");
+                content.append("  ")
+                    .append(formatMethodSignature(element)).append("\n");
             } else if (element.type() == CodeElementType.METHOD) {
-                content.append("  ").append(formatMethodSignature(element)).append("\n");
+                content.append("  ")
+                    .append(formatMethodSignature(element)).append("\n");
             }
         }
 

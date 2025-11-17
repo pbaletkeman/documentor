@@ -2,6 +2,8 @@
 
 A powerful Java Spring Boot Command Line application that analyzes Java and Python projects to generate comprehensive documentation using Large Language Models (LLMs).
 
+> 🚨 **IMPORTANT**: Always use the enhanced version (`run-enhanced.cmd`) for better error handling, especially for unit test generation. See [Enhanced Version Instructions](#enhanced-version-instructions) for details.
+
 ## 🚀 Features
 
 - **🔍 Multi-Language Analysis**: Supports Java and Python codebases with comprehensive AST parsing
@@ -24,6 +26,10 @@ A powerful Java Spring Boot Command Line application that analyzes Java and Pyth
 - [Requirements](#-requirements)
 - [Installation](#-installation)
 - [Quick Start](#-quick-start)
+- [Enhanced Version Instructions](#enhanced-version-instructions)
+  - [Why Use the Enhanced Version?](#why-use-the-enhanced-version)
+  - [How to Run the Enhanced Version](#how-to-run-the-enhanced-version)
+  - [Troubleshooting with the Enhanced Version](#troubleshooting-with-the-enhanced-version)
 - [Configuration](#-configuration)
   - [Configuration Files Overview](#configuration-files-overview)
   - [Configuration Options Explained](#configuration-options-explained)
@@ -119,6 +125,53 @@ gradlew.bat tasks
 ## 🚀 Quick Start
 
 Get up and running with Ollama in 5 minutes!
+
+## Enhanced Version Instructions
+
+The Documentor application comes in two versions:
+
+1. **Standard Version** (`runApp`) - The original implementation
+2. **Enhanced Version** (`runEnhancedApp`) - Improved version with better error handling and thread safety
+
+### Why Use the Enhanced Version?
+
+The enhanced version includes critical improvements:
+
+- ✅ **Fixes NullPointerException issues** in CompletableFuture for unit test generation
+- ✅ **Better thread safety** with improved ThreadLocal handling
+- ✅ **Enhanced error handling** throughout the application
+- ✅ **Improved memory management** with proper cleanup of ThreadLocal resources
+- ✅ **More detailed logging** to help diagnose issues
+
+### How to Run the Enhanced Version
+
+**Option 1: Use the convenience script (Windows)**
+
+```bash
+# Simply run the enhanced version script
+run-enhanced.cmd
+```
+
+**Option 2: Use Gradle directly**
+
+```bash
+# Unix/Linux/macOS
+./gradlew runEnhancedApp
+
+# Windows
+gradlew.bat runEnhancedApp
+```
+
+**Option 3: With command line arguments**
+
+```bash
+# For example, to analyze a project with the enhanced version
+gradlew.bat runEnhancedApp -Pargs="analyze,--project-path,./src,--config,config.json"
+```
+
+### Troubleshooting with the Enhanced Version
+
+If you encounter errors like "NullPointerException in CompletableFuture for unit tests", always switch to the enhanced version which has specific fixes for these issues.
 
 ### Option 1: Using Ollama (Recommended for Local Development)
 

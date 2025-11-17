@@ -22,11 +22,13 @@ class MermaidClassDiagramGeneratorEnhancedTest {
     private static final int LINE_NUMBER_THREE = 3;
     private static final int LOOP_COUNT_TWENTY = 20;
 
-    private final MermaidClassDiagramGenerator generator = new MermaidClassDiagramGenerator();
+    private final MermaidClassDiagramGenerator generator =
+        new MermaidClassDiagramGenerator();
 
     @Test
     @DisplayName("Should generate class diagram with relationships")
-    void generateClassDiagramWithRelationships(@TempDir final Path tempDir) throws IOException {
+    void generateClassDiagramWithRelationships(@TempDir final Path tempDir)
+        throws IOException {
         // Given
         CodeElement mainClass = new CodeElement(
             CodeElementType.CLASS,
@@ -58,22 +60,25 @@ class MermaidClassDiagramGeneratorEnhancedTest {
             "public DependencyClass methodUsingDependency()",
             "/path/MainClass.java",
             LINE_NUMBER_THREE,
-            "public DependencyClass methodUsingDependency() { return new DependencyClass(); }",
+            "public DependencyClass methodUsingDependency() "
+            + "{ return new DependencyClass(); }",
             "Method using dependency",
             List.of(),
             List.of()
         );
 
-        List<CodeElement> elements = Arrays.asList(mainClass, dependencyClass, methodWithDependency);
+        List<CodeElement> elements =
+            Arrays.asList(mainClass, dependencyClass, methodWithDependency);
 
         // When
-        String result = generator.generateClassDiagram(mainClass, elements, tempDir);
+        String result =
+            generator.generateClassDiagram(mainClass, elements, tempDir);
 
         // Then
         assertNotNull(result);
 
         // Verify file was created
-        Path diagramPath = tempDir.resolve("MainClass_diagram.md");
+        Path diagramPath = tempDir.resolve("MainClass_diagram.mmd");
         assertTrue(Files.exists(diagramPath));
         String fileContent = Files.readString(diagramPath);
 
@@ -82,12 +87,14 @@ class MermaidClassDiagramGeneratorEnhancedTest {
         assertTrue(fileContent.contains("```mermaid"));
         assertTrue(fileContent.contains("classDiagram"));
 
-        // Note: We only check basics as the relationship detection might vary based on implementation
+        // Note: We only check basics as the relationship detection might
+        // vary based on implementation
     }
 
     @Test
     @DisplayName("Should handle long signatures by truncating them")
-    void generateClassDiagramWithLongSignatures(@TempDir final Path tempDir) throws IOException {
+    void generateClassDiagramWithLongSignatures(@TempDir final Path tempDir)
+        throws IOException {
         // Given
         CodeElement classElement = new CodeElement(
             CodeElementType.CLASS,
@@ -102,7 +109,8 @@ class MermaidClassDiagramGeneratorEnhancedTest {
         );
 
         // Create a method with a very long signature
-        StringBuilder longSignature = new StringBuilder("public void methodWithVeryLongSignature(");
+        StringBuilder longSignature = new StringBuilder(
+            "public void methodWithVeryLongSignature(");
         for (int i = 0; i < LOOP_COUNT_TWENTY; i++) {
             longSignature.append("String param").append(i).append(", ");
         }
@@ -120,13 +128,14 @@ class MermaidClassDiagramGeneratorEnhancedTest {
             List.of()
         );
 
-        List<CodeElement> elements = Arrays.asList(classElement, longMethodElement);
+        List<CodeElement> elements = Arrays.asList(classElement,
+            longMethodElement);
 
         // When
         generator.generateClassDiagram(classElement, elements, tempDir);
 
         // Then
-        Path diagramPath = tempDir.resolve("TestClass_diagram.md");
+        Path diagramPath = tempDir.resolve("TestClass_diagram.mmd");
         assertTrue(Files.exists(diagramPath));
         String fileContent = Files.readString(diagramPath);
 
@@ -139,4 +148,3 @@ class MermaidClassDiagramGeneratorEnhancedTest {
         assertTrue(fileContent.contains("class TestClass"));
     }
 }
-

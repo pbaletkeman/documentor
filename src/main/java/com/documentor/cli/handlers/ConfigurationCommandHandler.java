@@ -16,7 +16,8 @@ import java.nio.file.Paths;
 @Component
 public final class ConfigurationCommandHandler {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationCommandHandler.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(ConfigurationCommandHandler.class);
 
     private final ObjectMapper objectMapper;
 
@@ -34,7 +35,8 @@ public final class ConfigurationCommandHandler {
             }
 
             // Parse and validate configuration
-            DocumentorConfig validatedConfig = objectMapper.readValue(config.toFile(), DocumentorConfig.class);
+            DocumentorConfig validatedConfig = objectMapper.readValue(
+                    config.toFile(), DocumentorConfig.class);
 
             StringBuilder result = new StringBuilder();
             result.append("✅ Configuration file is valid!\n\n");
@@ -50,26 +52,34 @@ public final class ConfigurationCommandHandler {
         }
     }
 
-    private void appendConfigSummary(final StringBuilder result, final DocumentorConfig config) {
+    private void appendConfigSummary(final StringBuilder result,
+            final DocumentorConfig config) {
         result.append("📋 Configuration Summary:\n");
         result.append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-        result.append("🤖 LLM Models: ").append(config.llmModels().size()).append("\n");
+        result.append("🤖 LLM Models: ").append(config.llmModels().size())
+                .append("\n");
 
         if (config.outputSettings() != null) {
-            result.append("📤 Output Format: ").append(config.outputSettings().format()).append("\n");
-            result.append("📁 Output Path: ").append(config.outputSettings().outputPath()).append("\n");
+            result.append("📤 Output Format: ")
+                    .append(config.outputSettings().format()).append("\n");
+            result.append("📁 Output Path: ")
+                    .append(config.outputSettings().outputPath()).append("\n");
         }
 
         if (config.analysisSettings() != null) {
-            result.append("🔍 Max Threads: ").append(config.analysisSettings().maxThreads()).append("\n");
+            result.append("🔍 Max Threads: ")
+                    .append(config.analysisSettings().maxThreads())
+                    .append("\n");
             result.append("🗂️ Supported Languages: ")
-                    .append(String.join(", ", config.analysisSettings().supportedLanguages()))
+                    .append(String.join(", ",
+                            config.analysisSettings().supportedLanguages()))
                     .append("\n");
         }
         result.append("\n");
     }
 
-    private void appendValidationDetails(final StringBuilder result, final DocumentorConfig config) {
+    private void appendValidationDetails(final StringBuilder result,
+            final DocumentorConfig config) {
         result.append("🔍 Validation Details:\n");
         result.append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
@@ -80,7 +90,8 @@ public final class ConfigurationCommandHandler {
             result.append("✅ LLM Models configuration is valid\n");
             for (int i = 0; i < config.llmModels().size(); i++) {
                 var model = config.llmModels().get(i);
-                result.append("   ").append(i + 1).append(". ").append(model.name());
+                result.append("   ").append(i + 1).append(". ")
+                        .append(model.name());
                 if (model.apiKey() == null || model.apiKey().trim().isEmpty()) {
                     result.append(" ⚠️ (No API key)");
                 }
@@ -92,14 +103,16 @@ public final class ConfigurationCommandHandler {
         if (config.outputSettings() != null) {
             result.append("✅ Output settings configuration is valid\n");
         } else {
-            result.append("⚠️ Warning: No output settings configured (using defaults)\n");
+            result.append("⚠️ Warning: No output settings configured ")
+                    .append("(using defaults)\n");
         }
 
         // Validate analysis settings
         if (config.analysisSettings() != null) {
             result.append("✅ Analysis settings configuration is valid\n");
         } else {
-            result.append("⚠️ Warning: No analysis settings configured (using defaults)\n");
+            result.append("⚠️ Warning: No analysis settings configured ")
+                    .append("(using defaults)\n");
         }
     }
 }

@@ -5,20 +5,25 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
 
-/** 🔍 LLM Response Parser - Centralized response parsing for different LLM providers */
+/**
+ * 🔍 LLM Response Parser - Centralized response parsing for different
+ * LLM providers
+ */
 @Component
 public class LlmResponseParser {
 
     private final ObjectMapper objectMapper;
     private final LlmModelTypeDetector modelTypeDetector;
 
-    public LlmResponseParser(final LlmModelTypeDetector modelTypeDetectorParam) {
+    public LlmResponseParser(
+            final LlmModelTypeDetector modelTypeDetectorParam) {
         this.objectMapper = new ObjectMapper();
         this.modelTypeDetector = modelTypeDetectorParam;
     }
 
     /** 🔍 Main response parsing method that delegates to specific parsers */
-    public String parseResponse(final String response, final LlmModelConfig model) {
+    public String parseResponse(final String response,
+            final LlmModelConfig model) {
         try {
             if (modelTypeDetector.isOllamaModel(model)) {
                 return parseOllamaResponse(response);
@@ -43,7 +48,8 @@ public class LlmResponseParser {
             JsonNode json = objectMapper.readTree(response);
             if (json.has("choices") && json.get("choices").isArray()) {
                 JsonNode choice = json.get("choices").get(0);
-                if (choice.has("message") && choice.get("message").has("content")) {
+                if (choice.has("message")
+                        && choice.get("message").has("content")) {
                     return choice.get("message").get("content").asText();
                 }
                 if (choice.has("text")) {
@@ -54,7 +60,8 @@ public class LlmResponseParser {
             // fallback fields (response, text, content, output, result) before
             // returning an empty string. This handles tests that pass a simple
             // {"response": "..."} JSON body for OpenAI-configured models.
-            return parseGenericResponse(response, "response", "text", "content", "output", "result");
+            return parseGenericResponse(response, "response", "text",
+                    "content", "output", "result");
         } catch (Exception e) {
             return response;
         }
@@ -62,10 +69,12 @@ public class LlmResponseParser {
 
     /** 🔍 Extracts response from generic format */
     public String parseGenericResponse(final String response) {
-        return parseGenericResponse(response, "text", "content", "response", "output", "result");
+        return parseGenericResponse(response, "text", "content",
+                "response", "output", "result");
     }
 
-    private String parseGenericResponse(final String response, final String... fields) {
+    private String parseGenericResponse(final String response,
+            final String... fields) {
         try {
             JsonNode json = objectMapper.readTree(response);
             for (String field : fields) {
@@ -79,4 +88,3 @@ public class LlmResponseParser {
         }
     }
 }
-

@@ -46,7 +46,8 @@ class CodeElementTest {
         assertEquals("com.test.TestClass.testMethod", element.qualifiedName());
         assertEquals("/test/TestClass.java", element.filePath());
         assertEquals(LINE_NUMBER_TEN, element.lineNumber());
-        assertEquals("public void testMethod(String arg1, int arg2)", element.signature());
+        assertEquals("public void testMethod(String arg1, int arg2)",
+            element.signature());
         assertEquals("This is a test method", element.documentation());
         assertEquals(parameters, element.parameters());
         assertEquals(annotations, element.annotations());
@@ -149,7 +150,8 @@ class CodeElementTest {
         String id = element.getId();
 
         // Then
-        assertEquals("/src/test/TestClass.java:com.test.TestClass:" + LINE_NUMBER_TEN, id);
+        assertEquals("/src/test/TestClass.java:com.test.TestClass:"
+            + LINE_NUMBER_TEN, id);
     }
 
     @Test
@@ -231,7 +233,8 @@ class CodeElementTest {
         assertTrue(displayName.contains("🔧")); // METHOD icon
         assertTrue(displayName.contains("com.test.TestClass.testMethod"));
         assertTrue(displayName.contains("TestClass.java"));
-        assertTrue(displayName.contains(String.valueOf(LINE_NUMBER_TWENTY_FIVE)));
+        assertTrue(displayName.contains(
+            String.valueOf(LINE_NUMBER_TWENTY_FIVE)));
     }
 
     @Test
@@ -255,9 +258,11 @@ class CodeElementTest {
         // Then
         assertTrue(context.contains("Type: Method"));
         assertTrue(context.contains("Name: processData"));
-        assertTrue(context.contains("Signature: public String processData(String input, int flags)"));
+        assertTrue(context.contains("Signature: public String "
+            + "processData(String input, int flags)"));
         assertTrue(context.contains("Parameters: String input, int flags"));
-        assertTrue(context.contains("Documentation: Processes the input data with given flags"));
+        assertTrue(context.contains("Documentation: Processes the input"
+            + " data with given flags"));
         assertTrue(context.contains("Annotations: @Override, @Transactional"));
     }
 

@@ -3,8 +3,8 @@ package com.documentor.constants;
 /**
  * 🔍 Application Constants - Centralized constants to reduce complexity
  *
- * Contains commonly used string literals, magic numbers, and configuration defaults
- * to improve maintainability and reduce duplication.
+ * Contains commonly used string literals, magic numbers, and configuration
+ * defaults to improve maintainability and reduce duplication.
  */
 public final class ApplicationConstants {
 

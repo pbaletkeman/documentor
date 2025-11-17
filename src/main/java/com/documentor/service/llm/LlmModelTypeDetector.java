@@ -18,7 +18,8 @@ public class LlmModelTypeDetector {
      */
     public boolean isOllamaModel(final LlmModelConfig model) {
         return model.baseUrl().contains("ollama")
-               || model.baseUrl().contains(ApplicationConstants.DEFAULT_OLLAMA_PORT);
+               || model.baseUrl().contains(
+                       ApplicationConstants.DEFAULT_OLLAMA_PORT);
     }
 
     /**
@@ -33,7 +34,7 @@ public class LlmModelTypeDetector {
      * 🔍 Gets the appropriate endpoint for the model
      */
     public String getModelEndpoint(final LlmModelConfig model) {
-        return model.baseUrl() + (model.baseUrl().endsWith("/") ? "" : "/") + "api/generate";
+        return model.baseUrl() + (model.baseUrl().endsWith("/") ? "" : "/")
+                + "api/generate";
     }
 }
-

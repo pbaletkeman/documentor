@@ -63,14 +63,17 @@ public class PythonASTProcessorMockedTest {
         // Mock process input stream with test data
         String testOutput =
             "CLASS|ComplexClass|10|Complex class with multiple methods\n"
-            + "FUNCTION|complex_method|15|Method that does complex things|param1,param2,param3\n";
+            + "FUNCTION|complex_method|15|Method that does complex"
+            + " things|param1,param2,param3\n";
 
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(testOutput.getBytes());
+        ByteArrayInputStream inputStream =
+            new ByteArrayInputStream(testOutput.getBytes());
         when(process.getInputStream()).thenReturn(inputStream);
         when(process.waitFor()).thenReturn(0);
 
         // Mock the command builder to return valid CodeElements
-        when(commandBuilder.parseASTOutputLine(contains("CLASS|ComplexClass"), eq(filePath)))
+        when(commandBuilder.parseASTOutputLine(contains("CLASS|ComplexClass"),
+            eq(filePath)))
             .thenReturn(new CodeElement(
                 CodeElementType.CLASS,
                 "ComplexClass",
@@ -83,7 +86,9 @@ public class PythonASTProcessorMockedTest {
                 List.of()
             ));
 
-        when(commandBuilder.parseASTOutputLine(contains("FUNCTION|complex_method"), eq(filePath)))
+        when(commandBuilder.parseASTOutputLine(contains(
+                "FUNCTION|complex_method"),
+            eq(filePath)))
             .thenReturn(new CodeElement(
                 CodeElementType.METHOD,
                 "complex_method",
@@ -99,7 +104,8 @@ public class PythonASTProcessorMockedTest {
         // Create a ProcessBuilder mock that returns our mocked Process
         ProcessBuilder mockProcessBuilder = mock(ProcessBuilder.class);
         when(mockProcessBuilder.start()).thenReturn(process);
-        when(commandBuilder.createProcessBuilder(any(), any())).thenReturn(mockProcessBuilder);
+        when(commandBuilder.createProcessBuilder(any(), any()))
+            .thenReturn(mockProcessBuilder);
 
         // Execute the test method
         List<CodeElement> elements = astProcessor.analyzeWithAST(filePath);
@@ -109,7 +115,8 @@ public class PythonASTProcessorMockedTest {
         verify(commandBuilder).createProcessBuilder(any(), eq(filePath));
 
         // Should have called parseASTOutputLine for each line
-        verify(commandBuilder, atLeast(1)).parseASTOutputLine(anyString(), eq(filePath));
+        verify(commandBuilder, atLeast(1)).parseASTOutputLine(anyString(),
+            eq(filePath));
 
         // Assertions
         assertNotNull(elements);
@@ -149,12 +156,15 @@ public class PythonASTProcessorMockedTest {
 
         // Create a process with a non-zero exit code
         Process mockProcess = mock(Process.class);
-        ByteArrayInputStream inputStream = new ByteArrayInputStream("".getBytes());
+        ByteArrayInputStream inputStream =
+            new ByteArrayInputStream("".getBytes());
         when(mockProcess.getInputStream()).thenReturn(inputStream);
-        when(mockProcess.waitFor()).thenReturn(1); // Non-zero exit code indicating error
+        // Non-zero exit code indicating error
+        when(mockProcess.waitFor()).thenReturn(1);
 
         when(mockProcessBuilder.start()).thenReturn(mockProcess);
-        when(commandBuilder.createProcessBuilder(any(), eq(filePath))).thenReturn(mockProcessBuilder);
+        when(commandBuilder.createProcessBuilder(any(), eq(filePath)))
+            .thenReturn(mockProcessBuilder);
 
         // Execute the method and expect an exception
         assertThrows(IOException.class, () -> {
@@ -180,8 +190,10 @@ public class PythonASTProcessorMockedTest {
 
         // Create a ProcessBuilder mock that throws an exception
         ProcessBuilder mockProcessBuilder = mock(ProcessBuilder.class);
-        when(mockProcessBuilder.start()).thenThrow(new IOException("Process failed to start"));
-        when(commandBuilder.createProcessBuilder(any(), any())).thenReturn(mockProcessBuilder);
+        when(mockProcessBuilder.start()).thenThrow(
+            new IOException("Process failed to start"));
+        when(commandBuilder.createProcessBuilder(any(), any()))
+            .thenReturn(mockProcessBuilder);
 
         // Execute the method and expect an exception
         assertThrows(IOException.class, () -> {
@@ -189,7 +201,7 @@ public class PythonASTProcessorMockedTest {
         });
 
         // Verify the temp file was cleaned up
-        assertFalse(Files.exists(tempScript), "Temp script should be cleaned up even when exception occurs");
+        assertFalse(Files.exists(tempScript),
+        "Temp script should be cleaned up even when exception occurs");
     }
 }
-

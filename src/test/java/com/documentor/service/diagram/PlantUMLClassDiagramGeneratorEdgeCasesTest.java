@@ -8,16 +8,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.nio.file.Path;
+import java.nio.file.Files;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * Edge case tests for PlantUMLClassDiagramGenerator to achieve 85%+ branch coverage.
- * These tests target the remaining uncovered branches in specific methods.
- */
+
 class PlantUMLClassDiagramGeneratorEdgeCasesTest {
 
     private PlantUMLClassDiagramGenerator generator;
@@ -51,12 +49,18 @@ class PlantUMLClassDiagramGeneratorEdgeCasesTest {
         );
 
         CodeElement classElement = createTestClass();
-        List<CodeElement> elements = List.of(classElement, methodWithOnlyVisibility);
+        List<CodeElement> elements =
+            List.of(classElement, methodWithOnlyVisibility);
 
-        String result = generator.generateClassDiagram(classElement, elements, tempDir);
+        String result = generator.generateClassDiagram(
+            classElement,
+            elements,
+            tempDir
+        );
 
         assertNotNull(result);
-        String content = java.nio.file.Files.readString(Path.of(result));
+        Path out = Path.of(result);
+        String content = Files.readString(out);
         assertTrue(content.contains("void simpleMethod"));
     }
 
@@ -76,17 +80,24 @@ class PlantUMLClassDiagramGeneratorEdgeCasesTest {
         );
 
         CodeElement classElement = createTestClass();
-        List<CodeElement> elements = List.of(classElement, methodWithModifiers);
+        List<CodeElement> elements =
+            List.of(classElement, methodWithModifiers);
 
-        String result = generator.generateClassDiagram(classElement, elements, tempDir);
+        String result = generator.generateClassDiagram(
+            classElement,
+            elements,
+            tempDir
+        );
 
         assertNotNull(result);
-        String content = java.nio.file.Files.readString(Path.of(result));
+        Path out = Path.of(result);
+        String content = Files.readString(out);
         assertTrue(content.contains("void modifierMethod"));
     }
 
     @Test
-    @DisplayName("Should handle method without parentheses and parameters")
+    @DisplayName("Should handle method without parentheses"
+        + " and parameters")
     void shouldHandleMethodWithoutParenthesesParameters() throws Exception {
         CodeElement methodWithoutParams = new CodeElement(
             CodeElementType.METHOD,
@@ -101,17 +112,24 @@ class PlantUMLClassDiagramGeneratorEdgeCasesTest {
         );
 
         CodeElement classElement = createTestClass();
-        List<CodeElement> elements = List.of(classElement, methodWithoutParams);
+        List<CodeElement> elements =
+            List.of(classElement, methodWithoutParams);
 
-        String result = generator.generateClassDiagram(classElement, elements, tempDir);
+        String result = generator.generateClassDiagram(
+            classElement,
+            elements,
+            tempDir
+        );
 
         assertNotNull(result);
-        String content = java.nio.file.Files.readString(Path.of(result));
+        Path out = Path.of(result);
+        String content = Files.readString(out);
         assertTrue(content.contains("void noParamsMethod"));
     }
 
     @Test
-    @DisplayName("Should handle method with malformed parentheses")
+    @DisplayName("Should handle method with malformed"
+        + " parentheses")
     void shouldHandleMethodWithMalformedParentheses() throws Exception {
         CodeElement malformedMethod = new CodeElement(
             CodeElementType.METHOD,
@@ -128,15 +146,21 @@ class PlantUMLClassDiagramGeneratorEdgeCasesTest {
         CodeElement classElement = createTestClass();
         List<CodeElement> elements = List.of(classElement, malformedMethod);
 
-        String result = generator.generateClassDiagram(classElement, elements, tempDir);
+        String result = generator.generateClassDiagram(
+            classElement,
+            elements,
+            tempDir
+        );
 
         assertNotNull(result);
-        String content = java.nio.file.Files.readString(Path.of(result));
+        Path out = Path.of(result);
+        String content = Files.readString(out);
         assertTrue(content.contains("void malformedMethod"));
     }
 
     @Test
-    @DisplayName("Should handle element with underscore name for privacy check")
+    @DisplayName("Should handle element with underscore name"
+        + " for privacy check")
     void shouldHandleElementWithUnderscoreName() throws Exception {
         CodeElement underscoreField = new CodeElement(
             CodeElementType.FIELD,
@@ -153,7 +177,8 @@ class PlantUMLClassDiagramGeneratorEdgeCasesTest {
         CodeElement classElement = createTestClass();
         List<CodeElement> elements = List.of(classElement, underscoreField);
 
-        String result = generator.generateClassDiagram(classElement, elements, tempDir);
+        String result =
+            generator.generateClassDiagram(classElement, elements, tempDir);
 
         assertNotNull(result);
         String content = java.nio.file.Files.readString(Path.of(result));
@@ -162,7 +187,8 @@ class PlantUMLClassDiagramGeneratorEdgeCasesTest {
     }
 
     @Test
-    @DisplayName("Should handle class with no relationships found")
+    @DisplayName("Should handle class with no relationships"
+        + " found")
     void shouldHandleClassWithNoRelationships() throws Exception {
         CodeElement classA = createTestClass();
 
@@ -190,9 +216,11 @@ class PlantUMLClassDiagramGeneratorEdgeCasesTest {
             List.of()
         );
 
-        List<CodeElement> elements = List.of(classA, classB, methodWithoutDependency);
+        List<CodeElement> elements =
+            List.of(classA, classB, methodWithoutDependency);
 
-        String result = generator.generateClassDiagram(classA, elements, tempDir);
+        String result =
+            generator.generateClassDiagram(classA, elements, tempDir);
 
         assertNotNull(result);
         String content = java.nio.file.Files.readString(Path.of(result));
@@ -203,7 +231,8 @@ class PlantUMLClassDiagramGeneratorEdgeCasesTest {
     }
 
     @Test
-    @DisplayName("Should handle class name with special characters for sanitization")
+    @DisplayName("Should handle class name with special characters "
+        + "for sanitization")
     void shouldHandleClassNameWithSpecialCharacters() throws Exception {
         CodeElement specialClass = new CodeElement(
             CodeElementType.CLASS,
@@ -219,7 +248,8 @@ class PlantUMLClassDiagramGeneratorEdgeCasesTest {
 
         List<CodeElement> elements = List.of(specialClass);
 
-        String result = generator.generateClassDiagram(specialClass, elements, tempDir);
+        String result =
+            generator.generateClassDiagram(specialClass, elements, tempDir);
 
         assertNotNull(result);
         String content = java.nio.file.Files.readString(Path.of(result));
@@ -243,9 +273,11 @@ class PlantUMLClassDiagramGeneratorEdgeCasesTest {
         );
 
         CodeElement classElement = createTestClass();
-        List<CodeElement> elements = List.of(classElement, methodWithPackageType);
+        List<CodeElement> elements =
+            List.of(classElement, methodWithPackageType);
 
-        String result = generator.generateClassDiagram(classElement, elements, tempDir);
+        String result =
+            generator.generateClassDiagram(classElement, elements, tempDir);
 
         assertNotNull(result);
         String content = java.nio.file.Files.readString(Path.of(result));
@@ -254,9 +286,12 @@ class PlantUMLClassDiagramGeneratorEdgeCasesTest {
     }
 
     @Test
-    @DisplayName("Should handle element where isPublic returns false but signature doesn't contain private")
+    @DisplayName("Should handle element where isPublic returns false "
+        + "but signature doesn't contain "
+        + "private")
     void shouldHandlePublicFalseNonPrivateSignature() throws Exception {
-        // This tests the second condition in isNonPrivate: !signature.contains("private")
+        // This tests the second condition in isNonPrivate:
+        // !signature.contains("private")
         CodeElement protectedMethod = new CodeElement(
             CodeElementType.METHOD,
             "_hiddenMethod",  // Underscore makes isPublic() return false
@@ -272,12 +307,14 @@ class PlantUMLClassDiagramGeneratorEdgeCasesTest {
         CodeElement classElement = createTestClass();
         List<CodeElement> elements = List.of(classElement, protectedMethod);
 
-        String result = generator.generateClassDiagram(classElement, elements, tempDir);
+        String result =
+            generator.generateClassDiagram(classElement, elements, tempDir);
 
         assertNotNull(result);
         String content = java.nio.file.Files.readString(Path.of(result));
-        // Should be INCLUDED because even though isPublic() returns false,
-        // the signature doesn't contain "private", so isNonPrivate() returns true
+        // Should be INCLUDED because even though isPublic() returns
+        // false, the signature doesn't contain "private" so
+        // isNonPrivate() returns true
         assertTrue(content.contains("_hiddenMethod"));
     }
 

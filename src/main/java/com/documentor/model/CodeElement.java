@@ -5,8 +5,9 @@ import java.util.List;
 /**
  * 🔧 Code Element Model
  *
- * Represents a single code element (class, method, or field) discovered during analysis.
- * Contains all metadata needed for documentation generation and LLM processing.
+ * Represents a single code element (class, method, or field) discovered during
+ * analysis. Contains all metadata needed for documentation generation and LLM
+ * processing.
  */
 public record CodeElement(
     CodeElementType type,
@@ -56,7 +57,8 @@ public record CodeElement(
         context.append(String.format("Signature: %s\n", signature));
 
         if (!parameters.isEmpty()) {
-            context.append(String.format("Parameters: %s\n", String.join(", ", parameters)));
+            context.append(String.format("Parameters: %s\n",
+                    String.join(", ", parameters)));
         }
 
         if (!documentation.isEmpty()) {
@@ -64,10 +66,10 @@ public record CodeElement(
         }
 
         if (!annotations.isEmpty()) {
-            context.append(String.format("Annotations: %s\n", String.join(", ", annotations)));
+            context.append(String.format("Annotations: %s\n",
+                    String.join(", ", annotations)));
         }
 
         return context.toString();
     }
 }
-

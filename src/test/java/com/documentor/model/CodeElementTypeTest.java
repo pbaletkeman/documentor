@@ -31,9 +31,12 @@ class CodeElementTypeTest {
     @Test
     void testValueOf() {
         // Test valueOf method
-        assertEquals(CodeElementType.CLASS, CodeElementType.valueOf("CLASS"));
-        assertEquals(CodeElementType.METHOD, CodeElementType.valueOf("METHOD"));
-        assertEquals(CodeElementType.FIELD, CodeElementType.valueOf("FIELD"));
+        assertEquals(CodeElementType.CLASS,
+            CodeElementType.valueOf("CLASS"));
+        assertEquals(CodeElementType.METHOD,
+            CodeElementType.valueOf("METHOD"));
+        assertEquals(CodeElementType.FIELD,
+            CodeElementType.valueOf("FIELD"));
     }
 
     @Test
@@ -52,8 +55,10 @@ class CodeElementTypeTest {
         assertTrue(CodeElementType.FIELD.ordinal() >= 0);
 
         // Test that ordinals are different
-        assertNotEquals(CodeElementType.CLASS.ordinal(), CodeElementType.METHOD.ordinal());
-        assertNotEquals(CodeElementType.METHOD.ordinal(), CodeElementType.FIELD.ordinal());
+        assertNotEquals(CodeElementType.CLASS.ordinal(),
+            CodeElementType.METHOD.ordinal());
+        assertNotEquals(CodeElementType.METHOD.ordinal(),
+            CodeElementType.FIELD.ordinal());
     }
 
     @Test
@@ -67,9 +72,12 @@ class CodeElementTypeTest {
     @Test
     void testGetDescription() {
         // Test description values
-        assertEquals("Class/Interface", CodeElementType.CLASS.getDescription());
-        assertEquals("Method/Function", CodeElementType.METHOD.getDescription());
-        assertEquals("Field/Variable", CodeElementType.FIELD.getDescription());
+        assertEquals("Class/Interface",
+            CodeElementType.CLASS.getDescription());
+        assertEquals("Method/Function",
+            CodeElementType.METHOD.getDescription());
+        assertEquals("Field/Variable",
+            CodeElementType.FIELD.getDescription());
     }
 
     @Test

@@ -65,7 +65,8 @@ class JavaElementVisitorEnhancedTest {
         assertNotNull(classElement, "Class element should be found");
         assertEquals("TestClass", classElement.name());
         assertEquals("com.test.TestClass", classElement.qualifiedName());
-        assertTrue(classElement.documentation().contains("Test class documentation"));
+        assertTrue(classElement.documentation()
+            .contains("Test class documentation"));
     }
 
     @Test
@@ -100,7 +101,8 @@ class JavaElementVisitorEnhancedTest {
         CodeElement methodElement = findElementByType(CodeElementType.METHOD);
         assertNotNull(methodElement, "Method element should be found");
         assertEquals("testMethod", methodElement.name());
-        assertTrue(methodElement.documentation().contains("Public method with documentation"));
+        assertTrue(methodElement.documentation()
+            .contains("Public method with documentation"));
         assertEquals(2, methodElement.parameters().size());
         assertEquals("String param1", methodElement.parameters().get(0));
         assertEquals("int param2", methodElement.parameters().get(1));
@@ -197,9 +199,11 @@ class JavaElementVisitorEnhancedTest {
 
         // Then
         assertTrue(privateElements.stream().anyMatch(e ->
-            e.type() == CodeElementType.FIELD && e.name().equals("privateField")));
+            e.type() == CodeElementType.FIELD && e.name()
+                .equals("privateField")));
         assertTrue(privateElements.stream().anyMatch(e ->
-            e.type() == CodeElementType.FIELD && e.name().equals("publicField")));
+            e.type() == CodeElementType.FIELD && e.name()
+                .equals("publicField")));
 
         // Check documentation was captured
         CodeElement fieldElement = privateElements.stream()
@@ -207,7 +211,8 @@ class JavaElementVisitorEnhancedTest {
             .findFirst()
             .orElse(null);
         assertNotNull(fieldElement);
-        assertTrue(fieldElement.documentation().contains("A private field with docs"));
+        assertTrue(fieldElement.documentation()
+            .contains("A private field with docs"));
     }
 
     /**
@@ -229,4 +234,3 @@ class JavaElementVisitorEnhancedTest {
             .orElse(null);
     }
 }
-

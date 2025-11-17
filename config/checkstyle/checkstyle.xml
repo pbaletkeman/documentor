@@ -7,38 +7,31 @@
   <property name="charset" value="UTF-8"/>
   <property name="severity" value="warning"/>
   <property name="fileExtensions" value="java, properties, xml"/>
-  
+
   <!-- Excludes all 'module-info.java' files -->
   <module name="BeforeExecutionExclusionFileFilter">
     <property name="fileNamePattern" value="module\-info\.java$"/>
   </module>
-  
-  <!-- Suppression filter for specific files -->
-  <module name="SuppressionSingleFilter">
-    <property name="files" value=".*DocumentorApplication\.java$"/>
-    <property name="checks" value="HideUtilityClassConstructor"/>
-  </module>
-  
-  <!-- Size Violations -->
+
+  <!-- Checks for Size Violations -->
   <module name="FileLength"/>
   <module name="LineLength">
-    <property name="max" value="120"/>
-    <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://|@|public static final|private static final|^\s*\*"/>
+    <property name="max" value="80"/>
   </module>
-  
-  <!-- Whitespace -->
+
+  <!-- Checks for whitespace -->
   <module name="FileTabCharacter"/>
-  
-  <!-- Miscellaneous -->
+
+  <!-- Miscellaneous other checks -->
   <module name="RegexpSingleline">
     <property name="format" value="\s+$"/>
     <property name="minimum" value="0"/>
     <property name="maximum" value="0"/>
     <property name="message" value="Line has trailing spaces."/>
   </module>
-  
+
   <module name="TreeWalker">
-    <!-- Naming Conventions -->
+    <!-- Checks for Naming Conventions -->
     <module name="ConstantName"/>
     <module name="LocalFinalVariableName"/>
     <module name="LocalVariableName"/>
@@ -48,20 +41,18 @@
     <module name="ParameterName"/>
     <module name="StaticVariableName"/>
     <module name="TypeName"/>
-    
-    <!-- Imports -->
+
+    <!-- Checks for imports -->
     <module name="AvoidStarImport"/>
-    <module name="IllegalImport"/>
+    <module name="IllegalImport"/> <!-- defaults to sun.* packages -->
     <module name="RedundantImport"/>
-    <module name="UnusedImports">
-      <property name="processJavadoc" value="false"/>
-    </module>
-    
-    <!-- Size Violations -->
+    <module name="UnusedImports"/>
+
+    <!-- Checks for Size Violations -->
     <module name="MethodLength"/>
     <module name="ParameterNumber"/>
-    
-    <!-- Whitespace -->
+
+    <!-- Checks for whitespace -->
     <module name="EmptyForIteratorPad"/>
     <module name="GenericWhitespace"/>
     <module name="MethodParamPad"/>
@@ -72,19 +63,19 @@
     <module name="TypecastParenPad"/>
     <module name="WhitespaceAfter"/>
     <module name="WhitespaceAround"/>
-    
+
     <!-- Modifier Checks -->
     <module name="ModifierOrder"/>
     <module name="RedundantModifier"/>
-    
-    <!-- Blocks -->
+
+    <!-- Checks for blocks -->
     <module name="AvoidNestedBlocks"/>
     <module name="EmptyBlock"/>
     <module name="LeftCurly"/>
     <module name="NeedBraces"/>
     <module name="RightCurly"/>
-    
-    <!-- Common Coding Problems -->
+
+    <!-- Checks for common coding problems -->
     <module name="EmptyStatement"/>
     <module name="EqualsHashCode"/>
     <module name="HiddenField"/>
@@ -94,15 +85,15 @@
     <module name="MissingSwitchDefault"/>
     <module name="SimplifyBooleanExpression"/>
     <module name="SimplifyBooleanReturn"/>
-    
-    <!-- Class Design -->
+
+    <!-- Checks for class design -->
     <module name="DesignForExtension"/>
     <module name="FinalClass"/>
     <module name="HideUtilityClassConstructor"/>
     <module name="InterfaceIsType"/>
     <module name="VisibilityModifier"/>
-    
-    <!-- Miscellaneous -->
+
+    <!-- Miscellaneous other checks -->
     <module name="ArrayTypeStyle"/>
     <module name="FinalParameters"/>
     <module name="TodoComment"/>

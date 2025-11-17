@@ -58,7 +58,9 @@ class LlmServiceIntegrationTest {
     void setUp() {
         // Create test configuration with LLM models
         LlmModelConfig model = new LlmModelConfig(
-            "test-model", "openai", "https://api.test.com", "test-key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
+            "test-model", "openai",
+            "https://api.test.com", "test-key",
+            DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
         );
 
         OutputSettings outputSettings = new OutputSettings(
@@ -66,16 +68,21 @@ class LlmServiceIntegrationTest {
         );
 
         AnalysisSettings analysisSettings = new AnalysisSettings(
-            true, ITERATION_COUNT_LARGE, List.of("**/*.java"), List.of("**/test/**")
+            true, ITERATION_COUNT_LARGE,
+            List.of("**/*.java"), List.of("**/test/**")
         );
 
-        config = new DocumentorConfig(List.of(model), outputSettings, analysisSettings);
+        config = new DocumentorConfig(List.of(model), outputSettings,
+            analysisSettings);
 
         // Create test code element
         testElement = new CodeElement(
-            CodeElementType.METHOD, "testMethod", "com.test.TestClass.testMethod",
-            "/test/TestClass.java", TEST_LINE_NUMBER, "public void testMethod(String param)",
-            "Test method documentation", List.of("param"), List.of()
+            CodeElementType.METHOD, "testMethod",
+            "com.test.TestClass.testMethod",
+            "/test/TestClass.java", TEST_LINE_NUMBER,
+            "public void testMethod(String param)",
+            "Test method documentation", List.of("param"),
+            List.of()
         );
     }
 
@@ -83,15 +90,23 @@ class LlmServiceIntegrationTest {
      * Helper method to create LlmService with new constructor
      */
     private LlmService createLlmService(final DocumentorConfig serviceConfig) {
-        LlmModelTypeDetector modelTypeDetector = new LlmModelTypeDetector();
-        LlmPromptTemplates promptTemplates = new LlmPromptTemplates();
-        LlmRequestFormatter requestFormatter = new LlmRequestFormatter(modelTypeDetector);
-        LlmRequestBuilder requestBuilder = new LlmRequestBuilder(promptTemplates, requestFormatter);
-        LlmResponseParser responseParser = new LlmResponseParser(modelTypeDetector);
-        LlmResponseHandler responseHandler = new LlmResponseHandler(responseParser, modelTypeDetector);
-        LlmApiClient apiClient = new LlmApiClient(mockWebClient, modelTypeDetector);
+        LlmModelTypeDetector modelTypeDetector =
+            new LlmModelTypeDetector();
+        LlmPromptTemplates promptTemplates =
+            new LlmPromptTemplates();
+        LlmRequestFormatter requestFormatter =
+            new LlmRequestFormatter(modelTypeDetector);
+        LlmRequestBuilder requestBuilder =
+            new LlmRequestBuilder(promptTemplates, requestFormatter);
+        LlmResponseParser responseParser =
+            new LlmResponseParser(modelTypeDetector);
+        LlmResponseHandler responseHandler =
+            new LlmResponseHandler(responseParser, modelTypeDetector);
+        LlmApiClient apiClient =
+            new LlmApiClient(mockWebClient, modelTypeDetector);
 
-        return new LlmService(serviceConfig, requestBuilder, responseHandler, apiClient);
+        return new LlmService(serviceConfig, requestBuilder,
+            responseHandler, apiClient);
     }
 
     @Test
@@ -112,13 +127,15 @@ class LlmServiceIntegrationTest {
         LlmService serviceWithEmptyConfig = createLlmService(emptyConfig);
 
         // When
-        CompletableFuture<String> result = serviceWithEmptyConfig.generateDocumentation(testElement);
+        CompletableFuture<String> result =
+            serviceWithEmptyConfig.generateDocumentation(testElement);
 
         // Then
         assertNotNull(result);
         assertDoesNotThrow(() -> {
             String response = result.get();
-            // With empty models, the method returns empty response after consolidation
+            // With empty models, the method returns empty response
+            // after consolidation
             assertNotNull(response);
         });
     }
@@ -133,13 +150,15 @@ class LlmServiceIntegrationTest {
         LlmService serviceWithEmptyConfig = createLlmService(emptyConfig);
 
         // When
-        CompletableFuture<String> result = serviceWithEmptyConfig.generateUsageExamples(testElement);
+        CompletableFuture<String> result =
+            serviceWithEmptyConfig.generateUsageExamples(testElement);
 
         // Then
         assertNotNull(result);
         assertDoesNotThrow(() -> {
             String response = result.get();
-            assertTrue(response.contains("No LLM models configured for usage example generation"));
+            assertTrue(response.contains(
+                    "No LLM models configured for usage example generation"));
         });
     }
 
@@ -152,13 +171,15 @@ class LlmServiceIntegrationTest {
         LlmService serviceWithEmptyConfig = createLlmService(emptyConfig);
 
         // When
-        CompletableFuture<String> result = serviceWithEmptyConfig.generateUnitTests(testElement);
+        CompletableFuture<String> result =
+            serviceWithEmptyConfig.generateUnitTests(testElement);
 
         // Then
         assertNotNull(result);
         assertDoesNotThrow(() -> {
             String response = result.get();
-            assertTrue(response.contains("No LLM models configured for unit test generation"));
+            assertTrue(response.contains(
+                    "No LLM models configured for unit test generation"));
         });
     }
 
@@ -177,9 +198,12 @@ class LlmServiceIntegrationTest {
         );
 
         // When & Then
-        CompletableFuture<String> docResult = serviceWithEmptyConfig.generateDocumentation(classElement);
-        CompletableFuture<String> exampleResult = serviceWithEmptyConfig.generateUsageExamples(classElement);
-        CompletableFuture<String> testResult = serviceWithEmptyConfig.generateUnitTests(classElement);
+        CompletableFuture<String> docResult =
+            serviceWithEmptyConfig.generateDocumentation(classElement);
+        CompletableFuture<String> exampleResult =
+            serviceWithEmptyConfig.generateUsageExamples(classElement);
+        CompletableFuture<String> testResult =
+            serviceWithEmptyConfig.generateUnitTests(classElement);
 
         assertNotNull(docResult);
         assertNotNull(exampleResult);
@@ -196,20 +220,25 @@ class LlmServiceIntegrationTest {
     void testServiceWithMultipleModels() {
         // Given - configuration with multiple models
         LlmModelConfig model1 = new LlmModelConfig(
-            "model-1", "openai", "https://api1.test.com", "key-1", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
+            "model-1", "openai",
+            "https://api1.test.com", "key-1",
+            DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
         );
         LlmModelConfig model2 = new LlmModelConfig(
-            "model-2", "openai", "https://api2.test.com", "key-2", ALTERNATIVE_MAX_TOKENS, ALTERNATIVE_TIMEOUT_SECONDS
+            "model-2", "openai", "https://api2.test.com",
+            "key-2", ALTERNATIVE_MAX_TOKENS, ALTERNATIVE_TIMEOUT_SECONDS
         );
 
         DocumentorConfig multiModelConfig = new DocumentorConfig(
-            List.of(model1, model2), config.outputSettings(), config.analysisSettings()
+            List.of(model1, model2), config.outputSettings(),
+                config.analysisSettings()
         );
         LlmService multiModelService = createLlmService(multiModelConfig);
 
         // When & Then - should not throw exceptions
         assertDoesNotThrow(() -> {
-            CompletableFuture<String> result = multiModelService.generateDocumentation(testElement);
+            CompletableFuture<String> result = multiModelService.
+                generateDocumentation(testElement);
             assertNotNull(result);
         });
     }
@@ -224,22 +253,33 @@ class LlmServiceIntegrationTest {
 
         // Create elements of different types
         CodeElement[] elements = {
-            new CodeElement(CodeElementType.CLASS, "TestClass", "com.test.TestClass",
-                "/test/TestClass.java", 1, "public class TestClass", "", List.of(), List.of()),
-            new CodeElement(CodeElementType.METHOD, "testMethod", "com.test.TestClass.testMethod",
-                "/test/TestClass.java", ITERATION_COUNT_MEDIUM, "public void testMethod()", "", List.of(), List.of()),
-            new CodeElement(CodeElementType.FIELD, "testField", "com.test.TestClass.testField",
-                "/test/TestClass.java", ITERATION_COUNT_SMALL, "private String testField", "", List.of(), List.of()),
-            new CodeElement(CodeElementType.CLASS, "TestInterface", "com.test.TestInterface",
-                "/test/TestInterface.java", 1, "public interface TestInterface", "", List.of(), List.of())
+            new CodeElement(CodeElementType.CLASS, "TestClass",
+                "com.test.TestClass",
+                "/test/TestClass.java", 1,
+                "public class TestClass", "", List.of(), List.of()),
+            new CodeElement(CodeElementType.METHOD, "testMethod",
+                "com.test.TestClass.testMethod",
+                "/test/TestClass.java", ITERATION_COUNT_MEDIUM,
+                 "public void testMethod()", "", List.of(), List.of()),
+            new CodeElement(CodeElementType.FIELD, "testField",
+                "com.test.TestClass.testField",
+                "/test/TestClass.java", ITERATION_COUNT_SMALL,
+                "private String testField", "", List.of(), List.of()),
+            new CodeElement(CodeElementType.CLASS,
+                "TestInterface", "com.test.TestInterface",
+                "/test/TestInterface.java", 1,
+                "public interface TestInterface", "", List.of(), List.of())
         };
 
         // When & Then - all should handle gracefully
         for (CodeElement element : elements) {
             assertDoesNotThrow(() -> {
-                CompletableFuture<String> docResult = serviceWithEmptyConfig.generateDocumentation(element);
-                CompletableFuture<String> exampleResult = serviceWithEmptyConfig.generateUsageExamples(element);
-                CompletableFuture<String> testResult = serviceWithEmptyConfig.generateUnitTests(element);
+                CompletableFuture<String> docResult =
+                    serviceWithEmptyConfig.generateDocumentation(element);
+                CompletableFuture<String> exampleResult =
+                    serviceWithEmptyConfig.generateUsageExamples(element);
+                CompletableFuture<String> testResult =
+                    serviceWithEmptyConfig.generateUnitTests(element);
 
                 assertNotNull(docResult);
                 assertNotNull(exampleResult);
@@ -274,9 +314,12 @@ class LlmServiceIntegrationTest {
         LlmService serviceWithEmptyConfig = createLlmService(emptyConfig);
 
         // When - all methods should return CompletableFuture
-        CompletableFuture<String> docFuture = serviceWithEmptyConfig.generateDocumentation(testElement);
-        CompletableFuture<String> exampleFuture = serviceWithEmptyConfig.generateUsageExamples(testElement);
-        CompletableFuture<String> testFuture = serviceWithEmptyConfig.generateUnitTests(testElement);
+        CompletableFuture<String> docFuture =
+            serviceWithEmptyConfig.generateDocumentation(testElement);
+        CompletableFuture<String> exampleFuture =
+            serviceWithEmptyConfig.generateUsageExamples(testElement);
+        CompletableFuture<String> testFuture =
+            serviceWithEmptyConfig.generateUnitTests(testElement);
 
         // Then
         assertNotNull(docFuture);
@@ -295,15 +338,21 @@ class LlmServiceIntegrationTest {
     void testOllamaModelDetection() {
         // Given - Various Ollama model configurations
         LlmModelConfig ollamaModel1 = new LlmModelConfig(
-            "llama3.2", "ollama", "http://localhost:11434/api/generate", "", LARGE_MAX_TOKENS, ALTERNATIVE_TIMEOUT_SECONDS
+            "llama3.2", "ollama",
+            "http://localhost:11434/api/generate", "",
+            LARGE_MAX_TOKENS, ALTERNATIVE_TIMEOUT_SECONDS
         );
 
         LlmModelConfig ollamaModel2 = new LlmModelConfig(
-            "codellama", "ollama", "http://localhost:11434/api/generate", "", LARGE_MAX_TOKENS, ALTERNATIVE_TIMEOUT_SECONDS
+            "codellama", "ollama",
+            "http://localhost:11434/api/generate", "",
+            LARGE_MAX_TOKENS, ALTERNATIVE_TIMEOUT_SECONDS
         );
 
         LlmModelConfig openaiModel = new LlmModelConfig(
-            "gpt-4", "openai", "https://api.openai.com/v1/chat/completions", "test-key", LARGE_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
+            "gpt-4", "openai",
+            "https://api.openai.com/v1/chat/completions",
+            "test-key", LARGE_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
         );
 
         OutputSettings outputSettings = new OutputSettings(
@@ -311,13 +360,20 @@ class LlmServiceIntegrationTest {
         );
 
         AnalysisSettings analysisSettings = new AnalysisSettings(
-            true, ITERATION_COUNT_LARGE, List.of("**/*.java"), List.of("**/test/**")
+            true, ITERATION_COUNT_LARGE,
+            List.of("**/*.java"), List.of("**/test/**")
         );
 
         // Test each model type
-        DocumentorConfig ollamaConfig1 = new DocumentorConfig(List.of(ollamaModel1), outputSettings, analysisSettings);
-        DocumentorConfig ollamaConfig2 = new DocumentorConfig(List.of(ollamaModel2), outputSettings, analysisSettings);
-        DocumentorConfig openaiConfig = new DocumentorConfig(List.of(openaiModel), outputSettings, analysisSettings);
+        DocumentorConfig ollamaConfig1 =
+            new DocumentorConfig(List.of(ollamaModel1), outputSettings,
+            analysisSettings);
+        DocumentorConfig ollamaConfig2 =
+                new DocumentorConfig(List.of(ollamaModel2), outputSettings,
+                analysisSettings);
+        DocumentorConfig openaiConfig =
+            new DocumentorConfig(List.of(openaiModel), outputSettings,
+                analysisSettings);
 
         // When & Then - Should handle different model types without errors
         assertDoesNotThrow(() -> {

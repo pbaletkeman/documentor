@@ -19,10 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-/**
- * Fast tests for PlantUMLDiagramService focusing on logic validation without I/O operations.
- * These tests improve performance by avoiding file system operations and asynchronous operations.
- */
+
 @ExtendWith(MockitoExtension.class)
 class PlantUMLDiagramServiceFastTest {
 
@@ -60,11 +57,13 @@ class PlantUMLDiagramServiceFastTest {
     void shouldHandleEmptyProjectAnalysis() {
         // Given
         ProjectAnalysis emptyAnalysis = createEmptyProjectAnalysis();
-        when(mockElementFilter.getEligibleClasses(any())).thenReturn(List.of());
+        when(mockElementFilter.getEligibleClasses(any()))
+            .thenReturn(List.of());
 
         // When
         CompletableFuture<List<String>> result =
-            plantUMLDiagramService.generateClassDiagrams(emptyAnalysis, "/mock/output");
+            plantUMLDiagramService
+                .generateClassDiagrams(emptyAnalysis, "/mock/output");
 
         // Then
         assertNotNull(result);
@@ -77,7 +76,8 @@ class PlantUMLDiagramServiceFastTest {
     @DisplayName("Should handle single class project")
     void shouldHandleSingleClassProject() {
         // Given
-        ProjectAnalysis singleClassAnalysis = createSingleClassProjectAnalysis();
+        ProjectAnalysis singleClassAnalysis =
+            createSingleClassProjectAnalysis();
         CodeElement classElement = createTestClass();
 
         when(mockElementFilter.getEligibleClasses(any()))
@@ -99,7 +99,8 @@ class PlantUMLDiagramServiceFastTest {
 
         // When
         CompletableFuture<List<String>> result =
-            plantUMLDiagramService.generateClassDiagrams(singleClassAnalysis, "/mock/output");
+            plantUMLDiagramService.generateClassDiagrams(
+                singleClassAnalysis, "/mock/output");
 
         // Then
         assertNotNull(result);

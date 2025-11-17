@@ -24,18 +24,22 @@ class ProjectAnalysisTest {
     void testConstructorAndGetters() {
         // Given
         CodeElement element1 = new CodeElement(
-            CodeElementType.CLASS, "TestClass", "com.test.TestClass", "/test/TestClass.java",
+            CodeElementType.CLASS, "TestClass", "com.test.TestClass",
+            "/test/TestClass.java",
             1, "public class TestClass", "", List.of(), List.of()
         );
         CodeElement element2 = new CodeElement(
-            CodeElementType.METHOD, "testMethod", "com.test.TestClass.testMethod", "/test/TestClass.java",
-            LINE_NUMBER_FIVE, "public void testMethod()", "", List.of(), List.of()
+            CodeElementType.METHOD, "testMethod",
+            "com.test.TestClass.testMethod", "/test/TestClass.java",
+            LINE_NUMBER_FIVE, "public void testMethod()", "",
+                List.of(), List.of()
         );
         List<CodeElement> elements = List.of(element1, element2);
         long timestamp = System.currentTimeMillis();
 
         // When
-        ProjectAnalysis analysis = new ProjectAnalysis("/test/project", elements, timestamp);
+        ProjectAnalysis analysis = new ProjectAnalysis("/test/project",
+            elements, timestamp);
 
         // Then
         assertNotNull(analysis);
@@ -52,7 +56,8 @@ class ProjectAnalysisTest {
         long timestamp = System.currentTimeMillis();
 
         // When
-        ProjectAnalysis analysis = new ProjectAnalysis("/test/empty", emptyElements, timestamp);
+        ProjectAnalysis analysis = new ProjectAnalysis("/test/empty",
+            emptyElements, timestamp);
 
         // Then
         assertNotNull(analysis);
@@ -66,14 +71,17 @@ class ProjectAnalysisTest {
     void testEquality() {
         // Given
         CodeElement element = new CodeElement(
-            CodeElementType.CLASS, "TestClass", "com.test.TestClass", "/test/TestClass.java",
+            CodeElementType.CLASS, "TestClass", "com.test.TestClass",
+            "/test/TestClass.java",
             1, "public class TestClass", "", List.of(), List.of()
         );
         List<CodeElement> elements = List.of(element);
         long timestamp = TEST_TIMESTAMP;
 
-        ProjectAnalysis analysis1 = new ProjectAnalysis("/test/project", elements, timestamp);
-        ProjectAnalysis analysis2 = new ProjectAnalysis("/test/project", elements, timestamp);
+        ProjectAnalysis analysis1 = new ProjectAnalysis("/test/project",
+            elements, timestamp);
+        ProjectAnalysis analysis2 = new ProjectAnalysis("/test/project",
+            elements, timestamp);
 
         // Then
         assertEquals(analysis1, analysis2);
@@ -84,11 +92,13 @@ class ProjectAnalysisTest {
     void testToString() {
         // Given
         CodeElement element = new CodeElement(
-            CodeElementType.CLASS, "TestClass", "com.test.TestClass", "/test/TestClass.java",
+            CodeElementType.CLASS, "TestClass", "com.test.TestClass",
+            "/test/TestClass.java",
             1, "public class TestClass", "", List.of(), List.of()
         );
         List<CodeElement> elements = List.of(element);
-        ProjectAnalysis analysis = new ProjectAnalysis("/test/project", elements, System.currentTimeMillis());
+        ProjectAnalysis analysis = new ProjectAnalysis("/test/project",
+            elements, System.currentTimeMillis());
 
         // When
         String result = analysis.toString();
@@ -102,19 +112,26 @@ class ProjectAnalysisTest {
     void testGetClasses() {
         // Given
         CodeElement classElement = new CodeElement(
-            CodeElementType.CLASS, "TestClass", "com.test.TestClass", "/test/TestClass.java",
+            CodeElementType.CLASS, "TestClass", "com.test.TestClass",
+            "/test/TestClass.java",
             1, "public class TestClass", "", List.of(), List.of()
         );
         CodeElement methodElement = new CodeElement(
-            CodeElementType.METHOD, "testMethod", "com.test.TestClass.testMethod", "/test/TestClass.java",
-            LINE_NUMBER_FIVE, "public void testMethod()", "", List.of(), List.of()
+            CodeElementType.METHOD, "testMethod",
+                "com.test.TestClass.testMethod", "/test/TestClass.java",
+            LINE_NUMBER_FIVE, "public void testMethod()", "", List.of(),
+                List.of()
         );
         CodeElement fieldElement = new CodeElement(
-            CodeElementType.FIELD, "testField", "com.test.TestClass.testField", "/test/TestClass.java",
-            LINE_NUMBER_THREE, "private String testField", "", List.of(), List.of()
+            CodeElementType.FIELD, "testField", "com.test.TestClass.testField",
+            "/test/TestClass.java",
+            LINE_NUMBER_THREE, "private String testField", "",
+                List.of(), List.of()
         );
-        List<CodeElement> elements = List.of(classElement, methodElement, fieldElement);
-        ProjectAnalysis analysis = new ProjectAnalysis("/test/project", elements, System.currentTimeMillis());
+        List<CodeElement> elements = List.of(classElement,
+            methodElement, fieldElement);
+        ProjectAnalysis analysis = new ProjectAnalysis("/test/project",
+            elements, System.currentTimeMillis());
 
         // When
         List<CodeElement> classes = analysis.getClasses();
@@ -128,19 +145,23 @@ class ProjectAnalysisTest {
     void testGetMethods() {
         // Given - same setup as above
         CodeElement classElement = new CodeElement(
-            CodeElementType.CLASS, "TestClass", "com.test.TestClass", "/test/TestClass.java",
+            CodeElementType.CLASS, "TestClass", "com.test.TestClass",
+            "/test/TestClass.java",
             1, "public class TestClass", "", List.of(), List.of()
         );
         CodeElement method1 = new CodeElement(
-            CodeElementType.METHOD, "method1", "com.test.TestClass.method1", "/test/TestClass.java",
+            CodeElementType.METHOD, "method1", "com.test.TestClass.method1",
+            "/test/TestClass.java",
             LINE_NUMBER_FIVE, "public void method1()", "", List.of(), List.of()
         );
         CodeElement method2 = new CodeElement(
-            CodeElementType.METHOD, "method2", "com.test.TestClass.method2", "/test/TestClass.java",
+            CodeElementType.METHOD, "method2", "com.test.TestClass.method2",
+                "/test/TestClass.java",
             LINE_NUMBER_TEN, "public void method2()", "", List.of(), List.of()
         );
         List<CodeElement> elements = List.of(classElement, method1, method2);
-        ProjectAnalysis analysis = new ProjectAnalysis("/test/project", elements, System.currentTimeMillis());
+        ProjectAnalysis analysis = new ProjectAnalysis("/test/project",
+            elements, System.currentTimeMillis());
 
         // When
         List<CodeElement> methods = analysis.getMethods();
@@ -155,19 +176,25 @@ class ProjectAnalysisTest {
     void testGetFields() {
         // Given
         CodeElement field1 = new CodeElement(
-            CodeElementType.FIELD, "field1", "com.test.TestClass.field1", "/test/TestClass.java",
-            LINE_NUMBER_THREE, "private String field1", "", List.of(), List.of()
+            CodeElementType.FIELD, "field1", "com.test.TestClass.field1",
+            "/test/TestClass.java",
+            LINE_NUMBER_THREE, "private String field1", "", List.of(),
+            List.of()
         );
         CodeElement field2 = new CodeElement(
-            CodeElementType.FIELD, "field2", "com.test.TestClass.field2", "/test/TestClass.java",
+            CodeElementType.FIELD, "field2", "com.test.TestClass.field2",
+            "/test/TestClass.java",
             LINE_NUMBER_FOUR, "private int field2", "", List.of(), List.of()
         );
         CodeElement methodElement = new CodeElement(
-            CodeElementType.METHOD, "testMethod", "com.test.TestClass.testMethod", "/test/TestClass.java",
-            LINE_NUMBER_FIVE, "public void testMethod()", "", List.of(), List.of()
+            CodeElementType.METHOD, "testMethod",
+            "com.test.TestClass.testMethod", "/test/TestClass.java",
+            LINE_NUMBER_FIVE, "public void testMethod()", "", List.of(),
+            List.of()
         );
         List<CodeElement> elements = List.of(field1, field2, methodElement);
-        ProjectAnalysis analysis = new ProjectAnalysis("/test/project", elements, System.currentTimeMillis());
+        ProjectAnalysis analysis = new ProjectAnalysis("/test/project",
+            elements, System.currentTimeMillis());
 
         // When
         List<CodeElement> fields = analysis.getFields();
@@ -182,19 +209,23 @@ class ProjectAnalysisTest {
     void testGetElementsByFile() {
         // Given
         CodeElement element1 = new CodeElement(
-            CodeElementType.CLASS, "TestClass1", "com.test.TestClass1", "/test/TestClass1.java",
+            CodeElementType.CLASS, "TestClass1", "com.test.TestClass1",
+            "/test/TestClass1.java",
             1, "public class TestClass1", "", List.of(), List.of()
         );
         CodeElement element2 = new CodeElement(
-            CodeElementType.CLASS, "TestClass2", "com.test.TestClass2", "/test/TestClass2.java",
+            CodeElementType.CLASS, "TestClass2", "com.test.TestClass2",
+            "/test/TestClass2.java",
             1, "public class TestClass2", "", List.of(), List.of()
         );
         CodeElement element3 = new CodeElement(
-            CodeElementType.METHOD, "method1", "com.test.TestClass1.method1", "/test/TestClass1.java",
+            CodeElementType.METHOD, "method1",
+            "com.test.TestClass1.method1", "/test/TestClass1.java",
             LINE_NUMBER_FIVE, "public void method1()", "", List.of(), List.of()
         );
         List<CodeElement> elements = List.of(element1, element2, element3);
-        ProjectAnalysis analysis = new ProjectAnalysis("/test/project", elements, System.currentTimeMillis());
+        ProjectAnalysis analysis = new ProjectAnalysis("/test/project",
+            elements, System.currentTimeMillis());
 
         // When
         var elementsByFile = analysis.getElementsByFile();
@@ -211,19 +242,27 @@ class ProjectAnalysisTest {
     void testGetElementsByType() {
         // Given
         CodeElement classElement = new CodeElement(
-            CodeElementType.CLASS, "TestClass", "com.test.TestClass", "/test/TestClass.java",
+            CodeElementType.CLASS, "TestClass", "com.test.TestClass",
+                "/test/TestClass.java",
             1, "public class TestClass", "", List.of(), List.of()
         );
         CodeElement methodElement = new CodeElement(
-            CodeElementType.METHOD, "testMethod", "com.test.TestClass.testMethod", "/test/TestClass.java",
-            LINE_NUMBER_FIVE, "public void testMethod()", "", List.of(), List.of()
+            CodeElementType.METHOD, "testMethod",
+                "com.test.TestClass.testMethod",
+                "/test/TestClass.java",
+            LINE_NUMBER_FIVE, "public void testMethod()", "",
+                List.of(), List.of()
         );
         CodeElement fieldElement = new CodeElement(
-            CodeElementType.FIELD, "testField", "com.test.TestClass.testField", "/test/TestClass.java",
-            LINE_NUMBER_THREE, "private String testField", "", List.of(), List.of()
+            CodeElementType.FIELD, "testField", "com.test.TestClass.testField",
+                "/test/TestClass.java",
+            LINE_NUMBER_THREE, "private String testField", "",
+                List.of(), List.of()
         );
-        List<CodeElement> elements = List.of(classElement, methodElement, fieldElement);
-        ProjectAnalysis analysis = new ProjectAnalysis("/test/project", elements, System.currentTimeMillis());
+        List<CodeElement> elements =
+            List.of(classElement, methodElement, fieldElement);
+        ProjectAnalysis analysis = new ProjectAnalysis("/test/project",
+         elements, System.currentTimeMillis());
 
         // When
         var elementsByType = analysis.getElementsByType();
@@ -242,23 +281,30 @@ class ProjectAnalysisTest {
     void testGetStats() {
         // Given
         CodeElement classElement = new CodeElement(
-            CodeElementType.CLASS, "TestClass", "com.test.TestClass", "/test/TestClass.java",
-            1, "public class TestClass", "", List.of(), List.of()
+            CodeElementType.CLASS, "TestClass", "com.test.TestClass",
+            "/test/TestClass.java", 1, "public class TestClass",
+            "", List.of(), List.of()
         );
         CodeElement method1 = new CodeElement(
-            CodeElementType.METHOD, "method1", "com.test.TestClass.method1", "/test/TestClass.java",
+            CodeElementType.METHOD, "method1", "com.test.TestClass.method1",
+                "/test/TestClass.java",
             LINE_NUMBER_FIVE, "public void method1()", "", List.of(), List.of()
         );
         CodeElement method2 = new CodeElement(
-            CodeElementType.METHOD, "method2", "com.test.TestClass.method2", "/test/TestClass.java",
+            CodeElementType.METHOD, "method2",
+                "com.test.TestClass.method2", "/test/TestClass.java",
             LINE_NUMBER_TEN, "public void method2()", "", List.of(), List.of()
         );
         CodeElement fieldElement = new CodeElement(
-            CodeElementType.FIELD, "testField", "com.test.TestClass.testField", "/test/TestClass.java",
-            LINE_NUMBER_THREE, "private String testField", "", List.of(), List.of()
+            CodeElementType.FIELD, "testField",
+                "com.test.TestClass.testField", "/test/TestClass.java",
+            LINE_NUMBER_THREE, "private String testField", "",
+                List.of(), List.of()
         );
-        List<CodeElement> elements = List.of(classElement, method1, method2, fieldElement);
-        ProjectAnalysis analysis = new ProjectAnalysis("/test/project", elements, System.currentTimeMillis());
+        List<CodeElement> elements = List.of(classElement,
+            method1, method2, fieldElement);
+        ProjectAnalysis analysis = new ProjectAnalysis("/test/project",
+            elements, System.currentTimeMillis());
 
         // When
         ProjectAnalysis.AnalysisStats stats = analysis.getStats();
@@ -295,7 +341,8 @@ class ProjectAnalysisTest {
     void testWithEmptyElements() {
         // Given
         List<CodeElement> emptyElements = List.of();
-        ProjectAnalysis analysis = new ProjectAnalysis("/test/empty", emptyElements, System.currentTimeMillis());
+        ProjectAnalysis analysis = new ProjectAnalysis("/test/empty",
+            emptyElements, System.currentTimeMillis());
 
         // When & Then
         assertTrue(analysis.getClasses().isEmpty());

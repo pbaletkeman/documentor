@@ -17,7 +17,8 @@ public class PythonElementExtractor {
     /**
      * Extracts docstring from Python code starting at given line index
      */
-    public String extractDocstring(final List<String> lines, final int startIndex) {
+    public String extractDocstring(final List<String> lines,
+            final int startIndex) {
         if (startIndex >= lines.size()) {
             return "";
         }
@@ -28,9 +29,10 @@ public class PythonElementExtractor {
             String quote = nextLine.startsWith("\"\"\"") ? "\"\"\"" : "'''";
 
             // Handle single-line docstring
-            if (nextLine.substring(ApplicationConstants.FUNCTION_DEF_PREFIX_LENGTH).endsWith(quote)) {
-                return nextLine.substring(ApplicationConstants.FUNCTION_DEF_PREFIX_LENGTH,
-                    nextLine.length() - ApplicationConstants.FUNCTION_DEF_PREFIX_LENGTH);
+            int prefixLength = ApplicationConstants.FUNCTION_DEF_PREFIX_LENGTH;
+            if (nextLine.substring(prefixLength).endsWith(quote)) {
+                return nextLine.substring(prefixLength,
+                        nextLine.length() - prefixLength);
             }
 
             // Handle multi-line docstring

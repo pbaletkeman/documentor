@@ -47,7 +47,8 @@ public class PythonElementExtractorMockTest {
      * This is a helper method to simulate a combined approach using both
      * AST and regex analysis
      */
-    private List<CodeElement> extractElementsUsingBothApproaches(final Path filePath)
+    private List<CodeElement> extractElementsUsingBothApproaches(
+        final Path filePath)
             throws IOException, InterruptedException {
         try {
             // Try AST first
@@ -101,7 +102,8 @@ public class PythonElementExtractorMockTest {
             .thenReturn(List.of(astClass, astMethod));
 
         // When - Test the method that we're creating to combine both approaches
-        List<CodeElement> elements = extractElementsUsingBothApproaches(pythonFile);
+        List<CodeElement> elements =
+            extractElementsUsingBothApproaches(pythonFile);
 
         // Then
         verify(astProcessor).analyzeWithAST(pythonFile);
@@ -142,7 +144,8 @@ public class PythonElementExtractorMockTest {
             .thenReturn(List.of(regexClass));
 
         // When
-        List<CodeElement> elements = extractElementsUsingBothApproaches(pythonFile);
+        List<CodeElement> elements =
+            extractElementsUsingBothApproaches(pythonFile);
 
         // Then
         verify(astProcessor).analyzeWithAST(pythonFile);
@@ -169,4 +172,3 @@ public class PythonElementExtractorMockTest {
         return pythonFile;
     }
 }
-

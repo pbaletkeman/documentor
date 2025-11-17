@@ -46,10 +46,12 @@ class PlantUMLDiagramServiceTest {
         plantUMLClassDiagramGenerator = new PlantUMLClassDiagramGenerator();
 
         // Update TestDiagramGeneratorFactory to support PlantUML
-        TestDiagramGeneratorFactory generatorFactory = new TestDiagramGeneratorFactory(null) {
+        TestDiagramGeneratorFactory generatorFactory =
+            new TestDiagramGeneratorFactory(null) {
             @Override
-            public PlantUMLClassDiagramGenerator getPlantUMLClassDiagramGenerator() {
-                return plantUMLClassDiagramGenerator;
+            public PlantUMLClassDiagramGenerator
+                getPlantUMLClassDiagramGenerator() {
+                    return plantUMLClassDiagramGenerator;
             }
         };
 
@@ -61,7 +63,8 @@ class PlantUMLDiagramServiceTest {
     }
 
     @Test
-    void generateClassDiagramsWithValidAnalysisShouldGeneratePlantUMLFiles() throws IOException {
+    void genClassDiagramsWithValidAnalysisShouldGeneratePlantUMLFiles()
+        throws IOException {
         // Given
         ProjectAnalysis analysis = createTestProjectAnalysis();
 
@@ -78,7 +81,8 @@ class PlantUMLDiagramServiceTest {
         String generatedFile = generatedFiles.get(0);
         Path diagramPath = Path.of(generatedFile);
         assertThat(Files.exists(diagramPath)).isTrue();
-        assertThat(diagramPath.getFileName().toString()).endsWith("_plantuml.puml");
+        assertThat(diagramPath.getFileName().toString())
+            .endsWith("_plantuml.puml");
 
         // Verify PlantUML content
         String content = Files.readString(diagramPath);
@@ -128,7 +132,8 @@ class PlantUMLDiagramServiceTest {
     }
 
     @Test
-    void generateClassDiagramsWithMultipleClassesShouldGenerateMultipleDiagrams() throws IOException {
+    void genClassDiagramsWithMultipleClassesShouldGenerateMultipleDiagrams()
+        throws IOException {
         // Given
         ProjectAnalysis analysis = createMultiClassProjectAnalysis();
 
@@ -138,13 +143,15 @@ class PlantUMLDiagramServiceTest {
         List<String> generatedFiles = future.join();
 
         // Then
-        assertThat(generatedFiles).hasSize(2); // Two classes should generate two diagrams
+        // Two classes should generate two diagrams
+        assertThat(generatedFiles).hasSize(2);
 
         // Verify both files exist and have PlantUML format
         for (String generatedFile : generatedFiles) {
             Path diagramPath = Path.of(generatedFile);
             assertThat(Files.exists(diagramPath)).isTrue();
-            assertThat(diagramPath.getFileName().toString()).endsWith("_plantuml.puml");
+            assertThat(diagramPath.getFileName().toString())
+                .endsWith("_plantuml.puml");
 
             String content = Files.readString(diagramPath);
             assertThat(content).contains("@startuml");
@@ -189,7 +196,8 @@ class PlantUMLDiagramServiceTest {
             )
         );
 
-        return new ProjectAnalysis(TEST_PROJECT_PATH, elements, System.currentTimeMillis());
+        return new ProjectAnalysis(TEST_PROJECT_PATH, elements,
+            System.currentTimeMillis());
     }
 
     private ProjectAnalysis createMultiClassProjectAnalysis() {
@@ -240,6 +248,7 @@ class PlantUMLDiagramServiceTest {
             )
         );
 
-        return new ProjectAnalysis(TEST_PROJECT_PATH, elements, System.currentTimeMillis());
+        return new ProjectAnalysis(TEST_PROJECT_PATH, elements,
+            System.currentTimeMillis());
     }
 }

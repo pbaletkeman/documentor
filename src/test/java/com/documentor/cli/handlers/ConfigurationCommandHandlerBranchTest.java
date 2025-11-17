@@ -67,9 +67,13 @@ class ConfigurationCommandHandlerBranchTest {
     void testAppendConfigSummaryWithMinimalSettings() throws Exception {
         // Test a different branch path - minimal valid configuration
         DocumentorConfig config = new DocumentorConfig(
-            List.of(new LlmModelConfig("minimal", "ollama", "http://localhost", "key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT)),
-            new OutputSettings("output", "html", false, false, true), // Different output format and flags
-            null // This will trigger the null analysis settings path
+            List.of(new LlmModelConfig("minimal", "ollama",
+                "http://localhost", "key", DEFAULT_MAX_TOKENS,
+                DEFAULT_TIMEOUT)),
+            new OutputSettings("output", "html",
+            // Different output format and flags
+                false, false, true),
+                null // This will trigger the null analysis settings path
         );
 
         Path configFile = tempDir.resolve("config.json");
@@ -84,9 +88,11 @@ class ConfigurationCommandHandlerBranchTest {
 
     @Test
     void testHandleValidateConfigWithCustomObjectMapper() throws Exception {
-        // Test null handling branches by using a custom ObjectMapper that allows nulls
+        // Test null handling branches by using a
+        // custom ObjectMapper that allows nulls
         ObjectMapper customMapper = new ObjectMapper();
-        ConfigurationCommandHandler customHandler = new ConfigurationCommandHandler(customMapper);
+        ConfigurationCommandHandler customHandler =
+            new ConfigurationCommandHandler(customMapper);
 
         // Create a JSON string with nulls manually
         String jsonWithNulls = String.format("""
@@ -107,21 +113,28 @@ class ConfigurationCommandHandlerBranchTest {
         Path configFile = tempDir.resolve("nullconfig.json");
         Files.writeString(configFile, jsonWithNulls);
 
-        String result = customHandler.handleValidateConfig(configFile.toString());
+        String result = customHandler
+        .handleValidateConfig(configFile.toString());
 
-        // The configuration should load successfully (Jackson handles missing fields as null)
-        assertTrue(result.contains("✅ Configuration file is valid!"));
-        assertTrue(result.contains("🤖 LLM Models: 1"));
-        assertTrue(result.contains("⚠️ Warning: No output settings configured"));
+        // The configuration should load successfully
+        // (Jackson handles missing fields as null)
+        assertTrue(result.contains(
+            "✅ Configuration file is valid!"));
+        assertTrue(result.contains(
+            "🤖 LLM Models: 1"));
+        assertTrue(result.contains(
+            "⚠️ Warning: No output settings configured"));
         // Note: analysis settings get defaults, so we check for valid settings
-        assertTrue(result.contains("✅ Analysis settings configuration is valid"));
+        assertTrue(result.contains(
+            "✅ Analysis settings configuration is valid"));
     }
 
     @Test
     void testHandleValidateConfigWithExplicitNulls() throws Exception {
         // Try to force the null branch by using explicit nulls in JSON
         ObjectMapper customMapper = new ObjectMapper();
-        ConfigurationCommandHandler customHandler = new ConfigurationCommandHandler(customMapper);
+        ConfigurationCommandHandler customHandler =
+        new ConfigurationCommandHandler(customMapper);
 
         // Create a JSON string with explicit nulls
         String jsonWithNulls = String.format("""
@@ -144,24 +157,31 @@ class ConfigurationCommandHandlerBranchTest {
         Path configFile = tempDir.resolve("explicitnulls.json");
         Files.writeString(configFile, jsonWithNulls);
 
-        String result = customHandler.handleValidateConfig(configFile.toString());
+        String result = customHandler.handleValidateConfig(
+            configFile.toString());
 
         // Should still work due to record default constructor behavior
         assertTrue(result.contains("✅ Configuration file is valid!"));
         assertTrue(result.contains("🤖 LLM Models: 1"));
-        assertTrue(result.contains("⚠️ Warning: No output settings configured"));
-        // Analysis settings should get defaults in constructor, but test both possibilities
-        assertTrue(result.contains("✅ Analysis settings configuration is valid")
-                  || result.contains("⚠️ Warning: No analysis settings configured"));
+        assertTrue(result.contains(
+            "⚠️ Warning: No output settings configured"));
+        // Analysis settings should get defaults in
+        // constructor, but test both possibilities
+        assertTrue(result.contains(
+            "✅ Analysis settings configuration is valid")
+                  || result.contains(
+                    "⚠️ Warning: No analysis settings configured"));
     }
 
     @Test
     void testAppendConfigSummaryWithValidSettings() throws Exception {
         // Test normal path to ensure all branches are covered
         DocumentorConfig config = new DocumentorConfig(
-            List.of(new LlmModelConfig("test", "ollama", "http://test", "key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT)),
+            List.of(new LlmModelConfig("test", "ollama", "http://test",
+            "key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT)),
             new OutputSettings("docs", "markdown", true, true, false),
-            new AnalysisSettings(true, DEFAULT_MAX_DEPTH, List.of("**/*.java"), List.of("**/test/**"))
+            new AnalysisSettings(true, DEFAULT_MAX_DEPTH,
+            List.of("**/*.java"), List.of("**/test/**"))
         );
 
         Path configFile = tempDir.resolve("config.json");
@@ -177,7 +197,8 @@ class ConfigurationCommandHandlerBranchTest {
         assertTrue(result.contains("🗂️ Supported Languages:"));
         assertTrue(result.contains("✅ LLM Models configuration is valid"));
         assertTrue(result.contains("✅ Output settings configuration is valid"));
-        assertTrue(result.contains("✅ Analysis settings configuration is valid"));
+        assertTrue(result.contains(
+            "✅ Analysis settings configuration is valid"));
     }
 
     @Test
@@ -186,7 +207,8 @@ class ConfigurationCommandHandlerBranchTest {
         DocumentorConfig config = new DocumentorConfig(
             List.of(), // empty list
             new OutputSettings("docs", "markdown", true, true, false),
-            new AnalysisSettings(true, DEFAULT_MAX_DEPTH, List.of("**/*.java"), List.of("**/test/**"))
+            new AnalysisSettings(true, DEFAULT_MAX_DEPTH,
+            List.of("**/*.java"), List.of("**/test/**"))
         );
 
         Path configFile = tempDir.resolve("config.json");
@@ -203,12 +225,17 @@ class ConfigurationCommandHandlerBranchTest {
         // Test API key validation branch (line 84)
         DocumentorConfig config = new DocumentorConfig(
             List.of(
-                new LlmModelConfig("model1", "ollama", "http://test", null, DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT), // null API key
-                new LlmModelConfig("model2", "ollama", "http://test", "", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT),   // empty API key
-                new LlmModelConfig("model3", "ollama", "http://test", "  ", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT)  // whitespace API key
+                new LlmModelConfig("model1", "ollama", "http://test",
+                null, DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT), // null API key
+                new LlmModelConfig("model2", "ollama", "http://test",
+                "", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT),   // empty API key
+                new LlmModelConfig("model3", "ollama", "http://test",
+                // whitespace API key
+                "  ", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT)
             ),
             new OutputSettings("docs", "markdown", true, true, false),
-            new AnalysisSettings(true, DEFAULT_MAX_DEPTH, List.of("**/*.java"), List.of("**/test/**"))
+            new AnalysisSettings(true, DEFAULT_MAX_DEPTH,
+            List.of("**/*.java"), List.of("**/test/**"))
         );
 
         Path configFile = tempDir.resolve("config.json");

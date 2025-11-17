@@ -32,11 +32,15 @@ class DiagramElementFilterTest {
         CodeElement class2 = createClass("Class2", "/path/Class2.java");
         CodeElement method2 = createMethod("method2", "/path/Class2.java");
 
-        List<CodeElement> allElements = Arrays.asList(class1, method1, field1, class2, method2);
-        ProjectAnalysis analysis = new ProjectAnalysis("/root", allElements, System.currentTimeMillis());
+        List<CodeElement> allElements =
+            Arrays.asList(class1, method1, field1, class2, method2);
+        ProjectAnalysis analysis =
+            new ProjectAnalysis("/root", allElements,
+            System.currentTimeMillis());
 
         // When
-        Map<CodeElement, List<CodeElement>> groupedElements = filter.groupElementsByClass(analysis);
+        Map<CodeElement, List<CodeElement>> groupedElements =
+            filter.groupElementsByClass(analysis);
 
         // Then
         assertEquals(2, groupedElements.size());
@@ -103,11 +107,15 @@ class DiagramElementFilterTest {
         CodeElement method2 = createMethod("method2", "/path/File2.java");
         CodeElement field2 = createField("field2", "/path/File2.java");
 
-        List<CodeElement> allElements = Arrays.asList(class1, method1, class2, method2, field2);
-        ProjectAnalysis analysis = new ProjectAnalysis("/root", allElements, System.currentTimeMillis());
+        List<CodeElement> allElements =
+            Arrays.asList(class1, method1, class2, method2, field2);
+        ProjectAnalysis analysis =
+            new ProjectAnalysis("/root", allElements,
+            System.currentTimeMillis());
 
         // When
-        Map<String, List<CodeElement>> groupedElements = filter.groupElementsByFile(analysis);
+        Map<String, List<CodeElement>> groupedElements =
+            filter.groupElementsByFile(analysis);
 
         // Then
         assertEquals(2, groupedElements.size());
@@ -123,7 +131,8 @@ class DiagramElementFilterTest {
     @DisplayName("Should return eligible classes only")
     void getEligibleClasses() {
         // Given
-        CodeElement publicClass = createClass("PublicClass", "/path/Public.java");
+        CodeElement publicClass =
+            createClass("PublicClass", "/path/Public.java");
         CodeElement privateClass = new CodeElement(
             CodeElementType.CLASS,
             "PrivateClass",
@@ -137,11 +146,15 @@ class DiagramElementFilterTest {
         );
         CodeElement method = createMethod("method", "/path/Other.java");
 
-        List<CodeElement> allElements = Arrays.asList(publicClass, privateClass, method);
-        ProjectAnalysis analysis = new ProjectAnalysis("/root", allElements, System.currentTimeMillis());
+        List<CodeElement> allElements =
+            Arrays.asList(publicClass, privateClass, method);
+        ProjectAnalysis analysis =
+            new ProjectAnalysis("/root", allElements,
+            System.currentTimeMillis());
 
         // When
-        List<CodeElement> eligibleClasses = filter.getEligibleClasses(analysis);
+        List<CodeElement> eligibleClasses =
+            filter.getEligibleClasses(analysis);
 
         // Then
         assertEquals(1, eligibleClasses.size());
@@ -190,4 +203,3 @@ class DiagramElementFilterTest {
         );
     }
 }
-

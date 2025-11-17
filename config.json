@@ -1,60 +1,24 @@
 {
   "llm_models": [
     {
-      "name": "llama3.2",
-      "endpoint": "http://localhost:11434/api/generate",
-      "max_tokens": 4096,
-      "temperature": 0.7,
-      "timeout_seconds": 60
-    },
-    {
       "name": "llamacpp",
-      "endpoint": "http://localhost:8080/completion",
-      "max_tokens": 2048,
-      "temperature": 0.5,
-      "timeout_seconds": 90
-    },
-    {
-      "name": "codellama",
-      "endpoint": "http://localhost:11434/api/generate",
-      "max_tokens": 4096,
-      "temperature": 0.3,
-      "timeout_seconds": 60
-    },
-    {
-      "name": "gpt-3.5-turbo",
-      "api_key": "your-openai-api-key-here",
-      "endpoint": "https://api.openai.com/v1/chat/completions",
-      "max_tokens": 4096,
-      "temperature": 0.7,
-      "timeout_seconds": 30
-    },
-    {
-      "name": "gpt-4",
-      "api_key": "your-openai-api-key-here",
-      "endpoint": "https://api.openai.com/v1/chat/completions",
-      "max_tokens": 8192,
-      "temperature": 0.5,
-      "timeout_seconds": 60
+      "baseUrl": "http://localhost:8080/completion",
+      "maxTokens": 2048,
+      "timeoutSeconds": 90
     }
   ],
   "output_settings": {
     "output_directory": "./docs",
     "format": "markdown",
-    "include_icons": true,
-    "generate_unit_tests": true,
-    "run_unit_test_commands": false,
-    "log_unit_test_commands": true,
-    "target_coverage": 0.9,
-    "generate_mermaid": false,
+    "generate_mermaid": true,
     "generate_plantuml": false,
     "verbose_output": false
   },
   "analysis_settings": {
     "include_private_members": false,
-    "max_threads": 4,
-    "supported_languages": ["java", "python"],
-    "exclude_patterns": [
+    "max_depth": 4,
+    "included_patterns": ["**/*.java", "**/*.py"],
+    "excluded_patterns": [
       "**/test/**",
       "**/target/**",
       "**/__pycache__/**",
