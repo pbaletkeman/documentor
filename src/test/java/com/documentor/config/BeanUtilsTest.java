@@ -19,7 +19,7 @@ import static org.mockito.Mockito.verify;
  */
 class BeanUtilsTest {
 
-    private static final int expectedValue = 42;
+    private static final int EXPECTED_VALUE = 42;
 
     @Test
     void testOverrideBeanWithNullApplicationContext() {
@@ -131,10 +131,10 @@ class BeanUtilsTest {
 
     @Test
     void testOverrideBeanWithReflectionFallback() {
-        ConfigurableApplicationContext context = mock (
+        ConfigurableApplicationContext context = mock(
             ConfigurableApplicationContext.class);
-        ConfigurableListableBeanFactory beanFactory = mock
-        (ConfigurableListableBeanFactory.class);
+        ConfigurableListableBeanFactory beanFactory = mock(
+            ConfigurableListableBeanFactory.class);
         BeanDefinition beanDefinition = mock(BeanDefinition.class);
 
         when(context.getBeanFactory())
@@ -271,7 +271,7 @@ class BeanUtilsTest {
         // Test with different object types
         assertDoesNotThrow(() -> {
             BeanUtils.overrideBean(context, "stringBean", "stringValue");
-            BeanUtils.overrideBean(context, "integerBean", expectedValue);
+            BeanUtils.overrideBean(context, "integerBean", EXPECTED_VALUE);
             BeanUtils.overrideBean(context, "listBean",
                 java.util.List.of("item1", "item2"));
         });

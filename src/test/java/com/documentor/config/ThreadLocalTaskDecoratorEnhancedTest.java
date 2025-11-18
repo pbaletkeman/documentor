@@ -220,11 +220,14 @@ class ThreadLocalTaskDecoratorEnhancedTest {
         // Create config with multiple models
         List<LlmModelConfig> models = List.of(
             new LlmModelConfig(
-                "model1", "provider1", "url1", "key1", TIMEOUT_MILLIS, TIMEOUT_SECONDS),
+                "model1", "provider1",
+                "url1", "key1", TIMEOUT_MILLIS, TIMEOUT_SECONDS),
             new LlmModelConfig(
-                "model2", "provider2", "url2", "key2", TIMEOUT_MILLIS, TIMEOUT_SECONDS),
+                "model2", "provider2",
+                "url2", "key2", TIMEOUT_MILLIS, TIMEOUT_SECONDS),
             new LlmModelConfig(
-                "model3", "provider3", "url3", "key3", TIMEOUT_MILLIS, TIMEOUT_SECONDS)
+                "model3", "provider3",
+                "url3", "key3", TIMEOUT_MILLIS, TIMEOUT_SECONDS)
         );
 
         OutputSettings outputSettings =

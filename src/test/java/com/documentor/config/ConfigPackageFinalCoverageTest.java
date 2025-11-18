@@ -3,7 +3,6 @@ package com.documentor.config;
 import com.documentor.config.model.AnalysisSettings;
 import com.documentor.config.model.LlmModelConfig;
 import com.documentor.config.model.OutputSettings;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,6 +23,14 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
  * Focuses on specific uncovered lines identified in the coverage report.
  */
 class ConfigPackageFinalCoverageTest {
+    // Magic number constants for test configuration
+    private static final int MAX_TOKENS = 4000;
+    private static final int TIMEOUT_SECONDS = 30;
+    private static final int ANALYSIS_DEPTH = 5;
+    private static final int TIMEOUT_MILLIS = 1000;
+    private static final int AWAIT_SECONDS = 2;
+    private static final int EXCEPTION_AWAIT_SECONDS = 3;
+    private static final int EMPTY_MODELS_SIZE = 0;
 
     private DocumentorConfig testConfig;
 
@@ -33,20 +40,17 @@ class ConfigPackageFinalCoverageTest {
 
         // Create test config with non-null models
         LlmModelConfig model = new LlmModelConfig("test-model",
-        "provider", "url", "key", 4000, 30);
+            "provider", "url", "key", MAX_TOKENS, TIMEOUT_SECONDS);
         OutputSettings outputSettings = new OutputSettings(
             "output", "markdown", false, false, false);
         AnalysisSettings analysisSettings =
-        new AnalysisSettings(true, 5, null, null);
+            new AnalysisSettings(true, ANALYSIS_DEPTH, null, null);
 
         testConfig = new DocumentorConfig(
             Collections.singletonList(model), outputSettings, analysisSettings);
     }
-
-    @AfterEach
-    void tearDown() {
-        ThreadLocalContextHolder.clearConfig();
-    }
+                AnalysisSettings analysisSettings =
+                new AnalysisSettings(true, ANALYSIS_DEPTH, null, null);
 
     /**
      * Test ThreadLocalPropagatingExecutorEnhanced with config having null
@@ -73,10 +77,9 @@ class ConfigPackageFinalCoverageTest {
             latch.countDown();
         });
 
-        assertTrue(latch.await(2, TimeUnit.SECONDS));
+        assertTrue(latch.await(AWAIT_SECONDS, TimeUnit.SECONDS));
         ThreadLocalContextHolder.clearConfig();
     }
-
     /**
      * Test ThreadLocalPropagatingExecutorEnhanced with explicitly set
      * config scenario
@@ -101,8 +104,7 @@ class ConfigPackageFinalCoverageTest {
             // This should exercise the wasExplicitlySet branch
             latch.countDown();
         });
-
-        assertTrue(latch.await(2, TimeUnit.SECONDS));
+        assertTrue(latch.await(AWAIT_SECONDS, TimeUnit.SECONDS));
         ThreadLocalContextHolder.clearConfig();
     }
 
@@ -158,20 +160,18 @@ class ConfigPackageFinalCoverageTest {
                 // This should trigger the uncaught exception handler
                 throw new RuntimeException("Uncaught exception in thread");
             });
-
             faultyThread.start();
-
             try {
-                faultyThread.join(1000); // Wait for thread to complete
+                // Wait for thread to complete
+                faultyThread.join(TIMEOUT_MILLIS);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
-
             latch.countDown();
         });
-
-        assertTrue(latch.await(3, TimeUnit.SECONDS));
-        assertTrue(exceptionLatch.await(3, TimeUnit.SECONDS));
+        assertTrue(latch.await(EXCEPTION_AWAIT_SECONDS, TimeUnit.SECONDS));
+        assertTrue(exceptionLatch.await(EXCEPTION_AWAIT_SECONDS,
+            TimeUnit.SECONDS));
     }
 
     /**
@@ -277,7 +277,7 @@ class ConfigPackageFinalCoverageTest {
             DocumentorConfig threadConfig = ThreadLocalContextHolder
             .getConfig();
             assertNotNull(threadConfig);
-            assertEquals(0, threadConfig.llmModels().size());
+            assertEquals(EMPTY_MODELS_SIZE, threadConfig.llmModels().size());
             latch.countDown();
         };
 
@@ -286,7 +286,7 @@ class ConfigPackageFinalCoverageTest {
         Thread testThread = new Thread(decoratedTask);
         testThread.start();
 
-        assertTrue(latch.await(2, TimeUnit.SECONDS));
+        assertTrue(latch.await(AWAIT_SECONDS, TimeUnit.SECONDS));
         testThread.join();
 
         ThreadLocalContextHolder.clearConfig();

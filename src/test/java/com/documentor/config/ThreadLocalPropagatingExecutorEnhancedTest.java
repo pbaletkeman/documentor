@@ -45,6 +45,8 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
     private static final int TOTAL_TASKS = QUEUE_CAPACITY + EXTRA_TASKS;
     private static final int LATCH_AWAIT_SECONDS = 2;
     private static final int THREAD_SLEEP_MILLIS = 100;
+    private static final int DEFAULT_THREAD_COUNT_TEST = 5;
+    private static final int DEFAULT_TIMEOUT_SECONDS_TEST = 30;
 
     @Mock
     private DocumentorConfig mockConfig;
@@ -197,7 +199,7 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
         executor = new ThreadLocalPropagatingExecutorEnhanced(
             mockDelegate, "test-executor");
 
-        Runnable testCommand = () -> { } ;
+        Runnable testCommand = () -> { };
 
         // Mock delegate to throw exception
         doThrow(new RuntimeException("Delegate executor failed"))
@@ -214,7 +216,7 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
         executor = new ThreadLocalPropagatingExecutorEnhanced(
             null, "test-executor");
 
-        Runnable testCommand = () -> { } ;
+        Runnable testCommand = () -> { };
 
         // The fallback is ForkJoinPool.commonPool() which should
         // work, but we can't easily mock it
@@ -260,7 +262,8 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
 
     @Test
     void testCreateExecutorWithValidParameters() {
-        final int threadCount = ThreadLocalPropagatingExecutorEnhanced.DEFAULT_THREAD_COUNT;
+        final int threadCount = ThreadLocalPropagatingExecutorEnhanced
+            .DEFAULT_THREAD_COUNT;
         Executor createdExecutor =
             ThreadLocalPropagatingExecutorEnhanced.createExecutor(
                 threadCount, "test-pool");
@@ -292,9 +295,11 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
 
     @Test
     void testCreateExecutorWithNullPrefix() {
-        final int threadCount = ThreadLocalPropagatingExecutorEnhanced.DEFAULT_THREAD_COUNT;
+        final int threadCount = ThreadLocalPropagatingExecutorEnhanced
+            .DEFAULT_THREAD_COUNT;
         Executor createdExecutor =
-            ThreadLocalPropagatingExecutorEnhanced.createExecutor(threadCount, null);
+            ThreadLocalPropagatingExecutorEnhanced.createExecutor(
+                threadCount, null);
 
         assertNotNull(createdExecutor);
         assertTrue(createdExecutor
@@ -408,9 +413,9 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
     @Test
     void testConstantsValues() {
         // Test that constants have expected values
-        assertEquals(5,
+        assertEquals(DEFAULT_THREAD_COUNT_TEST,
             ThreadLocalPropagatingExecutorEnhanced.DEFAULT_THREAD_COUNT);
-        assertEquals(30,
+        assertEquals(DEFAULT_TIMEOUT_SECONDS_TEST,
             ThreadLocalPropagatingExecutorEnhanced.DEFAULT_TIMEOUT_SECONDS);
     }
 
@@ -435,7 +440,8 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
             });
         }
 
-        final int awaitTimeoutSeconds = 5;
-        assertTrue(latch.await(awaitTimeoutSeconds, TimeUnit.SECONDS));
+        final int awaitTimeoutSeconds = DEFAULT_THREAD_COUNT_TEST;
+        assertTrue(latch.await(
+            awaitTimeoutSeconds, TimeUnit.SECONDS));
     }
 }

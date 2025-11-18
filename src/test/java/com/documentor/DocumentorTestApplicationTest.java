@@ -10,8 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.mock;
 
 import org.junit.jupiter.api.Test;
@@ -431,7 +429,7 @@ class DocumentorTestApplicationTest {
         // Verify it's exactly void, not Void
         assertEquals(void.class, mainMethod.getReturnType());
         assertFalse(
-            mainMethod.getReturnType().isPrimitive() == false
+            !mainMethod.getReturnType().isPrimitive()
         ); // double negative to ensure it's primitive void
     }
 

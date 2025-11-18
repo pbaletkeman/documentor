@@ -53,6 +53,8 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
         private static final int MANY_METHODS_COUNT = 15;
         private static final int STANDALONE_FIELD_LINE = 3;
         private static final int STANDALONE_METHOD_LINE = 10;
+        private static final int LINE_NUMBER_5 = 5;
+        private static final int LINE_NUMBER_10 = 10;
 
     @BeforeEach
     void setUp() {
@@ -308,7 +310,7 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
             "test",
             "com.example.TestClass.test",
             "/test/TestClass.java",
-            5,
+            LINE_NUMBER_5,
             codeWithStrings,
             "A test method",
             Collections.emptyList(),
@@ -349,7 +351,7 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
             null, // null name
             "com.example.TestClass.nullMethod",
             "/test/TestClass.java",
-            5,
+            LINE_NUMBER_5,
             "public void nullMethod() {}",
             "A method with null name",
             Collections.emptyList(),
@@ -385,7 +387,7 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
             "", // empty name
             "com.example.TestClass.emptyMethod",
             "/test/TestClass.java",
-            5,
+            LINE_NUMBER_5,
             "public void emptyMethod() {}",
             "A method with empty name",
             Collections.emptyList(),
@@ -498,7 +500,7 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
             "veryLongMethodNameWithManyParameters",
             "com.example.TestClass.veryLongMethodNameWithManyParameters",
             "/test/TestClass.java",
-            10,
+            LINE_NUMBER_10,
             longSignature,
             "A method with a very long signature",
             Collections.emptyList(),
@@ -545,7 +547,7 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
             "shortMethod",
             "com.example.TestClass.shortMethod",
             "/test/TestClass.java",
-            10,
+            LINE_NUMBER_10,
             shortSignature,
             "A method with a short signature",
             Collections.emptyList(),
@@ -579,7 +581,7 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
     @ParameterizedTest
     @ValueSource(strings = {"/test/script.rb", "/test/config.xml",
             "/test/style.css", "/test/README.md", "noextension"})
-    void testGetLanguageFromFileWithVariousExtensions(String filePath)
+        void testGetLanguageFromFileWithVariousExtensions(final String filePath)
             throws Exception {
         when(llmService.generateDocumentation(any()))
                 .thenReturn(CompletableFuture.completedFuture(
@@ -628,7 +630,7 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
             "standaloneMethod",
             "standaloneMethod", // no dots, so it's standalone
             "/test/Standalone.java",
-            10,
+            LINE_NUMBER_10,
             "public static void standaloneMethod() {}",
             "A standalone method",
             Collections.emptyList(),
@@ -744,7 +746,7 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
                 "method" + i,
                 "com.example.TestClass.method" + i,
                 "/test/TestClass.java",
-                i + 10,
+                    i + LINE_NUMBER_10,
                 "public void method" + i + "() {}",
                 "Method " + i,
                 Collections.emptyList(),
