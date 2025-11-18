@@ -30,7 +30,10 @@ import static org.mockito.Mockito.mock;
  * thread-local value management
  */
 @ExtendWith(MockitoExtension.class)
-public class ThreadLocalContextHolderTest {
+public final class ThreadLocalContextHolderTest {
+    private static final int MAGIC_NUMBER_1 = 1;
+    private static final int MAGIC_NUMBER_5 = 5;
+    private static final int MAGIC_NUMBER_10 = 10;
 
     @Mock
     private DocumentorConfig mockConfig;
@@ -143,7 +146,7 @@ public class ThreadLocalContextHolderTest {
         ThreadLocalContextHolder.setConfig(mainThreadConfig);
 
         // Create a latch to synchronize threads
-        CountDownLatch latch = new CountDownLatch(1);
+        CountDownLatch latch = new CountDownLatch(MAGIC_NUMBER_1);
         AtomicBoolean workerHasCorrectConfig = new AtomicBoolean(false);
 
         // Create and start worker thread with its own config
@@ -189,11 +192,11 @@ public class ThreadLocalContextHolderTest {
         // Create executor and tasks
         Executor executor = ThreadLocalPropagatingExecutorEnhanced
             .createExecutor(2, "test-executor");
-        CountDownLatch latch = new CountDownLatch(5);
+        CountDownLatch latch = new CountDownLatch(MAGIC_NUMBER_5);
         AtomicInteger correctConfigCount = new AtomicInteger(0);
 
         // Execute multiple tasks
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < MAGIC_NUMBER_5; i++) {
             CompletableFuture.runAsync(() -> {
                 try {
                     // Check if config propagated correctly
@@ -209,16 +212,16 @@ public class ThreadLocalContextHolderTest {
         }
 
         // Wait for all tasks to complete
-        latch.await(10, TimeUnit.SECONDS);
+        latch.await(MAGIC_NUMBER_10, TimeUnit.SECONDS);
 
         // All tasks should have received the correct config
-        assertEquals(5, correctConfigCount.get());
+        assertEquals(MAGIC_NUMBER_5, correctConfigCount.get());
     }
 
     @Test
     public void testRunWithNullConfigOrRunnable() {
         // Should not throw an exception
-        ThreadLocalContextHolder.runWithConfig(null, () -> {});
+        ThreadLocalContextHolder.runWithConfig(null, () -> { });
         ThreadLocalContextHolder.runWithConfig(mockConfig, null);
         ThreadLocalContextHolder.runWithConfig(null, null);
     }

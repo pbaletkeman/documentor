@@ -60,11 +60,14 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
         // Use lenient() to avoid UnnecessaryStubbingException
         lenient().when(config.outputSettings()).thenReturn(outputSettings);
         lenient().when(outputSettings.includeIcons()).thenReturn(true);
-        lenient().when(outputSettings.targetCoverage()).thenReturn(TEST_TARGET_COVERAGE);
+        lenient().when(outputSettings.targetCoverage())
+              .thenReturn(TEST_TARGET_COVERAGE);
         lenient().when(llmServiceFix.isThreadLocalConfigAvailable())
             .thenReturn(true);
         lenient().when(llmService.generateUnitTests(any()))
-            .thenReturn(CompletableFuture.completedFuture(TEST_UNIT_TESTS));
+                .thenReturn(
+                    CompletableFuture.completedFuture(TEST_UNIT_TESTS)
+                );
 
         generator = new UnitTestDocumentationGeneratorEnhanced(
             llmService, config, llmServiceFix);
@@ -93,7 +96,7 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
     @Test
     void testGenerateUnitTestDocumentationWithConfigSetFails() {
         when(llmServiceFix.isThreadLocalConfigAvailable())
-            .thenReturn(false); // Config not available after set
+              .thenReturn(false); // Config not available after set
 
         ProjectAnalysis analysis = createTestProjectAnalysis();
 
@@ -128,7 +131,9 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
     @Test
     void testGenerateUnitTestDocumentationWithElementGenerationException() {
         when(llmService.generateUnitTests(any()))
-            .thenThrow(new RuntimeException("LLM service error"));
+                .thenThrow(
+                    new RuntimeException("LLM service error")
+                );
 
         ProjectAnalysis analysis = createTestProjectAnalysis();
 
@@ -152,8 +157,8 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
         // Create a future that will fail
         CompletableFuture<String> failedFuture = new CompletableFuture<>();
         failedFuture.completeExceptionally(
-            new RuntimeException("Future completion error")
-        );
+                new RuntimeException("Future completion error")
+            );
         when(llmService.generateUnitTests(any())).thenReturn(failedFuture);
 
         ProjectAnalysis analysis = createTestProjectAnalysis();
@@ -179,7 +184,10 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
         CodeElement validElement = createTestMethodElement();
         List<CodeElement> elementsWithNull = Arrays.asList(validElement, null);
         ProjectAnalysis analysisWithNulls = new ProjectAnalysis(
-            "/test/path", elementsWithNull, System.currentTimeMillis());
+                "/test/path",
+                elementsWithNull,
+                System.currentTimeMillis()
+            );
 
         when(llmService.generateUnitTests(validElement))
             .thenReturn(CompletableFuture.completedFuture(TEST_UNIT_TESTS));
@@ -211,7 +219,10 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
         CodeElement methodElement = createTestMethodElement();
         List<CodeElement> elements = Arrays.asList(fieldElement, methodElement);
         ProjectAnalysis analysis = new ProjectAnalysis(
-            "/test/path", elements, System.currentTimeMillis());
+                "/test/path",
+                elements,
+                System.currentTimeMillis()
+            );
 
         when(llmService.generateUnitTests(methodElement))
             .thenReturn(CompletableFuture.completedFuture(TEST_UNIT_TESTS));
@@ -259,9 +270,13 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
 
         CodeElement validElement = createTestMethodElement();
         List<CodeElement> elements = Arrays.asList(elementWithNullType,
-            validElement);
-        ProjectAnalysis analysis = new ProjectAnalysis(
-            "/test/path", elements, System.currentTimeMillis());
+                validElement
+            );
+            ProjectAnalysis analysis = new ProjectAnalysis(
+                "/test/path",
+                elements,
+                System.currentTimeMillis()
+            );
 
         when(llmService.generateUnitTests(validElement))
             .thenReturn(CompletableFuture.completedFuture(TEST_UNIT_TESTS));

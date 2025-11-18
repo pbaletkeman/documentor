@@ -75,7 +75,8 @@ class UnitTestDocumentationGeneratorBranchTest {
     void setUp() {
         lenient().when(config.outputSettings()).thenReturn(outputSettings);
         lenient().when(outputSettings.includeIcons()).thenReturn(true);
-        lenient().when(outputSettings.targetCoverage()).thenReturn(TARGET_COVERAGE_085);
+        lenient().when(outputSettings.targetCoverage())
+            .thenReturn(TARGET_COVERAGE_085);
         generator = new UnitTestDocumentationGenerator(llmService, config,
             llmServiceFix);
     }
@@ -91,7 +92,10 @@ class UnitTestDocumentationGeneratorBranchTest {
             );
 
         CompletableFuture<Void> result = generator
-            .generateUnitTestDocumentation(emptyAnalysis, tempDir);
+                .generateUnitTestDocumentation(
+                    emptyAnalysis,
+                    tempDir
+                );
 
         assertDoesNotThrow(() -> result.join());
 
@@ -108,16 +112,27 @@ class UnitTestDocumentationGeneratorBranchTest {
         // Test with project containing only FIELD elements
         // - should create empty tests file (fields are filtered out)
         CodeElement fieldElement1 = new CodeElement(
-            CodeElementType.FIELD, "field1", "com.example.TestClass.field1",
-            "/test/TestClass.java", LINE_NUMBER_3, "private String field1;", "A test field",
-            Collections.emptyList(), Collections.emptyList()
+            CodeElementType.FIELD,
+            "field1",
+            "com.example.TestClass.field1",
+            "/test/TestClass.java",
+            LINE_NUMBER_3,
+            "private String field1;",
+            "A test field",
+            Collections.emptyList(),
+            Collections.emptyList()
         );
 
         CodeElement fieldElement2 = new CodeElement(
-            CodeElementType.FIELD, "field2", "com.example.TestClass.field2",
-            "/test/TestClass.java", LINE_NUMBER_5, "private int field2;",
+            CodeElementType.FIELD,
+            "field2",
+            "com.example.TestClass.field2",
+            "/test/TestClass.java",
+            LINE_NUMBER_5,
+            "private int field2;",
             "Another test field",
-            Collections.emptyList(), Collections.emptyList()
+            Collections.emptyList(),
+            Collections.emptyList()
         );
 
         List<CodeElement> elements = Arrays.asList(
@@ -229,12 +244,15 @@ class UnitTestDocumentationGeneratorBranchTest {
     void testGenerateUnitTestDocumentationWithLlmException() {
         // Test behavior when LLM service throws exception
         CodeElement methodElement = new CodeElement(
-            CodeElementType.METHOD, "testMethod",
+            CodeElementType.METHOD,
+            "testMethod",
             "com.example.TestClass.testMethod",
-            "/test/TestClass.java", LINE_NUMBER_10, "public void testMethod() {}",
-                "A test method",
-                Collections.emptyList(),
-                Collections.emptyList()
+            "/test/TestClass.java",
+            LINE_NUMBER_10,
+            "public void testMethod() {}",
+            "A test method",
+            Collections.emptyList(),
+            Collections.emptyList()
         );
 
         when(
@@ -261,11 +279,15 @@ class UnitTestDocumentationGeneratorBranchTest {
         throws IOException {
         // Test behavior when IO exception occurs during file writing
         CodeElement methodElement = new CodeElement(
-            CodeElementType.METHOD, "testMethod",
+            CodeElementType.METHOD,
+            "testMethod",
             "com.example.TestClass.testMethod",
-            "/test/TestClass.java", LINE_NUMBER_10, "public void testMethod() {}",
+            "/test/TestClass.java",
+            LINE_NUMBER_10,
+            "public void testMethod() {}",
             "A test method",
-            Collections.emptyList(), Collections.emptyList()
+            Collections.emptyList(),
+            Collections.emptyList()
         );
 
         // Create a file where the tests directory
@@ -291,11 +313,15 @@ class UnitTestDocumentationGeneratorBranchTest {
             new UnitTestDocumentationGenerator(null, config, llmServiceFix);
 
         CodeElement methodElement = new CodeElement(
-            CodeElementType.METHOD, "testMethod",
-            "com.example.TestClass.testMethod", "/test/TestClass.java", LINE_NUMBER_10,
-            "public void testMethod() {}", "A test method",
-                Collections.emptyList(),
-                Collections.emptyList()
+            CodeElementType.METHOD,
+            "testMethod",
+            "com.example.TestClass.testMethod",
+            "/test/TestClass.java",
+            LINE_NUMBER_10,
+            "public void testMethod() {}",
+            "A test method",
+            Collections.emptyList(),
+            Collections.emptyList()
         );
 
         List<CodeElement> elements = Collections.singletonList(methodElement);
@@ -385,30 +411,52 @@ class UnitTestDocumentationGeneratorBranchTest {
 
         // Create elements of different types to test filtering
         CodeElement fieldElement = new CodeElement(
-            CodeElementType.FIELD, "field", "com.example.TestClass.field",
-            "/test/TestClass.java", LINE_NUMBER_3, "private String field;", "A test field",
-            Collections.emptyList(), Collections.emptyList()
+            CodeElementType.FIELD,
+            "field",
+            "com.example.TestClass.field",
+            "/test/TestClass.java",
+            LINE_NUMBER_3,
+            "private String field;",
+            "A test field",
+            Collections.emptyList(),
+            Collections.emptyList()
         );
 
         CodeElement methodElement = new CodeElement(
-            CodeElementType.METHOD, "method", "com.example.TestClass.method",
-            "/test/TestClass.java", LINE_NUMBER_10, "public void method() {}",
+            CodeElementType.METHOD,
+            "method",
+            "com.example.TestClass.method",
+            "/test/TestClass.java",
+            LINE_NUMBER_10,
+            "public void method() {}",
             "A test method",
-            Collections.emptyList(), Collections.emptyList()
+            Collections.emptyList(),
+            Collections.emptyList()
         );
 
         CodeElement classElement = new CodeElement(
-            CodeElementType.CLASS, "TestClass", "com.example.TestClass",
-            "/test/TestClass.java", LINE_NUMBER_1, "public class TestClass {}",
+            CodeElementType.CLASS,
+            "TestClass",
+            "com.example.TestClass",
+            "/test/TestClass.java",
+            LINE_NUMBER_1,
+            "public class TestClass {}",
             "A test class",
-            Collections.emptyList(), Collections.emptyList()
+            Collections.emptyList(),
+            Collections.emptyList()
         );
 
 
         CodeElement constructorElement = new CodeElement(
-            CodeElementType.METHOD, "TestClass", "com.example.TestClass.TestClass",
-            "/test/TestClass.java", LINE_NUMBER_5, "public TestClass() {}", "A test constructor",
-            Collections.emptyList(), Collections.emptyList()
+            CodeElementType.METHOD,
+            "TestClass",
+            "com.example.TestClass.TestClass",
+            "/test/TestClass.java",
+            LINE_NUMBER_5,
+            "public TestClass() {}",
+            "A test constructor",
+            Collections.emptyList(),
+            Collections.emptyList()
         );
 
         when(

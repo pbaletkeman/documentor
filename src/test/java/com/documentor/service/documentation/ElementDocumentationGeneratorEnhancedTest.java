@@ -421,8 +421,8 @@ class ElementDocumentationGeneratorEnhancedTest {
             } catch (CompletionException e) {
                 // IOException wrapped in CompletionException is expected
                 assertTrue(e.getCause() instanceof IOException,
-                    "Expected IOException as cause, got: " +
-                    e.getCause().getClass());
+                    "Expected IOException as cause, got: "
+                    + e.getCause().getClass());
             }
         });
     }    @Test
@@ -436,25 +436,30 @@ class ElementDocumentationGeneratorEnhancedTest {
         // Create multiple classes with methods and fields
         CodeElement class1 = new CodeElement(
             CodeElementType.CLASS, "FirstClass", "com.example.FirstClass",
-            "/test/FirstClass.java", LINE_NUMBER_1, "public class FirstClass {}", "",
+            "/test/FirstClass.java", LINE_NUMBER_1,
+            "public class FirstClass {}", "",
             Collections.emptyList(), Collections.emptyList()
         );
 
         CodeElement method1 = new CodeElement(
-            CodeElementType.METHOD, "method1", "com.example.FirstClass.method1",
-            "/test/FirstClass.java", LINE_NUMBER_5, "public void method1() {}", "",
+            CodeElementType.METHOD, "method1",
+            "com.example.FirstClass.method1",
+            "/test/FirstClass.java", LINE_NUMBER_5,
+            "public void method1() {}", "",
             Collections.emptyList(), Collections.emptyList()
         );
 
         CodeElement class2 = new CodeElement(
             CodeElementType.CLASS, "SecondClass", "com.example.SecondClass",
-            "/test/SecondClass.java", LINE_NUMBER_1, "public class SecondClass {}", "",
+            "/test/SecondClass.java", LINE_NUMBER_1,
+            "public class SecondClass {}", "",
             Collections.emptyList(), Collections.emptyList()
         );
 
         CodeElement field2 = new CodeElement(
             CodeElementType.FIELD, "field2", "com.example.SecondClass.field2",
-            "/test/SecondClass.java", LINE_NUMBER_3, "private String field2;", "",
+            "/test/SecondClass.java", LINE_NUMBER_3,
+            "private String field2;", "",
             Collections.emptyList(), Collections.emptyList()
         );
 
@@ -488,9 +493,10 @@ class ElementDocumentationGeneratorEnhancedTest {
         when(llmServiceFix.isThreadLocalConfigAvailable()).thenReturn(true);
 
         // Test with Python file
+        final String filePath = "/test/PythonClass.py";
         CodeElement pythonElement = new CodeElement(
             CodeElementType.CLASS, "PythonClass", "com.example.PythonClass",
-            "/test/PythonClass.py", 1, "class PythonClass:", "",
+            filePath, LINE_NUMBER_1, "class PythonClass:", "",
             Collections.emptyList(), Collections.emptyList()
         );
 

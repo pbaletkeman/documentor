@@ -23,6 +23,8 @@ import static org.mockito.Mockito.verifyNoInteractions;
  */
 class BeanUtilsComprehensiveTest {
 
+    private static final int MAGIC_NUMBER_5 = 5;
+    private static final int MAGIC_NUMBER_10 = 10;
     /**
      * Test successful bean override with DefaultSingletonBeanRegistry
      */
@@ -572,23 +574,23 @@ class BeanUtilsComprehensiveTest {
     public static class TestServiceWithConfig {
         private DocumentorConfig config;
 
-        public DocumentorConfig getConfig() {
+        DocumentorConfig getConfig() {
             return config;
         }
 
-        public void setConfig(DocumentorConfig config) {
-            this.config = config;
+        void setConfig(final DocumentorConfig newConfig) {
+            this.config = newConfig;
         }
     }
 
     public static class TestBeanWithStringField {
         private String stringField;
 
-        public TestBeanWithStringField(String value) {
+        TestBeanWithStringField(final String value) {
             this.stringField = value;
         }
 
-        public String getStringField() {
+        String getStringField() {
             return stringField;
         }
     }
@@ -596,24 +598,24 @@ class BeanUtilsComprehensiveTest {
     public static class TestBaseService {
         private String baseValue;
 
-        public String getBaseValue() {
+        String getBaseValue() {
             return baseValue;
         }
 
-        public void setBaseValue(String baseValue) {
-            this.baseValue = baseValue;
+        void setBaseValue(final String newBaseValue) {
+            this.baseValue = newBaseValue;
         }
     }
 
     public static class TestChildService extends TestBaseService {
         private String childValue;
 
-        public String getChildValue() {
+        String getChildValue() {
             return childValue;
         }
 
-        public void setChildValue(String childValue) {
-            this.childValue = childValue;
+        void setChildValue(final String newChildValue) {
+            this.childValue = newChildValue;
         }
     }
 }

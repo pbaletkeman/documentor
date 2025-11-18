@@ -414,9 +414,11 @@ class LlmServiceBranchCoverageTest {
         // Simulate a slow API call
                 final int simulatedDelayMs = 100;
                 when(mockApiClient.callLlmModel(
-                                mockModelConfig, "http://slow.com", Map.of("prompt", "test")))
+                                mockModelConfig, "http://slow.com",
+                                        Map.of("prompt", "test")))
                         .thenAnswer(invocation -> {
-                                Thread.sleep(simulatedDelayMs); // Simulate slow response
+                                // Simulate slow response
+                                Thread.sleep(simulatedDelayMs);
                                 return "delayed response";
                         });
         when(mockResponseHandler.extractResponseContent(

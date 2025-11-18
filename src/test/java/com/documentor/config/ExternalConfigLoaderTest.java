@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+// ...existing code...
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
@@ -26,6 +26,14 @@ import static org.mockito.Mockito.verify;
  * Comprehensive tests for ExternalConfigLoader to improve branch coverage.
  */
 class ExternalConfigLoaderTest {
+    private static final int TEST_MODEL_TOKENS = 1000;
+    private static final int TEST_MODEL_TIMEOUT = 30;
+    private static final int ANALYSIS_DEPTH = 5;
+    private static final int COMPLEX_MODEL1_TOKENS = 2000;
+    private static final int COMPLEX_MODEL1_TIMEOUT = 60;
+    private static final int COMPLEX_MODEL2_TOKENS = 4000;
+    private static final int COMPLEX_MODEL2_TIMEOUT = 30;
+    private static final int COMPLEX_ANALYSIS_DEPTH = 10;
 
     @TempDir
     private Path tempDir;
@@ -41,11 +49,11 @@ class ExternalConfigLoaderTest {
         testConfig = new DocumentorConfig(
             List.of(new com.documentor.config.model.LlmModelConfig(
                 "test-model", "ollama", "http://localhost:11434",
-                "test-key", 1000, 30)),
+                "test-key", TEST_MODEL_TOKENS, TEST_MODEL_TIMEOUT)),
             new com.documentor.config.model.OutputSettings("output",
                 "markdown", false, false, false),
             new com.documentor.config.model.AnalysisSettings(true,
-                5, List.of("*.java"), null)
+                ANALYSIS_DEPTH, List.of("*.java"), null)
         );
     }    @Test
     void testSetApplicationContext() {
@@ -236,15 +244,16 @@ class ExternalConfigLoaderTest {
             List.of(
                 new com.documentor.config.model.LlmModelConfig(
                     "model1", "ollama", "http://localhost:11434", null,
-                    2000, 60),
+                    COMPLEX_MODEL1_TOKENS, COMPLEX_MODEL1_TIMEOUT),
                 new com.documentor.config.model.LlmModelConfig(
                     "model2", "openai", "https://api.openai.com", "sk-key",
-                    4000, 30)
+                    COMPLEX_MODEL2_TOKENS, COMPLEX_MODEL2_TIMEOUT)
             ),
             new com.documentor.config.model.OutputSettings(
                 "complex-output", "html", true, true, true),
             new com.documentor.config.model.AnalysisSettings(
-                false, 10, List.of("*.java", "*.py"), List.of("test/**"))
+                false, COMPLEX_ANALYSIS_DEPTH,
+                    List.of("*.java", "*.py"), List.of("test/**"))
         );
 
         Path configFile = tempDir.resolve("complex-config.json");

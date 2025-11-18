@@ -31,10 +31,20 @@ import static org.junit.jupiter.api.Assertions.assertNull;
  * ThreadLocal propagation logic.
  */
 @ExtendWith(MockitoExtension.class)
+
 class ThreadLocalPropagatingExecutorEnhancedTest {
 
     @Mock
     private Executor mockDelegate;
+    private static final int MINIMAL_THREAD_COUNT = 1;
+    private static final int HIGH_THREAD_COUNT = 20;
+    private static final int THREAD_FACTORY_COUNT = 2;
+    private static final int REJECTION_TEST_THREAD_COUNT = 1;
+    private static final int QUEUE_CAPACITY = 100;
+    private static final int EXTRA_TASKS = 50;
+    private static final int TOTAL_TASKS = QUEUE_CAPACITY + EXTRA_TASKS;
+    private static final int LATCH_AWAIT_SECONDS = 2;
+    private static final int THREAD_SLEEP_MILLIS = 100;
 
     @Mock
     private DocumentorConfig mockConfig;
@@ -263,7 +273,7 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
     @Test
     void testCreateExecutorWithMinimalThreads() {
         Executor createdExecutor = ThreadLocalPropagatingExecutorEnhanced
-            .createExecutor(1, "minimal-pool");
+            .createExecutor(MINIMAL_THREAD_COUNT, "minimal-pool");
 
         assertNotNull(createdExecutor);
         assertTrue(createdExecutor
@@ -272,9 +282,8 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
 
     @Test
     void testCreateExecutorWithHighThreadCount() {
-        final int highThreadCount = 20;
         Executor createdExecutor = ThreadLocalPropagatingExecutorEnhanced
-            .createExecutor(highThreadCount, "large-pool");
+            .createExecutor(HIGH_THREAD_COUNT, "large-pool");
 
         assertNotNull(createdExecutor);
         assertTrue(createdExecutor
@@ -296,7 +305,7 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
     void testCreateExecutorThreadFactoryExceptionHandling() {
         // Test that thread creation works and handles exceptions properly
         Executor createdExecutor = ThreadLocalPropagatingExecutorEnhanced
-            .createExecutor(2, "exception-test");
+            .createExecutor(THREAD_FACTORY_COUNT, "exception-test");
 
         assertNotNull(createdExecutor);
 
@@ -315,7 +324,7 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
     @Test
     void testCreateExecutorRejectionHandler() {
         Executor createdExecutor = ThreadLocalPropagatingExecutorEnhanced
-            .createExecutor(1, "rejection-test");
+            .createExecutor(REJECTION_TEST_THREAD_COUNT, "rejection-test");
 
         assertNotNull(createdExecutor);
 
@@ -325,7 +334,7 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
         // Submit one task that should execute
         createdExecutor.execute(() -> {
             try {
-                Thread.sleep(100); // Hold thread briefly
+                Thread.sleep(THREAD_SLEEP_MILLIS); // Hold thread briefly
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
@@ -334,10 +343,7 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
 
         // Submit many more tasks to potentially trigger
         // queue overflow and rejection
-        final int queueCapacity = 100;
-        final int extraTasks = 50;
-        final int totalTasks = queueCapacity + extraTasks;
-        for (int i = 0; i < totalTasks; i++) {
+        for (int i = 0; i < TOTAL_TASKS; i++) {
             createdExecutor.execute(() -> {
                 // Simple task
             });
@@ -345,7 +351,7 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
 
         // Should handle rejections gracefully
         assertDoesNotThrow(() -> {
-            assertTrue(latch.await(2, TimeUnit.SECONDS));
+            assertTrue(latch.await(LATCH_AWAIT_SECONDS, TimeUnit.SECONDS));
         });
     }
 

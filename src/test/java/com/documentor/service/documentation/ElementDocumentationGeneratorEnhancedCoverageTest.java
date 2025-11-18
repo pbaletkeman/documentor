@@ -51,6 +51,8 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
 
         private static final int MANY_FIELDS_COUNT = 15;
         private static final int MANY_METHODS_COUNT = 15;
+        private static final int STANDALONE_FIELD_LINE = 3;
+        private static final int STANDALONE_METHOD_LINE = 10;
 
     @BeforeEach
     void setUp() {
@@ -414,17 +416,17 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
 
         // Create standalone field without proper class
         // qualification (triggers _FIELDS_ group)
-        CodeElement standaloneField = new CodeElement(
-            CodeElementType.FIELD,
-            "standaloneField",
-            "standaloneField", // no dots, so it's standalone
-            "/test/Standalone.java",
-            3,
-            "public static String standaloneField;",
-            "A standalone field",
-            Collections.emptyList(),
-            Collections.emptyList()
-        );
+                CodeElement standaloneField = new CodeElement(
+                        CodeElementType.FIELD,
+                        "standaloneField",
+                        "standaloneField", // no dots, so it's standalone
+                        "/test/Standalone.java",
+                        STANDALONE_FIELD_LINE,
+                        "public static String standaloneField;",
+                        "A standalone field",
+                        Collections.emptyList(),
+                        Collections.emptyList()
+                );
 
         List<CodeElement> elements = Collections.singletonList(standaloneField);
         ProjectAnalysis analysis = new ProjectAnalysis("/test/path", elements,
@@ -448,17 +450,17 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
 
         // Create standalone method without proper class qualification
         // (triggers _METHODS_ group)
-        CodeElement standaloneMethod = new CodeElement(
-            CodeElementType.METHOD,
-            "standaloneMethod",
-            "standaloneMethod", // no dots, so it's standalone
-            "/test/Standalone.java",
-            10,
-            "public static void standaloneMethod() {}",
-            "A standalone method",
-            Collections.emptyList(),
-            Collections.emptyList()
-        );
+                CodeElement standaloneMethod = new CodeElement(
+                        CodeElementType.METHOD,
+                        "standaloneMethod",
+                        "standaloneMethod", // no dots, so it's standalone
+                        "/test/Standalone.java",
+                        STANDALONE_METHOD_LINE,
+                        "public static void standaloneMethod() {}",
+                        "A standalone method",
+                        Collections.emptyList(),
+                        Collections.emptyList()
+                );
 
         List<CodeElement> elements = Collections.singletonList(
                 standaloneMethod);

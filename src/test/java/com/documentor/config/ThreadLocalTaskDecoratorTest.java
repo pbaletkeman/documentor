@@ -220,11 +220,14 @@ class ThreadLocalTaskDecoratorTest {
         DocumentorConfig multiModelConfig = new DocumentorConfig(
             List.of(
                 new LlmModelConfig(
-                    "model1", "ollama", "endpoint1", "key1", TEST_MAX_TOKENS, TEST_TIMEOUT),
+                    "model1", "ollama", "endpoint1",
+                    "key1", TEST_MAX_TOKENS, TEST_TIMEOUT),
                 new LlmModelConfig(
-                    "model2", "ollama", "endpoint2", "key2", TEST_MAX_TOKENS, TEST_TIMEOUT),
+                    "model2", "ollama", "endpoint2",
+                    "key2", TEST_MAX_TOKENS, TEST_TIMEOUT),
                 new LlmModelConfig(
-                    "model3", "ollama", "endpoint3", "key3", TEST_MAX_TOKENS, TEST_TIMEOUT)
+                    "model3", "ollama", "endpoint3",
+                    "key3", TEST_MAX_TOKENS, TEST_TIMEOUT)
             ),
             new OutputSettings("test/output", "markdown", false, false, false),
             new AnalysisSettings(null, null, null, null)

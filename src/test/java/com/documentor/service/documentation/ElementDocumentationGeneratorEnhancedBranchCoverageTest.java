@@ -29,6 +29,9 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
+    private static final int LINE_NUMBER_5 = 5;
+    private static final int LINE_NUMBER_10 = 10;
+    private static final int LINE_NUMBER_3 = 3;
 
     @Mock
     private LlmServiceEnhanced llmService;
@@ -40,6 +43,7 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
 
     @TempDir
     private Path tempDir;
+
 
     private static final String TEST_DOCUMENTATION =
         "Test documentation content";
@@ -401,7 +405,7 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
         CodeElement elementWithNullName = new CodeElement(
             CodeElementType.METHOD, null,
             "com.example.TestClass.nullMethod",
-            "/test/TestClass.java", 5,
+            "/test/TestClass.java", LINE_NUMBER_5,
             "public void nullMethod() {}",
             "A method with null name",
             Collections.emptyList(), Collections.emptyList()
@@ -428,7 +432,7 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
 
         CodeElement elementWithEmptyName = new CodeElement(
             CodeElementType.METHOD, "", "com.example.TestClass.emptyMethod",
-            "/test/TestClass.java", 5, "public void emptyMethod() {}",
+            "/test/TestClass.java", LINE_NUMBER_5, "public void emptyMethod() {}",
             "A method with empty name",
             Collections.emptyList(), Collections.emptyList()
         );
@@ -455,7 +459,7 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
         CodeElement elementWithSpecialChars = new CodeElement(
             CodeElementType.METHOD, "method<T>[]()$test",
             "com.example.TestClass.methodWithSpecialChars",
-            "/test/TestClass.java", 5,
+            "/test/TestClass.java", LINE_NUMBER_5,
             "public void methodWithSpecialChars() {}",
             "A method with special chars",
             Collections.emptyList(), Collections.emptyList()
@@ -533,7 +537,7 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
         CodeElement standaloneMethod = new CodeElement(
             CodeElementType.METHOD, "standaloneMethod",
             "standaloneMethod",
-            "/test/Standalone.java", 10,
+            "/test/Standalone.java", LINE_NUMBER_10,
             "public static void standaloneMethod() {}",
             "A standalone method",
             Collections.emptyList(), Collections.emptyList()
@@ -595,7 +599,7 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
         CodeElement methodWithLongSig = new CodeElement(
             CodeElementType.METHOD, "veryLongMethodName",
             "com.example.TestClass.veryLongMethodName",
-            "/test/TestClass.java", 10, longSignature,
+            "/test/TestClass.java", LINE_NUMBER_10, longSignature,
             "A method with a very long signature",
             Collections.emptyList(), Collections.emptyList()
         );
@@ -625,7 +629,7 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
         CodeElement methodWithShortSig = new CodeElement(
             CodeElementType.METHOD, "shortMethod",
             "com.example.TestClass.shortMethod",
-            "/test/TestClass.java", 10, shortSignature,
+            "/test/TestClass.java", LINE_NUMBER_10, shortSignature,
             "A method with a short signature",
             Collections.emptyList(), Collections.emptyList()
         );
@@ -682,7 +686,7 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
         // Create standalone elements (no dots in qualified name)
         CodeElement standaloneMethod = new CodeElement(
             CodeElementType.METHOD, "standaloneMethod", "standaloneMethod",
-            "/test/Standalone.java", 10,
+            "/test/Standalone.java", LINE_NUMBER_10,
             "public static void standaloneMethod() {}",
             "A standalone method",
             Collections.emptyList(), Collections.emptyList()
@@ -690,7 +694,7 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
 
         CodeElement standaloneField = new CodeElement(
             CodeElementType.FIELD, "standaloneField", "standaloneField",
-            "/test/Standalone.java", 3,
+            "/test/Standalone.java", LINE_NUMBER_3,
             "public static String standaloneField;",
             "A standalone field",
             Collections.emptyList(), Collections.emptyList()

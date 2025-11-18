@@ -72,12 +72,12 @@ class LlmServiceConfigurationEnhancedTest {
         void testLlmServiceEnhancedWithValidDocumentorConfig() {
         // Given
         LlmModelConfig modelConfig = new LlmModelConfig(
-                "test-model",
-                "ollama",
-                "http://localhost:11434",
-                "test-key",
-                4096,
-                30
+            "test-model",
+            "ollama",
+            "http://localhost:11434",
+            "test-key",
+            MAX_TOKENS_4096,
+            TIMEOUT_30
         );
         when(mockDocumentorConfig.llmModels()).thenReturn(List.of(modelConfig));
 
@@ -289,16 +289,16 @@ class LlmServiceConfigurationEnhancedTest {
             "ollama",
             "endpoint1",
             "key1",
-            1000,
-            10
+            MAX_TOKENS_1000,
+            TIMEOUT_10
         );
         LlmModelConfig modelConfig2 = new LlmModelConfig(
             "model2",
             "openai",
             "endpoint2",
             "key2",
-            2000,
-            20
+            MAX_TOKENS_2000,
+            TIMEOUT_20
         );
         when(mockDocumentorConfig.llmModels())
             .thenReturn(List.of(modelConfig1, modelConfig2));
@@ -333,12 +333,12 @@ class LlmServiceConfigurationEnhancedTest {
     void testThreadLocalConfigurationPropagation() {
         // Given
         LlmModelConfig modelConfig = new LlmModelConfig(
-                "test-model",
-                "ollama",
-                "http://localhost:11434",
-                "",
-                4096,
-                30
+            "test-model",
+            "ollama",
+            "http://localhost:11434",
+            "",
+            MAX_TOKENS_4096,
+            TIMEOUT_30
         );
         DocumentorConfig testConfig = new DocumentorConfig(
             List.of(modelConfig),
