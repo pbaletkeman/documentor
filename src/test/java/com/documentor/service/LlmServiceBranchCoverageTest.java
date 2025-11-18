@@ -67,7 +67,7 @@ class LlmServiceBranchCoverageTest {
      * error message
      */
     @Test
-    void testGenerateDocumentation_NullConfig() {
+        void testGenerateDocumentationNullConfig() {
         // Arrange - Clear any leftover ThreadLocal config from other tests
         LlmService.clearThreadLocalConfig();
         LlmService serviceWithNullConfig =
@@ -87,7 +87,7 @@ class LlmServiceBranchCoverageTest {
      * Test generateDocumentation with configuration having empty models list
      */
     @Test
-    void testGenerateDocumentation_EmptyModelsList() {
+        void testGenerateDocumentationEmptyModelsList() {
         // Arrange
         when(mockConfig.llmModels()).thenReturn(Collections.emptyList());
 
@@ -104,7 +104,7 @@ class LlmServiceBranchCoverageTest {
      * Test generateDocumentation with null models list
      */
     @Test
-    void testGenerateDocumentation_NullModelsList() {
+        void testGenerateDocumentationNullModelsList() {
         // Arrange
         when(mockConfig.llmModels()).thenReturn(null);
 
@@ -121,7 +121,7 @@ class LlmServiceBranchCoverageTest {
      * Test generateDocumentation with successful model generation
      */
     @Test
-    void testGenerateDocumentation_SuccessfulGeneration() throws Exception {
+        void testGenerateDocumentationSuccessfulGeneration() throws Exception {
         // Arrange
         when(mockConfig.llmModels()).thenReturn(List.of(mockModelConfig));
         when(mockModelConfig.name()).thenReturn("test-model");
@@ -153,7 +153,7 @@ class LlmServiceBranchCoverageTest {
      * Test generateDocumentation with exception during generation
      */
     @Test
-    void testGenerateDocumentation_ExceptionDuringGeneration()
+        void testGenerateDocumentationExceptionDuringGeneration()
         throws Exception {
         // Arrange
         when(mockConfig.llmModels()).thenReturn(List.of(mockModelConfig));
@@ -179,7 +179,7 @@ class LlmServiceBranchCoverageTest {
      * Test generateUsageExamples with null configuration
      */
     @Test
-    void testGenerateUsageExamples_NullConfig() {
+        void testGenerateUsageExamplesNullConfig() {
         // Arrange - Clear any leftover ThreadLocal config from other tests
         LlmService.clearThreadLocalConfig();
         LlmService serviceWithNullConfig =
@@ -198,7 +198,7 @@ class LlmServiceBranchCoverageTest {
      * Test generateUsageExamples with empty models list
      */
     @Test
-    void testGenerateUsageExamples_EmptyModelsList() {
+        void testGenerateUsageExamplesEmptyModelsList() {
         // Arrange
         when(mockConfig.llmModels()).thenReturn(Collections.emptyList());
 
@@ -215,7 +215,7 @@ class LlmServiceBranchCoverageTest {
      * Test generateUsageExamples with successful generation
      */
     @Test
-    void testGenerateUsageExamples_SuccessfulGeneration() throws Exception {
+        void testGenerateUsageExamplesSuccessfulGeneration() throws Exception {
         // Arrange
         when(mockConfig.llmModels()).thenReturn(List.of(mockModelConfig));
         when(mockModelConfig.name()).thenReturn("test-model");
@@ -247,7 +247,7 @@ class LlmServiceBranchCoverageTest {
      * Test generateUsageExamples with exception during generation
      */
     @Test
-    void testGenerateUsageExamples_ExceptionDuringGeneration()
+        void testGenerateUsageExamplesExceptionDuringGeneration()
         throws Exception {
         // Arrange
         when(mockConfig.llmModels()).thenReturn(List.of(mockModelConfig));
@@ -270,7 +270,7 @@ class LlmServiceBranchCoverageTest {
      * Test generateUnitTests with null configuration
      */
     @Test
-    void testGenerateUnitTests_NullConfig() {
+        void testGenerateUnitTestsNullConfig() {
         // Arrange - Clear any leftover ThreadLocal config from other tests
         LlmService.clearThreadLocalConfig();
         LlmService serviceWithNullConfig =
@@ -289,7 +289,7 @@ class LlmServiceBranchCoverageTest {
      * Test generateUnitTests with null models list
      */
     @Test
-    void testGenerateUnitTests_NullModelsList() {
+        void testGenerateUnitTestsNullModelsList() {
         // Arrange
         when(mockConfig.llmModels()).thenReturn(null);
 
@@ -304,7 +304,7 @@ class LlmServiceBranchCoverageTest {
      * Test generateUnitTests with successful generation
      */
     @Test
-    void testGenerateUnitTests_SuccessfulGeneration() throws Exception {
+        void testGenerateUnitTestsSuccessfulGeneration() throws Exception {
         // Arrange
         when(mockConfig.llmModels()).thenReturn(List.of(mockModelConfig));
         when(mockModelConfig.name()).thenReturn("test-model");
@@ -334,7 +334,7 @@ class LlmServiceBranchCoverageTest {
      * Test generateUnitTests with API client exception
      */
     @Test
-    void testGenerateUnitTests_ApiClientException() throws Exception {
+        void testGenerateUnitTestsApiClientException() throws Exception {
         // Arrange
         when(mockConfig.llmModels()).thenReturn(List.of(mockModelConfig));
         when(mockModelConfig.name()).thenReturn("test-model");
@@ -364,7 +364,7 @@ class LlmServiceBranchCoverageTest {
      * Test createPrompt switch statement with different types
      */
     @Test
-    void testCreatePrompt_AllTypes() throws Exception {
+        void testCreatePromptAllTypes() throws Exception {
         // Arrange
         when(mockConfig.llmModels()).thenReturn(List.of(mockModelConfig));
         when(mockModelConfig.name()).thenReturn("test-model");
@@ -412,12 +412,13 @@ class LlmServiceBranchCoverageTest {
                 .thenReturn("http://slow.com");
 
         // Simulate a slow API call
-        when(mockApiClient.callLlmModel(
-                mockModelConfig, "http://slow.com", Map.of("prompt", "test")))
-            .thenAnswer(invocation -> {
-                Thread.sleep(100); // Simulate slow response
-                return "delayed response";
-            });
+                final int simulatedDelayMs = 100;
+                when(mockApiClient.callLlmModel(
+                                mockModelConfig, "http://slow.com", Map.of("prompt", "test")))
+                        .thenAnswer(invocation -> {
+                                Thread.sleep(simulatedDelayMs); // Simulate slow response
+                                return "delayed response";
+                        });
         when(mockResponseHandler.extractResponseContent(
                 "delayed response", mockModelConfig))
                 .thenReturn("delayed result");

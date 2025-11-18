@@ -60,8 +60,9 @@ class DocumentorPackageUtilsTest {
 
         // The exception should be either UnsupportedOperationException
         // directly or wrapped in InvocationTargetException
-        assertTrue(exception instanceof UnsupportedOperationException ||
-                   (exception.getCause() instanceof
+        assertTrue(exception instanceof UnsupportedOperationException
+                || (exception.getCause()
+                instanceof
                    UnsupportedOperationException),
                    "Expected UnsupportedOperationException but got: "
                    + exception.getClass());

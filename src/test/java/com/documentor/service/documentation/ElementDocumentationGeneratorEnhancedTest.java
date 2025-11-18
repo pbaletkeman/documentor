@@ -19,6 +19,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+// Removed duplicate imports for assertEquals, assertNotNull, assertTrue
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.TimeoutException;
@@ -26,15 +27,10 @@ import java.util.concurrent.TimeoutException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.atLeastOnce;
 
 /**
@@ -43,6 +39,11 @@ import static org.mockito.Mockito.atLeastOnce;
  */
 @ExtendWith(MockitoExtension.class)
 class ElementDocumentationGeneratorEnhancedTest {
+        private static final int LINE_NUMBER_1 = 1;
+        private static final int LINE_NUMBER_5 = 5;
+        private static final int LINE_NUMBER_3 = 3;
+    // Magic number constants for checkstyle compliance
+    private static final int LINE_NUMBER_10 = 10;
 
     @Mock
     private LlmServiceEnhanced llmService;
@@ -277,7 +278,7 @@ class ElementDocumentationGeneratorEnhancedTest {
             // No dots, so it's treated as standalone
             "standaloneMethod",
             "/test/StandaloneTest.java",
-            10,
+            LINE_NUMBER_10,
             "public static void standaloneMethod() {}",
             "A standalone method",
             Collections.emptyList(),
@@ -435,25 +436,25 @@ class ElementDocumentationGeneratorEnhancedTest {
         // Create multiple classes with methods and fields
         CodeElement class1 = new CodeElement(
             CodeElementType.CLASS, "FirstClass", "com.example.FirstClass",
-            "/test/FirstClass.java", 1, "public class FirstClass {}", "",
+            "/test/FirstClass.java", LINE_NUMBER_1, "public class FirstClass {}", "",
             Collections.emptyList(), Collections.emptyList()
         );
 
         CodeElement method1 = new CodeElement(
             CodeElementType.METHOD, "method1", "com.example.FirstClass.method1",
-            "/test/FirstClass.java", 5, "public void method1() {}", "",
+            "/test/FirstClass.java", LINE_NUMBER_5, "public void method1() {}", "",
             Collections.emptyList(), Collections.emptyList()
         );
 
         CodeElement class2 = new CodeElement(
             CodeElementType.CLASS, "SecondClass", "com.example.SecondClass",
-            "/test/SecondClass.java", 1, "public class SecondClass {}", "",
+            "/test/SecondClass.java", LINE_NUMBER_1, "public class SecondClass {}", "",
             Collections.emptyList(), Collections.emptyList()
         );
 
         CodeElement field2 = new CodeElement(
             CodeElementType.FIELD, "field2", "com.example.SecondClass.field2",
-            "/test/SecondClass.java", 3, "private String field2;", "",
+            "/test/SecondClass.java", LINE_NUMBER_3, "private String field2;", "",
             Collections.emptyList(), Collections.emptyList()
         );
 
@@ -616,7 +617,7 @@ class ElementDocumentationGeneratorEnhancedTest {
             "testMethod",
             "com.example.TestClass.testMethod",
             "/test/TestClass.java",
-            5,
+            LINE_NUMBER_5,
             "public void testMethod() {}",
             "A test method",
             Collections.emptyList(),
@@ -630,7 +631,7 @@ class ElementDocumentationGeneratorEnhancedTest {
             "testField",
             "com.example.TestClass.testField",
             "/test/TestClass.java",
-            3,
+            LINE_NUMBER_3,
             "private String testField;",
             "A test field",
             Collections.emptyList(),

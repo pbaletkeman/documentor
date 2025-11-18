@@ -27,6 +27,13 @@ import static org.mockito.Mockito.when;
  */
 @ExtendWith(MockitoExtension.class)
 class LlmServiceConfigurationEnhancedTest {
+    // Magic number constants for checkstyle compliance
+    private static final int MAX_TOKENS_4096 = 4096;
+    private static final int TIMEOUT_30 = 30;
+    private static final int MAX_TOKENS_1000 = 1000;
+    private static final int TIMEOUT_10 = 10;
+    private static final int MAX_TOKENS_2000 = 2000;
+    private static final int TIMEOUT_20 = 20;
 
     @Mock
     private DocumentorConfig mockDocumentorConfig;
@@ -62,7 +69,7 @@ class LlmServiceConfigurationEnhancedTest {
     }
 
     @Test
-    void testLlmServiceEnhanced_WithValidDocumentorConfig() {
+        void testLlmServiceEnhancedWithValidDocumentorConfig() {
         // Given
         LlmModelConfig modelConfig = new LlmModelConfig(
                 "test-model",
@@ -90,7 +97,7 @@ class LlmServiceConfigurationEnhancedTest {
     }
 
     @Test
-    void testLlmServiceEnhanced_WithNullDocumentorConfig() {
+    void testLlmServiceEnhancedWithNullDocumentorConfig() {
         // Given
         DocumentorConfig nullConfig = null;
 
@@ -121,7 +128,7 @@ class LlmServiceConfigurationEnhancedTest {
     }
 
     @Test
-    void testLlmServiceEnhanced_WithEmptyModelList() {
+    void testLlmServiceEnhancedWithEmptyModelList() {
         // Given
         when(mockDocumentorConfig.llmModels())
             .thenReturn(Collections.emptyList());
@@ -155,7 +162,7 @@ class LlmServiceConfigurationEnhancedTest {
     }
 
     @Test
-    void testLlmServiceEnhanced_WithNullModelList() {
+    void testLlmServiceEnhancedWithNullModelList() {
         // Given
         when(mockDocumentorConfig.llmModels()).thenReturn(null);
         when(mockDocumentorConfig.outputSettings())
@@ -187,7 +194,7 @@ class LlmServiceConfigurationEnhancedTest {
     }
 
     @Test
-    void testLlmServiceFixEnhanced_Creation() {
+    void testLlmServiceFixEnhancedCreation() {
         // When
         LlmServiceFixEnhanced result = configuration.llmServiceFixEnhanced();
 
@@ -196,7 +203,7 @@ class LlmServiceConfigurationEnhancedTest {
     }
 
     @Test
-    void testElementDocumentationGeneratorEnhanced_Creation() {
+    void testElementDocumentationGeneratorEnhancedCreation() {
         // Given
         LlmServiceEnhanced mockLlmService = new LlmServiceEnhanced(
             createTestConfig(),
@@ -217,7 +224,7 @@ class LlmServiceConfigurationEnhancedTest {
     }
 
     @Test
-    void testCreateDefaultConfig_DefaultValues() {
+    void testCreateDefaultConfigDefaultValues() {
         // This tests the private createDefaultConfig method indirectly
         // through null config path
         // When
@@ -246,7 +253,7 @@ class LlmServiceConfigurationEnhancedTest {
     }
 
     @Test
-    void testAddDefaultModel_PreservesExistingSettings() {
+    void testAddDefaultModelPreservesExistingSettings() {
         // Given - config with no models but with other settings
         when(mockDocumentorConfig.llmModels())
             .thenReturn(Collections.emptyList());
@@ -275,7 +282,7 @@ class LlmServiceConfigurationEnhancedTest {
     }
 
     @Test
-    void testLlmServiceEnhanced_LogsConfigurationDetails() {
+    void testLlmServiceEnhancedLogsConfigurationDetails() {
         // Given
         LlmModelConfig modelConfig1 = new LlmModelConfig(
             "model1",
@@ -355,7 +362,7 @@ class LlmServiceConfigurationEnhancedTest {
     }
 
     @Test
-    void testDefaultModelCreation_ValidatesDefaultValues() {
+    void testDefaultModelCreationValidatesDefaultValues() {
         // This test covers the private methods by triggering their execution
         // Given - null config to trigger createDefaultConfig path
         DocumentorConfig nullConfig = null;
@@ -388,7 +395,7 @@ class LlmServiceConfigurationEnhancedTest {
     }
 
     @Test
-    void testAddDefaultModel_CreatesNewConfigWithDefaultModel() {
+    void testAddDefaultModelCreatesNewConfigWithDefaultModel() {
         // Given - empty model list to trigger addDefaultModel path
         when(mockDocumentorConfig.llmModels())
             .thenReturn(Collections.emptyList());
@@ -427,12 +434,12 @@ class LlmServiceConfigurationEnhancedTest {
      */
     private DocumentorConfig createTestConfig() {
         LlmModelConfig modelConfig = new LlmModelConfig(
-                "test-model",
-                "ollama",
-                "http://localhost:11434",
-                "",
-                4096,
-                30
+            "test-model",
+            "ollama",
+            "http://localhost:11434",
+            "",
+            MAX_TOKENS_4096,
+            TIMEOUT_30
         );
         return new DocumentorConfig(List.of(modelConfig), null, null);
     }

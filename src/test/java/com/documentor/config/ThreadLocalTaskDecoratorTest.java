@@ -16,9 +16,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.mock;
@@ -33,6 +31,8 @@ import static org.mockito.ArgumentMatchers.any;
  */
 @ExtendWith(MockitoExtension.class)
 class ThreadLocalTaskDecoratorTest {
+    private static final int TEST_MAX_TOKENS = 1000;
+    private static final int TEST_TIMEOUT = 30;
 
     private ThreadLocalTaskDecorator decorator;
     private DocumentorConfig testConfig;
@@ -45,7 +45,7 @@ class ThreadLocalTaskDecoratorTest {
         // Create test configuration
         testConfig = new DocumentorConfig(
             List.of(new LlmModelConfig("test-model", "ollama", "test-endpoint",
-                "test-key", 1000, 30)),
+                "test-key", TEST_MAX_TOKENS, TEST_TIMEOUT)),
             new OutputSettings("test/output", "markdown", false, false, false),
             new AnalysisSettings(null, null, null, null)
         );
@@ -220,11 +220,11 @@ class ThreadLocalTaskDecoratorTest {
         DocumentorConfig multiModelConfig = new DocumentorConfig(
             List.of(
                 new LlmModelConfig(
-                    "model1", "ollama", "endpoint1", "key1", 1000, 30),
+                    "model1", "ollama", "endpoint1", "key1", TEST_MAX_TOKENS, TEST_TIMEOUT),
                 new LlmModelConfig(
-                    "model2", "ollama", "endpoint2", "key2", 1000, 30),
+                    "model2", "ollama", "endpoint2", "key2", TEST_MAX_TOKENS, TEST_TIMEOUT),
                 new LlmModelConfig(
-                    "model3", "ollama", "endpoint3", "key3", 1000, 30)
+                    "model3", "ollama", "endpoint3", "key3", TEST_MAX_TOKENS, TEST_TIMEOUT)
             ),
             new OutputSettings("test/output", "markdown", false, false, false),
             new AnalysisSettings(null, null, null, null)

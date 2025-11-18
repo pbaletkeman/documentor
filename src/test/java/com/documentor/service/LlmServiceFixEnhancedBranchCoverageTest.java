@@ -62,7 +62,7 @@ class LlmServiceFixEnhancedBranchCoverageTest {
      * - covers null check branch
      */
     @Test
-    void testSetLlmServiceThreadLocalConfig_NullConfig() {
+    void testSetLlmServiceThreadLocalConfigNullConfig() {
         // Act
         llmServiceFixEnhanced.setLlmServiceThreadLocalConfig(null);
 
@@ -77,7 +77,7 @@ class LlmServiceFixEnhancedBranchCoverageTest {
      * - covers empty list branch
      */
     @Test
-    void testSetLlmServiceThreadLocalConfig_EmptyModelsList() {
+    void testSetLlmServiceThreadLocalConfigEmptyModelsList() {
         // Arrange
         when(mockConfig.llmModels()).thenReturn(Collections.emptyList());
 
@@ -95,7 +95,7 @@ class LlmServiceFixEnhancedBranchCoverageTest {
      * - covers null models branch
      */
     @Test
-    void testSetLlmServiceThreadLocalConfig_NullModelsList() {
+    void testSetLlmServiceThreadLocalConfigNullModelsList() {
         // Arrange
         when(mockConfig.llmModels()).thenReturn(null);
 
@@ -114,7 +114,7 @@ class LlmServiceFixEnhancedBranchCoverageTest {
      * - covers success branch
      */
     @Test
-    void testSetLlmServiceThreadLocalConfig_ValidModelsList() {
+    void testSetLlmServiceThreadLocalConfigValidModelsList() {
         // Arrange
         when(mockModelConfig1.name()).thenReturn("model1");
         when(mockModelConfig1.provider()).thenReturn("openai");
@@ -142,7 +142,7 @@ class LlmServiceFixEnhancedBranchCoverageTest {
      * Test setLlmServiceThreadLocalConfig with exception during verification
      */
     @Test
-    void testSetLlmServiceThreadLocalConfig_VerificationException() {
+    void testSetLlmServiceThreadLocalConfigVerificationException() {
         // Arrange - Use a mock that will cause issues during verification
         DocumentorConfig problematicConfig = mock(DocumentorConfig.class);
         when(problematicConfig.llmModels()).thenThrow(
@@ -163,7 +163,7 @@ class LlmServiceFixEnhancedBranchCoverageTest {
      * - covers true branch
      */
     @Test
-    void testIsThreadLocalConfigAvailable_ConfigAvailable() {
+    void testIsThreadLocalConfigAvailableConfigAvailable() {
         // Arrange - Set a config first
         when(mockConfig.llmModels()).thenReturn(List.of(mockModelConfig1));
         llmServiceFixEnhanced.setLlmServiceThreadLocalConfig(mockConfig);
@@ -181,7 +181,7 @@ class LlmServiceFixEnhancedBranchCoverageTest {
      * - covers false branch
      */
     @Test
-    void testIsThreadLocalConfigAvailable_ConfigNotAvailable() {
+    void testIsThreadLocalConfigAvailableConfigNotAvailable() {
         // Arrange - Ensure no config is set
         ThreadLocalContextHolder.clearConfig();
 
@@ -197,7 +197,7 @@ class LlmServiceFixEnhancedBranchCoverageTest {
      * Test isThreadLocalConfigAvailable with config that has null models
      */
     @Test
-    void testIsThreadLocalConfigAvailable_ConfigWithNullModels() {
+    void testIsThreadLocalConfigAvailableConfigWithNullModels() {
         // Arrange - Set config with null models
         when(mockConfig.llmModels()).thenReturn(null);
         llmServiceFixEnhanced.setLlmServiceThreadLocalConfig(mockConfig);
@@ -215,7 +215,7 @@ class LlmServiceFixEnhancedBranchCoverageTest {
      *  - covers exception branch
      */
     @Test
-    void testIsThreadLocalConfigAvailable_ExceptionDuringCheck() {
+    void testIsThreadLocalConfigAvailableExceptionDuringCheck() {
         // This test is tricky since ThreadLocalContextHolder.getConfig()
         // is static We'll test by setting a config that will cause
         // issues when accessed
@@ -240,7 +240,7 @@ class LlmServiceFixEnhancedBranchCoverageTest {
      * Test cleanupThreadLocalConfig normal operation
      */
     @Test
-    void testCleanupThreadLocalConfig_Normal() {
+    void testCleanupThreadLocalConfigNormal() {
         // Arrange - Set a config first
         when(mockConfig.llmModels()).thenReturn(List.of(mockModelConfig1));
         llmServiceFixEnhanced.setLlmServiceThreadLocalConfig(mockConfig);
@@ -286,6 +286,7 @@ class LlmServiceFixEnhancedBranchCoverageTest {
      */
     @Test
     void testMultipleModelConfigurationsLogging() {
+        final int expectedModelCount = 3;
         // Arrange - Create multiple model configs
         LlmModelConfig mockModelConfig3 = mock(LlmModelConfig.class);
         when(mockModelConfig1.name()).thenReturn("model1");
@@ -310,7 +311,7 @@ class LlmServiceFixEnhancedBranchCoverageTest {
         DocumentorConfig retrievedConfig = ThreadLocalContextHolder
             .getConfig();
         assertNotNull(retrievedConfig);
-        assertEquals(3, retrievedConfig.llmModels().size());
+        assertEquals(expectedModelCount, retrievedConfig.llmModels().size());
     }
 
     /**

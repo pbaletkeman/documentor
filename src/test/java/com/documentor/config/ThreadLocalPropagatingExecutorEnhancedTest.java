@@ -187,7 +187,7 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
         executor = new ThreadLocalPropagatingExecutorEnhanced(
             mockDelegate, "test-executor");
 
-        Runnable testCommand = () -> {};
+        Runnable testCommand = () -> { } ;
 
         // Mock delegate to throw exception
         doThrow(new RuntimeException("Delegate executor failed"))
@@ -204,7 +204,7 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
         executor = new ThreadLocalPropagatingExecutorEnhanced(
             null, "test-executor");
 
-        Runnable testCommand = () -> {};
+        Runnable testCommand = () -> { } ;
 
         // The fallback is ForkJoinPool.commonPool() which should
         // work, but we can't easily mock it
@@ -250,9 +250,10 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
 
     @Test
     void testCreateExecutorWithValidParameters() {
+        final int threadCount = ThreadLocalPropagatingExecutorEnhanced.DEFAULT_THREAD_COUNT;
         Executor createdExecutor =
             ThreadLocalPropagatingExecutorEnhanced.createExecutor(
-                5, "test-pool");
+                threadCount, "test-pool");
 
         assertNotNull(createdExecutor);
         assertTrue(createdExecutor
@@ -271,8 +272,9 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
 
     @Test
     void testCreateExecutorWithHighThreadCount() {
+        final int highThreadCount = 20;
         Executor createdExecutor = ThreadLocalPropagatingExecutorEnhanced
-            .createExecutor(20, "large-pool");
+            .createExecutor(highThreadCount, "large-pool");
 
         assertNotNull(createdExecutor);
         assertTrue(createdExecutor
@@ -281,8 +283,9 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
 
     @Test
     void testCreateExecutorWithNullPrefix() {
+        final int threadCount = ThreadLocalPropagatingExecutorEnhanced.DEFAULT_THREAD_COUNT;
         Executor createdExecutor =
-            ThreadLocalPropagatingExecutorEnhanced.createExecutor(5, null);
+            ThreadLocalPropagatingExecutorEnhanced.createExecutor(threadCount, null);
 
         assertNotNull(createdExecutor);
         assertTrue(createdExecutor
@@ -331,8 +334,10 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
 
         // Submit many more tasks to potentially trigger
         // queue overflow and rejection
-        for (int i = 0; i < 150; i++) {
-            // More than default queue capacity of 100
+        final int queueCapacity = 100;
+        final int extraTasks = 50;
+        final int totalTasks = queueCapacity + extraTasks;
+        for (int i = 0; i < totalTasks; i++) {
             createdExecutor.execute(() -> {
                 // Simple task
             });
@@ -406,10 +411,11 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
     @Test
     void testExecuteMultipleTasksConcurrently() throws InterruptedException {
         // Test with real thread pool to verify concurrent execution
+        final int concurrentThreadCount = 3;
         Executor realExecutor = ThreadLocalPropagatingExecutorEnhanced
-            .createExecutor(3, "concurrent-test");
+            .createExecutor(concurrentThreadCount, "concurrent-test");
 
-        int taskCount = 10;
+        final int taskCount = 10;
         CountDownLatch latch = new CountDownLatch(taskCount);
 
         // Setup ThreadLocal config
@@ -423,6 +429,7 @@ class ThreadLocalPropagatingExecutorEnhancedTest {
             });
         }
 
-        assertTrue(latch.await(5, TimeUnit.SECONDS));
+        final int awaitTimeoutSeconds = 5;
+        assertTrue(latch.await(awaitTimeoutSeconds, TimeUnit.SECONDS));
     }
 }

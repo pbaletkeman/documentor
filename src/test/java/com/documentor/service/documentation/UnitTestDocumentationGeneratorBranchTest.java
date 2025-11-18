@@ -58,8 +58,9 @@ class UnitTestDocumentationGeneratorBranchTest {
     private Path tempDir;
 
     private static final String TEST_UNIT_TESTS =
-        "// Generated unit tests\n@Test\nvoid testMethod() {\n    // "
-        + " test code\n}";
+        "// Generated unit tests\n@Test\nvoid testMethod() {\n"
+        + "    // test code\n"
+        + "}";
 
     // Magic number constants for checkstyle compliance
     private static final int LINE_NUMBER_3 = 3;
@@ -83,8 +84,11 @@ class UnitTestDocumentationGeneratorBranchTest {
     void testGenerateUnitTestDocumentationWithEmptyProject() {
         // Test with empty project analysis - should create empty tests file
         ProjectAnalysis emptyAnalysis =
-        new ProjectAnalysis("/test/path", Collections.emptyList(),
-            System.currentTimeMillis());
+            new ProjectAnalysis(
+                "/test/path",
+                Collections.emptyList(),
+                System.currentTimeMillis()
+            );
 
         CompletableFuture<Void> result = generator
             .generateUnitTestDocumentation(emptyAnalysis, tempDir);
@@ -116,11 +120,15 @@ class UnitTestDocumentationGeneratorBranchTest {
             Collections.emptyList(), Collections.emptyList()
         );
 
-        List<CodeElement> elements = Arrays.asList(fieldElement1,
-            fieldElement2);
-        ProjectAnalysis analysis =
-            new ProjectAnalysis("/test/path", elements, System
-                .currentTimeMillis());
+        List<CodeElement> elements = Arrays.asList(
+            fieldElement1,
+            fieldElement2
+        );
+        ProjectAnalysis analysis = new ProjectAnalysis(
+            "/test/path",
+            elements,
+            System.currentTimeMillis()
+        );
 
         CompletableFuture<Void> result = generator
             .generateUnitTestDocumentation(analysis, tempDir);
@@ -141,25 +149,39 @@ class UnitTestDocumentationGeneratorBranchTest {
         // Test with mixed elements
         // - only non-FIELD elements should generate tests
         CodeElement fieldElement = new CodeElement(
-            CodeElementType.FIELD, "field", "com.example.TestClass.field",
-            "/test/TestClass.java", LINE_NUMBER_3, "private String field;", "A test field",
-            Collections.emptyList(), Collections.emptyList()
+            CodeElementType.FIELD,
+            "field",
+            "com.example.TestClass.field",
+            "/test/TestClass.java",
+            LINE_NUMBER_3,
+            "private String field;",
+            "A test field",
+            Collections.emptyList(),
+            Collections.emptyList()
         );
 
         CodeElement methodElement = new CodeElement(
-            CodeElementType.METHOD, "testMethod",
+            CodeElementType.METHOD,
+            "testMethod",
             "com.example.TestClass.testMethod",
-            "/test/TestClass.java", LINE_NUMBER_10, "public void testMethod() {}",
+            "/test/TestClass.java",
+            LINE_NUMBER_10,
+            "public void testMethod() {}",
             "A test method",
-            Collections.emptyList(), Collections.emptyList()
+            Collections.emptyList(),
+            Collections.emptyList()
         );
 
         CodeElement classElement = new CodeElement(
-            CodeElementType.CLASS, "TestClass",
+            CodeElementType.CLASS,
+            "TestClass",
             "com.example.TestClass",
-            "/test/TestClass.java", LINE_NUMBER_1, "public class TestClass {}",
+            "/test/TestClass.java",
+            LINE_NUMBER_1,
+            "public class TestClass {}",
             "A test class",
-            Collections.emptyList(), Collections.emptyList()
+            Collections.emptyList(),
+            Collections.emptyList()
         );
 
         when(
@@ -171,14 +193,17 @@ class UnitTestDocumentationGeneratorBranchTest {
             llmService.generateUnitTests(classElement)
         ).thenReturn(
             CompletableFuture.completedFuture(
-                "// Tests for TestClass"
+                    "// Tests for TestClass"
             )
         );
 
         List<CodeElement> elements =
-        Arrays.asList(fieldElement, methodElement, classElement);
-        ProjectAnalysis analysis = new ProjectAnalysis("/test/path", elements,
-            System.currentTimeMillis());
+            Arrays.asList(fieldElement, methodElement, classElement);
+            ProjectAnalysis analysis = new ProjectAnalysis(
+                "/test/path",
+                elements,
+                System.currentTimeMillis()
+            );
 
         CompletableFuture<Void> result =
         generator.generateUnitTestDocumentation(analysis, tempDir);
@@ -207,18 +232,21 @@ class UnitTestDocumentationGeneratorBranchTest {
             CodeElementType.METHOD, "testMethod",
             "com.example.TestClass.testMethod",
             "/test/TestClass.java", LINE_NUMBER_10, "public void testMethod() {}",
-            "A test method",
-            Collections.emptyList(), Collections.emptyList()
+                "A test method",
+                Collections.emptyList(),
+                Collections.emptyList()
         );
 
         when(
             llmService.generateUnitTests(methodElement)
         ).thenReturn(CompletableFuture.failedFuture(
-            new RuntimeException("LLM service error")));
+                new RuntimeException("LLM service error")
+            ));
 
         List<CodeElement> elements = Collections.singletonList(methodElement);
         ProjectAnalysis analysis = new ProjectAnalysis("/test/path", elements,
-            System.currentTimeMillis());
+                System.currentTimeMillis()
+            );
 
         CompletableFuture<Void> result =
             generator.generateUnitTestDocumentation(analysis, tempDir);
@@ -266,7 +294,8 @@ class UnitTestDocumentationGeneratorBranchTest {
             CodeElementType.METHOD, "testMethod",
             "com.example.TestClass.testMethod", "/test/TestClass.java", LINE_NUMBER_10,
             "public void testMethod() {}", "A test method",
-            Collections.emptyList(), Collections.emptyList()
+                Collections.emptyList(),
+                Collections.emptyList()
         );
 
         List<CodeElement> elements = Collections.singletonList(methodElement);
@@ -291,47 +320,58 @@ class UnitTestDocumentationGeneratorBranchTest {
         // in lambda$generateUnitTestDocumentation$4 are covered
 
         // Test with high target coverage (>80%)
-        when(outputSettings.targetCoverage()).thenReturn(TARGET_COVERAGE_09);
+        when(outputSettings.targetCoverage())
+            .thenReturn(TARGET_COVERAGE_09);
 
         CodeElement methodElement = new CodeElement(
-            CodeElementType.METHOD, "testMethod",
+            CodeElementType.METHOD,
+            "testMethod",
             "com.example.TestClass.testMethod",
-            "/test/TestClass.java", LINE_NUMBER_10, "public void testMethod() {}",
+            "/test/TestClass.java",
+            LINE_NUMBER_10,
+            "public void testMethod() {}",
             "A test method",
-            Collections.emptyList(), Collections.emptyList()
+            Collections.emptyList(),
+            Collections.emptyList()
         );
 
-        when(
-            llmService.generateUnitTests(methodElement)
-        ).thenReturn(CompletableFuture.completedFuture(TEST_UNIT_TESTS));
+        when(llmService.generateUnitTests(methodElement))
+            .thenReturn(CompletableFuture.completedFuture(TEST_UNIT_TESTS));
 
         List<CodeElement> elements = Collections.singletonList(methodElement);
-        ProjectAnalysis analysis = new ProjectAnalysis("/test/path",
-            elements, System.currentTimeMillis());
+        ProjectAnalysis analysis = new ProjectAnalysis(
+            "/test/path",
+            elements,
+            System.currentTimeMillis()
+        );
 
-        CompletableFuture<Void> result = generator.
-            generateUnitTestDocumentation(analysis, tempDir);
+        CompletableFuture<Void> result = generator
+            .generateUnitTestDocumentation(analysis, tempDir);
         result.join();
 
-        Path testsFile = tempDir.resolve("tests").resolve("unit-tests.md");
+        Path testsFile = tempDir.resolve("tests")
+            .resolve("unit-tests.md");
         String content = Files.readString(testsFile);
         assertTrue(content.contains("Target Coverage: 90%"));
 
         // Test with low target coverage (≤80%)
-        when(outputSettings.targetCoverage()).thenReturn(TARGET_COVERAGE_06);
+        when(outputSettings.targetCoverage())
+            .thenReturn(TARGET_COVERAGE_06);
 
         // Create new generator with updated config
         UnitTestDocumentationGenerator generatorLowCoverage =
-            new UnitTestDocumentationGenerator(llmService, config,
-            llmServiceFix);
+            new UnitTestDocumentationGenerator(
+                llmService,
+                config,
+                llmServiceFix
+            );
 
         // Delete existing file first
         Files.deleteIfExists(testsFile);
         Files.deleteIfExists(tempDir.resolve("tests"));
 
-        CompletableFuture<Void> result2 =
-            generatorLowCoverage.generateUnitTestDocumentation(analysis,
-            tempDir);
+        CompletableFuture<Void> result2 = generatorLowCoverage
+            .generateUnitTestDocumentation(analysis, tempDir);
         result2.join();
 
         String content2 = Files.readString(testsFile);

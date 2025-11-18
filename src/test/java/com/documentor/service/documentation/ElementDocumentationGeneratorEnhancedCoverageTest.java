@@ -1,3 +1,4 @@
+
 package com.documentor.service.documentation;
 
 import com.documentor.model.CodeElement;
@@ -47,6 +48,9 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
     private static final String TEST_DOCUMENTATION =
         "Test documentation content";
     private static final String TEST_EXAMPLES = "Test usage examples";
+
+        private static final int MANY_FIELDS_COUNT = 15;
+        private static final int MANY_METHODS_COUNT = 15;
 
     @BeforeEach
     void setUp() {
@@ -682,7 +686,7 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
         elements.add(classElement);
 
         // Add 15 fields to trigger line break logic
-        for (int i = 1; i <= 15; i++) {
+        for (int i = 1; i <= MANY_FIELDS_COUNT; i++) {
             CodeElement field = new CodeElement(
                 CodeElementType.FIELD,
                 "field" + i,
@@ -732,7 +736,7 @@ class ElementDocumentationGeneratorEnhancedCoverageTest {
         elements.add(classElement);
 
         // Add 15 methods to trigger line break logic
-        for (int i = 1; i <= 15; i++) {
+        for (int i = 1; i <= MANY_METHODS_COUNT; i++) {
             CodeElement method = new CodeElement(
                 CodeElementType.METHOD,
                 "method" + i,
