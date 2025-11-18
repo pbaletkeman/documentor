@@ -23,14 +23,10 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.times;
@@ -65,11 +61,20 @@ class UnitTestDocumentationGeneratorBranchTest {
         "// Generated unit tests\n@Test\nvoid testMethod() {\n    // "
         + " test code\n}";
 
+    // Magic number constants for checkstyle compliance
+    private static final int LINE_NUMBER_3 = 3;
+    private static final int LINE_NUMBER_5 = 5;
+    private static final int LINE_NUMBER_10 = 10;
+    private static final int LINE_NUMBER_1 = 1;
+    private static final double TARGET_COVERAGE_085 = 0.85;
+    private static final double TARGET_COVERAGE_09 = 0.9;
+    private static final double TARGET_COVERAGE_06 = 0.6;
+
     @BeforeEach
     void setUp() {
         lenient().when(config.outputSettings()).thenReturn(outputSettings);
         lenient().when(outputSettings.includeIcons()).thenReturn(true);
-        lenient().when(outputSettings.targetCoverage()).thenReturn(0.85);
+        lenient().when(outputSettings.targetCoverage()).thenReturn(TARGET_COVERAGE_085);
         generator = new UnitTestDocumentationGenerator(llmService, config,
             llmServiceFix);
     }
@@ -100,13 +105,13 @@ class UnitTestDocumentationGeneratorBranchTest {
         // - should create empty tests file (fields are filtered out)
         CodeElement fieldElement1 = new CodeElement(
             CodeElementType.FIELD, "field1", "com.example.TestClass.field1",
-            "/test/TestClass.java", 3, "private String field1;", "A test field",
+            "/test/TestClass.java", LINE_NUMBER_3, "private String field1;", "A test field",
             Collections.emptyList(), Collections.emptyList()
         );
 
         CodeElement fieldElement2 = new CodeElement(
             CodeElementType.FIELD, "field2", "com.example.TestClass.field2",
-            "/test/TestClass.java", 5, "private int field2;",
+            "/test/TestClass.java", LINE_NUMBER_5, "private int field2;",
             "Another test field",
             Collections.emptyList(), Collections.emptyList()
         );
@@ -137,14 +142,14 @@ class UnitTestDocumentationGeneratorBranchTest {
         // - only non-FIELD elements should generate tests
         CodeElement fieldElement = new CodeElement(
             CodeElementType.FIELD, "field", "com.example.TestClass.field",
-            "/test/TestClass.java", 3, "private String field;", "A test field",
+            "/test/TestClass.java", LINE_NUMBER_3, "private String field;", "A test field",
             Collections.emptyList(), Collections.emptyList()
         );
 
         CodeElement methodElement = new CodeElement(
             CodeElementType.METHOD, "testMethod",
             "com.example.TestClass.testMethod",
-            "/test/TestClass.java", 10, "public void testMethod() {}",
+            "/test/TestClass.java", LINE_NUMBER_10, "public void testMethod() {}",
             "A test method",
             Collections.emptyList(), Collections.emptyList()
         );
@@ -152,7 +157,7 @@ class UnitTestDocumentationGeneratorBranchTest {
         CodeElement classElement = new CodeElement(
             CodeElementType.CLASS, "TestClass",
             "com.example.TestClass",
-            "/test/TestClass.java", 1, "public class TestClass {}",
+            "/test/TestClass.java", LINE_NUMBER_1, "public class TestClass {}",
             "A test class",
             Collections.emptyList(), Collections.emptyList()
         );
@@ -201,7 +206,7 @@ class UnitTestDocumentationGeneratorBranchTest {
         CodeElement methodElement = new CodeElement(
             CodeElementType.METHOD, "testMethod",
             "com.example.TestClass.testMethod",
-            "/test/TestClass.java", 10, "public void testMethod() {}",
+            "/test/TestClass.java", LINE_NUMBER_10, "public void testMethod() {}",
             "A test method",
             Collections.emptyList(), Collections.emptyList()
         );
@@ -230,7 +235,7 @@ class UnitTestDocumentationGeneratorBranchTest {
         CodeElement methodElement = new CodeElement(
             CodeElementType.METHOD, "testMethod",
             "com.example.TestClass.testMethod",
-            "/test/TestClass.java", 10, "public void testMethod() {}",
+            "/test/TestClass.java", LINE_NUMBER_10, "public void testMethod() {}",
             "A test method",
             Collections.emptyList(), Collections.emptyList()
         );
@@ -259,7 +264,7 @@ class UnitTestDocumentationGeneratorBranchTest {
 
         CodeElement methodElement = new CodeElement(
             CodeElementType.METHOD, "testMethod",
-            "com.example.TestClass.testMethod", "/test/TestClass.java", 10,
+            "com.example.TestClass.testMethod", "/test/TestClass.java", LINE_NUMBER_10,
             "public void testMethod() {}", "A test method",
             Collections.emptyList(), Collections.emptyList()
         );
@@ -286,12 +291,12 @@ class UnitTestDocumentationGeneratorBranchTest {
         // in lambda$generateUnitTestDocumentation$4 are covered
 
         // Test with high target coverage (>80%)
-        when(outputSettings.targetCoverage()).thenReturn(0.9);
+        when(outputSettings.targetCoverage()).thenReturn(TARGET_COVERAGE_09);
 
         CodeElement methodElement = new CodeElement(
             CodeElementType.METHOD, "testMethod",
             "com.example.TestClass.testMethod",
-            "/test/TestClass.java", 10, "public void testMethod() {}",
+            "/test/TestClass.java", LINE_NUMBER_10, "public void testMethod() {}",
             "A test method",
             Collections.emptyList(), Collections.emptyList()
         );
@@ -313,7 +318,7 @@ class UnitTestDocumentationGeneratorBranchTest {
         assertTrue(content.contains("Target Coverage: 90%"));
 
         // Test with low target coverage (≤80%)
-        when(outputSettings.targetCoverage()).thenReturn(0.6);
+        when(outputSettings.targetCoverage()).thenReturn(TARGET_COVERAGE_06);
 
         // Create new generator with updated config
         UnitTestDocumentationGenerator generatorLowCoverage =
@@ -341,28 +346,28 @@ class UnitTestDocumentationGeneratorBranchTest {
         // Create elements of different types to test filtering
         CodeElement fieldElement = new CodeElement(
             CodeElementType.FIELD, "field", "com.example.TestClass.field",
-            "/test/TestClass.java", 3, "private String field;", "A test field",
+            "/test/TestClass.java", LINE_NUMBER_3, "private String field;", "A test field",
             Collections.emptyList(), Collections.emptyList()
         );
 
         CodeElement methodElement = new CodeElement(
             CodeElementType.METHOD, "method", "com.example.TestClass.method",
-            "/test/TestClass.java", 10, "public void method() {}",
+            "/test/TestClass.java", LINE_NUMBER_10, "public void method() {}",
             "A test method",
             Collections.emptyList(), Collections.emptyList()
         );
 
         CodeElement classElement = new CodeElement(
             CodeElementType.CLASS, "TestClass", "com.example.TestClass",
-            "/test/TestClass.java", 1, "public class TestClass {}",
+            "/test/TestClass.java", LINE_NUMBER_1, "public class TestClass {}",
             "A test class",
             Collections.emptyList(), Collections.emptyList()
         );
 
+
         CodeElement constructorElement = new CodeElement(
-            CodeElementType.METHOD, "TestClass",
-            "com.example.TestClass.TestClass", "/test/TestClass.java",
-            5, "public TestClass() {}", "A constructor",
+            CodeElementType.METHOD, "TestClass", "com.example.TestClass.TestClass",
+            "/test/TestClass.java", LINE_NUMBER_5, "public TestClass() {}", "A test constructor",
             Collections.emptyList(), Collections.emptyList()
         );
 

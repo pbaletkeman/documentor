@@ -26,6 +26,11 @@ import static org.junit.jupiter.api.Assertions.fail;
  */
 @ExtendWith(MockitoExtension.class)
 class ThreadLocalTaskDecoratorEnhancedTest {
+    // Magic number constants for test clarity
+    private static final int TIMEOUT_MILLIS = 4000;
+    private static final int TIMEOUT_SECONDS = 30;
+    private static final int DEFAULT_COUNT = 5;
+    private static final int SMALL_COUNT = 3;
 
     private ThreadLocalTaskDecoratorEnhanced decorator;
     private DocumentorConfig testConfig;
@@ -38,7 +43,7 @@ class ThreadLocalTaskDecoratorEnhancedTest {
         // Create test config
         List<LlmModelConfig> models = Collections.singletonList(
             new LlmModelConfig("test-model", "ollama",
-            "http://localhost:11434", null, 4000, 30)
+            "http://localhost:11434", null, TIMEOUT_MILLIS, TIMEOUT_SECONDS)
         );
         OutputSettings outputSettings = new OutputSettings(
             "output", "markdown", false, false, false);
@@ -75,7 +80,7 @@ class ThreadLocalTaskDecoratorEnhancedTest {
         Thread childThread = new Thread(decoratedRunnable);
         childThread.start();
 
-        assertTrue(latch.await(5, TimeUnit.SECONDS));
+        assertTrue(latch.await(DEFAULT_COUNT, TimeUnit.SECONDS));
         childThread.join();
 
         // Config should be propagated to child thread
@@ -100,7 +105,7 @@ class ThreadLocalTaskDecoratorEnhancedTest {
         Thread childThread = new Thread(decoratedRunnable);
         childThread.start();
 
-        assertTrue(latch.await(5, TimeUnit.SECONDS));
+        assertTrue(latch.await(DEFAULT_COUNT, TimeUnit.SECONDS));
         childThread.join();
 
         // No config should be available in child thread
@@ -114,8 +119,8 @@ class ThreadLocalTaskDecoratorEnhancedTest {
         // but test the branch)
         OutputSettings outputSettings = new OutputSettings(
             "output", "markdown", false, false, false);
-        AnalysisSettings analysisSettings = new AnalysisSettings(
-            true, 5, null, null);
+            AnalysisSettings analysisSettings = new AnalysisSettings(
+                true, DEFAULT_COUNT, null, null);
 
         // We'll test with empty models instead since null models
         // would fail validation
@@ -140,7 +145,7 @@ class ThreadLocalTaskDecoratorEnhancedTest {
         Thread childThread = new Thread(decoratedRunnable);
         childThread.start();
 
-        assertTrue(latch.await(5, TimeUnit.SECONDS));
+            assertTrue(latch.await(DEFAULT_COUNT, TimeUnit.SECONDS));
         childThread.join();
 
         // Config should still be propagated even with empty models
@@ -181,7 +186,7 @@ class ThreadLocalTaskDecoratorEnhancedTest {
         OutputSettings outputSettings = new OutputSettings(
             "output", "markdown", false, false, false);
         AnalysisSettings analysisSettings = new AnalysisSettings(
-            true, 5, null, null);
+            true, DEFAULT_COUNT, null, null);
 
         DocumentorConfig configWithEmptyModels =
             new DocumentorConfig(emptyModels, outputSettings, analysisSettings);
@@ -202,7 +207,7 @@ class ThreadLocalTaskDecoratorEnhancedTest {
         Thread childThread = new Thread(decoratedRunnable);
         childThread.start();
 
-        assertTrue(latch.await(5, TimeUnit.SECONDS));
+        assertTrue(latch.await(DEFAULT_COUNT, TimeUnit.SECONDS));
         childThread.join();
 
         // Config should be propagated with empty models list
@@ -215,17 +220,17 @@ class ThreadLocalTaskDecoratorEnhancedTest {
         // Create config with multiple models
         List<LlmModelConfig> models = List.of(
             new LlmModelConfig(
-                "model1", "provider1", "url1", "key1", 4000, 30),
+                "model1", "provider1", "url1", "key1", TIMEOUT_MILLIS, TIMEOUT_SECONDS),
             new LlmModelConfig(
-                "model2", "provider2", "url2", "key2", 4000, 30),
+                "model2", "provider2", "url2", "key2", TIMEOUT_MILLIS, TIMEOUT_SECONDS),
             new LlmModelConfig(
-                "model3", "provider3", "url3", "key3", 4000, 30)
+                "model3", "provider3", "url3", "key3", TIMEOUT_MILLIS, TIMEOUT_SECONDS)
         );
 
         OutputSettings outputSettings =
             new OutputSettings("output", "markdown", false, false, false);
         AnalysisSettings analysisSettings =
-            new AnalysisSettings(true, 5, null, null);
+            new AnalysisSettings(true, DEFAULT_COUNT, null, null);
 
         DocumentorConfig configWithMultipleModels =
             new DocumentorConfig(models, outputSettings, analysisSettings);
@@ -246,7 +251,7 @@ class ThreadLocalTaskDecoratorEnhancedTest {
         Thread childThread = new Thread(decoratedRunnable);
         childThread.start();
 
-        assertTrue(latch.await(5, TimeUnit.SECONDS));
+        assertTrue(latch.await(DEFAULT_COUNT, TimeUnit.SECONDS));
         childThread.join();
 
         // Config should be propagated with all models
@@ -278,7 +283,7 @@ class ThreadLocalTaskDecoratorEnhancedTest {
         });
 
         childThread.start();
-        assertTrue(latch.await(5, TimeUnit.SECONDS));
+        assertTrue(latch.await(DEFAULT_COUNT, TimeUnit.SECONDS));
         childThread.join();
     }
 
@@ -301,13 +306,13 @@ class ThreadLocalTaskDecoratorEnhancedTest {
         Thread childThread = new Thread(decoratedRunnable);
         childThread.start();
 
-        assertTrue(latch.await(5, TimeUnit.SECONDS));
+        assertTrue(latch.await(DEFAULT_COUNT, TimeUnit.SECONDS));
         childThread.join();
     }    @Test
     void testMultipleDecorationsWorkCorrectly() throws InterruptedException {
         ThreadLocalContextHolder.setConfig(testConfig);
 
-        CountDownLatch latch = new CountDownLatch(3);
+        CountDownLatch latch = new CountDownLatch(SMALL_COUNT);
         List<DocumentorConfig> capturedConfigs = Collections
             .synchronizedList(new ArrayList<>());
 
@@ -330,14 +335,14 @@ class ThreadLocalTaskDecoratorEnhancedTest {
         thread2.start();
         thread3.start();
 
-        assertTrue(latch.await(5, TimeUnit.SECONDS));
+        assertTrue(latch.await(DEFAULT_COUNT, TimeUnit.SECONDS));
 
         thread1.join();
         thread2.join();
         thread3.join();
 
         // All threads should have received the config
-        assertEquals(3, capturedConfigs.size());
+        assertEquals(SMALL_COUNT, capturedConfigs.size());
         capturedConfigs.forEach(config -> assertEquals(testConfig, config));
     }
 }

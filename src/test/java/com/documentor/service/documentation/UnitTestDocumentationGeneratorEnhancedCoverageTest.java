@@ -51,13 +51,16 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
     private Path tempDir;
 
     private static final String TEST_UNIT_TESTS = "Test unit test content";
+    private static final double TEST_TARGET_COVERAGE = 0.8;
+    private static final int TEST_METHOD_LINE_NUMBER = 5;
+    private static final int TEST_FIELD_LINE_NUMBER = 3;
 
     @BeforeEach
     void setUp() {
         // Use lenient() to avoid UnnecessaryStubbingException
         lenient().when(config.outputSettings()).thenReturn(outputSettings);
         lenient().when(outputSettings.includeIcons()).thenReturn(true);
-        lenient().when(outputSettings.targetCoverage()).thenReturn(0.8);
+        lenient().when(outputSettings.targetCoverage()).thenReturn(TEST_TARGET_COVERAGE);
         lenient().when(llmServiceFix.isThreadLocalConfigAvailable())
             .thenReturn(true);
         lenient().when(llmService.generateUnitTests(any()))
@@ -169,7 +172,7 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
     void testGenerateUnitTestDocumentationWithNullElements() {
         when(config.outputSettings()).thenReturn(outputSettings);
         when(outputSettings.includeIcons()).thenReturn(true);
-        when(outputSettings.targetCoverage()).thenReturn(0.8);
+        when(outputSettings.targetCoverage()).thenReturn(TEST_TARGET_COVERAGE);
         when(llmServiceFix.isThreadLocalConfigAvailable()).thenReturn(true);
 
         // Create analysis with null elements mixed in
@@ -200,7 +203,7 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
     void testGenerateUnitTestDocumentationWithFieldElements() {
         when(config.outputSettings()).thenReturn(outputSettings);
         when(outputSettings.includeIcons()).thenReturn(true);
-        when(outputSettings.targetCoverage()).thenReturn(0.8);
+        when(outputSettings.targetCoverage()).thenReturn(TEST_TARGET_COVERAGE);
         when(llmServiceFix.isThreadLocalConfigAvailable()).thenReturn(true);
 
         // Create analysis with field elements (should be filtered out)
@@ -237,7 +240,7 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
     void testGenerateUnitTestDocumentationWithElementsWithNullType() {
         when(config.outputSettings()).thenReturn(outputSettings);
         when(outputSettings.includeIcons()).thenReturn(true);
-        when(outputSettings.targetCoverage()).thenReturn(0.8);
+        when(outputSettings.targetCoverage()).thenReturn(TEST_TARGET_COVERAGE);
         when(llmServiceFix.isThreadLocalConfigAvailable())
         .thenReturn(true);
 
@@ -247,7 +250,7 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
             "testElement",
             "com.example.TestClass.testElement",
             "/test/TestClass.java",
-            5,
+            TEST_METHOD_LINE_NUMBER,
             "public void testElement() {}",
             "An element with null type",
             Collections.emptyList(),
@@ -298,7 +301,7 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
         throws IOException {
         when(config.outputSettings()).thenReturn(outputSettings);
         when(outputSettings.includeIcons()).thenReturn(true);
-        when(outputSettings.targetCoverage()).thenReturn(0.8);
+        when(outputSettings.targetCoverage()).thenReturn(TEST_TARGET_COVERAGE);
         when(llmServiceFix.isThreadLocalConfigAvailable()).thenReturn(true);
         when(llmService.generateUnitTests(any()))
             .thenReturn(CompletableFuture.completedFuture(TEST_UNIT_TESTS));
@@ -323,7 +326,7 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
     void testGenerateUnitTestDocumentationWithNullUnitTestResult() {
         when(config.outputSettings()).thenReturn(outputSettings);
         when(outputSettings.includeIcons()).thenReturn(true);
-        when(outputSettings.targetCoverage()).thenReturn(0.8);
+        when(outputSettings.targetCoverage()).thenReturn(TEST_TARGET_COVERAGE);
         when(llmServiceFix.isThreadLocalConfigAvailable()).thenReturn(true);
         when(llmService.generateUnitTests(any()))
             .thenReturn(CompletableFuture.completedFuture(null));
@@ -349,7 +352,7 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
     void testGenerateUnitTestDocumentationWithoutIconsConfig() {
         when(config.outputSettings()).thenReturn(outputSettings);
         when(outputSettings.includeIcons()).thenReturn(false); // No icons
-        when(outputSettings.targetCoverage()).thenReturn(0.8);
+        when(outputSettings.targetCoverage()).thenReturn(TEST_TARGET_COVERAGE);
         when(llmServiceFix.isThreadLocalConfigAvailable()).thenReturn(true);
         when(llmService.generateUnitTests(any()))
             .thenReturn(CompletableFuture.completedFuture(TEST_UNIT_TESTS));
@@ -452,7 +455,7 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
     void testGenerateUnitTestDocumentationWithCleanupCall() {
         when(config.outputSettings()).thenReturn(outputSettings);
         when(outputSettings.includeIcons()).thenReturn(true);
-        when(outputSettings.targetCoverage()).thenReturn(0.8);
+        when(outputSettings.targetCoverage()).thenReturn(TEST_TARGET_COVERAGE);
         when(llmServiceFix.isThreadLocalConfigAvailable()).thenReturn(true);
         when(llmService.generateUnitTests(any()))
             .thenReturn(CompletableFuture.completedFuture(TEST_UNIT_TESTS));
@@ -482,7 +485,7 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
             "testMethod",
             "com.example.TestClass.testMethod",
             "/test/TestClass.java",
-            5,
+            TEST_METHOD_LINE_NUMBER,
             "public void testMethod() {}",
             "A test method",
             Collections.emptyList(),
@@ -496,7 +499,7 @@ class UnitTestDocumentationGeneratorEnhancedCoverageTest {
             "testField",
             "com.example.TestClass.testField",
             "/test/TestClass.java",
-            3,
+            TEST_FIELD_LINE_NUMBER,
             "private String testField;",
             "A test field",
             Collections.emptyList(),

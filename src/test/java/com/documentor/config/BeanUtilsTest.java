@@ -7,9 +7,6 @@ import org.springframework.beans.factory.support.DefaultSingletonBeanRegistry;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.Mockito.mock;
@@ -21,6 +18,8 @@ import static org.mockito.Mockito.verify;
  * Enhanced tests for BeanUtils class to improve branch coverage.
  */
 class BeanUtilsTest {
+
+    private static final int expectedValue = 42;
 
     @Test
     void testOverrideBeanWithNullApplicationContext() {
@@ -132,7 +131,7 @@ class BeanUtilsTest {
 
     @Test
     void testOverrideBeanWithReflectionFallback() {
-        ConfigurableApplicationContext context = mock(
+        ConfigurableApplicationContext context = mock (
             ConfigurableApplicationContext.class);
         ConfigurableListableBeanFactory beanFactory = mock
         (ConfigurableListableBeanFactory.class);
@@ -272,7 +271,7 @@ class BeanUtilsTest {
         // Test with different object types
         assertDoesNotThrow(() -> {
             BeanUtils.overrideBean(context, "stringBean", "stringValue");
-            BeanUtils.overrideBean(context, "integerBean", 42);
+            BeanUtils.overrideBean(context, "integerBean", expectedValue);
             BeanUtils.overrideBean(context, "listBean",
                 java.util.List.of("item1", "item2"));
         });

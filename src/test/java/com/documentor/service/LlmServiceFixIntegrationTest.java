@@ -90,7 +90,7 @@ public final class LlmServiceFixIntegrationTest {
 
         AnalysisSettings analysisSettings = new AnalysisSettings(
                 true,
-                3,
+                TEST_MAX_DEPTH,
                 List.of("**/*.java"),
                 List.of("**/test/**")
         );
@@ -186,7 +186,7 @@ public final class LlmServiceFixIntegrationTest {
                 "testMethod",              // name
                 "com.example.TestClass.testMethod", // qualifiedName
                 "/test/TestClass.java",    // filePath
-                10,                        // lineNumber
+                TEST_METHOD_LINE_NUMBER_1,  // lineNumber
                 "public void testMethod() {}", // signature
                 "",                        // documentation
                 new ArrayList<>(),         // parameters
@@ -225,7 +225,7 @@ public final class LlmServiceFixIntegrationTest {
                 "add",                     // name
                 "com.example.TestClass.add", // qualifiedName
                 "/test/TestClass.java",    // filePath
-                15,                        // lineNumber
+                TEST_METHOD_LINE_NUMBER_2,  // lineNumber
                 "public int add(int a, int b) { return a + b; }", // signature
                 "",                        // documentation
                 parameters,                // parameters
@@ -284,7 +284,7 @@ public final class LlmServiceFixIntegrationTest {
                 "method1",                 // name
                 "com.example.Class1.method1", // qualifiedName
                 "/test/Class1.java",       // filePath
-                10,                        // lineNumber
+                TEST_METHOD_LINE_NUMBER_3,  // lineNumber
                 "public void method1() {}", // signature
                 "",                        // documentation
                 new ArrayList<>(),         // parameters

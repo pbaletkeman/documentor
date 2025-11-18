@@ -39,8 +39,8 @@ class StatusCommandHandlerTest {
 
         String status = handler.handleShowStatus(null, null);
         assertTrue(status.contains("Documentor Status"));
-        assertTrue(status.contains("LLM Models") ||
-            status.contains("No LLM models"));
+        assertTrue(status.contains("LLM Models")
+            || status.contains("No LLM models"));
     }
 
     @Test

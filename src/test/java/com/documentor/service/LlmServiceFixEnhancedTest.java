@@ -29,14 +29,25 @@ class LlmServiceFixEnhancedTest {
     private LlmServiceFixEnhanced llmServiceFix;
     private DocumentorConfig testConfig;
 
+    // Magic numbers for test config
+    private static final int TEST_MODEL_MAX_TOKENS = 1000;
+    private static final int TEST_MODEL_TIMEOUT = 30;
+    private static final int MODEL2_MAX_TOKENS = 2000;
+    private static final int MODEL2_TIMEOUT = 60;
+
     @BeforeEach
     void setUp() {
         llmServiceFix = new LlmServiceFixEnhanced();
 
         testConfig = new DocumentorConfig(
-            List.of(new LlmModelConfig("test-model", "ollama",
-            "http://localhost:11434", "test-key", 1000, 30)),
-            new OutputSettings("./test-output", "markdown", true, true, false),
+            List.of(new LlmModelConfig(
+                "test-model", "ollama",
+                "http://localhost:11434", "test-key",
+                TEST_MODEL_MAX_TOKENS, TEST_MODEL_TIMEOUT
+            )),
+            new OutputSettings(
+                "./test-output", "markdown", true, true, false
+            ),
             new AnalysisSettings(null, null, null, null)
         );
     }
@@ -98,10 +109,10 @@ class LlmServiceFixEnhancedTest {
     @Test
     void testIsThreadLocalConfigAvailableWithException() {
         try (MockedStatic<ThreadLocalContextHolder> mockedStatic =
-            mockStatic(ThreadLocalContextHolder.class)) {
+                 mockStatic(ThreadLocalContextHolder.class)) {
             // Arrange
             mockedStatic.when(ThreadLocalContextHolder::getConfig)
-                    .thenThrow(new RuntimeException("Test exception"));
+                .thenThrow(new RuntimeException("Test exception"));
 
             // Act
             boolean result = llmServiceFix.isThreadLocalConfigAvailable();
@@ -164,12 +175,20 @@ class LlmServiceFixEnhancedTest {
         // Arrange
         DocumentorConfig multiModelConfig = new DocumentorConfig(
             List.of(
-                new LlmModelConfig("model1", "ollama",
-                    "http://localhost:11434", "key1", 1000, 30),
-                new LlmModelConfig("model2", "openai",
-                    "https://api.openai.com", "key2", 2000, 60)
+                new LlmModelConfig(
+                    "model1", "ollama",
+                    "http://localhost:11434", "key1",
+                    TEST_MODEL_MAX_TOKENS, TEST_MODEL_TIMEOUT
+                ),
+                new LlmModelConfig(
+                    "model2", "openai",
+                    "https://api.openai.com", "key2",
+                    MODEL2_MAX_TOKENS, MODEL2_TIMEOUT
+                )
             ),
-            new OutputSettings("./test-output", "markdown", true, true, false),
+            new OutputSettings(
+                "./test-output", "markdown", true, true, false
+            ),
             new AnalysisSettings(null, null, null, null)
         );
 
@@ -201,13 +220,15 @@ class LlmServiceFixEnhancedTest {
     @Test
     void testExceptionHandlingInCleanup() {
         try (MockedStatic<ThreadLocalContextHolder> mockedStatic =
-            mockStatic(ThreadLocalContextHolder.class)) {
+                 mockStatic(ThreadLocalContextHolder.class)) {
             // Arrange
             mockedStatic.when(ThreadLocalContextHolder::clearConfig)
-                    .thenThrow(new RuntimeException("Cleanup error"));
+                .thenThrow(new RuntimeException("Cleanup error"));
 
             // Act & Assert - Should not throw exception, handles gracefully
-            assertDoesNotThrow(() -> llmServiceFix.cleanupThreadLocalConfig());
+            assertDoesNotThrow(
+                () -> llmServiceFix.cleanupThreadLocalConfig()
+            );
         }
     }
 }

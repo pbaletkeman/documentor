@@ -32,6 +32,17 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
  */
 @ExtendWith(MockitoExtension.class)
 class AppConfigEnhancedTest {
+    // Magic number constants for test clarity
+    private static final int THREADS_EIGHT = 8;
+    private static final int THREADS_SIXTEEN = 16;
+    private static final int QUEUE_HUNDRED = 100;
+    private static final int THREADS_FIVE = 5;
+    private static final int THREADS_TEN = 10;
+    private static final int THREADS_FOUR = 4;
+    private static final int THREADS_THREE = 3;
+    private static final int THREADS_SIX = 6;
+    private static final int THREADS_TWENTY = 20;
+    private static final int THREADS_FORTY = 40;
 
     @Mock
     private DocumentorConfig documentorConfig;
@@ -88,17 +99,14 @@ class AppConfigEnhancedTest {
     void testLlmExecutorEnhancedWithValidAnalysisSettings() {
         // Setup valid analysis settings
         when(documentorConfig.analysisSettings()).thenReturn(analysisSettings);
-        when(analysisSettings.maxThreads()).thenReturn(8);
-
+        when(analysisSettings.maxThreads()).thenReturn(THREADS_THREE);
         appConfigEnhanced = new AppConfigEnhanced(documentorConfig);
-
         ThreadPoolTaskExecutor executor =
             appConfigEnhanced.llmExecutorEnhanced();
-
         assertNotNull(executor);
-        assertEquals(8, executor.getCorePoolSize());
-        assertEquals(16, executor.getMaxPoolSize()); // 8 * 2
-        assertEquals(100, executor.getQueueCapacity());
+        assertEquals(THREADS_THREE, executor.getCorePoolSize());
+        assertEquals(THREADS_SIX, executor.getMaxPoolSize()); // 3 * 2
+        assertEquals(QUEUE_HUNDRED, executor.getQueueCapacity());
         assertTrue(executor.getThreadNamePrefix().startsWith("LLM-Enhanced-"));
         // Note: These methods are not publicly available in
         // ThreadPoolTaskExecutor, so we verify the setup indirectly by
@@ -114,8 +122,8 @@ class AppConfigEnhancedTest {
             .llmExecutorEnhanced();
 
         assertNotNull(executor);
-        assertEquals(5, executor.getCorePoolSize()); // Default value
-        assertEquals(10, executor.getMaxPoolSize()); // 5 * 2
+        assertEquals(THREADS_FIVE, executor.getCorePoolSize()); // Default value
+        assertEquals(THREADS_TEN, executor.getMaxPoolSize()); // 5 * 2
     }
 
     @Test
@@ -128,19 +136,21 @@ class AppConfigEnhancedTest {
             .llmExecutorEnhanced();
 
         assertNotNull(executor);
-        assertEquals(5, executor.getCorePoolSize()); // Default value
-        assertEquals(10, executor.getMaxPoolSize()); // 5 * 2
+        assertEquals(THREADS_FIVE, executor.getCorePoolSize()); // Default value
+        assertEquals(THREADS_TEN, executor.getMaxPoolSize()); // 5 * 2
     }
 
     @Test
     void testLlmExecutorEnhancedTaskDecoratorWithValidConfig() {
         // Setup ThreadLocal context
         when(documentorConfig.analysisSettings()).thenReturn(analysisSettings);
-        when(analysisSettings.maxThreads()).thenReturn(4);
-
+        when(analysisSettings.maxThreads()).thenReturn(THREADS_EIGHT);
         appConfigEnhanced = new AppConfigEnhanced(documentorConfig);
-        ThreadPoolTaskExecutor executor = appConfigEnhanced
-            .llmExecutorEnhanced();
+        ThreadPoolTaskExecutor executor
+            = appConfigEnhanced.llmExecutorEnhanced();
+        assertEquals(THREADS_EIGHT, executor.getCorePoolSize());
+        assertEquals(THREADS_SIXTEEN, executor.getMaxPoolSize()); // 8 * 2
+        assertEquals(QUEUE_HUNDRED, executor.getQueueCapacity());
 
         // Setup ThreadLocal context for testing
         ThreadLocalContextHolder.setConfig(documentorConfig);
@@ -158,7 +168,7 @@ class AppConfigEnhancedTest {
 
         // Wait a bit for async execution
         try {
-            Thread.sleep(100);
+                Thread.sleep(QUEUE_HUNDRED);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
@@ -189,7 +199,7 @@ class AppConfigEnhancedTest {
 
         // Wait a bit for async execution
         try {
-            Thread.sleep(100);
+                Thread.sleep(QUEUE_HUNDRED);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
@@ -213,7 +223,7 @@ class AppConfigEnhancedTest {
 
         // Wait a bit for async execution
         try {
-            Thread.sleep(100);
+                Thread.sleep(QUEUE_HUNDRED);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
@@ -313,16 +323,16 @@ class AppConfigEnhancedTest {
     @Test
     void testThreadPoolTaskExecutorConfiguration() {
         when(documentorConfig.analysisSettings()).thenReturn(analysisSettings);
-        when(analysisSettings.maxThreads()).thenReturn(3);
+        when(analysisSettings.maxThreads()).thenReturn(THREADS_THREE);
 
         appConfigEnhanced = new AppConfigEnhanced(documentorConfig);
         ThreadPoolTaskExecutor executor = appConfigEnhanced
         .llmExecutorEnhanced();
 
         assertNotNull(executor);
-        assertEquals(3, executor.getCorePoolSize());
-        assertEquals(6, executor.getMaxPoolSize()); // 3 * 2
-        assertEquals(100, executor.getQueueCapacity());
+        assertEquals(THREADS_THREE, executor.getCorePoolSize());
+        assertEquals(THREADS_SIX, executor.getMaxPoolSize()); // 3 * 2
+        assertEquals(QUEUE_HUNDRED, executor.getQueueCapacity());
         assertEquals("LLM-Enhanced-", executor.getThreadNamePrefix());
         // Note: Configuration verification
         // - executor internals are not publicly accessible
@@ -345,15 +355,16 @@ class AppConfigEnhancedTest {
     @Test
     void testConfigurationWithHighThreadCount() {
         when(documentorConfig.analysisSettings()).thenReturn(analysisSettings);
-        when(analysisSettings.maxThreads()).thenReturn(20); // High value
+        // High value
+        when(analysisSettings.maxThreads()).thenReturn(THREADS_TWENTY);
 
         appConfigEnhanced = new AppConfigEnhanced(documentorConfig);
         ThreadPoolTaskExecutor executor = appConfigEnhanced
             .llmExecutorEnhanced();
 
         assertNotNull(executor);
-        assertEquals(20, executor.getCorePoolSize());
-        assertEquals(40, executor.getMaxPoolSize()); // 20 * 2
+        assertEquals(THREADS_TWENTY, executor.getCorePoolSize());
+        assertEquals(THREADS_FORTY, executor.getMaxPoolSize()); // 20 * 2
     }
 
     @Test

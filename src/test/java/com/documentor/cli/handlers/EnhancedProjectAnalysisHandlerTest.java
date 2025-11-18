@@ -16,18 +16,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 
@@ -36,6 +29,10 @@ import static org.mockito.Mockito.times;
  */
 @ExtendWith(MockitoExtension.class)
 class EnhancedProjectAnalysisHandlerTest {
+
+    private static final int _defaultMaxAttempts = 60;
+
+    private static final int _defaultTimeout = 1000;
 
     @Mock
     private ProjectAnalysisCommandHandler baseHandler;
@@ -61,8 +58,8 @@ class EnhancedProjectAnalysisHandlerTest {
                     "openai",
                     "http://test-url",
                     "test-key",
-                    1000,
-                    60
+                    _defaultTimeout,
+                    _defaultMaxAttempts
                 )
             ),
             new OutputSettings(
@@ -80,15 +77,15 @@ class EnhancedProjectAnalysisHandlerTest {
      * Helper method to create a ProjectAnalysisRequest
      */
         private ProjectAnalysisRequest createRequest(
-            String projectPath,
-            String configPath,
-            boolean generateMermaid,
-            String mermaidOutput,
-            boolean generatePlantUML,
-            String plantUMLOutput,
-            Boolean includePrivateMembers,
-            boolean useFix,
-            String outputDir) {
+            final String projectPath,
+            final String configPath,
+            final boolean generateMermaid,
+            final String mermaidOutput,
+            final boolean generatePlantUML,
+            final String plantUMLOutput,
+            final Boolean includePrivateMembers,
+            final boolean useFix,
+            final String outputDir) {
         return new ProjectAnalysisRequest(
             projectPath,
             configPath,

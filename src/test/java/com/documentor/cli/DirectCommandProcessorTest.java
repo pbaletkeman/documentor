@@ -215,7 +215,7 @@ class DirectCommandProcessorTest {
         });
         when(
             documentorCommands.analyzeProject(anyString(), anyString(),
-                anyBoolean(),anyBoolean(), anyString(), anyBoolean(),
+                anyBoolean(), anyBoolean(), anyString(), anyBoolean(),
                 anyString())
         ).thenReturn("Analysis complete");
 
@@ -353,7 +353,7 @@ class DirectCommandProcessorTest {
         when(applicationArguments.getSourceArgs()).thenReturn(new String[]
             {"analyze"});
         when(documentorCommands.analyzeProject(anyString(), anyString(),
-            anyBoolean(),anyBoolean(), anyString(), anyBoolean(), anyString()))
+            anyBoolean(), anyBoolean(), anyString(), anyBoolean(), anyString()))
             .thenReturn("Analysis complete");
 
         processor.run(applicationArguments);
@@ -391,7 +391,7 @@ class DirectCommandProcessorTest {
             "--generate-mermaid", "not-a-boolean"
         });
         when(documentorCommands.analyzeProject(anyString(), anyString(),
-            anyBoolean(),anyBoolean(), anyString(), anyBoolean(), anyString()))
+            anyBoolean(), anyBoolean(), anyString(), anyBoolean(), anyString()))
             .thenReturn("Analysis complete");
 
         processor.run(applicationArguments);

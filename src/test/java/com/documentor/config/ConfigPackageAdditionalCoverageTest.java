@@ -26,6 +26,14 @@ import static org.junit.jupiter.api.Assertions.fail;
  * mocking.
  */
 class ConfigPackageAdditionalCoverageTest {
+    // Magic number constants for test clarity
+    private static final int TOKEN_4000 = 4000;
+    private static final int TIMEOUT_30 = 30;
+    private static final int THREADS_5 = 5;
+    private static final int TASKS_150 = 150;
+    private static final int WAIT_5_SECONDS = 5;
+    private static final int THREADS_3 = 3;
+    private static final int TASKS_10 = 10;
 
     private DocumentorConfig testConfig;
 
@@ -35,11 +43,11 @@ class ConfigPackageAdditionalCoverageTest {
 
         // Create test config
         LlmModelConfig model = new LlmModelConfig(
-            "test-model", "provider", "url", "key", 4000, 30);
+            "test-model", "provider", "url", "key", TOKEN_4000, TIMEOUT_30);
         OutputSettings outputSettings = new OutputSettings(
             "output", "markdown", false, false, false);
         AnalysisSettings analysisSettings = new AnalysisSettings(
-            true, 5, null, null);
+            true, THREADS_5, null, null);
 
         testConfig = new DocumentorConfig(Collections.singletonList(model),
             outputSettings, analysisSettings);
@@ -77,7 +85,7 @@ class ConfigPackageAdditionalCoverageTest {
         });
 
         // Submit many tasks to potentially trigger queue overflow
-        for (int i = 0; i < 150; i++) {
+        for (int i = 0; i < TASKS_150; i++) {
             executor.execute(() -> {
                 // Simple task
                 try {
@@ -92,7 +100,7 @@ class ConfigPackageAdditionalCoverageTest {
         blockingLatch.countDown();
 
         // Wait for completion
-        assertTrue(completedLatch.await(5, TimeUnit.SECONDS));
+        assertTrue(completedLatch.await(WAIT_5_SECONDS, TimeUnit.SECONDS));
     }
 
     /**
@@ -202,7 +210,7 @@ class ConfigPackageAdditionalCoverageTest {
         OutputSettings outputSettings =
             new OutputSettings("output", "markdown", false, false, false);
         AnalysisSettings analysisSettings =
-            new AnalysisSettings(true, 5, null, null);
+            new AnalysisSettings(true, THREADS_5, null, null);
 
         // Use empty list instead of null (as null would fail validation)
         DocumentorConfig emptyModelsConfig =
@@ -235,9 +243,9 @@ class ConfigPackageAdditionalCoverageTest {
      */
     @Test
     void testExecutorConstants() {
-        assertEquals(5,
+        assertEquals(THREADS_5,
             ThreadLocalPropagatingExecutorEnhanced.DEFAULT_THREAD_COUNT);
-        assertEquals(30,
+        assertEquals(TIMEOUT_30,
             ThreadLocalPropagatingExecutorEnhanced.DEFAULT_TIMEOUT_SECONDS);
     }
 
@@ -281,14 +289,14 @@ class ConfigPackageAdditionalCoverageTest {
     void testComplexMultiThreadedExecution() throws InterruptedException {
         Executor executor =
             ThreadLocalPropagatingExecutorEnhanced.createExecutor(
-                3, "multi-test");
+                THREADS_3, "multi-test");
         ThreadLocalTaskDecoratorEnhanced decorator =
             new ThreadLocalTaskDecoratorEnhanced();
 
         // Set up parent thread config
         ThreadLocalContextHolder.setConfig(testConfig);
 
-        int taskCount = 10;
+        int taskCount = TASKS_10;
         CountDownLatch latch = new CountDownLatch(taskCount);
 
         for (int i = 0; i < taskCount; i++) {
@@ -311,7 +319,7 @@ class ConfigPackageAdditionalCoverageTest {
      * Helper method to create mock without external dependencies
      */
     @SuppressWarnings("unchecked")
-    private <T> T mock(Class<T> clazz) {
+    private <T> T mock(final Class<T> clazz) {
         // Simple mock implementation for basic testing
         try {
             return (T) java.lang.reflect.Proxy.newProxyInstance(

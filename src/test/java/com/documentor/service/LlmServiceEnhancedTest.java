@@ -28,12 +28,6 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.mockStatic;
@@ -505,7 +499,7 @@ class LlmServiceEnhancedTest {
             // Assert - Should return fallback executor (not null)
             assertNotNull(executor);
         } catch (Exception e) {
-            fail("Failed to test getExecutor with null threadLocalExecutor: "
+            org.junit.jupiter.api.Assertions.fail("Failed to test getExecutor with null threadLocalExecutor: "
                     + e.getMessage());
         }
     }
@@ -526,7 +520,7 @@ class LlmServiceEnhancedTest {
             // Assert - Should return the threadLocalExecutor (not null)
             assertNotNull(executor);
         } catch (Exception e) {
-            fail("Failed to test getExecutor with valid threadLocalExecutor: "
+            org.junit.jupiter.api.Assertions.fail("Failed to test getExecutor with valid threadLocalExecutor: "
                     + e.getMessage());
         }
     }
@@ -553,7 +547,7 @@ class LlmServiceEnhancedTest {
             assertNotNull(prompt);
             assertEquals("documentation prompt for null element", prompt);
         } catch (Exception e) {
-            fail("Failed to test createPrompt with null CodeElement: "
+            org.junit.jupiter.api.Assertions.fail("Failed to test createPrompt with null CodeElement: "
                     + e.getMessage());
         }
     }

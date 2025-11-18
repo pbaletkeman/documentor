@@ -57,7 +57,7 @@ class ProjectAnalysisCommandHandlerBranchTest {
     void setUp() {
         handler = new ProjectAnalysisCommandHandler(
                 codeAnalysisService, documentationService,
-                mermaidDiagramService,plantUMLDiagramService, commonHandler);
+                mermaidDiagramService, plantUMLDiagramService, commonHandler);
     }
 
     @Test
@@ -90,8 +90,8 @@ class ProjectAnalysisCommandHandlerBranchTest {
         when(commonHandler.createResultBuilder())
                 .thenReturn(new StringBuilder());
         when(plantUMLDiagramService.generateClassDiagrams(any(), anyString()))
-                .thenReturn(CompletableFuture.completedFuture
-                (List.of("diagram1.puml", "diagram2.puml")));
+                .thenReturn(CompletableFuture.completedFuture(
+                        List.of("diagram1.puml", "diagram2.puml")));
 
         // When: Generate with PlantUML enabled
         String result = handler.handleAnalyzeProjectExtended(
