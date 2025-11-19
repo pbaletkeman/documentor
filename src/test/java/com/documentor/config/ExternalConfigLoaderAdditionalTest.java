@@ -11,11 +11,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -35,6 +33,10 @@ class ExternalConfigLoaderAdditionalTest {
 
     private ExternalConfigLoader externalConfigLoader;
     private DocumentorConfig testConfig;
+    // Magic number constants for test configuration
+    private static final int TEST_MODEL_TIMEOUT_MILLIS = 1000;
+    private static final int TEST_MODEL_TIMEOUT_SECONDS = 30;
+    private static final int TEST_ANALYSIS_DEPTH = 5;
 
     @BeforeEach
     void setUp() {
@@ -44,11 +46,12 @@ class ExternalConfigLoaderAdditionalTest {
         testConfig = new DocumentorConfig(
             List.of(new com.documentor.config.model.LlmModelConfig(
                 "test-model", "ollama", "http://localhost:11434",
-                "test-key", 1000, 30)),
+                "test-key", TEST_MODEL_TIMEOUT_MILLIS,
+                TEST_MODEL_TIMEOUT_SECONDS)),
             new com.documentor.config.model.OutputSettings("output",
                "markdown", false, false, false),
             new com.documentor.config.model.AnalysisSettings(true,
-                5, List.of("*.java"), null)
+                TEST_ANALYSIS_DEPTH, List.of("*.java"), null)
         );
     }
 

@@ -312,7 +312,7 @@ class ConfigPackageAdditionalCoverageTest {
             executor.execute(decoratedTask);
         }
 
-        assertTrue(latch.await(5, TimeUnit.SECONDS));
+        assertTrue(latch.await(WAIT_5_SECONDS, TimeUnit.SECONDS));
     }
 
     /**

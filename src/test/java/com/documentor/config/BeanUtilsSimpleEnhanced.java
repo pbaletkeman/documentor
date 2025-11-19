@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
  * Tests null parameter handling and non-configurable context scenarios.
  */
 class BeanUtilsSimpleEnhancedTest {
+    private static final int TEST_INTEGER_BEAN_VALUE = 42;
 
     @Test
     void testOverrideBeanWithNullApplicationContext() {
@@ -97,9 +98,13 @@ class BeanUtilsSimpleEnhancedTest {
         // Test with different object types
         assertDoesNotThrow(() -> {
             BeanUtils.overrideBean(context, "stringBean", "stringValue");
-            BeanUtils.overrideBean(context, "integerBean", 42);
-            BeanUtils.overrideBean(context, "listBean",
-                java.util.List.of("item1", "item2"));
+            BeanUtils.overrideBean(context, "integerBean",
+                TEST_INTEGER_BEAN_VALUE);
+            BeanUtils.overrideBean(
+                context,
+                "listBean",
+                java.util.List.of("item1", "item2")
+            );
         });
     }
 }

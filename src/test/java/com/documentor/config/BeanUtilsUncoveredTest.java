@@ -72,7 +72,8 @@ class BeanUtilsUncoveredTest {
     @Test
     void testUpdateBeanFieldsReflectionException() {
         try {
-            java.lang.reflect.Method updateMethod = BeanUtils.class.getDeclaredMethod(
+            java.lang.reflect.Method updateMethod =
+                BeanUtils.class.getDeclaredMethod(
                 "updateBeanFields", Object.class, String.class,
                 Object.class);
             updateMethod.setAccessible(true);
@@ -129,7 +130,7 @@ class BeanUtilsUncoveredTest {
     /**
      * Simple test bean class for testing field updates
      */
-    private static class TestBean {
+    private static final class TestBean {
         @SuppressWarnings("unused")
         private String config;
         @SuppressWarnings("unused")
@@ -139,7 +140,7 @@ class BeanUtilsUncoveredTest {
     /**
      * Bean that throws exceptions when accessed via reflection
      */
-    private static class ExceptionThrowingBean {
+    private static final class ExceptionThrowingBean {
         @SuppressWarnings("unused")
         private String config;
 

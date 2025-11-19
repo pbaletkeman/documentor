@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -35,6 +34,8 @@ import static org.mockito.ArgumentMatchers.any;
  */
 @ExtendWith(MockitoExtension.class)
 class DocumentationServiceEnhancedTest {
+    private static final int TEST_TIMEOUT_MILLIS = 1000;
+    private static final int TEST_MAX_TOKENS = 30;
 
     @Mock
     private MainDocumentationGenerator mainDocGenerator;
@@ -61,7 +62,8 @@ class DocumentationServiceEnhancedTest {
     void setUp() {
         config = new DocumentorConfig(
             List.of(new LlmModelConfig("test-model", "ollama",
-            "http://localhost:11434", "test-key", 1000, 30)),
+            "http://localhost:11434", "test-key",
+            TEST_TIMEOUT_MILLIS, TEST_MAX_TOKENS)),
             new OutputSettings("./test-output",
             "markdown", true, true, false),
             new AnalysisSettings(null, null, null, null)
@@ -232,4 +234,3 @@ class DocumentationServiceEnhancedTest {
         );
     }
 }
-// Removed unused imports for checkstyle compliance

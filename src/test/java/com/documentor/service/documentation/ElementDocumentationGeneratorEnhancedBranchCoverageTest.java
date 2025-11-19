@@ -432,7 +432,8 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
 
         CodeElement elementWithEmptyName = new CodeElement(
             CodeElementType.METHOD, "", "com.example.TestClass.emptyMethod",
-            "/test/TestClass.java", LINE_NUMBER_5, "public void emptyMethod() {}",
+            "/test/TestClass.java", LINE_NUMBER_5,
+            "public void emptyMethod() {}",
             "A method with empty name",
             Collections.emptyList(), Collections.emptyList()
         );
@@ -653,7 +654,7 @@ class ElementDocumentationGeneratorEnhancedBranchCoverageTest {
         "/test/config.json", "/test/script.rb",
         "/test/file.unknown", "noextension"
     })
-    void testGetLanguageFromFileWithVariousExtensions(String filePath) {
+    void testGetLanguageFromFileWithVariousExtensions(final String filePath) {
         when(llmService.generateDocumentation(any()))
             .thenReturn(CompletableFuture.completedFuture(TEST_DOCUMENTATION));
         when(llmService.generateUsageExamples(any()))

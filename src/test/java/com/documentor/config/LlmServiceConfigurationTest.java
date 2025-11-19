@@ -35,6 +35,10 @@ class LlmServiceConfigurationTest {
 
     private LlmServiceConfiguration configuration;
 
+    // Magic number constants for LlmModelConfig
+    private static final int TEST_MODEL_TIMEOUT_MILLIS = 1000;
+    private static final int TEST_MODEL_TIMEOUT_SECONDS = 30;
+
     @BeforeEach
     void setUp() {
         configuration = new LlmServiceConfiguration();
@@ -42,9 +46,9 @@ class LlmServiceConfigurationTest {
 
     @Test
     void testDocumentorConfigWithValidConfig() {
-        // Create a valid config
         LlmModelConfig model = new LlmModelConfig("test-model",
-            "ollama", "http://localhost:11434", "key", 1000, 30);
+            "ollama", "http://localhost:11434", "key",
+            TEST_MODEL_TIMEOUT_MILLIS, TEST_MODEL_TIMEOUT_SECONDS);
         DocumentorConfig validConfig = new DocumentorConfig(
             List.of(model),
             null,
@@ -110,7 +114,8 @@ class LlmServiceConfigurationTest {
     void testLlmServiceWithValidConfig() {
         // Create a valid config
         LlmModelConfig model = new LlmModelConfig("test-model",
-            "ollama", "http://localhost:11434", "key", 1000, 30);
+            "ollama", "http://localhost:11434", "key",
+            TEST_MODEL_TIMEOUT_MILLIS, TEST_MODEL_TIMEOUT_SECONDS);
         DocumentorConfig validConfig = new DocumentorConfig(
             List.of(model),
             null,

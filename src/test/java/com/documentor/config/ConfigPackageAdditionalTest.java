@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -54,13 +53,15 @@ class ConfigPackageAdditionalTest {
         assertNotNull(executor1);
 
         // Test createExecutor with negative threads
+            final int negativeThreadCount = -5;
         var executor2 = ThreadLocalPropagatingExecutorEnhanced
-            .createExecutor(-5, "negative-threads");
+                .createExecutor(negativeThreadCount, "negative-threads");
         assertNotNull(executor2);
 
         // Test createExecutor with very high thread count
+            final int highThreadCount = 1000;
         var executor3 = ThreadLocalPropagatingExecutorEnhanced
-            .createExecutor(1000, "high-threads");
+                .createExecutor(highThreadCount, "high-threads");
         assertNotNull(executor3);
     }
 

@@ -106,6 +106,9 @@ class ConfigPackageSimpleCoverageTest {
         assertNotNull(ThreadLocalPropagatingExecutorEnhanced
             .createExecutor(1, ""));
     }
+    // Magic number constants for testExecutorConstants
+    private static final int EXPECTED_DEFAULT_THREAD_COUNT = 5;
+    private static final int EXPECTED_DEFAULT_TIMEOUT_SECONDS = 30;
 
     /**
      * Test ThreadLocalPropagatingExecutorEnhanced constants access
@@ -113,9 +116,9 @@ class ConfigPackageSimpleCoverageTest {
     @Test
     void testExecutorConstants() {
         // Access constants to improve coverage
-        assertEquals(5,
+        assertEquals(EXPECTED_DEFAULT_THREAD_COUNT,
             ThreadLocalPropagatingExecutorEnhanced.DEFAULT_THREAD_COUNT);
-        assertEquals(30,
+        assertEquals(EXPECTED_DEFAULT_TIMEOUT_SECONDS,
             ThreadLocalPropagatingExecutorEnhanced.DEFAULT_TIMEOUT_SECONDS);
     }
 

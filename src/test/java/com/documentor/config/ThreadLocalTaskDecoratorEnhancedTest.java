@@ -48,7 +48,7 @@ class ThreadLocalTaskDecoratorEnhancedTest {
         OutputSettings outputSettings = new OutputSettings(
             "output", "markdown", false, false, false);
         AnalysisSettings analysisSettings = new AnalysisSettings(
-            true, 5, null, null);
+            true, DEFAULT_COUNT, null, null);
 
         testConfig = new DocumentorConfig(models, outputSettings,
             analysisSettings);
@@ -171,7 +171,7 @@ class ThreadLocalTaskDecoratorEnhancedTest {
             childThread.start();
 
             try {
-                assertTrue(latch.await(5, TimeUnit.SECONDS));
+                assertTrue(latch.await(DEFAULT_COUNT, TimeUnit.SECONDS));
                 childThread.join();
             } catch (InterruptedException e) {
                 fail("Thread execution was interrupted");
@@ -261,7 +261,7 @@ class ThreadLocalTaskDecoratorEnhancedTest {
         assertEquals(1, capturedConfigs.size());
         DocumentorConfig capturedConfig = capturedConfigs.get(0);
         assertNotNull(capturedConfig);
-        assertEquals(3, capturedConfig.llmModels().size());
+        assertEquals(SMALL_COUNT, capturedConfig.llmModels().size());
         assertEquals(configWithMultipleModels, capturedConfig);
     }
 

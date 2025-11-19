@@ -41,6 +41,8 @@ import static org.mockito.ArgumentMatchers.anyString;
  */
 @ExtendWith(MockitoExtension.class)
 class LlmServiceEnhancedTest {
+        private static final int TEST_TIMEOUT_MILLIS = 1000;
+        private static final int TEST_MAX_TOKENS = 30;
 
     @Mock
     private LlmRequestBuilder requestBuilder;
@@ -58,8 +60,14 @@ class LlmServiceEnhancedTest {
     @BeforeEach
     void setUp() {
         config = new DocumentorConfig(
-            List.of(new LlmModelConfig("test-model", "ollama",
-                    "http://localhost:11434", "test-key", 1000, 30)),
+                        List.of(new LlmModelConfig(
+                                "test-model",
+                                "ollama",
+                                "http://localhost:11434",
+                                "test-key",
+                                TEST_TIMEOUT_MILLIS,
+                                TEST_MAX_TOKENS
+                        )),
             new OutputSettings("./test-output", "markdown", true, true, false),
             new AnalysisSettings(null, null, null, null)
         );
@@ -147,23 +155,22 @@ class LlmServiceEnhancedTest {
         LlmServiceEnhanced serviceWithNullConfig = new LlmServiceEnhanced(null,
                 requestBuilder, responseHandler, apiClient);
 
-        try (MockedStatic<ThreadLocalContextHolder> mockedStatic =
-                mockStatic(ThreadLocalContextHolder.class)) {
+                try (MockedStatic<ThreadLocalContextHolder> mockedStatic =
+                                mockStatic(ThreadLocalContextHolder.class)) {
                         mockedStatic.when(ThreadLocalContextHolder::getConfig)
                                 .thenReturn(null);
 
-            // Act
-            CompletableFuture<String> result =
-                    serviceWithNullConfig.generateDocumentation(
-                        testCodeElement);
-            String documentation = result.get();
+                        // Act
+                        CompletableFuture<String> result =
+                                serviceWithNullConfig
+                                .generateDocumentation(testCodeElement);
+                        String documentation = result.get();
 
-            // Assert
-                        assertTrue(
-                                documentation.contains(
-                                        "Error: LLM configuration is null")
+                        // Assert
+                        assertTrue(documentation.contains(
+                                "Error: LLM configuration is null")
                         );
-        }
+                }
     }
 
     @Test
@@ -401,11 +408,14 @@ class LlmServiceEnhancedTest {
         String usageExamples = result.get();
 
         // Assert
-        System.out.println("Actual usage examples result: " + usageExamples);
+        System.out.println("Actual usage examples result: "
+        + usageExamples);
         assertTrue(usageExamples.contains("Error generating"),
-                "Expected error message, got: " + usageExamples);
+                "Expected error message, got: "
+                + usageExamples);
         assertTrue(usageExamples.contains("Request building failed"),
-                "Expected 'Request building failed', got: " + usageExamples);
+                "Expected 'Request building failed', got: "
+                + usageExamples);
     }
 
     @Test
@@ -468,11 +478,12 @@ class LlmServiceEnhancedTest {
         String unitTests = result.get();
 
         // Assert
-        System.out.println("Actual unit tests result: " + unitTests);
-        assertTrue(unitTests.contains("Error generating"),
-                "Expected error message, got: " + unitTests);
-        assertTrue(unitTests.contains("Unit test generation failed"),
-                "Expected 'Unit test generation failed', got: " + unitTests);
+                System.out.println("Actual unit tests result: " + unitTests);
+                assertTrue(unitTests.contains("Error generating"),
+                        "Expected error message, got: " + unitTests);
+                assertTrue(unitTests.contains("Unit test generation failed"),
+                        "Expected 'Unit test generation failed', got: "
+                        + unitTests);
     }
 
     @Test
@@ -499,8 +510,11 @@ class LlmServiceEnhancedTest {
             // Assert - Should return fallback executor (not null)
             assertNotNull(executor);
         } catch (Exception e) {
-            org.junit.jupiter.api.Assertions.fail("Failed to test getExecutor with null threadLocalExecutor: "
-                    + e.getMessage());
+                        org.junit.jupiter.api.Assertions.fail(
+                                "Failed to test getExecutor with"
+                                + " null threadLocalExecutor: "
+                                + e.getMessage()
+                        );
         }
     }
 
@@ -520,8 +534,11 @@ class LlmServiceEnhancedTest {
             // Assert - Should return the threadLocalExecutor (not null)
             assertNotNull(executor);
         } catch (Exception e) {
-            org.junit.jupiter.api.Assertions.fail("Failed to test getExecutor with valid threadLocalExecutor: "
-                    + e.getMessage());
+                        org.junit.jupiter.api.Assertions.fail(
+                                "Failed to test getExecutor with"
+                                + " valid threadLocalExecutor: "
+                                + e.getMessage()
+                        );
         }
     }
 
@@ -547,8 +564,11 @@ class LlmServiceEnhancedTest {
             assertNotNull(prompt);
             assertEquals("documentation prompt for null element", prompt);
         } catch (Exception e) {
-            org.junit.jupiter.api.Assertions.fail("Failed to test createPrompt with null CodeElement: "
-                    + e.getMessage());
+                        org.junit.jupiter.api.Assertions.fail(
+                                "Failed to test createPrompt"
+                                + " with null CodeElement: "
+                                + e.getMessage()
+                        );
         }
     }
 }

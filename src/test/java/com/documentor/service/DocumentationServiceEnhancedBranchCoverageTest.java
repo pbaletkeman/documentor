@@ -2,12 +2,10 @@ package com.documentor.service;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
-// Removed unused imports for checkstyle compliance
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.lenient;
 
@@ -65,7 +63,12 @@ class DocumentationServiceEnhancedBranchCoverageTest {
     private OutputSettings mockOutputSettings;
 
     @TempDir
-    Path tempDir;
+    private Path tempDir;
+
+    // Getter for tempDir to satisfy checkstyle visibility
+    Path getTempDir() {
+        return tempDir;
+    }
 
     private DocumentationServiceEnhanced service;
 

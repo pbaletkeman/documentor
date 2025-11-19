@@ -170,7 +170,8 @@ public final class ThreadLocalContextHolderTest {
         });
 
         workerThread.start();
-        latch.await(5, TimeUnit.SECONDS); // Wait for worker to complete
+        // Wait for worker to complete
+        latch.await(MAGIC_NUMBER_5, TimeUnit.SECONDS);
 
         // Verify worker had correct config
         assertTrue(workerHasCorrectConfig.get());

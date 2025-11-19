@@ -26,6 +26,9 @@ import java.lang.reflect.Field;
  */
 @ExtendWith(MockitoExtension.class)
 class DocumentorTestApplicationCoverageBoostTest {
+    // Magic number constants for test clarity
+    private static final int LONG_ARGS_COUNT = 100;
+    private static final int STATIC_BLOCK_LOOP_COUNT = 5;
 
     @Test
     void testLoggerField() throws NoSuchFieldException,
@@ -112,8 +115,8 @@ class DocumentorTestApplicationCoverageBoostTest {
         // Test with extremely long argument list
         try (MockedStatic<SpringApplication> mockedSpringApp =
             mockStatic(SpringApplication.class)) {
-            String[] longArgs = new String[100];
-            for (int i = 0; i < 100; i++) {
+            String[] longArgs = new String[LONG_ARGS_COUNT];
+            for (int i = 0; i < LONG_ARGS_COUNT; i++) {
                 longArgs[i] = "--test.property" + i + "=value" + i;
             }
 
@@ -172,7 +175,7 @@ class DocumentorTestApplicationCoverageBoostTest {
     void testStaticBlockExecution() {
         // Ensure static block and field initialization is covered
         // by accessing the class multiple times
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < STATIC_BLOCK_LOOP_COUNT; i++) {
             Class<?> clazz = DocumentorTestApplication.class;
             assertNotNull(clazz);
             assertEquals("com.documentor.DocumentorTestApplication",
