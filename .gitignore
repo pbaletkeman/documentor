@@ -63,10 +63,36 @@ TEST-*.xml
 .jacoco/
 jacoco.exec
 
+# ============================================================================
+# CONFIGURATION FILE STRATEGY
+# ============================================================================
+# Version Control: YES for samples/ directory
+#   - samples/config-*.json: Template configurations for all use cases
+#   - samples/README.md: Documentation for using sample configs
+#   - Purpose: Help new users get started with tested configurations
+#
+# Version Control: NO for user configs (ignored by design)
+#   - *.local.json: Local-only configuration overrides
+#   - *.secret.json: Sensitive configuration files
+#   - *.api-key.json: API keys and secrets
+#   - Purpose: Prevent accidental commit of sensitive credentials
+#
+# Version Control: OPTIONAL for active config
+#   - config.json: User's primary active configuration
+#   - config-test.json: Test framework configuration
+#   - Recommendation: Add to .gitignore if config.json contains real API keys
+# ============================================================================
+
 # Application specific files
 documentor.log
 temp/
 tmp/
+
+# Configuration files
+# Note: config-test.json is version controlled (test configuration)
+# Note: config.json can be version controlled if needed (user's active config)
+# Note: samples/ directory contains template configurations for version control
+# All sample configs should be committed to help users get started quickly
 
 # Temporary development files
 *_summary.md
@@ -86,9 +112,12 @@ replay_*.log
 *.old
 
 # Runtime configuration that might contain sensitive data
+# Note: Sample configs in samples/ are version controlled by design
+# Users should NOT commit configs with real API keys - use config.json locally only
 config/local.json
 *.local.json
 *.secret.json
+*.api-key.json
 
 # Node modules (if any JS tools are used)
 node_modules/

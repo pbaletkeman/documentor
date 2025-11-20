@@ -198,7 +198,7 @@ If you encounter errors like "NullPointerException in CompletableFuture for unit
 3. **Use the provided Ollama config**:
 
    ```bash
-   cp config-ollama.json config.json
+   cp samples/config-ollama.json config.json
    ```
 
 4. **Run the application**:
@@ -210,7 +210,7 @@ If you encounter errors like "NullPointerException in CompletableFuture for unit
 5. **Analyze your first project**:
 
    ```bash
-   analyze --project-path ./src --generate-mermaid true --config config-ollama.json
+   analyze --project-path ./src --generate-mermaid true --config samples/config-ollama.json
    ```
 
 ### Option 2: Using OpenAI/Other APIs
@@ -218,7 +218,7 @@ If you encounter errors like "NullPointerException in CompletableFuture for unit
 1. **Copy the pre-configured OpenAI config**:
 
    ```bash
-   cp config-openai.json config.json
+   cp samples/config-openai.json config.json
    ```
 
 2. **Add your API key to config.json**:
@@ -270,28 +270,28 @@ Documentor implements an early configuration loading system that ensures setting
 
 ```bash
 # Using standard format
-./gradlew runApp -Pargs="analyze --project-path ./src --config config-llamacpp.json"
+./gradlew runApp -Pargs="analyze --project-path ./src --config samples/config-llamacpp.json"
 
 # Using equals format
-./gradlew runApp -Pargs="analyze --project-path ./src --config=config-llamacpp.json"
+./gradlew runApp -Pargs="analyze --project-path ./src --config=samples/config-llamacpp.json"
 
 # Using comma-separated format
-./gradlew runApp -Pargs="analyze,--project-path,./src,--config,config-llamacpp.json"
+./gradlew runApp -Pargs="analyze,--project-path,./src,--config,samples/config-llamacpp.json"
 ```
 
 ### Configuration Files Overview
 
 Documentor provides several pre-configured settings files for different use cases:
 
-| Configuration File              | Purpose               | Description                                                                 |
-| ------------------------------- | --------------------- | --------------------------------------------------------------------------- |
-| `config.json`                   | Main Configuration    | Your active configuration file - copy one of the templates to this filename |
-| `config-openai.json`            | OpenAI/ChatGPT        | Quickstart configuration for using OpenAI API services                      |
-| `config-ollama.json`            | Ollama Integration    | Optimized configuration for local Ollama models                             |
-| `config-llamacpp.json`          | llama.cpp Integration | Settings for using local llama.cpp server                                   |
-| `config-unit-test-logging.json` | Unit Test Logging     | Minimal configuration focused on unit test command logging                  |
-| `config-diagrams-only.json`     | Diagrams Only         | Configuration focused only on generating diagrams (no documentation)        |
-| `config-docs-only.json`         | Documentation Only    | Configuration for generating only documentation (no diagrams)               |
+| Configuration File                      | Purpose               | Description                                                                 |
+| --------------------------------------- | --------------------- | --------------------------------------------------------------------------- |
+| `config.json`                           | Main Configuration    | Your active configuration file - copy one of the templates to this filename |
+| `samples/config-openai.json`            | OpenAI/ChatGPT        | Quickstart configuration for using OpenAI API services                      |
+| `samples/config-ollama.json`            | Ollama Integration    | Optimized configuration for local Ollama models                             |
+| `samples/config-llamacpp.json`          | llama.cpp Integration | Settings for using local llama.cpp server                                   |
+| `samples/config-unit-test-logging.json` | Unit Test Logging     | Minimal configuration focused on unit test command logging                  |
+| `samples/config-diagrams-only.json`     | Diagrams Only         | Configuration focused only on generating diagrams (no documentation)        |
+| `samples/config-docs-only.json`         | Documentation Only    | Configuration for generating only documentation (no diagrams)               |
 
 ### Configuration Options Explained
 
@@ -476,7 +476,7 @@ Documentor provides seamless integration with OpenAI's GPT models for high-quali
 
 2. **Edit the OpenAI configuration**:
 
-   - Open `config-openai.json`
+   - Open `samples/config-openai.json`
    - Add your API key: Replace "YOUR_OPENAI_API_KEY" with your actual key
 
 3. **Start the application and use the config directly**:
@@ -486,14 +486,14 @@ Documentor provides seamless integration with OpenAI's GPT models for high-quali
    ./gradlew runApp
 
    # In the Documentor shell, run an analysis using the OpenAI config directly
-   analyze --project-path ./src --config config-openai.json
+   analyze --project-path ./src --config samples/config-openai.json
    ```
 
    Alternatively, if you plan to use OpenAI frequently, you can copy the config:
 
    ```bash
    # Copy the ready-to-use OpenAI configuration for repeated use
-   cp config-openai.json config.json
+   cp samples/config-openai.json config.json
 
    # Then run your analysis with the default config
    analyze --project-path ./src
@@ -641,14 +641,14 @@ After your llama.cpp server is running:
 ./gradlew runApp
 
 # In the Documentor shell, run an analysis using the llama.cpp config directly
-analyze --project-path ./src --generate-mermaid true --config config-llamacpp.json
+analyze --project-path ./src --generate-mermaid true --config samples/config-llamacpp.json
 ```
 
 Alternatively, if you plan to use llama.cpp frequently, you can copy the config:
 
 ```bash
 # Copy the ready-to-use llama.cpp configuration for repeated use
-cp config-llamacpp.json config.json
+cp samples/config-llamacpp.json config.json
 
 # Then run your analysis with the default config
 analyze --project-path ./src --generate-mermaid true
@@ -656,7 +656,7 @@ analyze --project-path ./src --generate-mermaid true
 
 #### 📋 Complete llama.cpp Configuration
 
-The `config-llamacpp.json` includes optimal settings for llama.cpp integration:
+The `samples/config-llamacpp.json` includes optimal settings for llama.cpp integration:
 
 ```json
 {
@@ -732,14 +732,14 @@ Documentor provides **seamless integration with Ollama** for local LLM models! R
    ./gradlew runApp
 
    # In the Documentor shell, run an analysis using the Ollama config directly
-   analyze --project-path ./src --generate-mermaid true --config config-ollama.json
+   analyze --project-path ./src --generate-mermaid true --config samples/config-ollama.json
    ```
 
    Alternatively, if you plan to use Ollama frequently, you can copy the config:
 
    ```bash
    # Copy the ready-to-use Ollama configuration for repeated use
-   cp config-ollama.json config.json
+   cp samples/config-ollama.json config.json
 
    # Then run your analysis with the default config
    analyze --project-path ./src --generate-mermaid true
@@ -754,14 +754,14 @@ For scenarios where you want to generate only diagrams without full documentatio
 ./gradlew runApp
 
 # In the Documentor shell, run an analysis using the diagrams-only config directly
-analyze --project-path ./src --config config-diagrams-only.json
+analyze --project-path ./src --config samples/config-diagrams-only.json
 ```
 
 Alternatively, if you plan to use this configuration frequently:
 
 ```bash
 # Copy the diagrams-only configuration for repeated use
-cp config-diagrams-only.json config.json
+cp samples/config-diagrams-only.json config.json
 
 # Then run your analysis with the default config
 analyze --project-path ./src
@@ -769,7 +769,7 @@ analyze --project-path ./src
 
 #### 📋 Complete Diagrams Only Configuration
 
-The `config-diagrams-only.json` provides optimized settings for diagram generation:
+The `samples/config-diagrams-only.json` provides optimized settings for diagram generation:
 
 ```json
 {
@@ -811,16 +811,14 @@ For scenarios where you want to generate only textual documentation without diag
 ./gradlew runApp
 
 # In the Documentor shell, run an analysis using the docs-only config directly
-analyze --project-path ./src --config config-docs-only.json
+   analyze --project-path ./src --config samples/config-docs-only.json
 ```
 
 Alternatively, if you plan to use this configuration frequently:
 
 ```bash
 # Copy the documentation-only configuration for repeated use
-cp config-docs-only.json config.json
-
-# Then run your analysis with the default config
+cp samples/config-docs-only.json config.json# Then run your analysis with the default config
 analyze --project-path ./src
 ```
 
@@ -1104,16 +1102,14 @@ For development scenarios where you want to log unit test commands without runni
 ./gradlew runApp
 
 # In the Documentor shell, run an analysis using the unit test logging config directly
-analyze --project-path ./src --config config-unit-test-logging.json
+   analyze --project-path ./src --config samples/config-unit-test-logging.json
 ```
 
 Alternatively, if you plan to use this configuration frequently:
 
 ```bash
 # Copy the unit test logging configuration for repeated use
-cp config-unit-test-logging.json config.json
-
-# Then run your analysis with the default config
+cp samples/config-unit-test-logging.json config.json# Then run your analysis with the default config
 analyze --project-path ./src
 ```
 
