@@ -159,7 +159,7 @@ Each configuration file can be customized by modifying:
 2. **Output Settings** - Configure output directory, diagram generation, test generation
 3. **Analysis Settings** - Control thread count, language support, file patterns to exclude
 
-See the main README.md for detailed configuration documentation.
+See [`docs/CONFIGURATION_OVERVIEW.md`](../docs/CONFIGURATION_OVERVIEW.md) for detailed configuration documentation.
 
 ## Tips
 
@@ -167,3 +167,9 @@ See the main README.md for detailed configuration documentation.
 - **Try Diagrams First:** Use `config-diagrams-only.json` for a quick visual check
 - **Test Your Setup:** Run `validate-config --config samples/config-XXXX.json` to verify
 - **Keep Original:** Don't modify files in the samples directory; copy them first
+
+## See Also
+
+- Main [`README.md`](../README.md) - Complete Documentor documentation and usage guide
+- [`docs/CONFIGURATION_OVERVIEW.md`](../docs/CONFIGURATION_OVERVIEW.md) - Detailed configuration system documentation
+- [`docs/ENHANCED-README.md`](../docs/ENHANCED-README.md) - Enhanced version instructions

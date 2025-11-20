@@ -2296,6 +2296,16 @@ Email: [documentor@letkeman.ca](mailto:documentor@letkeman.ca)
 
 ---
 
+## 📚 Documentation Files
+
+For more detailed information, see the following documentation in the `docs/` folder:
+
+- **[`docs/CONFIGURATION_OVERVIEW.md`](docs/CONFIGURATION_OVERVIEW.md)** - Comprehensive guide to the configuration system, early loading mechanism, and all configuration options
+- **[`docs/ENHANCED-README.md`](docs/ENHANCED-README.md)** - Enhanced version instructions with improved error handling and additional features
+- **[`docs/ORGANIZATION_SUMMARY.md`](docs/ORGANIZATION_SUMMARY.md)** - Summary of project organization, file structure improvements, and cleanup operations
+
+---
+
 ## ✅ Recent Updates & Current Status
 
 **Last Updated**: October 11, 2025
