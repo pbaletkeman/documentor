@@ -24,7 +24,7 @@ git push origin vX.Y.Z
 Build and produce artifacts (runs Checkstyle first):
 
 ```bash
-gradlew.bat clean checkstyleTest
+gradlew.bat clean checkstyleMain checkstyleTest
 gradleMaint build
 ```
 
@@ -40,7 +40,7 @@ gh release edit vX.Y.Z --notes-file detailed_release_notes_vX.Y.Z.md --publish
 Always run the clean Checkstyle build before finalizing releases to avoid style regressions:
 
 ```bash
-gradlew.bat clean checkstyleTest
+gradlew.bat clean checkstyleMain checkstyleTest
 ```
 
 # Release notes and changelog
@@ -52,7 +52,7 @@ gradlew.bat clean checkstyleTest
 # Publishing checklist
 
 1. Commit documentation changes (`CHANGELOG.md`, `DOCUMENTATION_SUMMARY.md`, release note files).
-2. Run `gradlew.bat clean checkstyleTest && gradlew.bat build` and confirm `build/libs/documentor.jar` exists.
+2. Run `gradlew.bat clean checkstyleMain checkstyleTest && gradlew.bat build` and confirm `build/libs/documentor.jar` exists.
 3. Create and push annotated tag, create or edit GitHub release, upload artifact(s), then publish.
 
 # Contact
@@ -78,7 +78,7 @@ Usage summary:
 - Always run the clean Checkstyle build before finalizing releases:
 
 ```bash
-gradlew.bat clean checkstyleTest
+gradlew.bat clean checkstyleMain checkstyleTest
 ```
 
 This helps prevent style regressions and ensures the project follows defined rules.
@@ -92,7 +92,7 @@ This helps prevent style regressions and ensures the project follows defined rul
 ## Reviewing and publishing releases
 
 1. Ensure the working tree is clean and documentation changes are committed.
-2. Verify build and style: `gradlew.bat clean checkstyleTest && gradlew.bat build`.
+2. Verify build and style: `gradlew.bat clean checkstyleMain checkstyleTest && gradlew.bat build`.
 3. Create and push tag, create/edit the release, upload artifacts, then publish the release when ready.
 
 ## Contact
