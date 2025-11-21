@@ -49,8 +49,12 @@ public class DiagramPathManager {
             final DiagramNamingOptions namingOptions,
             final String defaultExtension) {
         if (namingOptions == null) {
-            return sanitizeFileName(className) + "_diagram."
-                    + defaultExtension;
+            // Backward compatibility: use old naming format
+            String suffix = defaultExtension.equals("mmd")
+                    ? "_diagram" : "_plantuml";
+            String ext = defaultExtension.equals("mmd")
+                    ? "mmd" : "puml";
+            return sanitizeFileName(className) + suffix + "." + ext;
         }
 
         String prefix = namingOptions.getPrefixOrEmpty();

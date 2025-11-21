@@ -95,22 +95,16 @@ public record OutputSettings(
     }
 
     /**
-     * 🔍 Gets Mermaid naming options or default
+     * 🔍 Gets Mermaid naming options or default (null for backward compat)
      */
     public DiagramNamingOptions getMermaidNamingOrDefault() {
-        if (mermaidNaming == null) {
-            return new DiagramNamingOptions(null, null, "mmd");
-        }
         return mermaidNaming;
     }
 
     /**
-     * 🔍 Gets PlantUML naming options or default
+     * 🔍 Gets PlantUML naming options or default (null for backward compat)
      */
     public DiagramNamingOptions getPlantumlNamingOrDefault() {
-        if (plantumlNaming == null) {
-            return new DiagramNamingOptions(null, null, "plantuml");
-        }
         return plantumlNaming;
     }
 }
