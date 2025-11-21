@@ -2,6 +2,18 @@
 
 Comprehensive guide with practical examples for all Documentor commands.
 
+## Table of Contents
+
+- [Interactive Shell](#interactive-shell)
+- [Command Overview](#command-overview)
+- [Analyze Command](#analyze-command)
+- [Validate Config Command](#validate-config-command)
+- [Status Command](#status-command)
+- [Mock Provider Examples](#mock-provider-examples)
+- [Docker Usage Examples](#docker-usage-examples)
+- [Advanced Examples](#advanced-examples)
+- [Batch Processing](#batch-processing)
+
 ## Interactive Shell
 
 ### Starting the Shell

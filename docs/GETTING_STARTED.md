@@ -2,6 +2,17 @@
 
 A comprehensive guide to setting up and running Documentor for your first code analysis project.
 
+## Table of Contents
+
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Basic Usage](#basic-usage)
+- [Configuration](#configuration)
+- [Next Steps](#next-steps)
+- [Common Tasks](#common-tasks)
+- [Troubleshooting](#troubleshooting)
+- [Sample Configurations](#sample-configurations)
+
 ## Installation
 
 ### Prerequisites

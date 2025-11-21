@@ -2,6 +2,17 @@
 
 Complete reference for all Documentor configuration options.
 
+## Table of Contents
+
+- [Configuration Structure](#configuration-structure)
+- [LLM Models Configuration](#llm-models-configuration)
+- [Output Settings Configuration](#output-settings-configuration)
+- [Analysis Settings Configuration](#analysis-settings-configuration)
+- [Sample Configurations](#sample-configurations)
+- [Configuration Validation](#configuration-validation)
+- [Environment Variables](#environment-variables)
+- [Advanced Options](#advanced-options)
+
 ## Configuration Structure
 
 The configuration file (typically `config.json`) is divided into three main sections:

@@ -2,6 +2,22 @@
 
 This document covers running Documentor in Docker containers for both development and production environments.
 
+## Table of Contents
+
+- [Quick Start](#quick-start)
+- [Building Images](#building-images)
+- [Configuration](#configuration)
+- [Advanced Usage](#advanced-usage)
+- [Performance Tuning](#performance-tuning)
+- [Networking](#networking)
+- [Cleanup](#cleanup)
+- [Health Checks](#health-checks)
+- [Security Considerations](#security-considerations)
+- [Troubleshooting](#troubleshooting)
+- [Docker Compose Services](#docker-compose-services)
+- [Sample Configurations](#sample-configurations)
+- [References](#references)
+
 ## Quick Start
 
 ### Development Environment
@@ -272,6 +288,80 @@ Verify container is running:
 ```bash
 docker-compose ps
 docker-compose logs documentor-dev
+```
+
+## Docker Compose Services
+
+### Service: documentor-dev
+
+**Purpose:** Development environment with live code reloading
+
+**Features:**
+
+- Source code mounted for live updates
+- Continuous Gradle builds
+- Remote debugging (port 5005)
+- Full logging output
+
+**Environment Variables:**
+
+```bash
+JAVA_TOOL_OPTIONS="-Xmx512m -Xms256m"
+LOG_LEVEL="DEBUG"
+CONFIG_PATH="/app/config/config.json"
+```
+
+### Service: documentor-prod
+
+**Purpose:** Production-optimized container
+
+**Features:**
+
+- Minimal dependencies
+- Health checks enabled
+- Auto-restart on failure
+- Non-root user execution
+
+**Environment Variables:**
+
+```bash
+JAVA_TOOL_OPTIONS="-Xmx256m -Xms128m"
+LOG_LEVEL="INFO"
+CONFIG_PATH="/app/config/config.json"
+```
+
+## Sample Configurations
+
+### Using with config-openai.json
+
+```bash
+# Copy sample config
+cp samples/config-openai.json config/config.json
+
+# Build and run
+docker-compose build
+docker-compose up documentor-dev
+```
+
+### Using with config-ollama.json
+
+```bash
+# Ensure Ollama is running locally
+ollama serve
+
+# In another terminal, use Ollama config
+cp samples/config-ollama.json config/config.json
+docker-compose up documentor-dev
+```
+
+### Custom Configuration with Docker
+
+```bash
+# Create custom config
+cp samples/config-diagram-naming-example.json config/custom-diagrams.json
+
+# Run with custom config
+docker-compose exec documentor-dev analyze --project-path ./src --config /app/config/custom-diagrams.json
 ```
 
 ## References
