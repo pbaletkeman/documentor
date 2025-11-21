@@ -41,8 +41,7 @@ class ConfigPackageFinalCoverageTest {
         // Create test config with non-null models
         LlmModelConfig model = new LlmModelConfig("test-model",
             "provider", "url", "key", MAX_TOKENS, TIMEOUT_SECONDS);
-        OutputSettings outputSettings = new OutputSettings(
-            "output", "markdown", false, false, false);
+        OutputSettings outputSettings = new OutputSettings("output", "markdown", false, false, false, null, null, null, null);
         AnalysisSettings analysisSettings =
             new AnalysisSettings(true, ANALYSIS_DEPTH, null, null);
 
@@ -246,8 +245,7 @@ class ConfigPackageFinalCoverageTest {
 
         // Test with config having empty models (size = 0)
         LlmModelConfig[] emptyModels = {};
-        OutputSettings outputSettings = new OutputSettings(
-            "output", "format", false, false, false);
+        OutputSettings outputSettings = new OutputSettings("output", "format", false, false, false, null, null, null, null);
         AnalysisSettings analysisSettings = new AnalysisSettings(
             true, 1, null, null);
 

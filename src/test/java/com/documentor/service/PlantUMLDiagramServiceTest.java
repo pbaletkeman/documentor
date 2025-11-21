@@ -43,7 +43,7 @@ class PlantUMLDiagramServiceTest {
     void setUp() {
         diagramElementFilter = new DiagramElementFilter();
         diagramPathManager = new DiagramPathManager();
-        plantUMLClassDiagramGenerator = new PlantUMLClassDiagramGenerator();
+        plantUMLClassDiagramGenerator = new PlantUMLClassDiagramGenerator(new DiagramPathManager());
 
         // Update TestDiagramGeneratorFactory to support PlantUML
         TestDiagramGeneratorFactory generatorFactory =

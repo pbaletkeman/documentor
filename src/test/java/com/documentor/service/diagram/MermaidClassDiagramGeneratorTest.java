@@ -22,7 +22,7 @@ class MermaidClassDiagramGeneratorTest {
     private static final int LINE_NUMBER_THREE = 3;
 
     private final MermaidClassDiagramGenerator generator =
-        new MermaidClassDiagramGenerator();
+        new MermaidClassDiagramGenerator(new DiagramPathManager());
 
     @Test
     @DisplayName("Should generate class diagram with fields and methods")

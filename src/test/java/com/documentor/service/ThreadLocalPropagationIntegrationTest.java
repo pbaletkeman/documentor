@@ -53,13 +53,8 @@ public class ThreadLocalPropagationIntegrationTest {
             MAX_TOKENS,
             TIMEOUT_SECONDS);
 
-        OutputSettings outputSettings = new OutputSettings(
-            "./output",
-            "markdown",
-            true,
-            true,
-            true
-        );
+        OutputSettings outputSettings = new OutputSettings("./output", "markdown", true, true, true
+        , null, null, null, null);
 
         AnalysisSettings analysisSettings = new AnalysisSettings(
             true,
@@ -142,13 +137,8 @@ public class ThreadLocalPropagationIntegrationTest {
             MAX_TOKENS,
             TIMEOUT_SECONDS);
 
-        OutputSettings outputSettings = new OutputSettings(
-            "./output",
-            "markdown",
-            true,
-            true,
-            true
-        );
+        OutputSettings outputSettings = new OutputSettings("./output", "markdown", true, true, true
+        , null, null, null, null);
 
         AnalysisSettings analysisSettings = new AnalysisSettings(
             true,

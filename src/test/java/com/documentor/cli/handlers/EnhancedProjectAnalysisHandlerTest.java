@@ -61,13 +61,8 @@ class EnhancedProjectAnalysisHandlerTest {
         );
         testConfig = new DocumentorConfig(
             List.of(llmModelConfig),
-            new OutputSettings(
-                "test-output-dir",
-                "markdown",
-                true,
-                true,
-                false
-            ),
+            new OutputSettings("test-output-dir", "markdown", true, true, false
+            , null, null, null, null),
             new AnalysisSettings(
                 null,
                 null,
@@ -579,7 +574,7 @@ class EnhancedProjectAnalysisHandlerTest {
         // Create config with null llmModels
         DocumentorConfig configWithNullModels = new DocumentorConfig(
             null,
-            new OutputSettings("/test/output", "markdown", true, true, false),
+            new OutputSettings("/test/output", "markdown", true, true, false, null, null, null, null),
             null
         );
 

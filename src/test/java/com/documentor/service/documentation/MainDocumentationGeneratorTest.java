@@ -32,8 +32,7 @@ class MainDocumentationGeneratorTest {
 
     @BeforeEach
     void setUp() {
-        OutputSettings outputSettings = new OutputSettings(
-            "out", "markdown", true, false, false);
+        OutputSettings outputSettings = new OutputSettings("out", "markdown", true, false, false, null, null, null, null);
         AnalysisSettings analysisSettings = new AnalysisSettings(
             true, MAX_DEPTH, List.of("**/*.java"), List.of());
         LlmModelConfig model = new LlmModelConfig("m", "ollama",

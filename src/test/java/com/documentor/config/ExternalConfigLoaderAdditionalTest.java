@@ -21,6 +21,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.withSettings;
+import com.documentor.config.model.OutputSettings;
 
 /**
  * Additional tests for ExternalConfigLoader to specifically
@@ -48,8 +49,7 @@ class ExternalConfigLoaderAdditionalTest {
                 "test-model", "ollama", "http://localhost:11434",
                 "test-key", TEST_MODEL_TIMEOUT_MILLIS,
                 TEST_MODEL_TIMEOUT_SECONDS)),
-            new com.documentor.config.model.OutputSettings("output",
-               "markdown", false, false, false),
+            new OutputSettings("output", "markdown", false, false, false, null, null, null, null),
             new com.documentor.config.model.AnalysisSettings(true,
                 TEST_ANALYSIS_DEPTH, List.of("*.java"), null)
         );
