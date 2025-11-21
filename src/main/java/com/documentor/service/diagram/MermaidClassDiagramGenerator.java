@@ -1,5 +1,6 @@
 package com.documentor.service.diagram;
 
+import com.documentor.config.model.DiagramNamingOptions;
 import com.documentor.constants.ApplicationConstants;
 import com.documentor.model.CodeElement;
 import com.documentor.model.CodeElementType;
@@ -27,14 +28,32 @@ public class MermaidClassDiagramGenerator {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(MermaidClassDiagramGenerator.class);
 
+    private final DiagramPathManager pathManager;
+
+    public MermaidClassDiagramGenerator(
+            final DiagramPathManager pathManagerParam) {
+        this.pathManager = pathManagerParam;
+    }
+
     /**
      * 📊 Generates a Mermaid class diagram for a single class
      */
     public String generateClassDiagram(final CodeElement classElement,
             final List<CodeElement> allElements, final Path outputPath)
             throws IOException {
+        return generateClassDiagram(classElement, allElements, outputPath,
+                null);
+    }
+
+    /**
+     * 📊 Generates a Mermaid class diagram with custom naming options
+     */
+    public String generateClassDiagram(final CodeElement classElement,
+            final List<CodeElement> allElements, final Path outputPath,
+            final DiagramNamingOptions namingOptions) throws IOException {
         String className = classElement.name();
-        String diagramFileName = className + "_diagram.mmd";
+        String diagramFileName = pathManager.generateDiagramFileName(
+            className, namingOptions, "mmd");
         Path diagramPath = outputPath.resolve(diagramFileName);
 
         // Generate Mermaid diagram content

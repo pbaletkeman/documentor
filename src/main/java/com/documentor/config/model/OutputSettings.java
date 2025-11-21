@@ -2,6 +2,7 @@ package com.documentor.config.model;
 
 import com.documentor.constants.ApplicationConstants;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 
 /**
@@ -22,7 +23,21 @@ public record OutputSettings(
     Boolean generatePlantUML,
 
     @JsonProperty("verbose_output")
-    Boolean verboseOutput
+    Boolean verboseOutput,
+
+    @JsonProperty("mermaid_naming")
+    @Valid
+    DiagramNamingOptions mermaidNaming,
+
+    @JsonProperty("plantuml_naming")
+    @Valid
+    DiagramNamingOptions plantumlNaming,
+
+    @JsonProperty("error_log")
+    String errorLog,
+
+    @JsonProperty("output_log")
+    String outputLog
 ) {
     // Simplified defaults
     public OutputSettings {
@@ -37,6 +52,12 @@ public record OutputSettings(
         }
         if (verboseOutput == null) {
             verboseOutput = false;
+        }
+        if (errorLog == null || errorLog.isEmpty()) {
+            errorLog = "errors.log";
+        }
+        if (outputLog == null || outputLog.isEmpty()) {
+            outputLog = "out.log";
         }
     }
 
@@ -71,6 +92,26 @@ public record OutputSettings(
 
     public String plantUMLOutputPath() {
         return outputDirectory;
+    }
+
+    /**
+     * 🔍 Gets Mermaid naming options or default
+     */
+    public DiagramNamingOptions getMermaidNamingOrDefault() {
+        if (mermaidNaming == null) {
+            return new DiagramNamingOptions(null, null, "mmd");
+        }
+        return mermaidNaming;
+    }
+
+    /**
+     * 🔍 Gets PlantUML naming options or default
+     */
+    public DiagramNamingOptions getPlantumlNamingOrDefault() {
+        if (plantumlNaming == null) {
+            return new DiagramNamingOptions(null, null, "plantuml");
+        }
+        return plantumlNaming;
     }
 }
 

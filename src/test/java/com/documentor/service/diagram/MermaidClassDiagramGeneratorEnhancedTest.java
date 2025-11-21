@@ -23,7 +23,7 @@ class MermaidClassDiagramGeneratorEnhancedTest {
     private static final int LOOP_COUNT_TWENTY = 20;
 
     private final MermaidClassDiagramGenerator generator =
-        new MermaidClassDiagramGenerator();
+        new MermaidClassDiagramGenerator(new DiagramPathManager());
 
     @Test
     @DisplayName("Should generate class diagram with relationships")

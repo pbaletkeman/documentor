@@ -96,7 +96,10 @@ public class DocumentationService {
                     List<String> diagramPaths = mermaidDiagramService
                             .generateClassDiagrams(analysis,
                                     config.outputSettings()
-                                            .mermaidOutputPath()).join();
+                                            .mermaidOutputPath(),
+                                    config.outputSettings()
+                                            .getMermaidNamingOrDefault())
+                            .join();
                     LOGGER.info("✅ Generated {} Mermaid diagrams",
                             diagramPaths.size());
                 }
@@ -106,7 +109,10 @@ public class DocumentationService {
                     List<String> plantUMLPaths = plantUMLDiagramService
                             .generateClassDiagrams(analysis,
                                     config.outputSettings()
-                                            .plantUMLOutputPath()).join();
+                                            .plantUMLOutputPath(),
+                                    config.outputSettings()
+                                            .getPlantumlNamingOrDefault())
+                            .join();
                     LOGGER.info("✅ Generated {} PlantUML diagrams",
                             plantUMLPaths.size());
                 }

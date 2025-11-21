@@ -64,8 +64,7 @@ class DocumentationServiceEnhancedTest {
             List.of(new LlmModelConfig("test-model", "ollama",
             "http://localhost:11434", "test-key",
             TEST_TIMEOUT_MILLIS, TEST_MAX_TOKENS)),
-            new OutputSettings("./test-output",
-            "markdown", true, true, false),
+            new OutputSettings("./test-output", "markdown", true, true, false, null, null, null, null),
             new AnalysisSettings(null, null, null, null)
         );
 

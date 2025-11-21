@@ -60,8 +60,7 @@ class DocumentationServiceCoverageEnabledTest {
         // defaults pointing at the temp directory
         LlmModelConfig model = new LlmModelConfig("test-model", "ollama",
             "http://localhost", null, null, null);
-        OutputSettings outputSettings = new OutputSettings(tempDir.toString(),
-            "md", true, false, false);
+        OutputSettings outputSettings = new OutputSettings(tempDir.toString(), "md", true, false, false, null, null, null, null);
         AnalysisSettings analysisSettings =
             new AnalysisSettings(null, null, null, null);
         config = new DocumentorConfig(List.of(model),
