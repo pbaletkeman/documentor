@@ -519,6 +519,10 @@ See `samples/config-diagrams-only.json`
 
 See `samples/config-docs-only.json`
 
+### Custom Diagram Naming
+
+See `samples/config-diagram-naming-example.json` for a complete example of configuring custom prefixes, suffixes, and extensions for Mermaid and PlantUML diagrams.
+
 ## Next Steps
 
 - **[LLM Integrations](LLM_INTEGRATIONS.md)** - Detailed setup for each provider

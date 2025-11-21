@@ -12,6 +12,7 @@ This directory contains ready-to-use configuration files for different Documento
 | `config-diagrams-only.json`                                         | Diagrams Only         | Generate only Mermaid and PlantUML diagrams (no documentation)    |
 | `config-docs-only.json`                                             | Documentation Only    | Generate only comprehensive documentation (no diagrams)           |
 | `config-unit-test-logging.json`                                     | Unit Test Logging     | Minimal configuration focused on unit test command logging        |
+| `config-diagram-naming-example.json`                                | Custom Diagram Naming | Example with custom prefixes, suffixes, and extensions            |
 | `fixed-config.json`, `fixed-config-v2.json`, `fixed-config-v3.json` | Fixed/Development     | Development and testing configurations                            |
 
 ## How to Use
@@ -135,20 +136,67 @@ analyze --project-path ./src
 - Minimal configuration
 - Good for CI/CD integration
 
+### config-diagram-naming-example.json
+
+**Best For:** Customizing diagram file naming with prefixes, suffixes, and extensions
+
+**Key Features:**
+
+- Custom naming for Mermaid diagrams (`prefix`, `suffix`, `extension`)
+- Custom naming for PlantUML diagrams (independent settings)
+- Error and output logging configuration
+- Example: `arch-DataFlow.md` and `2025-API-UserService_v2.uml`
+
+**Configuration Structure:**
+
+```json
+{
+  "mermaid_naming": {
+    "prefix": "arch-",
+    "suffix": "",
+    "extension": "md"
+  },
+  "plantuml_naming": {
+    "prefix": "2025-API-",
+    "suffix": "_v2",
+    "extension": "uml"
+  },
+  "error_log": "errors.log",
+  "output_log": "out.log"
+}
+```
+
+**Naming Rules:**
+
+- Prefix/Suffix: Max 20 characters, optional
+- Extension: Max 10 characters
+- Allowed characters: `[0-9a-zA-Z- ()+._]`
+- Invalid input is ignored; defaults are applied
+
+**Usage:**
+
+```bash
+cp samples/config-diagram-naming-example.json config.json
+# Customize prefix, suffix, and extension values as needed
+./gradlew runApp
+analyze --project-path ./src --config config.json
+```
+
 ## Directory Structure
 
 ```
 samples/
-├── config-openai.json              # OpenAI configuration
-├── config-ollama.json              # Ollama configuration
-├── config-llamacpp.json            # llama.cpp configuration
-├── config-diagrams-only.json       # Diagrams-only configuration
-├── config-docs-only.json           # Documentation-only configuration
-├── config-unit-test-logging.json   # Unit test logging configuration
-├── fixed-config.json               # Fixed/development configuration
-├── fixed-config-v2.json            # Alternative development config
-├── fixed-config-v3.json            # Alternative development config
-└── README.md                        # This file
+├── config-openai.json                # OpenAI configuration
+├── config-ollama.json                # Ollama configuration
+├── config-llamacpp.json              # llama.cpp configuration
+├── config-diagrams-only.json         # Diagrams-only configuration
+├── config-docs-only.json             # Documentation-only configuration
+├── config-unit-test-logging.json     # Unit test logging configuration
+├── config-diagram-naming-example.json # Custom diagram naming example
+├── fixed-config.json                 # Fixed/development configuration
+├── fixed-config-v2.json              # Alternative development config
+├── fixed-config-v3.json              # Alternative development config
+└── README.md                          # This file
 ```
 
 ## Customizing Configurations
