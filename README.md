@@ -11,6 +11,7 @@ A powerful Java Spring Boot command-line application that analyzes Java and Pyth
 - **📝 Comprehensive Output**: Markdown documentation with examples and usage instructions
 - **🎨 Mermaid Diagrams**: Modern class diagrams rendered in GitHub and markdown
 - **🌿 PlantUML Diagrams**: Professional UML class diagrams with advanced relationships
+- **🏷️ Configurable Diagram Naming**: Custom prefixes, suffixes, and extensions for diagram files [Learn more →](docs/DIAGRAMS_GUIDE.md#file-naming-customization)
 - **🧪 Unit Test Generation**: Creates test suggestions targeting 90% code coverage
 - **⚡ Multi-Threading**: Parallel processing for optimal performance
 - **🔧 Pre-commit Hooks**: Automated quality assurance

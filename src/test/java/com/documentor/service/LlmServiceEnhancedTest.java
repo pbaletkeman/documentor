@@ -68,7 +68,7 @@ class LlmServiceEnhancedTest {
                                 TEST_TIMEOUT_MILLIS,
                                 TEST_MAX_TOKENS
                         )),
-            new OutputSettings("./test-output", "markdown", true, true, false),
+            new OutputSettings("./test-output", "markdown", true, true, false, null, null, null, null),
             new AnalysisSettings(null, null, null, null)
         );
 
@@ -179,7 +179,7 @@ class LlmServiceEnhancedTest {
         // Arrange
         DocumentorConfig emptyModelsConfig = new DocumentorConfig(
             List.of(), // Empty models list
-            new OutputSettings("./test-output", "markdown", true, true, false),
+            new OutputSettings("./test-output", "markdown", true, true, false, null, null, null, null),
             new AnalysisSettings(null, null, null, null)
         );
         LlmServiceEnhanced serviceWithEmptyModels = new LlmServiceEnhanced(

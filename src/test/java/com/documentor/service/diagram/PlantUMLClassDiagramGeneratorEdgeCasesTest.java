@@ -30,7 +30,7 @@ class PlantUMLClassDiagramGeneratorEdgeCasesTest {
 
     @BeforeEach
     void setUp() {
-        generator = new PlantUMLClassDiagramGenerator();
+        generator = new PlantUMLClassDiagramGenerator(new DiagramPathManager());
     }
 
     @Test

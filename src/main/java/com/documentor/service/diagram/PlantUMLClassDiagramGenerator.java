@@ -1,5 +1,6 @@
 package com.documentor.service.diagram;
 
+import com.documentor.config.model.DiagramNamingOptions;
 import com.documentor.model.CodeElement;
 import com.documentor.model.CodeElementType;
 import org.slf4j.Logger;
@@ -26,14 +27,32 @@ public class PlantUMLClassDiagramGenerator {
             LoggerFactory.getLogger(
                     PlantUMLClassDiagramGenerator.class);
 
+    private final DiagramPathManager pathManager;
+
+    public PlantUMLClassDiagramGenerator(
+            final DiagramPathManager pathManagerParam) {
+        this.pathManager = pathManagerParam;
+    }
+
     /**
      * 📊 Generates a PlantUML class diagram for a single class
      */
     public String generateClassDiagram(final CodeElement classElement,
             final List<CodeElement> allElements,
             final Path outputPath) throws IOException {
+        return generateClassDiagram(classElement, allElements, outputPath,
+                null);
+    }
+
+    /**
+     * 📊 Generates a PlantUML class diagram with custom naming options
+     */
+    public String generateClassDiagram(final CodeElement classElement,
+            final List<CodeElement> allElements, final Path outputPath,
+            final DiagramNamingOptions namingOptions) throws IOException {
         String className = classElement.name();
-        String diagramFileName = className + "_plantuml.puml";
+        String diagramFileName = pathManager.generateDiagramFileName(
+            className, namingOptions, "plantuml");
         Path diagramPath = outputPath.resolve(diagramFileName);
 
         // Generate PlantUML diagram content

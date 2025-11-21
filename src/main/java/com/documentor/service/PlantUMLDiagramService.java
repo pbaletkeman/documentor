@@ -1,5 +1,6 @@
 package com.documentor.service;
 
+import com.documentor.config.model.DiagramNamingOptions;
 import com.documentor.model.CodeElement;
 import com.documentor.model.ProjectAnalysis;
 import com.documentor.service.diagram.DiagramElementFilter;
@@ -46,13 +47,22 @@ public class PlantUMLDiagramService {
      */
     public CompletableFuture<List<String>> generateClassDiagrams(
             final ProjectAnalysis analysis, final String outputPath) {
+        return generateClassDiagrams(analysis, outputPath, null);
+    }
+
+    /**
+     * 📊 Generates class diagrams with custom naming options
+     */
+    public CompletableFuture<List<String>> generateClassDiagrams(
+            final ProjectAnalysis analysis, final String outputPath,
+            final DiagramNamingOptions namingOptions) {
 
         return CompletableFuture.supplyAsync(() -> {
             LOGGER.info("📊 Starting PlantUML diagram generation for {} "
                     + "elements", analysis.codeElements().size());
 
             try {
-                return generateDiagrams(analysis, outputPath);
+                return generateDiagrams(analysis, outputPath, namingOptions);
             } catch (Exception e) {
                 LOGGER.error("❌ Error generating PlantUML diagrams: {}",
                         e.getMessage(), e);
@@ -66,7 +76,8 @@ public class PlantUMLDiagramService {
      * 📊 Core diagram generation logic
      */
     private List<String> generateDiagrams(final ProjectAnalysis analysis,
-            final String outputPath) {
+            final String outputPath,
+            final DiagramNamingOptions namingOptions) {
         List<String> generatedFiles = new ArrayList<>();
 
         // Get eligible classes for diagram generation
@@ -81,7 +92,7 @@ public class PlantUMLDiagramService {
         eligibleClasses.forEach(classElement -> {
             try {
                 String diagram = processSingleClassDiagram(classElement,
-                        elementsByClass, outputPath);
+                        elementsByClass, outputPath, namingOptions);
                 generatedFiles.add(diagram);
             } catch (Exception e) {
                 LOGGER.warn("⚠️ Failed to generate PlantUML diagram for {}: {}",
@@ -99,7 +110,8 @@ public class PlantUMLDiagramService {
     private String processSingleClassDiagram(
             final CodeElement classElement,
             final Map<CodeElement, List<CodeElement>> elementsByClass,
-            final String outputPath) throws Exception {
+            final String outputPath,
+            final DiagramNamingOptions namingOptions) throws Exception {
 
         List<CodeElement> classElements = elementsByClass.get(classElement);
 
@@ -113,6 +125,7 @@ public class PlantUMLDiagramService {
 
         // Generate the diagram
         return generatorFactory.getPlantUMLClassDiagramGenerator()
-            .generateClassDiagram(classElement, classElements, outputDir);
+            .generateClassDiagram(classElement, classElements, outputDir,
+                namingOptions);
     }
 }

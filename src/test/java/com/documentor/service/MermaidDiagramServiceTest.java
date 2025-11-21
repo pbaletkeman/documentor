@@ -42,7 +42,7 @@ class MermaidDiagramServiceTest {
     void setUp() {
         diagramElementFilter = new DiagramElementFilter();
         diagramPathManager = new DiagramPathManager();
-        mermaidClassDiagramGenerator = new MermaidClassDiagramGenerator();
+        mermaidClassDiagramGenerator = new MermaidClassDiagramGenerator(new DiagramPathManager());
         TestDiagramGeneratorFactory generatorFactory =
                 new TestDiagramGeneratorFactory(mermaidClassDiagramGenerator);
         mermaidDiagramService = new MermaidDiagramService(

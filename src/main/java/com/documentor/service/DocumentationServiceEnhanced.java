@@ -264,7 +264,8 @@ public class DocumentationServiceEnhanced {
                 CompletableFuture<List<String>> diagramFuture =
                         mermaidDiagramService
                     .generateClassDiagrams(analysis,
-                            config.outputSettings().mermaidOutputPath())
+                            config.outputSettings().mermaidOutputPath(),
+                            config.outputSettings().getMermaidNamingOrDefault())
                     .orTimeout(DEFAULT_FUTURE_TIMEOUT_SECONDS, TimeUnit.SECONDS)
                     .exceptionally(ex -> {
                         LOGGER.error("Error generating Mermaid diagrams: {}",
@@ -293,7 +294,9 @@ public class DocumentationServiceEnhanced {
                 CompletableFuture<List<String>> plantUMLFuture =
                         plantUMLDiagramService
                     .generateClassDiagrams(analysis,
-                            config.outputSettings().plantUMLOutputPath())
+                            config.outputSettings().plantUMLOutputPath(),
+                            config.outputSettings()
+                                    .getPlantumlNamingOrDefault())
                     .orTimeout(DEFAULT_FUTURE_TIMEOUT_SECONDS, TimeUnit.SECONDS)
                     .exceptionally(ex -> {
                         LOGGER.error("Error generating PlantUML diagrams: {}",

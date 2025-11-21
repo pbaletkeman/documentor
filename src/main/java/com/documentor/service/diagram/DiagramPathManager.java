@@ -1,5 +1,6 @@
 package com.documentor.service.diagram;
 
+import com.documentor.config.model.DiagramNamingOptions;
 import org.springframework.stereotype.Component;
 
 import java.nio.file.Path;
@@ -34,6 +35,35 @@ public class DiagramPathManager {
      */
     public String generateDiagramFileName(final String className) {
         return sanitizeFileName(className) + "_diagram.mmd";
+    }
+
+    /**
+     * 🏷️ Generates a customizable diagram file name
+     *
+     * @param className the name of the class
+     * @param namingOptions the naming options (prefix, suffix, extension)
+     * @param defaultExtension the default extension if none specified
+     * @return the generated file name
+     */
+    public String generateDiagramFileName(final String className,
+            final DiagramNamingOptions namingOptions,
+            final String defaultExtension) {
+        if (namingOptions == null) {
+            // Backward compatibility: use old naming format
+            String suffix = defaultExtension.equals("mmd")
+                    ? "_diagram" : "_plantuml";
+            String ext = defaultExtension.equals("mmd")
+                    ? "mmd" : "puml";
+            return sanitizeFileName(className) + suffix + "." + ext;
+        }
+
+        String prefix = namingOptions.getPrefixOrEmpty();
+        String suffix = namingOptions.getSuffixOrEmpty();
+        String extension = namingOptions.getExtensionOrDefault(
+                defaultExtension);
+
+        return prefix + sanitizeFileName(className) + suffix + "."
+                + extension;
     }
 
     /**

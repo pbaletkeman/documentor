@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
+import com.documentor.config.model.OutputSettings;
 
 /**
  * Comprehensive tests for ExternalConfigLoader to improve branch coverage.
@@ -50,8 +51,7 @@ class ExternalConfigLoaderTest {
             List.of(new com.documentor.config.model.LlmModelConfig(
                 "test-model", "ollama", "http://localhost:11434",
                 "test-key", TEST_MODEL_TOKENS, TEST_MODEL_TIMEOUT)),
-            new com.documentor.config.model.OutputSettings("output",
-                "markdown", false, false, false),
+            new OutputSettings("output", "markdown", false, false, false, null, null, null, null),
             new com.documentor.config.model.AnalysisSettings(true,
                 ANALYSIS_DEPTH, List.of("*.java"), null)
         );
@@ -249,8 +249,7 @@ class ExternalConfigLoaderTest {
                     "model2", "openai", "https://api.openai.com", "sk-key",
                     COMPLEX_MODEL2_TOKENS, COMPLEX_MODEL2_TIMEOUT)
             ),
-            new com.documentor.config.model.OutputSettings(
-                "complex-output", "html", true, true, true),
+            new OutputSettings("complex-output", "html", true, true, true, null, null, null, null),
             new com.documentor.config.model.AnalysisSettings(
                 false, COMPLEX_ANALYSIS_DEPTH,
                     List.of("*.java", "*.py"), List.of("test/**"))

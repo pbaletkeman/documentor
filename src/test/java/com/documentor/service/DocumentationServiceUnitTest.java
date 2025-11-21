@@ -64,9 +64,8 @@ class DocumentationServiceUnitTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        OutputSettings outputSettings = new OutputSettings(
-            tempDir.toString(), "markdown", true, false, true
-        );
+        OutputSettings outputSettings = new OutputSettings(tempDir.toString(), "markdown", true, false, true
+        , null, null, null, null);
 
         AnalysisSettings analysisSettings = new AnalysisSettings(
             true, MAX_DEPTH_FIVE,
@@ -162,9 +161,8 @@ class DocumentationServiceUnitTest {
     void testGenerateDocumentationWithMermaidDiagramsDisabled()
         throws Exception {
         // Create config with generateMermaidDiagrams = false (third parameter)
-        OutputSettings outputSettings = new OutputSettings(
-            tempDir.toString(), "markdown", false, false, true
-        );
+        OutputSettings outputSettings = new OutputSettings(tempDir.toString(), "markdown", false, false, true
+        , null, null, null, null);
         AnalysisSettings analysisSettings = new AnalysisSettings(
             true, MAX_DEPTH_FIVE,
             List.of("**/*.java"), List.of("**/test/**")

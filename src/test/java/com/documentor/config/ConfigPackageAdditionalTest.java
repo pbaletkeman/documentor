@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import com.documentor.config.model.OutputSettings;
 
 /**
  * Additional tests to improve branch coverage for remaining config classes.
@@ -32,8 +33,7 @@ class ConfigPackageAdditionalTest {
         // Test setting actual config
         DocumentorConfig config = new DocumentorConfig(
             java.util.List.of(),
-            new com.documentor.config.model.OutputSettings(
-                "/test", "MARKDOWN", false, false, false),
+            new OutputSettings("/test", "MARKDOWN", false, false, false, null, null, null, null),
             null
         );
         ThreadLocalContextHolder.setConfig(config);

@@ -45,8 +45,7 @@ class ThreadLocalTaskDecoratorEnhancedTest {
             new LlmModelConfig("test-model", "ollama",
             "http://localhost:11434", null, TIMEOUT_MILLIS, TIMEOUT_SECONDS)
         );
-        OutputSettings outputSettings = new OutputSettings(
-            "output", "markdown", false, false, false);
+        OutputSettings outputSettings = new OutputSettings("output", "markdown", false, false, false, null, null, null, null);
         AnalysisSettings analysisSettings = new AnalysisSettings(
             true, DEFAULT_COUNT, null, null);
 
@@ -117,8 +116,7 @@ class ThreadLocalTaskDecoratorEnhancedTest {
     void testDecorateWithConfigWithNullModels() throws InterruptedException {
         // Create config with null models (this will fail validation,
         // but test the branch)
-        OutputSettings outputSettings = new OutputSettings(
-            "output", "markdown", false, false, false);
+        OutputSettings outputSettings = new OutputSettings("output", "markdown", false, false, false, null, null, null, null);
             AnalysisSettings analysisSettings = new AnalysisSettings(
                 true, DEFAULT_COUNT, null, null);
 
@@ -183,8 +181,7 @@ class ThreadLocalTaskDecoratorEnhancedTest {
     void testDecorateWithEmptyModelsList() throws InterruptedException {
         // Create config with empty models list
         List<LlmModelConfig> emptyModels = Collections.emptyList();
-        OutputSettings outputSettings = new OutputSettings(
-            "output", "markdown", false, false, false);
+        OutputSettings outputSettings = new OutputSettings("output", "markdown", false, false, false, null, null, null, null);
         AnalysisSettings analysisSettings = new AnalysisSettings(
             true, DEFAULT_COUNT, null, null);
 
@@ -231,7 +228,7 @@ class ThreadLocalTaskDecoratorEnhancedTest {
         );
 
         OutputSettings outputSettings =
-            new OutputSettings("output", "markdown", false, false, false);
+            new OutputSettings("output", "markdown", false, false, false, null, null, null, null);
         AnalysisSettings analysisSettings =
             new AnalysisSettings(true, DEFAULT_COUNT, null, null);
 

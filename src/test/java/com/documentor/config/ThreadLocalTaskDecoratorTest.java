@@ -46,7 +46,7 @@ class ThreadLocalTaskDecoratorTest {
         testConfig = new DocumentorConfig(
             List.of(new LlmModelConfig("test-model", "ollama", "test-endpoint",
                 "test-key", TEST_MAX_TOKENS, TEST_TIMEOUT)),
-            new OutputSettings("test/output", "markdown", false, false, false),
+            new OutputSettings("test/output", "markdown", false, false, false, null, null, null, null),
             new AnalysisSettings(null, null, null, null)
         );
 
@@ -229,7 +229,7 @@ class ThreadLocalTaskDecoratorTest {
                     "model3", "ollama", "endpoint3",
                     "key3", TEST_MAX_TOKENS, TEST_TIMEOUT)
             ),
-            new OutputSettings("test/output", "markdown", false, false, false),
+            new OutputSettings("test/output", "markdown", false, false, false, null, null, null, null),
             new AnalysisSettings(null, null, null, null)
         );
 
@@ -258,7 +258,7 @@ class ThreadLocalTaskDecoratorTest {
         // Setup: Create config with empty models list
         DocumentorConfig emptyModelsConfig = new DocumentorConfig(
             List.of(), // Empty models list
-            new OutputSettings("test/output", "markdown", false, false, false),
+            new OutputSettings("test/output", "markdown", false, false, false, null, null, null, null),
             new AnalysisSettings(null, null, null, null)
         );
 
