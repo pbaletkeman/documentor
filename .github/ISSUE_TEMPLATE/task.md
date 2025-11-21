@@ -7,12 +7,15 @@ assignees: []
 ---
 
 ## PRD Reference
+
 Path to PRD file: `.github/file-named-prd.md`
 
 ## Work Scope
+
 Brief description of what needs to be done (implementation, tests, documentation updates).
 
 ## Acceptance Criteria
+
 - [ ] All requirements from PRD implemented
 - [ ] Unit and integration tests passing
 - [ ] Documentation updated (README, DIAGRAMS_GUIDE, CONFIGURATION guides)
@@ -20,6 +23,7 @@ Brief description of what needs to be done (implementation, tests, documentation
 - [ ] CI/CD pipeline passing
 
 ## Blockers / Dependencies
+
 None yet
 
 ---

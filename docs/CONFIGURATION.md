@@ -82,7 +82,6 @@ Controls documentation generation behavior and output formats.
 | `plantuml_output_path`   | String  | `./uml`      | Output directory for PlantUML diagrams    |
 | `verbose_output`         | Boolean | `false`      | Include more detailed information in logs |
 
-
 ### Diagram File Naming
 
 Customize how diagram files are named using prefix, suffix, and extension options. Each diagram type (Mermaid and PlantUML) can have independent naming configuration.
@@ -110,25 +109,27 @@ Customize how diagram files are named using prefix, suffix, and extension option
 
 #### Naming Options
 
-| Option      | Type   | Max Length | Description                          | Example     |
-| ----------- | ------ | ---------- | ------------------------------------ | ----------- |
-| `prefix`    | String | 20         | Text prepended to file name          | `arch-`     |
-| `suffix`    | String | 20         | Text appended to file name           | `_v2`       |
-| `extension` | String | 10         | File extension (without dot)         | `uml`       |
-| `error_log` | String | -          | Path for error log file              | `errors.log`|
-| `output_log`| String | -          | Path for successful generation log   | `out.log`   |
+| Option       | Type   | Max Length | Description                        | Example      |
+| ------------ | ------ | ---------- | ---------------------------------- | ------------ |
+| `prefix`     | String | 20         | Text prepended to file name        | `arch-`      |
+| `suffix`     | String | 20         | Text appended to file name         | `_v2`        |
+| `extension`  | String | 10         | File extension (without dot)       | `uml`        |
+| `error_log`  | String | -          | Path for error log file            | `errors.log` |
+| `output_log` | String | -          | Path for successful generation log | `out.log`    |
 
 #### Allowed Characters
 
 File names must use valid UTF-8 characters from this set: `[0-9a-zA-Z- ()+._]`
 
 **Valid Examples:**
+
 - `2025-API-`
 - `arch (v2)`
 - `legacy_old`
 - `v1.0+beta`
 
 **Invalid Examples:**
+
 - `api@#$` (contains special characters)
 - `test!service` (contains exclamation mark)
 
@@ -195,6 +196,7 @@ Result: `arch-DataFlow.md`
 ```
 
 Results:
+
 - Mermaid: `backend-OrderService.mmd`
 - PlantUML: `api-OrderService_design.uml`
 
