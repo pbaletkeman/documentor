@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -47,13 +48,24 @@ class ConfigurationCommandHandlerTest {
         Path cfg = tmp.resolve("cfg.json");
         mapper.writeValue(cfg.toFile(), config);
 
+        // Debug: Print what was written
+        String jsonContent = Files.readString(cfg);
+        System.out.println("===== WRITTEN JSON =====");
+        System.out.println(jsonContent);
+        System.out.println("=============================");
+
         String res = handler.handleValidateConfig(cfg.toString());
 
-        assertTrue(res.contains("Configuration file is valid"));
-        assertTrue(res.contains("LLM Models"));
-        assertTrue(res.contains("Output Format"));
+        // Debug output
+        System.out.println("===== HANDLER RESPONSE =====");
+        System.out.println(res);
+        System.out.println("=============================");
+
+        assertTrue(res.contains("Configuration file is valid"), "Expected 'Configuration file is valid' in response: " + res);
+        assertTrue(res.contains("LLM Models"), "Expected 'LLM Models' in response: " + res);
+        assertTrue(res.contains("Output Format"), "Expected 'Output Format' in response: " + res);
         assertTrue(res.contains("Analysis settings")
-            || res.contains("Max Threads"));
+            || res.contains("Max Threads"), "Expected 'Analysis settings' or 'Max Threads' in response: " + res);
     }
 
     @Test
@@ -172,10 +184,12 @@ class ConfigurationCommandHandlerTest {
 
         String res = handler.handleValidateConfig(cfg.toString());
 
-        // Should either fail validation or show warning about
-        //  null output settings
-        assertTrue(res.contains("Configuration validation failed")
-                || res.contains("Warning: No output settings configured"));
+        // Should fail validation with schema error about null output settings
+        System.out.println("===== NULL OUTPUT SETTINGS TEST =====");
+        System.out.println(res);
+        System.out.println("=====================================");
+        assertTrue(res.contains("Schema validation failed")
+                || res.contains("null found, object expected"), "Response was: " + res);
     }
 
     @Test
@@ -199,23 +213,22 @@ class ConfigurationCommandHandlerTest {
                     }
                 ],
                 "output_settings": {
-                    "outputPath": "%s",
+                    "output_directory": "%s",
                     "format": "md",
-                    "includeUnitTests": true,
-                    "includeSourceCode": false
+                    "generate_mermaid": true,
+                    "generate_plantuml": false
                 },
                 "analysis_settings": null
             }
-            """.formatted(tmp.toString());
+            """.formatted(tmp.toString().replace("\\", "/"));
 
         Path cfg = tmp.resolve("null-analysis.json");
         java.nio.file.Files.writeString(cfg, jsonWithNullAnalysis);
 
         String res = handler.handleValidateConfig(cfg.toString());
 
-        // Should either fail validation or show warning about
-        // null analysis settings
-        assertTrue(res.contains("Configuration validation failed")
-                || res.contains("Warning: No analysis settings configured"));
+        // Should fail validation with schema error about null analysis settings
+        assertTrue(res.contains("Schema validation failed")
+                || res.contains("null found"), "Response was: " + res);
     }
 }

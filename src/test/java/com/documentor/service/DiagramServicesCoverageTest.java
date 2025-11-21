@@ -108,7 +108,7 @@ class DiagramServicesCoverageTest {
 
         // Make the class diagram generator throw an exception
         when(mockMermaidClassDiagramGenerator
-            .generateClassDiagram(any(), any(), any()))
+            .generateClassDiagram(any(), any(), any(), any()))
             .thenThrow(new RuntimeException("Diagram generation failed"));
 
         ProjectAnalysis analysis = createTestProjectAnalysis();
@@ -150,7 +150,7 @@ class DiagramServicesCoverageTest {
 
         // Make the class diagram generator throw an exception
         lenient().when(mockPlantUMLClassDiagramGenerator
-            .generateClassDiagram(any(), any(), any()))
+            .generateClassDiagram(any(), any(), any(), any()))
             .thenThrow(new RuntimeException("Diagram generation failed"));
 
         ProjectAnalysis analysis = createTestProjectAnalysis();
@@ -176,8 +176,8 @@ class DiagramServicesCoverageTest {
         when(mockElementFilter.groupElementsByClass(any()))
             .thenReturn(elementsByClass);
 
-        when(mockMermaidClassDiagramGenerator
-        .generateClassDiagram(any(), any(), any()))
+        lenient().when(mockMermaidClassDiagramGenerator
+        .generateClassDiagram(any(), any(), any(), any()))
             .thenReturn("generated-diagram.mmd");
 
         ProjectAnalysis analysis = createTestProjectAnalysis();
@@ -202,8 +202,8 @@ class DiagramServicesCoverageTest {
         when(mockElementFilter.groupElementsByClass(any()))
             .thenReturn(elementsByClass);
 
-        when(mockPlantUMLClassDiagramGenerator
-            .generateClassDiagram(any(), any(), any()))
+        lenient().when(mockPlantUMLClassDiagramGenerator
+            .generateClassDiagram(any(), any(), any(), any()))
             .thenReturn("generated-diagram.puml");
 
         ProjectAnalysis analysis = createTestProjectAnalysis();

@@ -1,6 +1,7 @@
 package com.documentor.config.model;
 
 import com.documentor.constants.ApplicationConstants;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
@@ -8,6 +9,7 @@ import jakarta.validation.constraints.NotEmpty;
 /**
  * 🔍 Output Settings Configuration - Enhanced with PlantUML Support
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public record OutputSettings(
     @JsonProperty("output_directory")
     @NotEmpty(message = "Output directory is required")
@@ -108,4 +110,3 @@ public record OutputSettings(
         return plantumlNaming;
     }
 }
-

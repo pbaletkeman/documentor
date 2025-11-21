@@ -1,6 +1,7 @@
 package com.documentor.config.model;
 
 import com.documentor.constants.ApplicationConstants;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -9,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * Extracted from nested DocumentorConfig to reduce complexity.
  * Contains all LLM-specific configuration settings.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public record LlmModelConfig(
     @JsonProperty("name") String name,
     @JsonProperty("provider") String provider,

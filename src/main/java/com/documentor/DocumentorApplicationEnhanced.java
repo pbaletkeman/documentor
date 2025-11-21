@@ -46,17 +46,15 @@ import com.documentor.config.AppConfigEnhanced;
         )
     }
 )
-public final class DocumentorApplicationEnhanced {
+public class DocumentorApplicationEnhanced {
 
     private static final Logger LOGGER =
             LoggerFactory.getLogger(DocumentorApplicationEnhanced.class);
 
     /**
-     * Private constructor to prevent instantiation of utility class.
+     * Public no-args constructor for Spring to instantiate.
      */
-    private DocumentorApplicationEnhanced() {
-        throw new UnsupportedOperationException(
-                "Utility class should not be instantiated");
+    public DocumentorApplicationEnhanced() {
     }
 
     public static void main(final String[] args) {

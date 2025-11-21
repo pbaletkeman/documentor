@@ -82,7 +82,7 @@ class DocumentationServiceCoverageEnabledTest {
             .thenReturn(CompletableFuture.completedFuture(null));
 
         lenient().when(mermaidDiagramService
-            .generateClassDiagrams(any(), any()))
+            .generateClassDiagrams(any(), any(), any()))
             .thenReturn(CompletableFuture.completedFuture(List.of()));
 
         DocumentationService documentationService =
@@ -111,7 +111,7 @@ class DocumentationServiceCoverageEnabledTest {
         verify(elementDocGenerator, atMost(1))
             .generateGroupedDocumentation(any(), any());
         verify(mermaidDiagramService, times(1))
-            .generateClassDiagrams(any(), any());
+            .generateClassDiagrams(any(), any(), any());
     }
 
     @Test
@@ -125,7 +125,7 @@ class DocumentationServiceCoverageEnabledTest {
 
         // Also stub mermaid and unit test generator to avoid NPEs
         // (they are invoked)
-        when(mermaidDiagramService.generateClassDiagrams(any(), any()))
+        when(mermaidDiagramService.generateClassDiagrams(any(), any(), any()))
             .thenReturn(CompletableFuture.completedFuture(List.of()));
         when(unitTestDocumentationGenerator
             .generateUnitTestDocumentation(any(), any()))

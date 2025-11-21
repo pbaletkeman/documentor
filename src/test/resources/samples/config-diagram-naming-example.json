@@ -29,7 +29,10 @@
   "analysis_settings": {
     "include_private_members": false,
     "max_depth": 4,
-    "included_patterns": ["**/*.java", "**/*.py"],
+    "included_patterns": [
+      "**/*.java",
+      "**/*.py"
+    ],
     "excluded_patterns": [
       "**/test/**",
       "**/target/**",

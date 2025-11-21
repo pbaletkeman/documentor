@@ -118,7 +118,7 @@ class DocumentationServiceCoverageTest {
             .completedFuture("# Test Documentation"));
         when(mockElementDocGenerator.generateGroupedDocumentation(any(), any()))
             .thenReturn(CompletableFuture.completedFuture(null));
-        when(mockPlantUMLDiagramService.generateClassDiagrams(any(), any()))
+        when(mockPlantUMLDiagramService.generateClassDiagrams(any(), any(), any()))
             .thenReturn(CompletableFuture.completedFuture(
                 Collections.singletonList("diagram.puml")));
 
@@ -128,7 +128,7 @@ class DocumentationServiceCoverageTest {
             documentationService.generateDocumentation(analysis);
 
         assertDoesNotThrow(() -> result.join());
-        verify(mockPlantUMLDiagramService).generateClassDiagrams(any(), any());
+        verify(mockPlantUMLDiagramService).generateClassDiagrams(any(), any(), any());
     }
 
     @Test

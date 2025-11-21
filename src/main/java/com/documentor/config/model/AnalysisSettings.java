@@ -1,6 +1,7 @@
 package com.documentor.config.model;
 
 import com.documentor.constants.ApplicationConstants;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.List;
 /**
  * 🔍 Analysis Settings Configuration - Simplified
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public record AnalysisSettings(
     @JsonProperty("include_private_members")
     Boolean includePrivateMembers,

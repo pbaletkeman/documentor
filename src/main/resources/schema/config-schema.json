@@ -2,57 +2,116 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Documentor Configuration",
   "type": "object",
-  "required": ["llm_models", "output_settings", "analysis_settings"],
+  "required": [
+    "llm_models",
+    "output_settings",
+    "analysis_settings"
+  ],
   "properties": {
     "llm_models": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["name", "baseUrl"],
+        "required": [
+          "name",
+          "baseUrl"
+        ],
         "properties": {
-          "name": {"type": "string"},
-          "baseUrl": {"type": "string", "format": "uri"},
-          "maxTokens": {"type": "integer"},
-          "timeoutSeconds": {"type": "integer"}
+          "name": {
+            "type": "string"
+          },
+          "baseUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "maxTokens": {
+            "type": "integer"
+          },
+          "timeoutSeconds": {
+            "type": "integer"
+          }
         }
       }
     },
     "output_settings": {
       "type": "object",
-      "required": ["output_directory", "format"],
+      "required": [
+        "output_directory",
+        "format"
+      ],
       "properties": {
-        "output_directory": {"type": "string"},
-        "format": {"type": "string"},
-        "generate_mermaid": {"type": "boolean"},
-        "generate_plantuml": {"type": "boolean"},
-        "verbose_output": {"type": "boolean"},
+        "output_directory": {
+          "type": "string"
+        },
+        "format": {
+          "type": "string"
+        },
+        "generate_mermaid": {
+          "type": "boolean"
+        },
+        "generate_plantuml": {
+          "type": "boolean"
+        },
+        "verbose_output": {
+          "type": "boolean"
+        },
         "mermaid_naming": {
           "type": "object",
           "properties": {
-            "prefix": {"type": "string"},
-            "suffix": {"type": "string"},
-            "extension": {"type": "string"}
+            "prefix": {
+              "type": "string"
+            },
+            "suffix": {
+              "type": "string"
+            },
+            "extension": {
+              "type": "string"
+            }
           }
         },
         "plantuml_naming": {
           "type": "object",
           "properties": {
-            "prefix": {"type": "string"},
-            "suffix": {"type": "string"},
-            "extension": {"type": "string"}
+            "prefix": {
+              "type": "string"
+            },
+            "suffix": {
+              "type": "string"
+            },
+            "extension": {
+              "type": "string"
+            }
           }
         },
-        "error_log": {"type": "string"},
-        "output_log": {"type": "string"}
+        "error_log": {
+          "type": "string"
+        },
+        "output_log": {
+          "type": "string"
+        }
       }
     },
     "analysis_settings": {
       "type": "object",
       "properties": {
-        "include_private_members": {"type": "boolean"},
-        "max_depth": {"type": "integer"},
-        "included_patterns": {"type": "array", "items": {"type": "string"}},
-        "excluded_patterns": {"type": "array", "items": {"type": "string"}}
+        "include_private_members": {
+          "type": "boolean"
+        },
+        "max_depth": {
+          "type": "integer"
+        },
+        "included_patterns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "excluded_patterns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       }
     }
   }

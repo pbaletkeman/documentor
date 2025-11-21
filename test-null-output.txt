@@ -1,0 +1,31 @@
+'chcp' is not recognized as an internal or external command,
+operable program or batch file.
+Picked up JAVA_TOOL_OPTIONS: -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8
+> Task :compileJava UP-TO-DATE
+> Task :processResources UP-TO-DATE
+> Task :classes UP-TO-DATE
+> Task :compileTestJava
+> Task :processTestResources UP-TO-DATE
+> Task :testClasses
+
+> Task :test
+Picked up JAVA_TOOL_OPTIONS: -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8
+
+ConfigurationCommandHandlerTest > handleValidateConfigWithNullOutputSettings(Path) FAILED
+    org.opentest4j.AssertionFailedError at ConfigurationCommandHandlerTest.java:192
+
+1 test completed, 1 failed
+
+> Task :test FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':test'.
+> There were failing tests. See the report at: file:///C:/Users/Pete/Desktop/documentor/build/reports/tests/test/index.html
+
+* Try:
+> Run with --scan to generate a Build Scan (Powered by Develocity).
+
+BUILD FAILED in 4s
+5 actionable tasks: 2 executed, 3 up-to-date

@@ -1,0 +1,37 @@
+# Development Dockerfile - Full build environment with debugging tools
+FROM eclipse-temurin:21-jdk-jammy AS developer
+
+WORKDIR /app
+
+# Install development tools
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    ca-certificates \
+    curl \
+    git \
+    vim \
+    nano \
+    less \
+    maven \
+    gradle \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy entire project
+COPY . .
+
+# Make gradle wrapper executable
+RUN chmod +x ./gradlew
+
+# Expose ports: 8080 for app, 5005 for debug
+EXPOSE 8080 5005
+
+# Volume for persistent gradle cache
+VOLUME ["/app", "/root/.gradle"]
+
+# Default command for continuous build
+CMD ["./gradlew", "build", "--continuous"]
+
+# Labels
+LABEL maintainer="Documentor Team"
+LABEL description="Documentor Development Environment"
+LABEL version="1.0.0-dev"

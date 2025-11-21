@@ -1,0 +1,83 @@
+'chcp' is not recognized as an internal or external command,
+operable program or batch file.
+Picked up JAVA_TOOL_OPTIONS: -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8
+> Task :compileJava UP-TO-DATE
+> Task :processResources UP-TO-DATE
+> Task :classes UP-TO-DATE
+
+> Task :runApp
+Picked up JAVA_TOOL_OPTIONS: -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8
+13:14:17.662 [main] INFO  c.documentor.DocumentorApplication - Starting DocumentorApplication using Java 21.0.8 with PID 29780 (C:\Users\Pete\Desktop\documentor\build\classes\java\main started by Pete in C:\Users\Pete\Desktop\documentor)
+13:14:17.665 [main] INFO  c.documentor.DocumentorApplication - No active profile set, falling back to 1 default profile: "default"
+13:14:18.191 [main] INFO  o.s.b.f.s.DefaultListableBeanFactory - Overriding bean definition for bean 'llmExecutor' with a different definition: replacing [Root bean: class=null; scope=; abstract=false; lazyInit=null; autowireMode=3; dependencyCheck=0; autowireCandidate=true; primary=false; fallback=false; factoryBeanName=appConfig; factoryMethodName=llmExecutor; initMethodNames=null; destroyMethodNames=[(inferred)]; defined in class path resource [com/documentor/config/AppConfig.class]] with [Root bean: class=null; scope=; abstract=false; lazyInit=null; autowireMode=3; dependencyCheck=0; autowireCandidate=true; primary=true; fallback=false; factoryBeanName=appConfigEnhanced; factoryMethodName=llmExecutorEnhanced; initMethodNames=null; destroyMethodNames=[(inferred)]; defined in class path resource [com/documentor/config/AppConfigEnhanced.class]]
+13:14:18.191 [main] INFO  o.s.b.f.s.DefaultListableBeanFactory - Overriding bean definition for bean 'llmService' with a different definition: replacing [Root bean: class=null; scope=; abstract=false; lazyInit=null; autowireMode=3; dependencyCheck=0; autowireCandidate=true; primary=false; fallback=false; factoryBeanName=appConfig; factoryMethodName=llmService; initMethodNames=null; destroyMethodNames=[(inferred)]; defined in class path resource [com/documentor/config/AppConfig.class]] with [Root bean: class=null; scope=; abstract=false; lazyInit=null; autowireMode=3; dependencyCheck=0; autowireCandidate=true; primary=false; fallback=false; factoryBeanName=appConfigEnhanced; factoryMethodName=llmServiceEnhanced; initMethodNames=null; destroyMethodNames=[(inferred)]; defined in class path resource [com/documentor/config/AppConfigEnhanced.class]]
+13:14:18.192 [main] INFO  o.s.b.f.s.DefaultListableBeanFactory - Overriding bean definition for bean 'llmService' with a different definition: replacing [Root bean: class=null; scope=; abstract=false; lazyInit=null; autowireMode=3; dependencyCheck=0; autowireCandidate=true; primary=false; fallback=false; factoryBeanName=appConfigEnhanced; factoryMethodName=llmServiceEnhanced; initMethodNames=null; destroyMethodNames=[(inferred)]; defined in class path resource [com/documentor/config/AppConfigEnhanced.class]] with [Root bean: class=null; scope=; abstract=false; lazyInit=null; autowireMode=3; dependencyCheck=0; autowireCandidate=true; primary=true; fallback=false; factoryBeanName=llmServiceConfiguration; factoryMethodName=llmService; initMethodNames=null; destroyMethodNames=[(inferred)]; defined in class path resource [com/documentor/config/LlmServiceConfiguration.class]]
+13:14:18.516 [main] INFO  o.s.c.a.ConfigurationClassEnhancer - @Bean method ExternalConfigLoader.configurationPostProcessor is non-static and returns an object assignable to Spring's BeanFactoryPostProcessor interface. This will result in a failure to process annotations such as @Autowired, @Resource and @PostConstruct within the method's declaring @Configuration class. Add the 'static' modifier to this method to avoid these container lifecycle issues; see @Bean javadoc for complete details.
+13:14:18.516 [main] INFO  c.d.config.ExternalConfigLoader - ExternalConfigLoader's BeanFactoryPostProcessor running
+13:14:18.516 [main] INFO  c.d.config.ExternalConfigLoader - No configuration loaded yet, trying command line arguments as fallback
+13:14:18.516 [main] INFO  c.d.config.ExternalConfigLoader - Raw command: com.documentor.DocumentorApplication validate-config samples/config-diagram-naming-example.json
+13:14:18.521 [main] INFO  c.d.config.ExternalConfigLoader - Extracted args: [validate-config, samples/config-diagram-naming-example.json]
+13:14:18.521 [main] INFO  c.d.config.ExternalConfigLoader - Extracting config path from args: [validate-config, samples/config-diagram-naming-example.json]
+13:14:18.521 [main] INFO  c.d.config.ExternalConfigLoader - No config file specified in arguments
+13:14:18.732 [main] INFO  c.d.config.LlmServiceConfiguration - Checking DocumentorConfig: DocumentorConfig[llmModels=[LlmModelConfig[name=gpt-3.5-turbo, provider=null, baseUrl=null, apiKey=your-api-key-here, maxTokens=4096, timeoutSeconds=30]], outputSettings=OutputSettings[outputDirectory=./docs, format=markdown, generateMermaid=true, generatePlantUML=false, verboseOutput=false, mermaidNaming=null, plantumlNaming=null, errorLog=errors.log, outputLog=out.log], analysisSettings=AnalysisSettings[includePrivateMembers=false, maxDepth=10, includedPatterns=[**/*.java, **/*.py], excludePatterns=[**/test/**, **/target/**, **/__pycache__/**, **/node_modules/**, **/.git/**]]]
+13:14:18.746 [main] INFO  c.d.config.LlmServiceConfiguration - Using DocumentorConfig with 1 models
+13:14:18.894 [main] INFO  c.d.config.AppConfigEnhanced - AppConfigEnhanced initialized with DocumentorConfig: valid
+13:14:18.896 [main] INFO  c.d.config.AppConfigEnhanced - Creating enhanced WebClient (PRIMARY)
+13:14:19.108 [main] INFO  c.d.config.LlmServiceConfiguration - Creating LlmService with DocumentorConfig: DocumentorConfig[llmModels=[LlmModelConfig[name=gpt-3.5-turbo, provider=null, baseUrl=null, apiKey=your-api-key-here, maxTokens=4096, timeoutSeconds=30]], outputSettings=OutputSettings[outputDirectory=./docs, format=markdown, generateMermaid=true, generatePlantUML=false, verboseOutput=false, mermaidNaming=null, plantumlNaming=null, errorLog=errors.log, outputLog=out.log], analysisSettings=AnalysisSettings[includePrivateMembers=false, maxDepth=10, includedPatterns=[**/*.java, **/*.py], excludePatterns=[**/test/**, **/target/**, **/__pycache__/**, **/node_modules/**, **/.git/**]]]
+13:14:19.109 [main] INFO  c.d.config.LlmServiceConfiguration - Setting global ThreadLocal config with 1 models
+13:14:19.109 [main] INFO  c.d.config.LlmServiceConfiguration - LlmService created with 1 models
+13:14:19.131 [main] INFO  c.d.config.LlmServiceConfiguration - Creating ElementDocumentationGenerator with our configured LlmService
+13:14:19.138 [main] INFO  c.d.c.DiagramServiceConfiguration - Creating MermaidDiagramService with ThreadLocalContextHolder support
+13:14:19.140 [main] INFO  c.d.c.DiagramServiceConfiguration - Creating PlantUMLDiagramService with ThreadLocalContextHolder support
+13:14:19.203 [main] INFO  c.d.config.AppConfigEnhanced - Creating enhanced LLM executor with core pool size: 10
+13:14:19.213 [main] INFO  c.d.config.AppConfigEnhanced - Creating standalone LlmServiceEnhanced bean for autowiring
+13:14:19.215 [main] INFO  c.d.service.LlmServiceEnhanced - ThreadLocalPropagatingExecutorEnhanced created successfully
+13:14:19.221 [main] INFO  c.d.config.AppConfigEnhanced - Creating enhanced LlmServiceFix (secondary)
+13:14:19.222 [main] INFO  c.d.c.LlmServiceConfigurationEnhanced - Creating enhanced LlmServiceFixEnhanced for ThreadLocal management
+13:14:19.224 [main] INFO  c.d.config.AppConfigEnhanced - Creating enhanced UnitTestDocumentationGenerator with direct LlmServiceEnhanced instance
+13:14:19.224 [main] INFO  c.d.service.LlmServiceEnhanced - ThreadLocalPropagatingExecutorEnhanced created successfully
+13:14:19.226 [main] INFO  c.d.c.LlmServiceConfigurationEnhanced - Creating enhanced LlmServiceEnhanced with DocumentorConfig: DocumentorConfig[llmModels=[LlmModelConfig[name=gpt-3.5-turbo, provider=null, baseUrl=null, apiKey=your-api-key-here, maxTokens=4096, timeoutSeconds=30]], outputSettings=OutputSettings[outputDirectory=./docs, format=markdown, generateMermaid=true, generatePlantUML=false, verboseOutput=false, mermaidNaming=null, plantumlNaming=null, errorLog=errors.log, outputLog=out.log], analysisSettings=AnalysisSettings[includePrivateMembers=false, maxDepth=10, includedPatterns=[**/*.java, **/*.py], excludePatterns=[**/test/**, **/target/**, **/__pycache__/**, **/node_modules/**, **/.git/**]]]
+13:14:19.226 [main] INFO  c.d.c.LlmServiceConfigurationEnhanced - Setting global ThreadLocalContextHolder config with 1 models
+13:14:19.226 [main] INFO  c.d.c.LlmServiceConfigurationEnhanced - LlmServiceEnhanced created with 1 models
+13:14:19.226 [main] INFO  c.d.service.LlmServiceEnhanced - ThreadLocalPropagatingExecutorEnhanced created successfully
+13:14:19.228 [main] INFO  c.d.c.LlmServiceConfigurationEnhanced - Creating ElementDocumentationGeneratorEnhanced with enhanced services
+13:14:19.229 [main] INFO  c.d.s.d.ElementDocumentationGeneratorEnhanced - ElementDocumentationGeneratorEnhanced initialized with services: LlmServiceEnhanced=OK, LlmServiceFixEnhanced=OK
+13:14:19.233 [main] INFO  c.d.c.DocumentationServiceConfiguration - Creating enhanced DocumentationService with ThreadLocalContextHolder support
+13:14:19.233 [main] INFO  c.d.s.DocumentationServiceEnhanced - DocumentationServiceEnhanced initialized with enhanced components
+13:14:19.547 [main] WARN  org.jline - Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+13:14:19.945 [main] INFO  c.documentor.DocumentorApplication - Started DocumentorApplication in 2.73 seconds (process running for 3.083)
+13:14:19.949 [main] INFO  c.d.config.EarlyConfigurationLoader - Early configuration loading started
+13:14:19.949 [main] INFO  c.d.config.ExternalConfigLoader - Loading external config from arguments: [validate-config, samples/config-diagram-naming-example.json]
+13:14:19.949 [main] INFO  c.d.config.ExternalConfigLoader - Extracting config path from args: [validate-config, samples/config-diagram-naming-example.json]
+13:14:19.949 [main] INFO  c.d.config.ExternalConfigLoader - No config file specified in arguments
+13:14:19.949 [main] INFO  c.d.config.EarlyConfigurationLoader - Early configuration loading completed without finding a config file
+13:14:19.980 [main] INFO  c.d.c.h.ConfigurationCommandHandler - 🔍 Validating configuration file: samples/config-diagram-naming-example.json
+✅ Configuration file is valid!
+
+📋 Configuration Summary:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🤖 LLM Models: 1
+📤 Output Format: markdown
+📁 Output Path: ./docs
+🔍 Max Threads: 4
+🗂️ Supported Languages: java, python
+
+🔍 Validation Details:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ LLM Models configuration is valid
+   1. llamacpp ⚠️ (No API key)
+✅ Output settings configuration is valid
+✅ Analysis settings configuration is valid
+
+13:14:20.128 [main] INFO  c.d.cli.DirectCommandProcessor - Processing command arguments: [validate-config, samples/config-diagram-naming-example.json]
+13:14:20.128 [main] INFO  c.d.cli.DirectCommandProcessor - Setting ThreadLocal config directly via LlmServiceFix
+13:14:20.128 [main] INFO  c.documentor.service.LlmServiceFix - Setting ThreadLocal config in thread [main]
+13:14:20.128 [main] INFO  c.documentor.service.LlmServiceFix - Setting global ThreadLocal config through LlmServiceFix with 1 models
+13:14:20.128 [main] INFO  c.documentor.service.LlmServiceFix - Successfully set and verified ThreadLocal config with 1 models
+13:14:20.128 [main] INFO  c.documentor.service.LlmServiceFix - Child threads created by ThreadLocalPropagatingExecutor should now receive this config
+13:14:20.128 [main] INFO  c.documentor.service.LlmServiceFix - ThreadLocal config IS available in thread [main] with 1 models
+13:14:20.128 [main] INFO  c.d.cli.DirectCommandProcessor - ThreadLocal config verification: AVAILABLE
+
+BUILD SUCCESSFUL in 4s
+3 actionable tasks: 1 executed, 2 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.1.0/userguide/configuration_cache_enabling.html

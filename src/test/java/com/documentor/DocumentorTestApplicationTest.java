@@ -4,8 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -440,40 +438,21 @@ class DocumentorTestApplicationTest {
             DocumentorTestApplication.class;
 
         assertTrue(java.lang.reflect.Modifier.isPublic(clazz.getModifiers()));
-        // Class is final
-        assertTrue(java.lang.reflect.Modifier.isFinal(clazz.getModifiers()));
+        // Class is no longer final (Spring needs to proxy it)
+        assertFalse(java.lang.reflect.Modifier.isFinal(clazz.getModifiers()));
         assertFalse(java.lang.reflect.Modifier.isStatic(clazz.getModifiers()));
     }
 
     @Test
     void testConstructorExists() throws NoSuchMethodException {
-        // Test that private constructor exists and throws exception
-        // when called
+        // Test that public no-args constructor exists for Spring
         java.lang.reflect.Constructor<DocumentorTestApplication> constructor =
             DocumentorTestApplication.class.getDeclaredConstructor();
 
         assertNotNull(constructor);
+        // Constructor is public (required by Spring)
         assertTrue(java.lang.reflect.Modifier
-            .isPrivate(constructor.getModifiers())); // Constructor is private
-
-        // Test that calling the constructor throws
-        // UnsupportedOperationException
-        constructor.setAccessible(true);
-        java.lang.reflect.InvocationTargetException exception = assertThrows(
-            java.lang.reflect.InvocationTargetException.class,
-            () -> {
-                constructor.newInstance();
-            }
-        );
-
-        // Verify the cause is UnsupportedOperationException
-        // with correct message
-        Throwable cause = exception.getCause();
-        assertInstanceOf(UnsupportedOperationException.class, cause);
-        assertEquals(
-            "Utility class should not be instantiated",
-            cause.getMessage()
-        );
+            .isPublic(constructor.getModifiers()));
     }
 
     @Test
