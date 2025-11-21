@@ -275,9 +275,9 @@ If needed, we could further enhance the configuration system by:
 
 ## References
 
-- Spring Boot Lifecycle and Startup Events: https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.spring-application
-- BeanFactoryPostProcessor: https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/factory/config/BeanFactoryPostProcessor.html
-- Command-Line Argument Handling: https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.external-config.application-arguments
-- JSON Configuration with Jackson: https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.external-config.yaml
+- Spring Boot Lifecycle and Startup Events: <https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.spring-application>
+- BeanFactoryPostProcessor: <https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/factory/config/BeanFactoryPostProcessor.html>
+- Command-Line Argument Handling: <https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.external-config.application-arguments>
+- JSON Configuration with Jackson: <https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.external-config.yaml>
 
 Overall, the early configuration loading system is a robust solution that significantly improves the stability and usability of the Documentor application.
