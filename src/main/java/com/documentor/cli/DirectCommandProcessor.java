@@ -130,7 +130,7 @@ public class DirectCommandProcessor implements ApplicationRunner {
             String result = documentorCommands.analyzeProject(
                 projectPath, configPath, includePrivateMembers,
                 generateMermaid, mermaidOutput, generatePlantUML,
-                plantUMLOutput);
+                plantUMLOutput, false);
 
             LOGGER.info("Command execution result: {}", result);
         } catch (Exception e) {
@@ -138,4 +138,3 @@ public class DirectCommandProcessor implements ApplicationRunner {
         }
     }
 }
-

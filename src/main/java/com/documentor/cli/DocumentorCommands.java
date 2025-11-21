@@ -41,6 +41,7 @@ public class DocumentorCommands {
         private final String plantUMLOutput;
         private final boolean useFix;
         private final String outputDir;
+        private final boolean dryRun;
 
         private AnalysisOptions(final Builder builder) {
             this.projectPath = builder.projectPath;
@@ -52,6 +53,7 @@ public class DocumentorCommands {
             this.plantUMLOutput = builder.plantUMLOutput;
             this.useFix = builder.useFix;
             this.outputDir = builder.outputDir;
+            this.dryRun = builder.dryRun;
         }
 
         static Builder builder() {
@@ -68,6 +70,7 @@ public class DocumentorCommands {
             private String plantUMLOutput;
             private boolean useFix;
             private String outputDir;
+            private boolean dryRun;
 
             Builder projectPath(final String projectPathParam) {
                 this.projectPath = projectPathParam;
@@ -115,6 +118,11 @@ public class DocumentorCommands {
                 return this;
             }
 
+            Builder dryRun(final boolean dryRunParam) {
+                this.dryRun = dryRunParam;
+                return this;
+            }
+
             AnalysisOptions build() {
                 return new AnalysisOptions(this);
             }
@@ -155,6 +163,10 @@ public class DocumentorCommands {
         public String getOutputDir() {
             return outputDir;
         }
+
+        public boolean isDryRun() {
+            return dryRun;
+        }
     }
 
     public DocumentorCommands(
@@ -166,6 +178,22 @@ public class DocumentorCommands {
         this.statusHandler = statusHandlerParam;
         this.configurationHandler = configurationHandlerParam;
         this.enhancedAnalysisHandler = enhancedAnalysisHandlerParam;
+    }
+
+    /**
+     * 🔍 Overload for backward compatibility (without dryRun)
+     */
+    public String analyzeProject(
+            final String projectPath,
+            final String configPath,
+            final boolean includePrivateMembers,
+            final boolean generateMermaid,
+            final String mermaidOutput,
+            final boolean generatePlantUML,
+            final String plantUMLOutput) {
+        return analyzeProject(projectPath, configPath, includePrivateMembers,
+                generateMermaid, mermaidOutput, generatePlantUML,
+                plantUMLOutput, false);
     }
 
     /**
@@ -203,15 +231,36 @@ public class DocumentorCommands {
                     help = "Output directory for PlantUML diagrams "
                            + "(defaults to same directory as source files)",
                     defaultValue = "")
-            final String plantUMLOutput) {
+            final String plantUMLOutput,
+            @ShellOption(value = "--dry-run",
+                    help = "Preview changes without writing files to disk",
+                    defaultValue = "false")
+            final boolean dryRun) {
 
         // Update current state
         this.currentProjectPath = projectPath;
         this.currentConfigPath = configPath;
 
-        return projectAnalysisHandler.handleAnalyzeProjectExtended(
+        String result = projectAnalysisHandler.handleAnalyzeProjectExtended(
                 projectPath, configPath, generateMermaid, mermaidOutput,
-                generatePlantUML, plantUMLOutput, includePrivateMembers);
+                generatePlantUML, plantUMLOutput, includePrivateMembers, dryRun);
+
+        if (dryRun) {
+            result = "🔄 DRY RUN MODE (no files written)\n\n" + result;
+        }
+
+        return result;
+    }
+
+    /**
+     * 🌱 Overload for backward compatibility (without dryRun)
+     */
+    public String generatePlantUMLDiagrams(
+            final String projectPath,
+            final boolean includePrivateMembers,
+            final String plantUMLOutput) {
+        return generatePlantUMLDiagrams(projectPath, includePrivateMembers,
+                plantUMLOutput, false);
     }
 
     /**
@@ -231,14 +280,24 @@ public class DocumentorCommands {
                     help = "Output directory for PlantUML diagrams "
                            + "(defaults to same directory as source files)",
                     defaultValue = "")
-            final String plantUMLOutput) {
+            final String plantUMLOutput,
+            @ShellOption(value = "--dry-run",
+                    help = "Preview changes without writing files to disk",
+                    defaultValue = "false")
+            final boolean dryRun) {
 
         // Update current state
         this.currentProjectPath = projectPath;
 
-        return projectAnalysisHandler.handleAnalyzeProjectExtended(
+        String result = projectAnalysisHandler.handleAnalyzeProjectExtended(
                 projectPath, "config.json", false, "", true,
-                plantUMLOutput, includePrivateMembers);
+                plantUMLOutput, includePrivateMembers, dryRun);
+
+        if (dryRun) {
+            result = "🔄 DRY RUN MODE (no files written)\n\n" + result;
+        }
+
+        return result;
     }
 
     /**
@@ -368,9 +427,8 @@ public class DocumentorCommands {
             options.isGenerateMermaid(), options.getMermaidOutput(),
             options.isGeneratePlantUML(), options.getPlantUMLOutput(),
             options.isIncludePrivateMembers(), options.isUseFix(),
-            options.getOutputDir());
+            options.getOutputDir(), options.isDryRun());
 
         return enhancedAnalysisHandler.analyzeProjectWithFix(request);
     }
 }
-

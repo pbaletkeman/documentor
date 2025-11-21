@@ -13,20 +13,31 @@
     "format": "markdown",
     "include_icons": true,
     "generate_unit_tests": true,
-    "run_unit_test_commands": false,
-    "log_unit_test_commands": true,
-    "generate_mermaid": false,
-    "generate_plantuml": false,
-    "verbose_output": true,
+    "target_coverage": 0.85,
+    "generate_mermaid": true,
+    "mermaid_output_path": "./diagrams/mermaid",
+    "generate_plantuml": true,
+    "plantuml_output_path": "./diagrams/plantuml",
+    "verbose_output": false,
+    "mermaid_naming": {
+      "prefix": "arch-",
+      "suffix": "",
+      "extension": "mmd"
+    },
+    "plantuml_naming": {
+      "prefix": "design-",
+      "suffix": "_v1",
+      "extension": "puml"
+    },
     "error_log": "errors.log",
-    "output_log": "output.log",
+    "output_log": "generation.log",
     "overwrite": false,
     "collision_strategy": "timestamp",
     "backup_existing": true
   },
   "analysis_settings": {
-    "include_private_members": true,
-    "max_threads": 6,
+    "include_private_members": false,
+    "max_threads": 4,
     "supported_languages": [
       "java",
       "python"
@@ -34,7 +45,9 @@
     "exclude_patterns": [
       "**/test/**",
       "**/target/**",
-      "**/build/**"
+      "**/build/**",
+      "**/__pycache__/**",
+      "**/node_modules/**"
     ]
   }
 }

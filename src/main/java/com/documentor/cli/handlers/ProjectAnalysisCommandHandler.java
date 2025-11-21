@@ -86,7 +86,7 @@ public class ProjectAnalysisCommandHandler {
 
     /**
      * Handle project analysis command with both Mermaid and PlantUML options
-     * and private member override
+     * and private member override and dry-run mode
      */
     public String handleAnalyzeProjectExtended(final String projectPath,
                                             final String configPath,
@@ -95,9 +95,26 @@ public class ProjectAnalysisCommandHandler {
                                             final boolean generatePlantUML,
                                         final String plantUMLOutput,
                                         final Boolean includePrivateMembers) {
+        return handleAnalyzeProjectExtended(projectPath, configPath,
+                generateMermaid, mermaidOutput,
+                generatePlantUML, plantUMLOutput,
+                includePrivateMembers, false);
+    }
+
+    /**
+     * Handle project analysis command with both Mermaid and PlantUML options,
+     * private member override, and dry-run mode
+     */
+    public String handleAnalyzeProjectExtended(final String projectPath,
+                                            final String configPath,
+                                            final boolean generateMermaid,
+                                            final String mermaidOutput,
+                                            final boolean generatePlantUML,
+                                        final String plantUMLOutput,
+                                        final Boolean includePrivateMembers,
+                                        final boolean dryRun) {
         try {
-            LOGGER.info("🔍 Starting analysis of project: {}",
-                    projectPath);
+            LOGGER.info("🔍 Starting analysis of project: {}", projectPath);
 
             if (!commonHandler.directoryExists(projectPath)) {
                 return "❌ Error: Project path does not exist or is not a "
@@ -106,18 +123,28 @@ public class ProjectAnalysisCommandHandler {
 
             ProjectAnalysis analysis = performAnalysis(projectPath,
                     includePrivateMembers);
-            String outputPath = generateDocumentation(analysis);
+
             StringBuilder result = commonHandler.createResultBuilder();
-            result.append(String.format(
-                    "✅ Analysis complete! Documentation generated at: %s\n",
-                    outputPath));
+
+            if (dryRun) {
+                result.append("📋 DRY RUN: Analysis would generate documentation at: ")
+                      .append(System.getProperty("user.dir")).append("\n");
+                result.append("   (no files actually written in dry-run mode)\n\n");
+                result.append("✅ Dry-run analysis complete! Found ")
+                      .append(analysis.getClasses().size()).append(" classes\n");
+            } else {
+                String outputPath = generateDocumentation(analysis);
+                result.append(String.format(
+                        "✅ Analysis complete! Documentation generated at: %s\n",
+                        outputPath));
+            }
 
             if (generateMermaid) {
-                handleMermaidGeneration(analysis, mermaidOutput, result);
+                handleMermaidGeneration(analysis, mermaidOutput, result, dryRun);
             }
 
             if (generatePlantUML) {
-                handlePlantUMLGeneration(analysis, plantUMLOutput, result);
+                handlePlantUMLGeneration(analysis, plantUMLOutput, result, dryRun);
             }
 
             return result.toString();
@@ -191,15 +218,23 @@ public class ProjectAnalysisCommandHandler {
      */
     private void handleMermaidGeneration(final ProjectAnalysis analysis,
                                        final String mermaidOutput,
-                                       final StringBuilder result) {
+                                       final StringBuilder result,
+                                       final boolean dryRun) {
         LOGGER.info("🧩 Generating Mermaid diagrams...");
         String mermaidOutputPath = mermaidOutput.trim().isEmpty()
                 ? null : mermaidOutput;
-        CompletableFuture<List<String>> mermaidFuture = mermaidDiagramService
-                .generateClassDiagrams(analysis, mermaidOutputPath);
-        List<String> mermaidResult = mermaidFuture.join();
-        result.append("🧩 Mermaid diagrams: ").append(mermaidResult.size())
-                .append(" diagrams generated").append("\n");
+
+        if (dryRun) {
+            result.append("🧩 DRY RUN - Mermaid: would generate ")
+                  .append(analysis.getClasses().size())
+                  .append(" diagrams\n");
+        } else {
+            CompletableFuture<List<String>> mermaidFuture = mermaidDiagramService
+                    .generateClassDiagrams(analysis, mermaidOutputPath);
+            List<String> mermaidResult = mermaidFuture.join();
+            result.append("🧩 Mermaid diagrams: ").append(mermaidResult.size())
+                    .append(" diagrams generated").append("\n");
+        }
     }
 
     /**
@@ -207,15 +242,23 @@ public class ProjectAnalysisCommandHandler {
      */
     private void handlePlantUMLGeneration(final ProjectAnalysis analysis,
                                         final String plantUMLOutput,
-                                        final StringBuilder result) {
+                                        final StringBuilder result,
+                                        final boolean dryRun) {
         LOGGER.info("🌱 Generating PlantUML diagrams...");
         String plantUMLOutputPath = plantUMLOutput.trim().isEmpty()
                 ? null : plantUMLOutput;
-        CompletableFuture<List<String>> plantUMLFuture = plantUMLDiagramService
-                .generateClassDiagrams(analysis, plantUMLOutputPath);
-        List<String> plantUMLResult = plantUMLFuture.join();
-        result.append("🌱 PlantUML diagrams: ").append(plantUMLResult.size())
-                .append(" diagrams generated").append("\n");
+
+        if (dryRun) {
+            result.append("🌱 DRY RUN - PlantUML: would generate ")
+                  .append(analysis.getClasses().size())
+                  .append(" diagrams\n");
+        } else {
+            CompletableFuture<List<String>> plantUMLFuture = plantUMLDiagramService
+                    .generateClassDiagrams(analysis, plantUMLOutputPath);
+            List<String> plantUMLResult = plantUMLFuture.join();
+            result.append("🌱 PlantUML diagrams: ").append(plantUMLResult.size())
+                    .append(" diagrams generated").append("\n");
+        }
     }
 
     /**

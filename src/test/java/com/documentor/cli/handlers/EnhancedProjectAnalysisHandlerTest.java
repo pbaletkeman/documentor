@@ -95,7 +95,8 @@ class EnhancedProjectAnalysisHandlerTest {
             includePrivateMembers,
             useFix,
             // use getter to avoid hidden field
-            outputConfig.getOutputDir()
+            outputConfig.getOutputDir(),
+            false  // dryRun - default to false for tests
         );
     }
 
@@ -141,7 +142,7 @@ class EnhancedProjectAnalysisHandlerTest {
             projectPath, configPath, generateMermaid,
             outputConfig.getMermaidOutput(),
             generatePlantUML, outputConfig.getPlantUMLOutput(),
-            includePrivateMembers)
+            includePrivateMembers, false)
         ).thenReturn("Analysis complete without fix");
 
         // When
@@ -162,7 +163,7 @@ class EnhancedProjectAnalysisHandlerTest {
             projectPath, configPath, generateMermaid,
             outputConfig.getMermaidOutput(),
             generatePlantUML, outputConfig.getPlantUMLOutput(),
-            includePrivateMembers
+            includePrivateMembers, false
         );
 
         // LlmServiceFix should not be called when useFix is false
@@ -194,7 +195,7 @@ class EnhancedProjectAnalysisHandlerTest {
             outputConfig.getMermaidOutput(),
             generatePlantUML,
             outputConfig.getPlantUMLOutput(),
-            includePrivateMembers
+            includePrivateMembers, false
         )).thenReturn("Analysis complete with null config");
 
         // When
@@ -215,7 +216,7 @@ class EnhancedProjectAnalysisHandlerTest {
             projectPath, configPath, generateMermaid,
             outputConfig.getMermaidOutput(),
             generatePlantUML, outputConfig.getPlantUMLOutput(),
-            includePrivateMembers
+            includePrivateMembers, false
         );
 
         // LlmServiceFix should not be called when configPath is null
@@ -251,7 +252,7 @@ class EnhancedProjectAnalysisHandlerTest {
             projectPath, configPath, generateMermaid,
             outputConfig.getMermaidOutput(),
             generatePlantUML, outputConfig.getPlantUMLOutput(),
-            includePrivateMembers)
+            includePrivateMembers, false)
         ).thenReturn("Analysis complete with loaded config");
 
         // When
@@ -274,7 +275,7 @@ class EnhancedProjectAnalysisHandlerTest {
             projectPath, configPath, generateMermaid,
             outputConfig.getMermaidOutput(),
             generatePlantUML, outputConfig.getPlantUMLOutput(),
-            includePrivateMembers
+            includePrivateMembers, false
         );
 
         // Should not try to load config since it's already loaded
@@ -308,7 +309,7 @@ class EnhancedProjectAnalysisHandlerTest {
             projectPath, configPath, generateMermaid,
             outputConfig.getMermaidOutput(),
             generatePlantUML, outputConfig.getPlantUMLOutput(),
-            includePrivateMembers)
+            includePrivateMembers, false)
         ).thenReturn("Analysis complete with newly loaded config");
 
         // When
@@ -336,7 +337,7 @@ class EnhancedProjectAnalysisHandlerTest {
             projectPath, configPath, generateMermaid,
             outputConfig.getMermaidOutput(),
             generatePlantUML, outputConfig.getPlantUMLOutput(),
-            includePrivateMembers
+            includePrivateMembers, false
         );
 
         // Output directory should be set
@@ -364,7 +365,7 @@ class EnhancedProjectAnalysisHandlerTest {
             projectPath, configPath, generateMermaid,
             outputConfig.getMermaidOutput(),
             generatePlantUML, outputConfig.getPlantUMLOutput(),
-            includePrivateMembers)
+            includePrivateMembers, false)
         ).thenReturn("Analysis complete with failed config loading");
 
         // When
@@ -390,7 +391,7 @@ class EnhancedProjectAnalysisHandlerTest {
             projectPath, configPath, generateMermaid,
             outputConfig.getMermaidOutput(),
             generatePlantUML, outputConfig.getPlantUMLOutput(),
-            includePrivateMembers
+            includePrivateMembers, false
         );
     }
 
@@ -463,7 +464,7 @@ class EnhancedProjectAnalysisHandlerTest {
             outputConfig.getMermaidOutput(),
             generatePlantUML,
             outputConfig.getPlantUMLOutput(),
-            includePrivateMembers
+            includePrivateMembers, false
         )).thenReturn("Analysis complete with custom output directory");
 
         // When
@@ -489,7 +490,7 @@ class EnhancedProjectAnalysisHandlerTest {
             outputConfig.getMermaidOutput(),
             generatePlantUML,
             outputConfig.getPlantUMLOutput(),
-            includePrivateMembers
+            includePrivateMembers, false
         );
 
         // Verify output directory system property was set
@@ -523,7 +524,7 @@ class EnhancedProjectAnalysisHandlerTest {
             outputConfig.getMermaidOutput(),
             generatePlantUML,
             outputConfig.getPlantUMLOutput(),
-            includePrivateMembers
+            includePrivateMembers, false
         )).thenReturn("Analysis complete without output directory");
 
         // When
@@ -549,7 +550,7 @@ class EnhancedProjectAnalysisHandlerTest {
             outputConfig.getMermaidOutput(),
             generatePlantUML,
             outputConfig.getPlantUMLOutput(),
-            includePrivateMembers
+            includePrivateMembers, false
         );
 
         // Verify output directory system property was not set
@@ -590,7 +591,7 @@ class EnhancedProjectAnalysisHandlerTest {
             outputConfig.getMermaidOutput(),
             generatePlantUML,
             outputConfig.getPlantUMLOutput(),
-            includePrivateMembers
+            includePrivateMembers, false
         )).thenReturn("Analysis complete with null llmModels");
 
         // When
@@ -622,7 +623,7 @@ class EnhancedProjectAnalysisHandlerTest {
             outputConfig.getMermaidOutput(),
             generatePlantUML,
             outputConfig.getPlantUMLOutput(),
-            includePrivateMembers
+            includePrivateMembers, false
         );
     }
 }

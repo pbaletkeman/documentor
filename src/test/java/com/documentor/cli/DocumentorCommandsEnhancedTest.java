@@ -49,7 +49,7 @@ class DocumentorCommandsEnhancedTest {
         String mermaidOutput = "/test/diagrams";
 
         when(projectAnalysisHandler.handleAnalyzeProjectExtended(projectPath,
-            configPath, generateMermaid, mermaidOutput, false, "", true))
+            configPath, generateMermaid, mermaidOutput, false, "", true, false))
             .thenReturn("Analysis complete");        // When
         String result = commands.analyzeProject(projectPath, configPath, true,
                 generateMermaid, mermaidOutput, false, "");
@@ -58,7 +58,7 @@ class DocumentorCommandsEnhancedTest {
         assertEquals("Analysis complete", result);
         verify(projectAnalysisHandler).handleAnalyzeProjectExtended(
             projectPath, configPath, generateMermaid, mermaidOutput,
-            false, "", true);
+            false, "", true, false);
     }
 
     @Test
@@ -185,7 +185,7 @@ class DocumentorCommandsEnhancedTest {
 
         when(projectAnalysisHandler.handleAnalyzeProjectExtended(
             projectPath, "config.json",
-                false, "", true, plantUMLOutput, includePrivateMembers))
+                false, "", true, plantUMLOutput, includePrivateMembers, false))
             .thenReturn("PlantUML diagrams generated");
 
         // When
@@ -196,7 +196,7 @@ class DocumentorCommandsEnhancedTest {
         assertEquals("PlantUML diagrams generated", result);
         verify(projectAnalysisHandler).handleAnalyzeProjectExtended(
             projectPath, "config.json",
-                false, "", true, plantUMLOutput, includePrivateMembers);
+                false, "", true, plantUMLOutput, includePrivateMembers, false);
     }
 
     @Test

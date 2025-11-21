@@ -80,7 +80,7 @@ public class EnhancedProjectAnalysisHandler {
                 request.projectPath(), request.configPath(),
                 request.generateMermaid(), request.mermaidOutput(),
                 request.generatePlantUML(), request.plantUMLOutput(),
-                request.includePrivateMembers());
+                request.includePrivateMembers(), request.dryRun());
     }
 
     /**
@@ -101,7 +101,7 @@ public class EnhancedProjectAnalysisHandler {
         ProjectAnalysisRequest request = new ProjectAnalysisRequest(
                 projectPath, configPath, generateMermaid, mermaidOutput,
                 generatePlantUML, plantUMLOutput, includePrivateMembers,
-                true, null); // Default: useFix=true, outputDir=null
+                true, null, false); // Default: useFix=true, outputDir=null, dryRun=false
         return analyzeProjectWithFix(request);
     }
 }

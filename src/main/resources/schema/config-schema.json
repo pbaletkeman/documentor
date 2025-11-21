@@ -88,6 +88,24 @@
         },
         "output_log": {
           "type": "string"
+        },
+        "overwrite": {
+          "type": "boolean",
+          "description": "Whether to overwrite existing files (default: false)"
+        },
+        "collision_strategy": {
+          "type": "string",
+          "enum": [
+            "timestamp",
+            "increment",
+            "error"
+          ],
+          "description": "How to handle filename collisions: 'timestamp' (append timestamp), 'increment' (append number), 'error' (fail)",
+          "default": "timestamp"
+        },
+        "backup_existing": {
+          "type": "boolean",
+          "description": "Whether to backup existing files before overwriting (default: true)"
         }
       }
     },

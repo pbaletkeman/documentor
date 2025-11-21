@@ -1,0 +1,63 @@
+{
+  "llm_models": [
+    {
+      "name": "codellama",
+      "endpoint": "http://localhost:11434/api/generate",
+      "max_tokens": 4096,
+      "temperature": 0.3,
+      "timeout_seconds": 60
+    }
+  ],
+  "output_settings": {
+    "output_directory": "./docs",
+    "format": "markdown",
+    "generate_mermaid": true,
+    "generate_plantuml": true,
+    "verbose_output": true,
+    "mermaid_naming": {
+      "prefix": "",
+      "suffix": "",
+      "extension": "mmd"
+    },
+    "plantuml_naming": {
+      "prefix": "",
+      "suffix": "",
+      "extension": "puml"
+    },
+    "error_log": "errors.log",
+    "output_log": "output.log"
+  },
+  "analysis_settings": {
+    "include_private_members": false,
+    "max_threads": 4,
+    "supported_languages": [
+      "java",
+      "python"
+    ],
+    "exclude_patterns": [
+      "**/test/**",
+      "**/target/**",
+      "**/build/**"
+    ]
+  },
+  "_comments": {
+    "collision_strategy_timestamp": {
+      "overwrite": false,
+      "collision_strategy": "timestamp",
+      "backup_existing": true,
+      "description": "Safe mode: preserves all versions with timestamps, creates new file on collision"
+    },
+    "collision_strategy_increment": {
+      "overwrite": true,
+      "collision_strategy": "increment",
+      "backup_existing": true,
+      "description": "Versioning mode: overwrites with backup, incremented naming (v1, v2, v3)"
+    },
+    "collision_strategy_error": {
+      "overwrite": false,
+      "collision_strategy": "error",
+      "backup_existing": false,
+      "description": "Strict mode: fails generation if file exists, useful for CI/CD"
+    }
+  }
+}

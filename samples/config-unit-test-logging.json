@@ -14,7 +14,15 @@
     "generate_unit_tests": true,
     "run_unit_test_commands": false,
     "log_unit_test_commands": true,
-    "target_coverage": 0.9
+    "target_coverage": 0.9,
+    "generate_mermaid": false,
+    "generate_plantuml": false,
+    "verbose_output": true,
+    "error_log": "errors.log",
+    "output_log": "output.log",
+    "overwrite": false,
+    "collision_strategy": "timestamp",
+    "backup_existing": true
   },
   "analysis_settings": {
     "include_private_members": false,

@@ -1,372 +1,449 @@
-# Docker Setup for Documentor
+# 🐳 Docker Setup & Deployment
 
-This document covers running Documentor in Docker containers for both development and production environments.
+Complete guide for containerizing and deploying Documentor with Docker.
 
 ## Table of Contents
 
 - [Quick Start](#quick-start)
-- [Building Images](#building-images)
+- [Images](#images)
+- [Local Development](#local-development)
+- [Production Deployment](#production-deployment)
 - [Configuration](#configuration)
-- [Advanced Usage](#advanced-usage)
-- [Performance Tuning](#performance-tuning)
-- [Networking](#networking)
-- [Cleanup](#cleanup)
-- [Health Checks](#health-checks)
-- [Security Considerations](#security-considerations)
 - [Troubleshooting](#troubleshooting)
-- [Docker Compose Services](#docker-compose-services)
-- [Sample Configurations](#sample-configurations)
-- [References](#references)
+- [Performance Tips](#performance-tips)
+- [Advanced Configuration](#advanced-configuration)
 
 ## Quick Start
 
-### Development Environment
-
-Start the development container with live code reloading:
+### Build Image
 
 ```bash
-docker-compose up documentor-dev
+docker build -t documentor:latest .
 ```
 
-The container will:
-
-- Mount your source code for live updates
-- Run continuous Gradle builds
-- Expose port 8080 for the app
-- Expose port 5005 for remote debugging
-
-### Production Environment
-
-Run the production-optimized image:
+### Run Container
 
 ```bash
-docker-compose up documentor-prod
+docker run -it \
+  -v $(pwd)/src:/app/src \
+  -v $(pwd)/docs:/app/docs \
+  documentor:latest
 ```
 
-The container will:
+### Docker Compose
 
-- Run the compiled JAR with minimal dependencies
-- Use 256MB heap memory
-- Expose port 8081
-- Include health checks
-- Auto-restart on failure
+```bash
+docker-compose up -d
+```
 
-## Building Images
+## Images
 
-### Build Development Image
+### Production Image (`Dockerfile`)
+
+Optimized for production use.
+
+**Features**:
+- Multi-stage build for small size
+- Java 21 (slim variant)
+- Minimal dependencies
+- ~500MB image
+
+**Usage**:
+
+```bash
+docker build -f Dockerfile -t documentor:prod .
+docker run documentor:prod
+```
+
+### Development Image (`Dockerfile.dev`)
+
+Includes development tools.
+
+**Features**:
+- Full build environment
+- Gradle included
+- Development utilities
+- Testing support
+- ~1.2GB image
+
+**Usage**:
 
 ```bash
 docker build -f Dockerfile.dev -t documentor:dev .
+docker run -it documentor:dev bash
 ```
 
-### Build Production Image
+## Local Development
+
+### Container with Source Code
+
+Mount local code:
 
 ```bash
-docker build -f Dockerfile -t documentor:latest .
+docker run -it \
+  -v $(pwd):/app \
+  -w /app \
+  documentor:dev \
+  bash
 ```
 
-### Build with Docker Compose
+Then inside container:
 
 ```bash
-docker-compose build
+./gradlew build
+./gradlew runApp
+```
+
+### Docker Compose for Development
+
+```yaml
+version: '3.9'
+services:
+  documentor:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: documentor-dev
+    volumes:
+      - .:/app
+      - ~/.m2:/root/.m2  # Maven cache
+      - ~/.gradle:/root/.gradle  # Gradle cache
+    working_dir: /app
+    command: bash
+    stdin_open: true
+    tty: true
+```
+
+Usage:
+
+```bash
+docker-compose -f docker-compose.yml up -d documentor
+docker-compose exec documentor bash
+```
+
+### Hot Reload Setup
+
+Mount entire project and use volume for build cache:
+
+```bash
+docker run -it \
+  -v $(pwd):/app \
+  -v documentor-gradle-cache:/root/.gradle \
+  -w /app \
+  documentor:dev \
+  ./gradlew build --continuous
+```
+
+## Production Deployment
+
+### Single Container
+
+```bash
+docker run -d \
+  --name documentor \
+  -v /data/projects:/app/projects:ro \
+  -v /data/docs:/app/docs \
+  -p 8080:8080 \
+  documentor:prod \
+  java -jar app.jar
+```
+
+### Docker Compose Production
+
+```yaml
+version: '3.9'
+services:
+  documentor:
+    image: documentor:prod
+    container_name: documentor-prod
+    restart: always
+    volumes:
+      - /data/projects:/app/projects:ro
+      - /data/docs:/app/docs
+      - /data/logs:/app/logs
+    environment:
+      - JAVA_OPTS=-Xmx2g -Xms512m
+      - DOCUMENTOR_CONFIG=/app/config/config.json
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "10"
+```
+
+### Kubernetes Deployment
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: documentor
+  labels:
+    app: documentor
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: documentor
+  template:
+    metadata:
+      labels:
+        app: documentor
+    spec:
+      containers:
+      - name: documentor
+        image: documentor:prod
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "2000m"
+        volumeMounts:
+        - name: projects
+          mountPath: /app/projects
+          readOnly: true
+        - name: docs
+          mountPath: /app/docs
+        - name: config
+          mountPath: /app/config
+          readOnly: true
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/ready
+            port: 8080
+          initialDelaySeconds: 20
+          periodSeconds: 5
+      volumes:
+      - name: projects
+        persistentVolumeClaim:
+          claimName: projects-pvc
+      - name: docs
+        persistentVolumeClaim:
+          claimName: docs-pvc
+      - name: config
+        configMap:
+          name: documentor-config
 ```
 
 ## Configuration
 
 ### Environment Variables
 
-**Development (`documentor-dev`):**
+```bash
+docker run \
+  -e JAVA_OPTS="-Xmx2g -Xms512m" \
+  -e DOCUMENTOR_CONFIG="/app/config/config.json" \
+  -e DOCUMENTOR_LOG_LEVEL="INFO" \
+  documentor:prod
+```
 
-- `JAVA_TOOL_OPTIONS`: JVM memory settings (default: `-Xmx512m -Xms256m`)
-- `LOG_LEVEL`: Logging level (default: `DEBUG`)
-- `CONFIG_PATH`: Path to configuration file (default: `/app/config/config.json`)
-
-**Production (`documentor-prod`):**
-
-- `JAVA_TOOL_OPTIONS`: JVM memory settings (default: `-Xmx256m -Xms128m`)
-- `LOG_LEVEL`: Logging level (default: `INFO`)
-- `CONFIG_PATH`: Path to configuration file
-
-### Mounting Configuration
-
-To use custom configuration:
+### Config File Mounting
 
 ```bash
-# Development
-docker run -v $(pwd)/config/custom-config.json:/app/config/config.json documentor:dev
-
-# Production
-docker run -e CONFIG_PATH=/app/custom-config.json -v $(pwd)/config:/app/config documentor:latest
+docker run -d \
+  -v $(pwd)/config.json:/app/config/config.json:ro \
+  documentor:prod
 ```
 
-## Advanced Usage
+### Spring Boot Properties
 
-### Remote Debugging
-
-Enable debug port in development:
+Pass as environment variables:
 
 ```bash
-docker-compose up documentor-dev
-```
-
-Then connect your IDE debugger to `localhost:5005` with Java remote debugging.
-
-### Testing with Mock LLM Service
-
-Run development environment with mock LLM API:
-
-```bash
-docker-compose --profile testing up documentor-dev mock-llm-service
-```
-
-This starts:
-
-- `documentor-dev`: Development environment
-- `mock-llm-service`: MockServer for simulating LLM API responses
-
-### Viewing Logs
-
-Development logs with tail:
-
-```bash
-docker-compose logs -f documentor-dev
-```
-
-Production logs:
-
-```bash
-docker-compose logs -f documentor-prod
-```
-
-### Executing Commands in Running Container
-
-Run a command inside development container:
-
-```bash
-docker-compose exec documentor-dev ./gradlew test
-```
-
-Run a command inside production container:
-
-```bash
-docker-compose exec documentor-prod java -jar documentor.jar --config /app/config/custom.json
-```
-
-### Interactive Shell
-
-Open a shell in development container:
-
-```bash
-docker-compose exec documentor-dev bash
-```
-
-## Performance Tuning
-
-### Development Performance
-
-Optimize build cache volumes:
-
-```bash
-# Use delegated strategy for source mounts (faster on macOS/Windows)
-volumes:
-  - ./src:/app/src:delegated
-  - gradle-cache:/root/.gradle:cached
-```
-
-### Production Performance
-
-Adjust heap memory based on available resources:
-
-```bash
-# Low memory (256MB)
-JAVA_TOOL_OPTIONS: -Xmx256m -Xms128m
-
-# Medium memory (512MB)
-JAVA_TOOL_OPTIONS: -Xmx512m -Xms256m
-
-# High memory (1GB+)
-JAVA_TOOL_OPTIONS: -Xmx1g -Xms512m
-```
-
-## Networking
-
-All services use the `documentor-network` bridge network. Services can communicate by service name:
-
-```
-http://documentor-dev:8080
-http://mock-llm-service:1080
-```
-
-To expose services to the host, use port mappings in `docker-compose.yml`.
-
-## Cleanup
-
-Remove containers and volumes:
-
-```bash
-docker-compose down -v
-```
-
-Remove images:
-
-```bash
-docker rmi documentor:dev documentor:latest
-```
-
-## Health Checks
-
-Production image includes health checks:
-
-```bash
-# Check container health
-docker ps --format "{{.Names}}\t{{.Status}}"
-
-# Manual health check
-curl http://localhost:8081/actuator/health
-```
-
-## Security Considerations
-
-### Non-root User
-
-Production image runs as non-root `documentor` user for security.
-
-### Read-only Volumes
-
-Production configuration is mounted read-only:
-
-```yaml
-volumes:
-  - ./config:/app/config:ro
-```
-
-### Network Isolation
-
-Use profile-based services to isolate sensitive components:
-
-```bash
-# Run only production without mock services
-docker-compose up documentor-prod
-
-# Run with testing services
-docker-compose --profile testing up
+docker run -e spring.profiles.active=production documentor:prod
 ```
 
 ## Troubleshooting
 
-### Build fails in container
+### Container Won't Start
 
-Check Gradle cache and permissions:
+**Check logs**:
 
 ```bash
-docker-compose down -v
-docker-compose build --no-cache
+docker logs documentor
 ```
 
-### Out of memory errors
+**Common issues**:
 
-Increase heap size in `docker-compose.yml`:
+1. **Out of Memory**
+   ```bash
+   docker run -m 4g documentor:prod
+   ```
+
+2. **Volume Mount Issues**
+   ```bash
+   docker run -v /local/path:/container/path:z documentor:prod
+   ```
+
+3. **Permission Denied**
+   ```bash
+   docker run --user root documentor:prod
+   ```
+
+### Performance Issues
+
+**Increase Memory**:
+
+```bash
+docker run -m 4g -e JAVA_OPTS="-Xmx3g" documentor:prod
+```
+
+**Enable CPU Limits**:
+
+```bash
+docker run --cpus="2" --memory="4g" documentor:prod
+```
+
+**Check Resource Usage**:
+
+```bash
+docker stats documentor
+```
+
+### Network Issues
+
+**Expose Port**:
+
+```bash
+docker run -p 8080:8080 documentor:prod
+```
+
+**Check Connectivity**:
+
+```bash
+docker exec documentor curl http://localhost:8080
+```
+
+## Performance Tips
+
+### 1. Multi-Stage Builds
+
+Production image uses multi-stage builds to minimize size:
+
+```dockerfile
+FROM gradle:8-jdk21 as builder
+# Build steps...
+
+FROM openjdk:21-slim
+COPY --from=builder /app/build/libs/*.jar app.jar
+```
+
+### 2. Layer Caching
+
+Order Dockerfile layers by change frequency:
+
+```dockerfile
+# Base image - rarely changes
+FROM openjdk:21-slim
+
+# System dependencies - rarely changes
+RUN apt-get update && apt-get install -y curl
+
+# Application - frequently changes
+COPY app.jar .
+```
+
+### 3. Volume Optimization
+
+Use bind mounts for better performance with source code:
+
+```bash
+docker run -v $(pwd):/app documentor:dev
+```
+
+### 4. Resource Allocation
+
+Set appropriate limits:
+
+```bash
+docker run \
+  --cpus="2" \
+  --memory="4g" \
+  --memory-swap="5g" \
+  documentor:prod
+```
+
+### 5. Logging Configuration
+
+Limit log volume:
 
 ```yaml
-environment:
-  - JAVA_TOOL_OPTIONS=-Xmx1g -Xms512m
+logging:
+  driver: "json-file"
+  options:
+    max-size: "100m"
+    max-file: "10"
 ```
 
-### Permission denied on volumes
+## Advanced Configuration
 
-Ensure volumes have correct permissions:
+### Network Setup
+
+**Create custom network**:
 
 ```bash
-chmod 755 build/
-chmod 755 .gradle/
+docker network create documentor-network
 ```
 
-### Cannot connect to service
-
-Verify container is running:
+**Connect to network**:
 
 ```bash
-docker-compose ps
-docker-compose logs documentor-dev
+docker run --network documentor-network documentor:prod
 ```
 
-## Docker Compose Services
+### Volume Management
 
-### Service: documentor-dev
-
-**Purpose:** Development environment with live code reloading
-
-**Features:**
-
-- Source code mounted for live updates
-- Continuous Gradle builds
-- Remote debugging (port 5005)
-- Full logging output
-
-**Environment Variables:**
+**Create named volume**:
 
 ```bash
-JAVA_TOOL_OPTIONS="-Xmx512m -Xms256m"
-LOG_LEVEL="DEBUG"
-CONFIG_PATH="/app/config/config.json"
+docker volume create documentor-data
 ```
 
-### Service: documentor-prod
-
-**Purpose:** Production-optimized container
-
-**Features:**
-
-- Minimal dependencies
-- Health checks enabled
-- Auto-restart on failure
-- Non-root user execution
-
-**Environment Variables:**
+**Use volume**:
 
 ```bash
-JAVA_TOOL_OPTIONS="-Xmx256m -Xms128m"
-LOG_LEVEL="INFO"
-CONFIG_PATH="/app/config/config.json"
+docker run -v documentor-data:/app/data documentor:prod
 ```
 
-## Sample Configurations
+### Registry Management
 
-### Using with config-openai.json
+**Tag image for registry**:
 
 ```bash
-# Copy sample config
-cp samples/config-openai.json config/config.json
-
-# Build and run
-docker-compose build
-docker-compose up documentor-dev
+docker tag documentor:prod my-registry/documentor:latest
 ```
 
-### Using with config-ollama.json
+**Push to registry**:
 
 ```bash
-# Ensure Ollama is running locally
-ollama serve
-
-# In another terminal, use Ollama config
-cp samples/config-ollama.json config/config.json
-docker-compose up documentor-dev
+docker push my-registry/documentor:latest
 ```
 
-### Custom Configuration with Docker
+**Pull from registry**:
 
 ```bash
-# Create custom config
-cp samples/config-diagram-naming-example.json config/custom-diagrams.json
-
-# Run with custom config
-docker-compose exec documentor-dev analyze --project-path ./src --config /app/config/custom-diagrams.json
+docker pull my-registry/documentor:latest
 ```
 
-## References
+## Next Steps
 
-- [Docker Documentation](https://docs.docker.com/)
-- [Docker Compose Documentation](https://docs.docker.com/compose/)
-- [Best Practices for Java Docker Images](https://www.docker.com/blog/containerized-java-applications-best-practices/)
-- [Spring Boot Docker Documentation](https://spring.io/guides/gs/spring-boot-docker/)
+- **[LLM Integrations](LLM_INTEGRATIONS.md)** - Configure LLM providers
+- **[Configuration Guide](CONFIGURATION.md)** - Configuration options
+- **[Usage Examples](USAGE_EXAMPLES.md)** - Command examples

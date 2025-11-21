@@ -12,6 +12,6 @@ public record ProjectAnalysisRequest(
         String plantUMLOutput,
         Boolean includePrivateMembers,
         boolean useFix,
-        String outputDir) {
+        String outputDir,
+        boolean dryRun) {
 }
-

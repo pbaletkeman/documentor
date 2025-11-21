@@ -1,98 +1,107 @@
 # 📖 Usage Examples & Commands
 
-Comprehensive guide with practical examples for all Documentor commands.
+Practical examples for all Documentor commands and features.
 
 ## Table of Contents
 
 - [Interactive Shell](#interactive-shell)
-- [Command Overview](#command-overview)
-- [Analyze Command](#analyze-command)
-- [Validate Config Command](#validate-config-command)
-- [Status Command](#status-command)
-- [Mock Provider Examples](#mock-provider-examples)
-- [Docker Usage Examples](#docker-usage-examples)
-- [Advanced Examples](#advanced-examples)
-- [Batch Processing](#batch-processing)
+- [Basic Commands](#basic-commands)
+- [Analysis with Diagrams](#analysis-with-diagrams)
+- [Dry-Run Mode](#dry-run-mode)
+- [Output Management](#output-management)
+- [Non-Interactive Mode](#non-interactive-mode)
+- [Examples by Use Case](#examples-by-use-case)
+- [Command Reference](#command-reference)
 
 ## Interactive Shell
 
-### Starting the Shell
+### Starting
 
 ```bash
 ./gradlew runApp
 ```
 
-You'll see the Documentor prompt:
+You'll see the prompt:
 
 ```
 documentor>
 ```
 
-### Basic Commands
-
-#### Help Commands
+### Help Commands
 
 ```bash
-# Show main help
 help
-
-# Show quick start guide
 quick-start
-
-# Show application info
 info
 ```
 
-## Analysis Commands
+## Basic Commands
 
-### Basic Analysis
+### Analyze Project
 
 ```bash
-documentor> analyze --project-path /path/to/project --config config.json
+documentor> analyze --project-path ./src --config config.json
 ```
 
-**Output:**
+Output:
 
 ```text
-🚀 Starting analysis of project: /path/to/project
+🚀 Starting analysis of project: ./src
 ✅ Analysis complete! Documentation generated at: ./docs
 📊 Analysis Summary: 125 total elements (15 classes, 89 methods, 21 fields) across 12 files
 ```
 
-### Analysis with Mermaid Diagrams
+### Scan Project (Analysis Only)
 
 ```bash
-documentor> analyze --project-path ./src --generate-mermaid true --config config.json
+documentor> scan --project-path ./src
 ```
 
-**Output:**
+### Validate Configuration
+
+```bash
+documentor> validate-config --config config.json
+```
+
+Output:
 
 ```text
-✅ Analysis complete! Documentation generated at: ./docs
-📊 Generated 5 Mermaid diagrams
-🎨 Diagram files:
-  - ./src/UserService_diagram.mmd
-  - ./src/ProductController_diagram.mmd
-  - ./src/DatabaseConfig_diagram.mmd
+✅ Configuration file is valid: config.json
+Size: 1024 bytes
+Models configured: 2
+- gpt-3.5-turbo
+- codellama
 ```
 
-### Analysis with Custom Diagram Output
+### Check Status
+
+```bash
+documentor> status
+```
+
+Shows application configuration and capabilities.
+
+## Analysis with Diagrams
+
+### Mermaid Only
 
 ```bash
 documentor> analyze \
   --project-path ./src \
   --generate-mermaid true \
-  --mermaid-output ./my-diagrams \
   --config config.json
 ```
 
-### Analysis with PlantUML Diagrams
+### PlantUML Only
 
 ```bash
-documentor> analyze --project-path ./src --generate-plantuml true --config config.json
+documentor> analyze \
+  --project-path ./src \
+  --generate-plantuml true \
+  --config config.json
 ```
 
-### Analysis with Both Diagram Types
+### Both Diagram Types
 
 ```bash
 documentor> analyze \
@@ -104,16 +113,16 @@ documentor> analyze \
   --config config.json
 ```
 
-### Analysis Without Private Members
+### With Custom Naming
 
 ```bash
 documentor> analyze \
   --project-path ./src \
-  --include-private-members false \
-  --config config.json
+  --generate-mermaid true \
+  --config samples/config-diagram-naming-example.json
 ```
 
-### Analysis With Private Members
+### Including Private Members
 
 ```bash
 documentor> analyze \
@@ -123,192 +132,72 @@ documentor> analyze \
   --config config.json
 ```
 
-## Scan Commands
+## Dry-Run Mode
 
-### Project Scan (Analysis Only)
-
-Scan without generating documentation:
-
-```bash
-documentor> scan --project-path ./src
-```
-
-**Output:**
-
-```text
-📊 Project Analysis Results
-━━━━━━━━━━━━━━━━━━━━━━━━━━
-📊 Analysis Summary: 67 total elements (8 classes, 45 methods, 14 fields) across 6 files
-
-📁 Files analyzed:
-  - ./src/main.py
-  - ./src/utils.py
-  - ./src/models/user.py
-```
-
-### Scan with Specific Language
-
-```bash
-documentor> scan --project-path ./src --supported-languages java
-```
-
-## Configuration Commands
-
-### Validate Configuration
-
-```bash
-documentor> validate-config --config config.json
-```
-
-**Output:**
-
-```text
-✅ Configuration file is valid: config.json
-Size: 1024 bytes
-Models configured: 2
-- gpt-3.5-turbo
-- codellama
-```
-
-### Validate with Detailed Output
-
-```bash
-documentor> validate-config --config config.json
-```
-
-## Status Command
-
-### Check Application Status
-
-```bash
-documentor> status
-```
-
-**Output:**
-
-```text
-📋 Documentor Status
-━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-📁 Current Project:
-   Path: /path/to/my-spring-project
-   Exists: ✅ Yes
-   Type: Directory
-
-⚙️ Configuration:
-   Config File: config.json
-   Config Exists: ✅ Yes
-
-🤖 LLM Models:
-   Total Models: 2
-   1. gpt-3.5-turbo
-      API Key: ***...
-      Max Tokens: 4096
-      Endpoint: https://api.openai.com/v1/chat/completions
-   2. codellama
-      Max Tokens: 4096
-      Endpoint: http://localhost:11434/api/generate
-
-📤 Output Settings:
-   Output Path: ./docs
-   Format: markdown
-   Include Icons: ✅ Yes
-   Generate Unit Tests: ✅ Yes
-   Generate Mermaid: ✅ Yes
-   Generate PlantUML: ✅ No
-   Target Coverage: 90.0%
-
-📊 Analysis Settings:
-   Include Private Members: ❌ No
-   Max Threads: 4
-   Supported Languages: java, python
-   Exclude Patterns: **/test/**, **/target/**, **/build/**
-```
-
-## Practical Examples by Use Case
-
-### Example 1: Quick Project Overview with Diagrams
+### Preview Without Writing Files
 
 ```bash
 documentor> analyze \
-  --project-path ./my-java-project \
-  --generate-mermaid true \
+  --project-path ./src \
+  --config config.json \
+  --dry-run true
+```
+
+Output:
+
+```text
+📋 DRY RUN: Analysis would generate documentation at: ./docs
+📋 DRY RUN: Would create 12 documentation files
+📋 DRY RUN: Would create 5 Mermaid diagrams
+📋 DRY RUN: Would create 3 PlantUML diagrams
+📋 DRY RUN: No files were actually written
+```
+
+### Use Cases
+
+- **Validate** configuration before actual generation
+- **Preview** output structure without side effects
+- **Test** in CI/CD pipelines safely
+- **Troubleshoot** issues without creating files
+- **Verify** analysis completes without errors
+
+## Output Management
+
+### Collision Strategies
+
+**Safe Mode (Never Overwrite)**
+
+```bash
+documentor> analyze \
+  --project-path ./src \
   --config samples/config-ollama.json
 ```
 
-### Example 2: Complete Documentation with All Details
+Uses timestamp strategy: `MyClass_diagram_20251121_143022.mmd`
+
+**Versioning Mode**
 
 ```bash
 documentor> analyze \
   --project-path ./src \
-  --include-private-members true \
-  --generate-mermaid true \
-  --generate-plantuml true \
-  --config samples/config-openai.json
+  --config samples/config-collision-strategies.json
 ```
 
-### Example 3: Diagrams Only (Fast Processing)
+Uses increment strategy: `MyClass_diagram_v1.mmd`, `MyClass_diagram_v2.mmd`
+
+**Strict Mode (Fail on Collision)**
 
 ```bash
 documentor> analyze \
   --project-path ./src \
-  --config samples/config-diagrams-only.json
+  --config samples/config-collision-strategies.json
 ```
 
-### Example 4: Documentation Only (Detailed Text)
-
-```bash
-documentor> analyze \
-  --project-path ./src \
-  --config samples/config-docs-only.json
-```
-
-### Example 5: Multiple Projects in Sequence
-
-```bash
-# First project
-documentor> analyze --project-path ./project-a --config config.json
-
-# Second project
-documentor> analyze --project-path ./project-b --config config.json
-
-# Third project
-documentor> analyze --project-path ./project-c --config config.json
-```
-
-### Example 6: Generate Test Logs Without Running Tests
-
-```bash
-documentor> analyze \
-  --project-path ./src \
-  --generate-unit-tests true \
-  --run-unit-test-commands false \
-  --log-unit-test-commands true \
-  --config config.json
-```
-
-### Example 7: Python Project Analysis
-
-```bash
-documentor> analyze \
-  --project-path ./python-app \
-  --supported-languages python \
-  --generate-mermaid true \
-  --config config.json
-```
-
-### Example 8: Large Project with Custom Thread Pool
-
-```bash
-documentor> analyze \
-  --project-path ./large-enterprise-project \
-  --max-threads 8 \
-  --config config.json
-```
+For CI/CD - fails if files exist.
 
 ## Non-Interactive Mode
 
-Run commands directly from the terminal without interactive shell:
+Run commands directly without shell:
 
 ### Direct Analysis
 
@@ -322,193 +211,201 @@ Run commands directly from the terminal without interactive shell:
 ./gradlew runApp -Pargs="scan,--project-path,./src"
 ```
 
-### Direct Configuration Validation
+### Direct Validation
 
 ```bash
 ./gradlew runApp -Pargs="validate-config,--config,config.json"
 ```
 
-### Direct Status Check
+### Direct Status
 
 ```bash
 ./gradlew runApp -Pargs="status"
 ```
 
-## Output Examples
+## Examples by Use Case
 
-### Generated Documentation Structure
+### Quick Start with Ollama
 
-After running `analyze`, you'll find:
-
-```text
-docs/
-├── README.md                 # Main documentation
-├── elements/                 # Individual element docs
-│   ├── UserService.md
-│   ├── ProductController.md
-│   └── OrderService.md
-└── unit-tests/              # Generated test suggestions
-    └── test-recommendations.md
+```bash
+documentor> analyze \
+  --project-path ./my-java-project \
+  --generate-mermaid true \
+  --config samples/config-ollama.json
 ```
 
-### Generated Mermaid Diagram Example
+### Production with OpenAI
 
-```mermaid
-classDiagram
-    class UserService {
-        -userRepository: UserRepository
-        -passwordEncoder: PasswordEncoder
-        +createUser(data: UserData): User
-        +findByEmail(email: String): Optional~User~
-        +updateUser(id: Long, data: UserData): User
-        -validateUser(data: UserData): boolean
-        -encodePassword(password: String): String
-    }
-
-    UserService --> UserRepository
-    UserService --> PasswordEncoder
+```bash
+documentor> analyze \
+  --project-path ./src \
+  --include-private-members true \
+  --generate-mermaid true \
+  --generate-plantuml true \
+  --config samples/config-openai.json
 ```
 
-### Generated PlantUML Diagram Example
+### Fast Diagram Generation
 
-```plantuml
-@startuml UserService
-!theme plain
+```bash
+documentor> analyze \
+  --project-path ./src \
+  --config samples/config-diagrams-only.json
+```
 
-class UserService {
-  - userRepository : UserRepository
-  - passwordEncoder : PasswordEncoder
-  + createUser(data: UserData) : User
-  + findByEmail(email: String) : Optional<User>
-  + updateUser(id: Long, data: UserData) : User
-  - validateUser(data: UserData) : boolean
-  - encodePassword(password: String) : String
-}
+### Detailed Documentation
 
-UserService --> UserRepository : uses
-UserService --> PasswordEncoder : uses
+```bash
+documentor> analyze \
+  --project-path ./src \
+  --config samples/config-docs-only.json
+```
 
-note top of UserService
-  Manages user account operations
-  Handles authentication and validation
-end note
+### Unit Test Focus
 
-@enduml
+```bash
+documentor> analyze \
+  --project-path ./src \
+  --generate-unit-tests true \
+  --run-unit-test-commands false \
+  --log-unit-test-commands true \
+  --config samples/config-unit-test-logging.json
+```
+
+### Python Project
+
+```bash
+documentor> analyze \
+  --project-path ./python-app \
+  --supported-languages python \
+  --generate-mermaid true \
+  --config config.json
+```
+
+### Large Project with Threads
+
+```bash
+documentor> analyze \
+  --project-path ./large-project \
+  --max-threads 8 \
+  --config config.json
+```
+
+### Pre-Flight Check
+
+```bash
+# 1. Validate config
+documentor> validate-config --config config.json
+
+# 2. Scan project
+documentor> scan --project-path ./src
+
+# 3. Dry-run analysis
+documentor> analyze --project-path ./src --config config.json --dry-run true
+
+# 4. Full analysis
+documentor> analyze --project-path ./src --config config.json
 ```
 
 ## Command Reference
 
 ### analyze
 
-Generate documentation and diagrams for a project.
+Generate documentation and diagrams.
 
-**Syntax:**
+**Syntax**: `analyze --project-path <path> [options]`
 
-```bash
-analyze --project-path <path> [options]
-```
+**Key Options**:
 
-**Options:**
-
-| Option                      | Type    | Default     | Description                    |
-| --------------------------- | ------- | ----------- | ------------------------------ |
-| `--project-path`            | String  | (req)       | Path to project directory      |
-| `--config`                  | String  | config.json | Configuration file path        |
-| `--include-private-members` | Boolean | false       | Include private fields/methods |
-| `--generate-mermaid`        | Boolean | false       | Generate Mermaid diagrams      |
-| `--mermaid-output`          | String  | (auto)      | Output directory for Mermaid   |
-| `--generate-plantuml`       | Boolean | false       | Generate PlantUML diagrams     |
-| `--plantuml-output`         | String  | (auto)      | Output directory for PlantUML  |
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `--project-path` | String | Required | Project directory |
+| `--config` | String | config.json | Config file |
+| `--include-private-members` | Boolean | false | Include private members |
+| `--generate-mermaid` | Boolean | false | Generate Mermaid |
+| `--generate-plantuml` | Boolean | false | Generate PlantUML |
+| `--dry-run` | Boolean | false | Preview without writing |
 
 ### scan
 
-Analyze project without generating documentation.
+Analyze project without documentation.
 
-**Syntax:**
-
-```bash
-scan --project-path <path> [options]
-```
-
-**Options:**
-
-| Option           | Type   | Default     | Description               |
-| ---------------- | ------ | ----------- | ------------------------- |
-| `--project-path` | String | (req)       | Path to project directory |
-| `--config`       | String | config.json | Configuration file path   |
+**Syntax**: `scan --project-path <path> [options]`
 
 ### validate-config
 
-Validate a configuration file.
+Validate configuration file.
 
-**Syntax:**
-
-```bash
-validate-config --config <file>
-```
-
-**Options:**
-
-| Option     | Type   | Default | Description             |
-| ---------- | ------ | ------- | ----------------------- |
-| `--config` | String | (req)   | Configuration file path |
+**Syntax**: `validate-config --config <file>`
 
 ### status
 
 Display application status.
 
-**Syntax:**
+**Syntax**: `status`
 
-```bash
-status
+## Output Examples
+
+### Directory Structure
+
+After running `analyze`:
+
+```text
+docs/
+├── README.md
+├── elements/
+│   ├── UserService.md
+│   ├── ProductController.md
+│   └── OrderService.md
+└── unit-tests/
+    └── test-recommendations.md
+```
+
+### Generated Diagram (Mermaid)
+
+```mermaid
+classDiagram
+    class UserService {
+        -userRepository: UserRepository
+        +createUser(data: UserData): User
+        +findByEmail(email: String): Optional~User~
+        +updateUser(id: Long, data: UserData): User
+    }
+    UserService --> UserRepository
 ```
 
 ## Tips & Tricks
 
-### Running Multiple Analyses
+### Chain Multiple Analyses
 
 ```bash
-# Each analysis can have different settings
 documentor> analyze --project-path ./backend --config config-openai.json
 documentor> analyze --project-path ./frontend --config config-ollama.json
 documentor> analyze --project-path ./shared --config config-diagrams-only.json
 ```
 
-### Generating Diagrams for Different Audiences
+### Different Audiences
 
 ```bash
-# Detailed diagrams with private members for developers
+# Detailed for developers
 analyze --project-path ./src --include-private-members true --generate-plantuml true
 
-# Simplified diagrams with public API for clients
+# Simplified for clients
 analyze --project-path ./src --include-private-members false --generate-mermaid true
-```
-
-### Testing Configuration Before Full Analysis
-
-```bash
-# Validate config first
-validate-config --config config.json
-
-# Quick scan to verify setup
-scan --project-path ./src
-
-# Then run full analysis
-analyze --project-path ./src --config config.json
 ```
 
 ### Performance Optimization
 
 ```bash
-# Diagrams only (faster)
-analyze --project-path ./src --generate-mermaid true --config config-diagrams-only.json
+# Diagrams only (fast)
+analyze --project-path ./src --config samples/config-diagrams-only.json
 
 # Documentation only (comprehensive)
-analyze --project-path ./src --config config-docs-only.json
+analyze --project-path ./src --config samples/config-docs-only.json
 ```
 
 ## Next Steps
 
-- **[Configuration Guide](CONFIGURATION.md)** - Detailed configuration options
-- **[LLM Integrations](LLM_INTEGRATIONS.md)** - Setup for each LLM provider
-- **[Diagrams Guide](DIAGRAMS_GUIDE.md)** - Understanding diagram generation
+- **[Configuration Guide](CONFIGURATION.md)** - Configuration options
+- **[LLM Integrations](LLM_INTEGRATIONS.md)** - Provider setup
+- **[Diagrams Guide](DIAGRAMS_GUIDE.md)** - Diagram details

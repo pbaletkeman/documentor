@@ -134,7 +134,8 @@ class DirectCommandProcessorTest {
             false,
             "",
             false,
-            ""
+            "",
+            false
         );
     }
 
@@ -158,7 +159,7 @@ class DirectCommandProcessorTest {
         processor.run(applicationArguments);
 
         verify(documentorCommands).analyzeProject("/custom/path",
-            "config.json", true, false, "", false, "");
+            "config.json", true, false, "", false, "", false);
     }
 
     @Test
@@ -181,7 +182,7 @@ class DirectCommandProcessorTest {
         processor.run(applicationArguments);
 
         verify(documentorCommands).analyzeProject(".",
-            "custom-config.json", true, false, "", false, "");
+            "custom-config.json", true, false, "", false, "", false);
     }
 
     @Test
@@ -204,7 +205,7 @@ class DirectCommandProcessorTest {
         processor.run(applicationArguments);
 
         verify(documentorCommands).analyzeProject(".",
-            "config.json", false, false, "", false, "");
+            "config.json", false, false, "", false, "", false);
     }
 
     @Test
@@ -216,13 +217,13 @@ class DirectCommandProcessorTest {
         when(
             documentorCommands.analyzeProject(anyString(), anyString(),
                 anyBoolean(), anyBoolean(), anyString(), anyBoolean(),
-                anyString())
+                anyString(), anyBoolean())
         ).thenReturn("Analysis complete");
 
         processor.run(applicationArguments);
 
         verify(documentorCommands).analyzeProject(".",
-            "config.json", true, true, "diagram.mmd", false, "");
+            "config.json", true, true, "diagram.mmd", false, "", false);
     }
 
     @Test
@@ -233,13 +234,14 @@ class DirectCommandProcessorTest {
         });
         when(
             documentorCommands.analyzeProject(anyString(), anyString(),
-            anyBoolean(), anyBoolean(), anyString(), anyBoolean(), anyString())
+            anyBoolean(), anyBoolean(), anyString(), anyBoolean(), anyString(),
+            anyBoolean())
         ).thenReturn("Analysis complete");
 
         processor.run(applicationArguments);
 
         verify(documentorCommands).analyzeProject(".",
-            "config.json", true, false, "", true, "diagram.puml");
+            "config.json", true, false, "", true, "diagram.puml", false);
     }
 
     @Test
@@ -277,7 +279,8 @@ class DirectCommandProcessorTest {
             true,
             "mermaid.mmd",
             true,
-            "plantuml.puml"
+            "plantuml.puml",
+            false
         );
     }
 
@@ -303,7 +306,7 @@ class DirectCommandProcessorTest {
 
         // Should use default values when parameter values are missing
         verify(documentorCommands).analyzeProject(".",
-            "config.json", true, false, "", false, "");
+            "config.json", true, false, "", false, "", false);
     }
 
     @Test
@@ -319,7 +322,7 @@ class DirectCommandProcessorTest {
         assertDoesNotThrow(() -> processor.run(applicationArguments));
 
         verify(documentorCommands).analyzeProject(".",
-            "config.json", true, false, "", false, "");
+            "config.json", true, false, "", false, "", false);
     }
 
     @Test
@@ -361,7 +364,7 @@ class DirectCommandProcessorTest {
         // Should not call llmServiceFix when config is null
         verifyNoInteractions(llmServiceFix);
         verify(documentorCommands).analyzeProject(".",
-            "config.json", true, false, "", false, "");
+            "config.json", true, false, "", false, "", false);
     }
 
     @Test
@@ -380,7 +383,7 @@ class DirectCommandProcessorTest {
         processor.run(applicationArguments);
 
         verify(documentorCommands).analyzeProject(".",
-            "config.json", true, false, "", true, "");
+            "config.json", true, false, "", true, "", false);
     }
 
     @Test
@@ -398,6 +401,6 @@ class DirectCommandProcessorTest {
 
         // Invalid boolean strings should parse as false
         verify(documentorCommands).analyzeProject(".",
-            "config.json", false, false, "", false, "");
+            "config.json", false, false, "", false, "", false);
     }
 }

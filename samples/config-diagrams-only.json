@@ -15,9 +15,24 @@
     "generate_unit_tests": false,
     "generate_mermaid": true,
     "mermaid_output_path": "./diagrams/mermaid",
+    "mermaid_naming": {
+      "prefix": "",
+      "suffix": "",
+      "extension": "mmd"
+    },
     "generate_plantuml": true,
     "plantuml_output_path": "./diagrams/plantuml",
-    "verbose_output": false
+    "plantuml_naming": {
+      "prefix": "",
+      "suffix": "",
+      "extension": "puml"
+    },
+    "error_log": "errors.log",
+    "output_log": "output.log",
+    "verbose_output": false,
+    "overwrite": false,
+    "collision_strategy": "timestamp",
+    "backup_existing": true
   },
   "analysis_settings": {
     "include_private_members": false,
