@@ -33,7 +33,8 @@ class ConfigPackageAdditionalTest {
         // Test setting actual config
         DocumentorConfig config = new DocumentorConfig(
             java.util.List.of(),
-            new OutputSettings("/test", "MARKDOWN", false, false, false, null, null, null, null),
+            new OutputSettings("/test", "MARKDOWN", false, false, false,
+                null, null, null, null),
             null
         );
         ThreadLocalContextHolder.setConfig(config);

@@ -2,12 +2,21 @@ package com.documentor.config.model;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * Unit tests for DiagramNamingOptions.
  */
 class DiagramNamingOptionsTest {
+
+    private static final int MAX_PREFIX_LENGTH = 20;
+    private static final int MAX_SUFFIX_LENGTH = 20;
+    private static final int MAX_EXTENSION_LENGTH = 10;
 
     @Test
     void testConstructorWithValidInputs() {
@@ -50,7 +59,7 @@ class DiagramNamingOptionsTest {
 
     @Test
     void testPrefixTooLong() {
-        String longPrefix = "a".repeat(21);
+        String longPrefix = "a".repeat(MAX_PREFIX_LENGTH + 1);
         assertThrows(IllegalArgumentException.class, () ->
             new DiagramNamingOptions(longPrefix, null, null)
         );
@@ -58,7 +67,7 @@ class DiagramNamingOptionsTest {
 
     @Test
     void testSuffixTooLong() {
-        String longSuffix = "b".repeat(21);
+        String longSuffix = "b".repeat(MAX_SUFFIX_LENGTH + 1);
         assertThrows(IllegalArgumentException.class, () ->
             new DiagramNamingOptions(null, longSuffix, null)
         );
@@ -66,7 +75,7 @@ class DiagramNamingOptionsTest {
 
     @Test
     void testExtensionTooLong() {
-        String longExtension = "c".repeat(11);
+        String longExtension = "c".repeat(MAX_EXTENSION_LENGTH + 1);
         assertThrows(IllegalArgumentException.class, () ->
             new DiagramNamingOptions(null, null, longExtension)
         );
@@ -217,7 +226,7 @@ class DiagramNamingOptionsTest {
     @Test
     void testCreateSafeWithTooLongPrefix() {
         DiagramNamingOptions options = DiagramNamingOptions.createSafe(
-            "a".repeat(21), "-suffix", "uml"
+            "a".repeat(MAX_PREFIX_LENGTH + 1), "-suffix", "uml"
         );
 
         assertNull(options.prefix()); // Too long prefix ignored

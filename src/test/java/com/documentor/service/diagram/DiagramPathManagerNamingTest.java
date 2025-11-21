@@ -4,7 +4,7 @@ import com.documentor.config.model.DiagramNamingOptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Unit tests for DiagramPathManager naming functionality.
@@ -19,7 +19,7 @@ class DiagramPathManagerNamingTest {
     }
 
     @Test
-    void testGenerateDiagramFileNameWithNullOptions_Mermaid() {
+    void testGenerateDiagramFileNameWithNullOptionsMermaid() {
         String fileName = pathManager.generateDiagramFileName(
             "UserService",
             null,
@@ -30,7 +30,7 @@ class DiagramPathManagerNamingTest {
     }
 
     @Test
-    void testGenerateDiagramFileNameWithNullOptions_PlantUML() {
+    void testGenerateDiagramFileNameWithNullOptionsPlantUML() {
         String fileName = pathManager.generateDiagramFileName(
             "UserService",
             null,

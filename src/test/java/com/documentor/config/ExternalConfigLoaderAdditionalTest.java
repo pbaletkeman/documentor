@@ -49,7 +49,8 @@ class ExternalConfigLoaderAdditionalTest {
                 "test-model", "ollama", "http://localhost:11434",
                 "test-key", TEST_MODEL_TIMEOUT_MILLIS,
                 TEST_MODEL_TIMEOUT_SECONDS)),
-            new OutputSettings("output", "markdown", false, false, false, null, null, null, null),
+            new OutputSettings("output", "markdown",
+                false, false, false, null, null, null, null),
             new com.documentor.config.model.AnalysisSettings(true,
                 TEST_ANALYSIS_DEPTH, List.of("*.java"), null)
         );

@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 @DisplayName("Mock LLM Provider Tests")
 class MockLlmProviderTest {
+    private static final int LONG_CONTENT_LENGTH = 1000;
 
     @Nested
     @DisplayName("MockOpenAiProvider Tests")
@@ -65,7 +66,8 @@ class MockLlmProviderTest {
         @DisplayName("should support chat interface")
         void testChat() {
             List<MockLlmProvider.ChatMessage> messages = List.of(
-                    new MockLlmProvider.ChatMessage("user", "Explain Spring Boot"));
+                    new MockLlmProvider.ChatMessage(
+                        "user", "Explain Spring Boot"));
 
             String response = provider.chat(messages);
             assertNotNull(response);
@@ -125,19 +127,23 @@ class MockLlmProviderTest {
         }
 
         @Test
-        @DisplayName("should return local efficiency for local deployment prompts")
+        @DisplayName("should return local efficiency"
+            + " for local deployment prompts")
         void testLocalPrompt() {
             String response = provider.complete("document this code locally");
             assertNotNull(response);
-            assertTrue(response.contains("local") || response.contains("Ollama"));
+            assertTrue(response.contains("local")
+            || response.contains("Ollama"));
         }
 
         @Test
         @DisplayName("should handle chat messages")
         void testChat() {
             List<MockLlmProvider.ChatMessage> messages = List.of(
-                    new MockLlmProvider.ChatMessage("system", "You are helpful"),
-                    new MockLlmProvider.ChatMessage("user", "Explain Gradle"));
+                    new MockLlmProvider.ChatMessage(
+                        "system", "You are helpful"),
+                    new MockLlmProvider.ChatMessage(
+                        "user", "Explain Gradle"));
 
             String response = provider.chat(messages);
             assertNotNull(response);
@@ -194,7 +200,8 @@ class MockLlmProviderTest {
         void testCpuEfficiency() {
             String response = provider.complete("Optimize this code");
             assertNotNull(response);
-            assertTrue(response.contains("llama.cpp") || response.contains("CPU"));
+            assertTrue(response.contains("llama.cpp")
+                || response.contains("CPU"));
         }
 
         @Test
@@ -253,7 +260,8 @@ class MockLlmProviderTest {
         @DisplayName("should create llama.cpp provider")
         void testCreateLlamaCppProvider() {
             MockLlmProvider provider = MockLlmProviderFactory
-                    .createProvider(MockLlmProviderFactory.ProviderType.LLAMACPP);
+                    .createProvider(
+                        MockLlmProviderFactory.ProviderType.LLAMACPP);
             assertNotNull(provider);
             assertEquals("llamacpp", provider.getProviderName());
         }
@@ -261,7 +269,8 @@ class MockLlmProviderTest {
         @Test
         @DisplayName("should create provider from string name")
         void testCreateFromString() {
-            MockLlmProvider provider = MockLlmProviderFactory.createProvider("openai");
+            MockLlmProvider provider = MockLlmProviderFactory
+                .createProvider("openai");
             assertNotNull(provider);
             assertEquals("openai", provider.getProviderName());
         }
@@ -322,17 +331,18 @@ class MockLlmProviderTest {
             MockLlmProviderFactory.getProvider("ollama");
 
             assertEquals(2, MockLlmProviderFactory.getCacheSize());
-            MockLlmProviderFactory.removeFromCache(MockLlmProviderFactory.ProviderType.OPENAI);
+            MockLlmProviderFactory
+                .removeFromCache(MockLlmProviderFactory.ProviderType.OPENAI);
             assertEquals(1, MockLlmProviderFactory.getCacheSize());
         }
 
         @Test
         @DisplayName("should support case-insensitive provider name")
         void testCaseInsensitiveProvider() {
-            MockLlmProvider provider1 =
-                    MockLlmProviderFactory.createProvider("OPENAI");
-            MockLlmProvider provider2 =
-                    MockLlmProviderFactory.createProvider("OpenAI");
+            MockLlmProvider provider1 = MockLlmProviderFactory
+                .createProvider("OPENAI");
+            MockLlmProvider provider2 = MockLlmProviderFactory
+                .createProvider("OpenAI");
 
             assertEquals("openai", provider1.getProviderName());
             assertEquals("openai", provider2.getProviderName());
@@ -341,7 +351,8 @@ class MockLlmProviderTest {
         @Test
         @DisplayName("should get provider from string name")
         void testGetProviderFromString() {
-            MockLlmProvider provider = MockLlmProviderFactory.getProvider("ollama");
+            MockLlmProvider provider =
+                MockLlmProviderFactory.getProvider("ollama");
             assertNotNull(provider);
             assertEquals("ollama", provider.getProviderName());
         }
@@ -405,11 +416,11 @@ class MockLlmProviderTest {
         @Test
         @DisplayName("should handle long content")
         void testLongContent() {
-            String longContent = "x".repeat(1000);
+            String longContent = "x".repeat(LONG_CONTENT_LENGTH);
             MockLlmProvider.ChatMessage message =
                     new MockLlmProvider.ChatMessage("user", longContent);
 
-            assertEquals(1000, message.content().length());
+            assertEquals(LONG_CONTENT_LENGTH, message.content().length());
         }
     }
 
@@ -429,13 +440,15 @@ class MockLlmProviderTest {
         }
 
         @Test
-        @DisplayName("should generate different responses for different providers")
+        @DisplayName("should generate different responses"
+            + " for different providers")
         void testProviderResponses() {
             String prompt = "generate code";
 
             String openaiResponse = new MockOpenAiProvider().complete(prompt);
             String ollamaResponse = new MockOllamaProvider().complete(prompt);
-            String llamacppResponse = new MockLlamaCppProvider().complete(prompt);
+            String llamacppResponse =
+                new MockLlamaCppProvider().complete(prompt);
 
             assertTrue(openaiResponse.contains("Mock OpenAI"));
             assertTrue(ollamaResponse.contains("Mock Ollama"));

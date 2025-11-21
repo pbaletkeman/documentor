@@ -173,8 +173,9 @@ class AppConfigTest {
         List<LlmModelConfig> llmModels = List.of(
             new LlmModelConfig("gpt-4", "openai", null, "key1", null, null)
         );
-        OutputSettings outputSettings = new OutputSettings("docs", "markdown", false, false, false
-        , null, null, null, null);
+        OutputSettings outputSettings = new OutputSettings("docs", "markdown",
+            false, false, false,
+            null, null, null, null);
         // Set maxThreads to 6 to match expected values
         AnalysisSettings configAnalysisSettings = new AnalysisSettings(
             false, TEST_THREAD_COUNT_SIX, List.of("**/*.java"), List.of()

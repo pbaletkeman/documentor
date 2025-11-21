@@ -45,7 +45,9 @@ class ThreadLocalTaskDecoratorEnhancedTest {
             new LlmModelConfig("test-model", "ollama",
             "http://localhost:11434", null, TIMEOUT_MILLIS, TIMEOUT_SECONDS)
         );
-        OutputSettings outputSettings = new OutputSettings("output", "markdown", false, false, false, null, null, null, null);
+        OutputSettings outputSettings = new OutputSettings(
+            "output", "markdown", false, false, false, null, null, null,
+            null);
         AnalysisSettings analysisSettings = new AnalysisSettings(
             true, DEFAULT_COUNT, null, null);
 
@@ -116,9 +118,11 @@ class ThreadLocalTaskDecoratorEnhancedTest {
     void testDecorateWithConfigWithNullModels() throws InterruptedException {
         // Create config with null models (this will fail validation,
         // but test the branch)
-        OutputSettings outputSettings = new OutputSettings("output", "markdown", false, false, false, null, null, null, null);
-            AnalysisSettings analysisSettings = new AnalysisSettings(
-                true, DEFAULT_COUNT, null, null);
+        OutputSettings outputSettings = new OutputSettings(
+            "output", "markdown", false, false, false, null, null, null,
+            null);
+        AnalysisSettings analysisSettings = new AnalysisSettings(
+            true, DEFAULT_COUNT, null, null);
 
         // We'll test with empty models instead since null models
         // would fail validation
@@ -181,12 +185,15 @@ class ThreadLocalTaskDecoratorEnhancedTest {
     void testDecorateWithEmptyModelsList() throws InterruptedException {
         // Create config with empty models list
         List<LlmModelConfig> emptyModels = Collections.emptyList();
-        OutputSettings outputSettings = new OutputSettings("output", "markdown", false, false, false, null, null, null, null);
+        OutputSettings outputSettings = new OutputSettings(
+            "output", "markdown", false, false, false, null, null, null,
+            null);
         AnalysisSettings analysisSettings = new AnalysisSettings(
             true, DEFAULT_COUNT, null, null);
 
         DocumentorConfig configWithEmptyModels =
-            new DocumentorConfig(emptyModels, outputSettings, analysisSettings);
+            new DocumentorConfig(emptyModels, outputSettings,
+                analysisSettings);
 
         ThreadLocalContextHolder.setConfig(configWithEmptyModels);
 
@@ -228,7 +235,8 @@ class ThreadLocalTaskDecoratorEnhancedTest {
         );
 
         OutputSettings outputSettings =
-            new OutputSettings("output", "markdown", false, false, false, null, null, null, null);
+            new OutputSettings("output", "markdown", false, false, false,
+                null, null, null, null);
         AnalysisSettings analysisSettings =
             new AnalysisSettings(true, DEFAULT_COUNT, null, null);
 

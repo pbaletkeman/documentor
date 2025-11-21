@@ -44,7 +44,8 @@ class ConfigPackageAdditionalCoverageTest {
         // Create test config
         LlmModelConfig model = new LlmModelConfig(
             "test-model", "provider", "url", "key", TOKEN_4000, TIMEOUT_30);
-        OutputSettings outputSettings = new OutputSettings("output", "markdown", false, false, false, null, null, null, null);
+        OutputSettings outputSettings = new OutputSettings("output",
+            "markdown", false, false, false, null, null, null, null);
         AnalysisSettings analysisSettings = new AnalysisSettings(
             true, THREADS_5, null, null);
 
@@ -207,7 +208,8 @@ class ConfigPackageAdditionalCoverageTest {
 
         // Create config with potential null model list
         OutputSettings outputSettings =
-            new OutputSettings("output", "markdown", false, false, false, null, null, null, null);
+            new OutputSettings("output", "markdown",
+                false, false, false, null, null, null, null);
         AnalysisSettings analysisSettings =
             new AnalysisSettings(true, THREADS_5, null, null);
 

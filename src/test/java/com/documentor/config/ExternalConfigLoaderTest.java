@@ -51,7 +51,8 @@ class ExternalConfigLoaderTest {
             List.of(new com.documentor.config.model.LlmModelConfig(
                 "test-model", "ollama", "http://localhost:11434",
                 "test-key", TEST_MODEL_TOKENS, TEST_MODEL_TIMEOUT)),
-            new OutputSettings("output", "markdown", false, false, false, null, null, null, null),
+            new OutputSettings("output", "markdown", false, false, false,
+                null, null, null, null),
             new com.documentor.config.model.AnalysisSettings(true,
                 ANALYSIS_DEPTH, List.of("*.java"), null)
         );
@@ -71,7 +72,8 @@ class ExternalConfigLoaderTest {
 
     @Test
     void testLoadExternalConfigWithEmptyArgs() {
-        boolean result = externalConfigLoader.loadExternalConfig(new String[0]);
+        boolean result =
+            externalConfigLoader.loadExternalConfig(new String[0]);
         assertFalse(result);
         assertNull(externalConfigLoader.getLoadedConfig());
     }
@@ -249,7 +251,8 @@ class ExternalConfigLoaderTest {
                     "model2", "openai", "https://api.openai.com", "sk-key",
                     COMPLEX_MODEL2_TOKENS, COMPLEX_MODEL2_TIMEOUT)
             ),
-            new OutputSettings("complex-output", "html", true, true, true, null, null, null, null),
+            new OutputSettings("complex-output", "html", true, true, true,
+                null, null, null, null),
             new com.documentor.config.model.AnalysisSettings(
                 false, COMPLEX_ANALYSIS_DEPTH,
                     List.of("*.java", "*.py"), List.of("test/**"))

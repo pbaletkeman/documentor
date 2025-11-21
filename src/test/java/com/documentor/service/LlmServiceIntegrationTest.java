@@ -63,8 +63,9 @@ class LlmServiceIntegrationTest {
             DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
         );
 
-        OutputSettings outputSettings = new OutputSettings("output", "markdown", true, false, true
-        , null, null, null, null);
+        OutputSettings outputSettings = new OutputSettings("output",
+            "markdown", true,
+            false, true, null, null, null, null);
 
         AnalysisSettings analysisSettings = new AnalysisSettings(
             true, ITERATION_COUNT_LARGE,
@@ -354,8 +355,9 @@ class LlmServiceIntegrationTest {
             "test-key", LARGE_MAX_TOKENS, DEFAULT_TIMEOUT_SECONDS
         );
 
-        OutputSettings outputSettings = new OutputSettings("output", "markdown", true, true, false
-        , null, null, null, null);
+        OutputSettings outputSettings = new OutputSettings("output",
+            "markdown", true, true, false,
+            null, null, null, null);
 
         AnalysisSettings analysisSettings = new AnalysisSettings(
             true, ITERATION_COUNT_LARGE,

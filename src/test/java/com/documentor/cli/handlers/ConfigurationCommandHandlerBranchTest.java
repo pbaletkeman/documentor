@@ -70,7 +70,8 @@ class ConfigurationCommandHandlerBranchTest {
             List.of(new LlmModelConfig("minimal", "ollama",
                 "http://localhost", "key", DEFAULT_MAX_TOKENS,
                 DEFAULT_TIMEOUT)),
-            new OutputSettings("output", "html", // Different output format and flags
+            new OutputSettings("output", "html",
+                // Different output format and flags
                 false, false, true, null, null, null, null),
                 null // This will trigger the null analysis settings path
         );
@@ -166,7 +167,8 @@ class ConfigurationCommandHandlerBranchTest {
         DocumentorConfig config = new DocumentorConfig(
             List.of(new LlmModelConfig("test", "ollama", "http://test",
             "key", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT)),
-            new OutputSettings("docs", "markdown", true, true, false, null, null, null, null),
+            new OutputSettings("docs", "markdown", true, true, false,
+                null, null, null, null),
             new AnalysisSettings(true, DEFAULT_MAX_DEPTH,
             List.of("**/*.java"), List.of("**/test/**"))
         );
@@ -193,7 +195,8 @@ class ConfigurationCommandHandlerBranchTest {
         // Test empty LLM models branch (line 77)
         DocumentorConfig config = new DocumentorConfig(
             List.of(), // empty list
-            new OutputSettings("docs", "markdown", true, true, false, null, null, null, null),
+            new OutputSettings("docs", "markdown", true, true, false,
+                null, null, null, null),
             new AnalysisSettings(true, DEFAULT_MAX_DEPTH,
             List.of("**/*.java"), List.of("**/test/**"))
         );
@@ -220,7 +223,8 @@ class ConfigurationCommandHandlerBranchTest {
                 // whitespace API key
                 "  ", DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT)
             ),
-            new OutputSettings("docs", "markdown", true, true, false, null, null, null, null),
+            new OutputSettings("docs", "markdown", true, true, false,
+                null, null, null, null),
             new AnalysisSettings(true, DEFAULT_MAX_DEPTH,
             List.of("**/*.java"), List.of("**/test/**"))
         );

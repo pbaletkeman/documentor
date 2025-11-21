@@ -44,8 +44,8 @@ class DocumentorConfigTest {
         boolean generateMermaid = true;
         boolean verboseOutput = false;
 
-        OutputSettings settings =
-            new OutputSettings(outputDirectory, format, generateMermaid, false, verboseOutput, null, null, null, null);
+        OutputSettings settings = new OutputSettings(outputDirectory, format,
+            generateMermaid, false, verboseOutput, null, null, null, null);
 
         assertEquals(outputDirectory, settings.outputDirectory());
         assertEquals(format, settings.format());

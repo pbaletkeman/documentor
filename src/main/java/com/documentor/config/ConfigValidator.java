@@ -10,10 +10,15 @@ import com.networknt.schema.ValidationMessage;
 import java.io.InputStream;
 import java.util.Set;
 
-public class ConfigValidator {
+public final class ConfigValidator {
 
-    private static final ObjectMapper mapper = new ObjectMapper();
-    private static final JsonSchema schema;
+    private ConfigValidator() {
+        throw new UnsupportedOperationException(
+            "Utility class cannot be instantiated");
+    }
+
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final JsonSchema SCHEMA;
 
     static {
         try {
@@ -22,22 +27,22 @@ public class ConfigValidator {
                 throw new IllegalStateException("Schema resource 'schema/config-schema.json' not found on classpath");
             }
             JsonSchemaFactory factory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7);
-            JsonNode schemaNode = mapper.readTree(in);
+            JsonNode schemaNode = MAPPER.readTree(in);
             if (schemaNode == null) {
                 throw new IllegalStateException("Failed to read schema JSON");
             }
-            schema = factory.getSchema(schemaNode);
+            SCHEMA = factory.getSchema(schemaNode);
         } catch (Exception e) {
             throw new ExceptionInInitializerError(e);
         }
     }
 
-    public static Set<ValidationMessage> validate(InputStream jsonInput) throws Exception {
-        JsonNode node = mapper.readTree(jsonInput);
-        return schema.validate(node);
+    public static Set<ValidationMessage> validate(final InputStream jsonInput) throws Exception {
+        JsonNode node = MAPPER.readTree(jsonInput);
+        return SCHEMA.validate(node);
     }
 
-    public static Set<ValidationMessage> validate(JsonNode node) {
-        return schema.validate(node);
+    public static Set<ValidationMessage> validate(final JsonNode node) {
+        return SCHEMA.validate(node);
     }
 }

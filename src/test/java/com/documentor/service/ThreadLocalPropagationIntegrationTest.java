@@ -53,8 +53,8 @@ public class ThreadLocalPropagationIntegrationTest {
             MAX_TOKENS,
             TIMEOUT_SECONDS);
 
-        OutputSettings outputSettings = new OutputSettings("./output", "markdown", true, true, true
-        , null, null, null, null);
+        OutputSettings outputSettings = new OutputSettings("./output",
+            "markdown", true, true, true, null, null, null, null);
 
         AnalysisSettings analysisSettings = new AnalysisSettings(
             true,
@@ -77,7 +77,8 @@ public class ThreadLocalPropagationIntegrationTest {
         CountDownLatch latch = new CountDownLatch(1);
 
         // Flag to check if config was available in child thread
-        AtomicBoolean configAvailableInChildThread = new AtomicBoolean(false);
+        AtomicBoolean configAvailableInChildThread =
+            new AtomicBoolean(false);
 
         // Execute a task that checks if the config is available
         executor.execute(() -> {
@@ -105,7 +106,8 @@ public class ThreadLocalPropagationIntegrationTest {
                     }
                 } else {
                     LOGGER.error(
-                            "ThreadLocal config NOT available in child thread");
+                            "ThreadLocal config NOT"
+                            + " available in child thread");
                 }
             } finally {
                 latch.countDown();
@@ -137,8 +139,8 @@ public class ThreadLocalPropagationIntegrationTest {
             MAX_TOKENS,
             TIMEOUT_SECONDS);
 
-        OutputSettings outputSettings = new OutputSettings("./output", "markdown", true, true, true
-        , null, null, null, null);
+        OutputSettings outputSettings = new OutputSettings("./output",
+            "markdown", true, true, true, null, null, null, null);
 
         AnalysisSettings analysisSettings = new AnalysisSettings(
             true,

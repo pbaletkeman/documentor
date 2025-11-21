@@ -39,7 +39,9 @@ class ConfigurationCommandHandlerTest {
 
         LlmModelConfig model = new LlmModelConfig("m", "openai",
             "http://x", null, TEST_MAX_TOKENS, TEST_TIMEOUT_SECONDS);
-        OutputSettings output = new OutputSettings(tmp.toString(), "md", true, false, false, null, null, null, null);
+        OutputSettings output = new OutputSettings(
+            tmp.toString(), "md", true, false, false, null, null,
+            null, null);
         AnalysisSettings analysis = new AnalysisSettings(false,
             2, List.of("**/*.java"), List.of("**/test/**"));
         DocumentorConfig config =
@@ -61,11 +63,16 @@ class ConfigurationCommandHandlerTest {
         System.out.println(res);
         System.out.println("=============================");
 
-        assertTrue(res.contains("Configuration file is valid"), "Expected 'Configuration file is valid' in response: " + res);
-        assertTrue(res.contains("LLM Models"), "Expected 'LLM Models' in response: " + res);
-        assertTrue(res.contains("Output Format"), "Expected 'Output Format' in response: " + res);
+        assertTrue(res.contains("Configuration file is valid"),
+            "Expected 'Configuration file is valid' in response: " + res);
+        assertTrue(res.contains("LLM Models"),
+            "Expected 'LLM Models' in response: " + res);
+        assertTrue(res.contains("Output Format"),
+            "Expected 'Output Format' in response: " + res);
         assertTrue(res.contains("Analysis settings")
-            || res.contains("Max Threads"), "Expected 'Analysis settings' or 'Max Threads' in response: " + res);
+            || res.contains("Max Threads"),
+            "Expected 'Analysis settings' or 'Max Threads' in response: "
+            + res);
     }
 
     @Test
@@ -76,7 +83,9 @@ class ConfigurationCommandHandlerTest {
             new ConfigurationCommandHandler(mapper);
 
         // Create config with empty LLM models list
-        OutputSettings output = new OutputSettings(tmp.toString(), "md", true, false, false, null, null, null, null);
+        OutputSettings output = new OutputSettings(
+            tmp.toString(), "md", true, false, false, null, null,
+            null, null);
         AnalysisSettings analysis = new AnalysisSettings(
             false, 2, List.of("**/*.java"), List.of("**/test/**"));
         DocumentorConfig config = new DocumentorConfig(List.of(),
@@ -110,10 +119,12 @@ class ConfigurationCommandHandlerTest {
         "openai", "http://test", "valid-key", TEST_MAX_TOKENS,
             TEST_TIMEOUT_SECONDS);
 
-        OutputSettings output = new OutputSettings(tmp.toString(), "md", true, false, false, null, null, null, null);
+        OutputSettings output = new OutputSettings(
+            tmp.toString(), "md", true, false, false, null, null,
+            null, null);
         AnalysisSettings analysis = new AnalysisSettings(
             false, 2, List.of("**/*.java"),
-                List.of("**/test/**"));
+            List.of("**/test/**"));
         DocumentorConfig config = new DocumentorConfig(
                 List.of(modelWithNullKey, modelWithEmptyKey,
                 modelWithWhitespaceKey, modelWithValidKey),
@@ -189,7 +200,8 @@ class ConfigurationCommandHandlerTest {
         System.out.println(res);
         System.out.println("=====================================");
         assertTrue(res.contains("Schema validation failed")
-                || res.contains("null found, object expected"), "Response was: " + res);
+                || res.contains("null found, object expected"),
+                "Response was: " + res);
     }
 
     @Test

@@ -80,8 +80,8 @@ public final class LlmServiceFixIntegrationTest {
                 TEST_MAX_TOKENS,
                 TEST_TIMEOUT_SECONDS);
 
-        OutputSettings outputSettings = new OutputSettings("./output", "markdown", true, true, true
-        , null, null, null, null);
+        OutputSettings outputSettings = new OutputSettings("./output",
+            "markdown", true, true, true, null, null, null, null);
 
         AnalysisSettings analysisSettings = new AnalysisSettings(
                 true,

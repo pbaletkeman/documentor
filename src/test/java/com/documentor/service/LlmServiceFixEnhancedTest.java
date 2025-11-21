@@ -45,8 +45,8 @@ class LlmServiceFixEnhancedTest {
                 "http://localhost:11434", "test-key",
                 TEST_MODEL_MAX_TOKENS, TEST_MODEL_TIMEOUT
             )),
-            new OutputSettings("./test-output", "markdown", true, true, false
-            , null, null, null, null),
+            new OutputSettings("./test-output", "markdown", true, true, false,
+                null, null, null, null),
             new AnalysisSettings(null, null, null, null)
         );
     }
@@ -154,7 +154,8 @@ class LlmServiceFixEnhancedTest {
         // Arrange
         DocumentorConfig emptyModelsConfig = new DocumentorConfig(
             List.of(), // Empty models list
-            new OutputSettings("./test-output", "markdown", true, true, false, null, null, null, null),
+            new OutputSettings("./test-output", "markdown", true, true, false,
+                null, null, null, null),
             new AnalysisSettings(null, null, null, null)
         );
 
@@ -185,8 +186,8 @@ class LlmServiceFixEnhancedTest {
                     MODEL2_MAX_TOKENS, MODEL2_TIMEOUT
                 )
             ),
-            new OutputSettings("./test-output", "markdown", true, true, false
-            , null, null, null, null),
+            new OutputSettings("./test-output", "markdown", true, true, false,
+                null, null, null, null),
             new AnalysisSettings(null, null, null, null)
         );
 

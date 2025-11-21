@@ -16,7 +16,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -26,9 +25,15 @@ import org.junit.jupiter.api.io.TempDir;
 @DisplayName("AtomicFileWriter Tests")
 class AtomicFileWriterTest {
     @TempDir
-    Path tempDir;
+    private Path tempDir;
 
     private AtomicFileWriter writer;
+
+    // Test constants
+    private static final int SMALL_TIMEOUT_MS = 5;
+    private static final int MEDIUM_TIMEOUT_MS = 10;
+    private static final int LARGE_TIMEOUT_SECONDS = 10000;
+    private static final int THREAD_COUNT = 10;
 
     @BeforeEach
     void setUp() {
@@ -79,21 +84,24 @@ class AtomicFileWriterTest {
         @Test
         @DisplayName("should throw exception for null path")
         void testNullPathThrowsException() {
-            assertThrows(IllegalArgumentException.class, () -> writer.writeFile(null, "content"));
+            assertThrows(IllegalArgumentException.class, () ->
+                writer.writeFile(null, "content"));
         }
 
         @Test
         @DisplayName("should throw exception for null content string")
         void testNullContentStringThrowsException() throws IOException {
             Path filePath = tempDir.resolve("test.txt");
-            assertThrows(IllegalArgumentException.class, () -> writer.writeFile(filePath, (String) null));
+            assertThrows(IllegalArgumentException.class, () ->
+                writer.writeFile(filePath, (String) null));
         }
 
         @Test
         @DisplayName("should throw exception for null content bytes")
         void testNullContentBytesThrowsException() throws IOException {
             Path filePath = tempDir.resolve("test.txt");
-            assertThrows(IllegalArgumentException.class, () -> writer.writeFile(filePath, (byte[]) null));
+            assertThrows(IllegalArgumentException.class, () ->
+                writer.writeFile(filePath, (byte[]) null));
         }
     }
 
@@ -265,10 +273,12 @@ class AtomicFileWriterTest {
         @Test
         @DisplayName("should handle concurrent writes safely")
         void testConcurrentWrites() throws InterruptedException, IOException {
-            AtomicFileWriter overwriteWriter = new AtomicFileWriter(CollisionPolicy.OVERWRITE);
+            AtomicFileWriter overwriteWriter =
+                new AtomicFileWriter(CollisionPolicy.OVERWRITE);
             Path filePath = tempDir.resolve("concurrent.txt");
-            int threadCount = 10;
-            ExecutorService executor = Executors.newFixedThreadPool(threadCount);
+            int threadCount = THREAD_COUNT;
+            ExecutorService executor =
+                Executors.newFixedThreadPool(threadCount);
             CountDownLatch latch = new CountDownLatch(threadCount);
             AtomicInteger successCount = new AtomicInteger(0);
 
@@ -276,22 +286,28 @@ class AtomicFileWriterTest {
                 final int threadId = i;
                 executor.submit(() -> {
                     try {
-                        boolean success = overwriteWriter.writeFile(filePath, "thread-" + threadId);
+                        String data = "thread-" + threadId;
+                        final boolean success;
+                        success = overwriteWriter.writeFile(
+                            filePath, data);
                         if (success) {
                             successCount.incrementAndGet();
                         }
                     } catch (final IOException e) {
-                        Thread.currentThread().getUncaughtExceptionHandler()
-                                .uncaughtException(Thread.currentThread(), e);
+                        final Thread thread = Thread.currentThread();
+                        thread.getUncaughtExceptionHandler()
+                            .uncaughtException(thread, e);
                     } finally {
                         latch.countDown();
                     }
                 });
             }
 
-            assertTrue(latch.await(5, TimeUnit.SECONDS));
+            assertTrue(latch.await(SMALL_TIMEOUT_MS, TimeUnit.SECONDS));
             executor.shutdown();
-            assertTrue(executor.awaitTermination(5, TimeUnit.SECONDS));
+            assertTrue(
+                executor.awaitTermination(SMALL_TIMEOUT_MS, TimeUnit.SECONDS)
+            );
 
             assertEquals(threadCount, successCount.get());
             assertTrue(Files.exists(filePath));
@@ -299,13 +315,16 @@ class AtomicFileWriterTest {
 
         @Test
         @DisplayName("should handle concurrent SUFFIX writes safely")
-        void testConcurrentSuffixWrites() throws InterruptedException, IOException {
-            AtomicFileWriter suffixWriter = new AtomicFileWriter(CollisionPolicy.SUFFIX);
+        void testConcurrentSuffixWrites() throws
+            InterruptedException, IOException {
+            AtomicFileWriter suffixWriter =
+                new AtomicFileWriter(CollisionPolicy.SUFFIX);
             Path filePath = tempDir.resolve("concurrent.txt");
             Files.writeString(filePath, "original");
 
-            int threadCount = 5;
-            ExecutorService executor = Executors.newFixedThreadPool(threadCount);
+            int threadCount = MEDIUM_TIMEOUT_MS;
+            ExecutorService executor =
+                Executors.newFixedThreadPool(threadCount);
             CountDownLatch latch = new CountDownLatch(threadCount);
 
             for (int i = 0; i < threadCount; i++) {
@@ -322,22 +341,25 @@ class AtomicFileWriterTest {
                 });
             }
 
-            assertTrue(latch.await(5, TimeUnit.SECONDS));
+            assertTrue(latch.await(SMALL_TIMEOUT_MS, TimeUnit.SECONDS));
             executor.shutdown();
 
             long suffixedFileCount = Files.list(tempDir)
-                    .filter(p -> p.getFileName().toString().contains("concurrent_")).count();
+                    .filter(p -> p.getFileName()
+                    .toString().contains("concurrent_")).count();
             assertEquals(threadCount, suffixedFileCount);
         }
 
         @Test
         @DisplayName("should handle concurrent reads of lastWrittenPath")
-        void testConcurrentLastWrittenPathReads() throws InterruptedException, IOException {
+        void testConcurrentLastWrittenPathReads() throws
+            InterruptedException, IOException {
             Path filePath = tempDir.resolve("test.txt");
             writer.writeFile(filePath, "content");
 
-            int threadCount = 10;
-            ExecutorService executor = Executors.newFixedThreadPool(threadCount);
+            int threadCount = THREAD_COUNT;
+            ExecutorService executor =
+                Executors.newFixedThreadPool(threadCount);
             CountDownLatch latch = new CountDownLatch(threadCount);
             List<Path> readPaths = new ArrayList<>();
 
@@ -351,7 +373,7 @@ class AtomicFileWriterTest {
                 });
             }
 
-            assertTrue(latch.await(5, TimeUnit.SECONDS));
+            assertTrue(latch.await(SMALL_TIMEOUT_MS, TimeUnit.SECONDS));
             executor.shutdown();
 
             assertTrue(readPaths.stream().allMatch(p -> p.equals(filePath)));
@@ -369,14 +391,16 @@ class AtomicFileWriterTest {
             writer.writeFile(filePath, "content");
 
             long tempFileCount = Files.list(tempDir)
-                    .filter(p -> p.getFileName().toString().endsWith(".tmp")).count();
+                    .filter(p -> p.getFileName()
+                    .toString().endsWith(".tmp")).count();
             assertEquals(0, tempFileCount);
         }
 
         @Test
         @DisplayName("should clean up temp file on write failure")
         void testTempFileCleanupOnFailure() throws IOException {
-            Path filePath = Path.of("/invalid/path/that/does/not/exist/file.txt");
+            Path filePath =
+                Path.of("/invalid/path/that/does/not/exist/file.txt");
 
             try {
                 writer.writeFile(filePath, "content");
@@ -385,7 +409,8 @@ class AtomicFileWriterTest {
             }
 
             long tempFileCount = Files.list(tempDir)
-                    .filter(p -> p.getFileName().toString().endsWith(".tmp")).count();
+                    .filter(p -> p.getFileName()
+                    .toString().endsWith(".tmp")).count();
             assertEquals(0, tempFileCount);
         }
 
@@ -419,7 +444,7 @@ class AtomicFileWriterTest {
         @DisplayName("should handle large content")
         void testLargeContent() throws IOException {
             Path filePath = tempDir.resolve("test.txt");
-            String content = "x".repeat(10000);
+            String content = "x".repeat(LARGE_TIMEOUT_SECONDS);
 
             boolean success = writer.writeFile(filePath, content);
 
@@ -470,7 +495,8 @@ class AtomicFileWriterTest {
         @DisplayName("should return null for lastWrittenPath before any write")
         void testLastWrittenPathNullInitially() {
             assertNotNull(writer);
-            // No assertion needed - test verifies no exception on getLastWrittenPath
+            // No assertion needed -
+            // test verifies no exception on getLastWrittenPath
         }
 
         @Test
@@ -489,7 +515,8 @@ class AtomicFileWriterTest {
         @Test
         @DisplayName("should not update lastWrittenPath on skipped write")
         void testLastWrittenPathNotUpdatedOnSkip() throws IOException {
-            AtomicFileWriter skipWriter = new AtomicFileWriter(CollisionPolicy.SKIP);
+            AtomicFileWriter skipWriter =
+                new AtomicFileWriter(CollisionPolicy.SKIP);
             Path filePath1 = tempDir.resolve("test.txt");
             Files.writeString(filePath1, "original");
 

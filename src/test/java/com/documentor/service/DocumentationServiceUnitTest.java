@@ -65,8 +65,9 @@ class DocumentationServiceUnitTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        OutputSettings outputSettings = new OutputSettings(tempDir.toString(), "markdown", true, false, true
-        , null, null, null, null);
+        OutputSettings outputSettings = new OutputSettings(
+            tempDir.toString(), "markdown", true, false, true,
+            null, null, null, null);
 
         AnalysisSettings analysisSettings = new AnalysisSettings(
             true, MAX_DEPTH_FIVE,
@@ -101,7 +102,8 @@ class DocumentationServiceUnitTest {
                 .thenReturn(CompletableFuture.completedFuture(null));
         when(testGenerator.generateUnitTestDocumentation(any(), any()))
                 .thenReturn(CompletableFuture.completedFuture(null));
-        lenient().when(mermaidService.generateClassDiagrams(any(), anyString(), any()))
+        lenient().when(
+                mermaidService.generateClassDiagrams(any(), anyString(), any()))
                 .thenReturn(CompletableFuture.completedFuture(List.of(
                         "diagram1")));
 
@@ -141,7 +143,8 @@ class DocumentationServiceUnitTest {
         // Stub other generators that may be invoked by configuration defaults
         when(testGenerator.generateUnitTestDocumentation(any(), any()))
                 .thenReturn(CompletableFuture.completedFuture(null));
-        lenient().when(mermaidService.generateClassDiagrams(any(), anyString(), any()))
+        lenient().when(mermaidService
+                .generateClassDiagrams(any(), anyString(), any()))
                 .thenReturn(CompletableFuture.completedFuture(List.of()));
 
         CompletableFuture<String> result = documentationService
@@ -162,8 +165,9 @@ class DocumentationServiceUnitTest {
     void testGenerateDocumentationWithMermaidDiagramsDisabled()
         throws Exception {
         // Create config with generateMermaidDiagrams = false (third parameter)
-        OutputSettings outputSettings = new OutputSettings(tempDir.toString(), "markdown", false, false, true
-        , null, null, null, null);
+        OutputSettings outputSettings = new OutputSettings(
+            tempDir.toString(), "markdown", false, false, true,
+            null, null, null, null);
         AnalysisSettings analysisSettings = new AnalysisSettings(
             true, MAX_DEPTH_FIVE,
             List.of("**/*.java"), List.of("**/test/**")
@@ -239,7 +243,8 @@ class DocumentationServiceUnitTest {
                 .thenReturn(CompletableFuture.completedFuture("# README"));
         when(elementGenerator.generateGroupedDocumentation(any(), any()))
                 .thenReturn(CompletableFuture.completedFuture(null));
-        lenient().when(mermaidService.generateClassDiagrams(any(), anyString(), any()))
+        lenient().when(
+                mermaidService.generateClassDiagrams(any(), anyString(), any()))
                 .thenReturn(CompletableFuture.completedFuture(
                         List.of("diagram1")));
 
