@@ -75,6 +75,15 @@ public record DiagramNamingOptions(
 
     /**
      * 🔍 Creates options with safe values (invalid input ignored)
+     *
+     * This method provides a safe way to create DiagramNamingOptions by
+     * validating all inputs and ignoring any invalid values. Invalid inputs
+     * are set to null, allowing the operation to continue.
+     *
+     * @param prefixParam the prefix to prepend to file names
+     * @param suffixParam the suffix to append to file names
+     * @param extensionParam the file extension to use
+     * @return DiagramNamingOptions with validated values, invalid inputs null
      */
     public static DiagramNamingOptions createSafe(final String prefixParam,
             final String suffixParam, final String extensionParam) {
@@ -135,6 +144,12 @@ public record DiagramNamingOptions(
 
     /**
      * 🔍 Checks if any naming option is configured
+     *
+     * Determines whether this DiagramNamingOptions instance has any custom
+     * naming configured (prefix, suffix, or extension). Returns true if at
+     * least one of these values is non-null and non-empty.
+     *
+     * @return true if any naming option is configured, false otherwise
      */
     public boolean hasCustomNaming() {
         return (prefix != null && !prefix.isEmpty())
