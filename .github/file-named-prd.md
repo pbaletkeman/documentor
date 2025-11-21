@@ -44,8 +44,41 @@ Enable users to customize the naming convention (prefix, suffix, extension) for 
   - Diagram file extension (separately for PlantUML and Mermaid)
 - Backward compatibility: default naming if options not specified
 - Validation of user input (allowed characters, extension format)
-- Documentation and usage examples
+- Documentation and usage examples (see Documentation Requirements below)
 - Unit and integration tests for new config and CLI options
+
+## Documentation Requirements
+
+**Modular Documentation Structure** (maintain 300-500 lines per file):
+
+- **README.md** (main hub, ~345 lines):
+
+  - Add brief "Configurable Diagram Naming" section (5-7 lines) summarizing the feature
+  - Include link to full guide in docs/DIAGRAMS_GUIDE.md
+  - Example: "Generate diagrams with custom prefixes, suffixes, and extensions. [Learn more →](docs/DIAGRAMS_GUIDE.md#file-naming-customization)"
+
+- **docs/DIAGRAMS_GUIDE.md** (currently ~599 lines):
+
+  - Add "File Naming Customization" section (~50-80 lines) covering:
+    - Overview of naming options, use cases, and benefits
+    - Complete configuration JSON example with all fields
+    - CLI flag examples for each naming option
+    - Validation rules (allowed UTF-8 characters, length limits, extension defaults)
+    - Logging behavior (errorLog and outputLog paths)
+    - Examples: "2025-API-UserService_v2.uml", "arch-DataFlow.md"
+  - Note: Monitor line count after adding; if exceeding 600, consider moving advanced examples to separate file
+
+- **docs/CONFIGURATION.md** (currently ~411 lines):
+
+  - Add "Diagram File Naming" subsection (~40-50 lines) with:
+    - Configuration property structure (plantUml.prefix/suffix/extension, mermaid.prefix/suffix/extension)
+    - Allowed characters and constraints ([0-9a-zA-Z- ()+._], max lengths)
+    - Default values if not specified
+    - Error handling (invalid input ignored, defaults applied)
+  - Note: Monitor line count after adding; if exceeding 500, consolidate examples with DIAGRAMS_GUIDE.md
+
+- **No new documentation files**: All updates fit within existing modular structure
+- **All existing files remain unchanged** in scope/structure except for additions noted above
 
 ## Technical Considerations
 
