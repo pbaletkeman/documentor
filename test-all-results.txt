@@ -1,0 +1,75 @@
+'chcp' is not recognized as an internal or external command,
+operable program or batch file.
+Picked up JAVA_TOOL_OPTIONS: -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8
+> Task :compileJava UP-TO-DATE
+> Task :processResources UP-TO-DATE
+> Task :classes UP-TO-DATE
+> Task :compileTestJava
+> Task :processTestResources UP-TO-DATE
+> Task :testClasses
+
+> Task :test
+Picked up JAVA_TOOL_OPTIONS: -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8
+
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+
+> Task :test
+
+DiagramServicesCoverageTest > testPlantUMLDiagramSuccessfulGeneration() FAILED
+    org.opentest4j.AssertionFailedError at DiagramServicesCoverageTest.java:215
+
+DiagramServicesCoverageTest > testPlantUMLDiagramGenerationWithSingleClassException() FAILED
+    org.opentest4j.AssertionFailedError at DiagramServicesCoverageTest.java:164
+
+DiagramServicesCoverageTest > testMermaidDiagramSuccessfulGeneration() FAILED
+    org.opentest4j.AssertionFailedError at DiagramServicesCoverageTest.java:189
+
+DocumentationServiceCoverageEnabledTest > testGenerateDocumentationWithElementsCallsElementGenerator() FAILED
+    java.util.concurrent.ExecutionException at DocumentationServiceCoverageEnabledTest.java:154
+        Caused by: java.lang.RuntimeException at DocumentationService.java:127
+            Caused by: org.mockito.exceptions.misusing.PotentialStubbingProblem at MermaidDiagramService.java:62
+
+DocumentationServiceCoverageEnabledTest > testGenerateDocumentationWritesReadmeAndInvokesGenerators() FAILED
+    java.util.concurrent.ExecutionException at DocumentationServiceCoverageEnabledTest.java:98
+        Caused by: java.lang.RuntimeException at DocumentationService.java:127
+            Caused by: java.lang.NullPointerException at DocumentationService.java:102
+
+DocumentationServiceCoverageTest > testGenerateDocumentationWithPlantUMLEnabled() FAILED
+    org.opentest4j.AssertionFailedError at DocumentationServiceCoverageTest.java:130
+        Caused by: java.util.concurrent.CompletionException at CompletableFuture.java:315
+            Caused by: java.lang.RuntimeException at DocumentationService.java:127
+                Caused by: org.mockito.exceptions.misusing.PotentialStubbingProblem at PlantUMLDiagramService.java:60
+
+DocumentationServiceUnitTest > testGenerateDocumentationWithUnitTestsDisabled() FAILED
+    java.util.concurrent.ExecutionException at DocumentationServiceUnitTest.java:251
+        Caused by: java.lang.RuntimeException at DocumentationService.java:127
+            Caused by: java.lang.NullPointerException at DocumentationService.java:102
+
+DocumentationServiceUnitTest > testGenerateDocumentationHandlesEmptyAnalysis() FAILED
+    java.util.concurrent.ExecutionException at DocumentationServiceUnitTest.java:150
+        Caused by: java.lang.RuntimeException at DocumentationService.java:127
+            Caused by: java.lang.NullPointerException at DocumentationService.java:102
+
+DocumentationServiceUnitTest > testGenerateDocumentationWritesFilesAndInvokesGenerators() FAILED
+    java.util.concurrent.ExecutionException at DocumentationServiceUnitTest.java:113
+        Caused by: java.lang.RuntimeException at DocumentationService.java:127
+            Caused by: java.lang.NullPointerException at DocumentationService.java:102
+
+PlantUMLDiagramServiceFastTest > Should handle single class project FAILED
+    org.opentest4j.AssertionFailedError at PlantUMLDiagramServiceFastTest.java:109
+
+1059 tests completed, 10 failed, 10 skipped
+
+> Task :test FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':test'.
+> There were failing tests. See the report at: file:///C:/Users/Pete/Desktop/documentor/build/reports/tests/test/index.html
+
+* Try:
+> Run with --scan to generate a Build Scan (Powered by Develocity).
+
+BUILD FAILED in 20s
+5 actionable tasks: 2 executed, 3 up-to-date

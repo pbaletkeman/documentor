@@ -1,17 +1,25 @@
 # 🤝 Contributing Guide
 
-We welcome contributions to Documentor! Whether you're fixing bugs, adding features, improving documentation, or optimizing performance, your help is appreciated.
+Comprehensive guide for contributing to the Documentor project, covering setup, workflow, testing, and quality standards.
+
+## Table of Contents
+
+- [Getting Started](#getting-started)
+- [Development Setup](#development-setup)
+- [Project Structure](#project-structure)
+- [Coding Standards](#coding-standards)
+- [Testing Requirements](#testing-requirements)
+- [Git Workflow](#git-workflow)
+- [Pull Request Process](#pull-request-process)
+- [Reporting Issues](#reporting-issues)
+- [Code Review Guidelines](#code-review-guidelines)
+- [Performance Considerations](#performance-considerations)
 
 ## Getting Started
 
-### Prerequisites
+We welcome contributions to Documentor! Whether you're fixing bugs, adding features, improving documentation, or optimizing performance, your help is appreciated.
 
-- Java 21 or higher
-- Gradle 9.1.0 or higher
-- Git
-- GitHub account
-
-### Development Setup
+## Development Setup
 
 ```bash
 # Fork the repository on GitHub

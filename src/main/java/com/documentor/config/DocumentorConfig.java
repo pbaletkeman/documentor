@@ -3,6 +3,7 @@ package com.documentor.config;
 import com.documentor.config.model.AnalysisSettings;
 import com.documentor.config.model.LlmModelConfig;
 import com.documentor.config.model.OutputSettings;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
@@ -20,6 +21,7 @@ import java.util.List;
  */
 @ConfigurationProperties(prefix = "documentor")
 @Validated
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public record DocumentorConfig(
 
         @JsonProperty("llm_models")
@@ -43,4 +45,3 @@ public record DocumentorConfig(
         }
     }
 }
-

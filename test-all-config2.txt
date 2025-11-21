@@ -1,0 +1,33 @@
+'chcp' is not recognized as an internal or external command,
+operable program or batch file.
+Picked up JAVA_TOOL_OPTIONS: -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8
+> Task :compileJava UP-TO-DATE
+> Task :processResources UP-TO-DATE
+> Task :classes UP-TO-DATE
+> Task :compileTestJava
+> Task :processTestResources UP-TO-DATE
+> Task :testClasses
+
+> Task :test
+Picked up JAVA_TOOL_OPTIONS: -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8
+
+> Task :jacocoTestReport
+
+> Task :jacocoTestCoverageVerification FAILED
+[ant:jacocoReport] Rule violated for bundle documentor: instructions covered ratio is 0.02, but expected minimum is 0.95
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':jacocoTestCoverageVerification'.
+> A failure occurred while executing org.gradle.internal.jacoco.JacocoCoverageAction
+   > Rule violated for bundle documentor: instructions covered ratio is 0.02, but expected minimum is 0.95
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to generate a Build Scan (Powered by Develocity).
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 6s
+7 actionable tasks: 4 executed, 3 up-to-date

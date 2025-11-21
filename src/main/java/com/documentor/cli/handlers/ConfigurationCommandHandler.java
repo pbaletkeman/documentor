@@ -1,14 +1,18 @@
 package com.documentor.cli.handlers;
 
+import com.documentor.config.ConfigValidator;
 import com.documentor.config.DocumentorConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.networknt.schema.ValidationMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.io.FileInputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Set;
 
 /**
  * ⚙️ Handler for configuration validation commands
@@ -32,6 +36,18 @@ public final class ConfigurationCommandHandler {
             Path config = Paths.get(configPath);
             if (!Files.exists(config)) {
                 return "❌ Configuration file not found: " + configPath;
+            }
+
+            // Run JSON Schema validation first
+            try (FileInputStream fis = new FileInputStream(config.toFile())) {
+                Set<ValidationMessage> schemaErrors = ConfigValidator.validate(fis);
+                if (!schemaErrors.isEmpty()) {
+                    StringBuilder errors = new StringBuilder("❌ Schema validation failed:\n");
+                    for (ValidationMessage msg : schemaErrors) {
+                        errors.append("  • ").append(msg.getMessage()).append("\n");
+                    }
+                    return errors.toString();
+                }
             }
 
             // Parse and validate configuration

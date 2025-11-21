@@ -27,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -100,7 +101,7 @@ class DocumentationServiceUnitTest {
                 .thenReturn(CompletableFuture.completedFuture(null));
         when(testGenerator.generateUnitTestDocumentation(any(), any()))
                 .thenReturn(CompletableFuture.completedFuture(null));
-        when(mermaidService.generateClassDiagrams(any(), anyString()))
+        lenient().when(mermaidService.generateClassDiagrams(any(), anyString(), any()))
                 .thenReturn(CompletableFuture.completedFuture(List.of(
                         "diagram1")));
 
@@ -126,7 +127,7 @@ class DocumentationServiceUnitTest {
         verify(testGenerator, atLeastOnce())
                 .generateUnitTestDocumentation(any(), any());
         verify(mermaidService, atLeastOnce())
-                .generateClassDiagrams(any(), anyString());
+                .generateClassDiagrams(any(), anyString(), any());
     }
 
     @Test
@@ -140,7 +141,7 @@ class DocumentationServiceUnitTest {
         // Stub other generators that may be invoked by configuration defaults
         when(testGenerator.generateUnitTestDocumentation(any(), any()))
                 .thenReturn(CompletableFuture.completedFuture(null));
-        when(mermaidService.generateClassDiagrams(any(), anyString()))
+        lenient().when(mermaidService.generateClassDiagrams(any(), anyString(), any()))
                 .thenReturn(CompletableFuture.completedFuture(List.of()));
 
         CompletableFuture<String> result = documentationService
@@ -199,7 +200,7 @@ class DocumentationServiceUnitTest {
 
         // Verify mermaid service was NOT called since generateMermaid = false
         verify(mermaidService, never()).generateClassDiagrams(any(),
-                anyString());
+                anyString(), any());
         // Unit test generator should still be called since generateUnitTests()
         // always returns true
         verify(testGenerator, atLeastOnce())
@@ -238,7 +239,7 @@ class DocumentationServiceUnitTest {
                 .thenReturn(CompletableFuture.completedFuture("# README"));
         when(elementGenerator.generateGroupedDocumentation(any(), any()))
                 .thenReturn(CompletableFuture.completedFuture(null));
-        when(mermaidService.generateClassDiagrams(any(), anyString()))
+        lenient().when(mermaidService.generateClassDiagrams(any(), anyString(), any()))
                 .thenReturn(CompletableFuture.completedFuture(
                         List.of("diagram1")));
 
@@ -258,6 +259,6 @@ class DocumentationServiceUnitTest {
         // Mermaid service should still be called
         // since generateMermaidDiagrams = true
         verify(mermaidService, atLeastOnce())
-                .generateClassDiagrams(any(), anyString());
+                .generateClassDiagrams(any(), anyString(), any());
     }
 }

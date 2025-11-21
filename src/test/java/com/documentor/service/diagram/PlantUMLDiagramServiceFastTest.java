@@ -74,7 +74,7 @@ class PlantUMLDiagramServiceFastTest {
 
     @Test
     @DisplayName("Should handle single class project")
-    void shouldHandleSingleClassProject() {
+    void shouldHandleSingleClassProject() throws java.io.IOException {
         // Given
         ProjectAnalysis singleClassAnalysis =
             createSingleClassProjectAnalysis();
@@ -90,12 +90,8 @@ class PlantUMLDiagramServiceFastTest {
             .thenReturn(java.nio.file.Paths.get("/mock/resolved"));
         when(mockGeneratorFactory.getPlantUMLClassDiagramGenerator())
             .thenReturn(mockGenerator);
-        try {
-            when(mockGenerator.generateClassDiagram(any(), any(), any()))
-                .thenReturn("/mock/diagram.puml");
-        } catch (java.io.IOException e) {
-            // This shouldn't happen in a test with mocks
-        }
+        when(mockGenerator.generateClassDiagram(any(), any(), any(), any()))
+            .thenReturn("/mock/diagram.puml");
 
         // When
         CompletableFuture<List<String>> result =

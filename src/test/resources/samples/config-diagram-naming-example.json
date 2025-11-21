@@ -1,0 +1,47 @@
+{
+  "llm_models": [
+    {
+      "name": "llamacpp",
+      "baseUrl": "http://localhost:8080/completion",
+      "maxTokens": 2048,
+      "timeoutSeconds": 90
+    }
+  ],
+  "output_settings": {
+    "output_directory": "./docs",
+    "format": "markdown",
+    "generate_mermaid": true,
+    "generate_plantuml": true,
+    "verbose_output": false,
+    "mermaid_naming": {
+      "prefix": "arch-",
+      "suffix": "",
+      "extension": "md"
+    },
+    "plantuml_naming": {
+      "prefix": "2025-API-",
+      "suffix": "_v2",
+      "extension": "uml"
+    },
+    "error_log": "errors.log",
+    "output_log": "out.log"
+  },
+  "analysis_settings": {
+    "include_private_members": false,
+    "max_depth": 4,
+    "included_patterns": [
+      "**/*.java",
+      "**/*.py"
+    ],
+    "excluded_patterns": [
+      "**/test/**",
+      "**/target/**",
+      "**/__pycache__/**",
+      "**/node_modules/**",
+      "**/.git/**",
+      "**/build/**",
+      "**/.idea/**",
+      "**/.vscode/**"
+    ]
+  }
+}

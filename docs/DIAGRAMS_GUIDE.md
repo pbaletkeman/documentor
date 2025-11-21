@@ -2,6 +2,17 @@
 
 Complete guide to understanding and generating class diagrams with Documentor.
 
+## Table of Contents
+
+- [Diagram Types](#diagram-types)
+- [Mermaid Class Diagrams](#mermaid-class-diagrams)
+- [PlantUML Class Diagrams](#plantuml-class-diagrams)
+- [Diagram Generation](#diagram-generation)
+- [Custom Naming](#custom-naming)
+- [Best Practices](#best-practices)
+- [Examples](#examples)
+- [Troubleshooting](#troubleshooting)
+
 ## Diagram Types
 
 Documentor supports two industry-standard diagram formats:
@@ -403,6 +414,7 @@ Customize how diagram files are named with configurable prefixes, suffixes, and 
 ### Overview
 
 File naming options allow you to:
+
 - **Prefix**: Add project/team identifiers (e.g., `2025-API-`, `arch-`)
 - **Suffix**: Add version/status markers (e.g., `_v2`, `_final`)
 - **Extension**: Use custom file extensions (e.g., `uml`, `md`, `puml`)
@@ -438,10 +450,12 @@ Configure naming in `config.json` under `output_settings`:
 **Allowed Characters:** `[0-9a-zA-Z- ()+._]`
 
 **Length Limits:**
+
 - Prefix/Suffix: Maximum 20 characters
 - Extension: Maximum 10 characters
 
 **Validation:**
+
 - Invalid prefixes/suffixes are ignored (operation continues)
 - Invalid extensions default to `mmd` (Mermaid) or `plantuml` (PlantUML)
 - All errors logged to `error_log` path
@@ -493,6 +507,7 @@ Generated file: `PaymentService.md`
 ### Use Cases
 
 **1. Project Organization**
+
 ```
 2025-API-UserService_v2.uml
 2025-API-OrderService_v2.uml
@@ -500,6 +515,7 @@ Generated file: `PaymentService.md`
 ```
 
 **2. Architecture Documentation**
+
 ```
 arch-DataFlow.md
 arch-SecurityModel.md
@@ -507,6 +523,7 @@ arch-Deployment.md
 ```
 
 **3. Legacy Compatibility**
+
 ```
 legacy-CustomerMgmt_old.puml
 ```
@@ -514,6 +531,7 @@ legacy-CustomerMgmt_old.puml
 ### Backward Compatibility
 
 When no naming options are configured:
+
 - Mermaid diagrams: `ClassName_diagram.mmd`
 - PlantUML diagrams: `ClassName_plantuml.puml`
 

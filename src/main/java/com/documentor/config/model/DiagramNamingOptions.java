@@ -1,5 +1,6 @@
 package com.documentor.config.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.regex.Pattern;
@@ -10,6 +11,7 @@ import java.util.regex.Pattern;
  * Configuration model for customizing diagram file names with prefix, suffix,
  * and extension. Supports validation for allowed characters and length limits.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public record DiagramNamingOptions(
         @JsonProperty("prefix")
         String prefix,

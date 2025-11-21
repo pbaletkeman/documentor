@@ -1,0 +1,97 @@
+version: "3.8"
+
+services:
+  # Development build environment with full build tools and source
+  documentor-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: developer
+    container_name: documentor-dev
+    environment:
+      - JAVA_TOOL_OPTIONS=-Xmx512m -Xms256m
+      - LOG_LEVEL=DEBUG
+      - CONFIG_PATH=/app/config/config.json
+    volumes:
+      # Mount source for live development
+      - ./src:/app/src:delegated
+      - ./gradle:/app/gradle:delegated
+      - ./build:/app/build:cached
+      - ./config:/app/config:delegated
+      - gradle-cache:/root/.gradle:cached
+    ports:
+      - "8080:8080"
+      - "5005:5005" # Debug port
+    networks:
+      - documentor-network
+    command: >
+      bash -c "
+        echo 'Starting Documentor in development mode...';
+        ./gradlew build -x test --continuous
+      "
+    stdin_open: true
+    tty: true
+
+  # Production-ready container
+  documentor-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    container_name: documentor-prod
+    environment:
+      - JAVA_TOOL_OPTIONS=-Xmx256m -Xms128m
+      - LOG_LEVEL=INFO
+      - CONFIG_PATH=/app/config/config.json
+    volumes:
+      - ./config:/app/config:ro
+      - ./output:/app/output
+    ports:
+      - "8081:8080"
+    networks:
+      - documentor-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: Mock LLM service for testing (simulates OpenAI API)
+  mock-llm-service:
+    image: mockserver/mockserver:latest
+    container_name: mock-llm-service
+    environment:
+      - MOCKSERVER_PROPERTY_FILE=/config/mockserver-init.properties
+      - MOCKSERVER_INITIALIZATION_JSON_PATH=/config/mockserver-init.json
+    volumes:
+      - ./docker/mockserver-config:/config:ro
+    ports:
+      - "1080:1080"
+    networks:
+      - documentor-network
+    profiles:
+      - testing
+
+volumes:
+  gradle-cache:
+
+networks:
+  documentor-network:
+    driver: bridge
+# Usage:
+# Development:
+#   docker-compose up documentor-dev
+#
+# Production:
+#   docker-compose up documentor-prod
+#
+# With mock LLM:
+#   docker-compose --profile testing up documentor-dev mock-llm-service
+#
+# Build images:
+#   docker-compose build
+#
+# Cleanup:
+#   docker-compose down -v

@@ -2,6 +2,18 @@
 
 Complete setup instructions for integrating different LLM providers with Documentor.
 
+## Table of Contents
+
+- [Supported LLM Providers](#supported-llm-providers)
+- [OpenAI / ChatGPT Integration](#openai--chatgpt-integration)
+- [Anthropic Claude Integration](#anthropic-claude-integration)
+- [Ollama Integration](#ollama-integration)
+- [Llama.cpp Integration](#llamacpp-integration)
+- [Mock Provider Integration](#mock-provider-integration)
+- [Configuration](#configuration)
+- [Performance Tuning](#performance-tuning)
+- [Troubleshooting](#troubleshooting)
+
 ## Supported LLM Providers
 
 - OpenAI / ChatGPT

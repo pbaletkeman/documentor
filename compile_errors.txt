@@ -1,0 +1,8 @@
+> Task :compileJava UP-TO-DATE
+> Task :processResources UP-TO-DATE
+> Task :classes UP-TO-DATE
+
+> Task :compileTestJava FAILED
+
+[Incubating] Problems report is available at: file:///C:/Users/Pete/Desktop/documentor/build/reports/problems/problems-report.html
+3 actionable tasks: 1 executed, 2 up-to-date
