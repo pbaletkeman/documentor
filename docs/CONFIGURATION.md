@@ -31,14 +31,14 @@ The configuration file (`config.json`) has three main sections: `llm_models`, `o
 ]
 ```
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `name` | String | Required | Model identifier (gpt-3.5-turbo, llama3.2) |
-| `endpoint` | String | Required | API endpoint URL |
-| `max_tokens` | Integer | 4096 | Maximum tokens in response |
-| `temperature` | Float | 0.7 | Response creativity (0.1-1.0) |
-| `timeout_seconds` | Integer | 30 | Request timeout in seconds |
-| `api_key` | String | Optional | Authentication key (if required) |
+| Option            | Type    | Default  | Description                                |
+| ----------------- | ------- | -------- | ------------------------------------------ |
+| `name`            | String  | Required | Model identifier (gpt-3.5-turbo, llama3.2) |
+| `endpoint`        | String  | Required | API endpoint URL                           |
+| `max_tokens`      | Integer | 4096     | Maximum tokens in response                 |
+| `temperature`     | Float   | 0.7      | Response creativity (0.1-1.0)              |
+| `timeout_seconds` | Integer | 30       | Request timeout in seconds                 |
+| `api_key`         | String  | Optional | Authentication key (if required)           |
 
 ## Output Settings
 
@@ -74,22 +74,22 @@ Controls documentation generation and file output behavior.
 
 ### Output Settings Options
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `output_directory` | String | `./docs` | Documentation output directory |
-| `format` | String | `markdown` | Output format (markdown only) |
-| `include_icons` | Boolean | `true` | Include emoji icons |
-| `generate_unit_tests` | Boolean | `true` | Generate test suggestions |
-| `target_coverage` | Float | 0.9 | Test coverage goal (0.0-1.0) |
-| `generate_mermaid` | Boolean | `true` | Generate Mermaid diagrams |
-| `mermaid_output_path` | String | Auto | Mermaid output directory |
-| `generate_plantuml` | Boolean | `false` | Generate PlantUML diagrams |
-| `plantuml_output_path` | String | Auto | PlantUML output directory |
-| `error_log` | String | `errors.log` | Error log file path |
-| `output_log` | String | `output.log` | Success log file path |
-| `overwrite` | Boolean | `false` | Overwrite existing files |
-| `collision_strategy` | String | `timestamp` | Collision handling: timestamp/increment/error |
-| `backup_existing` | Boolean | `true` | Backup files before overwriting |
+| Option                 | Type    | Default      | Description                                   |
+| ---------------------- | ------- | ------------ | --------------------------------------------- |
+| `output_directory`     | String  | `./docs`     | Documentation output directory                |
+| `format`               | String  | `markdown`   | Output format (markdown only)                 |
+| `include_icons`        | Boolean | `true`       | Include emoji icons                           |
+| `generate_unit_tests`  | Boolean | `true`       | Generate test suggestions                     |
+| `target_coverage`      | Float   | 0.9          | Test coverage goal (0.0-1.0)                  |
+| `generate_mermaid`     | Boolean | `true`       | Generate Mermaid diagrams                     |
+| `mermaid_output_path`  | String  | Auto         | Mermaid output directory                      |
+| `generate_plantuml`    | Boolean | `false`      | Generate PlantUML diagrams                    |
+| `plantuml_output_path` | String  | Auto         | PlantUML output directory                     |
+| `error_log`            | String  | `errors.log` | Error log file path                           |
+| `output_log`           | String  | `output.log` | Success log file path                         |
+| `overwrite`            | Boolean | `false`      | Overwrite existing files                      |
+| `collision_strategy`   | String  | `timestamp`  | Collision handling: timestamp/increment/error |
+| `backup_existing`      | Boolean | `true`       | Backup files before overwriting               |
 
 ### Diagram Naming Configuration
 
@@ -126,12 +126,12 @@ Controls code parsing and analysis scope.
 }
 ```
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `include_private_members` | Boolean | `false` | Include private members |
-| `max_threads` | Integer | 4 | Parallel processing threads |
-| `supported_languages` | Array | `["java", "python"]` | Languages to analyze |
-| `exclude_patterns` | Array | (see above) | Glob patterns to exclude |
+| Option                    | Type    | Default              | Description                 |
+| ------------------------- | ------- | -------------------- | --------------------------- |
+| `include_private_members` | Boolean | `false`              | Include private members     |
+| `max_threads`             | Integer | 4                    | Parallel processing threads |
+| `supported_languages`     | Array   | `["java", "python"]` | Languages to analyze        |
+| `exclude_patterns`        | Array   | (see above)          | Glob patterns to exclude    |
 
 ## Dry-Run Mode
 
@@ -224,9 +224,11 @@ Fails if file exists (useful for CI/CD)
 
 ```json
 {
-  "llm_models": [{"name": "llama3.2", "endpoint": "http://localhost:11434/api/generate"}],
-  "output_settings": {"output_directory": "./docs", "generate_mermaid": true},
-  "analysis_settings": {"include_private_members": false}
+  "llm_models": [
+    { "name": "llama3.2", "endpoint": "http://localhost:11434/api/generate" }
+  ],
+  "output_settings": { "output_directory": "./docs", "generate_mermaid": true },
+  "analysis_settings": { "include_private_members": false }
 }
 ```
 
@@ -234,9 +236,18 @@ Fails if file exists (useful for CI/CD)
 
 ```json
 {
-  "llm_models": [{"name": "gpt-3.5-turbo", "endpoint": "https://api.openai.com/v1/chat/completions"}],
-  "output_settings": {"output_directory": "./docs", "generate_mermaid": true, "generate_plantuml": true},
-  "analysis_settings": {"include_private_members": true}
+  "llm_models": [
+    {
+      "name": "gpt-3.5-turbo",
+      "endpoint": "https://api.openai.com/v1/chat/completions"
+    }
+  ],
+  "output_settings": {
+    "output_directory": "./docs",
+    "generate_mermaid": true,
+    "generate_plantuml": true
+  },
+  "analysis_settings": { "include_private_members": true }
 }
 ```
 
@@ -244,9 +255,11 @@ Fails if file exists (useful for CI/CD)
 
 ```json
 {
-  "llm_models": [{"name": "codellama", "endpoint": "http://localhost:11434/api/generate"}],
-  "output_settings": {"generate_unit_tests": false, "generate_mermaid": true},
-  "analysis_settings": {"include_private_members": false}
+  "llm_models": [
+    { "name": "codellama", "endpoint": "http://localhost:11434/api/generate" }
+  ],
+  "output_settings": { "generate_unit_tests": false, "generate_mermaid": true },
+  "analysis_settings": { "include_private_members": false }
 }
 ```
 
@@ -255,7 +268,7 @@ Fails if file exists (useful for CI/CD)
 All sample configs are in `samples/` directory:
 
 - `config-ollama.json` - Local Ollama setup with all features
-- `config-openai.json` - OpenAI GPT configuration  
+- `config-openai.json` - OpenAI GPT configuration
 - `config-diagrams-only.json` - Fast diagram generation
 - `config-docs-only.json` - Documentation without diagrams
 - `config-dryrun-example.json` - Dry-run feature showcase

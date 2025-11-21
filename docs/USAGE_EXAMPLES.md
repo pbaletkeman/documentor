@@ -317,14 +317,14 @@ Generate documentation and diagrams.
 
 **Key Options**:
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `--project-path` | String | Required | Project directory |
-| `--config` | String | config.json | Config file |
-| `--include-private-members` | Boolean | false | Include private members |
-| `--generate-mermaid` | Boolean | false | Generate Mermaid |
-| `--generate-plantuml` | Boolean | false | Generate PlantUML |
-| `--dry-run` | Boolean | false | Preview without writing |
+| Option                      | Type    | Default     | Description             |
+| --------------------------- | ------- | ----------- | ----------------------- |
+| `--project-path`            | String  | Required    | Project directory       |
+| `--config`                  | String  | config.json | Config file             |
+| `--include-private-members` | Boolean | false       | Include private members |
+| `--generate-mermaid`        | Boolean | false       | Generate Mermaid        |
+| `--generate-plantuml`       | Boolean | false       | Generate PlantUML       |
+| `--dry-run`                 | Boolean | false       | Preview without writing |
 
 ### scan
 
