@@ -396,6 +396,129 @@ class UserService {
 documentor> analyze --project-path ./src --config samples/config-diagrams-only.json
 ```
 
+## File Naming Customization
+
+Customize how diagram files are named with configurable prefixes, suffixes, and extensions. This feature improves organization, versioning, and integration with external tools.
+
+### Overview
+
+File naming options allow you to:
+- **Prefix**: Add project/team identifiers (e.g., `2025-API-`, `arch-`)
+- **Suffix**: Add version/status markers (e.g., `_v2`, `_final`)
+- **Extension**: Use custom file extensions (e.g., `uml`, `md`, `puml`)
+
+### Configuration
+
+Configure naming in `config.json` under `output_settings`:
+
+```json
+{
+  "output_settings": {
+    "output_directory": "./docs",
+    "generate_mermaid": true,
+    "generate_plantuml": true,
+    "mermaid_naming": {
+      "prefix": "arch-",
+      "suffix": "",
+      "extension": "md"
+    },
+    "plantuml_naming": {
+      "prefix": "2025-API-",
+      "suffix": "_v2",
+      "extension": "uml"
+    },
+    "error_log": "errors.log",
+    "output_log": "out.log"
+  }
+}
+```
+
+### Naming Rules
+
+**Allowed Characters:** `[0-9a-zA-Z- ()+._]`
+
+**Length Limits:**
+- Prefix/Suffix: Maximum 20 characters
+- Extension: Maximum 10 characters
+
+**Validation:**
+- Invalid prefixes/suffixes are ignored (operation continues)
+- Invalid extensions default to `mmd` (Mermaid) or `plantuml` (PlantUML)
+- All errors logged to `error_log` path
+
+### Examples
+
+**Example 1: Version-Tagged Diagrams**
+
+```json
+{
+  "plantuml_naming": {
+    "prefix": "v2.0-",
+    "suffix": "_draft",
+    "extension": "puml"
+  }
+}
+```
+
+Generated file: `v2.0-UserService_draft.puml`
+
+**Example 2: Team Prefixes**
+
+```json
+{
+  "mermaid_naming": {
+    "prefix": "backend-",
+    "suffix": "",
+    "extension": "mmd"
+  }
+}
+```
+
+Generated file: `backend-OrderService.mmd`
+
+**Example 3: Markdown Extension**
+
+```json
+{
+  "mermaid_naming": {
+    "prefix": "",
+    "suffix": "",
+    "extension": "md"
+  }
+}
+```
+
+Generated file: `PaymentService.md`
+
+### Use Cases
+
+**1. Project Organization**
+```
+2025-API-UserService_v2.uml
+2025-API-OrderService_v2.uml
+2025-API-PaymentService_v2.uml
+```
+
+**2. Architecture Documentation**
+```
+arch-DataFlow.md
+arch-SecurityModel.md
+arch-Deployment.md
+```
+
+**3. Legacy Compatibility**
+```
+legacy-CustomerMgmt_old.puml
+```
+
+### Backward Compatibility
+
+When no naming options are configured:
+- Mermaid diagrams: `ClassName_diagram.mmd`
+- PlantUML diagrams: `ClassName_plantuml.puml`
+
+This maintains compatibility with existing workflows.
+
 ## Best Practices
 
 ### Choosing the Right Diagram Type
