@@ -12,6 +12,7 @@ v2.0.2 is a maintenance release focused on project structure and documentation o
 ### Documentation Organization
 
 - **Moved to `docs/` directory:**
+
   - `COVERAGE_REPORT.md` → `docs/COVERAGE_REPORT.md`
   - `DOCUMENTATION_SUMMARY.md` → `docs/DOCUMENTATION_SUMMARY.md`
   - `FINAL_TESTING_SUMMARY.md` → `docs/FINAL_TESTING_SUMMARY.md`
