@@ -21,9 +21,9 @@ import org.slf4j.LoggerFactory;
  * }</pre>
  */
 public final class MockLlmProviderFactory {
-    private static final Logger logger = LoggerFactory.getLogger(MockLlmProviderFactory.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MockLlmProviderFactory.class);
 
-    private static final Map<String, MockLlmProvider> providerCache = new HashMap<>();
+    private static final Map<String, MockLlmProvider> PROVIDER_CACHE = new HashMap<>();
 
     /**
      * Supported provider types.
@@ -93,15 +93,15 @@ public final class MockLlmProviderFactory {
 
         return switch (providerType) {
             case OPENAI -> {
-                logger.debug("Creating MockOpenAiProvider with model: {}", model);
+                LOGGER.debug("Creating MockOpenAiProvider with model: {}", model);
                 yield new MockOpenAiProvider(model);
             }
             case OLLAMA -> {
-                logger.debug("Creating MockOllamaProvider with model: {}", model);
+                LOGGER.debug("Creating MockOllamaProvider with model: {}", model);
                 yield new MockOllamaProvider(model);
             }
             case LLAMACPP -> {
-                logger.debug("Creating MockLlamaCppProvider with model: {}", model);
+                LOGGER.debug("Creating MockLlamaCppProvider with model: {}", model);
                 yield new MockLlamaCppProvider(model);
             }
         };
@@ -168,8 +168,8 @@ public final class MockLlmProviderFactory {
             cacheKey = cacheKey + ":" + model;
         }
 
-        return providerCache.computeIfAbsent(cacheKey, key -> {
-            logger.debug("Creating and caching provider: {}", key);
+        return PROVIDER_CACHE.computeIfAbsent(cacheKey, key -> {
+            LOGGER.debug("Creating and caching provider: {}", key);
             return createProvider(providerType, model);
         });
     }
@@ -204,8 +204,8 @@ public final class MockLlmProviderFactory {
      * Clears all cached providers.
      */
     public static void clearCache() {
-        logger.debug("Clearing provider cache");
-        providerCache.clear();
+        LOGGER.debug("Clearing provider cache");
+        PROVIDER_CACHE.clear();
     }
 
     /**
@@ -228,8 +228,8 @@ public final class MockLlmProviderFactory {
         if (model != null && !model.trim().isEmpty()) {
             cacheKey = cacheKey + ":" + model;
         }
-        logger.debug("Removing provider from cache: {}", cacheKey);
-        providerCache.remove(cacheKey);
+        LOGGER.debug("Removing provider from cache: {}", cacheKey);
+        PROVIDER_CACHE.remove(cacheKey);
     }
 
     /**
@@ -238,6 +238,6 @@ public final class MockLlmProviderFactory {
      * @return cache size
      */
     public static int getCacheSize() {
-        return providerCache.size();
+        return PROVIDER_CACHE.size();
     }
 }

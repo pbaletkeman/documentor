@@ -23,7 +23,8 @@ import org.slf4j.LoggerFactory;
  * }</pre>
  */
 public class AtomicFileWriter {
-    private static final Logger logger = LoggerFactory.getLogger(AtomicFileWriter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+            AtomicFileWriter.class);
     private static final String TEMP_FILE_SUFFIX = ".tmp";
     private static final int MAX_SUFFIX_ATTEMPTS = 1000;
 
@@ -43,14 +44,17 @@ public class AtomicFileWriter {
     }
 
     /**
-     * Atomically writes content to a file using the configured collision policy.
+     * Atomically writes content to a file using the configured collision
+     * policy.
      *
      * @param targetPath the target file path
      * @param content the content to write
-     * @return true if write succeeded, false if skipped due to collision or error
+     * @return true if write succeeded, false if skipped due to collision
+     *         or error
      * @throws IOException if an I/O error occurs during write
      */
-    public boolean writeFile(final Path targetPath, final String content) throws IOException {
+    public boolean writeFile(final Path targetPath, final String content)
+            throws IOException {
         if (targetPath == null) {
             throw new IllegalArgumentException("Target path cannot be null");
         }
@@ -62,10 +66,9 @@ public class AtomicFileWriter {
         try {
             Path resolvedPath = handleCollision(targetPath);
             if (resolvedPath == null) {
-                logger.debug("Write skipped for file: {}", targetPath);
+                LOGGER.debug("Write skipped for file: {}", targetPath);
                 return false;
             }
-
             return writeAtomically(resolvedPath, content);
         } finally {
             lock.writeLock().unlock();
@@ -73,14 +76,16 @@ public class AtomicFileWriter {
     }
 
     /**
-     * Atomically writes bytes to a file using the configured collision policy.
+     * Atomically writes bytes to a file using the configured collision
+     * policy.
      *
      * @param targetPath the target file path
      * @param content the byte content to write
      * @return true if write succeeded, false if skipped due to collision
      * @throws IOException if an I/O error occurs during write
      */
-    public boolean writeFile(final Path targetPath, final byte[] content) throws IOException {
+    public boolean writeFile(final Path targetPath, final byte[] content)
+            throws IOException {
         if (targetPath == null) {
             throw new IllegalArgumentException("Target path cannot be null");
         }
@@ -92,10 +97,9 @@ public class AtomicFileWriter {
         try {
             Path resolvedPath = handleCollision(targetPath);
             if (resolvedPath == null) {
-                logger.debug("Write skipped for file: {}", targetPath);
+                LOGGER.debug("Write skipped for file: {}", targetPath);
                 return false;
             }
-
             return writeAtomically(resolvedPath, content);
         } finally {
             lock.writeLock().unlock();
@@ -129,11 +133,12 @@ public class AtomicFileWriter {
 
         return switch (policy) {
             case OVERWRITE -> {
-                logger.debug("Overwriting existing file: {}", targetPath);
+                LOGGER.debug("Overwriting existing file: {}", targetPath);
                 yield targetPath;
             }
             case SKIP -> {
-                logger.debug("Skipping write - file exists: {}", targetPath);
+                LOGGER.debug("Skipping write - file exists: {}",
+                        targetPath);
                 yield null;
             }
             case SUFFIX -> generateSuffixedPath(targetPath);
@@ -163,15 +168,19 @@ public class AtomicFileWriter {
         Path parent = originalPath.getParent();
         for (int i = 1; i < MAX_SUFFIX_ATTEMPTS; i++) {
             String newFilename = baseName + "_" + i + extension;
-            Path newPath = parent != null ? parent.resolve(newFilename) : Path.of(newFilename);
+            Path newPath = parent != null
+                    ? parent.resolve(newFilename)
+                    : Path.of(newFilename);
 
             if (!Files.exists(newPath)) {
-                logger.debug("Generated suffixed path: {}", newPath);
+                LOGGER.debug("Generated suffixed path: {}", newPath);
                 return newPath;
             }
         }
 
-        logger.warn("Could not find available filename after {} attempts", MAX_SUFFIX_ATTEMPTS);
+        LOGGER.warn(
+                "Could not find available filename after {} attempts",
+                MAX_SUFFIX_ATTEMPTS);
         return originalPath;
     }
 
@@ -183,22 +192,25 @@ public class AtomicFileWriter {
      * @return true if write succeeded
      * @throws IOException if an I/O error occurs
      */
-    private boolean writeAtomically(final Path targetPath, final String content) throws IOException {
+    private boolean writeAtomically(final Path targetPath,
+            final String content) throws IOException {
         Path tempPath = generateTempPath(targetPath);
 
         try {
             Files.createDirectories(targetPath.getParent());
-            Files.writeString(tempPath, content, StandardOpenOption.CREATE,
-                    StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE);
+            Files.writeString(tempPath, content,
+                    StandardOpenOption.CREATE,
+                    StandardOpenOption.TRUNCATE_EXISTING,
+                    StandardOpenOption.WRITE);
 
             Files.move(tempPath, targetPath,
                     java.nio.file.StandardCopyOption.REPLACE_EXISTING);
 
             this.lastWrittenPath = targetPath;
-            logger.debug("Successfully wrote file: {}", targetPath);
+            LOGGER.debug("Successfully wrote file: {}", targetPath);
             return true;
         } catch (final IOException e) {
-            logger.error("Failed to write file: {}", targetPath, e);
+            LOGGER.error("Failed to write file: {}", targetPath, e);
             Files.deleteIfExists(tempPath);
             throw e;
         }
@@ -212,22 +224,24 @@ public class AtomicFileWriter {
      * @return true if write succeeded
      * @throws IOException if an I/O error occurs
      */
-    private boolean writeAtomically(final Path targetPath, final byte[] content) throws IOException {
+    private boolean writeAtomically(final Path targetPath,
+            final byte[] content) throws IOException {
         Path tempPath = generateTempPath(targetPath);
 
         try {
             Files.createDirectories(targetPath.getParent());
             Files.write(tempPath, content, StandardOpenOption.CREATE,
-                    StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE);
+                    StandardOpenOption.TRUNCATE_EXISTING,
+                    StandardOpenOption.WRITE);
 
             Files.move(tempPath, targetPath,
                     java.nio.file.StandardCopyOption.REPLACE_EXISTING);
 
             this.lastWrittenPath = targetPath;
-            logger.debug("Successfully wrote file: {}", targetPath);
+            LOGGER.debug("Successfully wrote file: {}", targetPath);
             return true;
         } catch (final IOException e) {
-            logger.error("Failed to write file: {}", targetPath, e);
+            LOGGER.error("Failed to write file: {}", targetPath, e);
             Files.deleteIfExists(tempPath);
             throw e;
         }

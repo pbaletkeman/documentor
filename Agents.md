@@ -51,7 +51,7 @@ gradlew.bat clean checkstyleMain checkstyleTest
 
 # Publishing checklist
 
-1. Commit documentation changes (`CHANGELOG.md`, `DOCUMENTATION_SUMMARY.md`, release note files).
+1. Commit documentation changes (`CHANGELOG.md`, `docs/DOCUMENTATION_SUMMARY.md`, release note files).
 2. Run `gradlew.bat clean checkstyleMain checkstyleTest && gradlew.bat build` and confirm `build/libs/documentor.jar` exists.
 3. Create and push annotated tag, create or edit GitHub release, upload artifact(s), then publish.
 

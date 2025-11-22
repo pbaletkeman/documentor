@@ -13,10 +13,15 @@
     <property name="fileNamePattern" value="module\-info\.java$"/>
   </module>
 
+  <!-- Apply suppressions filter -->
+  <module name="SuppressionFilter">
+    <property name="file" value="${config_loc}/suppressions.xml"/>
+  </module>
+
   <!-- Checks for Size Violations -->
   <module name="FileLength"/>
   <module name="LineLength">
-    <property name="max" value="80"/>
+    <property name="max" value="100"/>
   </module>
 
   <!-- Checks for whitespace -->

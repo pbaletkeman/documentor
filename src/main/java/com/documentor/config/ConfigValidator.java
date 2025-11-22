@@ -22,11 +22,15 @@ public final class ConfigValidator {
 
     static {
         try {
-            InputStream in = ConfigValidator.class.getClassLoader().getResourceAsStream("schema/config-schema.json");
+            InputStream in = ConfigValidator.class
+                .getClassLoader().getResourceAsStream("schema/config-schema.json");
             if (in == null) {
-                throw new IllegalStateException("Schema resource 'schema/config-schema.json' not found on classpath");
+                throw new IllegalStateException(
+                    "Schema resource 'schema/config-schema.json'"
+                    + " not found on classpath");
             }
-            JsonSchemaFactory factory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7);
+            JsonSchemaFactory factory = JsonSchemaFactory.getInstance(
+                    SpecVersion.VersionFlag.V7);
             JsonNode schemaNode = MAPPER.readTree(in);
             if (schemaNode == null) {
                 throw new IllegalStateException("Failed to read schema JSON");

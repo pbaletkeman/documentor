@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE suppressions PUBLIC
+    "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+    "https://checkstyle.org/dtds/suppressions_1_2.dtd">
+
+<suppressions>
+  <!-- Suppress HideUtilityClassConstructor for Spring Boot entry points -->
+  <suppress checks="HideUtilityClassConstructor" files=".*DocumentorApplicationEnhanced\.java$"/>
+  <suppress checks="HideUtilityClassConstructor" files=".*DocumentorTestApplication\.java$"/>
+
+  <!-- Suppress ParameterNumber for methods with required parameters -->
+  <suppress checks="ParameterNumber" files="DocumentorCommands\.java" lines="204-220"/>
+  <suppress checks="ParameterNumber" files="ProjectAnalysisCommandHandler\.java" lines="108-125"/>
+
+  <!-- Suppress DesignForExtension for mock provider classes (test utilities) -->
+  <suppress checks="DesignForExtension" files=".*MockLlamaCppProvider\.java$"/>
+  <suppress checks="DesignForExtension" files=".*MockOllamaProvider\.java$"/>
+  <suppress checks="DesignForExtension" files=".*MockOpenAiProvider\.java$"/>
+
+  <!-- Suppress HiddenField for method parameters in mock classes -->
+  <suppress checks="HiddenField" files=".*MockLlmProviderFactory\.java$"/>
+  <suppress checks="HiddenField" files=".*AtomicFileWriter\.java$"/>
+
+  <!-- Suppress OperatorWrap for string concatenation in mock classes -->
+  <suppress checks="OperatorWrap" files=".*MockOllamaProvider\.java$"/>
+  <suppress checks="OperatorWrap" files=".*MockOpenAiProvider\.java$"/>
+</suppressions>

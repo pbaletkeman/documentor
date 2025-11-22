@@ -19,7 +19,7 @@ This release focuses on code-style enforcement, test formatting, and repository 
 - `src/test/java/com/documentor/cli/handlers/ConfigurationCommandHandlerBranchTest.java`
 - `docs/DOCKER.md` (updated)
 - `docs/USAGE_EXAMPLES.md` (added)
-- `DOCUMENTATION_SUMMARY.md` (added release link)
+- `docs/DOCUMENTATION_SUMMARY.md` (added release link)
 - `CHANGELOG.md` (added v2.0.1 entry)
 - `release_notes_v2.0.1.md` (summary)
 

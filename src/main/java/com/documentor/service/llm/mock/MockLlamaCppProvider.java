@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
  * Useful for testing in containerized environments and CI/CD pipelines.
  */
 public class MockLlamaCppProvider implements MockLlmProvider {
-    private static final Logger logger = LoggerFactory.getLogger(MockLlamaCppProvider.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MockLlamaCppProvider.class);
 
     private static final String PROVIDER_NAME = "llamacpp";
     private static final String DEFAULT_MODEL = "llama-7b-gguf";
@@ -25,7 +25,7 @@ public class MockLlamaCppProvider implements MockLlmProvider {
      */
     public MockLlamaCppProvider() {
         this.defaultModel = DEFAULT_MODEL;
-        logger.info("Initialized MockLlamaCppProvider with model: {}", defaultModel);
+        LOGGER.info("Initialized MockLlamaCppProvider with model: {}", defaultModel);
     }
 
     /**
@@ -35,7 +35,7 @@ public class MockLlamaCppProvider implements MockLlmProvider {
      */
     public MockLlamaCppProvider(final String model) {
         this.defaultModel = model != null ? model : DEFAULT_MODEL;
-        logger.info("Initialized MockLlamaCppProvider with model: {}", defaultModel);
+        LOGGER.info("Initialized MockLlamaCppProvider with model: {}", defaultModel);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class MockLlamaCppProvider implements MockLlmProvider {
             return "[Mock llama.cpp] Empty prompt provided";
         }
 
-        logger.debug("Mock llama.cpp completion - prompt: {}, model: {}", prompt, model);
+        LOGGER.debug("Mock llama.cpp completion - prompt: {}, model: {}", prompt, model);
 
         return generateMockCompletion(prompt, model);
     }
@@ -70,7 +70,7 @@ public class MockLlamaCppProvider implements MockLlmProvider {
             return "[Mock llama.cpp] Empty message list provided";
         }
 
-        logger.debug("Mock llama.cpp chat - {} messages, model: {}", messages.size(), model);
+        LOGGER.debug("Mock llama.cpp chat - {} messages, model: {}", messages.size(), model);
 
         String lastUserMessage = messages.stream()
                 .filter(m -> "user".equals(m.role()))
@@ -89,7 +89,7 @@ public class MockLlamaCppProvider implements MockLlmProvider {
     @Override
     public void setDefaultModel(final String model) {
         this.defaultModel = model != null ? model : DEFAULT_MODEL;
-        logger.debug("Updated default model to: {}", defaultModel);
+        LOGGER.debug("Updated default model to: {}", defaultModel);
     }
 
     @Override
@@ -149,8 +149,9 @@ public class MockLlamaCppProvider implements MockLlmProvider {
                     """;
         }
 
-        return "[Mock llama.cpp - " + model + "] CPU-efficient response: " +
-                "This mock response simulates llama.cpp C++ inference. " +
-                "Actual llama.cpp server would provide real model outputs with optimal performance.";
+        return "[Mock llama.cpp - " + model + "] CPU-efficient response: "
+                + "This mock response simulates llama.cpp C++ inference. "
+                + "Actual llama.cpp server would provide real model outputs"
+                + " with optimal performance.";
     }
 }

@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
  * Responses are mock data that simulate common OpenAI response patterns.
  */
 public class MockOpenAiProvider implements MockLlmProvider {
-    private static final Logger logger = LoggerFactory.getLogger(MockOpenAiProvider.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MockOpenAiProvider.class);
 
     private static final String PROVIDER_NAME = "openai";
     private static final String DEFAULT_MODEL = "gpt-3.5-turbo";
@@ -25,7 +25,7 @@ public class MockOpenAiProvider implements MockLlmProvider {
      */
     public MockOpenAiProvider() {
         this.defaultModel = DEFAULT_MODEL;
-        logger.info("Initialized MockOpenAiProvider with model: {}", defaultModel);
+        LOGGER.info("Initialized MockOpenAiProvider with model: {}", defaultModel);
     }
 
     /**
@@ -35,7 +35,7 @@ public class MockOpenAiProvider implements MockLlmProvider {
      */
     public MockOpenAiProvider(final String model) {
         this.defaultModel = model != null ? model : DEFAULT_MODEL;
-        logger.info("Initialized MockOpenAiProvider with model: {}", defaultModel);
+        LOGGER.info("Initialized MockOpenAiProvider with model: {}", defaultModel);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class MockOpenAiProvider implements MockLlmProvider {
             return "[Mock OpenAI] Empty prompt provided";
         }
 
-        logger.debug("Mock OpenAI completion - prompt: {}, model: {}", prompt, model);
+        LOGGER.debug("Mock OpenAI completion - prompt: {}, model: {}", prompt, model);
 
         return generateMockCompletion(prompt, model);
     }
@@ -70,7 +70,7 @@ public class MockOpenAiProvider implements MockLlmProvider {
             return "[Mock OpenAI] Empty message list provided";
         }
 
-        logger.debug("Mock OpenAI chat - {} messages, model: {}", messages.size(), model);
+        LOGGER.debug("Mock OpenAI chat - {} messages, model: {}", messages.size(), model);
 
         String lastUserMessage = messages.stream()
                 .filter(m -> "user".equals(m.role()))
@@ -89,7 +89,7 @@ public class MockOpenAiProvider implements MockLlmProvider {
     @Override
     public void setDefaultModel(final String model) {
         this.defaultModel = model != null ? model : DEFAULT_MODEL;
-        logger.debug("Updated default model to: {}", defaultModel);
+        LOGGER.debug("Updated default model to: {}", defaultModel);
     }
 
     @Override

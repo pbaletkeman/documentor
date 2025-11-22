@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
  * Useful for CI/CD pipelines and development environments.
  */
 public class MockOllamaProvider implements MockLlmProvider {
-    private static final Logger logger = LoggerFactory.getLogger(MockOllamaProvider.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MockOllamaProvider.class);
 
     private static final String PROVIDER_NAME = "ollama";
     private static final String DEFAULT_MODEL = "llama2";
@@ -25,7 +25,7 @@ public class MockOllamaProvider implements MockLlmProvider {
      */
     public MockOllamaProvider() {
         this.defaultModel = DEFAULT_MODEL;
-        logger.info("Initialized MockOllamaProvider with model: {}", defaultModel);
+        LOGGER.info("Initialized MockOllamaProvider with model: {}", defaultModel);
     }
 
     /**
@@ -35,7 +35,7 @@ public class MockOllamaProvider implements MockLlmProvider {
      */
     public MockOllamaProvider(final String model) {
         this.defaultModel = model != null ? model : DEFAULT_MODEL;
-        logger.info("Initialized MockOllamaProvider with model: {}", defaultModel);
+        LOGGER.info("Initialized MockOllamaProvider with model: {}", defaultModel);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class MockOllamaProvider implements MockLlmProvider {
             return "[Mock Ollama] Empty prompt provided";
         }
 
-        logger.debug("Mock Ollama completion - prompt: {}, model: {}", prompt, model);
+        LOGGER.debug("Mock Ollama completion - prompt: {}, model: {}", prompt, model);
 
         return generateMockCompletion(prompt, model);
     }
@@ -70,7 +70,7 @@ public class MockOllamaProvider implements MockLlmProvider {
             return "[Mock Ollama] Empty message list provided";
         }
 
-        logger.debug("Mock Ollama chat - {} messages, model: {}", messages.size(), model);
+        LOGGER.debug("Mock Ollama chat - {} messages, model: {}", messages.size(), model);
 
         String lastUserMessage = messages.stream()
                 .filter(m -> "user".equals(m.role()))
@@ -89,7 +89,7 @@ public class MockOllamaProvider implements MockLlmProvider {
     @Override
     public void setDefaultModel(final String model) {
         this.defaultModel = model != null ? model : DEFAULT_MODEL;
-        logger.debug("Updated default model to: {}", defaultModel);
+        LOGGER.debug("Updated default model to: {}", defaultModel);
     }
 
     @Override
