@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.0.2] - 2025-11-21
+
+### Changed
+
+- Reorganized documentation structure: Moved documentation files to `docs/` directory for better project organization
+  - `COVERAGE_REPORT.md` → `docs/COVERAGE_REPORT.md`
+  - `DOCUMENTATION_SUMMARY.md` → `docs/DOCUMENTATION_SUMMARY.md`
+  - `FINAL_TESTING_SUMMARY.md` → `docs/FINAL_TESTING_SUMMARY.md`
+- Updated all internal references to reflect new documentation paths
+
+### Build Quality
+
+- **Checkstyle**: 0 violations (maintained from v2.0.1)
+- **Tests**: 1206+ tests passing (100% success rate)
+- **Code Coverage**: 94% instruction coverage
+- **Compilation**: 0 errors
+
+### Notes
+
+- Non-breaking maintenance release
+- All functionality unchanged
+- Documentation relocation improves project structure and maintainability
+
+---
+
 ## [v2.0.1] - 2025-11-21
 
 ### Changed
