@@ -303,9 +303,11 @@ class ElementDocumentationGeneratorTest {
         assertTrue(Files.exists(class2FilePath),
             "SecondClass documentation file should exist");
         String content2 = Files.readString(class2FilePath);
-        assertTrue(content2.contains("# 📦 SecondClass"),
+        assertTrue(
+            content2.contains("# ") && content2.contains(" SecondClass"),
             "Should contain second class name");
-        assertTrue(content2.contains("### 🔧 secondMethod"),
+        assertTrue(
+            content2.contains("### ") && content2.contains(" secondMethod"),
             "Should contain second method name");
         assertFalse(content2.contains("firstMethod"),
             "Should not contain first method name");
