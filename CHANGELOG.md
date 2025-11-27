@@ -18,6 +18,14 @@ All notable changes to this project will be documented in this file.
     - `LlmService.java`
     - `LlmServiceEnhanced.java`
 
+### Added
+
+- **GitHub Actions Release Workflows**: Added dedicated release workflows for both Java versions
+  - `release-java17.yml`: Builds and releases Java 17 LTS artifacts
+  - `release-java21.yml`: Builds and releases Java 21 artifacts
+  - Triggered by tags `v*.*.*-java17` and `v*.*.*-java21` or manual dispatch
+  - Generates versioned JAR files with SHA256 checksums
+
 ### Compatibility
 
 - **Java Version**: Java 17 LTS (minimum)

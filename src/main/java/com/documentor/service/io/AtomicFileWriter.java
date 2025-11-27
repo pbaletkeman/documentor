@@ -143,7 +143,8 @@ public class AtomicFileWriter {
             case SUFFIX:
                 return generateSuffixedPath(targetPath);
             default:
-                return targetPath;
+                throw new IllegalArgumentException(
+                    "Unknown collision policy: " + policy);
         }
     }
 

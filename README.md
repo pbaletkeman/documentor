@@ -90,6 +90,26 @@ analyze --project-path ./src --generate-mermaid true --config config.json
 | `main` | Java 21 | Latest features including Virtual Threads, Pattern Matching, Sequenced Collections |
 | `java-17-lts` | Java 17 | Long-term support branch with traditional Java syntax |
 
+## 📦 Release Workflows
+
+The project includes GitHub Actions workflows for creating releases:
+
+| Workflow | Java Version | Trigger | Artifact |
+|----------|-------------|---------|----------|
+| `release-java17.yml` | Java 17 LTS | Tag `v*.*.*-java17` or manual | `documentor-java17.jar` |
+| `release-java21.yml` | Java 21 | Tag `v*.*.*-java21` or manual | `documentor-java21.jar` |
+
+To create a release:
+```bash
+# Java 17 LTS release
+git tag v1.2.0-java17
+git push origin v1.2.0-java17
+
+# Java 21 release
+git tag v1.2.0-java21
+git push origin v1.2.0-java21
+```
+
 ## 🎯 Common Use Cases
 
 ### Local Development with Ollama
