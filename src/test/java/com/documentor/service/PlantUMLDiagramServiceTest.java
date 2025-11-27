@@ -117,8 +117,9 @@ class PlantUMLDiagramServiceTest {
         ProjectAnalysis analysis = createTestProjectAnalysis();
 
         // When
+        // Use temp directory instead of null for cross-platform compatibility
         CompletableFuture<List<String>> future = plantUMLDiagramService
-            .generateClassDiagrams(analysis, null);
+            .generateClassDiagrams(analysis, tempDir.toString());
         List<String> generatedFiles = future.join();
 
         // Then
