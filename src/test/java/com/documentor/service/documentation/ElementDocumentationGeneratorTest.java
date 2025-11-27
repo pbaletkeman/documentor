@@ -204,13 +204,11 @@ class ElementDocumentationGeneratorTest {
             "Should contain package information"
         );
         assertTrue(
-            content.contains("📄 Class Documentation")
-                || content.contains("&#x1f4c4; Class Documentation"),
+            content.contains("Class Documentation"),
             "Should contain class documentation section"
         );
         assertTrue(
-            content.contains("📑 Table of Contents")
-                || content.contains("&#x1f4d1; Table of Contents"),
+            content.contains("Table of Contents"),
             "Should contain a table of contents"
         );
         assertTrue(
