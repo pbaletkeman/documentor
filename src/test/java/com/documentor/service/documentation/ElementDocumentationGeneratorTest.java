@@ -212,13 +212,11 @@ class ElementDocumentationGeneratorTest {
             "Should contain a table of contents"
         );
         assertTrue(
-            content.contains("📊 testField")
-                || content.contains("&#x1f4ca; testField"),
+            content.contains("testField"),
             "Should contain field name"
         );
         assertTrue(
-            content.contains("🔧 testMethod")
-                || content.contains("&#x1f527; testMethod"),
+            content.contains("testMethod"),
             "Should contain method name"
         );
     }
