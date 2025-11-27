@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.documentor.config.TestConfig;
-import com.documentor.DocumentorTestApplication;
+import com.documentor.DocumentorApplication;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -27,7 +27,7 @@ import org.springframework.test.context.ActiveProfiles;
  * are properly propagated from parent threads to child threads in asynchronous
  * operations.
  */
-@SpringBootTest(classes = DocumentorTestApplication.class)
+@SpringBootTest(classes = DocumentorApplication.class)
 @ActiveProfiles("test")
 @Import(TestConfig.class)
 public class ThreadLocalPropagationIntegrationTest {

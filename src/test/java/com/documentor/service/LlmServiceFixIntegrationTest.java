@@ -1,6 +1,6 @@
 package com.documentor.service;
 
-import com.documentor.DocumentorTestApplication;
+import com.documentor.DocumentorApplication;
 import com.documentor.config.DocumentorConfig;
 import com.documentor.config.model.AnalysisSettings;
 import com.documentor.config.model.LlmModelConfig;
@@ -39,7 +39,7 @@ import org.springframework.test.context.ActiveProfiles;
  * LlmService works correctly with the ThreadLocal configuration
  * in multiple async operations.
  */
-@SpringBootTest(classes = DocumentorTestApplication.class)
+@SpringBootTest(classes = DocumentorApplication.class)
 @ActiveProfiles("test")
 @Import(TestConfig.class)
 public final class LlmServiceFixIntegrationTest {

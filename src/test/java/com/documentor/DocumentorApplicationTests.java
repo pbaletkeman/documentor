@@ -23,7 +23,7 @@ import static org.mockito.Mockito.mockStatic;
  *
  * Integration tests for the Documentor Spring Boot application.
  */
-@SpringBootTest(classes = DocumentorTestApplication.class)
+@SpringBootTest(classes = DocumentorApplication.class)
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 class DocumentorApplicationTests {
