@@ -77,14 +77,14 @@ jobs:
 
       - name: Upload JaCoCo coverage report
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: jacoco-report-${{ matrix.os }}-java${{ matrix.java-version }}
           path: build/reports/jacoco/
 
       - name: Upload Checkstyle report
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: checkstyle-report-${{ matrix.os }}-java${{ matrix.java-version }}
           path: build/reports/checkstyle/
