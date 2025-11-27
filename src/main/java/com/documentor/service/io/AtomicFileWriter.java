@@ -131,18 +131,20 @@ public class AtomicFileWriter {
             return targetPath;
         }
 
-        return switch (policy) {
-            case OVERWRITE -> {
+        // Java 17: Traditional switch statement (Java 21 used switch expressions)
+        switch (policy) {
+            case OVERWRITE:
                 LOGGER.debug("Overwriting existing file: {}", targetPath);
-                yield targetPath;
-            }
-            case SKIP -> {
+                return targetPath;
+            case SKIP:
                 LOGGER.debug("Skipping write - file exists: {}",
                         targetPath);
-                yield null;
-            }
-            case SUFFIX -> generateSuffixedPath(targetPath);
-        };
+                return null;
+            case SUFFIX:
+                return generateSuffixedPath(targetPath);
+            default:
+                return targetPath;
+        }
     }
 
     /**

@@ -91,20 +91,21 @@ public final class MockLlmProviderFactory {
             throw new IllegalArgumentException("Provider type cannot be null");
         }
 
-        return switch (providerType) {
-            case OPENAI -> {
+        // Java 17: Traditional switch statement (Java 21 used switch expressions)
+        switch (providerType) {
+            case OPENAI:
                 LOGGER.debug("Creating MockOpenAiProvider with model: {}", model);
-                yield new MockOpenAiProvider(model);
-            }
-            case OLLAMA -> {
+                return new MockOpenAiProvider(model);
+            case OLLAMA:
                 LOGGER.debug("Creating MockOllamaProvider with model: {}", model);
-                yield new MockOllamaProvider(model);
-            }
-            case LLAMACPP -> {
+                return new MockOllamaProvider(model);
+            case LLAMACPP:
                 LOGGER.debug("Creating MockLlamaCppProvider with model: {}", model);
-                yield new MockLlamaCppProvider(model);
-            }
-        };
+                return new MockLlamaCppProvider(model);
+            default:
+                throw new IllegalArgumentException(
+                    "Unknown provider type: " + providerType);
+        }
     }
 
     /**

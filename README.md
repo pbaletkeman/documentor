@@ -16,7 +16,7 @@ A powerful Java Spring Boot command-line application that analyzes Java and Pyth
 - **⚡ Multi-Threading**: Parallel processing for optimal performance
 - **🔧 Pre-commit Hooks**: Automated quality assurance
 - **✅ High Test Coverage**: 96%+ code coverage
-- **🏗️ Production Ready**: Spring Boot 3.5.6 with Java 21
+- **🏗️ Production Ready**: Spring Boot 3.5.6 with Java 17 LTS
 
 ## 🚀 Quick Start (5 Minutes)
 
@@ -79,9 +79,16 @@ analyze --project-path ./src --generate-mermaid true --config config.json
 
 ## 🛠️ Requirements
 
-- **Java 21** or higher
+- **Java 17** (LTS) or higher
 - **Gradle 9.1.0** or higher
 - **Git** (optional, for pre-commit hooks)
+
+## 🌿 Branch Information
+
+| Branch | Java Version | Description |
+|--------|-------------|-------------|
+| `main` | Java 21 | Latest features including Virtual Threads, Pattern Matching, Sequenced Collections |
+| `java-17-lts` | Java 17 | Long-term support branch with traditional Java syntax |
 
 ## 🎯 Common Use Cases
 

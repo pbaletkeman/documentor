@@ -94,19 +94,21 @@ public class PythonASTCommandBuilder {
         String docstring =
                 parts[ApplicationConstants.FUNCTION_DEF_PREFIX_LENGTH];
 
-        return switch (type) {
-            case "CLASS" -> new CodeElement(
-                CodeElementType.CLASS,
-                name,
-                "class " + name,
-                filePath.toString(),
-                lineNumber,
-                "class " + name + ":",
-                docstring,
-                List.of(),
-                List.of()
-            );
-            case "FUNCTION" -> {
+        // Java 17: Traditional switch statement (Java 21 used switch expressions)
+        switch (type) {
+            case "CLASS":
+                return new CodeElement(
+                    CodeElementType.CLASS,
+                    name,
+                    "class " + name,
+                    filePath.toString(),
+                    lineNumber,
+                    "class " + name + ":",
+                    docstring,
+                    List.of(),
+                    List.of()
+                );
+            case "FUNCTION":
                 List<String> parameters = parts.length
                     > ApplicationConstants.PARAMETERS_ARRAY_INDEX
                     && !parts[ApplicationConstants.PARAMETERS_ARRAY_INDEX]
@@ -114,7 +116,7 @@ public class PythonASTCommandBuilder {
                     ? List.of(parts[ApplicationConstants.PARAMETERS_ARRAY_INDEX]
                              .split(","))
                     : List.of();
-                yield new CodeElement(
+                return new CodeElement(
                     CodeElementType.METHOD,
                     name,
                     "def " + name + "(" + String.join(", ", parameters) + ")",
@@ -125,19 +127,20 @@ public class PythonASTCommandBuilder {
                     parameters,
                     List.of()
                 );
-            }
-            case "VARIABLE" -> new CodeElement(
-                CodeElementType.FIELD,
-                name,
-                name,
-                filePath.toString(),
-                lineNumber,
-                name + " = ...",
-                "",
-                List.of(),
-                List.of()
-            );
-            default -> null;
-        };
+            case "VARIABLE":
+                return new CodeElement(
+                    CodeElementType.FIELD,
+                    name,
+                    name,
+                    filePath.toString(),
+                    lineNumber,
+                    name + " = ...",
+                    "",
+                    List.of(),
+                    List.of()
+                );
+            default:
+                return null;
+        }
     }
 }
