@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -74,24 +75,26 @@ class PlantUMLDiagramServiceFastTest {
 
     @Test
     @DisplayName("Should handle single class project")
-    void shouldHandleSingleClassProject() throws java.io.IOException {
+    void shouldHandleSingleClassProject(@TempDir java.nio.file.Path tempDir)
+            throws java.io.IOException {
         // Given
         ProjectAnalysis singleClassAnalysis =
             createSingleClassProjectAnalysis();
         CodeElement classElement = createTestClass();
+        String tempDirPath = tempDir.toString();
 
         when(mockElementFilter.getEligibleClasses(any()))
             .thenReturn(List.of(classElement));
         when(mockElementFilter.groupElementsByClass(any()))
             .thenReturn(java.util.Map.of(classElement, List.of(classElement)));
         when(mockPathManager.determineOutputPath(any(), any()))
-            .thenReturn("/mock/resolved");
+            .thenReturn(tempDirPath);
         when(mockPathManager.createOutputDirectory(any()))
-            .thenReturn(java.nio.file.Paths.get("/mock/resolved"));
+            .thenReturn(tempDir);
         when(mockGeneratorFactory.getPlantUMLClassDiagramGenerator())
             .thenReturn(mockGenerator);
         when(mockGenerator.generateClassDiagram(any(), any(), any(), any()))
-            .thenReturn("/mock/diagram.puml");
+            .thenReturn(tempDir.resolve("diagram.puml").toString());
 
         // When
         CompletableFuture<List<String>> result =
