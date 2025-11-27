@@ -78,8 +78,11 @@ class UnitTestDocumentationGeneratorEnhancedTest {
 
         String content = Files.readString(testsFile);
         // Check for header content (emoji may render differently on Linux vs Windows)
-        assertTrue(content.contains("Unit Test Documentation") || content.contains("test for TestClass"),
-        "header should include documentation content");
+        assertTrue(
+            content.contains("Unit Test Documentation")
+                || content.contains("test for TestClass"),
+            "header should include documentation content"
+        );
         assertTrue(content.contains("test for TestClass"));
     }
 
