@@ -5,29 +5,38 @@ on:
     branches:
       - main
       - develop
+      - java-17-lts
   pull_request:
     branches:
       - main
       - develop
+      - java-17-lts
 
 jobs:
   build:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        java-version: ["17", "21"]
       fail-fast: false
 
-    runs-on: ${{ matrix.os }}
-
-    steps:
+    runs-on: ${{ matrix.os }}    steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Determine Java version
+        id: java-version
+        shell: bash
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/java-17-lts" ]]; then
+            echo "version=17" >> $GITHUB_OUTPUT
+          else
+            echo "version=21" >> $GITHUB_OUTPUT
+          fi
 
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
-          java-version: ${{ matrix.java-version }}
+          java-version: ${{ steps.java-version.outputs.version }}
           distribution: "temurin"
           cache: gradle
 
@@ -69,7 +78,7 @@ jobs:
           fi
 
       - name: Upload coverage to Codecov
-        if: matrix.os == 'ubuntu-latest' && matrix.java-version == '21'
+        if: matrix.os == 'ubuntu-latest' && steps.java-version.outputs.version == '21'
         uses: codecov/codecov-action@v3
         with:
           file: ./build/reports/jacoco/test/jacocoTestReport.xml
@@ -79,22 +88,21 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: jacoco-report-${{ matrix.os }}-java${{ matrix.java-version }}
+          name: jacoco-report-${{ matrix.os }}-java${{ steps.java-version.outputs.version }}
           path: build/reports/jacoco/
 
       - name: Upload Checkstyle report
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: checkstyle-report-${{ matrix.os }}-java${{ matrix.java-version }}
+          name: checkstyle-report-${{ matrix.os }}-java${{ steps.java-version.outputs.version }}
           path: build/reports/checkstyle/
 
-      - name: Comment PR with results (Ubuntu + Java 21)
+      - name: Comment PR with results
         if: |
           always() &&
           github.event_name == 'pull_request' &&
-          matrix.os == 'ubuntu-latest' &&
-          matrix.java-version == '21'
+          matrix.os == 'ubuntu-latest'
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -103,7 +111,8 @@ jobs:
             let comment = '## Build Matrix Results\n\n';
             comment += '✅ **Build Status**\n';
             comment += '- OS: ${{ matrix.os }}\n';
-            comment += '- Java: ${{ matrix.java-version }}\n\n';
+            comment += '- Java: ${{ steps.java-version.outputs.version }}\n';
+            comment += '- Branch: ${{ github.ref_name }}\n\n';
 
             if (fs.existsSync('build/reports/jacoco/test/html/index.html')) {
               comment += '📊 **Coverage Report**\n';
