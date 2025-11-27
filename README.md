@@ -16,7 +16,7 @@ A powerful Java Spring Boot command-line application that analyzes Java and Pyth
 - **⚡ Multi-Threading**: Parallel processing for optimal performance
 - **🔧 Pre-commit Hooks**: Automated quality assurance
 - **✅ High Test Coverage**: 96%+ code coverage
-- **🏗️ Production Ready**: Spring Boot 3.5.6 with Java 21
+- **🏗️ Production Ready**: Spring Boot 3.5.6 with Java 17 LTS
 
 ## 🚀 Quick Start (5 Minutes)
 
@@ -79,9 +79,36 @@ analyze --project-path ./src --generate-mermaid true --config config.json
 
 ## 🛠️ Requirements
 
-- **Java 21** or higher
+- **Java 17** (LTS) or higher
 - **Gradle 9.1.0** or higher
 - **Git** (optional, for pre-commit hooks)
+
+## 🌿 Branch Information
+
+| Branch | Java Version | Description |
+|--------|-------------|-------------|
+| `main` | Java 21 | Latest features including Virtual Threads, Pattern Matching, Sequenced Collections |
+| `java-17-lts` | Java 17 | Long-term support branch with traditional Java syntax |
+
+## 📦 Release Workflows
+
+The project includes GitHub Actions workflows for creating releases:
+
+| Workflow | Java Version | Trigger | Artifact |
+|----------|-------------|---------|----------|
+| `release-java17.yml` | Java 17 LTS | Tag `v*.*.*-java17` or manual | `documentor-java17.jar` |
+| `release-java21.yml` | Java 21 | Tag `v*.*.*-java21` or manual | `documentor-java21.jar` |
+
+To create a release:
+```bash
+# Java 17 LTS release
+git tag v1.2.0-java17
+git push origin v1.2.0-java17
+
+# Java 21 release
+git tag v1.2.0-java21
+git push origin v1.2.0-java21
+```
 
 ## 🎯 Common Use Cases
 

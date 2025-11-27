@@ -264,13 +264,16 @@ public class LlmService {
 
     private String createPrompt(final CodeElement codeElement,
             final String type) {
-        return switch (type) {
-            case "documentation" -> requestBuilder.createDocumentationPrompt(
-                codeElement);
-            case "usage" -> requestBuilder.createUsageExamplePrompt(
-                codeElement);
-            case "tests" -> requestBuilder.createUnitTestPrompt(codeElement);
-            default -> requestBuilder.createDocumentationPrompt(codeElement);
-        };
+        // Java 17: Traditional switch statement (Java 21 used switch expressions)
+        switch (type) {
+            case "documentation":
+                return requestBuilder.createDocumentationPrompt(codeElement);
+            case "usage":
+                return requestBuilder.createUsageExamplePrompt(codeElement);
+            case "tests":
+                return requestBuilder.createUnitTestPrompt(codeElement);
+            default:
+                return requestBuilder.createDocumentationPrompt(codeElement);
+        }
     }
 }

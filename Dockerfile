@@ -1,6 +1,6 @@
-# Multi-stage Dockerfile for Documentor - Java 21 Spring Boot CLI Application
+# Multi-stage Dockerfile for Documentor - Java 17 LTS Spring Boot CLI Application
 # Stage 1: Builder - Compile and test the application
-FROM eclipse-temurin:21-jdk-jammy AS builder
+FROM eclipse-temurin:17-jdk-jammy AS builder
 
 WORKDIR /app
 
@@ -21,7 +21,7 @@ RUN ./gradlew clean build -x test \
     && cp build/libs/*.jar /app/libs/
 
 # Stage 2: Runtime - Production image with just the application
-FROM eclipse-temurin:21-jre-jammy
+FROM eclipse-temurin:17-jre-jammy
 
 WORKDIR /app
 

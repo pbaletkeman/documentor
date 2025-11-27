@@ -2,6 +2,45 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Java 17 LTS] - 2025-11-27
+
+### Changed
+
+- **Build Configuration**: Downgraded from Java 21 to Java 17 LTS for broader compatibility
+  - Updated `build.gradle`: `JavaLanguageVersion.of(21)` → `of(17)`
+  - Updated `Dockerfile`: Base images changed from `eclipse-temurin:21-*` to `eclipse-temurin:17-*`
+
+- **Code Refactoring**: Replaced Java 21-specific syntax with Java 17 equivalents
+  - Converted switch expressions with arrow syntax to traditional switch statements in:
+    - `PythonASTCommandBuilder.java`
+    - `MockLlmProviderFactory.java`
+    - `AtomicFileWriter.java`
+    - `LlmService.java`
+    - `LlmServiceEnhanced.java`
+
+### Added
+
+- **GitHub Actions Release Workflows**: Added dedicated release workflows for both Java versions
+  - `release-java17.yml`: Builds and releases Java 17 LTS artifacts
+  - `release-java21.yml`: Builds and releases Java 21 artifacts
+  - Triggered by tags `v*.*.*-java17` and `v*.*.*-java21` or manual dispatch
+  - Generates versioned JAR files with SHA256 checksums
+
+### Compatibility
+
+- **Java Version**: Java 17 LTS (minimum)
+- **Spring Boot**: 3.5.6 (unchanged)
+- **Gradle**: 9.1.0 (unchanged)
+
+### Notes
+
+- This is a compatibility-focused branch maintaining functional parity with the `main` branch
+- All existing tests pass without modification
+- Checkstyle compliance maintained (0 violations)
+- No regressions in functionality
+
+---
+
 ## [v2.0.2] - 2025-11-21
 
 ### Changed
