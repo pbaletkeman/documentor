@@ -103,7 +103,10 @@ class PlantUMLDiagramServiceFastTest {
         List<String> diagrams = result.join();
         assertNotNull(diagrams);
         assertTrue(diagrams.size() == 1);
-        assertTrue(diagrams.get(0).contains("diagram.puml"));
+        // Use Path to extract filename for cross-platform compatibility
+        String diagramPath = diagrams.get(0);
+        assertTrue(java.nio.file.Path.of(diagramPath).getFileName()
+                .toString().contains("diagram.puml"));
     }
 
     // Test data creation methods

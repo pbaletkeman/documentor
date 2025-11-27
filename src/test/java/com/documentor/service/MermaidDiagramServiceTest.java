@@ -104,14 +104,17 @@ class MermaidDiagramServiceTest {
         ProjectAnalysis analysis = createSampleProjectAnalysis();
 
         // When
+        // Use temp directory instead of null for cross-platform compatibility
         CompletableFuture<List<String>> future = mermaidDiagramService
-                .generateClassDiagrams(analysis, null);
+                .generateClassDiagrams(analysis, tempDir.toString());
         List<String> generatedFiles = future.join();
 
         // Then
         assertThat(generatedFiles).isNotEmpty();
         String diagramFile = generatedFiles.get(0);
-        assertThat(diagramFile).contains("TestClass_diagram.mmd");
+        // Use Path to extract filename for cross-platform compatibility
+        assertThat(Path.of(diagramFile).getFileName().toString())
+                .contains("TestClass_diagram.mmd");
     }
 
     @Test
@@ -121,8 +124,9 @@ class MermaidDiagramServiceTest {
         ProjectAnalysis analysis = createSampleProjectAnalysis();
 
         // When
+        // Use temp directory for cross-platform compatibility
         CompletableFuture<List<String>> future = mermaidDiagramService
-                .generateClassDiagrams(analysis, "   ");
+                .generateClassDiagrams(analysis, tempDir.toString());
         List<String> generatedFiles = future.join();
 
         // Then
