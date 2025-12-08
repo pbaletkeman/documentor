@@ -75,7 +75,7 @@ class PlantUMLDiagramServiceFastTest {
 
     @Test
     @DisplayName("Should handle single class project")
-    void shouldHandleSingleClassProject(@TempDir java.nio.file.Path tempDir)
+    void shouldHandleSingleClassProject(@TempDir final java.nio.file.Path tempDir)
             throws java.io.IOException {
         // Given
         ProjectAnalysis singleClassAnalysis =
