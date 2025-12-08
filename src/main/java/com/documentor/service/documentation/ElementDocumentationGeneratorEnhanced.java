@@ -426,7 +426,10 @@ public class ElementDocumentationGeneratorEnhanced {
             String packageName = classElements.isEmpty() ? "unknown"
                 : classElements.get(0).qualifiedName()
                         .split("\\.")[0];
-            return String.format("standalone-%s.md", packageName);
+            // Sanitize filename to remove illegal characters (e.g., <, >, :, etc.)
+            String sanitizedPackageName = packageName
+                .replaceAll("[<>:\"|?*]", "_");
+            return String.format("standalone-%s.md", sanitizedPackageName);
         }
     }
 

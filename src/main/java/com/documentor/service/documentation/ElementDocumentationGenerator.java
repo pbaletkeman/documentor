@@ -227,8 +227,11 @@ public class ElementDocumentationGenerator {
                         // For standalone elements
                         String packageName = classElements.get(0)
                             .qualifiedName().split("\\.")[0];
+                        // Sanitize filename to remove illegal characters (e.g., <, >, :, etc.)
+                        String sanitizedPackageName = packageName
+                            .replaceAll("[<>:\"|?*]", "_");
                         fileName = String.format("standalone-%s.md",
-                            packageName);
+                            sanitizedPackageName);
                     }
 
                     // Write to file
