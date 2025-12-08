@@ -1,16 +1,20 @@
 package com.documentor.cli.handlers;
 
+import com.documentor.config.DocumentorConfig;
 import com.documentor.model.ProjectAnalysis;
 import com.documentor.service.CodeAnalysisService;
 import com.documentor.service.DocumentationService;
+import com.documentor.service.LlmServiceFix;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import com.documentor.service.MermaidDiagramService;
 import com.documentor.service.PlantUMLDiagramService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,18 +35,21 @@ public class ProjectAnalysisCommandHandler {
     private final MermaidDiagramService mermaidDiagramService;
     private final PlantUMLDiagramService plantUMLDiagramService;
     private final CommonCommandHandler commonHandler;
+    private final LlmServiceFix llmServiceFix;
 
     public ProjectAnalysisCommandHandler(
             final CodeAnalysisService codeAnalysisServiceParam,
             final DocumentationService documentationServiceParam,
             final MermaidDiagramService mermaidDiagramServiceParam,
             final PlantUMLDiagramService plantUMLDiagramServiceParam,
-            final CommonCommandHandler commonHandlerParam) {
+            final CommonCommandHandler commonHandlerParam,
+            final LlmServiceFix llmServiceFixParam) {
         this.codeAnalysisService = codeAnalysisServiceParam;
         this.documentationService = documentationServiceParam;
         this.mermaidDiagramService = mermaidDiagramServiceParam;
         this.plantUMLDiagramService = plantUMLDiagramServiceParam;
         this.commonHandler = commonHandlerParam;
+        this.llmServiceFix = llmServiceFixParam;
     }
 
     /**
@@ -114,6 +121,29 @@ public class ProjectAnalysisCommandHandler {
                                         final Boolean includePrivateMembers,
                                         final boolean dryRun) {
         try {
+            // Load external config if provided
+            if (configPath != null && !configPath.isEmpty()
+                    && !"config.json".equals(configPath)) {
+                LOGGER.info("📝 Loading configuration from: {}", configPath);
+                Path configFile = Paths.get(configPath);
+                if (Files.exists(configFile)) {
+                    try {
+                        ObjectMapper objectMapper = new ObjectMapper();
+                        DocumentorConfig loadedConfig = objectMapper.readValue(
+                                configFile.toFile(), DocumentorConfig.class);
+                        LOGGER.info("✅ Configuration loaded with {} LLM models",
+                                loadedConfig.llmModels().size());
+                        llmServiceFix.setLlmServiceThreadLocalConfig(loadedConfig);
+                        LOGGER.info("✅ ThreadLocal context set for worker threads");
+                    } catch (Exception e) {
+                        LOGGER.error("⚠️ Failed to load config from {}: {}",
+                                configPath, e.getMessage());
+                    }
+                } else {
+                    LOGGER.warn("⚠️ Config file not found: {}", configPath);
+                }
+            }
+
             LOGGER.info("🔍 Starting analysis of project: {}", projectPath);
 
             if (!commonHandler.directoryExists(projectPath)) {

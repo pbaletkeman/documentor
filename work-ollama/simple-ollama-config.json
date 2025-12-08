@@ -1,0 +1,31 @@
+{
+  "llm_models": [
+    {
+      "name": "llama3.2",
+      "provider": "ollama",
+      "baseUrl": "http://localhost:11434",
+      "maxTokens": 4096,
+      "timeoutSeconds": 60
+    }
+  ],
+  "output_settings": {
+    "output_directory": "./work-ollama/docs",
+    "format": "markdown",
+    "generate_mermaid": true,
+    "generate_plantuml": false,
+    "verbose_output": true
+  },
+  "analysis_settings": {
+    "include_private_members": false,
+    "max_depth": 10,
+    "included_patterns": [
+      "**/*.java",
+      "**/*.py"
+    ],
+    "excluded_patterns": [
+      "**/test/**",
+      "**/target/**",
+      "**/__pycache__/**"
+    ]
+  }
+}

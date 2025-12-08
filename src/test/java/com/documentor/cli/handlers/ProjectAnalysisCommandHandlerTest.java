@@ -5,6 +5,7 @@ import com.documentor.model.CodeElementType;
 import com.documentor.model.ProjectAnalysis;
 import com.documentor.service.CodeAnalysisService;
 import com.documentor.service.DocumentationService;
+import com.documentor.service.LlmServiceFix;
 import com.documentor.service.MermaidDiagramService;
 import com.documentor.service.PlantUMLDiagramService;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,10 +45,11 @@ class ProjectAnalysisCommandHandlerTest {
         PlantUMLDiagramService plantUMLService = mock(
             PlantUMLDiagramService.class);
         commonHandler = mock(CommonCommandHandler.class);
+        LlmServiceFix llmServiceFix = mock(LlmServiceFix.class);
 
         handler = new ProjectAnalysisCommandHandler(analysisService,
             documentationService, mermaidService, plantUMLService,
-            commonHandler);
+            commonHandler, llmServiceFix);
 
         // Setup default behavior for commonHandler
         when(commonHandler.createResultBuilder())

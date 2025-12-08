@@ -3,6 +3,7 @@ package com.documentor.cli.handlers;
 import com.documentor.model.ProjectAnalysis;
 import com.documentor.service.CodeAnalysisService;
 import com.documentor.service.DocumentationService;
+import com.documentor.service.LlmServiceFix;
 import com.documentor.service.MermaidDiagramService;
 import com.documentor.service.PlantUMLDiagramService;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,6 +24,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.mock;
 
 /**
  * Branch coverage tests for ProjectAnalysisCommandHandler.
@@ -55,9 +57,11 @@ class ProjectAnalysisCommandHandlerBranchTest {
 
     @BeforeEach
     void setUp() {
+        LlmServiceFix llmServiceFix = mock(LlmServiceFix.class);
         handler = new ProjectAnalysisCommandHandler(
                 codeAnalysisService, documentationService,
-                mermaidDiagramService, plantUMLDiagramService, commonHandler);
+                mermaidDiagramService, plantUMLDiagramService, commonHandler,
+                llmServiceFix);
     }
 
     @Test
