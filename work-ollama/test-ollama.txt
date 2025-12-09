@@ -1,2 +1,0 @@
-analyze --project-path src/main/java/com/documentor/model --config-file work-ollama/test-ollama-config.json --output-dir work-ollama/docs --generate-plantuml true --plantuml-output work-ollama/diagrams/plantuml --generate-mermaid true --mermaid-output work-ollama/diagrams/mermaid  
-exit 

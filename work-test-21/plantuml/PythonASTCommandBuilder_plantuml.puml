@@ -1,9 +1,0 @@
-@startuml PythonASTCommandBuilder
-!theme plain
-title PythonASTCommandBuilder Class Diagram
-
-enum PythonASTCommandBuilder {
-}
-
-
-@enduml

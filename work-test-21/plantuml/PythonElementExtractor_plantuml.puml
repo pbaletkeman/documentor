@@ -1,9 +1,0 @@
-@startuml PythonElementExtractor
-!theme plain
-title PythonElementExtractor Class Diagram
-
-class PythonElementExtractor {
-}
-
-
-@enduml
