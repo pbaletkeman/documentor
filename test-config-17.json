@@ -1,0 +1,17 @@
+{
+  "llmProvider": "openai",
+  "model": "gpt-3.5-turbo",
+  "apiKey": "${OPENAI_API_KEY}",
+  "maxTokens": 2000,
+  "temperature": 0.3,
+  "outputDirectory": "work-test-17",
+  "includePrivateMembers": true,
+  "generateMermaidDiagrams": true,
+  "generatePlantUMLDiagrams": true,
+  "parallelProcessing": true,
+  "maxConcurrentRequests": 5,
+  "retryAttempts": 3,
+  "retryDelayMs": 1000,
+  "fileCollisionStrategy": "RENAME",
+  "dryRun": false
+}

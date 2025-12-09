@@ -1,0 +1,9 @@
+@startuml LlmModelTypeDetector
+!theme plain
+title LlmModelTypeDetector Class Diagram
+
+class LlmModelTypeDetector {
+}
+
+
+@enduml

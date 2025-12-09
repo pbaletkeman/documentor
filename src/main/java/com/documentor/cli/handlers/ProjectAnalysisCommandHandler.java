@@ -1,6 +1,7 @@
 package com.documentor.cli.handlers;
 
 import com.documentor.config.DocumentorConfig;
+import com.documentor.config.ThreadLocalContextHolder;
 import com.documentor.model.ProjectAnalysis;
 import com.documentor.service.CodeAnalysisService;
 import com.documentor.service.DocumentationService;
@@ -129,6 +130,8 @@ public class ProjectAnalysisCommandHandler {
                 if (Files.exists(configFile)) {
                     try {
                         ObjectMapper objectMapper = new ObjectMapper();
+                        ThreadLocalContextHolder.setConfig(loadedConfig);
+                        LOGGER.info("✅ Config set in ThreadLocalContextHolder");
                         DocumentorConfig loadedConfig = objectMapper.readValue(
                                 configFile.toFile(), DocumentorConfig.class);
                         LOGGER.info("✅ Configuration loaded with {} LLM models",

@@ -26,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import java.util.concurrent.Executor;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.lenient;
@@ -77,13 +78,15 @@ class DocumentationServiceCoverageTest {
         lenient().when(mockOutputSettings.generateUnitTests())
             .thenReturn(false);
 
+        Executor mockExecutor = Runnable::run;
         documentationService = new DocumentationService(
             mockMainDocGenerator,
             mockElementDocGenerator,
             mockTestDocGenerator,
             mockMermaidDiagramService,
             mockPlantUMLDiagramService,
-            mockConfig
+            mockConfig,
+            mockExecutor
         );
     }
 

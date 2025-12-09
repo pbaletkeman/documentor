@@ -1,0 +1,86 @@
+# 📦 MermaidClassDiagramGenerator
+
+> **Package:** `com.documentor.service.diagram`
+
+---
+
+## 📄 Class Documentation
+
+Error: LLM configuration is null. Please check the application configuration.
+
+---
+
+## 💡 Class Usage Examples
+
+Error: LLM configuration is null. Please check the application configuration.
+
+---
+
+## 📋 Class Signature
+
+```java
+/** * 📊 Mermaid Class Diagram Generator * * Specialized component for generating individual class diagrams in Mermaid * format. Handles the creation of class structure diagrams with fields and * methods. */ @Component public class MermaidClassDiagramGenerator {
+   private static final Logger LOGGER = LoggerFactory.getLogger(MermaidClassDiagramGenerator.class);
+ private final DiagramPathManager pathManager;
+ public MermaidClassDiagramGenerator(final DiagramPathManager pathManagerParam) {
+   this.pathManager = pathManagerParam;
+ } /** * 📊 Generates a Mermaid class diagram for a single class */ public String generateClassDiagram(final CodeElement classElement, final List<CodeElement> allElements, final Path outputPath) throws IOException {
+   return generateClassDiagram(classElement, allElements, outputPath, null);
+ } /** * 📊 Generates a Mermaid class diagram with custom naming options */ public String generateClassDiagram(final CodeElement classElement, final List<CodeElement> allElements, final Path outputPath, final DiagramNamingOptions namingOptions) throws IOException {
+   String className = classElement.name();
+ String diagramFileName = pathManager.generateDiagramFileName(className, namingOptions, "mmd");
+ Path diagramPath = outputPath.resolve(diagramFileName);
+ // Generate Mermaid diagram content StringBuilder diagram = new StringBuilder();
+ diagram.append("# ").append(className).append(" Class Diagram\n\n");
+ diagram.append("```mermaid\n");
+ diagram.append("---\n");
+ diagram.append("title: ").append(diagramFileName).append("\n");
+ diagram.append("config: \n");
+ diagram.append(" layout: elk\n");
+ diagram.append(" theme: forest %% neutral, for black-and-white " + "documents commented out\n");
+ diagram.append("---\n");
+ diagram.append("classDiagram\n");
+ // Add the main class addClassToMermaid(diagram, classElement, allElements);
+ // Add relationships (if we can detect them from method // parameters/return types) addRelationshipsToMermaid(diagram, classElement, allElements);
+ diagram.append("```\n\n");
+ diagram.append("Generated on: ").append(java.time.LocalDateTime.now()).append("\n");
+ // Write to file Files.writeString(diagramPath, diagram.toString(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+ LOGGER.debug("✅ Generated diagram: {}", diagramPath);
+ return diagramPath.toString();
+ } /** * 🔍 Adds a class definition to the Mermaid diagram */ private void addClassToMermaid(final StringBuilder diagram, final CodeElement classElement, final List<CodeElement> allElements) {
+   String className = sanitizeClassName(classElement.name());
+ // Get all methods and fields for this class List<CodeElement> classMembers = allElements.stream().filter(e -> e.qualifiedName().startsWith(classElement.qualifiedName())).filter(this::isNonPrivate).toList();
+ diagram.append(" class ").append(className).append(" {\n");
+ // Add non-private fields classMembers.stream().filter(e -> e.type() == CodeElementType.FIELD).forEach(field -> {
+   String fieldSignature = sanitizeSignature(field.signature());
+ diagram.append(" ").append(fieldSignature).append("\n");
+ });
+ // Add non-private methods classMembers.stream().filter(e -> e.type() == CodeElementType.METHOD).forEach(method -> {
+   String methodSignature = sanitizeSignature(method.signature());
+ diagram.append(" ").append(methodSignature).append("\n");
+ });
+ diagram.append(" }\n\n");
+ } /** * 🔗 Adds relationships between classes to the Mermaid diagram */ private void addRelationshipsToMermaid(final StringBuilder diagram, final CodeElement classElement, final List<CodeElement> allElements) {
+   // This is a simplified relationship detection // In a full implementation, we would analyze method parameters, // return types, and field types to detect associations, dependencies, // and inheritance relationships String className = sanitizeClassName(classElement.name());
+ // Look for potential relationships in method signatures List<CodeElement> methods = allElements.stream().filter(e -> e.type() == CodeElementType.METHOD).filter(e -> e.qualifiedName().startsWith(classElement.qualifiedName())).filter(this::isNonPrivate).toList();
+ methods.forEach(method -> {
+   // Simple heuristic: if method signature contains another class // name, add dependency String signature = method.signature();
+ allElements.stream().filter(e -> e.type() == CodeElementType.CLASS).filter(e -> !e.name().equals(classElement.name())).filter(e -> signature.contains(e.name())).forEach(relatedClass -> {
+   String relatedClassName = sanitizeClassName(relatedClass.name());
+ diagram.append(" ").append(className).append(" --> ").append(relatedClassName).append(" : uses\n");
+ });
+ });
+ } /** * 🧹 Sanitizes class name for Mermaid compatibility */ private String sanitizeClassName(final String className) {
+   return className.replaceAll("[^a-zA-Z0-9_]", "_");
+ } /** * 🧹 Sanitizes method/field signature for Mermaid compatibility */ private String sanitizeSignature(final String signature) {
+   // Remove complex generics and packages for readability String cleaned = signature.replaceAll("<[^>]*>", "");
+ cleaned = cleaned.replaceAll("\\b\\w+\\.", "");
+ // Limit length for diagram readability using constants if (cleaned.length() > ApplicationConstants.MAX_SIGNATURE_LENGTH) {
+   cleaned = cleaned.substring(0, ApplicationConstants.MAX_SIGNATURE_LENGTH - ApplicationConstants.TRUNCATE_SUFFIX_LENGTH) + "...";
+ } return cleaned;
+ } /** * 🔍 Simplified visibility check using enum */ private boolean isNonPrivate(final CodeElement element) {
+   CodeVisibility visibility = CodeVisibility.fromSignatureAndName(element.signature(), element.name());
+ // Don't include private return visibility.shouldInclude(false);
+ // elements in diagrams } }
+```
+

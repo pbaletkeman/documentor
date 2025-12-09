@@ -1,0 +1,9 @@
+@startuml MockLlmProvider
+!theme plain
+title MockLlmProvider Class Diagram
+
+interface MockLlmProvider {
+}
+
+
+@enduml

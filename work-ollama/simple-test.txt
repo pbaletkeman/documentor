@@ -1,0 +1,2 @@
+analyze src/main/java/com/documentor/model  
+exit 

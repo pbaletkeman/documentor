@@ -15,6 +15,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -39,6 +40,7 @@ public class DocumentationServiceEnhanced {
     private final PlantUMLDiagramService plantUMLDiagramService;
     private final DocumentorConfig config;
     private final LlmServiceFixEnhanced llmServiceFix;
+    private final Executor llmExecutor;
 
     public DocumentationServiceEnhanced(
             final MainDocumentationGenerator mainDocGeneratorParam,
@@ -48,7 +50,8 @@ public class DocumentationServiceEnhanced {
             final MermaidDiagramService mermaidDiagramServiceParam,
             final PlantUMLDiagramService plantUMLDiagramServiceParam,
             final DocumentorConfig configParam,
-            final LlmServiceFixEnhanced llmServiceFixParam) {
+            final LlmServiceFixEnhanced llmServiceFixParam,
+            final Executor llmExecutorParam) {
         this.mainDocGenerator = mainDocGeneratorParam;
         this.elementDocGenerator = elementDocGeneratorParam;
         this.testDocGenerator = testDocGeneratorParam;
@@ -56,6 +59,7 @@ public class DocumentationServiceEnhanced {
         this.plantUMLDiagramService = plantUMLDiagramServiceParam;
         this.config = configParam;
         this.llmServiceFix = llmServiceFixParam;
+        this.llmExecutor = llmExecutorParam;
 
         LOGGER.info("DocumentationServiceEnhanced initialized with enhanced "
                 + "components");
@@ -99,7 +103,7 @@ public class DocumentationServiceEnhanced {
             } finally {
                 cleanupThreadLocalResources();
             }
-        });
+        }, llmExecutor);
     }
 
     /**

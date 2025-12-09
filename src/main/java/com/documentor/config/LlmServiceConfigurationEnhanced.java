@@ -11,6 +11,7 @@ import com.documentor.service.llm.LlmResponseHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -85,18 +86,27 @@ public class LlmServiceConfigurationEnhanced {
 
     /**
      * Primary bean for ElementDocumentationGeneratorEnhanced with
-     * improved error handling
+     * direct LlmServiceEnhanced instance (same pattern as unit tests - FIXES OLLAMA)
      */
     @Bean
     @Primary
     public ElementDocumentationGeneratorEnhanced
             elementDocumentationGeneratorEnhanced(
-            final LlmServiceEnhanced llmServiceEnhanced,
-            final LlmServiceFixEnhanced llmServiceFixEnhanced) {
+            final DocumentorConfig documentorConfig,
+            final LlmServiceFixEnhanced llmServiceFixEnhanced,
+            final LlmRequestBuilder requestBuilder,
+            final LlmResponseHandler responseHandler,
+            final LlmApiClient apiClient) {
         LOGGER.info("Creating ElementDocumentationGeneratorEnhanced "
-                + "with enhanced services");
+                + "with direct LlmServiceEnhanced instance (fixes Ollama)");
+
+        // Create a new instance of LlmServiceEnhanced directly - same pattern as unit tests
+        LlmServiceEnhanced serviceEnhanced = new LlmServiceEnhanced(
+                documentorConfig, requestBuilder, responseHandler, apiClient);
+
+        LOGGER.info("Created LlmServiceEnhanced with requestBuilder: present");
         return new ElementDocumentationGeneratorEnhanced(
-                llmServiceEnhanced, llmServiceFixEnhanced);
+                serviceEnhanced, llmServiceFixEnhanced);
     }
 
     /**

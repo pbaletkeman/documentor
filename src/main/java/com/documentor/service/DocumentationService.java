@@ -14,6 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 /**
  * 📄 Documentation Generation Service - Enhanced with PlantUML Support
@@ -34,6 +35,7 @@ public class DocumentationService {
     private final MermaidDiagramService mermaidDiagramService;
     private final PlantUMLDiagramService plantUMLDiagramService;
     private final DocumentorConfig config;
+    private final Executor llmExecutor;
 
     public DocumentationService(
             final MainDocumentationGenerator mainDocGeneratorParam,
@@ -41,13 +43,15 @@ public class DocumentationService {
             final UnitTestDocumentationGenerator testDocGeneratorParam,
             final MermaidDiagramService mermaidDiagramServiceParam,
             final PlantUMLDiagramService plantUMLDiagramServiceParam,
-            final DocumentorConfig configParam) {
+            final DocumentorConfig configParam,
+            final Executor llmExecutorParam) {
         this.mainDocGenerator = mainDocGeneratorParam;
         this.elementDocGenerator = elementDocGeneratorParam;
         this.testDocGenerator = testDocGeneratorParam;
         this.mermaidDiagramService = mermaidDiagramServiceParam;
         this.plantUMLDiagramService = plantUMLDiagramServiceParam;
         this.config = configParam;
+        this.llmExecutor = llmExecutorParam;
     }
 
     /**
@@ -127,7 +131,7 @@ public class DocumentationService {
                 throw new RuntimeException(
                         "Failed to generate documentation", e);
             }
-        });
+        }, llmExecutor);
     }
 
     /**

@@ -1,0 +1,9 @@
+@startuml CollisionPolicy
+!theme plain
+title CollisionPolicy Class Diagram
+
+enum CollisionPolicy {
+}
+
+
+@enduml

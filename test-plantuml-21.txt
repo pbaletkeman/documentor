@@ -1,0 +1,2 @@
+plantuml --project-path src/main/java/com/documentor/model --plantuml-output work-test-21/plantuml --include-private-members false
+exit

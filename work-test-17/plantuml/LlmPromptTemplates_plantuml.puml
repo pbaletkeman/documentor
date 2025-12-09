@@ -1,0 +1,9 @@
+@startuml LlmPromptTemplates
+!theme plain
+title LlmPromptTemplates Class Diagram
+
+class LlmPromptTemplates {
+}
+
+
+@enduml

@@ -1,0 +1,2 @@
+analyze --project-path src/main/java/com/documentor/model --config config.json --generate-mermaid true --mermaid-output work-test-21/mermaid --generate-plantuml true --plantuml-output work-test-21/plantuml --include-private-members false
+exit

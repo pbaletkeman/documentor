@@ -1,0 +1,86 @@
+# 📦 MainDocumentationGenerator
+
+> **Package:** `com.documentor.service.documentation`
+
+---
+
+## 📄 Class Documentation
+
+Error: LLM configuration is null. Please check the application configuration.
+
+---
+
+## 💡 Class Usage Examples
+
+Error: LLM configuration is null. Please check the application configuration.
+
+---
+
+## 📋 Class Signature
+
+```java
+/** * 📖 Main Documentation Generator * * Specialized component for generating the main README.md documentation. * Handles project overview, statistics, and API reference sections. */ @Component public class MainDocumentationGenerator {
+   private static final int MAX_QUICK_LINKS = 5;
+ private final DocumentorConfig config;
+ public MainDocumentationGenerator(final DocumentorConfig configParam) {
+   this.config = configParam;
+ } /** * 📖 Generates the main README.md documentation */ public CompletableFuture<String> generateMainDocumentation(final ProjectAnalysis analysis) {
+   return CompletableFuture.supplyAsync(() -> {
+   StringBuilder doc = new StringBuilder();
+ // Header appendHeader(doc, analysis);
+ // Statistics appendStatistics(doc, analysis);
+ // API Reference appendApiReference(doc, analysis);
+ // Usage Examples appendUsageExamples(doc, analysis);
+ return doc.toString();
+ });
+ } /** * 📊 Appends header section to documentation */ private void appendHeader(final StringBuilder doc, final ProjectAnalysis analysis) {
+   String projectName = Paths.get(analysis.projectPath()).getFileName().toString();
+ String icon = config.outputSettings().includeIcons() ? "📚 " : "";
+ doc.append(String.format("# %s%s - Code Documentation\n\n", icon, projectName));
+ doc.append(String.format("Generated on: %s\n\n", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))));
+ doc.append("This documentation was automatically generated using " + "AI-powered code analysis.\n\n");
+ } /** * 📈 Appends statistics section */ private void appendStatistics(final StringBuilder doc, final ProjectAnalysis analysis) {
+   ProjectAnalysis.AnalysisStats stats = analysis.getStats();
+ String icon = config.outputSettings().includeIcons() ? "📊 " : "";
+ doc.append(String.format("## %sProject Statistics\n\n", icon));
+ // Generate summary without hardcoded emoji to respect includeIcons // setting String summary;
+ if (config.outputSettings().includeIcons()) {
+   summary = stats.getFormattedSummary();
+ } else {
+   summary = String.format("Analysis Summary: %d total elements (%d classes, %d methods, " + "%d fields) across %d files", stats.totalElements(), stats.classCount(), stats.methodCount(), stats.fieldCount(), stats.fileCount());
+ } doc.append(summary).append("\n\n");
+ doc.append("| Element Type | Count |\n");
+ doc.append("|--------------|-------|\n");
+ doc.append(String.format("| %s Classes | %d |\n", config.outputSettings().includeIcons() ? "📦" : "", stats.classCount()));
+ doc.append(String.format("| %s Methods | %d |\n", config.outputSettings().includeIcons() ? "🔧" : "", stats.methodCount()));
+ doc.append(String.format("| %s Fields | %d |\n", config.outputSettings().includeIcons() ? "📊" : "", stats.fieldCount()));
+ doc.append("\n");
+ } /** * 📋 Appends API reference section */ private void appendApiReference(final StringBuilder doc, final ProjectAnalysis analysis) {
+   String icon = config.outputSettings().includeIcons() ? "📋 " : "";
+ doc.append(String.format("## %sAPI Reference\n\n", icon));
+ Map<String, List<CodeElement>> elementsByFile = analysis.getElementsByFile();
+ elementsByFile.forEach((filePath, elements) -> {
+   String fileName = Paths.get(filePath).getFileName().toString();
+ doc.append(String.format("### %s\n\n", fileName));
+ elements.stream().collect(Collectors.groupingBy(CodeElement::type)).forEach((type, typeElements) -> {
+   String typeIcon = config.outputSettings().includeIcons() ? type.getIcon() + " " : "";
+ doc.append(String.format("#### %s%s\n\n", typeIcon, type.getDescription()));
+ typeElements.forEach(element -> {
+   doc.append(String.format("- **%s** - `%s`\n", element.name(), element.signature()));
+ });
+ doc.append("\n");
+ });
+ });
+ } /** * 💡 Appends usage examples section */ private void appendUsageExamples(final StringBuilder doc, final ProjectAnalysis analysis) {
+   String icon = config.outputSettings().includeIcons() ? "💡 " : "";
+ doc.append(String.format("## %sUsage Examples\n\n", icon));
+ doc.append("Detailed usage examples can be found in the individual " + "element documentation files.\n\n");
+ // Add links to detailed documentation doc.append("### Quick Links\n\n");
+ analysis.getClasses().stream().limit(// Show first 5 classes as examples MAX_QUICK_LINKS).forEach(cls -> {
+   String fileName = String.format("elements/class-%s.md", cls.name().replaceAll("[^a-zA-Z0-9]", "_"));
+ doc.append(String.format("- [%s](%s)\n", cls.name(), fileName));
+ });
+ doc.append("\n");
+ } }
+```
+

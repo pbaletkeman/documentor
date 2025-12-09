@@ -13,6 +13,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
+import java.util.concurrent.Executor;
+
 /**
  * Configuration class for enhanced documentation services.
  * Provides enhanced versions of documentation services with improved error
@@ -38,10 +40,11 @@ public class DocumentationServiceConfiguration {
             final MermaidDiagramService mermaidDiagramService,
             final PlantUMLDiagramService plantUMLDiagramService,
             final DocumentorConfig documentorConfig,
-            final LlmServiceFixEnhanced llmServiceFixEnhanced) {
+            final LlmServiceFixEnhanced llmServiceFixEnhanced,
+            final Executor llmExecutor) {
 
         LOGGER.info("Creating enhanced DocumentationService with "
-                + "ThreadLocalContextHolder support");
+                + "NON-Enhanced ElementDocumentationGenerator (fixes Ollama)");
 
         // Set the config in ThreadLocalContextHolder for good measure
         if (documentorConfig != null) {
@@ -57,6 +60,7 @@ public class DocumentationServiceConfiguration {
             mermaidDiagramService,
             plantUMLDiagramService,
             documentorConfig,
-            llmServiceFixEnhanced);
+            llmServiceFixEnhanced,
+            llmExecutor);
     }
 }

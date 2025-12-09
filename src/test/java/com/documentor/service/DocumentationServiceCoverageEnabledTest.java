@@ -90,7 +90,7 @@ class DocumentationServiceCoverageEnabledTest {
         DocumentationService documentationService =
         new DocumentationService(mainDocGenerator,
             elementDocGenerator, unitTestDocumentationGenerator,
-            mermaidDiagramService, plantUMLDiagramService, config);
+            mermaidDiagramService, plantUMLDiagramService, config, Runnable::run);
 
         ProjectAnalysis analysis = new ProjectAnalysis(tempDir.toString(),
             List.of(), System.currentTimeMillis());
@@ -136,7 +136,7 @@ class DocumentationServiceCoverageEnabledTest {
         DocumentationService documentationService =
             new DocumentationService(mainDocGenerator,
             elementDocGenerator, unitTestDocumentationGenerator,
-            mermaidDiagramService, plantUMLDiagramService, config);
+            mermaidDiagramService, plantUMLDiagramService, config, Runnable::run);
 
         CodeElement elem = new CodeElement(
             CodeElementType.CLASS,

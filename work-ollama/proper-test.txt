@@ -1,0 +1,2 @@
+analyze --project-path src/main/java/com/documentor/model --config-file work-ollama/test-ollama-config.json  
+exit 

@@ -25,8 +25,10 @@ import java.util.concurrent.CompletableFuture;
  * Handles element-specific documentation files with LLM-generated content.
  * Elements are grouped by their parent class to create comprehensive
  * class-level documentation that includes all related methods and fields.
+ *
+ * NOTE: @Component annotation DISABLED - using ElementDocumentationGeneratorEnhanced instead
  */
-@Component
+//@Component  // DISABLED - using ElementDocumentationGeneratorEnhanced instead
 public class ElementDocumentationGenerator {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(

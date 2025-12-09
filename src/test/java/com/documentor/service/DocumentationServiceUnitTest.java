@@ -81,7 +81,7 @@ class DocumentationServiceUnitTest {
 
         documentationService = new DocumentationService(mainGenerator,
                 elementGenerator, testGenerator, mermaidService,
-                plantUMLService, config);
+                plantUMLService, config, Runnable::run);
     }
 
     @Test
@@ -177,7 +177,7 @@ class DocumentationServiceUnitTest {
         DocumentationService testService =
                 new DocumentationService(mainGenerator,
                 elementGenerator, testGenerator, mermaidService,
-                plantUMLService, testConfig);
+                plantUMLService, testConfig, Runnable::run);
 
         CodeElement element = new CodeElement(CodeElementType.CLASS,
         "TestClass", "com.test.TestClass",
@@ -230,7 +230,7 @@ class DocumentationServiceUnitTest {
                 mockOutputSettings, analysisSettings);
         DocumentationService testService = new DocumentationService(
                 mainGenerator, elementGenerator, testGenerator, mermaidService,
-                plantUMLService, testConfig);
+                plantUMLService, testConfig, Runnable::run);
 
         CodeElement element = new CodeElement(CodeElementType.CLASS,
                 "TestClass", "com.test.TestClass",

@@ -20,8 +20,11 @@ import java.util.List;
 /**
  * Configuration class for LLM services.
  * Ensures proper DocumentorConfig injection into LlmService.
+ *
+ * NOTE: RE-ENABLED to provide non-Enhanced LlmService bean for ElementDocumentationGenerator
+ * LlmServiceConfigurationEnhanced remains @Primary for Enhanced services
  */
-@Configuration
+@Configuration  // RE-ENABLED - provides LlmService for non-Enhanced ElementDocumentationGenerator
 @Order(1) // Run after ExternalConfigLoader
 public class LlmServiceConfiguration {
 
@@ -35,7 +38,7 @@ public class LlmServiceConfiguration {
      * @return A modified DocumentorConfig if needed
      */
     @Bean
-    @Primary
+    //@Primary  // REMOVED - avoid conflicts with other config beans
     public DocumentorConfig documentorConfig(
             final DocumentorConfig existingConfig) {
         LOGGER.info("Checking DocumentorConfig: {}", existingConfig);
@@ -57,10 +60,11 @@ public class LlmServiceConfiguration {
     }
 
     /**
-     * Primary bean for LlmService to ensure proper configuration injection
+     * Non-primary bean for LlmService for ElementDocumentationGenerator
+     * (LlmServiceEnhanced is @Primary for Enhanced services)
      */
     @Bean
-    @Primary
+    //@Primary  // REMOVED - LlmServiceEnhanced is @Primary
     public LlmService llmService(
             @Autowired(required = false)
             final DocumentorConfig documentorConfig,

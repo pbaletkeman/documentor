@@ -1,0 +1,2 @@
+analyze --project-path src/main/java/com/documentor/model --config test-config-17.json --generate-mermaid true --mermaid-output work-test-17/mermaid --generate-plantuml true --plantuml-output work-test-17/plantuml
+exit
