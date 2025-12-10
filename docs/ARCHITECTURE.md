@@ -14,32 +14,22 @@ Documentor follows a layered, modular architecture designed for extensibility an
 
 ### High-Level Architecture
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    CLI Layer                                 │
-│          (Command-line Interface & Handlers)                 │
-└──────────────────────┬──────────────────────────────────────┘
-                       │
-┌──────────────────────v──────────────────────────────────────┐
-│                    Service Layer                             │
-│  (Documentation Generation & Analysis)                       │
-└──────────────────────┬──────────────────────────────────────┘
-                       │
-        ┌──────────────┼──────────────┐
-        │              │              │
-┌───────v─────┐ ┌─────v──────┐ ┌────v──────────┐
-│  LLM Layer  │ │ Analysis   │ │ Diagram       │
-│(OpenAI,    │ │ Service    │ │ Services      │
-│ Ollama,    │ │            │ │ (Mermaid,     │
-│ LlamaCpp)  │ │            │ │  PlantUML)    │
-└─────────────┘ └────────────┘ └───────────────┘
-        │              │              │
-└───────┴──────────────┴──────────────┘
-        │
-┌───────v──────────────────────────────┐
-│    Configuration & Data Models        │
-│  (DocumentorConfig, JSON deserialization)
-└──────────────────────────────────────┘
+```mermaid
+graph TD
+    CLI["CLI Layer<br/>(Command-line Interface & Handlers)"]
+    Service["Service Layer<br/>(Documentation Generation & Analysis)"]
+    LLM["LLM Layer<br/>(OpenAI, Ollama, LlamaCpp)"]
+    Analysis["Analysis Service"]
+    Diagram["Diagram Services<br/>(Mermaid, PlantUML)"]
+    Config["Configuration & Data Models<br/>(DocumentorConfig, JSON deserialization)"]
+
+    CLI --> Service
+    Service --> LLM
+    Service --> Analysis
+    Service --> Diagram
+    LLM --> Config
+    Analysis --> Config
+    Diagram --> Config
 ```
 
 ## System Architecture
@@ -150,14 +140,18 @@ Documentor follows a layered, modular architecture designed for extensibility an
 
 **Abstraction Pattern**:
 
-```
-Client Code
-    ↓
-LlmService (interface)
-    ↓
-⟱─ OpenAI Implementation
-⟱─ Ollama Implementation
-⟱─ LlamaCpp Implementation
+```mermaid
+graph TD
+    Client["Client Code"]
+    Interface["LlmService (interface)"]
+    OpenAI["OpenAI Implementation"]
+    Ollama["Ollama Implementation"]
+    LlamaCpp["LlamaCpp Implementation"]
+
+    Client --> Interface
+    Interface --> OpenAI
+    Interface --> Ollama
+    Interface --> LlamaCpp
 ```
 
 **Key Methods**:
@@ -181,43 +175,64 @@ LlmService (interface)
 
 ### Documentation Generation Flow
 
-```
-User Input (config.json)
-    ↓
-ExternalConfigLoader
-    ↓
-DocumentationService.generateDocumentation()
-    ↓
-CodeAnalysisService.analyzeProject()
-    ├─ Scan Java files
-    ├─ Parse source code
-    └─ Create CodeElement objects
-    ↓
-For each CodeElement:
-    ├─ Build LLM prompt (LlmRequestBuilder)
-    ├─ Call LLM (LlmApiClient)
-    ├─ Parse response (LlmResponseHandler)
-    ├─ Format as Markdown
-    ├─ Optionally generate diagrams
-    └─ Write to output
-    ↓
-Documentation files (.md)
-Diagram files (.svg, .png)
+```mermaid
+graph TD
+    Input["User Input (config.json)"]
+    Loader["ExternalConfigLoader"]
+    Generate["DocumentationService.generateDocumentation()"]
+    Analyze["CodeAnalysisService.analyzeProject()"]
+    ScanFiles["Scan Java files"]
+    Parse["Parse source code"]
+    CodeElements["Create CodeElement objects"]
+
+    ForEach{"For each<br/>CodeElement"}
+    BuildPrompt["Build LLM prompt<br/>(LlmRequestBuilder)"]
+    CallLLM["Call LLM<br/>(LlmApiClient)"]
+    ParseResponse["Parse response<br/>(LlmResponseHandler)"]
+    Format["Format as Markdown"]
+    Diagrams["Optionally generate diagrams"]
+    Write["Write to output"]
+
+    Output1["Documentation files (.md)"]
+    Output2["Diagram files (.svg, .png)"]
+
+    Input --> Loader
+    Loader --> Generate
+    Generate --> Analyze
+    Analyze --> ScanFiles
+    Analyze --> Parse
+    Analyze --> CodeElements
+    CodeElements --> ForEach
+    ForEach --> BuildPrompt
+    BuildPrompt --> CallLLM
+    CallLLM --> ParseResponse
+    ParseResponse --> Format
+    Format --> Diagrams
+    Diagrams --> Write
+    Write --> Output1
+    Write --> Output2
 ```
 
 ### ThreadLocal Context Propagation
 
-```
-Main Thread
-    ↓
-[Set ThreadLocal<DocumentorConfig>]
-    ↓
-Execute async task (ThreadLocalPropagatingExecutor)
-    ├─ Child Thread 1: [Inherit ThreadLocal]
-    ├─ Child Thread 2: [Inherit ThreadLocal]
-    └─ Child Thread N: [Inherit ThreadLocal]
-    ↓
-All threads have access to configuration
+```mermaid
+graph TD
+    Main["Main Thread"]
+    SetLocal["Set ThreadLocal<br/><DocumentorConfig>"]
+    Executor["Execute async task<br/>(ThreadLocalPropagatingExecutor)"]
+    Child1["Child Thread 1<br/>[Inherit ThreadLocal]"]
+    Child2["Child Thread 2<br/>[Inherit ThreadLocal]"]
+    ChildN["Child Thread N<br/>[Inherit ThreadLocal]"]
+    Access["All threads have access<br/>to configuration"]
+
+    Main --> SetLocal
+    SetLocal --> Executor
+    Executor --> Child1
+    Executor --> Child2
+    Executor --> ChildN
+    Child1 --> Access
+    Child2 --> Access
+    ChildN --> Access
 ```
 
 ## Design Patterns
@@ -337,47 +352,52 @@ All threads have access to configuration
 
 ### Input Validation
 
-```
-External Input
-    ↓
-Parameter Validation
-    ↓
-Type Checking
-    ↓
-Constraint Validation
-    ↓
-Business Logic
+```mermaid
+graph TD
+    Input["External Input"]
+    ParamVal["Parameter Validation"]
+    TypeCheck["Type Checking"]
+    ConstraintVal["Constraint Validation"]
+    Logic["Business Logic"]
+
+    Input --> ParamVal
+    ParamVal --> TypeCheck
+    TypeCheck --> ConstraintVal
+    ConstraintVal --> Logic
 ```
 
 ### API Communication
 
-```
-Outbound Request
-    ↓
-TLS/SSL Encryption
-    ↓
-API Key Management
-    ↓
-Response Validation
-    ↓
-Trusted Data Processing
+```mermaid
+graph TD
+    Request["Outbound Request"]
+    TLS["TLS/SSL Encryption"]
+    APIKey["API Key Management"]
+    ResponseVal["Response Validation"]
+    Processing["Trusted Data Processing"]
+
+    Request --> TLS
+    TLS --> APIKey
+    APIKey --> ResponseVal
+    ResponseVal --> Processing
 ```
 
 ## Testing Architecture
 
 ### Test Pyramid
 
-```
-        /\
-       /  \
-      / E2E \  - Integration tests (10%)
-     /______\
-    /        \
-   / Service  \ - Unit tests (70%)
-  /____________\
- /              \
-/ Configuration & \ - Configuration tests (20%)
-/__ Mock Tests ____\
+```mermaid
+graph TD
+    E2E["E2E Tests<br/>Integration Tests<br/>10%"]
+    Service["Service Tests<br/>Unit Tests<br/>70%"]
+    Config["Configuration & Mock Tests<br/>20%"]
+
+    Config --> Service
+    Service --> E2E
+
+    style E2E fill:#e1f5ff
+    style Service fill:#b3e5fc
+    style Config fill:#81d4fa
 ```
 
 ### Testing Strategy
