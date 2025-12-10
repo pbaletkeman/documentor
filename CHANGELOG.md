@@ -2,6 +2,96 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.1.0] - 2025-12-10
+
+### Added
+
+- **Comprehensive Documentation Suite**:
+  - `docs/ARCHITECTURE.md` (550+ lines): Complete system architecture with component layers, data flow diagrams, design patterns, and extension points
+  - `docs/SECURITY.md` (450+ lines): Security best practices, API key management, input validation, threat model, and vulnerability reporting
+  - `docs/CONTRIBUTING.md` (380+ lines): Community contribution guidelines, development setup, coding standards, testing requirements, and PR process
+  - `.github/copilot-instructions.md` (270 lines): AI assistant development guidelines for GitHub Copilot with project patterns, testing standards, and security practices
+
+- **Documentation Index and Organization**:
+  - `docs/README.md`: Comprehensive documentation index with role-based quick links (contributors, operations, release management)
+  - Organized documentation into logical sections: Getting Started, Configuration, Architecture, Development, Security, Operations, Workflows
+  - Added project statistics and support information to documentation index
+
+- **Improved Project README**:
+  - Condensed main README.md to 188 lines (from 372 lines)
+  - Focused on essentials: Features, Quick Start, Installation, Usage, Configuration
+  - Clear links to comprehensive documentation for deeper details
+  - ASCII-safe formatting for universal compatibility
+
+- **Enhanced Agents and Workflows Documentation**:
+  - Expanded `Agents.md` from 100 to 500+ lines with detailed workflow descriptions
+  - Complete release agent process with 9-step release workflow
+  - Build and test agent commands with coverage targets and success criteria
+  - Configuration and documentation agent guidelines
+  - CI/CD patterns and pre-commit hooks setup
+  - Troubleshooting procedures for common issues
+
+### Fixed
+
+- **Spring Shell Configuration** (Critical):
+  - Disabled Spring Shell globally via `ShellRunnerAutoConfiguration` exclusion
+  - Resolved issue where Shell initialization blocked non-interactive CLI mode
+  - Applied fix to both main (Java 21) and java-17-lts (Java 17) branches
+  - Restored proper CLI behavior for documentation generation
+
+- **Ollama LLM Provider** (Critical):
+  - Fixed null pointer exception in `OllamaService` when `requestBuilder` was not initialized
+  - Verified Ollama integration with localhost:11434 endpoint
+  - Confirmed document generation workflow with llama3.2 model
+  - Tested end-to-end with multiple LLM providers (Ollama, LlamaCpp, OpenAI)
+
+- **Test Configuration** (Enhancement):
+  - Added proper test configuration files for Ollama and LlamaCpp providers
+  - Updated `application-test.yml` with correct Spring Boot configuration
+  - Ensured test isolation and reproducibility
+
+### Changed
+
+- **Version Increment**: Updated from v1.1.1 to v2.1.0 (major feature release)
+  - `build.gradle`: Updated version field
+  - Both main and java-17-lts branches synchronized
+
+- **Documentation Synchronization**:
+  - Implemented selective file checkout workflow for cross-branch documentation sync
+  - Used `git checkout origin/main -- docs/ README.md Agents.md .github/copilot-instructions.md` for consistent updates
+  - Ensured java-17-lts branch receives all documentation updates from main
+
+### Build Quality
+
+- **Code Coverage**: Maintained 80%+ across project (continues from v2.0.2)
+- **Checkstyle**: 0 violations (clean code style compliance)
+- **Tests**: All unit and integration tests passing
+- **Compilation**: 0 errors on both Java 21 (main) and Java 17 (java-17-lts)
+
+### Compatibility
+
+- **Java**: 21 (main branch) and 17 LTS (java-17-lts branch)
+- **Spring Boot**: 3.5.6
+- **Gradle**: 9.1.0
+- **LLM Providers**: Ollama, LlamaCpp, OpenAI (all operational)
+
+### Documentation
+
+- Added 2000+ lines of new documentation across 7 major files
+- Created comprehensive documentation index with 15+ linked resources
+- Established best practices guides for security, contributing, and architecture
+- Documented all development workflows and release procedures
+
+### Notes
+
+- This release focuses on documentation and developer experience
+- No breaking API changes from v2.0.2
+- Both branches (main/java-17-lts) fully synchronized with identical documentation
+- Ready for community contributions with clear guidelines
+- Security-first approach with detailed threat model and mitigation strategies
+
+---
+
 ## [Java 17 LTS] - 2025-11-27
 
 ### Changed
