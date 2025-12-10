@@ -7,17 +7,20 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - **Comprehensive Documentation Suite**:
+
   - `docs/ARCHITECTURE.md` (550+ lines): Complete system architecture with component layers, data flow diagrams, design patterns, and extension points
   - `docs/SECURITY.md` (450+ lines): Security best practices, API key management, input validation, threat model, and vulnerability reporting
   - `docs/CONTRIBUTING.md` (380+ lines): Community contribution guidelines, development setup, coding standards, testing requirements, and PR process
   - `.github/copilot-instructions.md` (270 lines): AI assistant development guidelines for GitHub Copilot with project patterns, testing standards, and security practices
 
 - **Documentation Index and Organization**:
+
   - `docs/README.md`: Comprehensive documentation index with role-based quick links (contributors, operations, release management)
   - Organized documentation into logical sections: Getting Started, Configuration, Architecture, Development, Security, Operations, Workflows
   - Added project statistics and support information to documentation index
 
 - **Improved Project README**:
+
   - Condensed main README.md to 188 lines (from 372 lines)
   - Focused on essentials: Features, Quick Start, Installation, Usage, Configuration
   - Clear links to comprehensive documentation for deeper details
@@ -34,12 +37,14 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 - **Spring Shell Configuration** (Critical):
+
   - Disabled Spring Shell globally via `ShellRunnerAutoConfiguration` exclusion
   - Resolved issue where Shell initialization blocked non-interactive CLI mode
   - Applied fix to both main (Java 21) and java-17-lts (Java 17) branches
   - Restored proper CLI behavior for documentation generation
 
 - **Ollama LLM Provider** (Critical):
+
   - Fixed null pointer exception in `OllamaService` when `requestBuilder` was not initialized
   - Verified Ollama integration with localhost:11434 endpoint
   - Confirmed document generation workflow with llama3.2 model
@@ -53,6 +58,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 
 - **Version Increment**: Updated from v1.1.1 to v2.1.0 (major feature release)
+
   - `build.gradle`: Updated version field
   - Both main and java-17-lts branches synchronized
 
@@ -97,6 +103,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 
 - **Build Configuration**: Downgraded from Java 21 to Java 17 LTS for broader compatibility
+
   - Updated `build.gradle`: `JavaLanguageVersion.of(21)` → `of(17)`
   - Updated `Dockerfile`: Base images changed from `eclipse-temurin:21-*` to `eclipse-temurin:17-*`
 

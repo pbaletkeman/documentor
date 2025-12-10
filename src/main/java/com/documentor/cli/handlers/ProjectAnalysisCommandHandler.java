@@ -130,10 +130,10 @@ public class ProjectAnalysisCommandHandler {
                 if (Files.exists(configFile)) {
                     try {
                         ObjectMapper objectMapper = new ObjectMapper();
-                        ThreadLocalContextHolder.setConfig(loadedConfig);
-                        LOGGER.info("✅ Config set in ThreadLocalContextHolder");
                         DocumentorConfig loadedConfig = objectMapper.readValue(
                                 configFile.toFile(), DocumentorConfig.class);
+                        ThreadLocalContextHolder.setConfig(loadedConfig);
+                        LOGGER.info("✅ Config set in ThreadLocalContextHolder");
                         LOGGER.info("✅ Configuration loaded with {} LLM models",
                                 loadedConfig.llmModels().size());
                         llmServiceFix.setLlmServiceThreadLocalConfig(loadedConfig);
