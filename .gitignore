@@ -88,6 +88,13 @@ documentor.log
 temp/
 tmp/
 
+# Sample output directories (testing and documentation generation)
+ollama-sample/
+ollama17-sample/
+llama-sample/
+llama17-sample/
+work-ollama/
+
 # Configuration files
 # Note: config-test.json is version controlled (test configuration)
 # Note: config.json can be version controlled if needed (user's active config)

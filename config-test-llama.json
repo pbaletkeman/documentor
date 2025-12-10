@@ -1,0 +1,27 @@
+{
+  "llm_models": [
+    {
+      "name": "llama-2-7b",
+      "provider": "llamaCpp",
+      "baseUrl": "http://localhost:8000",
+      "apiKey": "not-needed-for-llamacpp",
+      "maxTokens": 2048,
+      "temperature": 0.7,
+      "timeoutSeconds": 60
+    }
+  ],
+  "output_settings": {
+    "output_directory": "llama-sample",
+    "format": "markdown",
+    "generate_mermaid": false,
+    "generate_plantuml": false,
+    "verbose_output": false
+  },
+  "analysis_settings": {
+    "include_private_members": false,
+    "max_depth": 10,
+    "included_patterns": ["**/*.java"],
+    "excluded_patterns": ["**/test/**", "**/target/**", "**/.git/**"],
+    "max_files_to_document": 5
+  }
+}

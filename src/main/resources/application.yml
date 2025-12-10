@@ -4,7 +4,7 @@ spring:
     name: documentor
   shell:
     interactive:
-      enabled: true
+      enabled: false
     command:
       version:
         enabled: false
@@ -12,6 +12,8 @@ spring:
     web-application-type: none
     banner-mode: off
     allow-bean-definition-overriding: true
+  autoconfigure:
+    exclude: org.springframework.shell.boot.ShellRunnerAutoConfiguration
 
 # Logging Configuration
 logging:
