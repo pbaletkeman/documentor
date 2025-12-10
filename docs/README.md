@@ -1,75 +1,95 @@
-# 📚 model - Code Documentation
+# Documentation Index
 
-Generated on: 2025-12-08 18:08:52
+Welcome to the Documentor documentation. Below you'll find comprehensive guides covering all aspects of the project.
 
-This documentation was automatically generated using AI-powered code analysis.
+## Table of Contents
 
-## 📊 Project Statistics
+- [Getting Started](#getting-started)
+- [Configuration and Usage](#configuration-and-usage)
+- [Architecture and Design](#architecture-and-design)
+- [Development](#development)
+- [Security and Compliance](#security-and-compliance)
+- [Operations](#operations)
+- [Workflows and Automation](#workflows-and-automation)
+- [Quick Links](#quick-links)
 
-📊 Analysis Summary: 19 total elements (2 classes, 15 methods, 2 fields) across 4 files
+## Getting Started
 
-| Element Type | Count |
-|--------------|-------|
-| 📦 Classes | 2 |
-| 🔧 Methods | 15 |
-| 📊 Fields | 2 |
+- [README.md](../README.md) - Quick start guide and feature overview
+- [Quick Start Guide](GETTING_STARTED.md) - Step-by-step setup instructions
 
-## 📋 API Reference
+## Configuration and Usage
 
-### CodeElementType.java
+- [Configuration Guide](CONFIGURATION.md) - Detailed configuration reference
+- [Configuration Overview](CONFIGURATION_OVERVIEW.md) - High-level configuration patterns
+- [Usage Examples](USAGE_EXAMPLES.md) - Common usage scenarios
+- [LLM Integrations](LLM_INTEGRATIONS.md) - Provider-specific setup guides
+- [Diagrams Guide](DIAGRAMS_GUIDE.md) - Diagram generation and customization
 
-#### 📦 Class/Interface
+## Architecture and Design
 
-- **CodeElementType** - `/** * 🔍 Code Element Type Enumeration * * Represents the different types of code elements that can be analyzed: * - CLASS: Classes, interfaces, enums * - METHOD: Methods, functions, procedures * - FIELD: Variables, attributes, constants */ public enum CodeElementType { CLASS("📦", "Class/Interface"), METHOD("🔧", "Method/Function"), FIELD("📊", "Field/Variable"); private final String icon; private final String description; CodeElementType(final String iconParam, final String descriptionParam) { this.icon = iconParam; this.description = descriptionParam; } public String getIcon() { return icon; } public String getDescription() { return description; } }`
+- [Architecture Guide](ARCHITECTURE.md) - System design, components, and data flow
+- [Organization Summary](ORGANIZATION_SUMMARY.md) - Project structure and layout
 
-#### 🔧 Method/Function
+## Development
 
-- **getIcon** - `public String getIcon()`
-- **getDescription** - `public String getDescription()`
+- [Contributing Guide](CONTRIBUTING.md) - How to contribute to the project
+- [Development Setup](DEVELOPMENT.md) - Local development environment
+- [Testing Guide](TESTING.md) - Testing strategies and coverage
+- [Documentation Summary](DOCUMENTATION_SUMMARY.md) - Documentation standards
 
-#### 📊 Field/Variable
+## Security and Compliance
 
-- **icon** - `private final String icon;`
-- **description** - `private final String description;`
+- [Security Guide](SECURITY.md) - Security best practices and threat model
+- [Migration Guide](MIGRATION.md) - Version upgrade and migration information
 
-### ProjectAnalysis.java
+## Operations
 
-#### 🔧 Method/Function
+- [Docker Guide](DOCKER.md) - Docker and containerization
+- [Coverage Report](COVERAGE_REPORT.md) - Test coverage analysis
+- [Final Testing Summary](FINAL_TESTING_SUMMARY.md) - Test results and validation
 
-- **getClasses** - `public List<CodeElement> getClasses()`
-- **getMethods** - `public List<CodeElement> getMethods()`
-- **getFields** - `public List<CodeElement> getFields()`
-- **getElementsByFile** - `public Map<String, List<CodeElement>> getElementsByFile()`
-- **getElementsByType** - `public Map<CodeElementType, List<CodeElement>> getElementsByType()`
-- **getStats** - `public AnalysisStats getStats()`
-- **getFormattedSummary** - `public String getFormattedSummary()`
+## Workflows and Automation
 
-### CodeElement.java
+- [Agents and Workflows](../Agents.md) - Release, build, and test automation
+- [Copilot Instructions](.github/copilot-instructions.md) - AI assistant guidelines
 
-#### 🔧 Method/Function
+## Quick Links
 
-- **getId** - `public String getId()`
-- **isPublic** - `public boolean isPublic()`
-- **getDisplayName** - `public String getDisplayName()`
-- **getAnalysisContext** - `public String getAnalysisContext()`
+### For New Contributors
 
-### CodeVisibility.java
+1. Read [Contributing Guide](CONTRIBUTING.md)
+2. Set up local environment with [Development Setup](DEVELOPMENT.md)
+3. Review [Architecture Guide](ARCHITECTURE.md) for system understanding
+4. Check [Testing Guide](TESTING.md) for test requirements
 
-#### 📦 Class/Interface
+### For Operations
 
-- **CodeVisibility** - `/** * 🔍 Code Visibility Levels - Simplified visibility detection * * Enum to reduce complexity in visibility checking across different languages. */ public enum CodeVisibility { PUBLIC, PROTECTED, PACKAGE_PRIVATE, PRIVATE; /** * 🔍 Determines visibility from signature and element name */ public static CodeVisibility fromSignatureAndName(final String signature, final String name) { String lowerSignature = signature.toLowerCase(); // Check explicit modifiers first if (lowerSignature.contains("private")) { return PRIVATE; } if (lowerSignature.contains("protected")) { return PROTECTED; } if (lowerSignature.contains("public")) { return PUBLIC; } // Check Python conventions if (name.startsWith("_")) { return PRIVATE; } // Default to package-private for Java, public for Python return PACKAGE_PRIVATE; } /** * 🔍 Check if visibility should be included in documentation */ public boolean shouldInclude(final boolean includePrivate) { return includePrivate || this != PRIVATE; } }`
+1. Review [Configuration Guide](CONFIGURATION.md)
+2. Check [Docker Guide](DOCKER.md) for containerization
+3. See [Security Guide](SECURITY.md) for security setup
+4. Review [LLM Integrations](LLM_INTEGRATIONS.md) for provider setup
 
-#### 🔧 Method/Function
+### For Release Management
 
-- **fromSignatureAndName** - `public static CodeVisibility fromSignatureAndName(final String signature, final String name)`
-- **shouldInclude** - `public boolean shouldInclude(final boolean includePrivate)`
+1. Follow [Agents and Workflows](../Agents.md) for build/release steps
+2. Review [Migration Guide](MIGRATION.md) for upgrade procedures
+3. Check [CHANGELOG](../CHANGELOG.md) for version history
 
-## 💡 Usage Examples
+## Project Statistics
 
-Detailed usage examples can be found in the individual element documentation files.
+- **Version**: 2.1.0
+- **Java Version**: 21 (main), 17 (java-17-lts)
+- **Test Coverage**: 80%+
+- **Code Style**: Google Java Style Guide
 
-### Quick Links
+## Support
 
-- [CodeElementType](elements/class-CodeElementType.md)
-- [CodeVisibility](elements/class-CodeVisibility.md)
+- GitHub Issues: Report bugs and request features
+- Discussions: Ask questions and share ideas
+- Security: See [Security Guide](SECURITY.md) for reporting vulnerabilities
+
+---
+
+**Last Updated**: December 9, 2025
 
