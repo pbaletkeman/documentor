@@ -1,395 +1,554 @@
-# 🤝 Contributing Guide
+# Contributing Guide - Documentor
 
-Comprehensive guide for contributing to the Documentor project, covering setup, workflow, testing, and quality standards.
+Welcome to Documentor! We appreciate your interest in contributing. This guide explains how to participate in the project effectively.
 
 ## Table of Contents
 
 - [Getting Started](#getting-started)
+- [Code of Conduct](#code-of-conduct)
+- [How to Contribute](#how-to-contribute)
 - [Development Setup](#development-setup)
-- [Project Structure](#project-structure)
 - [Coding Standards](#coding-standards)
 - [Testing Requirements](#testing-requirements)
-- [Git Workflow](#git-workflow)
+- [Commit Guidelines](#commit-guidelines)
 - [Pull Request Process](#pull-request-process)
 - [Reporting Issues](#reporting-issues)
-- [Code Review Guidelines](#code-review-guidelines)
-- [Performance Considerations](#performance-considerations)
 
 ## Getting Started
 
-We welcome contributions to Documentor! Whether you're fixing bugs, adding features, improving documentation, or optimizing performance, your help is appreciated.
+### Prerequisites
 
-## Development Setup
+- Java 21 (main branch) or Java 17 (java-17-lts branch)
+- Gradle 9.1.0 or higher
+- Git
+- At least one LLM provider (OpenAI, Ollama, or LlamaCpp)
+
+### Clone and Setup
 
 ```bash
-# Fork the repository on GitHub
-
-# Clone your fork
-git clone https://github.com/YOUR-USERNAME/documentor.git
+git clone https://github.com/yourusername/documentor.git
 cd documentor
-
-# Add upstream remote
-git remote add upstream https://github.com/pbaletkeman/documentor.git
-
-# Create a feature branch
-git checkout -b feature/your-feature-name
-
-# Set up pre-commit hooks
-cp .githooks/pre-commit .git/hooks/pre-commit
-chmod +x .git/hooks/pre-commit
-
-# Build and verify setup
 ./gradlew build
 ```
 
-## Contribution Workflow
+## Code of Conduct
 
-### 1. Create Feature Branch
+### Our Pledge
+
+We are committed to providing a welcoming and inspiring community for all. We pledge that everyone participating in our project and community will be treated with respect.
+
+### Expected Behavior
+
+- Use welcoming and inclusive language
+- Be respectful of differing opinions and experiences
+- Accept constructive criticism gracefully
+- Focus on what is best for the community
+- Show empathy towards other community members
+
+### Unacceptable Behavior
+
+- Harassment, discrimination, or bigotry
+- Unwelcome sexual advances
+- Deliberate intimidation or threats
+- Publishing others' private information
+- Other conduct that is unprofessional
+
+## How to Contribute
+
+### Types of Contributions
+
+#### 1. Bug Reports
+
+Found a bug? Open an issue with:
+
+- Clear description of the problem
+- Steps to reproduce
+- Expected behavior
+- Actual behavior
+- Environment (Java version, OS, LLM provider)
+- Logs or error messages
+
+#### 2. Feature Requests
+
+Have an idea? Share it! Provide:
+
+- Clear problem statement
+- Proposed solution
+- Alternative approaches considered
+- Use cases and benefits
+- Any relevant examples
+
+#### 3. Documentation
+
+Help improve documentation:
+
+- Fix typos and clarify explanations
+- Add examples and use cases
+- Update outdated information
+- Improve code comments
+- Translate documentation (if multilingual)
+
+#### 4. Code Contributions
+
+Want to fix a bug or add a feature?
+
+1. Check existing issues and PRs first
+2. Open an issue describing your plan (for major changes)
+3. Wait for feedback before starting work
+4. Follow development setup and coding standards
+5. Create a pull request
+
+## Development Setup
+
+### Local Development Environment
+
+1. **Clone the repository**:
+
+   ```bash
+   git clone https://github.com/yourusername/documentor.git
+   cd documentor
+   ```
+
+2. **Create a feature branch**:
+
+   ```bash
+   git checkout -b feature/your-feature-name
+   # or
+   git checkout -b fix/issue-number
+   ```
+
+3. **Build the project**:
+
+   ```bash
+   ./gradlew build
+   ```
+
+4. **Run tests**:
+
+   ```bash
+   ./gradlew test
+   ```
+
+5. **Set up LLM provider**:
+   - OpenAI: Export `OPENAI_API_KEY` environment variable
+   - Ollama: Start `ollama serve` (default localhost:11434)
+   - LlamaCpp: Start your server (default localhost:8000)
+
+### Development Tools
+
+**Recommended IDE**: IntelliJ IDEA Community Edition (free)
+
+- Import as Gradle project
+- Install Spring Boot support plugin
+- Configure code style (see `.idea/` if committed)
+
+**Build Commands**:
 
 ```bash
-# Branch naming convention
-feature/descriptive-name    # New features
-bugfix/descriptive-name     # Bug fixes
-docs/descriptive-name       # Documentation
-refactor/descriptive-name   # Code refactoring
-chore/descriptive-name      # Build, dependencies, etc.
-
-# Example
-git checkout -b feature/add-typescript-support
+./gradlew clean build          # Full build with tests
+./gradlew build -x test        # Build without tests
+./gradlew test                 # Run tests only
+./gradlew test --tests "*Spec" # Run specific tests
+./gradlew jacocoTestReport     # Generate coverage report
+./gradlew checkstyleMain       # Check code style
 ```
 
-### 2. Make Changes
+## Coding Standards
+
+### Code Style
+
+Follow Google Java Style Guide with Spring conventions:
+
+```java
+// Class documentation
+/**
+ * Generates documentation for a code element.
+ *
+ * This class orchestrates the documentation generation workflow
+ * including analysis, LLM interaction, and formatting.
+ */
+public class DocumentationGenerator {
+
+    // Method documentation
+    /**
+     * Generates documentation for a single element.
+     *
+     * @param element the code element to document
+     * @return the generated documentation
+     * @throws DocumentationException if generation fails
+     */
+    public String generate(CodeElement element) {
+        // Implementation
+    }
+}
+```
+
+### Naming Conventions
+
+- Classes: `PascalCase` (e.g., `DocumentationService`)
+- Methods/variables: `camelCase` (e.g., `generateDocumentation()`)
+- Constants: `UPPER_SNAKE_CASE` (e.g., `MAX_TOKENS_LIMIT`)
+- Packages: `lowercase.dotted.format`
+- Boolean methods: `is*` or `has*` prefix (e.g., `isValid()`)
+
+### Code Quality Rules
+
+**Checkstyle Configuration**: See `config/checkstyle/checkstyle.xml`
+
+Run before committing:
 
 ```bash
-# Follow code style guidelines
-# Write comprehensive tests
-# Update documentation
-# Run quality checks: ./gradlew check
+./gradlew checkstyleMain checkstyleTest
 ```
 
-### 3. Test Your Changes
+### Comments
+
+Write comments that explain **why**, not **what**:
+
+```java
+// Good: Explains rationale
+// Use ThreadLocal to ensure each request has isolated configuration
+private static final ThreadLocal<DocumentorConfig> CONFIG_HOLDER = new ThreadLocal<>();
+
+// Bad: Restates the code
+// Create a ThreadLocal
+private static final ThreadLocal<DocumentorConfig> CONFIG = new ThreadLocal<>();
+```
+
+### Imports
+
+Keep imports organized:
+
+```java
+// Standard library
+import java.io.*;
+import java.util.*;
+
+// Third-party libraries
+import org.springframework.boot.*;
+import com.fasterxml.jackson.annotation.*;
+
+// Project classes
+import com.documentor.config.*;
+import com.documentor.service.*;
+```
+
+## Testing Requirements
+
+### Test Coverage
+
+Maintain **80%+ code coverage**:
+
+- Unit tests for core logic
+- Integration tests for service layer
+- Configuration tests for bean creation
+- Mock external dependencies (LLM APIs)
+
+### Writing Tests
+
+Use JUnit 5 and Mockito:
+
+```java
+@ExtendWith(MockitoExtension.class)
+class DocumentationServiceTest {
+
+    @Mock
+    private LlmService llmService;
+
+    @InjectMocks
+    private DocumentationService service;
+
+    @Test
+    void shouldGenerateDocumentationSuccessfully() {
+        // Arrange
+        CodeElement element = createTestElement();
+        when(llmService.generateDocumentation(element))
+            .thenReturn("Generated docs");
+
+        // Act
+        String result = service.generate(element);
+
+        // Assert
+        assertThat(result).isNotEmpty();
+        verify(llmService).generateDocumentation(element);
+    }
+
+    @Test
+    void shouldHandleErrorsGracefully() {
+        // Arrange
+        CodeElement element = createTestElement();
+        when(llmService.generateDocumentation(element))
+            .thenThrow(new LlmException("API error"));
+
+        // Act & Assert
+        assertThatThrownBy(() -> service.generate(element))
+            .isInstanceOf(DocumentationException.class);
+    }
+}
+```
+
+### Running Tests
 
 ```bash
 # Run all tests
 ./gradlew test
 
 # Run specific test class
-./gradlew test --tests YourTestClass
+./gradlew test --tests DocumentationServiceTest
 
-# Verify coverage (minimum 95%)
-./gradlew test jacocoTestReport
+# Run with coverage
+./gradlew jacocoTestReport
 
-# Run quality checks
-./gradlew check
+# View coverage report
+# Open build/reports/jacoco/test/html/index.html
 ```
 
-### 4. Commit Changes
+## Commit Guidelines
+
+### Commit Message Format
+
+```
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
+```
+
+**Type**: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`
+
+**Scope**: Component affected (e.g., `config`, `llm-service`, `cli`)
+
+**Subject**:
+
+- Imperative mood ("add" not "added")
+- No period at end
+- Under 50 characters
+
+**Body**:
+
+- Wrap at 72 characters
+- Explain what and why (not how)
+- Reference related issues
+
+**Example**:
+
+```
+feat(llm-service): add support for Ollama provider
+
+Implement LlmService for Ollama integration including:
+- HTTP client for Ollama API
+- Request/response handling
+- Error recovery and retry logic
+
+Fixes #42
+```
+
+### Keep Commits Focused
+
+- One feature or fix per commit
+- Don't mix refactoring with feature work
+- Test should pass after each commit
+- Rebase before creating PR to clean up commits
 
 ```bash
-# Use clear, descriptive commit messages
-git commit -m "Add TypeScript support for code analysis"
+# Rebase interactive
+git rebase -i origin/main
 
-# Format: [type] Description
-# Types: feat, fix, docs, style, refactor, test, chore
-
-# Example good messages
-git commit -m "feat: Add TypeScript analyzer for .ts files"
-git commit -m "fix: Resolve NullPointerException in LLM service"
-git commit -m "docs: Update configuration guide with examples"
-git commit -m "test: Add comprehensive tests for Python analyzer"
+# Squash related commits
+pick abc1234 Add Ollama support
+squash def5678 Fix Ollama error handling
+squash ghi9012 Add Ollama tests
 ```
 
-### 5. Push and Create Pull Request
+## Pull Request Process
 
-```bash
-# Push your branch
-git push origin feature/your-feature-name
+### Before Creating PR
 
-# Create Pull Request on GitHub
-# - Clear title describing changes
-# - Detailed description of what changed and why
-# - Reference related issues (#123)
-# - Screenshots for UI changes
-```
+1. **Update your branch**:
 
-## Code Style and Standards
+   ```bash
+   git fetch origin
+   git rebase origin/main
+   ```
 
-### Java Code Style
+2. **Run full test suite**:
 
-We follow the **Google Java Style Guide** with automatic enforcement via Checkstyle.
+   ```bash
+   ./gradlew clean build
+   ```
 
-#### Key Guidelines
+3. **Check code style**:
 
-```java
-// Class names: PascalCase
-public class CodeAnalysisService {
+   ```bash
+   ./gradlew checkstyleMain checkstyleTest
+   ```
 
-    // Constant names: UPPER_SNAKE_CASE
-    private static final int MAX_THREADS = 10;
-
-    // Variable/method names: camelCase
-    private String projectPath;
-
-    public void analyzeProject() {
-        // Implementation
-    }
-
-    // Meaningful names
-    List<CodeElement> elements = analyzeProject();  // ✅ Good
-    List<CodeElement> list = analyzeProject();      // ❌ Avoid
-}
-```
-
-#### JavaDoc Comments
-
-```java
-/**
- * Analyzes a Java project and extracts code elements.
- *
- * @param projectPath the path to the Java project
- * @return a ProjectAnalysis containing all discovered elements
- * @throws IOException if project path is inaccessible
- */
-public ProjectAnalysis analyzeProject(String projectPath) {
-    // Implementation
-}
-```
-
-### Testing Standards
-
-- Maintain **minimum 95% code coverage**
-- Write tests following **AAA pattern** (Arrange, Act, Assert)
-- Use **descriptive test names** indicating the scenario
-- Mock external dependencies
-- Test **edge cases** (null, empty, invalid inputs)
-
-```java
-@Test
-void testAnalyzeProjectWithValidPath() {
-    // Arrange
-    String projectPath = "src/test/resources/test-project";
-    CodeAnalysisService service = new CodeAnalysisService();
-
-    // Act
-    ProjectAnalysis result = service.analyzeProject(projectPath);
-
-    // Assert
-    assertNotNull(result);
-    assertTrue(result.getElements().size() > 0);
-}
-```
-
-### Documentation Standards
-
-- Clear, concise descriptions
-- Complete API documentation
-- Usage examples for complex features
-- Keep documentation in sync with code
-
-## Pull Request Guidelines
-
-### PR Title Format
-
-```
-[TYPE] Brief description of changes
-
-Examples:
-[feat] Add TypeScript support
-[fix] Resolve concurrent modification exception
-[docs] Update configuration guide
-[refactor] Simplify diagram generation logic
-```
+4. **Verify coverage**:
+   ```bash
+   ./gradlew jacocoTestReport
+   # Coverage should be 80%+
+   ```
 
 ### PR Description Template
 
 ```markdown
 ## Description
 
-Brief explanation of what this PR does and why.
+Brief description of changes
+
+## Type of Change
+
+- [ ] Bug fix
+- [ ] New feature
+- [ ] Breaking change
+- [ ] Documentation update
 
 ## Related Issues
 
-Closes #123
-Related to #456
-
-## Changes
-
-- Change 1
-- Change 2
-- Change 3
+Fixes #123
 
 ## Testing
 
-- [x] Added unit tests
-- [x] Added integration tests
-- [x] Verified 95%+ coverage
-- [x] Manual testing completed
+Describe testing performed:
+
+- [ ] Unit tests added
+- [ ] Integration tests added
+- [ ] Manual testing completed
 
 ## Checklist
 
-- [x] Code follows style guidelines
-- [x] Tests pass locally (`./gradlew check`)
-- [x] Documentation updated
-- [x] No breaking changes
-- [x] Performance impact assessed
+- [ ] Code follows style guidelines
+- [ ] Self-review completed
+- [ ] Comments added for complex logic
+- [ ] Documentation updated
+- [ ] Tests added/updated
+- [ ] Coverage maintained (80%+)
+- [ ] No new warnings
 ```
 
-### Merging Requirements
+### PR Review Process
 
-PRs must satisfy:
+- Maintainers review code for quality, security, and style
+- Address review feedback promptly
+- Rebase if requested instead of merge commits
+- Once approved, maintainer will merge
 
-- ✅ All CI checks pass
-- ✅ Code review approval (1+ maintainer)
-- ✅ 95%+ test coverage
-- ✅ No Checkstyle violations
-- ✅ Documentation updated
+### Merging to Main
 
-## Types of Contributions
+Only maintainers can merge PRs:
+
+- Squash commits if needed for clean history
+- Delete feature branch after merge
+- Reference PR number in merge commit message
+
+## Reporting Issues
 
 ### Bug Reports
 
-1. **Search existing issues** - Check if already reported
-2. **Provide clear description** - What happened vs. expected
-3. **Include reproduction steps** - How to reproduce the bug
-4. **Add environment details** - OS, Java version, config
-5. **Attach logs** - Error messages and stack traces
+Use GitHub Issues with this template:
+
+```markdown
+## Bug Description
+
+Clear, concise description of the issue
+
+## Reproduction Steps
+
+1. Step one
+2. Step two
+3. ...
+
+## Expected Behavior
+
+What should happen
+
+## Actual Behavior
+
+What actually happens
+
+## Environment
+
+- Java version:
+- OS:
+- Documentor version:
+- LLM provider:
+
+## Logs
+
+Include relevant error messages and logs
+
+## Screenshots
+
+If applicable, add screenshots
+```
 
 ### Feature Requests
 
-1. **Describe the feature** - What you want to add
-2. **Explain the use case** - Why it's needed
-3. **Provide examples** - How it would be used
-4. **Consider alternatives** - Any other approaches?
+```markdown
+## Feature Description
 
-### Documentation Improvements
+Clear description of proposed feature
 
-- Fix typos and errors
-- Improve clarity
-- Add missing examples
-- Update outdated information
-- Suggest restructuring for better flow
+## Problem Statement
 
-### Performance Improvements
+Problem this solves
 
-- Profile code to identify bottlenecks
-- Document your measurements
-- Show before/after performance metrics
-- Include tests verifying improvements
+## Proposed Solution
 
-## Development Tips
+How you'd like it implemented
 
-### Build Commands
+## Alternative Approaches
 
-```bash
-# Clean build
-./gradlew clean build
+Other solutions considered
 
-# Build without tests (for quick iteration)
-./gradlew build -x test
+## Additional Context
 
-# Run specific test
-./gradlew test --tests CodeAnalysisServiceTest
-
-# Check code quality
-./gradlew check
-
-# View test coverage report
-open build/reports/jacoco/test/html/index.html
+Any other relevant information
 ```
 
-### IDE Setup
+## Community
 
-**VS Code**:
+### Discussions
 
-```json
-{
-  "[java]": {
-    "editor.defaultFormatter": "redhat.java",
-    "editor.formatOnSave": true,
-    "editor.codeActionsOnSave": {
-      "source.fixAll": true
-    }
-  }
-}
-```
+- GitHub Discussions for questions and ideas
+- Stack Overflow for general Java questions
+- Issues for bug reports and feature requests
 
-**IntelliJ IDEA**:
+### Getting Help
 
-1. Import code style from `config/checkstyle/checkstyle.xml`
-2. Enable Checkstyle plugin
-3. Configure pre-commit hooks via Git settings
+- Check existing documentation and issues
+- Ask in GitHub Discussions
+- Comment on related issues
+- Reach out to maintainers if needed
 
-### Debugging
+### Staying Updated
 
-```bash
-# Run with debug logging
-export LOGGING_LEVEL_COM_DOCUMENTOR=DEBUG
-./gradlew runApp
+- Watch the repository for updates
+- Follow release announcements
+- Subscribe to security notices
 
-# VS Code debug configuration (launch.json)
-{
-  "type": "java",
-  "name": "Debug",
-  "request": "launch",
-  "mainClass": "com.documentor.DocumentorApplication"
-}
-```
+## Recognition
 
-## Review Process
+Contributors are recognized in:
 
-### What Reviewers Look For
+- README.md contributors section
+- Release notes
+- Project documentation
 
-1. **Correctness** - Does the code work as intended?
-2. **Design** - Is the approach sound and maintainable?
-3. **Testing** - Are there comprehensive tests?
-4. **Style** - Does it follow guidelines?
-5. **Documentation** - Is it clear and complete?
-6. **Performance** - Does it have acceptable performance?
+## License
 
-### Responding to Reviews
+By contributing, you agree that your contributions will be licensed under the same license as the project (Apache 2.0).
 
-- Address feedback respectfully
-- Ask questions if unclear
-- Request re-review after changes
-- Acknowledge helpful suggestions
+## Questions?
 
-## Code of Conduct
-
-- Be respectful and inclusive
-- Welcome diverse perspectives
-- Provide constructive feedback
-- Assume good intent
-- Report inappropriate behavior to maintainers
-
-## Becoming a Maintainer
-
-Long-term contributors demonstrating:
-
-- Consistent quality work
-- Good judgment
-- Community engagement
-- Code review skills
-
-May be invited to join the maintainer team.
-
-## Questions or Need Help?
-
-- 📧 **Email**: documentor@letkeman.ca
-- 💬 **GitHub Discussions**: Ask questions and discuss ideas
-- 🐛 **GitHub Issues**: Report bugs or request features
-- 📖 **Documentation**: Check existing guides first
+- Open a discussion in GitHub Discussions
+- Comment on relevant issues
+- Contact maintainers directly
 
 ---
 
-## Release Process (Maintainers)
+**Thank you for contributing to Documentor!**
 
-1. Update version in `build.gradle`
-2. Update `CHANGELOG.md`
-3. Create release branch: `release/v1.2.0`
-4. Update README with new features
-5. Create Pull Request for release
-6. Merge to main branch
-7. Create GitHub Release with tag `v1.2.0`
-8. Publish to artifact repository
-
-Thank you for contributing to Documentor! 🎉
+**Version**: 2.1.0
+**Last Updated**: December 9, 2025
