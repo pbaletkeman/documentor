@@ -20,8 +20,14 @@
   "analysis_settings": {
     "include_private_members": false,
     "max_depth": 10,
-    "included_patterns": ["**/*.java"],
-    "excluded_patterns": ["**/test/**", "**/target/**", "**/.git/**"],
+    "included_patterns": [
+      "**/*.java"
+    ],
+    "excluded_patterns": [
+      "**/test/**",
+      "**/target/**",
+      "**/.git/**"
+    ],
     "max_files_to_document": 5
   }
 }
